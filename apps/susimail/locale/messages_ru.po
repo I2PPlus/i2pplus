@@ -241,7 +241,7 @@ msgid "no subject"
 msgstr "без темы"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Нет папки «Черновики»?"
 
 msgid "Found no valid sender address."
 msgstr "Не найдено корректного адреса отправителя."

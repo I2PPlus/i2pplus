@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "无法创建数据目录"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "对临时目录没有写入权限"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "无法创建临时目录"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "对种子目录没有写入权限"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "无法创建种子目录"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "已在出站隧道上禁用了隧道跳随机化"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "已启用为每个种子使用独立目标"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "已禁用为每个种子使用独立目标"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "最大目标数已更改为 {0}"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "已恢复不限目标数（每个种子一个目标）"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "已启用种子启动时间随机化"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "已禁用种子启动时间随机化"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "启动延迟范围已更改为 {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API密钥已更新。"
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "已启用为新种子预分配文件。"
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "已禁用为新种子预分配文件。"
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "已启用保留原始文件名。"
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "已禁用保留原始文件名。"
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "每个种子的最大文件数已更改为 {0}"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "每个种子的最大文件数无效：{0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "用于暂存的临时目录已更改为 {0}"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "已禁用临时目录暂存。"
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "种子目录已更改为 {0}"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "种子目录已重置为数据目录。"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "OpenTracker列表已改变 - 重新启动种子后生效."
@@ -302,7 +302,7 @@ msgstr "错误: 内存不足，无法为 {0} 创建种子。"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "错误 - 无法从 {0} 创建种子"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "初始化种子并打开隧道"
@@ -396,7 +396,7 @@ msgstr "种子已删除:\"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "将在 {0} 启动种子&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "警告 - 配置的数据分区仅剩 {0}MB 可供下载"
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "临时存储空间：当前配置的临时分区可用下载空间为 {0}GB"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "临时存储空间：当前配置的临时分区可下载的存储空间为 {0}MB"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "警告 - 配置的临时分区仅剩 {0}MB 可供下载"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "正在建立 I2P 隧道"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "正在解析种子查找：{0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "正在打开I2P隧道并启动所有种子."
@@ -489,14 +489,14 @@ msgstr "I2P隧道已关闭."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "跳过目标轮换 - 有 {0} 个正在进行的下载"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "跳过目标轮换 - 有 {0} 个正在进行的下载"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "没有正在下载的种子 - 正在轮换目标"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "分"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "I2PSnark 启动后，自动启动的种子最早在多长时间后加载"
 
 msgid "min"
-msgstr ""
+msgstr "最小"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "I2PSnark 启动后，自动启动的种子最晚在多长时间后加载"
 
 msgid "max"
-msgstr ""
+msgstr "最大"
 
 msgid "Data Storage"
 msgstr "数据保存于"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "数据与种子存储的目录"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "临时目录"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "可选目录，下载内容在完成前先暂存在此，完毕后再移入数据目录。留空则禁用。"
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "种子目录"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "用于将 .torrent 文件与下载数据分开存放的可选目录。留空则存放在数据目录中。"
 
 msgid "Files readable by all"
 msgstr "文件对所有人可读"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "设置文件的权限以允许其他本地用户浏览下载"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "预分配文件"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "在种子启动时立即将新的种子文件扩展到完整大小并分配磁盘空间，以防磁盘被占满而中断下载，并避免数据块陆续到达时产生碎片"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "保留文件名"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "保留种子中的原始文件名。禁用时会对文件名进行过滤，移除文件系统中的非法字符。启用时使用原始文件名；如果文件名包含文件系统不支持的字符，将使用安全的备用名称创建该文件，并显示警告"
 
 msgid "Max files per torrent"
 msgstr "每个洪流的最大文件数"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "隧道设置"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "本次会话的主目标（身份）；其 DHT、跟踪器和黑名单与各个种子的目标共享"
 
 msgid "Our destination (identity) for this session"
 msgstr "这个会话中我们的目标（身份）"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "主目标"
 
 msgid "Dest."
 msgstr "目标"
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "出站"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "多目标"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "为每个种子使用独立目标，使跟踪器和 DHT 无法将您的种子相互关联。目标是临时的，重启后即会改变。"
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "最大目标数"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "当同时运行的种子超过此最大数量时，多余的种子将以随机且大小可变的分组共享目标，以限制内存使用。零表示每个种子一个目标。"
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "随机启动延迟"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "使用随机延迟错开多目标种子的启动，使同时启动的种子无法被跟踪器或 DHT 对等点关联起来，并让隧道构建分散进行。禁用后将立即批量启动所有种子。"
 
 msgid "I2CP host"
 msgstr "I2CP主机"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "I2CP选项"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "浏览器集成"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "启用浏览器 API"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "允许来自 loopback 或下列许可主机的请求，无需 CSRF nonce 即可添加磁力链接和种子 URL"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "许可主机"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "以逗号分隔的主机名或 IP，无需 nonce 即可添加种子；loopback 始终被允许"
 
 msgid "API key"
-msgstr ""
+msgstr "API 密钥"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "用于远程访问的可选密码，可绕过主机许可列表"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "安装浏览器处理程序"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "更新浏览器处理程序"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "将已安装的 I2PSnark Bridge 扩展更新到 v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "在浏览器中打开 I2PSnark Bridge 扩展以添加磁力链接；该扩展会自行向浏览器注册，不会在路由器端写入任何文件"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "下载向浏览器注册磁力链接和 .torrent 文件的 PowerShell 安装程序；I2PSnark Bridge 扩展需要 Firefox 系浏览器"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "下载向浏览器注册磁力链接和 .torrent 文件的安装脚本；I2PSnark Bridge 扩展需要 Firefox 系浏览器"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "下载浏览器处理程序脚本"
 
 msgid "Save configuration"
 msgstr "保存设置"
@@ -957,7 +957,7 @@ msgstr "将此设置更改为少于 3 跳可能会提高速度，但会牺牲匿
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "I2PSnark Bridge 扩展 v{0} 已过时，请在配置页面上更新到 v{1}"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "点击 \"添加种子\" 按钮来获取种子"
@@ -1187,7 +1187,7 @@ msgstr "输入 URL 或选择 torrent 文件"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "添加种子时出错：{0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1229,11 +1229,11 @@ msgid "Directory deleted: {0}"
 msgstr "目录已经删除: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "浏览器 API 已启用。"
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "无法打开 I2PSnark Bridge 扩展：{0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1310,7 +1310,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "删除.torrent文件并删除数据文件"
 
 msgid "Destination"
-msgstr ""
+msgstr "目标"
 
 msgid "Checking"
 msgstr "正在检查"
@@ -1319,7 +1319,7 @@ msgid "Allocating"
 msgstr "正在分配空间"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "未能连接到所有已配置的跟踪器"
 
 msgid "Starting"
 msgstr "正在启动"
@@ -1508,7 +1508,7 @@ msgstr "已创建"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "实际下载的文件大小：{0}，不含 {1} 的 BEP 47 填充文件"
 
 msgid "Added"
 msgstr "已添加"

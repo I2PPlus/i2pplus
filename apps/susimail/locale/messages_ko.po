@@ -232,7 +232,7 @@ msgid "no subject"
 msgstr "제목 없음"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Drafts 폴더가 없나요?"
 
 msgid "Found no valid sender address."
 msgstr "올바른 보낸이 주소 없음."

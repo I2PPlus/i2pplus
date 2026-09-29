@@ -568,7 +568,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "警告：无法将I2P+服务设置为手动启动"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "警告：无法找到 I2P+ 安装目录"
 
 msgid "Configuration saved successfully"
 msgstr "设置保存成功"
@@ -1437,7 +1437,7 @@ msgid "Ban peer until restart"
 msgstr "封禁对等节点直到重启"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "通过 configpeer 手动封禁"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3533,10 +3533,10 @@ msgid "Low Latency"
 msgstr "低延迟"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "UDP 传输报告的已重传数据包数 / 已发送数据包数"
 
 msgid "Loss"
-msgstr ""
+msgstr "丢失"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "同意参与的tunnels对等点"
@@ -3591,61 +3591,61 @@ msgstr "配置对等节点"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "内存中 {0} / 磁盘上 {1}"
 
 msgid "High Cap"
-msgstr ""
+msgstr "高上限"
 
 msgid "Displayed"
-msgstr ""
+msgstr "已显示"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "显示 {1} 个配置文件中的 {0} 个"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
+msgstr[0] "已隐藏 {0} 个过期配置文件"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "显示的配置文件总数比例"
 
 msgid "peers"
 msgstr "对等节点"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "显示的层级配置文件比例"
 
 msgid "Window"
-msgstr ""
+msgstr "窗口"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "快速 RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "快速层成员资格的最大 RTT（毫秒）"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "快速层节点的平均丢失率（%）"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "高容量节点的平均丢失率（%）"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "在显示截止范围内曾收到消息"
 
 msgid "Lookups"
-msgstr ""
+msgstr "查询"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "查询成功率"
 
 msgid "Stores"
-msgstr ""
+msgstr "存储"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "存储成功率"
 
 msgid "Definitions"
 msgstr "定义"
@@ -3716,25 +3716,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "最近获知了多少新节点？"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "已知洪水节点"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "无失败"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "1 小时内无查询失败"
 
 msgid "Response"
-msgstr ""
+msgstr "响应"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "查询响应时间（1 小时）"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "1 小时联系"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "1 小时内联系过"
 
 msgid "1h Fail Rate"
 msgstr "1 小时失败率"
@@ -4718,10 +4718,10 @@ msgid "Slow Start Window Cap"
 msgstr "慢启动窗口上限"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "最大入站缓冲区"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "最大并发流数"
 
 msgid "Max SYN Sends"
 msgstr "最大 SYN 发送数"
@@ -4736,7 +4736,7 @@ msgid "Max Retransmissions"
 msgstr "最大重传次数"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "接收工作线程数"
 
 msgid "Writer Queue Size"
 msgstr "写入器队列大小"
@@ -4820,16 +4820,16 @@ msgid "Search Timeout"
 msgstr "搜索超时"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "搜索上限"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "重新发布窗口"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "重新发布扇出"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "探测广度"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet 查找超时"
@@ -4856,7 +4856,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "最大高容量节点数"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "高丢失率节点降级阈值"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "隧道构建请求超时"
@@ -4883,25 +4883,25 @@ msgid "Max Delay Between Tests"
 msgstr "测试间最大延迟"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "隧道测试失败窗口"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "隧道测试失败窗口下限"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "首跳失败冷却期"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "首跳失败阈值"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "入站拥塞阈值"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "过期构建修剪阈值"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "并发节流阈值"
 
 msgid "NTCP Reader Threads"
 msgstr "NTCP 读取线程数"
@@ -4913,7 +4913,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP 泵送器故障保护间隔"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "NTCP 泵送器最大空闲循环速率"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "最大并发节点消息数"
@@ -4985,7 +4985,7 @@ msgid "Max Window Size"
 msgstr "最大窗口尺寸"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "连接超时乘数"
 
 msgid "Max Message Queue Age"
 msgstr "最大消息队列存在时间"
@@ -5003,16 +5003,16 @@ msgid "Server Handler Threads"
 msgstr "服务器处理线程数"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "服务器处理队列容量"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "每条隧道的服务器默认线程数"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "I/O 传输线程数"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "I/O 停滞超时"
 
 msgid "Build Handler Threads"
 msgstr "构建处理线程数"
@@ -5021,7 +5021,7 @@ msgid "Client Runner Max Threads"
 msgstr "客户端运行器最大线程数"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "客户端默认最大连接数"
 
 msgid "Participating Throttle Min"
 msgstr "参与节流最小值"
@@ -5099,7 +5099,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "未经测试的隧道上限乘数"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "隧道 IV 过滤器大小"
 
 msgid "Message Processing Throttle"
 msgstr "消息处理节流阀"
@@ -5150,10 +5150,10 @@ msgid "Max congestion window during slow start."
 msgstr "慢启动期间的最大拥塞窗口。"
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "每个连接的入站缓冲区上限（字节）。"
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "每个目标的并发流动态上限。"
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "放弃握手之前的 SYN 尝试总数。"
@@ -5168,7 +5168,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "丢弃流之前的最大重传次数。"
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "每个流式会话的入站数据包处理线程数。"
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "丢弃流之前的最大空闲时间（毫秒）。"
@@ -5258,16 +5258,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "每个节点的查找超时（毫秒）。"
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "每次迭代搜索的硬性截止时间（毫秒）。"
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "租约重新发布存储消息的生命周期（毫秒）。"
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "搜索后可接收重新发布租约的最大节点数。"
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "每个周期的并发探测搜索次数。"
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "LeaseSet 查找的自适应截止上限（毫秒）。"
@@ -5294,7 +5294,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "路由表中的最大高容量节点数。"
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "将节点降级出快速层的丢失率（%）。"
 
 msgid "Build reply timeout (ms)."
 msgstr "构建回复超时（毫秒）。"
@@ -5321,25 +5321,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "隧道测试之间的最大间隔（毫秒）。"
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "隧道测试判定失败前的最长时间（毫秒）。"
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "隧道测试失败窗口的下限（毫秒）。"
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "首跳失败后跳过某节点的时长（毫秒）。"
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "冷却期间跳过某节点之前允许的失败次数。"
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "低于该入站隧道数时开始限制构建速率。"
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "修剪某次构建之前允许其排队等待占用的超时预算比例（%）。"
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "触发并发构建削减的超时率（%）。"
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "解密入站 NTCP 数据的线程数。"
@@ -5351,7 +5351,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "卡住 NTCP 泵送器的故障保护扫描间隔（毫秒）。"
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "空闲 NTCP 泵送器每秒迭代次数上限（循环/秒）。"
 
 msgid "In-flight message limit per UDP peer."
 msgstr "每个 UDP 节点的在途消息限制。"
@@ -5408,7 +5408,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT 估计的上限（毫秒）。"
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "按网络 RTT 缩放每个客户端的连接超时（30-200%）。"
 
 msgid "Delay before first retransmit (ms)."
 msgstr "首次重传前的延迟（毫秒）。"
@@ -5432,16 +5432,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "处理入站 I2PTunnel 连接的处理线程数。"
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "可等待空闲服务器处理线程的入站连接数。"
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "每条服务器隧道的服务器处理线程数默认上限。"
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "用于服务器→客户端数据传输的专用池，可释放处理线程。"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "服务器→客户端数据传输的停滞超时（毫秒）。"
 
 msgid "Thread pool for inbound build request processing."
 msgstr "处理入站构建请求的线程池。"
@@ -5450,7 +5450,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "客户端代理线程池的上限。"
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "默认客户端连接数上限。"
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "任何节点可持有的最小中转隧道数。"
@@ -5528,7 +5528,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "隧道服务器处理线程的 TCP 套接字连接超时（毫秒）。"
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "隧道 IV 去重过滤器的指数：其两个缓冲区各保存 2^n 位，因此这一对共占用 2^(n-2) 字节。其大小依据实际观察到的 IV 确定；过小会表现为良好的隧道数据被丢弃。"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "拒绝传输之前的最大平均消息延迟（毫秒）。"
@@ -5710,7 +5710,7 @@ msgid "Endpoint"
 msgstr "出站终端"
 
 msgid "ms"
-msgstr ""
+msgstr "毫秒"
 
 msgid "Test successful"
 msgstr "测试成功"
@@ -6121,10 +6121,10 @@ msgid "Additional Router Caps"
 msgstr "额外的路由器能力组"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "添加能力组，用空格或逗号分隔，例如 LUf,PUG。使用 ! 表示排除：G!f 封禁 G 路由器，除非其为洪水节点"
 
 msgid "Misc"
-msgstr ""
+msgstr "杂项"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "禁止无法响应查询的洪水节点对等体（失败率 >95%）"
@@ -6145,10 +6145,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "封禁过多的隧道请求"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "启用后，从网络中解析得到且我们未与之直接连接的节点——包括中转下一跳和客户端隧道端点——都受封禁策略约束。禁用时，此类节点将被豁免，除非已直接连接。"
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "封禁下一跳节点"
 
 msgid "Clear all bans"
 msgstr "清除所有封禁"
@@ -6291,10 +6291,10 @@ msgid "I2CP Port"
 msgstr "I2CP 端口"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "访问本地托管服务时不绕过网络"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "禁用环回"
 
 msgid "Require username and password"
 msgstr "需要用户名和密码登录"
@@ -7473,13 +7473,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "隧道构建处理期间并发下一个跃点RouterInfo查找的下限。确保即使很少隧道参与时也能有最低级别的查找并发性。[默认为10（慢速系统上为4）]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "隧道构建处理期间并发下一跳 RouterInfo 查找的上限。槽位按不同的下一跳计数，而非按单个请求计数：共用同一下一跳的构建会复用同一次搜索。该值不随核心数缩放；查找属于受网络限制的等待。[默认为 64（慢速系统上为 32）]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "用于在启动后按比例调整并发查找上限的当前参与隧道百分比。有效上限被限制在 minLookupLimit 与 maxLookupLimit 之间。[默认为 40（慢速系统上为 15）]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "当所有查找槽位均被占用时，用于暂存下一跳正在解析中的隧道构建的队列深度。其大小设定为使满队列可在发起方的构建超时时间内排空；超过该预算的条目无论队列深度如何都会作为过期项丢弃。[默认为 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "隧道构建请求时间戳的最大允许未来偏移。时间戳比此更远的请求将被拒绝为潜在的重放攻击。[默认为300000（5分钟）]"
@@ -7587,7 +7587,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "在限制探索对等点选择之前，路由器启动期间所需的最小活跃对等点数。在早期启动期间，路由器对等点质量更为宽容。[默认为6]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "已收到的 SYN 在被 accept() 取出之前可在接受队列中等待的最长时间（毫秒）。如果 accept() 被延迟（繁忙的托管服务器），连接将在此时间窗口后被拒绝，因此较高的值可以容忍短暂停顿。所配置的值无需重启即可生效。[默认为 60000（60 秒）]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "此特定于隧道的设置允许您启用或禁用对发送到路由器托管的服务器的 ping 的回复。要禁用 ping，必须将 <code>i2p.streaming.answerPings=false</code> 行添加到隧道管理器中服务器配置的<i>“自定义选项”</i>部分。"
@@ -7596,22 +7596,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "未设置显式连接超时时的默认最大流延迟（毫秒）。[默认为10000（10秒）]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "对同一不可达目标的连接尝试之间的冷却期（毫秒）。防止对不可达节点造成大量请求。[默认为 5000（5 秒）]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "流式连接断开后 TIME-WAIT 的持续时间（毫秒），在此期间迟到的数据包仍会被确认。对于最终 ACK 可能延迟的高延迟路径，请增大此值。[默认为 120000（2 分钟）]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "在被节制的目的地回复的次数，之后多余的包将被静默丢弃。防止连接风暴压垮路由器。[默认为3]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "启用此设置时，会为路由器托管的所有启用 ping 的服务器引入最长 50ms 的随机 pong 延迟。默认禁用。立即应用于新的 pong，无需重启。"
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "新的流式连接的初始拥塞窗口大小（以数据包计）。窗口越大，连接启动越快，但在拥塞路径上可能引发更多重传。[默认为 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "流式连接超时的上限。防止单连接超时超过此上限。对于极高延迟的远程访问，请增大此值。可在客户端隧道的客户端高级选项中设置同名属性来按连接覆盖该值（例如 IRC 客户端隧道默认为 300000）。[默认为 75000（75 秒）]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "ping对等点时等待pong回复的最长时间（毫秒）。[默认为300000（5分钟）]"
@@ -7620,43 +7620,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "如果还启用了 <code>i2p.streaming.enablePongDelay</code>，则此设置将修改为启用 ping 的服务器引入的最大额外随机 pong 延迟。除非显式设置，否则将使用默认值 50ms。"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "服务器接受队列中待处理连接（SYN 及部分数据包）的最大数量。队列满时，新的 SYN 会收到 RESET（客户端可以重试）而不是被静默丢弃，从而让客户端知晓该连接被拒绝。[默认为 256（慢速系统上为 128）]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "最大重传延迟（毫秒）。重传间隔无论退避如何都不会超过此值。增加以允许在拥塞路径上重试之间有更长时间。[默认为30000（30秒）]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "放弃某个连接之前允许的最大数据包重传次数。较高的值可提高高丢失链路上的可靠性，但会延迟故障检测。[默认为 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "指数退避（加倍）后的最大重传超时（毫秒）。限制发送者在严重拥塞期间尝试重传之前的等待时间。[默认为30000（30秒）]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "流式连接的最大往返时间（毫秒）。对计算出的 RTT 设置上限，以防网络波动后出现异常的超时值。[默认为 10000（10 秒）]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "流式连接的最大慢启动窗口大小。限制慢启动期间的拥塞窗口，以防压垮网络。[默认为 256（慢速系统上为 32）]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "流式连接的最大拥塞窗口大小（以数据包计）。限制单个流的最大吞吐量。[默认为 512（慢速系统上为 384）]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "最小重传延迟（毫秒）。包不会比此间隔更快地被重传。较低的值允许在有损连接上更快恢复。[默认为100ms]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "对超过下列流请求阈值的远程目标施加临时自动封禁的持续时间（分钟）。被封禁的目标在封禁期内将被拒绝所有新的入站连接。清理程序每 60 秒重新读取此值，因此可通过<a href=/configadvanced>高级配置页面</a>在运行时更改。设为 0 可完全禁用自动封禁。[默认为 5（5 分钟）]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "在滚动窗口内，单个远程目标被拒绝的入站 SYN 数量达到此值前将触发自动封禁。拒绝计数器每 60 秒减半（而非重置），因此零星突发会逐渐消退，而持续洪泛则会累积。[默认为 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "在 <code>tempBanSynRate</code> 窗口内，来自单个远程目标的入站 SYN 数量超过此值时将记录一次突发违规。第一次违规仅记录警告；60 秒内的第二次违规将触发自动封禁。这一两次违规的门槛可放行正常页面加载的突发请求，同时仍能捕获持续不断、否则会压垮拒绝计数器的连接洪泛。[默认为 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "进行 SYN 突发检查的时间窗口（毫秒）。若在此窗口内从单个目标收到的 SYN 超过 <code>tempBanSynBurst</code> 个，则记录一次突发违规；60 秒内的第二次违规将触发自动封禁。[默认为 1000（1 秒）]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Tuner 反应式并发流上限的最高界限。路由器的 Tuner 会根据需求、拒绝情况和路由器健康状况自动调整每个目标的并发流上限，但绝不会将某目标提高到超过其自身每隧道 <code>i2p.streaming.maxConcurrentStreams</code> 设置的水平。此值限定 Tuner 允许将该覆盖值提升到多高。如果您托管高流量服务而 Tuner 无法将上限扩展到足够高，请增大此值。[默认为 1024，范围 64–8192，需要重启]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "自动LeaseSet重新发布之间的间隔（毫秒）。较高的值减少netdb流量，但可能导致租赁信息过时。[默认为300000（5分钟）]"
@@ -7665,7 +7665,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "主动LeaseSet重新发布的阈值（毫秒）。如果租赁在此窗口内即将过期，则立即重新发布LeaseSet，而不是等待下一个定期周期。[默认为180000（3分钟）]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "路由器可接受的同时 I2CP 客户端会话的最大数量。[默认为 1536（慢速系统上为 768）]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "当设置为true时，禁用本地-本地环回交付，并强制所有流量通过隧道（出站隧道→网络→入站隧道→本地目的地）。当源和目的地在同一路由器上时，可用于测试隧道路由行为。[默认禁用]"
@@ -7692,55 +7692,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "在eepget放弃之前最大连续零数据传输失败次数，即使重试次数还剩。如果传输未接收任何数据就失败，请增加此值。[默认为20]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "eepget 重试之间的固定延迟（毫秒）。使用 -1 表示带抖动的延迟（基准 5 秒加上最多 10 秒的抖动），以分散对不稳定源的负载。值为 0 时立即重试。[默认为 -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "启用后，eepget 将通过 DNS-over-HTTPS 解析 HTTPS 抓取所需的主机名，防止查询被本地窥探。通过代理抓取或主机为 IP 地址时会绕过此设置。[默认为 true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "此定义了当多个种子同时启动或一起重新校验时，可同时校验存储数据的种子最大数量，以限制启动时或崩溃后的磁盘 I/O 风暴。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 4，需要重启 I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "此设置可配置 I2PSnark 在下载或创建种子时允许的每个种子最大文件数。请注意，将该值从默认的 2000 个文件大幅提高，可能需要在主机系统上进行额外配置，以提高操作系统允许打开的文件数上限（例如 Linux 上的 <code>ulimit -n</code>）。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code> 或在 I2PSnark 配置页面设置；此后添加的种子生效。"
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "启用此设置时，会周期性重启所有正在运行的种子，使其目的地轮换为新的身份，从而切断路由器 IP 地址与各 tracker 及 DHT 中种子目的地之间长期存在的关联。该周期为每 3 小时加上 1 至 60 分钟的随机延迟；任何种子正在活动下载时会跳过本轮，并且只重启此前正在运行的种子。目的地本就是临时的且每次重启都会变化；此设置将这种变化扩展到一次运行周期之内。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 true，需要重启 I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "此设置控制客户端身份伪装：tracker 的 peer ID 和 User-Agent、BitTorrent 握手 peer ID、扩展握手客户端名称以及 web seed 抓取，都将呈现为所选的知名客户端，而不是 I2PSnark。在多目标模式下，默认每个目标池都会被分配一个独立的随机客户端；在单目标模式下，除非设置了客户端名称或 \"random\"，否则 I2PSnark 会以自身身份标识。设为 \"random\" 可在所有模式下强制随机选择，设为 \"i2psnark\" 可即使在多目标模式下也保留经典身份，或设为某个客户端名称以始终模仿该客户端。版本字符串固定为当前上游发行版，并在 peer ID、User-Agent 和扩展握手之间保持一致。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为多目标模式下每个池随机；对之后启动的种子生效]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "此设置可选择性地将 <code>i2psnark.clientId</code> 随机选择所选用的客户端限制为已知客户端名称的一个以逗号分隔的子集；未知名称将被忽略，空值表示从所有支持的客户端中选择。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为未设置；对之后启动的种子生效]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "启用此设置时，会在下载开始时预分配完整的文件大小，以减少碎片。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 true，需要重启 I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "启用此设置时，会为 I2PSnark 创建的新种子添加 BEP 47 填充文件，使除最后一个文件外的每个文件都结束于分片边界。下载和校验带填充的种子不受影响。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 false；配置文件每 30 秒重新读取一次，更改后的设置无需重启即可生效]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "启用此设置时，将使用所配置的语言对种子名称排序，以获得正确的字母顺序。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 false，需要重启 I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "此定义了一个以逗号分隔的 tracker 通告 URL 列表，其中的 tracker 被视为私有 tracker；使用它们的种子不会通过 DHT 或 PEX 与其他节点共享。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[需要重启 I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "此定义了新种子所显示默认 tracker 列表的 name,url 对，以逗号分隔，并将覆盖内置列表。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[需要重启 I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "启用此设置时，会封禁那些取消了大部分请求内容的节点。一旦某节点累计请求并取消至少 5 MB，当其取消量超过所请求字节数的 90% 时，该节点将被封禁（入站和出站连接均被拒绝），封禁时长为 <code>i2psnark.banDiscardPeriod</code> 分钟。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 true，需要重启 I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "此定义了丢弃率过高的节点所受封禁的持续时间（分钟）。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 60，需要重启 I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "此定义了 I2PSnark Web 界面消息区域中保留的最大消息数量。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 50，需要重启 I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "此定义了对单个种子进行完整存储校验（例如续传或重新校验）时并行校验分片所用的工作线程数。未设置时，线程数随 CPU 数量缩放，且至少为 4。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code>。[默认为 max(cores / 4, 4)；每次校验时读取，因此无需重启]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "设为目录路径时，未完成的下载将写入该目录下的暂存文件夹，而不是数据目录，并且只有当某个文件的全部分片下载完毕后才会被复制到数据目录。这有助于将部分下载内容与主数据卷分开（例如放在独立、更快或负载较低的磁盘上）。暂存目录必须有足够的可用空间来容纳最大的进行中下载。未设置或为空时，下载将像以前一样直接写入数据目录。若要更改，请添加到 I2PSnark 的配置文件 <code>i2psnark.config</code> 或在 I2PSnark 配置页面设置；此后添加的种子生效。[默认禁用]"
 
 msgid "miscellaneous"
 msgstr "杂项"
@@ -7752,7 +7752,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "设置为 true 时，I2P 在没有网络连接的情况下运行，如果您不断重新启动路由器以测试代码更新，这将非常有用，因为这可以防止网络中断。"
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "设为 true 时，当前日志文件及所有轮转归档文件将赋予路由器运行所属用户组读写权限（模式 660），以便该用户组的成员查看日志。这些文件绝不会被设置为全局可读。[默认为 false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "此设置设置为 true 时，将在站点地图上显示“<i>感兴趣的网站</i>< href=/sitemap>。</a>[默认值为假]"
@@ -9665,13 +9665,13 @@ msgid "Set Password"
 msgstr "设置密码"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "全部路由[高级]"
 
 msgid "Remote"
 msgstr "远程"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "所有路由器（客户端NETDB）[高级]"
 
 msgid "Encryption type"
 msgstr "加密类型"
@@ -9723,19 +9723,19 @@ msgid "Network Peers"
 msgstr "节点"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "快速节点"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "高容量节点"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "洪水节点"
 
 msgid "Banned Peers"
 msgstr "已封禁对等节点"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "最近的节点配置文件"
 
 msgid "Configure router logging options"
 msgstr "配置路由器日志选项"

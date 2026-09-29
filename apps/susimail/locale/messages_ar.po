@@ -247,7 +247,7 @@ msgid "no subject"
 msgstr "لا يوجد عنوان"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "لا يوجد مجلد Drafts؟"
 
 msgid "Found no valid sender address."
 msgstr "لم يتم العثور على عنوان مرسل صالح."

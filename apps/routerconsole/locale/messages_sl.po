@@ -574,7 +574,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Opozorilo: ni mogoče nastaviti storitve I2P+ na ročni zagon"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Opozorilo: imenika namestitve I2P+ ni mogoče najti"
 
 msgid "Configuration saved successfully"
 msgstr "Nastavitve so uspešno shranjene"
@@ -1446,7 +1446,7 @@ msgid "Ban peer until restart"
 msgstr "Prepoved parterja do ponovnega zagona"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Ročno prepovedano preko configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3557,10 +3557,10 @@ msgid "Low Latency"
 msgstr "Nizka zavzeta"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Ponovno preneseni paketi / poslani paketi, kot jih poroča prenos UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "Izguba"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tuneli, v katerih se je parter strinjal sodelovati"
@@ -3615,64 +3615,64 @@ msgstr "Konfiguriraj peer"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} v RAM-u / {1} na disku"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Visoka kapaciteta"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Prikazano"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Prikazanih {0} od {1} profilov"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Skrit je {0} zastarel profil"
+msgstr[1] "Skrita sta {0} zastarela profila"
+msgstr[2] "Skriti so {0} zastareli profili"
+msgstr[3] "Skritih je {0} zastarelih profilov"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Delež prikazanih vseh profilov"
 
 msgid "peers"
 msgstr "parterji"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Delež prikazanih profilov ravni"
 
 msgid "Window"
-msgstr ""
+msgstr "Okno"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Hitri RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "Največji RTT za članstvo v hitri ravni (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Povprečna izguba hitrih parterjev v ravni (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Povprečna izguba parterjev z visoko kapaciteto (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Slišan znotraj meje prikaza"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Iskanja"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Stopnja uspešnosti iskanja"
 
 msgid "Stores"
-msgstr ""
+msgstr "Shranjevanja"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Stopnja uspešnosti shranjevanja"
 
 msgid "Definitions"
 msgstr "Definicije"
@@ -3743,25 +3743,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "koliko novih parterjev so nam naročili v zadnjem času?"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Znana poplavna vozlišča"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Brez neuspeha"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Brez neuspehov iskanja (1h)"
 
 msgid "Response"
-msgstr ""
+msgstr "Odziv"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Čas odziva iskanja (1h)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "Kontakt 1h"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Kontaktiran v zadnji uri"
 
 msgid "1h Fail Rate"
 msgstr "1h Neuspešnost"
@@ -4751,10 +4751,10 @@ msgid "Slow Start Window Cap"
 msgstr "Omejitev okna počasnega zagona"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Največji dohodni medpomnilnik"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Največje število sočasnih pretokov"
 
 msgid "Max SYN Sends"
 msgstr "Največ SYN pošilja"
@@ -4769,7 +4769,7 @@ msgid "Max Retransmissions"
 msgstr "Največ ponovnih prenosov"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Delovne niti za sprejemanje"
 
 msgid "Writer Queue Size"
 msgstr "Velikost vrste za pisanje"
@@ -4853,16 +4853,16 @@ msgid "Search Timeout"
 msgstr "Časovna omejitev iskanja"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Omejitev iskanj"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Okno ponovne objave"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Odkriv ponovne objave"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Širina raziskovanja"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "Časovna omejitev iskanja LeaseSet"
@@ -4889,7 +4889,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Največje število vozlišč z visoko zmogljivostjo"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Prag spustitve parterja z veliko izgubo"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Časovna omejitev zahteve za gradnjo predora"
@@ -4916,25 +4916,25 @@ msgid "Max Delay Between Tests"
 msgstr "Največja zakasnitev med preizkusi"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Okno neuspeha pri testu predora"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Spodnja meja okna neuspeha pri testu predora"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Obdobje ohlajanja po neuspehu prvega skoka"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Prag neuspeha prvega skoka"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Prag zasedenosti dohodnega prometa"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Prag obrezovanja zastarelih gradenj"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Prag dušenja sočasnosti"
 
 msgid "NTCP Reader Threads"
 msgstr "Niti za branje NTCP"
@@ -4946,7 +4946,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "Interval varnostnega pregleda črpalke NTCP"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "Največja hitrost zank neaktivne črpalke NTCP"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Največje število sočasnih sporočil vozlišču"
@@ -5018,7 +5018,7 @@ msgid "Max Window Size"
 msgstr "Največja velikost okna"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Množitelj časovne omejitve povezave"
 
 msgid "Max Message Queue Age"
 msgstr "Največja starost vrste sporočil"
@@ -5036,16 +5036,16 @@ msgid "Server Handler Threads"
 msgstr "Niti strežniškega obdelovalca"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Zmogljivost čakalne vrste strežniškega obdelovalca"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Privzeto število niti strežnika na predor"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "Niti za prenos V/I"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "Časovna omejitev zaustavitve V/I"
 
 msgid "Build Handler Threads"
 msgstr "Niti obdelovalca gradnje"
@@ -5054,7 +5054,7 @@ msgid "Client Runner Max Threads"
 msgstr "Največje število niti odjemalskega izvajalnika"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Privzeto največje število povezav odjemalca"
 
 msgid "Participating Throttle Min"
 msgstr "Najmanjše dušenje sodelovanja"
@@ -5132,7 +5132,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Nepreizkušen multiplikator tunelskih pokrovov"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Velikost filtra IV predorov"
 
 msgid "Message Processing Throttle"
 msgstr "Plin za obdelavo sporočil"
@@ -5183,10 +5183,10 @@ msgid "Max congestion window during slow start."
 msgstr "Največje okno zasedenosti med počasnim zagonom."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Omejitev dohodnega medpomnilnika na povezavo (bajti)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Dinamična omejitev sočasnih pretokov na cilj."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Skupni poskusi SYN, preden obupajo pri rokovanju."
@@ -5201,7 +5201,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Ponovni prenosi pred prekinitvijo toka."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Niti za obdelavo dohodnih paketov na pretočno sejo."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Največji čas nedejavnosti pred prekinitvijo toka (ms)."
@@ -5291,16 +5291,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Časovna omejitev iskanja na vozlišče (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Trdni rok za vsako ponavljajoče iskanje (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Življenjska doba sporočil za shranjevanje ponovne objave najema (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Največje število parterjev, ki po iskanju prejmejo ponovno objavljen najem."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Sočasna raziskovalna iskanja na cikel."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Prilagodljiva omejitev roka za iskanja LeaseSet (ms)."
@@ -5327,7 +5327,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Največje število vozlišč z visoko zmogljivostjo v usmerjevalni tabeli."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Razmerje izgube, ki parter spusti iz hitrih ravni (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Časovna omejitev odgovora gradnje (ms)."
@@ -5354,25 +5354,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Največji interval med preizkusi predorov (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Največji čas, ki ga sme test predora trajati pred neuspehom (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Spodnja meja okna neuspeha pri testu predora (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Kako dolgo je parter preskočen po neuspehih prvega skoka (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Neuspehi, preden je parter preskočen med obdobjem ohlajanja."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Število dohodnih predorov, pod katerim se gradnje dušijo."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Delež časovnega proračuna, ki ga lahko gradnja čaka v čakalni vrsti, preden je obrezana (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Delež časovnih omejitev, ki sproži zmanjšanje sočasnih gradenj (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Niti, ki dešifrirajo dohodne podatke NTCP."
@@ -5384,7 +5384,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Interval varnostnega pregleda zataknjenih črpalk NTCP (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Omejitev neuporabljenih iteracij črpalke NTCP na sekundo (zanki/s)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Omejitev sporočil v prenosu na vozlišče UDP."
@@ -5441,7 +5441,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Zgornja meja ocene RTT (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Prilagodi časovno omejitev povezave vsakega odjemalca glede na omrežni RTT (30-200 %)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Zakasnitev pred prvim ponovnim prenosom (ms)."
@@ -5465,16 +5465,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Niti obdelovalca za dohodne povezave I2PTunnel."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Dohodne povezave, ki lahko čakajo na prosto nit strežniškega obdelovalca."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Privzeta omejitev niti strežniškega obdelovalca za vsak strežniški predor."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Poseben bazen za prenos podatkov s strežnika odjemalcu, ki sprosti niti obdelovalcev."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Časovna omejitev zaustavitve za prenose podatkov s strežnika odjemalcu (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Zaloga niti za obdelavo dohodnih zahtev za gradnjo."
@@ -5483,7 +5483,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Zgornja meja zaloge niti odjemalskega posrednika."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Privzeta omejitev povezav odjemalca."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Najmanjše število prehodnih predorov, ki jih lahko drži katero koli vozlišče."
@@ -5561,7 +5561,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časovna omejitev povezave vtičnice TCP za niti strežniškega obdelovalca predorov (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Eksponent filtra za odstranjevanje podvajanja IV predorov: vsak od njegovih dveh medpomnilnikov vsebuje 2^n bitov, zato par stane 2^(n-2) bajtov. Velikost je določena iz dejansko opaženih IV-jev; premajhen filter se pokaže kot izguba dobrih podatkov predora."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Največja povprečna zakasnitev sporočila pred zavrnitvijo tranzita (ms)."
@@ -5743,7 +5743,7 @@ msgid "Endpoint"
 msgstr "Končna točka"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Test uspešen"
@@ -6154,10 +6154,10 @@ msgid "Additional Router Caps"
 msgstr "Dodatne skupine zmogljivosti usmerjevalnika"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Dodajte skupine caps, ločene s presledki ali vejicami, npr. LUf,PUG. Uporabite ! za izključitev: G!f prepove G usmerjevalnike, razen če so poplavna vozlišča"
 
 msgid "Misc"
-msgstr ""
+msgstr "Razno"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Prepoved vrstnikov poplavnih vozlišč, ki se ne odzovejo na poizvedbe (stopnja napak >95 %)"
@@ -6178,10 +6178,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Prepovej pretirane zahteve za tunele"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Ko je omogočeno, so parterji, razrešeni iz omrežja, s katerimi nismo neposredno povezani – naslednji skoki prehoda kot tudi končne točke odjemalskih predorov – podvrženi prepovedim po pravilih. Ko je onemogočeno, so taki parteri oproščeni, razen če so neposredno povezani."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Prepovej partere naslednjega skoka"
 
 msgid "Clear all bans"
 msgstr "Počisti vse izključitve"
@@ -6324,10 +6324,10 @@ msgid "I2CP Port"
 msgstr "Vrata I2CP"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Ne obidite omrežja pri dostopu do lokalno gostovanih storitev"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Onemogoči Loopback"
 
 msgid "Require username and password"
 msgstr "Zahtevaj uporabniško ime in geslo"
@@ -7506,13 +7506,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Tla za sočasna iskanja RouterInfo naslednjega skoka med obdelavo gradnje predorov. Zagotavlja najmanjšo raven sočasnosti iskanja, tudi ko sodeluje malo predorov. [Privzeto 10 (4 na počasnih sistemih)"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Zgornja meja sočasnih iskanj RouterInfo naslednjega skoka med obdelavo gradnje predorov. Mesta štejejo različne naslednje skoke, ne posameznih zahtev: gradnje, ki si delijo isti naslednji skok, uporabijo eno iskanje. Ni sorazmerno s številom jeder; iskanja so čakanja, vezana na omrežje. [Privzeto je 64 (32 na počasnih sistemih)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Odstotek trenutno sodelujočih predorov, uporabljen za prilagajanje omejitve sočasnih iskanj po zagonu. Učinkovita omejitev je omejena med minLookupLimit in maxLookupLimit. [Privzeto je 40 (15 na počasnih sistemih)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Globina čakalne vrste, ki zadrži gradnje predorov, katerih naslednji skok se rešuje, medtem ko so vsa mesta za iskanje zasedena. Velikost je nastavljena tako, da se polna čakalna vrsta izprazni znotraj časovne omejitve gradnje pri izvoru; vnosi, starejši od tega časovnega okvira, se obravnavajo kot zastareli in izbrišejo ne glede na globino. [Privzeto je 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Največje dovoljeno prihodnje odstopanje za časovne žige zahtevkov za gradnjo predorov. Zahtevki s časovnimi žigi dlje v prihodnosti od tega se zavrnejo kot potencialni napadi s ponovnim predvajanjem. [Privzeto 300000 (5 minut)"
@@ -7620,7 +7620,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Najmanjše število aktivnih enakovrednih, potrebnih med zagonom usmerjevalnika, preden se omeji izbira raziskovalnih enakovrednih. Med zgodnjim zagonom je usmerjevalnik bolj popustljiv glede kakovosti enakovrednih. [Privzeto 6"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Največji čas v milisekundah, ki lahko prejeti SYN čaka v čakalni vrsti sprejema, preden ga prevzame accept(). Če je accept() zakasnjen (zaseden gostovalni strežnik), se povezava po tem oknu zavrne, zato višja vrednost prenaša kratke zastoje. Konfigurirana vrednost se uporabi brez ponovnega zagona. [Privzeto je 60000 (60 sekund)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Ta nastavitev specifična za tunel vam omogoča omogočanje ali onemogočanje odgovorov na pings, poslane na strežnike gostiteljene s strani usmerjevalnika. Da onemogočite pings, morate dodati vrstico <code>i2p.streaming.answerPings=false</code> v sekcijo <i>Prilagojene možnosti</i> za konfiguracijo strežnika v Menedžer tunela"
@@ -7629,22 +7629,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Privzeta največja zakasnitev toka v milisekundah, ko ni nastavljena eksplicitna časovna omejitev povezave. [Privzeto 10000 (10 sekund)"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Obdobje ohlajanja v milisekundah med poskusi povezave do istega nedosegljivega cilja. Preprečuje neprestalo poskušanje nedosegljivih parterjev. [Privzeto je 5000 (5 sekund)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Trajanje TIME-WAIT v milisekundah po prekinitvi pretočne povezave, med katerim se pozni paketi še vedno potrjujejo. Povečajte za poti z visoko zakasnitvijo, kjer so lahko končni ACK zakasnjeni. [Privzeto je 120000 (2 minuti)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Število odgovorov dušenemu cilju, preden se presežni paketi tiho spustijo. Preprečuje, da bi nevihte povezav preobremenile usmerjevalnik. [Privzeto 3"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, uvede naključno zakasnitev odgovora pong do 50 ms za vse strežnike s podporo za ping, ki jih gosti usmerjevalnik. Privzeto je onemogočeno. Takoj se uporabi za nove odzove pong, ponovni zagon ni potreben."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Začetna velikost okna zasedenosti (v paketih) za nove pretočne povezave. Večje okno hitreje zažene povezave, vendar lahko povzroči več ponovnih prenosov na zasedenih poteh. [Privzeto je 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Zgornja meja časovne omejitve povezave za pretakanje. Preprečuje, da bi časovne omejitve posameznih povezav presegle to mejo. Povečajte za zelo oddaljen dostop z visoko zakasnitvijo. Lahko jo prepišete za posamezno povezavo tako, da nastavite isto lastnost v naprednih možnostih odjemalca odjemalskega predora (npr. odjemalski predor IRC ima privzeto 300000). [Privzeto je 75000 (75 sekund)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Največji čas v milisekundah za čakanje na odgovor pong pri pinganju enakovrednega. [Privzeto 300000 (5 minut)"
@@ -7653,43 +7653,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Ta nastavitev, ko je omogočena, spremeni maksimalno naključno zamudo pong odgovora za strežnike, ki podpirajo ping, če je tudi omogočena i2p.streaming.enablePongDelay. Če ni jasno določeno, se uporabi privzeto vrednost 50 ms"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Največje število čakajočih povezav (SYN in delnih paketov) v čakalni vrsti sprejema strežnika. Ko je polna, novi SYN prejmejo RESET (odjemalec lahko poskusi znova), ne da bi tiho izpuščeni, kar odjemalca obvesti o zavrnitvi. [Privzeto je 256 (128 na počasnih sistemih)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Največji zamik ponovnega prenosa v milisekundah. Interval ponovnega prenosa ne bo presegel te vrednosti ne glede na umik. Povečajte za daljši čas med poskusi na zamašenih poteh. [Privzeto 30000 (30s)"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Največje število ponovnih prenosov paketov, preden se odpovemo povezavi. Višje vrednosti izboljšajo zanesljivost na izgubljivih povezavah, vendar odlašajo zaznavanje neuspeha. [Privzeto je 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Največja časovna omejitev ponovnega prenosa v milisekundah po eksponentnem umiku (podvojitev). Omejuje, kako dolgo pošiljatelj čaka, preden poskusi ponovni prenos med resnim zastojem. [Privzeto 30000 (30s)"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Največji čas odziva v milisekundah za pretočne povezave. Omejuje izračunani RTT, da se po motnjah v omrežju preprečijo patološke vrednosti časovne omejitve. [Privzeto je 10000 (10 sekund)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Največja velikost okna počasnega zagona za pretočne povezave. Omejuje okno zasedenosti med počasnim zagonom, da se omrežje ne preobremeni. [Privzeto je 256 (32 na počasnih sistemih)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Največja velikost okna zasedenosti (v paketih) za pretočne povezave. Omejuje največjo prepustnost posameznega pretoka. [Privzeto je 512 (384 na počasnih sistemih)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Najmanjši zamik ponovnega prenosa v milisekundah. Paketi ne bodo ponovno poslani hitreje od tega intervala. Nižje vrednosti omogočajo hitrejšo obnovitev na izgubljivih povezavah. [Privzeto 100ms"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Trajanje v minutah začasne samodejne prepovedi, ki se namesti oddaljenim ciljem, ki presegajo spodnje pragove zahtevkov pretokov. Prepovedanim ciljem so vse nove dohodne povezave zavrnjene za čas prepovedi. Čistilnik to vrednost ponovno prebere vsakih 60 sekund, zato jo lahko spremenite med delovanjem prek <a href=/configadvanced>Strani za napredno konfiguracijo</a>. Nastavite na 0, da samodejno prepoved popolnoma onemogočite. [Privzeto je 5 (5 minut)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Največje število zavrnjenih dohodnih SYN z enega oddaljenega cilja v drsnem oknu, preden se sproži samodejna prepoved. Števec zavrnitev vsakih 60 sekund upada za polovico (namesto da se ponastavi), zato posamezni izbruhi izzvenijo, trajne poplavitve pa se kopičijo. [Privzeto je 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Največje število dohodnih SYN, dovoljenih z enega oddaljenega cilja v oknu <code>tempBanSynRate</code>, preden se zabeleži izbruh. Prvi izbruh le zabeleži opozorilo; drugi izbruh v 60 sekundah sproži samodejno prepoved. Ta dvostopenjski prehod spusti skozi legitimni izbruh ob nalaganju strani, hkrati pa še vedno ujame trajne poplavitve povezav, ki bi sicer preplavile števec zavrnitev. [Privzeto je 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Časovno okno v milisekundah za preverjanje izbruhov SYN. Če je z enega cilja v tem oknu prejetih več kot <code>tempBanSynBurst</code> SYN, se zabeleži izbruh; drugi izbruh v 60 sekundah sproži samodejno prepoved. [Privzeto je 1000 (1 sekunda)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Zgornja meja za reaktivno omejitev sočasnih pretokov tunerja. Tuner usmerjevalnika samodejno prilagaja omejitev sočasnih pretokov za posamezen cilj glede na povpraševanje, zavrnitve in zdravje usmerjevalnika, vendar pa cilja nikoli ne more dvigniti nad njegovo lastno nastavitev <code>i2p.streaming.maxConcurrentStreams</code> za posamezen predor. Ta vrednost omejuje, kako visoko sme tuner potisniti prekoračitev. Povečajte, če gostite storitve z velikim prometom in tuner ne more dovolj dvigniti omejitve. [Privzeto je 1024, obseg 64–8192, potreben je ponovni zagon]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Interval v milisekundah med samodejnimi ponovnimi objavami LeaseSet. Višje vrednosti zmanjšajo promet netdb, vendar lahko povzročijo zastarele informacije o najemu. [Privzeto 300000 (5 minut)"
@@ -7698,7 +7698,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Prag v milisekundah za proaktivno ponovno objavo LeaseSet. Če najem poteče v tem oknu, se LeaseSet ponovno objavi takoj, namesto da bi čakal na naslednji periodični cikel. [Privzeto 180000 (3 minute)"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Največje število hkratnih sej odjemalcev I2CP, ki jih bo usmerjevalnik sprejel. [Privzeto je 1536 (768 na počasnih sistemih)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Ko je nastavljeno na true, onemogoči lokalno-lokalno dostavo v zanki in prisili ves promet skozi predore (odhodni predor → omrežje → dohodni predor → lokalni cilj). Uporabno za testiranje vedenja usmerjanja predorov, ko sta vir in cilj na istem usmerjevalniku. [Privzeto onemogočeno"
@@ -7725,55 +7725,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Največje število zaporednih napak prenosa brez podatkov, preden eepget obupa, tudi če poskusi ostanejo. Povečajte, če prenosi ne uspejo brez prejemanja podatkov. [Privzeto 20"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Fiksna zakasnitev v milisekundah med poskusi eepget. Uporabite -1 za zakasnitev z naključnim odstopanjem (osnovno 5 s plus do 10 s odstopanja), da porazdelite obremenitev na nezanesljivem viru. Vrednost 0 povzroči takojšen ponoven poskus. [Privzeto je -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Ko je omogočeno, eepget razrešuje imena gostiteljev za prenose HTTPS prek DNS-over-HTTPS, kar ščiti iskanja pred lokalnim vohanjem. Zaobide se pri prenosu prek posredniškega strežnika ali kadar je gostitelj IP naslov. [Privzeto je true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev določa največje število torrentov, katerih shramba se preverja hkrati, ko se več torrentov zažene ali skupaj preveri znova, in s tem omeji vihar diskovnega V/I ob zagonu ali po zrušitvi. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je 4, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Ta nastavitev omogoča določitev največjega števila datotek na torrent, ki jih bo I2PSnark dovolil pri prenosu ali ustvarjanju torrenta. Upoštevajte, da lahko bistveno povečanje te vrednosti glede na privzetih 2000 datotek zahteva dodatno konfiguracijo na gostujočem sistemu za povečanje največjega števila odprtih datotek, ki ga dovoli operacijski sistem (npr. <code>ulimit -n</code> v Linuxu). Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code> ali nastavite na strani konfiguracije I2PSnark; velja za torrente, dodane pozneje."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, občasno znova zažene vse tekoče torrente, da se njihovi cilji zamenjajo z novimi identitetami, kar prekine dolgotrajno povezavo med IP naslovom usmerjevalnika in cilji torrentov pri sledilnikih ter v DHT. Cikel se izvaja vsake 3 ure plus naključna zakasnitev od 1 do 60 minut, preskoči se, kadar je kateri torrent dejansko v prenosu, in znova zažene le torrente, ki so tekali. Cilji so začasni in se sicer spremenijo ob vsakem ponovnem zagonu; to razširi veljavnost še znotraj enega cikla. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je true, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Ta nastavitev nadzira ponarejanje identitete odjemalca: ID parterja in User-Agent pri sledilniku, ID parterja pri rokovanju BitTorrent, ime odjemalca pri razširjenem rokovanju in prenosi z web seed se vsi predstavijo kot izbrani dobro znan odjemalec in ne kot I2PSnark. V načinu z več cilji dobi vsak bazen ciljev privzeto svojega naključnega odjemalca; v načinu z enim ciljem se I2PSnark predstavi sam, razen če je nastavljeno ime odjemalca ali \"random\". Nastavite na \"random\", da vsilite naključno izbiro v vseh načinih, na \"i2psnark\", da ohranite klasično identiteto tudi v načinu z več cilji, ali na ime odjemalca, da vedno posnemate tega odjemalca. Nizovi različic so vezani na trenutne izdaje višjih različic in so dosledni med ID-jem parterja, User-Agentom in razširjenim rokovanjem. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je naključno na bazen v načinu z več cilji; velja za torrente, zažete pozneje]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Ta nastavitev po želji omeji odjemalce, izbrane z naključno izbiro za <code>i2psnark.clientId</code>, na podmnožico znanih imen odjemalcev, ločeno z vejicami; neznana imena so prezrta, prazna vrednost pa izbira med vsemi podprtimi odjemalci. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto ni nastavljeno, velja za torrente, zažete pozneje]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, ob začetku prenosa vnaprej dodeli celotne velikosti datotek na disku, da zmanjša fragmentacijo. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je true, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, doda datoteke za oblazinjenje po BEP 47 novim torrentom, ki jih ustvari I2PSnark, zato se vsaka datoteka razen zadnje konča na meji kosa. Prenos in preverjanje oblazinjenih torrentov nista prizadeta. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je false; konfiguracijska datoteka se ponovno prebere vsakih 30 sekund in spremenjene nastavitve se uporabijo brez ponovnega zagona]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, razvrsti imena torrentov z uporabo nastavljenega jezika za pravilni abecedni vrstni red. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je false, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev določa seznam URL-jev za obveščanje sledilnikov, ločenih z vejicami, ki se obravnavajo kot zasebni sledilniki; torrenti, ki jih uporabljajo, niso deljeni z drugimi parterji prek DHT ali PEX. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev določa pare ime,url, ločene z vejicami, za privzeti seznam sledilnikov, ki je prikazan za nove torrente, in s tem prekrije vgrajeni seznam. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev, ko je omogočena, prepove parterje, ki prekličejo večino tega, kar zahtevajo. Ko je parter skupaj zahteval in preklical vsaj 5 MB, razmerje preklicanega nad 90 % zahtevanih bajtov povzroči prepoved parterja (zavrnjen je na dohodnih in odhodnih povezavah) za <code>i2psnark.banDiscardPeriod</code> minut. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je true, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev določa trajanje v minutah prepovedi, ki se uporabi parterjem s pretiranim razmerjem zavržkov. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je 60, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ta nastavitev določa največje število sporočil, ki se ohranijo v območju sporočil spletnega vmesnika I2PSnark. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je 50, potreben je ponovni zagon I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Ta nastavitev določa število delovnih niti, uporabljenih za vzporedno preverjanje delov med popolnim pregledom shrambe posameznega torrenta, npr. ob nadaljevanju ali ponovnem preverjanju. Ko ni nastavljeno, se število niti prilagaja številu procesorjev, najmanj 4. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code>. [Privzeto je max( jeder / 4, 4); bere se ob vsakem preverjanju, zato ponovni zagon ni potreben]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Ko je nastavljena pot do imenika, se nedokončani prenosi zapisujejo v vmesno mapo v tem imeniku namesto v imenik podatkov, posamezna datoteka pa se kopira v imenik podatkov šele, ko so preneseni vsi njeni kosi. To je koristno za držanje delnih prenosov stran od glavnega nosilka podatkov (na primer na ločenem, hitrejšem ali manj obremenjenem disku). Vmesni imenik mora imeti dovolj prostega prostora za največje potekajoče prenose. Ko ni nastavljen ali je prazen, se prenosi zapisujejo neposredno v imenik podatkov kot prej. Za spremembo dodajte v konfiguracijsko datoteko I2PSnark <code>i2psnark.config</code> ali nastavite na strani konfiguracije I2PSnark; velja za torrente, dodane pozneje. [Privzeto onemogočeno]"
 
 msgid "miscellaneous"
 msgstr "različno"
@@ -7785,7 +7785,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Ko je nastavljeno na true, deluje I2P brez omrežne povezanosti, kar je uporabno, če neprestano ponovno zagnate usmerjevalnik za preizpito posodobitve kode, saj to prepreči prekinitev omrežja"
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Ko je nastavljeno na true, sta trenutna dnevniška datoteka in vsi zasukani arhivi naredljiva za branje in pisanje skupini, pod katero teče usmerjevalnik (način 660), tako da lahko uporabniki, ki so člani te skupine, pregledajo dnevnike. Datoteke nikoli niso naredljive za branje vsem. [Privzeto je false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Ta nastavitev dovoli konfiguracijo alternativnih strežnikov NTP, potrebnih za zagotavljanje, da vaš usmerjevalnik vzdržuje točen čas na uro. [Privzeto je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org"
@@ -9698,13 +9698,13 @@ msgid "Set Password"
 msgstr "Nastavite geslo"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Vsi usmerjevalniki [Napredno]"
 
 msgid "Remote"
 msgstr "Oddaljen"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Vsi usmerjevalniki (NetDb odjemalca) [Napredno]"
 
 msgid "Encryption type"
 msgstr "Vrsta šifriranja"
@@ -9756,19 +9756,19 @@ msgid "Network Peers"
 msgstr "Sosednji strežniki omrežja"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Hitri parteri"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Parteri z visoko kapaciteto"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Poplavni parteri"
 
 msgid "Banned Peers"
 msgstr "Prepovedani parterji"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Nedavni profili parterjev"
 
 msgid "Configure router logging options"
 msgstr "Konfigurirajte možnosti dnevnikovanja strežnika"

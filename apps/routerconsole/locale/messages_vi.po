@@ -41,12 +41,12 @@ msgstr "Bắt đầu gieo lại"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
+msgstr[0] "Đã nhận {0} thông tin bộ định tuyến từ các máy chủ reseed"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
+msgstr[0] "Chỉ nhận được {0} thông tin bộ định tuyến từ các máy chủ reseed"
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -568,7 +568,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Cảnh báo: không thể đặt dịch vụ I2P ở chế độ khởi động thủ công"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Cảnh báo: không tìm thấy thư mục cài đặt I2P+"
 
 msgid "Configuration saved successfully"
 msgstr "Đã lưu cấu hình thành công"
@@ -736,7 +736,7 @@ msgstr "Kiểm tra cập nhật plugin không thành công"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
+msgstr[0] "{0} plugin đã cập nhật"
 
 msgid "Plugin check complete"
 msgstr "Kiểm tra plugin hoàn tất"
@@ -1437,7 +1437,7 @@ msgid "Ban peer until restart"
 msgstr "Cấm ngang hàng cho đến khi khởi động lại"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Bị cấm thủ công qua configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1537,7 +1537,7 @@ msgstr "Không thể gieo hạt lại từ tệp"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
+msgstr[0] "Reseed thành công, đã tải {0} thông tin bộ định tuyến từ tệp."
 
 msgid "Reset URL list"
 msgstr "Đặt lại danh sách URL"
@@ -1581,12 +1581,12 @@ msgstr "Tắt máy sau {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
+msgstr[0] "{0} đường hầm chuyển tuyến vẫn đang hoạt động"
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] ""
+msgstr[0] "Vui lòng chờ cam kết định tuyến hết hạn cho {0} đường hầm"
 
 #, java-format
 msgid "Restart in {0}"
@@ -3423,7 +3423,7 @@ msgstr "Kết nối bị tồn đọng"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] ""
+msgstr[0] "{0} peer"
 
 msgid "UDP connections"
 msgstr "Kết nối UDP"
@@ -3515,7 +3515,7 @@ msgstr "Họ cung cấp phần giới thiệu với chúng ta"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
+msgstr[0] "{0} lần thất bại"
 
 msgid "backlogged"
 msgstr "đăng nhập trở lại"
@@ -3533,10 +3533,10 @@ msgid "Low Latency"
 msgstr "Độ trễ thấp"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Số gói tin đã truyền lại / số gói tin đã gửi, theo báo cáo của lớp truyền tải UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "Mất gói"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Các đường hầm đồng đẳng đã đồng ý tham gia"
@@ -3591,61 +3591,61 @@ msgstr "Cấu hình peer"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} trong RAM / {1} trên đĩa"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Dung lực cao"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Đã hiển thị"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Hiển thị {0} trong {1} hồ sơ"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
+msgstr[0] "{0} hồ sơ cũ đã ẩn"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Tỷ lệ tổng số hồ sơ được hiển thị"
 
 msgid "peers"
 msgstr "đồng nghiệp"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Tỷ lệ hồ sơ theo bậc được hiển thị"
 
 msgid "Window"
-msgstr ""
+msgstr "Cửa sổ"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "RTT nhanh"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "RTT tối đa để thuộc bậc nhanh (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Mất gói trung bình của peer bậc nhanh (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Mất gói trung bình của peer dung lực cao (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Được nghe trong phạm vi thời gian hiển thị"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Tra cứu"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Tỷ lệ thành công tra cứu"
 
 msgid "Stores"
-msgstr ""
+msgstr "Lưu trữ"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Tỷ lệ thành công lưu trữ"
 
 msgid "Definitions"
 msgstr "Định nghĩa"
@@ -3716,25 +3716,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "gần đây họ đã nói với chúng ta về bao nhiêu đồng nghiệp mới?"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Các nút lũ đã biết"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Không lỗi"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Không có lỗi tra cứu (1h)"
 
 msgid "Response"
-msgstr ""
+msgstr "Phản hồi"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Thời gian phản hồi tra cứu (1h)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "Liên hệ 1h"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Đã liên hệ trong 1h"
 
 msgid "1h Fail Rate"
 msgstr "Tỷ lệ thất bại 1h"
@@ -4364,7 +4364,7 @@ msgstr "Tần số trung bình trọn đời"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
+msgstr[0] "{0} sự kiện"
 
 msgid "rate"
 msgstr "tỷ lệ"
@@ -4409,7 +4409,7 @@ msgstr "Giá trị trung bình trọn đời"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
+msgstr[0] "{0} sự kiện"
 
 msgid "sent"
 msgstr "đã gửi"
@@ -4718,10 +4718,10 @@ msgid "Slow Start Window Cap"
 msgstr "Giới hạn cửa sổ khởi động chậm"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Bộ đệm đầu vào tối đa"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Số luồng đồng thời tối đa"
 
 msgid "Max SYN Sends"
 msgstr "Số lần gửi SYN tối đa"
@@ -4736,7 +4736,7 @@ msgid "Max Retransmissions"
 msgstr "Số lần truyền lại tối đa"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Số luồng công nhân nhận"
 
 msgid "Writer Queue Size"
 msgstr "Kích thước hàng đợi ghi"
@@ -4820,16 +4820,16 @@ msgid "Search Timeout"
 msgstr "Thời gian chờ tìm kiếm"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Giới hạn tìm kiếm"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Cửa sổ xuất bản lại"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Độ lan toả khi xuất bản lại"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Độ rộng thám dò"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "Thời gian chờ tra cứu LeaseSet"
@@ -4856,7 +4856,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Số đồng đẳng dung lượng cao tối đa"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Ngưỡng hạ bậc peer mất gói"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Thời gian chờ yêu cầu xây dựng đường hầm"
@@ -4883,25 +4883,25 @@ msgid "Max Delay Between Tests"
 msgstr "Độ trễ tối đa giữa các lần kiểm tra"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Cửa sổ lỗi kiểm tra đường hầm"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Mức sàn của cửa sổ lỗi kiểm tra đường hầm"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Thời gian chờ lỗi bước nhảy đầu"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Ngưỡng lỗi bước nhảy đầu"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Ngưỡng tắc nghẽn đầu vào"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Ngưỡng loại bỏ lần xây dựng cũ"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Ngưỡng điều tiết đồng thời"
 
 msgid "NTCP Reader Threads"
 msgstr "Luồng đọc NTCP"
@@ -4913,7 +4913,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "Khoảng an toàn bơm NTCP"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "Tần suất vòng lặp nhàn rỗi tối đa của bơm NTCP"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Số tin nhắn đồng đẳng đồng thời tối đa"
@@ -4985,7 +4985,7 @@ msgid "Max Window Size"
 msgstr "Kích thước cửa sổ tối đa"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Hệ số nhân thời gian chờ kết nối"
 
 msgid "Max Message Queue Age"
 msgstr "Tuổi hàng đợi tin nhắn tối đa"
@@ -5003,16 +5003,16 @@ msgid "Server Handler Threads"
 msgstr "Luồng xử lý máy chủ"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Sức chứa hàng đợi bộ xử lý máy chủ"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Số luồng mặc định cho mỗi đường hầm máy chủ"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "Số luồng truyền I/O"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "Thời gian chờ I/O bị treo"
 
 msgid "Build Handler Threads"
 msgstr "Luồng xử lý xây dựng"
@@ -5021,7 +5021,7 @@ msgid "Client Runner Max Threads"
 msgstr "Số luồng chạy máy khách tối đa"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Số kết nối tối đa mặc định của khách"
 
 msgid "Participating Throttle Min"
 msgstr "Điều tiết tham gia tối thiểu"
@@ -5099,7 +5099,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Hệ số nhân nắp đường hầm chưa được kiểm tra"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Kích thước bộ lọc IV đường hầm"
 
 msgid "Message Processing Throttle"
 msgstr "Van xử lý tin nhắn"
@@ -5150,10 +5150,10 @@ msgid "Max congestion window during slow start."
 msgstr "Cửa sổ tắc nghẽn tối đa trong khởi động chậm."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Giới hạn bộ đệm đầu vào cho mỗi kết nối (byte)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Giới hạn động số luồng đồng thời cho mỗi đích."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Tổng số lần thử SYN trước khi từ bỏ việc bắt tay."
@@ -5168,7 +5168,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Số lần truyền lại trước khi hủy luồng."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Số luồng xử lý gói tin đầu vào cho mỗi phiên truyền phát."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Thời gian rỗi tối đa trước khi hủy luồng (ms)."
@@ -5258,16 +5258,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Thời gian chờ tra cứu mỗi đồng đẳng (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Thời hạn cứng cho mỗi lần tìm kiếm lặp lại (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Thời gian sống của thông báo lưu khi xuất bản lại hợp đồng thuê (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Số peer tối đa nhận được hợp đồng thuê đã xuất bản lại sau một lần tìm kiếm."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Số lần tìm kiếm thăm dò đồng thời trong mỗi chu kỳ."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Giới hạn thời hạn thích ứng cho tra cứu LeaseSet (ms)."
@@ -5294,7 +5294,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Số đồng đẳng dung lượng cao tối đa trong bảng định tuyến."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Tỷ lệ mất gói khiến một peer bị hạ khỏi các bậc nhanh (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Thời gian chờ phản hồi xây dựng (ms)."
@@ -5321,25 +5321,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Khoảng tối đa giữa các lần kiểm tra đường hầm (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Thời gian tối đa một lần kiểm tra đường hầm có thể diễn ra trước khi bị coi là thất bại (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Mức sàn cho cửa sổ lỗi kiểm tra đường hầm (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Bao lâu một peer bị bỏ qua sau các lỗi bước nhảy đầu (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Số lần thất bại trước khi một peer bị bỏ qua trong thời gian chờ."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Số đường hầm đầu vào dưới mức mà các lần xây dựng sẽ bị điều tiết."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Tỷ lệ phần trăm của ngân sách thời gian chờ dành cho việc xếp hàng trước khi loại bỏ một lần xây dựng (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Tỷ lệ thời gian chờ kích hoạt việc giảm số lần xây dựng đồng thời (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Các luồng giải mã dữ liệu NTCP đến."
@@ -5351,7 +5351,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Khoảng quét an toàn cho máy bơm NTCP bị kẹt (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Giới hạn số lần lặp của bơm NTCP nhàn rỗi mỗi giây (vòng lặp/giây)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Giới hạn tin nhắn đang truyền mỗi đồng đẳng UDP."
@@ -5408,7 +5408,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Giới hạn trên của ước tính RTT (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Điều chỉnh thời gian chờ kết nối của từng client theo RTT của mạng (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Độ trễ trước khi truyền lại đầu tiên (ms)."
@@ -5432,16 +5432,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Các luồng xử lý cho kết nối I2PTunnel đến."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Số kết nối đầu vào được phép chờ một luồng xử lý máy chủ đang rảnh."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Giới hạn mặc định số luồng xử lý máy chủ cho mỗi đường hầm máy chủ."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Nhóm riêng cho việc truyền dữ liệu Server→Client, giải phóng các luồng xử lý."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Thời gian chờ treo cho các lần truyền dữ liệu Server→Client (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Nhóm luồng xử lý yêu cầu xây dựng đến."
@@ -5450,7 +5450,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Giới hạn trên cho nhóm luồng proxy máy khách."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Giới hạn kết nối khách mặc định."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Số đường hầm trung chuyển tối thiểu bất kỳ đồng đẳng nào có thể giữ."
@@ -5528,7 +5528,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Thời gian chờ kết nối socket TCP cho các luồng xử lý máy chủ đường hầm (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Số mũ của bộ lọc khử trùng lặp IV đường hầm: mỗi bộ đệm trong hai bộ đệm của nó chứa 2^n bit, nên cả cặp tốn 2^(n-2) byte. Được cỡ theo các IV thực sự gặp phải; quá nhỏ sẽ thể hiện ra ở việc dữ liệu đường hầm tốt bị loại bỏ."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Độ trễ tin nhắn trung bình tối đa trước khi từ chối chuyển tuyến (ms)."
@@ -5710,7 +5710,7 @@ msgid "Endpoint"
 msgstr "Điểm cuối"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Kiểm tra thành công"
@@ -6121,10 +6121,10 @@ msgid "Additional Router Caps"
 msgstr "Nhóm khả năng bộ định tuyến bổ sung"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Thêm các nhóm caps, phân tách bằng dấu cách hoặc dấu phẩy, ví dụ LUf,PUG. Dùng ! để loại trừ: G!f cấm các bộ định tuyến G trừ khi chúng là nút lũ"
 
 msgid "Misc"
-msgstr ""
+msgstr "Khác"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Cấm các nút lũ ngang hàng không phản hồi các truy vấn (tỷ lệ lỗi >95%)"
@@ -6145,10 +6145,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Cấm yêu cầu tunnel quá mức"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Khi được bật, các peer được phân giải từ mạng mà chúng ta không kết nối trực tiếp - cả bước nhảy tiếp theo của đường hầm chuyển tuyến lẫn các đầu cuối đường hầm khách - sẽ chịu các lệnh cấm theo chính sách. Khi tắt, các peer như vậy được miễn trừ trừ khi có kết nối trực tiếp."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Cấm peer bước nhảy tiếp theo"
 
 msgid "Clear all bans"
 msgstr "Xóa tất cả lệnh cấm"
@@ -6291,10 +6291,10 @@ msgid "I2CP Port"
 msgstr "Cổng I2CP"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Không bỏ qua mạng khi truy cập các dịch vụ được lưu trữ cục bộ"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Tắt loopback"
 
 msgid "Require username and password"
 msgstr "Yêu cầu tên người dùng và mật khẩu"
@@ -7473,13 +7473,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Mức sàn cho các tra cứu RouterInfo bước nhảy tiếp theo đồng thời trong quá trình xử lý xây dựng đường hầm. Đảm bảo mức độ đồng thời tra cứu tối thiểu ngay cả khi ít đường hầm tham gia. [Mặc định 10 (4 trên hệ thống chậm)]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Giới hạn trên của các tra cứu RouterInfo bước nhảy tiếp theo đồng thời trong quá trình xử lý xây dựng đường hầm. Các ô tính theo bước nhảy tiếp theo khác nhau chứ không phải theo từng yêu cầu riêng lẻ: các lần xây dựng dùng chung một bước nhảy tiếp theo sẽ dùng lại cùng một lần tìm kiếm. Không nhân theo số lõi; các tra cứu là thao tác chờ phụ thuộc mạng. [Mặc định 64 (32 trên hệ thống chậm)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Tỷ lệ phần trăm của các đường hầm tham gia hiện tại được dùng để nhân tỉ lệ giới hạn tra cứu đồng thời sau khi khởi động. Giới hạn hiệu lực được kẹp trong khoảng minLookupLimit đến maxLookupLimit. [Mặc định 40 (15 trên hệ thống chậm)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Độ sâu của hàng đợi chứa các lần xây dựng đường hầm mà bước nhảy tiếp theo đang được phân giải trong khi tất cả các ô tra cứu đều bận. Được cỡ sao cho một hàng đợi đầy thoát ra trong thời gian chờ xây dựng của bên khởi tạo; các mục cũ hơn ngân sách thời gian đó bị loại bỏ như cũ bất kể độ sâu. [Mặc định 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Độ lệch tương lai tối đa cho phép đối với dấu thời gian yêu cầu xây dựng đường hầm. Các yêu cầu có dấu thời gian xa hơn trong tương lai so với mức này sẽ bị từ chối như các cuộc tấn công phát lại tiềm năng. [Mặc định 300000 (5 phút)]"
@@ -7587,7 +7587,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Số lượng peer đang hoạt động tối thiểu cần thiết trong quá trình khởi động bộ định tuyến trước khi hạn chế lựa chọn peer thăm dò. Trong quá trình khởi động ban đầu, bộ định tuyến dễ dãi hơn về chất lượng peer. [Mặc định 6]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Thời gian tối đa tính bằng mili giây mà một SYN đã nhận được có thể chờ trong hàng đợi chấp nhận trước khi accept() lấy đi. Nếu accept() bị trì hoãn (máy chủ lưu trữ đang bận) thì kết nối sẽ bị từ chối sau khoảng thời gian này, nên giá trị cao hơn giúp chịu được các đợt tắc tạm thời. Giá trị đã cấu hình được áp dụng mà không cần khởi động lại. [Mặc định 60000 (60 giây)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Cài đặt này cho phép bạn bật hoặc tắt phản hồi đối với ping gửi đến các máy chủ do bộ định tuyến lưu trữ. Để vô hiệu hóa ping, bạn phải thêm dòng <code>i2p.streaming.answerPings=false</code> vào phần <i>Tuỳ chọn tùy biến</i> cho cấu hình máy chủ trong Trình quản lý đường ống."
@@ -7596,22 +7596,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Độ trễ luồng tối đa mặc định tính bằng mili giây khi không có thời gian chờ kết nối rõ ràng nào được đặt. [Mặc định 10000 (10 giây)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Thời gian chờ tính bằng mili giây giữa các lần thử kết nối tới cùng một đích không thể truy cập. Ngăn chặn việc dội liên tục vào các peer không thể truy cập. [Mặc định 5000 (5 giây)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Thời lượng TIME-WAIT tính bằng mili giây sau khi một kết nối truyền phát ngắt kết nối, trong thời gian đó các gói tin đến muộn vẫn được phản hồi. Tăng giá trị này cho các đường dẫn có độ trễ cao, nơi các ACK cuối cùng có thể bị chậm. [Mặc định 120000 (2 phút)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Số lần trả lời cho một đích bị điều tiết trước khi âm thầm loại bỏ các gói tin dư thừa. Ngăn chặn các cơn bão kết nối làm quá tải bộ định tuyến. [Mặc định 3]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ áp dụng độ trễ pong ngẫu nhiên tối đa 50ms cho mọi máy chủ có hỗ trợ ping do bộ định tuyến lưu trữ. Mặc định là tắt. Được áp dụng ngay cho các pong mới, không cần khởi động lại."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Kích thước cửa sổ tắc nghẽn ban đầu (tính bằng gói tin) cho các kết nối truyền phát mới. Cửa sổ lớn hơn sẽ khởi động kết nối nhanh hơn nhưng có thể gây truyền lại nhiều hơn trên các đường dẫn bị tắc nghẽn. [Mặc định 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Giới hạn trên cho thời gian chờ kết nối truyền phát. Ngăn thời gian chờ của từng kết nối vượt quá trần này. Tăng giá trị này cho việc truy cập từ xa có độ trễ rất cao. Có thể ghi đè theo từng kết nối bằng cách đặt cùng thuộc tính này trong tùy chọn khách nâng cao của một đường hầm khách (ví dụ đường hầm khách IRC mặc định là 300000). [Mặc định 75000 (75 giây)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Thời gian tối đa tính bằng mili giây để chờ phản hồi pong khi ping một peer. [Mặc định 300000 (5 phút)]"
@@ -7620,43 +7620,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Thiết lập này, khi được bật, sẽ sửa đổi độ trễ phản hồi ngẫu nhiên tối đa được giới thiệu cho các máy chủ cho phép ping, nếu <code>i2p.streaming.enablePongDelay</code> cũng được bật. Trừ khi rõ ràng đặt, giá trị mặc định là 50ms sẽ được sử dụng."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Số kết nối đang chờ tối đa (SYN và các gói tin dở dang) trong hàng đợi chấp nhận của máy chủ. Khi hàng đợi đầy, các SYN mới sẽ nhận được một RESET (client có thể thử lại) thay vì bị âm thầm loại bỏ, nhờ đó client vẫn biết mình bị từ chối. [Mặc định 256 (128 trên hệ thống chậm)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Độ trễ truyền lại tối đa tính bằng mili giây. Khoảng thời gian truyền lại sẽ không vượt quá giá trị này bất kể backoff. Tăng để cho phép thời gian dài hơn giữa các lần thử trên các đường bị tắc nghẽn. [Mặc định 30000 (30gi)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Số lần truyền lại gói tin tối đa trước khi từ bỏ một kết nối. Giá trị cao hơn giúp cải thiện độ tin cậy trên các liên kết mất gói nhưng lại làm chậm việc phát hiện thất bại. [Mặc định 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Thời gian chờ truyền lại tối đa tính bằng mili giây sau backoff theo cấp số nhân (nhân đôi). Giới hạn thời gian người gửi chờ trước khi cố gắng truyền lại trong tình trạng tắc nghẽn nghiêm trọng. [Mặc định 30000 (30gi)]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Thời gian khứ hồi tối đa tính bằng mili giây cho các kết nối truyền phát. Giới hạn RTT được tính toán để tránh các giá trị thời gian chờ bất thường sau khi mạng bị gián đoạn. [Mặc định 10000 (10 giây)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Kích thước cửa sổ khởi động chậm tối đa cho các kết nối truyền phát. Giới hạn cửa sổ tắc nghẽn trong quá trình khởi động chậm để tránh làm quá tải mạng. [Mặc định 256 (32 trên hệ thống chậm)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Kích thước cửa sổ tắc nghẽn tối đa (tính bằng gói tin) cho các kết nối truyền phát. Giới hạn thông lượng tối đa của một luồng đơn lẻ. [Mặc định 512 (384 trên hệ thống chậm)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Độ trễ truyền lại tối thiểu tính bằng mili giây. Các gói tin sẽ không được gửi lại nhanh hơn khoảng thời gian này. Giá trị thấp hơn cho phép phục hồi nhanh hơn trên các kết nối mất gói. [Mặc định 100ms]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Thời lượng tính bằng phút của lệnh cấm tạm thời áp dụng cho các đích từ xa vượt quá các ngưỡng yêu cầu luồng nêu dưới đây. Các đích bị cấm sẽ bị từ chối mọi kết nối đầu vào mới trong suốt thời gian cấm. Bộ quét đọc lại giá trị này mỗi 60 giây, vì vậy có thể thay đổi nó khi đang chạy qua <a href=/configadvanced>trang Cấu hình nâng cao</a>. Đặt thành 0 để tắt hoàn toàn autoban. [Mặc định 5 (5 phút)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Số lần từ chối SYN đầu vào tối đa từ một đích từ xa duy nhất trong một cửa sổ luân phiên trước khi autoban được kích hoạt. Bộ đếm từ chối suy giảm một nửa mỗi 60 giây (thay vì đặt lại), nên các đợt bùng nổ lẻ tẻ sẽ tự tan biến trong khi các đợt tấn công kéo dài vẫn tích tụ dần. [Mặc định 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Số SYN đầu vào tối đa được phép từ một đích từ xa duy nhất trong cửa sổ <code>tempBanSynRate</code> trước khi một lần vi phạm bùng nổ được ghi nhận. Lần vi phạm đầu chỉ ghi cảnh báo; lần vi phạm thứ hai trong vòng 60 giây sẽ kích hoạt autoban. Cổng chặn hai lần vi phạm này cho phép một đợt tải trang hợp lệ đi qua, đồng thời vẫn bắt được các đợt tấn công kết nối kéo dài vốn sẽ làm quá tải bộ đếm từ chối. [Mặc định 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Cửa sổ thời gian tính bằng mili giây cho việc kiểm tra bùng nổ SYN. Nếu nhận được nhiều hơn <code>tempBanSynBurst</code> SYN từ một đích duy nhất trong cửa sổ này thì một lần vi phạm bùng nổ sẽ được ghi nhận; lần vi phạm thứ hai trong vòng 60 giây sẽ kích hoạt autoban. [Mặc định 1000 (1 giây)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Trần trên cho giới hạn luồng đồng thời theo phản ứng của Tuner. Tuner của bộ định tuyến tự động điều chỉnh giới hạn luồng đồng thời theo từng đích dựa trên nhu cầu, số lần từ chối và tình trạng của bộ định tuyến, nhưng không bao giờ có thể nâng một đích lên trên thiết lập <code>i2p.streaming.maxConcurrentStreams</code> của chính đường hầm đó. Giá trị này giới hạn mức cao nhất mà Tuner được phép đẩy ghi đè lên. Hãy tăng giá trị này nếu bạn lưu trữ các dịch vụ lưu lượng cao và Tuner không thể mở rộng giới hạn đủ cao. [Mặc định 1024, phạm vi 64–8192, cần khởi động lại]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Khoảng thời gian tính bằng mili giây giữa các lần xuất bản lại LeaseSet tự động. Giá trị cao hơn làm giảm lưu lượng netdb nhưng có thể gây ra thông tin cho thuê cũ. [Mặc định 300000 (5 phút)]"
@@ -7665,7 +7665,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Ngưỡng tính bằng mili giây để xuất bản lại LeaseSet chủ động. Nếu hợp đồng thuê sắp hết hạn trong cửa sổ này, LeaseSet được xuất bản lại ngay lập tức thay vì chờ chu kỳ định kỳ tiếp theo. [Mặc định 180000 (3 phút)]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Số phiên khách I2CP đồng thời tối đa mà bộ định tuyến sẽ chấp nhận. [Mặc định 1536 (768 trên hệ thống chậm)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Khi được đặt thành true, vô hiệu hóa việc phân phối vòng lặp nội bộ cục bộ-cục bộ và buộc tất cả lưu lượng đi qua các đường hầm (đường hầm đầu ra → mạng → đường hầm đầu vào → đích cục bộ). Hữu ích để kiểm tra hành vi định tuyến đường hầm khi nguồn và đích nằm trên cùng một bộ định tuyến. [Mặc định bị tắt]"
@@ -7692,55 +7692,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Số lần thất bại truyền dữ liệu bằng không liên tiếp tối đa trước khi eepget từ bỏ, ngay cả khi vẫn còn lần thử. Tăng nếu các lần truyền thất bại mà không nhận được dữ liệu. [Mặc định 20]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Độ trễ cố định tính bằng mili giây giữa các lần thử lại của eepget. Dùng -1 cho độ trễ có dao động (gốc 5 giây cộng thêm tối đa 10 giây dao động) để phân tán tải trên một nguồn không ổn định. Giá trị 0 khiến việc thử lại diễn ra ngay lập tức. [Mặc định -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Khi được bật, eepget phân giải tên máy chủ cho các lần tải HTTPS qua DNS-over-HTTPS, bảo vệ các tra cứu khỏi bị theo dõi cục bộ. Bị bỏ qua khi tải qua proxy hoặc khi máy chủ là một địa chỉ IP. [Mặc định là true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này xác định số torrent tối đa có dung lượng lưu trữ được kiểm tra cùng lúc, khi nhiều torrent khởi động hoặc được kiểm tra lại cùng nhau, nhằm giới hạn cơn bùng nổ I/O ổ đĩa khi khởi động hoặc sau một sự cố. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định 4, cần khởi động lại I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Thiết lập này cho phép cấu hình số tệp tối đa mỗi torrent mà I2PSnark sẽ cho phép, khi tải xuống hoặc tạo một torrent. Lưu ý rằng việc tăng đáng kể giá trị này so với mặc định 2000 tệp có thể đòi hỏi cấu hình bổ sung trên hệ thống máy chủ để tăng số tệp mở tối đa mà hệ điều hành cho phép (ví dụ <code>ulimit -n</code> trên Linux). Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark hoặc đặt trên trang cấu hình I2PSnark; áp dụng cho các torrent được thêm sau đó."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ định kỳ khởi động lại tất cả torrent đang chạy để các đích của chúng luân chuyển sang những danh tính mới, phá vỡ mối liên kết lâu dài giữa địa chỉ IP của bộ định tuyến và các đích của torrent tại các tracker cũng như trong DHT. Chu kỳ này chạy mỗi 3 giờ cộng thêm độ trễ ngẫu nhiên từ 1 đến 60 phút, bị bỏ qua khi bất kỳ torrent nào đang tải xuống, và chỉ khởi động lại những torrent đang chạy. Các đích vốn dĩ là tạm thời và cũng đổi sau mỗi lần khởi động lại; thiết lập này mở rộng điều đó cho cả trong một lần chạy. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là true, cần khởi động lại I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Thiết lập này điều khiển việc giả mạo danh tính client: peer ID và User-Agent của tracker, peer ID trong bắt tay BitTorrent, tên client trong bắt tay tiện ích mở rộng, cũng như các lần tải từ web seed đều hiển thị dưới dạng client nổi tiếng đã chọn thay vì I2PSnark. Trong chế độ nhiều đích, mỗi nhóm đích sẽ được gán một client ngẫu nhiên riêng theo mặc định; trong chế độ một đích, I2PSnark tự nhận diện là chính nó trừ khi có tên client hoặc \"random\" được đặt. Đặt thành \"random\" để bắt buộc chọn ngẫu nhiên trong mọi chế độ, \"i2psnark\" để giữ danh tính cổ điển ngay cả trong chế độ nhiều đích, hoặc một tên client bất kỳ để luôn mạo danh client đó. Chuỗi phiên bản được ghim theo các bản phát hành thượng nguồn hiện tại và nhất quán giữa peer ID, User-Agent và bắt tay tiện ích mở rộng. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là ngẫu nhiên theo từng nhóm trong chế độ nhiều đích; áp dụng cho các torrent được khởi động sau đó]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Thiết lập này tùy chọn giới hạn các client được chọn ngẫu nhiên cho <code>i2psnark.clientId</code> trong một tập con phân tách bằng dấu phẩy của các tên client đã biết; các tên không nhận dạng được sẽ bị bỏ qua và giá trị rỗng sẽ chọn từ tất cả các client được hỗ trợ. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là không đặt, áp dụng cho các torrent được khởi động sau đó]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ phân bổ trước toàn bộ kích thước tệp trên ổ đĩa khi một bản tải xuống bắt đầu, để giảm phân mảnh. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là true, cần khởi động lại I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ thêm các tệp đệm BEP 47 vào những torrent mới do I2PSnark tạo ra, để mỗi tệp trừ tệp cuối cùng kết thúc đúng tại ranh giới mảnh. Việc tải xuống và xác minh torrent có đệm không bị ảnh hưởng. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là false; tệp cấu hình được đọc lại mỗi 30 giây và các thiết lập đã thay đổi được áp dụng mà không cần khởi động lại]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ sắp xếp tên torrent theo ngôn ngữ đã cấu hình để có thứ tự chữ cái chính xác. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là false, cần khởi động lại I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này xác định một danh sách URL thông báo tracker phân tách bằng dấu phẩy được coi là tracker riêng tư; các torrent dùng chúng sẽ không được chia sẻ với các peer khác qua DHT hoặc PEX. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Cần khởi động lại I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này xác định các cặp name,url phân tách bằng dấu phẩy cho danh sách tracker mặc định hiển thị với torrent mới, ghi đè danh sách tích hợp sẵn. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Cần khởi động lại I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này, khi được bật, sẽ cấm các peer hủy phần lớn những gì chúng đã yêu cầu. Khi một peer đã yêu cầu và hủy tổng cộng ít nhất 5 MB, tỷ lệ hủy vượt quá 90% số byte mà nó đã yêu cầu sẽ khiến peer đó bị cấm (bị từ chối trên cả kết nối đầu vào lẫn kết nối đầu ra) trong <code>i2psnark.banDiscardPeriod</code> phút. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là true, cần khởi động lại I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này xác định thời lượng tính bằng phút của lệnh cấm áp dụng cho các peer có tỷ lệ loại bỏ vượt quá mức. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định 60, cần khởi động lại I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Thiết lập này xác định số thông báo tối đa được giữ trong khu vực thông báo của giao diện web I2PSnark. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định 50, cần khởi động lại I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Thiết lập này xác định số luồng công nhân được dùng để xác minh các mảnh song song trong quá trình kiểm tra toàn bộ dung lượng của một torrent, ví dụ khi tiếp tục hoặc kiểm tra lại. Khi không được đặt, số luồng sẽ nhân theo số CPU, tối thiểu là 4. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark. [Mặc định là max(cores / 4, 4); được đọc theo từng lần kiểm tra, nên không cần khởi động lại]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Khi được đặt thành một đường dẫn thư mục, các bản tải xuống chưa hoàn tất sẽ được ghi vào một thư mục đặt tạm bên trong thư mục này thay vì thư mục dữ liệu, và mỗi tệp chỉ được sao chép vào thư mục dữ liệu khi tất cả các mảnh của nó đã được tải xuống. Điều này hữu ích để giữ các bản tải xuống dở dang ngoài ổ dữ liệu chính (ví dụ trên một ổ đĩa riêng, nhanh hơn hoặc ít được sử dụng hơn). Thư mục đặt tạm phải có đủ dung lượng trống để chứa các bản tải xuống đang diễn ra lớn nhất. Khi không được đặt hoặc để trống, các bản tải xuống sẽ được ghi trực tiếp vào thư mục dữ liệu như trước. Để thay đổi, hãy thêm vào tệp cấu hình <code>i2psnark.config</code> của I2PSnark hoặc đặt trên trang cấu hình I2PSnark; áp dụng cho các torrent được thêm sau đó. [Bị tắt theo mặc định]"
 
 msgid "miscellaneous"
 msgstr "linh tinh"
@@ -7752,7 +7752,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Khi được đặt thành True, I2P chạy mà không có kết nối mạng, điều này rất hữu ích nếu bạn liên tục khởi động lại bộ định tuyến để kiểm tra cập nhật mã vì điều này ngăn chặn sự gián đoạn mạng."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Khi được đặt thành true, tệp nhật ký hiện tại và mọi kho lưu trữ đã xoay vòng sẽ được cấp quyền đọc và ghi cho nhóm mà bộ định tuyến chạy dưới đó (chế độ 660), để những người dùng là thành viên của nhóm đó có thể kiểm tra nhật ký. Các tệp không bao giờ được cấp quyền đọc cho mọi người. [Mặc định là false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Cài đặt này cho phép cấu hình của các máy chủ NTP thay thế cần thiết để đảm bảo rằng bộ định tuyến của bạn duy trì thời gian đồng hồ chính xác. [Mặc định là 0.pool.ntp.org, 1.pool.ntp.org, 2.pool.ntp.org]"
@@ -9665,13 +9665,13 @@ msgid "Set Password"
 msgstr "Đặt mật khẩu"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Tất cả bộ định tuyến [Nâng cao]"
 
 msgid "Remote"
 msgstr "Từ xa"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Tất cả bộ định tuyến (NetDb khách) [Nâng cao]"
 
 msgid "Encryption type"
 msgstr "Loại mã hóa"
@@ -9723,19 +9723,19 @@ msgid "Network Peers"
 msgstr "Đồng nghiệp Mạng"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Peer nhanh"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Peer dung lực cao"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Peer nút lũ"
 
 msgid "Banned Peers"
 msgstr "Đồng nghiệp bị cấm"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Hồ sơ peer gần đây"
 
 msgid "Configure router logging options"
 msgstr "Cấu hình tùy chọn ghi nhật ký bộ định tuyến"

@@ -235,7 +235,7 @@ msgid "no subject"
 msgstr "κανένα θέμα"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Δεν υπάρχει φάκελος Drafts;"
 
 msgid "Found no valid sender address."
 msgstr "Δεν βρέθηκε έγκυρη διεύθυνση αποστολέα."

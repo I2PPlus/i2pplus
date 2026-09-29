@@ -235,7 +235,7 @@ msgid "no subject"
 msgstr "nincs tárgy"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Nincs Drafts mappa?"
 
 msgid "Found no valid sender address."
 msgstr "Érvényes feladó cím nem található."

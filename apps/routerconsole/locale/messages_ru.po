@@ -572,7 +572,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Внимание: не удалось настроить службу I2P на ручной запуск"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "ПРЕДУПРЕЖДЕНИЕ: не удалось найти директорию установки I2P+"
 
 msgid "Configuration saved successfully"
 msgstr "Конфигурация успешно сохранена"
@@ -1443,7 +1443,7 @@ msgid "Ban peer until restart"
 msgstr "Заблокировать узел до перезапуска"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Заблокирован вручную через configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3549,10 +3549,10 @@ msgid "Low Latency"
 msgstr "Низкая задержка"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Повторно переданные пакеты / отправленные пакеты по данным транспорта UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "Потери"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Узел согласился участвовать в туннелях"
@@ -3607,63 +3607,63 @@ msgstr "Настроить пир"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} в ОЗУ / {1} на диске"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Высокая ёмкость"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Отображено"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Показано {0} из {1} профилей"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "{0} устаревший профиль скрыт"
+msgstr[1] "{0} устаревших профиля скрыто"
+msgstr[2] "{0} устаревших профилей скрыто"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Доля показанных профилей от общего числа"
 
 msgid "peers"
 msgstr "пэры"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Доля показанных профилей уровня"
 
 msgid "Window"
-msgstr ""
+msgstr "Окно"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Быстрый RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "Максимальный RTT для членства в быстрых уровнях (мс)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Средние потери пиров быстрого уровня (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Средние потери высокоёмких пиров (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Получен ответ в пределах отсечки отображения"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Поиски"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Процент успешных поисков"
 
 msgid "Stores"
-msgstr ""
+msgstr "Записи"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Процент успешных записей"
 
 msgid "Definitions"
 msgstr "Обозначения"
@@ -3734,25 +3734,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "о скольких новых узлах этот узел сообщил нам в последнее время?"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Известные узлы рассылки"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Без сбоев"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Нет сбоев поиска (посл. 1 час)"
 
 msgid "Response"
-msgstr ""
+msgstr "Ответ"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Время отклика поиска (посл. 1 час)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "Контакт за 1 час"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Контакт в течение 1 часа"
 
 msgid "1h Fail Rate"
 msgstr "Уровень отказов за 1 час"
@@ -4740,10 +4740,10 @@ msgid "Slow Start Window Cap"
 msgstr "Предел окна медленного старта"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Максимальный входящий буфер"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Максимум одновременных потоков"
 
 msgid "Max SYN Sends"
 msgstr "Макс. количество отправлений SYN"
@@ -4758,7 +4758,7 @@ msgid "Max Retransmissions"
 msgstr "Максимальное число повторных передач"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Рабочие потоки приёма"
 
 msgid "Writer Queue Size"
 msgstr "Размер очереди записи"
@@ -4842,16 +4842,16 @@ msgid "Search Timeout"
 msgstr "Тайм-аут поиска"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Предел поиска"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Окно перепубликации"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Ветвление перепубликации"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Охват разведки"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "Тайм-аут поиска набора аренды"
@@ -4878,7 +4878,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Максимум узлов с высокой пропускной способностью"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Порог понижения пиров с потерями"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Тайм-аут запроса на построение туннеля"
@@ -4905,25 +4905,25 @@ msgid "Max Delay Between Tests"
 msgstr "Максимальная задержка между тестами"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Окно сбоев теста туннеля"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Минимум окна сбоев теста туннеля"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Период охлаждения при сбоях первого хопа"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Порог сбоев первого хопа"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Порог входящей перегрузки"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Порог удаления устаревших построений"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Порог дросселирования параллелизма"
 
 msgid "NTCP Reader Threads"
 msgstr "Потоки чтения NTCP"
@@ -4935,7 +4935,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "Интервал защиты насоса NTCP"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "Максимальная частота простоя насоса NTCP (циклов/с)"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Максимум одновременных сообщений узлу"
@@ -5007,7 +5007,7 @@ msgid "Max Window Size"
 msgstr "Максимальный размер окна"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Множитель тайм-аута подключения"
 
 msgid "Max Message Queue Age"
 msgstr "Максимальный возраст очереди сообщений"
@@ -5025,16 +5025,16 @@ msgid "Server Handler Threads"
 msgstr "Потоки обработчика сервера"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Ёмкость очереди обработчика сервера"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Потоков сервера по умолчанию на туннель"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "Потоки ввода-вывода для передачи"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "Тайм-аут зависания ввода-вывода"
 
 msgid "Build Handler Threads"
 msgstr "Потоки обработчика построения"
@@ -5043,7 +5043,7 @@ msgid "Client Runner Max Threads"
 msgstr "Максимум потоков исполнителя клиента"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Максимум соединений клиента по умолчанию"
 
 msgid "Participating Throttle Min"
 msgstr "Минимум дросселирования транзита"
@@ -5121,7 +5121,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Непроверенный множитель ограничения туннеля"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Размер фильтра IV туннелей"
 
 msgid "Message Processing Throttle"
 msgstr "Регулировка обработки сообщений"
@@ -5172,10 +5172,10 @@ msgid "Max congestion window during slow start."
 msgstr "Максимальное окно перегрузки во время медленного старта."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Предел входящего буфера на соединение (байт)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Динамический предел одновременных потоков для каждого пункта назначения."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Общее количество попыток SYN, прежде чем отказаться от рукопожатия."
@@ -5190,7 +5190,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Число повторных передач перед сбросом потока."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Потоков обработки входящих пакетов на одну потоковую сессию."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Максимальное время простоя перед сбросом потока (мс)."
@@ -5280,16 +5280,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Тайм-аут поиска на узел (мс)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Жёсткий крайний срок для каждого итеративного поиска (мс)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Время жизни сообщений о записи при перепубликации аренды (мс)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Максимум пиров, получающих перепубликованную аренду после поиска."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Параллельных разведывательных поисков за цикл."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Адаптивный предел времени для поиска наборов аренды (мс)."
@@ -5316,7 +5316,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Максимум узлов с высокой пропускной способностью в таблице маршрутизации."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Доля потерь, при которой пир понижается с быстрых уровней (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Тайм-аут ответа на построение (мс)."
@@ -5343,25 +5343,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Максимальный интервал между тестами туннелей (мс)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Максимальное время теста туннеля до признания неудачным (мс)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Минимум окна сбоев теста туннеля (мс)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Сколько времени пир пропускается после сбоев первого хопа (мс)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Сбоев до пропуска пира во время периода охлаждения."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Количество входящих туннелей, ниже которого построения дросселируются."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Доля бюджета тайм-аута, приходящаяся на ожидание в очереди, до удаления построения (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Доля тайм-аутов, запускающая снижение параллельных построений (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Потоки, расшифровывающие входящие данные NTCP."
@@ -5373,7 +5373,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Интервал защитного сканирования зависших насосов NTCP (мс)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Предел итераций насоса NTCP в секунду при простое (циклов/с)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Лимит передаваемых сообщений на узел UDP."
@@ -5430,7 +5430,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Верхняя граница оценки RTT (мс)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Масштабирует тайм-аут подключения каждого клиента по RTT сети (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Задержка перед первой повторной передачей (мс)."
@@ -5454,16 +5454,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Потоки обработчика для входящих соединений I2PTunnel."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Входящих соединений, которые могут ожидать свободный поток обработчика сервера."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Предел потоков обработчика сервера по умолчанию для каждого серверного туннеля."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Выделенный пул для передачи данных Сервер→Клиент, разгружает потоки обработчиков."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Тайм-аут зависания для передач данных Сервер→Клиент (мс)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Пул потоков для обработки входящих запросов на построение."
@@ -5472,7 +5472,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Потолок пула потоков прокси клиента."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Предел соединений клиента по умолчанию."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Минимум транзитных туннелей, которые может удерживать узел."
@@ -5550,7 +5550,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Тайм-аут подключения TCP-сокета для потоков обработчика сервера туннелей (мс)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Показатель фильтра дедупликации IV туннелей: каждый из его двух буферов содержит 2^n бит, поэтому пара занимает 2^(n-2) байт. Размер определяется по фактически наблюдаемым IV; слишком малый размер проявляется как потеря хороших данных туннеля."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Максимальная средняя задержка сообщения перед отклонением передачи (мс)."
@@ -5732,7 +5732,7 @@ msgid "Endpoint"
 msgstr "Конечная точка"
 
 msgid "ms"
-msgstr ""
+msgstr "мс"
 
 msgid "Test successful"
 msgstr "Тест успешен"
@@ -6143,10 +6143,10 @@ msgid "Additional Router Caps"
 msgstr "Дополнительные группы возможностей"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Добавьте группы возможностей, разделённые пробелами или запятыми, например LUf,PUG. Используйте ! для исключения: G!f блокирует маршрутизаторы G, если они не являются узлами рассылки"
 
 msgid "Misc"
-msgstr ""
+msgstr "Разное"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Запретить одноранговые узлы флуда, которые не отвечают на запросы (частота сбоев> 95%)"
@@ -6167,10 +6167,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Банить чрезмерные запросы на туннели"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "При включении к пирам, разрешённым из сети, с которыми у нас нет прямого соединения — как к следующим хопам транзита, так и к конечным точкам клиентских туннелей — применяются блокировки по политике. При отключении такие пиры освобождаются от блокировок, если нет прямого соединения."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Блокировать пиров следующего хопа"
 
 msgid "Clear all bans"
 msgstr "Очистить все баны"
@@ -6313,10 +6313,10 @@ msgid "I2CP Port"
 msgstr "Порт I2CP"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Не обходить сеть при доступе к локально размещаемым службам"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Отключить loopback"
 
 msgid "Require username and password"
 msgstr "Требовать имя пользователя и пароль"
@@ -7495,13 +7495,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Минимум одновременных поисков RouterInfo следующего хопа во время обработки построения туннелей. Обеспечивает минимальный уровень одновременности поиска, даже когда мало туннелей участвует. [По умолчанию 10 (4 на медленных системах)]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Потолок одновременных поисков RouterInfo следующего хопа во время обработки построения туннелей. Слоты считают различные следующие хопы, а не отдельные запросы: построения, использующие общий следующий хоп, повторно используют один поиск. Не масштабируется по числу ядер; поиски — это ожидания, ограниченные сетью. [По умолчанию 64 (32 на медленных системах)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Процент текущих участвующих туннелей, используемый для масштабирования предела параллельных поисков после запуска. Эффективный предел ограничивается диапазоном от minLookupLimit до maxLookupLimit. [По умолчанию 40 (15 на медленных системах)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Глубина очереди, в которой хранятся построения туннелей, следующий хоп которых определяется, пока все слоты поиска заняты. Размер рассчитан так, чтобы полная очередь опустела в пределах тайм-аута построения инициатора; записи старше этого бюджета отбрасываются как устаревшие независимо от глубины. [По умолчанию 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Максимально допустимое будущее смещение для временных меток запросов на построение туннелей. Запросы с временными метками в будущем дальше этого отклоняются как потенциальные атаки повторного воспроизведения. [По умолчанию 300000 (5 минут)]"
@@ -7609,7 +7609,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Минимальное количество активных пиров, необходимое во время запуска маршрутизатора перед ограничением выбора разведывательных пиров. Во время начального запуска маршрутизатор более снисходителен к качеству пиров. [По умолчанию 6]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Максимальное время в миллисекундах, в течение которого принятый SYN может ожидать в очереди приёма до того, как его заберёт accept(). Если accept() задерживается (занятый размещаемый сервер), соединение отклоняется по истечении этого окна, поэтому более высокое значение допускает кратковременные задержки. Настроенное значение применяется без перезапуска. [По умолчанию 60000 (60 секунд)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Этот параметр, специфичный для туннеля, позволяет включать или отключать ответы на пинг-запросы, отправляемые на серверы, размещенные на маршрутизаторе. Чтобы отключить пинги, необходимо добавить строку <code>i2p.streaming.answerPings=false</code> в раздел <i>Пользовательские параметры</i> конфигурации сервера в диспетчере туннелей."
@@ -7618,22 +7618,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Максимальная задержка потока по умолчанию в миллисекундах, когда не установлен явный таймаут соединения. [По умолчанию 10000 (10 секунд)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Период охлаждения в миллисекундах между попытками подключения к одному и тому же недоступному пункту назначения. Предотвращает частые попытки связи с недоступными пирами. [По умолчанию 5000 (5 секунд)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Длительность TIME-WAIT в миллисекундах после отключения потокового соединения, в течение которой запоздалые пакеты всё ещё подтверждаются. Увеличьте для путей с высокой задержкой, где финальные ACK могут приходить с опозданием. [По умолчанию 120000 (2 минуты)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Количество раз ответа на дросселированный получатель перед молчаливым сбросом избыточных пакетов. Предотвращает перегрузку маршрутизатора шквалами соединений. [По умолчанию 3]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Этот параметр при включении вводит случайную задержку ответа pong длительностью до 50 мс для всех размещаемых маршрутизатором серверов с поддержкой ping. По умолчанию отключено. Применяется сразу к новым ответам pong, перезапуск не требуется."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Начальный размер окна перегрузки (в пакетах) для новых потоковых соединений. Большее окно быстрее запускает соединения, но может вызвать больше повторных передач на перегруженных путях. [По умолчанию 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Ограничение сверху для тайм-аута подключения потоковых соединений. Не позволяет тайм-аутам отдельных соединений превышать этот потолок. Увеличьте для удалённого доступа с очень высокой задержкой. Может быть переопределено для отдельного соединения установкой того же свойства в расширенных параметрах клиента клиентского туннеля (например, клиентский туннель IRC по умолчанию использует 300000). [По умолчанию 75000 (75 секунд)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Максимальное время ожидания ответа pong при пинге пира в миллисекундах. [По умолчанию 300000 (5 минут)]"
@@ -7642,43 +7642,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Его настройка, если она включена, изменяет максимальную дополнительную случайную задержку в понге, введенную для серверов с поддержкой ping, если <code>i2p.streaming.enablePongDelay</code> также включен. Если не указано явно, будет использоваться значение по умолчанию 50 мс."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Максимальное количество ожидающих соединений (SYN и неполных пакетов) в очереди приёма сервера. Когда она заполнена, новым SYN отправляется RESET (клиент может повторить попытку) вместо молчаливого отбрасывания, что информирует клиента об отказе. [По умолчанию 256 (128 на медленных системах)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Максимальная задержка повторной передачи в миллисекундах. Интервал повторной передачи не превысит это значение независимо от отката. Увеличьте для увеличения времени между повторными попытками на перегруженных путях. [По умолчанию 30000 (30 с)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Максимальное количество повторных передач пакетов до отказа от соединения. Более высокие значения повышают надёжность на каналах с потерями, но задерживают обнаружение сбоя. [По умолчанию 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Максимальный таймаут повторной передачи в миллисекундах после экспоненциального отката (удвоения). Ограничивает время ожидания отправителя перед попыткой повторной передачи при серьезной перегрузке. [По умолчанию 30000 (30 с)]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Максимальное время приёма-передачи в миллисекундах для потоковых соединений. Ограничивает вычисленный RTT, чтобы предотвратить патологические значения тайм-аута после сетевых возмущений. [По умолчанию 10000 (10 секунд)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Максимальный размер окна медленного старта для потоковых соединений. Ограничивает окно перегрузки во время медленного старта, чтобы не перегружать сеть. [По умолчанию 256 (32 на медленных системах)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Максимальный размер окна перегрузки (в пакетах) для потоковых соединений. Ограничивает максимальную пропускную способность одного потока. [По умолчанию 512 (384 на медленных системах)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Минимальная задержка повторной передачи в миллисекундах. Пакеты не будут отправляться повторно быстрее этого интервала. Более низкие значения позволяют быстрое восстановление на соединениях с потерями. [По умолчанию 100 мс]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Длительность в минутах временной автоблокировки, применяемой к удалённым пунктам назначения, превышающим указанные ниже пороги запросов потоков. Заблокированным пунктам назначения отказывают во всех новых входящих соединениях на срок блокировки. Очистка перечитывает это значение каждые 60 секунд, поэтому его можно изменить во время работы через <a href=/configadvanced>страницу расширенной конфигурации</a>. Установите 0, чтобы полностью отключить автоблокировку. [По умолчанию 5 (5 минут)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Максимальное количество отказов на входящие SYN от одного удалённого пункта назначения в скользящем окне до срабатывания автоблокировки. Счётчик отказов уменьшается вдвое каждые 60 секунд (а не сбрасывается), поэтому отдельные всплески затухают, а устойчивые лавины накапливаются. [По умолчанию 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Максимальное количество входящих SYN, разрешённых от одного удалённого пункта назначения в пределах окна <code>tempBanSynRate</code>, до фиксации нарушения всплеска. Первое нарушение лишь записывает предупреждение; второе нарушение в течение 60 секунд приводит к автоблокировке. Этот двухударный барьер пропускает допустимый всплеск при загрузке страницы, но по-прежнему перехватывает устойчивые лавины соединений, которые иначе переполнили бы счётчик отказов. [По умолчанию 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Временное окно в миллисекундах для проверки всплесков SYN. Если из одного пункта назначения в пределах этого окна получено более <code>tempBanSynBurst</code> SYN, фиксируется нарушение всплеска; второе нарушение в течение 60 секунд приводит к автоблокировке. [По умолчанию 1000 (1 секунда)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Верхний потолок для реактивного предела одновременных потоков Tuner. Tuner маршрутизатора автоматически регулирует предел одновременных потоков для каждого пункта назначения на основе спроса, отказов и состояния маршрутизатора, но никогда не может поднять пункт назначения выше его собственного параметра для туннеля <code>i2p.streaming.maxConcurrentStreams</code>. Это значение ограничивает, насколько высоко Tuner может поднять переопределение. Увеличьте его, если вы размещаете службы с высоким трафиком и Tuner не может масштабировать предел достаточно высоко. [По умолчанию 1024, диапазон 64–8192, требуется перезапуск]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Интервал в миллисекундах между автоматическими перепубликациями LeaseSet. Более высокие значения снижают трафик netdb, но могут вызывать устаревание информации об аренде. [По умолчанию 300000 (5 минут)]"
@@ -7687,7 +7687,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Порог в миллисекундах для упреждающей перепубликации LeaseSet. Если срок аренды истекает в этом окне, LeaseSet перепубликуется немедленно, а не ждет следующего периодического цикла. [По умолчанию 180000 (3 минуты)]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Максимальное количество одновременных клиентских сессий I2CP, которое примет маршрутизатор. [По умолчанию 1536 (768 на медленных системах)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "При значении true отключает локально-локальную доставку через loopback и принудительно направляет весь трафик через туннели (исходящий туннель → сеть → входящий туннель → локальный получатель). Полезно для тестирования поведения маршрутизации туннелей, когда источник и получатель находятся на одном маршрутизаторе. [По умолчанию отключено]"
@@ -7714,55 +7714,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Максимальное количество последовательных сбоев передачи с нулевым объемом данных, после которого eepget сдается, даже если остались попытки. Увеличьте, если передачи терпят неудачу без получения данных. [По умолчанию 20]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Фиксированная задержка в миллисекундах между попытками повтора eepget. Используйте -1 для задержки со случайным разбросом (базовые 5 с плюс до 10 с разброса), чтобы распределить нагрузку на ненадёжный источник. Значение 0 приводит к немедленному повтору. [По умолчанию -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "При включении eepget определяет имена хостов для загрузок по HTTPS через DNS-over-HTTPS, защищая запросы от локального прослушивания. Не применяется при загрузке через прокси или если хост является IP-адресом. [По умолчанию true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр задаёт максимальное количество торрентов, хранилище которых проверяется одновременно, когда несколько торрентов запускаются или перепроверяются вместе, ограничивая шторм дискового ввода-вывода при запуске или после сбоя. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию 4, требуется перезапуск I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Этот параметр позволяет настроить максимальное количество файлов на один торрент, которое допускает I2PSnark при загрузке или создании торрента. Обратите внимание, что существенное увеличение этого значения относительно значения по умолчанию в 2000 файлов может потребовать дополнительной настройки на хостовой системе, чтобы увеличить максимальное количество открытых файлов, разрешённое операционной системой (например, <code>ulimit -n</code> в Linux). Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code> или задайте на странице конфигурации I2PSnark; применяется к торрентам, добавленным позднее."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр при включении периодически перезапускает все работающие торренты, чтобы их пункты назначения переходили на новые идентичности, разрывая долговременную связь между IP-адресом маршрутизатора и пунктами назначения торрентов на трекерах и в DHT. Цикл выполняется каждые 3 часа плюс случайная задержка от 1 до 60 минут, пропускается, пока какой-либо торрент активно загружается, и перезапускает только те торренты, которые работали. Пункты назначения и так временные и меняются при каждом перезапуске; это распространено на весь период работы. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию true, требуется перезапуск I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Этот параметр управляет подменой идентичности клиента: peer ID трекера и User-Agent, peer ID рукопожатия BitTorrent, имя клиента в рукопожатии расширений и загрузки с web seed — всё это представляется как выбранный известный клиент вместо I2PSnark. В многоадресном режиме каждому пулу назначений по умолчанию назначается собственный случайный клиент; в одноадресном режиме I2PSnark представляется как сам по себе, если не задано имя клиента или \"random\". Установите \"random\", чтобы принудительно выбирать случайный клиент во всех режимах, \"i2psnark\", чтобы сохранить классическую идентичность даже в многоадресном режиме, либо имя клиента, чтобы всегда выдавать себя за этого клиента. Строки версий зафиксированы на текущих выпусках и согласованы между peer ID, User-Agent и рукопожатием расширений. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию случайный для каждого пула в многоадресном режиме; применяется к торрентам, запускаемым позднее]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Этот параметр необязательно ограничивает клиентов, выбираемых случайным образом для <code>i2psnark.clientId</code>, подмножеством известных имён клиентов, разделённым запятыми; неизвестные имена игнорируются, а пустое значение означает выбор из всех поддерживаемых клиентов. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию не задано, применяется к торрентам, запускаемым позднее]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр при включении предварительно выделяет на диске полный размер файлов при начале загрузки, чтобы уменьшить фрагментацию. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию true, требуется перезапуск I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Этот параметр при включении добавляет файлы дополнения BEP 47 к новым торрентам, создаваемым I2PSnark, так что каждый файл, кроме последнего, заканчивается на границе части. Загрузка и проверка дополненных торрентов не затрагивается. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию false; файл конфигурации перечитывается каждые 30 секунд, и изменённые настройки применяются без перезапуска]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр при включении сортирует имена торрентов с использованием настроенного языка для правильного алфавитного порядка. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию false, требуется перезапуск I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр задаёт список URL анонсов трекеров, разделённый запятыми, которые считаются приватными трекерами; торренты, использующие их, не распространяются среди других пиров через DHT или PEX. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [Требуется перезапуск I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр задаёт пары name,url, разделённые запятыми, для списка трекеров по умолчанию, отображаемого для новых торрентов, переопределяя встроенный список. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [Требуется перезапуск I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр при включении блокирует пиров, отменяющих большую часть запрошенного. После того как пир запросил и отменил суммарно не менее 5 МБ, доля отмены свыше 90% от запрошенных им байтов приводит к блокировке пира (отклоняется как на входящих, так и на исходящих соединениях) на <code>i2psnark.banDiscardPeriod</code> минут. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию true, требуется перезапуск I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр задаёт длительность в минутах блокировки, применяемой к пирам с чрезмерной долей отменённого. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию 60, требуется перезапуск I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Этот параметр задаёт максимальное количество сообщений, сохраняемых в области сообщений веб-интерфейса I2PSnark. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию 50, требуется перезапуск I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Этот параметр задаёт количество рабочих потоков, используемых для параллельной проверки частей при полной проверке хранилища одного торрента, например при возобновлении или перепроверке. Если не задано, количество потоков масштабируется по числу ЦП, минимум 4. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code>. [По умолчанию max(cores / 4, 4); считывается при каждой проверке, поэтому перезапуск не требуется]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "При значении, являющемся путём к каталогу, незавершённые загрузки записываются в промежуточный каталог внутри него, а не в каталог данных, и каждый файл копируется в каталог данных только после загрузки всех его частей. Это полезно, чтобы держать частичные загрузки вне основного тома данных (например на отдельном, более быстром или менее нагруженном диске). Промежуточный каталог должен иметь достаточно свободного места для крупнейших незавершённых загрузок. Если значение не задано или пусто, загрузки как и раньше записываются напрямую в каталог данных. Чтобы изменить, добавьте в файл конфигурации I2PSnark <code>i2psnark.config</code> или задайте на странице конфигурации I2PSnark; применяется к торрентам, добавленным позднее. [По умолчанию отключено]"
 
 msgid "miscellaneous"
 msgstr "Разное"
@@ -7774,7 +7774,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Если установлено значение true, I2P работает без подключения к сети, что полезно, если вы постоянно перезагружаете маршрутизатор для проверки обновлений кода, поскольку это предотвращает сбои в работе сети."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "При значении true текущий файл журнала и любые ротированные архивы становятся читаемыми и записываемыми для группы, от имени которой работает маршрутизатор (режим 660), чтобы пользователи, входящие в эту группу, могли просматривать журналы. Файлы никогда не делаются доступными на чтение всем. [По умолчанию false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Этот параметр, при установке в значение true, будет отображать ссылки на <i>Интересные сайты</i> на карте сайта. [По умолчанию значение false]"
@@ -9687,13 +9687,13 @@ msgid "Set Password"
 msgstr "Установить пароль"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Все маршрутизаторы [расширенные]"
 
 msgid "Remote"
 msgstr "Удаленный"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Все маршрутизаторы (клиент NetDb) [расширенные]"
 
 msgid "Encryption type"
 msgstr "Тип шифрования"
@@ -9745,19 +9745,19 @@ msgid "Network Peers"
 msgstr "Сетевые узлы"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Быстрые пиры"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Высокоёмкие пиры"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Пиры узлов рассылки"
 
 msgid "Banned Peers"
 msgstr "Заблокированные узлы"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Недавние профили пиров"
 
 msgid "Configure router logging options"
 msgstr "Настройка опций журналирования маршрутизатора"

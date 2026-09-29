@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "Bu geçersiz bir hedefe benzıyor:"
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "i2paddresshelper size bu tür bir hedef için yardımcı olamaz!"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "Adres defterinizdeki hedefe gitmek için <a href=\"{0}\">buraya</a> tıklayın. Çakışan adres yardımcısı hedefine gitmek için <a href=\"{1}\">buraya</a> tıklayın."
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "Adres defterindeki {0} hedefi"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "Çakışan adres yardımcı hedefi"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "Bozuk Base32 adresi"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "Hedef LeaseSet bulunamadı"
 
 msgid "Host"
 msgstr "Sunucu"
@@ -42,159 +42,159 @@ msgstr "Hedef"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "{0} adresine kaydetmeden devam et"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "Bu siteyi adres defterine kaydetmeden de gezebilirsiniz. Adres, I2P yönlendiricinizi yeniden başlatana kadar hatırlanacaktır."
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "Kaydetmeden devam et"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "{0} adresini yöneltici adres defterine kaydet ve web sitesine devam et"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "Bu adres, abonelik tabanlı adreslerinizin saklandığı Yöneltici adres defterinize kaydedilecek."
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "Manuel olarak eklediğiniz siteleri takip etmek istiyorsanız, bunun yerine Ana ya da Özel adres defterinize ekleyin."
 
 msgid "Save & continue"
-msgstr ""
+msgstr "Kaydet ve devam et"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "{0} adresini ana adres defterine kaydet ve web sitesine devam et"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "Bu adres Ana adres defterinize kaydedilecek. Ana yöneltici adres defterinden ayrı tutmak istediğiniz, ancak yayımlanmasında sakınca görmediğiniz adresler için bu seçeneği seçin."
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "{0} adresini özel adres defterine kaydet ve web sitesine devam et"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "Bu adres Özel adres defterinize kaydedilecek ve hiçbir zaman yayımlanmayacak."
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Base32 adresi arama parolası gerektiriyor"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Base32 adresi şifreleme anahtarı gerektiriyor"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Base32 adresi şifreleme anahtarı ve arama parolası gerektiriyor"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Base32 adresi çözme hatası, şifreleme anahtarını kontrol edin"
 
 msgid "Generate"
 msgstr "Üret"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "Şifreleme anahtarı"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "Sunucu işletmcisinin sağladığı bir PSK şifreleme anahtarını girmeli ya da bir DH şifreleme anahtarı oluşturup onu sunucu işletmcisine göndermelisiniz."
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "Yardım için sunucu işletmcisine başvurun."
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "PSK şifreleme anahtarını girin"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "Yeni DH şifreleme anahtarı oluştur"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "Arama parolası"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "Sunucu işletmcisinin sağladığı parolayı girmelisiniz."
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "HTTP dış vekil sunucu"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "Bir atlamalı hizmetten adres yardımcısı için aşağıdaki bağlantılardan birine tıklayın"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "{0} üzerinden adres yardımcısı aracılığıyla eklendi"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Adres yardımcısı aracılığıyla eklendi"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "Arama parolası eksik"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "Özel anahtar eksik"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "Geçersiz özel anahtar"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "Yeni şifreleme anahtarınız"
 
 msgid "Router Console"
-msgstr ""
+msgstr "Yöneltici Konsolu"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "Adres Defteri"
 
 msgid "Configuration"
 msgstr "Yapılandırma"
 
 msgid "Help"
-msgstr ""
+msgstr "Yardım"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "Anahtarı kopyalayıp sunucu işletmcisine gönderin."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "İzin verildikten sonra web sitesine geçebilirsiniz."
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "Geri dönüp hatayı düzeltin"
 
 msgid "router"
-msgstr ""
+msgstr "yöneltici"
 
 msgid "master"
-msgstr ""
+msgstr "ana"
 
 msgid "private"
-msgstr ""
+msgstr "özel"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "{0} adresine yönlendiriliyor"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Yönlendirme sürüyor"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "{0}, {1} adres defterine kaydedildi, şimdi yönlendiriliyor."
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "{0}, {1} adres defterine kaydedilemedi, şimdi yönlendiriliyor."
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "Otomatik olarak yönlendirilmezseniz buraya tıklayın."
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "{0} için kimlik doğrulama kaydedildi, şimdi yönlendiriliyor."
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "Yapılandırma kaydedilemedi"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "Yapılandırma değişiklikleri kaydedildi"
 
 msgid "Client"
 msgstr "İstemci"

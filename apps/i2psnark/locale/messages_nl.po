@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Data-directory kan niet aangemaakt worden"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Geen schrijfrechten voor de tijdelijke map"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "De tijdelijke map kan niet worden aangemaakt"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Geen schrijfrechten voor de torrentmap"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "De torrentmap kan niet worden aangemaakt"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "+0/1 tunnelhop randomisatie uitgeschakeld op outbound tunnels"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Een afzonderlijke bestemming per torrent ingeschakeld"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Een afzonderlijke bestemming per torrent uitgeschakeld"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Maximum aantal bestemmingen gewijzigd naar {0}"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "Onbeperkt aantal bestemmingen hersteld (één per torrent)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Willekeurige torrentstarttijden ingeschakeld"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Willekeurige torrentstarttijden uitgeschakeld"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Opstartvertraging gewijzigd naar {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API-sleutel bijgewerkt."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Vooruit toewijzen van bestanden voor nieuwe torrents ingeschakeld."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Vooruit toewijzen van bestanden voor nieuwe torrents uitgeschakeld."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Originele bestandsnamen behouden ingeschakeld."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Originele bestandsnamen behouden uitgeschakeld."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Maximum aantal bestanden per torrent gewijzigd naar {0}"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Ongeldig maximum aantal bestanden per torrent: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Tijdelijke map voor het verzamelen gewijzigd naar {0}"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Verzamelen in de tijdelijke map uitgeschakeld."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Torrentmap gewijzigd naar {0}"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Torrentmap opnieuw ingesteld op de gegevensmap."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker lijst gewijzigd - torrent herstart nodig."
@@ -302,7 +302,7 @@ msgstr "ERROR - Geen geheugen meer, kan geen torrent maken van {0}"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "FOUT - kan geen torrent aanmaken van {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Torrents initialiseren en tunnels openen"
@@ -396,7 +396,7 @@ msgstr "Torrent verwijderd: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Torrents worden gestart over {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Waarschuwing - Alleen {0}MB beschikbaar voor downloads op geconfigureerd
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Tijdelijke opslag: momenteel {0}GB beschikbaar voor downloads op de geconfigureerde tijdelijke partitie"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Tijdelijke opslag: momenteel {0}MB beschikbaar voor downloads op de geconfigureerde tijdelijke partitie"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Waarschuwing - slechts {0}MB beschikbaar voor downloads op de geconfigureerde tijdelijke partitie"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "Bezig met openen van I2P-tunnel"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Torrent-look-up wordt opgelost: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Openen van de I2P tunnel en starten van alle torrents."
@@ -489,14 +489,14 @@ msgstr "I2P-tunnel gesloten."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Bestemmingswisseling overgeslagen - er is {0} actieve download bezig"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Bestemmingswisseling overgeslagen - er zijn {0} actieve downloads bezig"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Geen torrents die actief downloaden - bestemmingen worden afgewisseld"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "minuten"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "Hoe lang het duurt voordat automatisch gestarte torrents bij het starten van I2PSnark worden geladen, minimaal"
 
 msgid "min"
-msgstr ""
+msgstr "min."
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "Hoe lang het duurt voordat automatisch gestarte torrents bij het starten van I2PSnark worden geladen, maximaal"
 
 msgid "max"
-msgstr ""
+msgstr "max."
 
 msgid "Data Storage"
 msgstr "Gegevensopslag"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Directory waar torrents en gedownloade/gedeelde bestanden worden opgeslagen"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Tijdelijke map"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "Optionele map waarin downloads worden verzameld voordat ze bij voltooiing naar de gegevensmap worden verplaatst. Laat leeg om dit uit te schakelen."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Torrentmap"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "Optionele map om .torrent-bestanden apart van de gedownloade gegevens op te slaan. Laat leeg om ze in de gegevensmap op te slaan."
 
 msgid "Files readable by all"
 msgstr "Bestanden leesbaar door iedereen"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Stel bestandsrechten in om andere lokale gebruikers toegang te geven tot de gedownloade bestanden"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Bestanden vooruit toewijzen"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Nieuwe torrentbestanden meteen uitbreiden tot hun volledige grootte en de ruimte op schijf direct toewijzen zodra de torrent start, om te voorkomen dat een volle schijf downloads onderbreekt en om fragmentatie te vermijden terwijl de delen binnenkomen"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Bestandsnamen behouden"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Originele bestandsnamen uit de torrent behouden. Indien uitgeschakeld worden bestandsnamen gefilterd om ongeldige tekens voor het bestandssysteem te verwijderen. Indien ingeschakeld worden de originele bestandsnamen gebruikt; als een bestandsnaam tekens bevat die uw bestandssysteem niet ondersteunt, wordt het bestand aangemaakt met een veilige vervangende naam en wordt een waarschuwing getoond"
 
 msgid "Max files per torrent"
 msgstr "Max. aantal bestanden per torrent"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Tunnelconfiguratie"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Primaire bestemming (identiteit) voor deze sessie; de DHT, de tracker en de zwarte lijst ervan worden gedeeld met de bestemmingen per torrent"
 
 msgid "Our destination (identity) for this session"
 msgstr "Onze bestemming (identiteit) voor deze sessie"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Primaire best."
 
 msgid "Dest."
 msgstr "Best."
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Uitgaand"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Multi-bestemming"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "Gebruik een afzonderlijke bestemming voor elke torrent, zodat trackers en de DHT uw torrents niet aan elkaar kunnen koppelen. Bestemmingen zijn tijdelijk en veranderen bij het herstarten."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Maximum aantal bestemmingen"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Als er meer torrents draaien dan dit maximum, delen de extra torrents bestemmingen in willekeurige groepen van wisselende grootte om het geheugengebruik te beperken. Nul betekent één bestemming per torrent."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Willekeurige opstartvertraging"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Start torrents met meerdere bestemmingen gestaggerd met een willekeurige vertraging, zodat torrents die tegelijkertijd starten niet door trackers of DHT-peers aan elkaar kunnen worden gerelateerd en de tunnelbouw wordt verspreid. Schakel dit uit om alle torrents direct in één batch te starten."
 
 msgid "I2CP host"
 msgstr "I2CP-host"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "I2CP opties"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Browserintegratie"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Browser-API inschakelen"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Sta toe dat magnet-links en torrent-URL's zonder de CSRF-nonce worden toegevoegd, vanaf loopback of vanaf de hieronder toegestane hosts"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Toegestane hosts"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Door komma's gescheiden hostnamen of IP-adressen die zonder nonce torrents mogen toevoegen; loopback is altijd toegestaan"
 
 msgid "API key"
-msgstr ""
+msgstr "API-sleutel"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Optioneel wachtwoord voor toegang op afstand, omzeilt de host-allowlist"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Browserhandler installeren"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Browserhandler bijwerken"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Werk de geïnstalleerde I2PSnark Bridge-extensie bij naar v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Open de I2PSnark Bridge-extensie in uw browser om magnet-links toe te voegen; de extensie registreert zichzelf bij de browser, er worden geen bestanden aan de kant van de router geschreven"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Download het PowerShell-installatieprogramma dat magnet-links en .torrent-bestanden bij uw browser registreert; de I2PSnark Bridge-extensie vereist een browser uit de Firefox-familie"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Download het installatiescript dat magnet-links en .torrent-bestanden bij uw browser registreert; de I2PSnark Bridge-extensie vereist een browser uit de Firefox-familie"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Download het script voor de browserhandler"
 
 msgid "Save configuration"
 msgstr "Configuratie opslaan"
@@ -957,7 +957,7 @@ msgstr "Het wijzigen van deze instelling naar minder dan 3 hops kan de snelheid 
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "I2PSnark Bridge-extensie v{0} is verouderd, werk deze bij naar v{1} op de configuratiepagina"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Klik op de \"Torrent toevoegen\"-knop om de torrent op te halen"
@@ -1189,7 +1189,7 @@ msgstr "Voer de URL in of selecteer een torrent-bestand"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Fout bij het toevoegen van de torrent: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1231,11 +1231,11 @@ msgid "Directory deleted: {0}"
 msgstr "Map verwijderd: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "Browser-API ingeschakeld."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "Kan de I2PSnark Bridge-extensie niet openen: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1312,7 +1312,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "Verwijder het .torrent-bestand en de bijbehorende gegevensbestanden"
 
 msgid "Destination"
-msgstr ""
+msgstr "Bestemming"
 
 msgid "Checking"
 msgstr "Bezig met controleren"
@@ -1321,7 +1321,7 @@ msgid "Allocating"
 msgstr "Bezig met toewijzen"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Kan niet verbinden met alle geconfigureerde trackers"
 
 msgid "Starting"
 msgstr "Bezig met starten"
@@ -1513,7 +1513,7 @@ msgstr "Aangemaakt"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Grootte van de werkelijk gedownloade bestanden: {0}, exclusief {1} aan BEP 47-opvulbestanden"
 
 msgid "Added"
 msgstr "Toegevoegd"

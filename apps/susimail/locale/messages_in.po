@@ -232,7 +232,7 @@ msgid "no subject"
 msgstr "tidak ada subyek"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Tidak ada folder Draft?"
 
 msgid "Found no valid sender address."
 msgstr "Tidak ditemukan alamat pengirim yang valid."

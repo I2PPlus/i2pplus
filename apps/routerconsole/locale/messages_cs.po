@@ -572,7 +572,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Warning: Nelze nastavit službu I2P na ruční spuštění"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Warning: Nelze najít instalační adresář I2P+"
 
 msgid "Configuration saved successfully"
 msgstr "Konfigurace byla úspěšně uložena"
@@ -1443,7 +1443,7 @@ msgid "Ban peer until restart"
 msgstr "Ban peer do restartu"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Ručně zakázáno přes configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3549,10 +3549,10 @@ msgid "Low Latency"
 msgstr "Nízká latence"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Pakety přenesené opakovaně / odeslané pakety, jak hlásí transport UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "Ztráta"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Společnost Tunnels souhlasila s účastí"
@@ -3607,63 +3607,63 @@ msgstr "Konfigurovat peer"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} v RAM / {1} na disku"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Vysoká kapacita"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Zobrazeno"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Zobrazeno {0} z {1} profilů"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Skryt {0} zastaralý profil"
+msgstr[1] "Skryty {0} zastaralé profily"
+msgstr[2] "Skryto {0} zastaralých profilů"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Podíl zobrazených celkových profilů"
 
 msgid "peers"
 msgstr "vrstevníci"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Podíl zobrazených profilů úrovní"
 
 msgid "Window"
-msgstr ""
+msgstr "Okno"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Rychlá RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "Maximální RTT pro členství v rychlé úrovni (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Průměrná ztráta u peerů v rychlé úrovni (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Průměrná ztráta u peerů s vysokou kapacitou (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Slyšeno v rámci limitu zobrazení"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Vyhledávání"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Míra úspěšnosti vyhledávání"
 
 msgid "Stores"
-msgstr ""
+msgstr "Úložiště"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Míra úspěšnosti ukládání"
 
 msgid "Definitions"
 msgstr "Definice"
@@ -3734,25 +3734,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "o kolika nových spolužácích nám v poslední době řekli?"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Známé floodfilly"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Bez selhání"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Žádné selhání vyhledávání (1h)"
 
 msgid "Response"
-msgstr ""
+msgstr "Odezva"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Doba odezvy vyhledávání (1h)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "1h Kontakt"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Kontaktován během 1h"
 
 msgid "1h Fail Rate"
 msgstr "1H Míra selhání"
@@ -4740,10 +4740,10 @@ msgid "Slow Start Window Cap"
 msgstr "Strop okna pomalého startu"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Maximální příchozí buffer"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Maximální počet souběžných streamů"
 
 msgid "Max SYN Sends"
 msgstr "Maximální počet odesílání SYN"
@@ -4758,7 +4758,7 @@ msgid "Max Retransmissions"
 msgstr "Maximální počet opakovaných přenosů"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Pracovní vlákna pro příjem"
 
 msgid "Writer Queue Size"
 msgstr "Velikost fronty zapisovače"
@@ -4842,16 +4842,16 @@ msgid "Search Timeout"
 msgstr "Časový limit hledání"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Strop hledání"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Okno republikace"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Šíře republikace"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Šíře průzkumu"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "Časový limit vyhledání LeaseSetu"
@@ -4878,7 +4878,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Maximální počet vysoce kapacitních uzlů"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Práh přesunu ztrátového peera"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Časový limit žádosti o sestavení tunelu"
@@ -4905,25 +4905,25 @@ msgid "Max Delay Between Tests"
 msgstr "Maximální prodleva mezi testy"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Okno selhání testu tunelu"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Dolní mez okna selhání testu tunelu"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Doba ochlazování po selhání prvního skoku"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Práh selhání prvního skoku"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Práh přetížení příchozích"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Práh prořazování zastaralých staveb"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Práh omezení souběžnosti"
 
 msgid "NTCP Reader Threads"
 msgstr "Čtecí vlákna NTCP"
@@ -4935,7 +4935,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "Failsafe interval pumpy NTCP"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "Maximální rychlost nečinných smyček pumpování NTCP"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Maximální souběžné zprávy uzlu"
@@ -5007,7 +5007,7 @@ msgid "Max Window Size"
 msgstr "Maximální velikost okna"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Násobitel časového limitu připojení"
 
 msgid "Max Message Queue Age"
 msgstr "Maximální stáří fronty zpráv"
@@ -5025,16 +5025,16 @@ msgid "Server Handler Threads"
 msgstr "Obslužná vlákna serveru"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Kapacita fronty obsluhy serveru"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Výchozí počet vláken serveru na tunel"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "Vlákna přenosu I/O"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "Časový limit zastavení I/O"
 
 msgid "Build Handler Threads"
 msgstr "Vlákna obsluhy sestavování"
@@ -5043,7 +5043,7 @@ msgid "Client Runner Max Threads"
 msgstr "Maximální počet vláken klienta"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Výchozí maximální počet připojení klienta"
 
 msgid "Participating Throttle Min"
 msgstr "Minimální omezení účasti"
@@ -5121,7 +5121,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Netestovaný Tunnel Cap Multiplier"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Velikost filtru IV tunelů"
 
 msgid "Message Processing Throttle"
 msgstr "Omezovač zpracování zpráv"
@@ -5172,10 +5172,10 @@ msgid "Max congestion window during slow start."
 msgstr "Maximální okno přetížení během pomalého startu."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Strop příchozího bufferu na jedno připojení (bajty)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Dynamický strop souběžných streamů na jeden cíl."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Celkový počet pokusů o SYN, než se vzdá podání ruky."
@@ -5190,7 +5190,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Opakované přenosy před zrušením proudu."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Vlákna pro zpracování příchozích paketů na jednu streamovou relaci."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Maximální doba nečinnosti před zrušením proudu (ms)."
@@ -5280,16 +5280,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Časový limit vyhledání na uzlu (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Tvrdý konečný termín pro každé iterativní hledání (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Doba životnosti zpráv úložiště pro republikaci pronájmů (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Maximální počet peerů, kterým je po hledání znovu zaslán pronájem."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Souběžná průzkumná hledání v jednom cyklu."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Adaptivní strop termínu pro vyhledání LeaseSetu (ms)."
@@ -5316,7 +5316,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Maximální počet vysoce kapacitních uzlů ve směrovací tabulce."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Poměr ztrát, který přesune peer z rychlých úrovní (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Časový limit odpovědi sestavení (ms)."
@@ -5343,25 +5343,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Maximální interval mezi testy tunelů (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Maximální doba testu tunelu před selháním (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Dolní mez okna selhání testu tunelu (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Jak dlouho je peer přeskočen po selháních prvního skoku (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Počet selhání, po kterém je peer během ochlazování přeskočen."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Počet příchozích tunelů, pod kterým se stavby omezují."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Podíl času čekání ve frontě z rozpočtu časového limitu před prořazením stavby (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Míra časových limitů, která spouští snížení souběžných staveb (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Vlákna dešifrující příchozí data NTCP."
@@ -5373,7 +5373,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Failsafe interval skenování zaseknutých pump NTCP (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Strop nečinných iterací pumpování NTCP za sekundu (smyček/s)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Limit probíhajících zpráv na uzlu UDP."
@@ -5430,7 +5430,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Horní mez odhadu RTT (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Mění časový limit připojení každého klienta podle RTT sítě (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Zpoždění před prvním opakovaným přenosem (ms)."
@@ -5454,16 +5454,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Obslužná vlákna pro příchozí spojení I2PTunnel."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Příchozí připojení, která mohou čekat na volné obslužné vlákno serveru."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Výchozí strop obslužných vláken serveru pro každý serverový tunel."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Vyhrazený fond pro přenos dat Server→Klient, odblokuje obslužná vlákna."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Časový limit zastavení pro přenosy dat Server→Klient (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Pool vláken pro zpracování příchozích žádostí o sestavení."
@@ -5472,7 +5472,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Strop poolu vláken proxy klienta."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Výchozí strop připojení klienta."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Minimální počet tranzitních tunelů, které může uzel držet."
@@ -5550,7 +5550,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časový limit připojení TCP socketu pro obslužná vlákna serveru tunelů (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Exponent filtru pro odstranění duplicit IV tunelu: každý z jeho dvou bufferů pojme 2^n bitů, takže dvojice stojí 2^(n-2) bajtů. Velikost se odvozuje ze skutečně pozorovaných IV; příliš malá velikost se projeví jako ztráta dobrých dat tunelu."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximální průměrné zpoždění zprávy před odmítnutím přenosu (ms)."
@@ -5732,7 +5732,7 @@ msgid "Endpoint"
 msgstr "Koncový bod"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Test úspěšný"
@@ -6143,10 +6143,10 @@ msgid "Additional Router Caps"
 msgstr "Další schopnosti routeru"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Přidejte skupiny schopností oddělené mezerami nebo čárkami, např. LUf,PUG. Použijte ! pro vyloučení: G!f zakáže routery G, pokud nejsou floodfill"
 
 msgid "Misc"
-msgstr ""
+msgstr "Různé"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Zakázat vrstevníky záplavových uzlů, kteří nereagují na dotazy (míra selhání > 95 %)"
@@ -6167,10 +6167,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Banovat nadměrné požadavky na tunely"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Když je povoleno, vztahují se zákazy podle zásad na peeré vyřešené ze sítě, ke kterým nemáme přímé připojení - na další skoky tranzitu i na koncové body klientských tunelů. Když je vypnuto, jsou tito peeré vyjmuti, pokud nejsou přímo připojeni."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Zakázat peerery dalšího skoku"
 
 msgid "Clear all bans"
 msgstr "Vymazat všechna blokování"
@@ -6313,10 +6313,10 @@ msgid "I2CP Port"
 msgstr "Port I2CP"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Neobcházet síť při přístupu k místně hostovaným službám"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Zakázat loopback"
 
 msgid "Require username and password"
 msgstr "Vyžadovat uživatelské jméno a heslo"
@@ -7495,13 +7495,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Minimální úroveň souběžných vyhledávání RouterInfo dalšího skoku během zpracování stavby tunelu. Zajišťuje minimální úroveň souběžnosti vyhledávání. [Výchozí je 8]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Horní mez souběžných vyhledávání RouterInfo dalšího skoku během zpracování stavby tunelu. Sloty počítají různé další skoky, nikoli jednotlivé požadavky: stavby sdílející další skok využívají jedno hledání. Není škálováno podle jader; vyhledávání představují čekání omezená sítí. [Výchozí je 64 (32 na pomalých systémech)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Procento aktuálních zúčastněných tunelů, které se používá ke škálování limitu souběžných vyhledávání po spuštění. Efektivní limit je omezen mezi minLookupLimit a maxLookupLimit. [Výchozí je 40 (15 na pomalých systémech)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Hloubka fronty, která uchovává stavby tunelů, jejichž další skok se právě vyhodnocuje, zatímco jsou všechny sloty pro vyhledávání obsazené. Nastavena tak, aby se plná fronta vyprázdnila v rámci časového limitu stavby u původce; položky starší než tento rozpočet se zahodí jako zastaré bez ohledu na hloubku. [Výchozí je 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Maximální povolená budoucí odchylka pro časová razítka požadavků na stavbu tunelu. Požadavky s časovými razítky v budoucnosti dále než tento limit... [Výchozí je 30000]"
@@ -7609,7 +7609,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Minimální počet aktivních peerů vyžadovaných během spouštění routeru před omezením výběru průzkumných peerů. Během časného spouštění... [Výchozí je 100]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Maximální doba v milisekundách, po kterou může přijatý SYN čekat ve frontě přijímání, než jej accept() vytáhne. Pokud je accept() zpožděno (vytížený hostovaný server), je připojení po tomto okně odmítnuto, takže vyšší hodnota toleruje krátká zastavení. Nastavená hodnota se použije bez restartu. [Výchozí je 60000 (60 sekund)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Toto specifické nastavení tunelu vám umožňuje povolit nebo zakázat odpovědi na odesílané pingy do serverů hostovaných směrovačem. Pokud chcete pingy zakázat, musíte do konfigurace serveru v Tunelovém správci přidat řádek <code>i2p.streaming.answerPings=false</code> do sekce <i>Vlastní možnosti</i>."
@@ -7618,22 +7618,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Výchozí maximální zpoždění streamu v milisekundách, když není nastaven explicitní časový limit připojení. [Výchozí je 10000 (10 sekund)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Doba ochlazování v milisekundách mezi pokusy o připojení ke stejnému nedosažitelnému cíli. Zabraňuje opakovanému útoku na nedosažitelné peeré. [Výchozí je 5000 (5 sekund)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Doba trvání TIME-WAIT v milisekundách po odpojení streamového připojení, během níž se ještě potvrzují pozdní pakety. Zvyšte pro cesty s vysokou latencí, kde mohou být konečná potvrzení ACK zpožděna. [Výchozí je 120000 (2 minuty)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Počet odpovědí na omezenou destinaci před tichým zahozením nadbytečných paketů. Zabraňuje bouřím připojení k omezeným destinacím. [Výchozí je 5]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Toto nastavení, když je povoleno, zavádí náhodné zpoždění pong až 50 ms pro všechny servery podporující ping, které jsou hostovány routerem. Výchozí je vypnuto. Použije se okamžitě pro nové pongs, není vyžadován restart."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Počáteční velikost okna přetížení (v paketech) pro nová streamová připojení. Větší okno zahájí připojení rychleji, ale na přetížených cestách může způsobit více opakovaných přenosů. [Výchozí je 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Horní omezení časového limitu připojení pro streamy. Zabraňuje překročení tohoto stropu časovými limity jednotlivých připojení. Zvyšte pro vzdálený přístup s velmi vysokou latencí. Lze přepsat pro jednotlivá připojení nastavením stejné vlastnosti v pokročilých možnostech klientského tunelu (například klientský tunel IRC má výchozí hodnotu 300000). [Výchozí je 75000 (75 sekund)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Maximální doba v milisekundách pro čekání na odpověď pong při pingování peeru. [Výchozí je 300000 (5 minut)]"
@@ -7642,43 +7642,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Toto nastavení, pokud je povoleno, upravuje maximální další náhodný zpožděný pong zavedený pro servery povolené pro odpovídání na pingy, pokud je také povoleno <code>i2p.streaming.enablePongDelay</code>. Pokud není explicitně nastaveno, bude použita výchozí hodnota 50 ms."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Maximální počet čekajících připojení (SYN a částečných paketů) ve frontě přijímání serveru. Když je plná, nové SYN dostane RESET (klient může opakovat) místo tichého zahazení, takže klient zůstává informován o odmítnutí. [Výchozí je 256 (128 na pomalých systémech)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Maximální zpoždění opakovaného přenosu v milisekundách. Interval opakovaného přenosu nepřekročí tuto hodnotu bez ohledu na backoff. [Výchozí je 60000]. [Výchozí je 30000 (30s)]. [Výchozí je 30000 (30s)]. [Výchozí hodnota je 30 000 (30 s)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Maximální počet opakovaných přenosů paketů, než se vzdá připojení. Vyšší hodnoty zlepšují spolehlivost na ztrátových linkách, ale zpožďují detekci selhání. [Výchozí je 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Maximální časový limit opakovaného přenosu v milisekundách po exponenciálním backoff (zdvojnásobení). Omezuje, jak dlouho odesílatel čeká před opakovaným odesláním nepotvrzeného paketu. [Výchozí je 120000]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Maximální doba odezvy v milisekundách pro streamová připojení. Omezuje vypočtenou RTT, aby po narušení sítě nevznikaly patologické hodnoty časového limitu. [Výchozí je 10000 (10 sekund)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Maximální velikost okna pomalého startu pro streamová připojení. Omezuje okno přetížení během pomalého startu, aby nedošlo k přetížení sítě. [Výchozí je 256 (32 na pomalých systémech)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Maximální velikost okna přetížení (v paketech) pro streamová připojení. Omezuje maximální propustnost jediného streamu. [Výchozí je 512 (384 na pomalých systémech)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Minimální zpoždění opakovaného přenosu v milisekundách. Pakety nebudou znovu odeslány rychleji než tento interval. Nižší hodnoty umožňují rychlejší opakovaný přenos. [Výchozí je 500]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Doba v minutách pro dočasný automatický zákaz u vzdálených cílů, které překročí níže uvedené prahy požadavků na streamy. Zakázaným cílům je po dobu zákazu odmítnuta všechna nová příchozí připojení. Údržbový proces tuto hodnotu znovu načítá každých 60 sekund, takže ji lze změnit za běhu na stránce <a href=/configadvanced>Pokročilá konfigurace</a>. Nastavte na 0 pro úplné vypnutí automatického zákazu. [Výchozí je 5 (5 minut)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Maximální počet odmítnutí příchozích SYN z jednoho vzdáleného cíle v posouvném okně, než se spustí automatický zákaz. Počítadlo odmítnutí se každých 60 sekund zmenší na polovinu (místo resetování), takže ojedinělé špiky odeznívají, zatímco trvalé záplavy se sčítají. [Výchozí je 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Maximální počet příchozích SYN povolených z jednoho vzdáleného cíle v okně <code>tempBanSynRate</code>, než se zaznamená přestřek. První přestřek pouze zapíše varování; druhý přestřek během 60 sekund spustí automatický zákaz. Tato dvoustřeková brána propustí legitimní špik při načtení stránky a přitom zachytí trvalé záplavy připojení, které by jinak přetěžovaly počítadlo odmítnutí. [Výchozí je 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Časové okno v milisekundách pro kontrolu špiku SYN. Pokud je z jediného cíle přijato více než <code>tempBanSynBurst</code> SYN v tomto okně, zaznamená se přestřek; druhý přestřek během 60 sekund spustí automatický zákaz. [Výchozí je 1000 (1 sekunda)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Horní strop reaktivního limitu souběžných streamů komponenty Tuner. Tuner routeru automaticky upravuje limit souběžných streamů pro každý cíl podle poptávky, odmítnutí a stavu routeru, ale nikdy nemůže cíl zvýšit nad vlastní nastavení pro tunel <code>i2p.streaming.maxConcurrentStreams</code>. Tato hodnota omezuje, jak vysoko může Tuner přepis posunout. Zvyšte ji, pokud hostujete služby s vysokým provozem a Tuner nedokáže limit dostatečně zvětšit. [Výchozí je 1024, rozsah 64–8192, je vyžadován restart]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Interval v milisekundách mezi automatickými republikacemi LeaseSet. Vyšší hodnoty snižují netdb provoz, ale mohou způsobit zastaralé informace. [Výchozí je 300000]"
@@ -7687,7 +7687,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Práh v milisekundách pro proaktivní republikaci LeaseSet. Pokud lease vyprší v tomto okně, LeaseSet je republikován předčasně. [Výchozí je 60000]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Maximální počet současných klientských relací I2CP, které router přijme. [Výchozí je 1536 (768 na pomalých systémech)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Při nastavení na true zakáže místní loopback doručování a vynutí veškerý provoz přes tunely (odchozí tunel → síť → příchozí tunel)... Užitečné pro testování chování směrování tunelů, když jsou zdroj a cíl na stejném routeru [Disabled by default]. Užitečné pro testování chování směrování tunelů, když jsou zdroj a cíl na stejném routeru [Disabled by default]. Užitečné pro testování chování tunelového směrování, když jsou zdroj a cíl na stejném směrovači [ve výchozím nastavení zakázáno]"
@@ -7714,55 +7714,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Maximální počet po sobě jdoucích selhání přenosu s nulovými daty, než eepget vzdá, i když zbývají opakování. Zvyšte, pokud jsou přenosy nestabilní. [Výchozí je 3]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Pevné zpoždění v milisekundách mezi opakovanými pokusy eepget. Použijte -1 pro zpoždění s kolísáním (základ 5 s plus až 10 s kolísání), abyste rozložili zátěž na nestabilní zdroj. Hodnoty 0 způsobí okamžitý opakovaný pokus. [Výchozí je -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Když je povoleno, eepget resolvuje názvy hostitelů pro stahování přes HTTPS pomocí DNS-over-HTTPS, a tím chrání vyhledávání před místním slídáním. Obchází se při stahování přes proxy nebo když je hostitel IP adresa. [Výchozí je true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení určuje maximální počet torrentů, jejichž úložiště je kontrolováno současně, když se několik torrentů spustí nebo je společně znovu kontroluje, a tím omezuje bouři vstupně-výstupních operací na disku při spuštění nebo po pádu. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je 4, je vyžadován restart I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Toto nastavení umožňuje konfigurovat maximální počet souborů na torrent, který I2PSnark povolí při stahování nebo vytváření torrentu. Upožteňte, že podstatné zvýšení této hodnoty oproti výchozím 2000 souborů může vyžadovat další konfiguraci na hostitelském systému pro zvýšení maximálního počtu otevřených souborů povolených operačním systémem (např. <code>ulimit -n</code> v Linuxu). Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code> nebo nastavte na konfigurační stránce I2PSnark; platí pro torrenty přidané později."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení, když je povoleno, pravidelně restartuje všechny spuštěné torrenty, aby se jejich cíle střídaly na čerstvé identity, což přeruší dlouhodobé spojení mezi IP adresou routeru a cíli torrentů u trackerů a v DHT. Cyklus běží každé 3 hodiny plus náhodné zpoždění 1 až 60 minut, je přeskočen, když nějaký torrent aktivně stahuje, a restartuje pouze torrenty, které běžely. Cíle jsou dočasné a mění se při každém restartu stejně; toto nastavení to prodlužuje i v rámci jednoho běhu. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je true, je vyžadován restart I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Toto nastavení řídí spoofing identity klienta: ID peera trackera a User-Agent, ID peera handshaku BitTorrentu, název klienta v handshake rozšíření i stahování z webových zdrojů se všechny prezentují jako vybraný známý klient místo I2PSnark. V režimu s více cíli je každému fondu cílů ve výchozím stavu přiřazen vlastní náhodný klient; v režimu s jedním cílem se I2PSnark identifikuje jako sám sebou, pokud není nastaven název klienta ani \"random\". Nastavte na \"random\" pro vynucení náhodného výběru ve všech režimech, \"i2psnark\" pro zachování klasické identity i v režimu s více cíli, nebo na název klienta pro trvalé vydávání se za daný klient. Řetězce verze jsou připojeny k aktuálním upstreamovým vydáním a jsou konzistentní napříč ID peera, User-Agent a handshake rozšíření. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je náhodně na fond v režimu s více cíli; platí pro torrenty spuštěné později]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Toto nastavení volitelně omezuje klienty vybrané náhodným výběrem pro <code>i2psnark.clientId</code> na podmnožinu známých názvů klientů oddělenou čárkami; neznámé názvy se ignorují a prázdná hodnota vybírá ze všech podporovaných klientů. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je nenastaveno, platí pro torrenty spuštěné později]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení, když je povoleno, předem alokuje celkové velikosti souborů na disku při spuštění stahování, aby se snížila fragmentace. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je true, je vyžadován restart I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Toto nastavení, když je povoleno, přidává novým torrentům vytvořeným v I2PSnark soubory doplnění podle BEP 47, takže každý soubor kromě posledního končí na hranici dílu. Stahování a ověřování doplněných torrentů tím není ovlivněno. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je false; konfigurační soubor se znovu čte každých 30 sekund a změněná nastavení se použijí bez restartu]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení, když je povoleno, řadí názvy torrentů podle nakonfigurovaného jazyka do správného abecedního pořadí. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je false, je vyžadován restart I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení určuje seznam adres URL oznámení trackerů oddělených čárkami, které jsou považovány za soukromé trackery; torrenty, které je používají, se nešíří s ostatními peery přes DHT ani PEX. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Je vyžadován restart I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení určuje páry name,url oddělené čárkami pro výchozí seznam trackerů zobrazovaný novým torrentům, a přepíše vestavěný seznam. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Je vyžadován restart I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení, když je povoleno, zakazuje peeré, kteří zruší většinu toho, co si vyžádají. Jakmile peer vyžádal a zrušil celkem alespoň 5 MB, poměr zrušení nad 90 % vyžádaných bajtů vede k zákazu peera (odmítnutí na příchozích i odchozích připojeních) po dobu <code>i2psnark.banDiscardPeriod</code> minut. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je true, je vyžadován restart I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení určuje dobu v minutách, po kterou se zákaz vztahuje na peeré s nadměrným poměrem zahozených dat. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je 60, je vyžadován restart I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Toto nastavení určuje maximální počet zpráv uchovávaných v oblasti zpráv webového rozhraní I2PSnark. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je 50, je vyžadován restart I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Toto nastavení určuje počet pracovních vláken používaných k paralelnímu ověřování dílů během úplné kontroly úložiště jediného torrentu, například při obnovení nebo opětovné kontrole. Když není nastaveno, počet vláken se škáluje s počtem CPU, minimálně 4. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code>. [Výchozí je max(jádra / 4, 4); čte se při každé kontrole, takže není vyžadován restart]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Když je nastavena cesta k adresáři, zapisují se nedokončená stahování do přechodného adresáře v tomto adresáři místo do adresáře dat a každý soubor se zkopíruje do adresáře dat až poté, co jsou staženy všechny jeho díly. To je užitečné pro udržování částečných stahování mimo hlavní datový svazek (například na samostatný, rychlejší nebo méně zatížený disk). Přechodný adresář musí mít dostatek volného místa pro největší probíhající stahování. Když není nastaven nebo je prázdný, stahování se zapisují přímo do adresáře dat jako dříve. Pro změnu přidejte do konfiguračního souboru I2PSnark <code>i2psnark.config</code> nebo nastavte na konfigurační stránce I2PSnark; platí pro torrenty přidané později. [Ve výchozím stavu vypnuto]"
 
 msgid "miscellaneous"
 msgstr "různé"
@@ -7774,7 +7774,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Pokud je nastaveno na true, I2P běží bez síťové konektivity, což je užitečné, pokud neustále restartujete směrovač, abyste otestovali aktualizace kódu, protože to zabrání přerušení sítě."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Když je nastaveno na true, současný soubor protokolu a všechny rotované archivy se stanou čitelnými a zapisovatelnými pro skupinu, pod kterou router běží (režim 660), takže uživatelé, kteří jsou členy této skupiny, mohou protokoly prohlížet. Soubory se nikdy nestanou čitelnými pro všechny. [Výchozí je false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Toto nastavení umožňuje konfiguraci alternativních NTP serverů, které jsou potřebné pro zajištění přesného času ve vašem směrovači. [Výchozí hodnota je 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -9693,13 +9693,13 @@ msgid "Set Password"
 msgstr "Nastavit heslo"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Všechny routery [Pokročilé]"
 
 msgid "Remote"
 msgstr "Vzdálený"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Všechny routery (klientská NetDb) [Pokročilé]"
 
 msgid "Encryption type"
 msgstr "Typ šifrování"
@@ -9751,19 +9751,19 @@ msgid "Network Peers"
 msgstr "Síťoví kolegové"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Rychlé peeré"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Peeré s vysokou kapacitou"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Floodfill peeré"
 
 msgid "Banned Peers"
 msgstr "Zakázaní vrstevníci"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Nedávné profily peerů"
 
 msgid "Configure router logging options"
 msgstr "Konfigurace možností protokolování routeru"

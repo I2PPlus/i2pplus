@@ -570,7 +570,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Varoitus: I2P-palvelua ei voitu asettaa manuaaliseen käynnistykseen"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Varoitus: I2P+-asennushakemistoa ei löytynyt"
 
 msgid "Configuration saved successfully"
 msgstr "Asetusten tallennus onnistui"
@@ -1440,7 +1440,7 @@ msgid "Ban peer until restart"
 msgstr "Estä vertaissolmu uudelleenkäynnistykseen saakka"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Manuaalisesti estetty configpeerilla"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3541,10 +3541,10 @@ msgid "Low Latency"
 msgstr "Matala latenssi"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Uudelleenlähetetyt paketit / lähetetyt paketit UDP-siirron ilmoittamana"
 
 msgid "Loss"
-msgstr ""
+msgstr "Hävikki"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tunnelien vertaiskumppani on suostunut osallistumaan"
@@ -3599,62 +3599,62 @@ msgstr "Määritä vertaiskumppani"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} muistissa / {1} levyllä"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Suuri"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Näytetään"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Näytetään {0} / {1} profiilia"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} vanhentunut profiili piilotettu"
+msgstr[1] "{0} vanhentunutta profiilia piilotettu"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Näytettävien profiilien osuus kaikista"
 
 msgid "peers"
 msgstr "vertaisia"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Näytettävien tasoprofiilien osuus"
 
 msgid "Window"
-msgstr ""
+msgstr "Ikkuna"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Nopea RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "Pikatason jäsenyyden enimmäis-RTT (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Pikatason vertaisten keskimääräinen hävikki (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Suuren kapasiteetin vertaisten keskimääräinen hävikki (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Kuullut näyttökatkaisun sisällä"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Haut"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Hakujen onnistumisprosentti"
 
 msgid "Stores"
-msgstr ""
+msgstr "Tallennukset"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Tallennusten onnistumisprosentti"
 
 msgid "Definitions"
 msgstr "Määritelmät"
@@ -3725,25 +3725,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "kuinka monesta uudesta kollegasta he ovat kertoneet meille viime aikoina"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Tunnetut tulvasolmut"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Ei epäonnistumisia"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Ei hakuvirheitä (1h)"
 
 msgid "Response"
-msgstr ""
+msgstr "Vastaus"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Hakuvastausaika (1h)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "1h yhteys"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Yhteydet 1 tunnin sisällä"
 
 msgid "1h Fail Rate"
 msgstr "1h epäonnistumisprosentti"
@@ -4729,10 +4729,10 @@ msgid "Slow Start Window Cap"
 msgstr "Hitaan aloituksen ikkunan yläraja"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Saapuvan puskurin enimmäiskoko"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Rinnakkaisuuksien enimmäismäärä"
 
 msgid "Max SYN Sends"
 msgstr "Max SYN lähettää"
@@ -4747,7 +4747,7 @@ msgid "Max Retransmissions"
 msgstr "Uudelleenlähetysten enimmäismäärä"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Vastaanottojen työsäikeet"
 
 msgid "Writer Queue Size"
 msgstr "Kirjoittajan jonon koko"
@@ -4831,16 +4831,16 @@ msgid "Search Timeout"
 msgstr "Haun aikakatkaisu"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Hakuraja"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Uudelleenjulkaisun ikkuna"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Uudelleenjulkaisun hajautus"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Tutkimuksen leveys"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet-haun aikakatkaisu"
@@ -4867,7 +4867,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Suurikapasiteettisten vertaisten enimmäismäärä"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Hävikkisen vertaisen alennuskynnys"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Tunnelin rakennuspyynnön aikakatkaisu"
@@ -4894,25 +4894,25 @@ msgid "Max Delay Between Tests"
 msgstr "Testien välinen enimmäisviive"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Tunnelikokeen virheikkuna"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Tunnelikokeen virheikkunan alaraja"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Ensimmäisen hypyn epäonnistumisen jäähdytys"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Ensimmäisen hypyn epäonnistumisen kynnys"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Saapuvan liikenteen ruuhkakynnys"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Vanhentuneiden rakennusten karsintakynnys"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Rinnakkaisuuden rajoituskynnys"
 
 msgid "NTCP Reader Threads"
 msgstr "NTCP-lukusäikeet"
@@ -4924,7 +4924,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP-pumpun vikaturvaväli"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "NTCP-pumpun enimmäismäärä joutenol kierrosta"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Samanaikaisten vertaisviestien enimmäismäärä"
@@ -4996,7 +4996,7 @@ msgid "Max Window Size"
 msgstr "Ikkunan enimmäiskoko"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Yhteyden aikakatkaisun kerroin"
 
 msgid "Max Message Queue Age"
 msgstr "Viestijonon enimmäisikä"
@@ -5014,16 +5014,16 @@ msgid "Server Handler Threads"
 msgstr "Palvelinkäsittelijäsäikeet"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Palvelinkäsittelijän jonon kapasiteetti"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Palvelimen oletussäikeet tunnelia kohti"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "I/O-siirron säikeet"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "I/O-pysähtymän aikakatkaisu"
 
 msgid "Build Handler Threads"
 msgstr "Rakennuskäsittelijäsäikeet"
@@ -5032,7 +5032,7 @@ msgid "Client Runner Max Threads"
 msgstr "Asiakassuorittajan säikeiden enimmäismäärä"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Asiakasoletuksen enimmäismäärä yhteyksiä"
 
 msgid "Participating Throttle Min"
 msgstr "Osallistumisen rajoituksen vähimmäismäärä"
@@ -5110,7 +5110,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Testaamaton tunnelin korkkikerroin"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Tunnelin IV-suodatuksen koko"
 
 msgid "Message Processing Throttle"
 msgstr "Viestien käsittelyn kaasutin"
@@ -5161,10 +5161,10 @@ msgid "Max congestion window during slow start."
 msgstr "Ruuhkaikkunan enimmäisarvo hitaan aloituksen aikana."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Saapuvan puskurin raja yhteyttä kohti (tavua)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Dynaaminen raja määränpään rinnakkaisille suoratoistoille."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "SYN-yritysten kokonaismäärä ennen kättelyn luovuttamista."
@@ -5179,7 +5179,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Uudelleenlähetykset ennen suoratoiston pudottamista."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Saapuvien pakettien käsittelysäikeet suoratoistointentoa kohti."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Enimmäisjouten-aika ennen suoratoiston pudottamista (ms)."
@@ -5269,16 +5269,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Vertaiskohtaisen haun aikakatkaisu (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Jokaisen iteratiivisen haun ehdoton määräaika (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "LeaseSet-uudelleenjulkaisun StoreMessage-viestien elinaika (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Enimmäismäärä vertaisia, jotka vastaanottavat uudelleen julkaistun vuokrasopimuksen haun jälkeen."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Rinnakkaiset tutkimushaut sykliä kohti."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Mukautuva määräajan yläraja LeaseSet-hauille (ms)."
@@ -5305,7 +5305,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Suurikapasiteettisten vertaisten enimmäismäärä reititystaulussa."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Hävikkisuhde, joka alentaa vertaisen pois nopeista tasoista (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Rakennusvastauksen aikakatkaisu (ms)."
@@ -5332,25 +5332,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Tunnelitestien välinen enimmäisväli (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Enimmäisaika, jonka tunnelikoe saa kestää ennen epäonnistumista (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Tunnelikokeen virheikkunan alaraja (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Kuinka kauan vertainen ohitetaan ensimmäisen hypyn epäonnistumisten jälkeen (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Epäonnistumisten määrä ennen kuin vertainen ohitetaan jäähdytyksen aikana."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Saapuvien tunnelien määrä, jonka alapuolella rakennuksia rajoitetaan."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Jono-odotuksen osuus aikakatkaisubudjetista ennen rakennuksen karsintaa (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Aikakatkaisuosuus, joka käynnistää rinnakkaisrakennusten vähentämisen (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Säikeet, jotka purkavat saapuvaa NTCP-dataa."
@@ -5362,7 +5362,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Vikaturvaskannauksen väli jumiutuneille NTCP-pumpuille (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "NTCP-pumpun joutenol kierroksen enimmäismäärä sekunnissa (silmukoita/s)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Lennossa olevien viestien raja UDP-vertaista kohti."
@@ -5419,7 +5419,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT-arvion yläraja (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Skaalaa kunkin asiakkaan yhteyden aikakatkaisun verkon RTT:n mukaan (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Viive ennen ensimmäistä uudelleenlähetystä (ms)."
@@ -5443,16 +5443,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Käsittelijäsäikeet saapuville I2PTunnel-yhteyksille."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Saapuvat yhteydet, jotka voivat odottaa vapaata palvelinkäsittelijäsäikettä."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Palvelinkäsittelijäsäikeiden oletusraja kullekin palvelintunnelille."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Oma resurssipooli palvelin→asiakas-tiedonsiirtoa varten, vapauttaa käsittelijäsäikeet."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Pysähtymän aikakatkaisu palvelin→asiakas-tiedonsiirroille (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Säievaranto saapuvien rakennuspyyntöjen käsittelyyn."
@@ -5461,7 +5461,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Asiakasvälityspalvelimen säievarannon yläraja."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Asiakasyhteyksien oletusraja."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Läpikulkutunnelien vähimmäismäärä, jonka mikä tahansa vertainen voi pitää."
@@ -5539,7 +5539,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-pistokkeen yhteydenmuodostuksen aikakatkaisu tunnelipalvelimen käsittelijäsäikeille (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Tunnelin IV-suodatuksen duplikaattien poiston eksponentti: kumpikin sen kahdesta puskurista sisältää 2^n bittiä, joten parin kustannus on 2^(n-2) tavua. Koko määritetään todellisuudessa nähdyistä IV:istä; liian pieni koko näkyy hyvän tunnelidatan pudottamisena."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Suurin keskimääräinen viestin viive ennen kuljetuksen hylkäämistä (ms)."
@@ -5721,7 +5721,7 @@ msgid "Endpoint"
 msgstr "Päätepiste"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Testi onnistui"
@@ -6132,10 +6132,10 @@ msgid "Additional Router Caps"
 msgstr "Lisäkapasiteetit"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Lisää caps-ryhmät erotettuina välilyönnein tai pilkuvin, esim. LUf,PUG. Käytä !-merkkiä poissulkemiseen: G!f estää G-reitittimet, elleivät ne ole tulvasolmuja"
 
 msgid "Misc"
-msgstr ""
+msgstr "Muut"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Estä tulvasolmukumppanit, jotka eivät vastaa kyselyihin (epäonnistumisprosentti > 95 %)"
@@ -6156,10 +6156,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Estä liialliset tunnelipyynnöt"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Kun käytössä, verkkosta ratkaistuihin vertaisiin, joihin emme ole suoraan yhteydessä - sekä läpikulkujen seuraaviin hyppeihin että asiakastunneleiden päätepisteisiin - sovelletaan käytäntöjen estoja. Kun pois käytöstä, tällaiset vertaiset on vapautettu, ellei suoraa yhteyttä ole."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Estä seuraavan hypyn vertaiset"
 
 msgid "Clear all bans"
 msgstr "Tyhjennä kaikki estot"
@@ -6302,10 +6302,10 @@ msgid "I2CP Port"
 msgstr "I2CP-portti"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Älä ohita verkkoa, kun käytät paikallisesti isännöityjä palveluita"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Poista Loopback käytöstä"
 
 msgid "Require username and password"
 msgstr "Vaadi käyttäjätunnus ja salasana"
@@ -7484,13 +7484,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Lattia samanaikaisille RouterInfo-hauille. [Oletus 10 (4 hitailla)] [Default is 10 (4 on slow systems)] [Oletusarvo on 10 (4 hitaissa järjestelmissä)] [Oletusarvo on 10 (4 hitaissa järjestelmissä)] [Oletusarvo on 10 (4 hitaissa järjestelmissä)]. [Oletusarvo on 10 (4 hitaissa järjestelmissä)"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Seuraavan hypyn RouterInfo-hakujen enimmäismäärä tunnelinrakennuksen käsittelyn aikana. Paikat lasketaan erillisinä seuraavina hyppeinä, ei yksittäisinä pyynnöinä: saman seuraavan hypyn jakamat rakennukset käyttävät samaa hakua. Ei skaalata ytinten mukaan; haut ovat verkkorajoitteisia odotuksia. [Oletus on 64 (32 hitaissa järjestelmissä)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Nykyisten osallistuvien tunnelien prosenttiosuus, jota käytetään rinnakkaisuusrajan skaalaamiseen käynnistyksen jälkeen. Tehokas raja rajataan välille minLookupLimit ja maxLookupLimit. [Oletus on 40 (15 hitaissa järjestelmissä)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Jonon syvyys, joka sisältää tunnelinrakennukset, joiden seuraavaa hyppää ratkaistaan kaikkien hakupaikkojen ollessa varattuina. Koko on valittu niin, että täysi jono tyhjenee alkuperäisen rakennuksen aikakatkaisun puitteissa; tämän budjetin vanhemmat merkinnät hylätään vanhentuneina syvyydestä riippumatta. [Oletus on 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Sallittu enimmäispoikkeama tulevaisuuteen aikaleimoille. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)"
@@ -7598,7 +7598,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Vähimmäismäärä aktiivisia vertaisia käynnistyksen aikana. [Oletus 6] [Default is 6] [Oletusarvo on 6] [Oletusarvo on 6] [Oletusarvo on 6]. [Oletus on 6"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Enimmäisaika millisekunneissa, jonka vastaanotettu SYN voi odottaa hyväksymisjonossa ennen kuin accept() poimii sen. Jos accept() viivästyy (kuormitettu isännöity palvelin), yhteys hylätään tämän ikkunan päätyttyä, joten suurempi arvo sietää lyhyet pysähdykset. Määritetty arvo otetaan käyttöön ilman uudelleenkäynnistystä. [Oletus on 60000 (60 sekuntia)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Tämä tunnelikohtainen asetus mahdollistaa sinun ottaa käyttöön tai poistaa käytöstä vastaukset reitittimen isännöimille palvelimille lähetettyihin pingviesteihin. Pingejen poistamiseksi sinun on lisättävä rivi <code>i2p.streaming.answerPings=false</code> palvelimen kokoonpanon <i>Mukautetut valinnat</i> -osioon Tunnel Managerissa"
@@ -7607,22 +7607,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Oletus enimmäis stream-viive ilman nimenomaista yhteyden aikakatkaisua. [Oletus 10000 (10s)"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Jäähdytysaika millisekunneissa yritysten välillä samaan tavoittamattomaan määränpäähän. Estää tavoittamattomien vertaisten jatkuvan pommituksen. [Oletus on 5000 (5 sekuntia)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "TIME-WAIT-kesto millisekunneissa suoratoistoyhteyden katkaisun jälkeen, jonka aikana myöhäiset paketit vielä kuittataan. Lisää suuren viiveen reiteillä, joissa lopulliset ACK:t voivat viivästyä. [Oletus on 120000 (2 minuuttia)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Kuinka monta kertaa vastata rajoitetulle kohteelle ennen hiljaista hylkäämistä. [Oletus 3] [Default is 3] [Oletusarvo on 3] [Oletusarvo on 3] [Oletusarvo on 3]. [Oletus on 3"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Kun tämä asetus on käytössä, reitittimen isännöimille kaikille ping-käytössä oleville palvelimille otetaan käyttöön enintään 50 ms:n satunnainen pong-viive. Oletuksena pois käytöstä. Otetaan käyttöön heti uusiin pongeihin, uudelleenkäynnistystä ei tarvita."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Uusien suoratoistoyhteyksien alkuperäinen ruuhkaikkunan koko (paketeissa). Suurempi ikkuna käynnistää yhteydet nopeammin, mutta voi aiheuttaa enemmän uudelleenlähetyksiä ruuhkaisuilla reiteillä. [Oletus on 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Suoratoiston yhteyden aikakatkaisun ylärajan rajaus. Estää yhteyskohtaisia aikakatkaisuja ylittämästä tätä kattoa. Lisää erittäin suuren viiveen etäkäytölle. Voidaan ohittaa yhteyskohtaisesti asettamalla sama ominaisuus asiakastunnelin lisäasetusvaihtoehdoissa (esim. IRC-asiakastunnelin oletus on 300000). [Oletus on 75000 (75 sekuntia)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Enimmäisaika odottaa pong-vastausta pingauksessa. [Oletus 300000 (5 min)"
@@ -7631,43 +7631,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Tämä asetus muuttaa maksimaalisen ylimääräisen satunnaisen pong-viiveen, joka esitellään, jos ping-palvelimet ovat käytössä ja <code>i2p.streaming.enablePongDelay</code> on myös käytössä. Ellei toisin määritetty, käytetään 50 ms:n oletusarvoa"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Palvelimen hyväksymisjonossa odottavien yhteyksien (SYN:ien ja osittaisten pakettien) enimmäismäärä. Kun jono on täynnä, uusille SYN:eille lähetetään RESET (asiakas voi yrittää uudelleen) sen sijaan, että ne hylättäisiin hiljaa, mikä pitää asiakkaan tietoisena hylkäyksestä. [Oletus on 256 (128 hitaissa järjestelmissä)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Enimmäis uudelleenlähetysviive. [Oletus 30000 (30s)] Increase to allow longer between retries on congested paths [Default is 30000 (30s)] Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30 000 (30 s)] Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30 000 (30 s)] Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30 000 (30 s)]. Kasvata, jotta ruuhkaisilla reiteillä olevien uudelleenyritysten välillä on pidempi aika [Oletusarvo on 30000 (30s)"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Paketin uudelleenlähetysten enimmäismäärä ennen yhteyden luovuttamista. Suuremmat arvot parantavat luotettavuutta hävikkillisillä yhteyksillä, mutta viivästyttävät epäonnistumisen tunnistamista. [Oletus on 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Enimmäis uudelleenlähetysaikakatkaisu eksponentiaalisen backoffin jälkeen. [Oletus 30000 (30s)] [Default is 30000 (30s)] [Oletusarvo on 30 000 (30 s)] [Oletusarvo on 30 000 (30 s)] [Oletusarvo on 30 000 (30 s)]. [Oletusarvo on 30000 (30s)"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Suoratoistoyhteyksien edestakaisen matka-ajan enimmäisaika millisekunneissa. Rajoittaa lasketun RTT:n estäen patologiset aikakatkaisuarvot verkkohäiriöiden jälkeen. [Oletus on 10000 (10 sekuntia)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Suoratoistoyhteyksien hitaan aloituksen ikkunan enimmäiskoko. Rajoittaa ruuhkaikkunaa hitaan aloituksen aikana estääkseen verkon ylikuormittumisen. [Oletus on 256 (32 hitaissa järjestelmissä)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Suoratoistoyhteyksien ruuhkaikkunan enimmäiskoko (paketeissa). Rajoittaa yksittäisen suoratoiston enimmäissiirtonopeutta. [Oletus on 512 (384 hitaissa järjestelmissä)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Vähimmäis uudelleenlähetysviive. [Oletus 100ms] Lower values allow faster recovery on lossy connections [Default is 100ms] Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletusarvo on 100 ms] Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletusarvo on 100 ms] Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletusarvo on 100 ms]. Pienemmät arvot mahdollistavat nopeamman palautumisen häviöllisissä yhteyksissä [Oletus on 100 ms"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Kesto minuuteina väliaikaiselle automaattiselle estoille, joka kohdistetaan etäisiin määränpäihin, jotka ylittävät alla olevat suorituspyyntökynnykset. Estetyille määränpäille hylätään kaikki uudet saapuvat yhteydet estoaikana. Siivooja lukee arvon uudelleen joka 60 sekunti, joten sitä voidaan muuttaa ajon aikana <a href=/configadvanced>Lisäasetussivulla</a>. Aseta arvoksi 0 poistaaksesi automaattisen eston kokonaan käytöstä. [Oletus on 5 (5 minuuttia)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Yhden etäisen määränpään saapuvien SYN-hylkäysten enimmäismäärä liikkuvassa ikkunassa ennen kuin automaattinen esto käynnistyy. Hylkäyslaskuri vähenee puoleen joka 60 sekunti (nollausten sijaan), joten yksittäiset purskeet häipyvät jatkuvien tulvien kertyessä. [Oletus on 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Yhden etäisen määränpään saapuvien SYN:ien enimmäismäärä <code>tempBanSynRate</code>-ikkunassa ennen kuin purskerangaistus kirjataan. Ensimmäinen rangaistus kirjaa vain varoituksen; toinen rangaistus 60 sekunnin sisällä käynnistää automaattisen eston. Tämä kaksirangaistusportti päästää läpi asianmukaisen sivunlatauksen purskeen samalla kun se poimii jatkuvat yhteysvuot, jotka muutoin tukkuisivat hylkäyslaskurin. [Oletus on 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "SYN-pursketarkistuksen aikaikkuna millisekunneissa. Jos yhdestä määränpäästä vastaanotetaan tässä ikkunassa yli <code>tempBanSynBurst</code> SYN:iä, kirjataan purskerangaistus; toinen rangaistus 60 sekunnin sisällä käynnistää automaattisen eston. [Oletus on 1000 (1 sekunti)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Tunerin reaktiivisen rinnakkaisuusrajan yläkatto. Reitittimen Tuner säätää automaattisesti määränpään rinnakkaisen suoratoiston rajan kysynnän, hylkäysten ja reitittimen kunnon perusteella, mutta ei voi koskaan nostaa määränpäätä yli oman tunnelikohtaisen <code>i2p.streaming.maxConcurrentStreams</code>-asetuksensa. Tämä arvo rajoittaa, kuinka korkealle Tuner saa nostaa ohituksen. Lisää tätä, jos isännöit paljon liikennettä tuottavia palveluita et Tuner pysty skaalaamaan rajaa riittävästi. [Oletus on 1024, väli 64–8192, uudelleenkäynnistys vaaditaan]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Väli automaattisten LeaseSet-uudelleenjulkaisujen välillä. [Oletus 300000 (5 min)] [Default is 300000 (5 minutes)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)] [Oletusarvo on 300 000 (5 minuuttia)]. [Oletus on 300000 (5 minuuttia)"
@@ -7676,7 +7676,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Kynnys ennakoivalle LeaseSet-uudelleenjulkaisulle. [Oletus 180000 (3 min)] [Default is 180000 (3 minutes)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)] [Oletus on 180000 (3 minuuttia)]. [Oletus on 180000 (3 minuuttia)"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Reitittimen hyväksymien samanaikaisten I2CP-asiakasistuntojen enimmäismäärä. [Oletus on 1536 (768 hitaissa järjestelmissä)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Poistaa paikallis-paikallinen loopback-toimituksen käytöstä. [Oletuksena pois käytöstä] [Disabled by default] [Oletuksena poissa käytöstä] [Oletuksena poissa käytöstä] [Oletuksena poissa käytöstä]. [Oletusarvoisesti poissa käytöstä"
@@ -7703,55 +7703,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Peräkkäisten nolladata-siirtovirheiden enimmäismäärä. [Oletus 20] [Default is 20] [Oletusarvo on 20] [Oletusarvo on 20] [Oletusarvo on 20]. [Oletusarvo on 20"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Kiinteä viive millisekunneissa eepgetin uudelleenyritysten välillä. Käytä arvoa -1 vaihtelevalla viiveellä (perusta 5 s ja enintään 10 s:n vaihtelu), jotta kuorma jakautuu epävakaalle lähteelle. Arvo 0 aiheuttaa välittömän uudelleenyrityksen. [Oletus on -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Kun käytössä, eepget ratkaisee isäntänimet HTTPS-noudoille DNS-over-HTTPS:n kautta, mikä suojaa hakuja paikalliselta nuuhkimiselta. Ohitetaan, kun nouto tehdään välityspalvelimen kautta tai kun isäntänimi on IP-osoite. [Oletus on tosi]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Tällä asetuksella määritellään niiden torrenttien enimmäismäärä, joiden tallennus tarkistetaan samanaikaisesti, kun useita torrenteja käynnistetään tai tarkistetaan yhdessä, rajoittaen levy-I/O:n kuormaa käynnistyksessä tai kaatumisen jälkeen. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on 4, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Tällä asetuksella voidaan määrittää tiedostojen enimmäismäärä torrentin kohdalle, jonka I2PSnark sallii latauksen tai torrentin luonnin yhteydessä. Huomaa, että arvon nostaminen huomattavasti oletuksesta 2000 tiedostoa voi vaatia lisämäärityksiä isäntäjärjestelmässä, jotta käyttöjärjestelmän sallimien avattavien tiedostojen enimmäismäärää voidaan kasvattaa (esim. <code>ulimit -n</code> Linuxissa). Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code> tai aseta I2PSnarkin määrityssivulla; koskee myöhemmin lisättyjä torrenteja."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Kun tämä asetus on käytössä, käynnissä olevat torrentit käynnistetään uudelleen säännöllisesti, jotta niiden kohteet vaihtuvat uusiin identiteetteihin, mikä katkaisee reitittimen IP-osoitteen ja torrenttien kohteiden pitkäikäisen yhteyden seuraajissa ja DHT:ssä. Sykli suoritetaan kolmen tunnin välein ja 1–60 minuutin satunnaisella viiveellä, se ohitetaan kun jokin torrentti lataa aktiivisesti, ja uudelleenkäynnistetään vain ne torrentit, jotka olivat käynnissä. Kohteet ovat väliaikaisia ja vaihtuvat joka uudelleenkäynnistyksessä joka tapauksessa; tämä laajentaa vaihtuvuuden myös yhden käynnistyksen sisällä. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on tosi, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Tällä asetuksella hallitaan asiakasidentiteetin naamiointia: seuraajan vertais-ID ja User-Agent, BitTorrent-kättelyn vertais-ID, laajennuksen kättelyn asiakasnimi sekä web seed -noudot ilmoittautuvat kaikki valitun tunnetun asiakkaan nimellä I2PSnarkin sijaan. Monikohdetilassa jokaiselle kohdepoolille määritetään oletuksena oma satunnainen asiakas; yhden kohteen tilassa I2PSnark ilmoittautuu itseään, ellei asiakasta tai \"random\"-arvoa ole asetettu. Aseta arvoksi \"random\" pakottaaksesi satunnaisvalinnan kaikissa tiloissa, \"i2psnark\" säilyttääksesi klassisen identiteetin myös monikohdetilassa tai asiakkaan nimi pakottaaksesi aina esiintymään kyseisen asiakkaana. Versiojonumerot on sidottu nykyisiin julkaisuihin ja ne ovat yhdenmukaisia vertais-ID:n, User-Agentin ja laajennuksen kättelyn välillä. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on satunnainen poolia kohta monikohdetilassa; koskee myöhemmin aloitettuja torrenteja]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Tällä asetuksella voidaan valinnaisesti rajoittaa <code>i2psnark.clientId</code>:n satunnaisvalinnassa käytettävät asiakkaat tunnettujen asiakasnimien pilkuvin erotettuun osajoukkoon; tuntemattomat nimet jätetään huomiotta ja tyhjä arvo valitsee kaikista tuetuista asiakkaista. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on asettamatta, koskee myöhemmin aloitettuja torrenteja]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Kun tämä asetus on käytössä, levyllä varataan tiedostojen täysi koko latauksen alkaessa fragmentation vähentämiseksi. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on tosi, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Kun tämä asetus on käytössä, I2PSnark lisää uusiin luomiinsa torrenteihin BEP 47 -täydennystiedostoja, jotta jokainen tiedosto paitsi viimeinen päättyy kappaleen rajalle. Täydennettyjen torrenttien lataaminen ja varmentaminen ei muutu. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on epätosi; määritystiedosto luetaan uudelleen joka 30 sekunti ja muutetut asetukset otetaan käyttöön ilman uudelleenkäynnistystä]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Kun tämä asetus on käytössä, torrenttien nimet lajitellaan määritetyn kielen mukaan oikean aakkosjärjestyksen saamiseksi. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on epätosi, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Tällä asetuksella määritellään pilkuvin erotettu luettelo seurausilmoitusten URL-osoitteista, joita käsitellään yksityisinä seuraajina; niitä käyttäviä torrenteja ei jaeta muille vertaisille DHT:n tai PEX:n kautta. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Tällä asetuksella määritellään pilkuvin erotetut nimi,url-parit uusille torrenteille näytettävään oletusseuraluetteloon, mikä ohittaa sisäänrakennetun luettelon. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Kun tämä asetus on käytössä, estetään vertaiset, jotka peruvat suurimman osan pyytämistään tiedoista. Kun vertainen on pyytänyt ja perunut yhteensä vähintään 5 Mt, yli 90 %:n perumissuhde pyydyistä tavuista johtaa vertaisen estämiseen (hylätään sekä saapuvissa että lähtevissä yhteyksissä) <code>i2psnark.banDiscardPeriod</code> minuutiksi. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on tosi, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Tällä asetuksella määritellään minuuteina niiden vertaisten estoaika, joiden hylkäyssuhde on liian suuri. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on 60, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Tällä asetuksella määritellään I2PSnarkin verkkokäyttöliittymän viestialueelle säilytettävien viestien enimmäismäärä. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on 50, I2PSnarkin uudelleenkäynnistys vaaditaan]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Tällä asetuksella määritellään työsäikeiden määrä, joita käytetään kappaleiden varmentamiseen rinnakkain yhden torrentin täydellisen tallennustarkistuksen aikana, esimerkiksi jatkettaessa tai tarkistettaessa uudelleen. Kun arvoa ei ole asetettu, säikeiden määrä skaalautuu suorittimen ydinmäärän mukaan, vähintään 4. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code>. [Oletus on max(ytimiä / 4, 4); luetaan joka tarkistuksessa, joten uudelleenkäynnistystä ei tarvita]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Kun asetetaan hakemistopoluksi, keskeneräiset lataukset kirjoitetaan tämän hakemiston väliaikaiseen kansioon datahakemiston sijaan, ja jokainen tiedosto kopioidaan datahakemistoon vasta kun kaikki sen kappaleet on ladattu. Tämä on hyödyllistä, kun halutaan pitää keskeneräiset lataukset erillään päädatavoluumista (esimerkiksi erillisellä, nopeammalla tai vähemmän kuormitetulla levyllä). Väliaikaisella hakemistolla on oltava riittävästi vapaata tilaa suurimpien keskeneräisten latausten tallentamiseen. Kun arvoa ei ole asetettu tai se on tyhjä, lataukset kirjoitetaan suoraan datahakemistoon kuten ennenkin. Muuttaaksesi, lisää I2PSnarkin määritystiedostoon <code>i2psnark.config</code> tai aseta I2PSnarkin määrityssivulla; koskee myöhemmin lisättyjä torrenteja. [Oletuksena pois käytöstä]"
 
 msgid "miscellaneous"
 msgstr "sekalaiset"
@@ -7763,7 +7763,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Kun arvo on päällä, I2P toimii ilman verkkoyhteyttä. Tämä on hyödyllistä, jos käynnistät reititintä jatkuvasti koodipäivitysten testaamiseksi, koska se estää verkkohäiriöitä"
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Kun asetetaan todeksi, nykyinen lokitiedosto ja kaikki kiertyneet arkistot asetetaan reitittimen suoritusryhmän luettaviksi ja kirjoitettaviksi (tila 660), jotta ryhmän jäsenet voivat tarkastella lokeja. Tiedostoja ei koskaan aseteta maailmanlaajuisesti luettaviksi. [Oletus on epätosi]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Tämä asetus mahdollistaa vaihtoehtoisten NTP-palvelinten määrittämisen, joita tarvitaan varmistamaan, että reititin ylläpitää tarkkaa kellonaikaa. [Oletuksena 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org"
@@ -9676,13 +9676,13 @@ msgid "Set Password"
 msgstr "Aseta salasana"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Kaikki reitittimet [Lisäasetukset]"
 
 msgid "Remote"
 msgstr "Etäinen"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Kaikki reitittimet (asiakas-NetDb) [Lisäasetukset]"
 
 msgid "Encryption type"
 msgstr "Salaustustyyppi"
@@ -9734,19 +9734,19 @@ msgid "Network Peers"
 msgstr "Verkkoverkot"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Nopeat vertaiset"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Suuren kapasiteetin vertaiset"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Tulvasolmuina toimivat vertaiset"
 
 msgid "Banned Peers"
 msgstr "Estetyt vertaissolmut"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Viimeisimmät vertaisprofiilit"
 
 msgid "Configure router logging options"
 msgstr "Määritä reitittimen lokiasetukset"

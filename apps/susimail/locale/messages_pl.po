@@ -241,7 +241,7 @@ msgid "no subject"
 msgstr "bez tematu"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Brak folderu Drafts?"
 
 msgid "Found no valid sender address."
 msgstr "Nie znaleziono poprawnego adresu nadawcy."

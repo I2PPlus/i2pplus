@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Podatkovne mape ni mogoče ustvariti"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Nimate pisnih dovoljenj za začasno mapo"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "Začasne mape ni mogoče ustvariti"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Nimate pisnih dovoljenj za mapo torrentov"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "Mape torrentov ni mogoče ustvariti"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Naključna razporeditev skoka po tunelu je onemogočena na izhodnih tunelah"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Ločena destinacija za vsak torrent je omogočena"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Ločena destinacija za vsak torrent je onemogočena"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Največje število destinacij spremenjeno na {0}"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "Obnovljeno neomejeno število destinacij (ena na torrent)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Naključno določanje časov zagona torrentov je omogočeno"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Naključno določanje časov zagona torrentov je onemogočeno"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Razpon zamika zagona spremenjen na {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API ključ posodobljen."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Vnaprejšnje dodeljevanje prostora za datoteke novih torrentov je omogočeno."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Vnaprejšnje dodeljevanje prostora za datoteke novih torrentov je onemogočeno."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Ohranjevanje prvotnih imen datotek je omogočeno."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Ohranjevanje prvotnih imen datotek je onemogočeno."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Največje število datotek na torrent spremenjeno na {0}"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Neveljavno največje število datotek na torrent: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Začasna mapa za pripravo spremenjena na {0}"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Priprava v začasni mapi je onemogočena."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Mapa torrentov spremenjena na {0}"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Mapa torrentov je ponastavljena na podatkovno mapo."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Seznam Odprih trackerjev spremenjen - za uveljavitev je potrebno ponovno zagon torrenta."
@@ -302,7 +302,7 @@ msgstr "NAPAKA - Pomanjkanje pomnilnika, iz {0} ni mogoče ustvariti torrenta"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "NAPAKA - iz {0} ni mogoče ustvariti torrenta"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Inicializacija Torrenti in odpiranje tunelov"
@@ -396,7 +396,7 @@ msgstr "Torrent odstranjen: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Zagon torrentov čez {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Opozorilo - za prenose na nastavljeni podatkovni razdelki je razpoložlj
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Začasna shramba: {0}GB je trenutno na voljo za prenose na nastavljeni začasni particiji"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Začasna shramba: na nastavljeni začasni particiji je trenutno na voljo {0}MB za prenose"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Opozorilo - za prenose na nastavljeni začasni particiji je razpoložljivih le {0}MB"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "Odpiranje tunela I2P"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Razreševanje iskanja torrenta: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Odpiranje tunela I2P in zagon vseh torrentov."
@@ -489,14 +489,14 @@ msgstr "I2P tunel je zaprt."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Preskoči menjavo destinacij - {0} aktiven prenos je v teku"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Preskoči menjavo destinacij - {0} aktivnih prenosov je v teku"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Ni torrentov v aktivnem prenosu - menjavanje destinacij"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "minute"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "Najkrajši čas do nalaganja samodejno zagnanih torrentov ob zagonu I2PSnark"
 
 msgid "min"
-msgstr ""
+msgstr "najm."
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "Najdaljši čas do nalaganja samodejno zagnanih torrentov ob zagonu I2PSnark"
 
 msgid "max"
-msgstr ""
+msgstr "najv."
 
 msgid "Data Storage"
 msgstr "Shramba podatkov"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Mapa, v kateri so shranjeni torrenti in prenesene/deljene datoteke"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Začasna mapa"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "Neobvezna mapa, v kateri se prenosi pripravijo, preden se ob dokončanju premaknejo v podatkovno mapo. Pustite prazno za onemogočanje."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Mapa torrentov"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "Neobvezna mapa za ločeno shranjevanje datotek .torrent od prenesenih podatkov. Pustite prazno za shranjevanje v podatkovni mapi."
 
 msgid "Files readable by all"
 msgstr "Datoteke prebrane od vseh"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Nastavi dovoljenja za datoteke, da jim omogočiš dostop drugim lokalnim uporabnikom do prenesenih datotek"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Vnaprej dodeli prostor za datoteke"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Razširi nove datoteke torrentov na celotno velikost in ob zagonu torrenta takoj dodeli prostor na disku, da poln disk ne prekine prenosov in da se ob prihodu delcev izogne drobljenju"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Ohrani imena datotek"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Ohrani prvotna imena datotek iz torrenta. Ko je možnost onemogočena, se iz imen datotek odstranijo nezakonite znaki datotečnega sistema. Ko je omogočena, se uporabijo prvotna imena datotek; če ime datoteke vsebuje znake, ki jih vaš datotečni sistem ne podpira, bo datoteka ustvarjena z varnim nadomestnim imenom in prikazano bo opozorilo"
 
 msgid "Max files per torrent"
 msgstr "Maksimalno število datotek na torrent"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Konfiguracija tunela"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Glavna destinacija (identiteta) za to sejo; njen DHT, tracker in črna lista so skupni z destinacijami posameznih torrentov"
 
 msgid "Our destination (identity) for this session"
 msgstr "Naslov (identiteta) za to sejo"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Glavna dest."
 
 msgid "Dest."
 msgstr "Cilj"
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Izhodni"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Več destinacij"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "Uporabi ločeno destinacijo za vsak torrent, da se vaši torrenti ne morejo povezati med seboj prek trackerjev in DHT. Destinacije so začasne in se ob ponovnem zagonu spremenijo."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Največje število destinacij"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Ko teče več torrentov, kot je to največje število, si dodatni torrenti delijo destinacije v naključnih skupinah z različnimi velikostmi, da se omeji poraba pomnilnika. Nič pomeni eno destinacijo na torrent."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Naključni zamik zagona"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Razporedi zagone torrentov z več destinacijami z naključnim zamikom, da se torrentov, ki se zaženejo skupaj, ne da povezati prek trackerjev ali DHT sosedov in da se gradi tunelov razporedijo. Onemogočite, da se vsi torrenti v skupini zaženejo takoj."
 
 msgid "I2CP host"
 msgstr "Gostitelj I2CP"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "Možnosti I2CP"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Integracija brskalnika"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Omogoči API brskalnika"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Dovoli dodajanje magnet povezav in URL-jev torrentov brez CSRF nonce iz zanke loopback ali iz dovoljenih gostiteljev spodaj"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Dovoljeni gostitelji"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Imena gostiteljev ali IP-ji, ločeni z vejicami, ki smejo dodajati torrente brez nonce; loopback je vedno dovoljen"
 
 msgid "API key"
-msgstr ""
+msgstr "API ključ"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Neobvezno geslo za oddaljeni dostop, ki preskoči seznam dovoljenih gostiteljev"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Namesti obravnavalnik brskalnika"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Posodobi obravnavalnik brskalnika"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Posodobi namenjeno razširitev I2PSnark Bridge na v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Odprite razširitev I2PSnark Bridge v brskalniku, da dodate magnet povezave; razširitev se sama registrira v brskalniku, na strani usmerjevalnika se ne zapisujejo nobene datoteke"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Prenesite namestitveni program PowerShell, ki poveže magnet povezave in datoteke .torrent z vašim brskalnikom; razširitev I2PSnark Bridge zahteva brskalnik družine Firefox"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Prenesite namestitveno skripto, ki poveže magnet povezave in datoteke .torrent z vašim brskalnikom; razširitev I2PSnark Bridge zahteva brskalnik družine Firefox"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Prenesi skripto obravnavalnika brskalnika"
 
 msgid "Save configuration"
 msgstr "Shrani konfiguracijo"
@@ -957,7 +957,7 @@ msgstr "Sprememba nastavitve na manj kot 3 skoka lahko izboljša hitrost, vendar
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "Razširitev I2PSnark Bridge v{0} je zastarela, posodobite na v{1} na strani za nastavitve"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Kliknite gumb \"Dodaj torrent\", da pridobite torrent"
@@ -1193,7 +1193,7 @@ msgstr "Vnesite URL ali izberite datoteko torrenta"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Napaka pri dodajanju torrenta: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1235,11 +1235,11 @@ msgid "Directory deleted: {0}"
 msgstr "Mapa izbrisana: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "API brskalnika je omogočen."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "Odpiranje razširitve I2PSnark Bridge ni uspelo: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1316,7 +1316,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "Izbriši .torrent datoteko in povezane datoteke podatkov"
 
 msgid "Destination"
-msgstr ""
+msgstr "Destinacija"
 
 msgid "Checking"
 msgstr "Preverjanje"
@@ -1325,7 +1325,7 @@ msgid "Allocating"
 msgstr "Dodeljevanje"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Povezovanje z vsemi nastavljenimi trackerji ni uspelo"
 
 msgid "Starting"
 msgstr "Zagon"
@@ -1523,7 +1523,7 @@ msgstr "Ustvarjeno"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Velikost dejansko prenesenih datotek: {0}, brez {1} datotek za dopolnjevanje po BEP 47"
 
 msgid "Added"
 msgstr "Dodano"

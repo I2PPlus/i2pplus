@@ -235,7 +235,7 @@ msgid "no subject"
 msgstr "Teema puudub"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Kas Drafts kausta pole?"
 
 msgid "Found no valid sender address."
 msgstr "Kehtivat saatja aadressi ei leitud."

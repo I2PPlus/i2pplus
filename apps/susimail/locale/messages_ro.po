@@ -238,7 +238,7 @@ msgid "no subject"
 msgstr "fară subiect"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Niciun folder Drafts?"
 
 msgid "Found no valid sender address."
 msgstr "Nu sa găsit nici o adresă de expeditor valabilă."

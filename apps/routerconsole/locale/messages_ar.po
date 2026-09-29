@@ -578,7 +578,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "تحذير: تعذر ضبط خدمة I2P+ على التشغيل اليدوي"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "تحذير: تعذّر تحديد دليل تثبيت I2P+"
 
 msgid "Configuration saved successfully"
 msgstr "تم حفظ الإعدادات بنجاح"
@@ -1452,7 +1452,7 @@ msgid "Ban peer until restart"
 msgstr "منع حتى اعادة التشغيل"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "محظور يدويًا عبر configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3573,10 +3573,10 @@ msgid "Low Latency"
 msgstr "الكمون المنخفض"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "الحزم المعاد إرسالها / الحزم المرسلة، كما يبلّغ عنها ناقل UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "الفقدان"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "الأنفاق وافق النظير على المشاركة فيها"
@@ -3631,66 +3631,66 @@ msgstr "تكوين النظير"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} في الذاكرة العشوائية / {1} على القرص"
 
 msgid "High Cap"
-msgstr ""
+msgstr "سعة عالية"
 
 msgid "Displayed"
-msgstr ""
+msgstr "معروض"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "عرض {0} من {1} ملفًا شخصيًا"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
-msgstr[4] ""
-msgstr[5] ""
+msgstr[0] "{0} ملف شخصي قديم مخفي"
+msgstr[1] "{0} ملف شخصي قديم مخفي"
+msgstr[2] "{0} ملف شخصي قديم مخفي"
+msgstr[3] "{0} ملف شخصي قديم مخفي"
+msgstr[4] "{0} ملف شخصي قديم مخفي"
+msgstr[5] "{0} ملف شخصي قديم مخفي"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "نسبة إجمالي الملفات الشخصية المعروضة"
 
 msgid "peers"
 msgstr "الأقران"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "نسبة ملفات تعريف الطبقات المعروضة"
 
 msgid "Window"
-msgstr ""
+msgstr "نافذة"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "RTT سريع"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "الحد الأقصى لـ RTT لعضوية الطبقة السريعة (مللي ثانية)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "متوسط فقدان أقران الطبقة السريعة (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "متوسط فقدان الأقران ذوي السعة العالية (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "سُمع ضمن حد العرض"
 
 msgid "Lookups"
-msgstr ""
+msgstr "عمليات البحث"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "معدل نجاح البحث"
 
 msgid "Stores"
-msgstr ""
+msgstr "عمليات التخزين"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "معدل نجاح التخزين"
 
 msgid "Definitions"
 msgstr "التعاريف"
@@ -3761,25 +3761,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "كم من النظائر موجودة مؤخرا؟"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "علامات الفيضان المعروفة"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "بلا فشل"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "لا فشل في عمليات البحث (1 ساعة)"
 
 msgid "Response"
-msgstr ""
+msgstr "الاستجابة"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "زمن استجابة البحث (1 ساعة)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "اتصال 1 ساعة"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "تم الاتصال خلال 1 ساعة"
 
 msgid "1h Fail Rate"
 msgstr "معدل الفشل 1 ساعة"
@@ -4773,10 +4773,10 @@ msgid "Slow Start Window Cap"
 msgstr "غطاء نافذة البداية البطيئة"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "الحد الأقصى للمخزن الوارد"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "الحد الأقصى للبث المتزامن"
 
 msgid "Max SYN Sends"
 msgstr "يرسل ماكس SYN"
@@ -4791,7 +4791,7 @@ msgid "Max Retransmissions"
 msgstr "ماكس إعادة الإرسال"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "الخيوط العاملة على الاستقبال"
 
 msgid "Writer Queue Size"
 msgstr "حجم قائمة انتظار الكاتب"
@@ -4875,16 +4875,16 @@ msgid "Search Timeout"
 msgstr "مهلة البحث"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "حد البحث"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "نافذة إعادة النشر"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "انتشار إعادة النشر"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "اتساع الاستكشاف"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "انتهت مهلة البحث عن LeaseSet"
@@ -4911,7 +4911,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "الحد الأقصى من أقرانهم ذوي السعة العالية"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "عتبة خفض رتبة الأقران ذات الفقدان العالي"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "انتهت مهلة طلب بناء النفق"
@@ -4938,25 +4938,25 @@ msgid "Max Delay Between Tests"
 msgstr "أقصى تأخير بين الاختبارات"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "نافذة فشل اختبار النفق"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "الحد الأدنى لنافذة فشل اختبار النفق"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "تهدئة فشل القفزة الأولى"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "عتبة فشل القفزة الأولى"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "عتبة ازدحام الوارد"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "عتبة تشذيب البناء القديم"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "عتبة خنق التزامن"
 
 msgid "NTCP Reader Threads"
 msgstr "خيوط قارئ NTCP"
@@ -4968,7 +4968,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "الفاصل الزمني الآمن لمضخة NTCP"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "الحد الأقصى لمعدل حلقات الخمول لمضخة NTCP"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "الحد الأقصى لرسائل النظير المتزامنة"
@@ -5040,7 +5040,7 @@ msgid "Max Window Size"
 msgstr "الحد الأقصى لحجم النافذة"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "مضاعف مهلة الاتصال"
 
 msgid "Max Message Queue Age"
 msgstr "الحد الأقصى لعمر قائمة انتظار الرسائل"
@@ -5058,16 +5058,16 @@ msgid "Server Handler Threads"
 msgstr "خيوط معالج الخادم"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "سعة طابور معالج الخادم"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "الخيوط الافتراضية للخادم لكل نفق"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "خيوط نقل الإدخال/الإخراج"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "مهلة توقف الإدخال/الإخراج"
 
 msgid "Build Handler Threads"
 msgstr "بناء مؤشرات الترابط المعالج"
@@ -5076,7 +5076,7 @@ msgid "Client Runner Max Threads"
 msgstr "خيوط العميل عداء ماكس"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "الحد الافتراضي لاتصالات العميل"
 
 msgid "Participating Throttle Min"
 msgstr "المشاركة خنق دقيقة"
@@ -5154,7 +5154,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "مضاعف غطاء النفق غير المختبر"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "حجم مرشح IV الخاص بالنفق"
 
 msgid "Message Processing Throttle"
 msgstr "خنق معالجة الرسائل"
@@ -5205,10 +5205,10 @@ msgid "Max congestion window during slow start."
 msgstr "أقصى نافذة للازدحام أثناء البداية البطيئة."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "حد مخزن الوارد لكل اتصال (بايت)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "حد ديناميكي للبث المتزامن لكل وجهة."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "يحاول Total SYN قبل التخلي عن المصافحة."
@@ -5223,7 +5223,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "إعادة الإرسال قبل إسقاط الدفق."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "خيوط معالجة الحزم الواردة لكل جلسة بث."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "الحد الأقصى لوقت الخمول قبل إسقاط الدفق (مللي ثانية)."
@@ -5313,16 +5313,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "مهلة البحث لكل نظير (مللي ثانية)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "الموعد النهائي القاطع لكل بحث تكراري (مللي ثانية)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "مدة تخزين رسائل إعادة نشر الإيجار (مللي ثانية)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "الحد الأقصى للأقران التي تتلقى إيجارًا معاد نشره بعد البحث."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "عمليات البحث الاستكشافية المتزامنة في كل دورة."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "الحد الأقصى للموعد النهائي المخصص لعمليات بحث LeaseSet (بالمللي ثانية)."
@@ -5349,7 +5349,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "الحد الأقصى للأقران ذات السعة العالية في جدول التوجيه."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "نسبة الفقدان التي تخفض رتبة الأقران من الطبقات السريعة (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "بناء مهلة الرد (مللي ثانية)."
@@ -5376,25 +5376,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "الحد الأقصى للفاصل الزمني بين اختبارات النفق (مللي ثانية)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "أقصى مدة يمكن أن يستغرقها اختبار النفق قبل الفشل (مللي ثانية)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "الحد الأدنى لنافذة فشل اختبار النفق (مللي ثانية)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "المدة التي يُتخطى فيها الأقران بعد فشل القفزة الأولى (مللي ثانية)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "الإخفاقات قبل تخطي الأقران أثناء فترة التهدئة."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "عدد الأنفاق الواردة الذي يتم عنده خنق عمليات البناء."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "نسبة انتظار الطابور من ميزانية المهلة قبل تشذيب البناء (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "معدل المهلة الذي يشغّل تقليل البناء المتزامن (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "المواضيع فك تشفير بيانات NTCP الواردة."
@@ -5406,7 +5406,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "الفاصل الزمني للفحص الآمن لمضخات NTCP العالقة (مللي ثانية)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "الحد الأقصى لتكرارات مضخة NTCP الخاملة في الثانية (حلقة/ثانية)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "حد الرسائل أثناء الرحلة لكل نظير UDP."
@@ -5463,7 +5463,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "الحد الأعلى لتقدير RTT (مللي ثانية)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "يوسّع مهلة اتصال كل عميل بحسب RTT الشبكة (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "التأخير قبل إعادة الإرسال الأول (مللي ثانية)."
@@ -5487,16 +5487,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "مؤشرات ترابط المعالج لاتصالات I2PTunnel الواردة."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "الاتصالات الواردة التي قد تنتظر خيط معالج خادم متاحًا."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "الحد الافتراضي لخيوط معالج الخادم لكل نفق خادم."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "تجمع مخصص لنقل البيانات من الخادم→العميل، يحرر خيوط المعالج."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "مهلة توقف نقل البيانات من الخادم→العميل (مللي ثانية)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "تجمع مؤشرات الترابط لمعالجة طلبات البناء الواردة."
@@ -5505,7 +5505,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "الحد الأقصى لتجمع مؤشرات ترابط وكيل العميل."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "حد اتصالات العميل الافتراضي."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "الحد الأدنى من أنفاق النقل التي يمكن لأي نظير الاحتفاظ بها."
@@ -5583,7 +5583,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "انتهت مهلة توصيل مقبس TCP لمؤشرات ترابط معالج خادم النفق (ملي ثانية)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "أس مرشح إزالة تكرار IV الخاص بالنفق: يحمل كل من مخزنيه 2^n بت، لذا يكلّف الزوج 2^(n-2) بايت. يُحدَّد الحجم من قيم IV التي شوهدت فعليًا؛ والحجم الصغير جدًا يظهر على صورة إسقاط بيانات أنفاق جيدة."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "الحد الأقصى لمتوسط ​​تأخير الرسالة قبل رفض النقل (بالمللي ثانية)."
@@ -5765,7 +5765,7 @@ msgid "Endpoint"
 msgstr "نقطة النهاية"
 
 msgid "ms"
-msgstr ""
+msgstr "مللي ثانية"
 
 msgid "Test successful"
 msgstr "الاختبار ناجح"
@@ -6176,10 +6176,10 @@ msgid "Additional Router Caps"
 msgstr "إمكانيات موجه إضافية"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "أضف مجموعات caps، مفصولة بمسافات أو فواصل مثل LUf,PUG. استخدم ! للاستثناء: G!f تحظر أجهزة توجيه G ما لم تكن من علامات الفيضان"
 
 msgid "Misc"
-msgstr ""
+msgstr "متنوع"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "حظر أقران عقدة الفيضان الذين يفشلون في الرد على الاستعلامات (معدل الفشل > 95%)"
@@ -6200,10 +6200,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "حظر طلبات النفق المفرطة"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "عند التمكين، تخضع الأقران التي يتم حلّها من الشبكة ولا نتصل بها مباشرة - نقاط الانتقال التالية للنقل وكذلك نقاط نهاية أنفاق العملاء - لحظر السياسات. وعند التعطيل، تُعفى هذه الأقران ما لم تكن متصلة مباشرة."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "حظر أقران القفزة التالية"
 
 msgid "Clear all bans"
 msgstr "مسح جميع الحظر"
@@ -6346,10 +6346,10 @@ msgid "I2CP Port"
 msgstr "I2CP منفذ"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "لا تتجاوز الشبكة عند الوصول إلى الخدمات المستضافة محليًا"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "تعطيل Loopback"
 
 msgid "Require username and password"
 msgstr "تتطلب اسم المستخدم وكلمة المرور"
@@ -7528,13 +7528,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "الحد الأدنى للبحث المتزامن عن RouterInfo للقفزة التالية أثناء معالجة بناء النفق. يضمن مستوى أدنى من التزامن في البحث. [الافتراضي 8]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "الحد الأقصى لعمليات بحث RouterInfo المتزامنة الخاصة بالقفزة التالية أثناء معالجة بناء الأنفاق. تحتسب الخانات القفزات التالية المميزة وليس الطلبات الفردية: فالعمليات التي تشترك في قفزة التالية تعيد استخدام بحث واحد. لا يتناسب مع عدد المعالجات؛ فعمليات البحث انتظارات مرتبطة بالشبكة. [الافتراضي 64 (32 على الأنظمة البطيئة)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "النسبة المئوية من الأنفاق المشاركة الحالية المستخدمة لتوسيع حد البحث المتزامن بعد بدء التشغيل. يُقيَّد الحد الفعّال بين minLookupLimit وmaxLookupLimit. [الافتراضي 40 (15 على الأنظمة البطيئة)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "عمق قائمة الانتظار التي تحتفظ بعمليات بناء الأنفاق التي يجري فيها تحديد القفزة التالية بينما تكون جميع خانات البحث مشغولة. يُحدَّد الحجم بحيث تُفرَّغ قائمة الانتظار الكاملة خلال مهلة البناء الخاصة بالمنشئ؛ وتُحذف المدخلات الأقدم من تلك الميزانية كبيانات قديمة بغض النظر عن العمق. [الافتراضي 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "أقصى انحراف مستقبلي مسموح به للطوابع الزمنية لطلبات بناء النفق. الطلبات ذات الطوابع الزمنية المستقبلية أكثر من هذا الحد... [الافتراضي 30000]"
@@ -7642,7 +7642,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "الحد الأدنى لعدد الأقران النشطين المطلوب أثناء بدء تشغيل الموجه قبل تقييد اختيار الأقران الاستكشافي. أثناء بدء التشغيل المبكر... [الافتراضي 100]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "أقصى مدة بالمللي ثانية يمكن أن تنتظر فيها SYN مستلمة في قائمة الانتظار قبل أن يسحبها accept(). وإذا تأخر accept() (خادم مستضاف مشغول) يُرفض الاتصال بعد هذه النافذة، لذا تتحمل قيمة أعلى التوقفات المؤقتة القصيرة. تُطبَّق القيمة المُهيأة دون إعادة تشغيل. [الافتراضي 60000 (60 ثانية)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "هذا الإعداد الخاص بالنفق يسمح لك بتمكين أو تعطيل الردود على الاستفسارات المرسلة إلى الخوادم المضيفة بواسطة الراوتر. لتعطيل الاستفسارات، يجب إضافة السطر <code>i2p.streaming.answerPings=false</code> إلى قسم <i>الخيارات المخصصة</i> لتكويف الخادم في مدير الأنفاق."
@@ -7651,22 +7651,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "الحد الأقصى الافتراضي لتأخير التدفق بالميلي ثانية عندما لا يتم تعيين مهلة اتصال صريحة. [الافتراضي 10000 (10 ثوانٍ)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "فترة التهدئة بالمللي ثانية بين محاولات الاتصال بالوجهة غير القابلة للوصول نفسها. تمنع إغراق الأقران غير القابلة للوصول بالطلبات. [الافتراضي 5000 (5 ثوانٍ)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "مدة TIME-WAIT بالمللي ثانية بعد انفصال اتصال البث، والتي تبقى فيها الحزم المتأخرة مُقرّرة. زِدها للمسارات ذات الكمون العالي حيث قد تتأخر إقرارات ACK النهائية. [الافتراضي 120000 (دقيقتان)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "عدد المرات للرد على وجهة مقيدة قبل إسقاط الحزم الزائدة بصمت. يمنع عواصف الاتصال عند الوجهات المقيدة. [الافتراضي 5]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "عند تمكين هذا الإعداد، يضيف تأخير pong عشوائيًا يصل إلى 50 مللي ثانية لجميع الخوادم التي تدعم ping والمضافة بواسطة جهاز التوجيه. وهو معطّل افتراضيًا. ويُطبَّق فورًا على الردود الجديدة، دون حاجة إلى إعادة تشغيل."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "حجم نافذة الازدحام الأولية (بالحزم) لاتصالات البث الجديدة. تبدأ النافذة الأكبر الاتصالات بشكل أسرع لكنها قد تسبب إعادة إرسال أكثر على المسارات المزدحمة. [الافتراضي 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "قيد الحد الأعلى لمهلة اتصال البث. يمنع مهل كل اتصال من تجاوز هذا السقف. زِدها للوصول البعيد شديد الكمون. ويمكن تجاوزه لكل اتصال عبر تعيين الخاصية نفسها في خيارات العميل المتقدمة لنفق عميل (مثلًا نفق عميل IRC افتراضه 300000). [الافتراضي 75000 (75 ثانية)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "الحد الأقصى للوقت بالميلي ثانية لانتظار رد pong عند اختبار اتصال أقران. [الافتراضي 300000 (5 دقائق)]"
@@ -7675,43 +7675,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "هذا الإعداد، عند تمكينه، يعدل أقصى تأخير إضافي عشوائي للاستجابة المضاف للخوادم الممكّنة للاستفسارات، إذا تم تمكين <code>i2p.streaming.enablePongDelay</code> أيضاً. ما لم يتم تعيينه بشكل صريح، سيتم استخدام القيمة الافتراضية البالغة 50 ميلي ثانية."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "الحد الأقصى لعدد الاتصالات المعلّقة (SYNs والحزم الجزئية) في قائمة انتظار قبول الخادم. وعند امتلائها، تُرسل RESET إلى SYNs الجديدة (قد يعيد العميل المحاولة) بدلاً من إسقاطها بصمت، مما يُبقي العميل على علم بالرفض. [الافتراضي 256 (128 على الأنظمة البطيئة)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "الحد الأقصى لتأخير إعادة الإرسال بالميلي ثانية. لن يتجاوز فاصل إعادة الإرسال هذه القيمة بغض النظر عن التراجع. [الافتراضي 60000]. [الافتراضي 30000 (30s)]. [الافتراضي 30000 (30s)]. [الافتراضي هو 30000 (30 ثانية)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "الحد الأقصى لعدد عمليات إعادة إرسال الحزم قبل الاستسلام عن الاتصال. القيم الأعلى تحسّن الموثوقية على الروابط ذات الفقدان لكنها تؤخر اكتشاف الفشل. [الافتراضي 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "الحد الأقصى لمهلة إعادة الإرسال بالميلي ثانية بعد التراجع الأسي (المضاعفة). يحد من مدة انتظار المرسل قبل إعادة إرسال الحزمة غير المؤكدة. [الافتراضي 120000]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "أقصى وقت ذهاب وإياب بالمللي ثانية لاتصالات البث. يحد من RTT المحسوب لمنع قيم المهلة غير المعقولة بعد اضطرابات الشبكة. [الافتراضي 10000 (10 ثوانٍ)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "الحد الأقصى لحجم نافذة البداية البطيئة لاتصالات البث. يحد من نافذة الازدحام أثناء البداية البطيئة لمنع إغراق الشبكة. [الافتراضي 256 (32 على الأنظمة البطيئة)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "الحد الأقصى لحجم نافذة الازدحام (بالحزم) لاتصالات البث. يحد من أقصى إنتاجية لتدفق واحد. [الافتراضي 512 (384 على الأنظمة البطيئة)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "الحد الأدنى لتأخير إعادة الإرسال بالميلي ثانية. لن يتم إعادة إرسال الحزم بشكل أسرع من هذا الفاصل الزمني. القيم المنخفضة تسمح بإعادة إرسال أسرع. [الافتراضي 500]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "المدة بالدقائق للحظر التلقائي المؤقت الذي يُفرض على الوجهات البعيدة التي تتجاوز عتبات طلبات البث أدناه. تُرفض جميع الاتصالات الواردة الجديدة للوجهات المحظورة طوال فترة الحظر. يعيد المنتظف قراءة هذه القيمة كل 60 ثانية، لذا يمكن تغييرها أثناء التشغيل عبر <a href=/configadvanced>صفحة التهيئة المتقدمة</a>. اضبطها على 0 لتعطيل الحظر التلقائي بالكامل. [الافتراضي 5 (5 دقائق)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "الحد الأقصى لعدد عمليات رفض SYN الواردة من وجهة بعيدة واحدة ضمن نافذة متحركة قبل تشغيل الحظر التلقائي. يتقلص عدّاد الرفض إلى النصف كل 60 ثانية (بدلًا من إعادة تعيينه)، لذا تبهت الانفجارات المنعزلة بينما تتراكم الفيضانات المستمرة. [الافتراضي 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "الحد الأقصى لعدد SYNs الواردة المسموح بها من وجهة بعيدة واحدة ضمن نافذة <code>tempBanSynRate</code> قبل تسجيل ضربة انفجار. الضربة الأولى تسجّل تحذيرًا فقط؛ والضربة الثانية خلال 60 ثانية تشغّل الحظر التلقائي. تتيح هذه البوابة ذات الضربتين مرور انفجار تحميل صفحة شرعي مع استمرار التقاط فيضانات الاتصالات المستمرة التي كانت ستُغرق عدّاد الرفض. [الافتراضي 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "نافذة الزمن بالمللي ثانية لفحص انفجار SYN. فإذا استُقبلت أكثر من <code>tempBanSynBurst</code> من SYNs من وجهة  واحدة ضمن هذه النافذة، تُسجَّل ضربة انفجار؛ والضربة الثانية خلال 60 ثانية تشغّل حظرًا تلقائيًا. [الافتراضي 1000 (ثانية واحدة)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "السقف الأعلى لحد البث المتزامن التفاعلي الخاص بـ Tuner. ويضبط Tuner في جهاز التوجيه تلقائيًا حد البث المتزامن لكل وجهة بناءً على الطلب والرفض وصحة جهاز التوجيه، لكنه لا يمكنه أبدًا رفع أي وجهة فوق إعداد <code>i2p.streaming.maxConcurrentStreams</code> الخاص بها لكل نفق. وتحد هذه القيمة الارتفاع المسموح به لـ Tuner بدفع التجاوز إليه. زِد هذه القيمة إذا كنت تستضيف خدمات ذات حركة مرور عالية ولم يكن Tuner قادرًا على توسيع الحد بما يكفي. [الافتراضي 1024، النطاق 64–8192، يتطلب إعادة التشغيل]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "الفاصل الزمني بالميلي ثانية بين إعادة نشر LeaseSet الآلية. القيم الأعلى تقلل من حركة قاعدة البيانات الشبكية ولكنها قد تسبب معلومات قديمة. [الافتراضي 300000]"
@@ -7720,7 +7720,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "الحد الأدنى بالميلي ثانية لإعادة نشر LeaseSet الاستباقي. إذا كانت مدة الإيجار تنتهي خلال هذه النافذة، يتم إعادة نشر LeaseSet مبكرًا. [الافتراضي 60000]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "الحد الأقصى لعدد جلسات عملاء I2CP المتزامنة التي سيقبلها جهاز التوجيه. [الافتراضي 1536 (768 على الأنظمة البطيئة)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "عند التعيين على صحيح، يعطل تسليم الحلقة المحلية-المحلية ويفرض كل حركة المرور عبر الأنفاق (نفق صادر ← الشبكة ← نفق وارد)... مفيد لاختبار سلوك توجيه الأنفاق عندما يكون المصدر والوجهة على نفس الراوتر [Disabled by default]. مفيد لاختبار سلوك توجيه الأنفاق عندما يكون المصدر والوجهة على نفس الراوتر [Disabled by default]. مفيد لاختبار سلوك توجيه النفق عندما يكون المصدر والوجهة على نفس جهاز التوجيه [معطل افتراضيًا]"
@@ -7747,55 +7747,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "الحد الأقصى لعدد إخفاقات نقل البيانات الصفرية المتتالية قبل أن يستسلم eepget، حتى لو بقيت محاولات إعادة. زد إذا كانت عمليات النقل غير مستقرة. [الافتراضي 3]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "تأخير ثابت بالمللي ثانية بين محاولات إعادة eepget. استخدم -1 لتأخير مشوش (أساس 5 ثوانٍ مع حتى 10 ثوانٍ من التذبذب) لتوزيع الحمل على مصدر غير مستقر. القيمة 0 تؤدي إلى إعادة محاولة فورية. [الافتراضي -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "عند التمكين، يحل eepget أسماء المضيفين لعمليات جلب HTTPS عبر DNS-over-HTTPS، مما يحمي عمليات البحث من المراقبة المحلية. ويُتجاوز ذلك عند الجلب عبر وكيل أو عندما يكون المضيف عنوان IP. [الافتراضي صحيح]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "يحدد هذا الإعداد الحد الأقصى لعدد السيول التي يُفحص تخزينها في الوقت نفسه، عندما تبدأ عدة سيول أو يُعاد فحصها معًا، مما يحد من عاصفة الإدخال/الإخراج على القرص عند بدء التشغيل أو بعد تعطل. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي 4، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "يتيح هذا الإعداد تحديد الحد الأقصى لعدد الملفات لكل سيول يسمح به I2PSnark، عند تنزيل سيول أو إنشائه. ولاحظ أن رفع هذه القيمة كثيرًا عن الافتراضي وهو 2000 ملف قد يتطلب تكوينًا إضافيًا على النظام المضيف لزيادة الحد الأقصى لعدد الملفات المفتوحة التي يسمح بها نظام التشغيل (مثل <code>ulimit -n</code> على Linux). للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code> أو اضبطه في صفحة تكوين I2PSnark؛ وينطبق على السيول المضافة لاحقًا."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "عند تمكين هذا الإعداد، يعيد تشغيل جميع السيول العاملة دوريًا حتى تتبدّل وجهاتها إلى هويات جديدة، مما يكسر الارتباط طويل الأمد بين عنوان IP الخاص بجهاز التوجيه ووجهات السيول لدى المتتبعات وفي DHT. وتعمل الدورة كل 3 ساعات مع تأخير عشوائي من 1 إلى 60 دقيقة، وتُتخطى أثناء تنزيل أي سيول بنشاط، وتعيد تشغيل السيول التي كانت تعمل فقط. والوجهات مؤقتة وتتغير عند كل إعادة تشغيل على أي حال؛ وهذا يوسّع ذلك ليشمل دورة التشغيل الواحدة. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي صحيح، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "يتحكم هذا الإعداد في انتحال هوية العميل: فمعرّف الأقران الخاص بالمتتبع وUser-Agent، ومعرّف أقران مصافحة BitTorrent، واسم العميل في مصافحة الامتداد، وعمليات جلب web seed، كلها تقدّم نفسها كعميلٍ معروفٍ مختارٍ بدلًا من I2PSnark. وفي وضع الوجهات المتعددة يُعيَّن لكل تجمع وجهات عميل عشوائي خاص به افتراضيًا؛ وفي وضع الوجهة الواحدة يعرّف I2PSnark نفسه بنفسه ما لم يُعيَّن اسم عميل أو \"random\". اضبطه على \"random\" لفرض الاختيار العشوائي في جميع الأوضاع، أو على \"i2psnark\" للحفاظ على الهوية الكلاسيكية حتى في وضع الوجهات المتعددة، أو على اسم عميل لانتحال ذلك العميل دائمًا. وتُثبَّت سلاسل الإصدار على الإصدارات الحالية من المصدر وهي متسقة عبر معرّف الأقران وUser-Agent ومصافحة الامتداد. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي عشوائي لكل تجمع في وضع الوجهات المتعددة؛ وينطبق على السيول التي تبدأ لاحقًا]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "يقيّد هذا الإعداد اختياريًا العملاء الذين يختارهم الاختيار العشوائي لـ <code>i2psnark.clientId</code> بمجموعة فرعية مفصولة بفواصل من أسماء العملاء المعروفة؛ وتُتجاهل الأسماء غير المعروفة، بينما تختار القيمة الفارغة من جميع العملاء المدعومين. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي غير معيَّن، وينطبق على السيول التي تبدأ لاحقًا]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "عند تمكين هذا الإعداد، يخصص مسبقًا أحجام الملفات الكاملة على القرص عند بدء التنزيل، لتقليل التجزئة. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي صحيح، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "عند تمكين هذا الإعداد، يضيف ملفات حشو BEP 47 إلى السيول الجديدة التي ينشئها I2PSnark، بحيث ينتهي كل ملف عدا الأخير عند حد قطعة. ولا يتأثر تنزيل السيول المحشوّة والتحقق منها. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي خطأ؛ ويُعاد قراءة ملف التكوين كل 30 ثانية وتُطبَّق الإعدادات المغيَّرة دون إعادة تشغيل]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "عند تمكين هذا الإعداد، يرتّب أسماء السيول باستخدام اللغة المُهيأة للحصول على الترتيب الأبجدي الصحيح. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي خطأ، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "يحدد هذا الإعداد قائمة مفصولة بفواصل من عناوين URL الخاصة بإعلانات المتتبع التي تُعامَل كمتتبعات خاصة؛ ولا تتم مشاركة السيول التي تستخدمها مع الأقران الأخرى عبر DHT أو PEX. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "يحدد هذا الإعداد أزواج name,url مفصولة بفواصل لقائمة المتتبع الافتراضية المعروضة للسيول الجديدة، متجاوزًا القائمة المدمجة. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "عند تمكين هذا الإعداد، يحظر الأقران الذين يلغون معظم ما يطلبونه. فبمجرد أن يطلب الأقران ويلغي 5 ميغابايت على الأقل إجمالًا، تؤدي نسبة إلغاء تتجاوز 90% من البايتات التي طلبها إلى حظر ذلك الأقران (فيُرفض على الاتصالات الواردة والصادرة معًا) لمدة <code>i2psnark.banDiscardPeriod</code> دقيقة. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي صحيح، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "يحدد هذا الإعداد المدة بالدقائق للحظر المطبَّق على الأقران ذات نسبة الإهمال المفرطة. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي 60، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "يحدد هذا الإعداد الحد الأقصى لعدد الرسائل المحفوظة في منطقة الرسائل بواجهة I2PSnark على الويب. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي 50، يتطلب إعادة تشغيل I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "يحدد هذا الإعداد عدد الخيوط العاملة المستخدمة للتحقق من القطع بالتوازي أثناء فحص تخزين كامل لسيول واحد، مثلًا عند الاستئناف أو إعادة الفحص. وعند عدم تعيينه، يتناسب عدد الخيوط مع عدد المعالجات، بحد أدنى 4. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code>. [الافتراضي max(cores / 4, 4)؛ يُقرأ عند كل فحص، لذا لا يلزم إعادة تشغيل]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "عند تعيينه على مسار دليل، تُكتب التنزيلات غير المكتملة في مجلد تخزين مؤقت داخل هذا الدليل بدلاً من مجلد البيانات، ولا يُنسخ أي ملف إلى مجلد البيانات إلا بعد تنزيل جميع قطعه. وهذا مفيد لإبقاء التنزيلات الجزئية بعيدًا عن وحدة بيانات التخزين الرئيسية (مثلًا على قرص منفصل أو أسرع أو أقل استخدامًا). ويجب أن يمتلك مجلد التخزين المؤقت مساحة خالية كافية لاستيعاب أكبر التنزيلات قيد التنفيذ. وعند عدم تعيينه أو تركه فارغًا، تُكتب التنزيلات مباشرة إلى مجلد البيانات كما كان سابقًا. للتغيير، أضف إلى ملف تكوين I2PSnark <code>i2psnark.config</code> أو اضبطه في صفحة تكوين I2PSnark؛ وينطبق على السيول المضافة لاحقًا. [معطّل افتراضيًا]"
 
 msgid "miscellaneous"
 msgstr "متفرقات"
@@ -7807,7 +7807,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "عند تعيينه على صحيح، يعمل I2P بدون اتصال بالشبكة، ما يكون مفيداً إذا كنت تعيد تشغيل الراوتر باستمرار لاختبار تحديثات الكود حيث أن ذلك يمنع اضطراب الشبكة."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "عند تعيينه على صحيح، يصبح ملف السجل الحالي وأرشيفات السجلات المدوَّرة أيٌّ منها قابلًا للقراءة والكتابة للمجموعة التي يعمل جهاز التوجيه تحتها (الوضع 660)، بحيث يتمكّن المستخدمون المنتمون إلى تلك المجموعة من فحص السجلات. ولا تصبح الملفات قابلة للقراءة للجميع أبدًا. [الافتراضي خطأ]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "يسمح هذا الإعداد بتكويف خوادم NTP بديلة لضمان أن يحافظ راوترك على الوقت بدقة. [الافتراضي هو 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -9720,13 +9720,13 @@ msgid "Set Password"
 msgstr "تعيين كلمة المرور"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "جميع أجهزة التوجيه [متقدم]"
 
 msgid "Remote"
 msgstr "بعيد"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "جميع أجهزة التوجيه (NetDb العميل) [متقدم]"
 
 msgid "Encryption type"
 msgstr "نوع التشفير"
@@ -9778,19 +9778,19 @@ msgid "Network Peers"
 msgstr "الأقران على الشبكة"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "الأقران السريعون"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "الأقران ذوو السعة العالية"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "أقران علامات الفيضان"
 
 msgid "Banned Peers"
 msgstr "مستخدمون ممنوعون"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "الملفات الشخصية الحديثة للأقران"
 
 msgid "Configure router logging options"
 msgstr "تكوين خيارات تسجيل جهاز التوجيه"

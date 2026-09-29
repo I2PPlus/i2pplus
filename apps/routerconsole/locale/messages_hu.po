@@ -570,7 +570,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Figyelmeztetés: nem sikerült kézi indításra állítani az I2P+ szolgáltatást"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Figyelmeztetés: az I2P+ telepítési könyvtára nem található"
 
 msgid "Configuration saved successfully"
 msgstr "Beállítások sikeresen elmentve"
@@ -1440,7 +1440,7 @@ msgid "Ban peer until restart"
 msgstr "Társ kitiltása újraindításig"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Kézzel tiltva a configpeer-en keresztül"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3541,10 +3541,10 @@ msgid "Low Latency"
 msgstr "Alacsony késleltetés"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Újraküldött csomagok / elküldött csomagok az UDP átviteli réteg jelentése szerint"
 
 msgid "Loss"
-msgstr ""
+msgstr "Veszteség"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Az alagutak partnere beleegyezett a részvételbe"
@@ -3599,62 +3599,62 @@ msgstr "Peer konfigurálása"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} a RAM-ban / {1} a lemezen"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Magas korlát"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Megjelenítve"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "{1} profilból {0} megjelenítve"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} elavult profil elrejtve"
+msgstr[1] "{0} elavult profil elrejtve"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "A megjelenített összes profil aránya"
 
 msgid "peers"
 msgstr "társak"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "A megjelenített szintprofilok aránya"
 
 msgid "Window"
-msgstr ""
+msgstr "Ablak"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Gyors RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "A gyors szinthez tartozáshoz szükséges maximális RTT (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "A gyors szintű társak átlagos vesztesége (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "A nagy kapacitású társak átlagos vesztesége (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Hallható a megjelenítési határon belül"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Keresések"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Keresési sikerarány"
 
 msgid "Stores"
-msgstr ""
+msgstr "Tárolások"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Tárolási sikerarány"
 
 msgid "Definitions"
 msgstr "Meghatározások"
@@ -3725,25 +3725,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "A közelmúltban hány új társról szóltak nekünk?"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Ismert elárasztási csomópontok"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Hibamentes"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Nincs keresési hiba (1 óra)"
 
 msgid "Response"
-msgstr ""
+msgstr "Válasz"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Keresési válaszidő (1 óra)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "1 órás Kapcsolat"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Kapcsolat 1 órán belül"
 
 msgid "1h Fail Rate"
 msgstr "Sikertelen ráta 1 óra alatt"
@@ -4729,10 +4729,10 @@ msgid "Slow Start Window Cap"
 msgstr "Lassú indítás ablakkorlátja"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Maximális bejövő puffer"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Maximális egyidejű streamek"
 
 msgid "Max SYN Sends"
 msgstr "Max SYN küld"
@@ -4747,7 +4747,7 @@ msgid "Max Retransmissions"
 msgstr "Maximális újraküldések"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Fogadó munkás szálak"
 
 msgid "Writer Queue Size"
 msgstr "Író sor mérete"
@@ -4831,16 +4831,16 @@ msgid "Search Timeout"
 msgstr "Keresés időtúllépése"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Keresési korlát"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Újraközlési ablak"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Újraközlés kiterjesztése"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Felderítő szélesség"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet keresés időtúllépése"
@@ -4867,7 +4867,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Maximális nagy kapacitású csomópontok"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Veszteséges társak lejjebb sorolási küszöbe"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Alagút-build kérés időtúllépése"
@@ -4894,25 +4894,25 @@ msgid "Max Delay Between Tests"
 msgstr "Maximális késleltetés a tesztek között"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Alagútteszt hiba ablak"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Alagútteszt hiba ablak padlója"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Első ugrási hiba lehűlési ideje"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Első ugrási hiba küszöbértéke"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Bejövő torlódási küszöb"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Elavult építések levágási küszöbe"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Egyidejűség-fojtási küszöb"
 
 msgid "NTCP Reader Threads"
 msgstr "NTCP olvasó szálak"
@@ -4924,7 +4924,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP pumpáló biztonsági intervallum"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "NTCP pumper maximális üresjárati kör sebessége"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Maximális egyidejű csomópont-üzenetek"
@@ -4996,7 +4996,7 @@ msgid "Max Window Size"
 msgstr "Max ablakméret"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Kapcsolódási időtúllépés szorzója"
 
 msgid "Max Message Queue Age"
 msgstr "Maximális üzenetsor-életkor"
@@ -5014,16 +5014,16 @@ msgid "Server Handler Threads"
 msgstr "Kiszolgáló kezelő szálak"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Kiszolgáló kezelési sor kapacitása"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Kiszolgáló alapértelmezett szálai alagútonként"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "I/O átviteli szálak"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "I/O megakadási időtúllépés"
 
 msgid "Build Handler Threads"
 msgstr "Build kezelő szálak"
@@ -5032,7 +5032,7 @@ msgid "Client Runner Max Threads"
 msgstr "Ügyfél-futtató maximális szálak"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Kliens alapértelmezett maximális kapcsolatai"
 
 msgid "Participating Throttle Min"
 msgstr "Részt vevő szabályozás minimuma"
@@ -5110,7 +5110,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Nem tesztelt Tunnel Cap szorzó"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Alagút IV szűrő mérete"
 
 msgid "Message Processing Throttle"
 msgstr "Üzenetfeldolgozási fojtószelep"
@@ -5161,10 +5161,10 @@ msgid "Max congestion window during slow start."
 msgstr "Maximális torlódási ablak a lassú indítás során."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Kapcsolatonkénti bejövő puffer korlátja (bájt)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Célállomásonkénti dinamikus korlát az egyidejű streamekre."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Összes SYN-kísérlet, mielőtt feladná a kézfogást."
@@ -5179,7 +5179,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Újraküldések a stream eldobása előtt."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Bejövő csomagfeldolgozási szálak streaming munkamenetenként."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Maximális üresjárati idő a stream eldobása előtt (ms)."
@@ -5269,16 +5269,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Csomópontontkénti keresési időtúllépés (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Határidő minden egyes iteratív kereséshez (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "A bérlet újraközléséhez tartozó tárolási üzenetek élettartama (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "A keresés után újraközlött bérletet kapó társak maximális száma."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Egyidejű felderítő keresések ciklusonként."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Adaptív határidő a LeaseSet keresésekhez (ms)."
@@ -5305,7 +5305,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Maximális nagy kapacitású csomópont az útválasztási táblában."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Az a veszteségi arány, amely a társat a gyors szintekről lejjebb sorolja (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Build válasz időtúllépése (ms)."
@@ -5332,25 +5332,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Maximális időköz az alagút-tesztek között (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "A leghosszabb idő, ameddig az alagútteszt futhat, mielőtt meghiúsul (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Padló az alagútteszt-hiba ablakához (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Meddig marad egy társ kihagyva az első ugrási hibák után (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "A hibák száma, mielőtt egy társ kihagyásra kerül a lehűlési idő alatt."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "A bejövő alagutak száma, amely alatt az építések fojtva vannak."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "A sorban töltött idő hányada az időtúllépési keretből, mielőtt egy építést levágunk (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Az egyidejű építések csökkentését kiváltó időtúllépési arány (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Bejövő NTCP adatokat visszafejtő szálak."
@@ -5362,7 +5362,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Biztonsági vizsgálati intervallum a beragadt NTCP pumpákhoz (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Az üresjárati NTCP pumper iterációinak másodpercenkénti korlátja (kör/mp)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Repülés közbeni üzenetkorlát UDP csomópontontként."
@@ -5419,7 +5419,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Felső határ az RTT becslésnél (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Minden kliens kapcsolódási időtúllépését a hálózati RTT alapján skálázza (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Késleltetés az első újraküldés előtt (ms)."
@@ -5443,16 +5443,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Kezelő szálak a bejövő I2PTunnel kapcsolatokhoz."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Azok a bejövő kapcsolatok, amelyek szabad kiszolgáló kezelő szálra várhatnak."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Alapértelmezett korlát a kiszolgáló kezelő szálakra minden egyes kiszolgáló alagútnál."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Külön készlet a Szerver→Kliens adatátvitelhez, felszabadítja a kezelő szálakat."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Megakadási időtúllépés a Szerver→Kliens adatátvitelhez (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Szálkészlet a bejövő build kérések feldolgozásához."
@@ -5461,7 +5461,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Felső határ az ügyfél-proxy szálkészlethez."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "A klienskapcsolatok alapértelmezett korlátja."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Minimális átmenő alagút, amelyet egy csomópont tarthat."
@@ -5539,7 +5539,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP socket csatlakozási időtúllépés az alagút-kiszolgáló kezelőszálakhoz (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Az alagút IV duplikációs szűrő kitevője: mindkét puffere 2^n bitet tartalmaz, így a kettő együtt 2^(n-2) bájtba kerül. A ténylegesen látott IV-k alapján méretezve; a túl kicsi méret jó alagútadatok eldobásaként jelentkezik."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximális átlagos üzenetkésleltetés a tömegközlekedés elutasítása előtt (ms)."
@@ -5721,7 +5721,7 @@ msgid "Endpoint"
 msgstr "Végpont"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Teszt sikeres"
@@ -6132,10 +6132,10 @@ msgid "Additional Router Caps"
 msgstr "További útválasztó képességek"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "A caps csoportok hozzáadása, szóközzel vagy vesszővel elválasztva, pl. LUf,PUG. A kizáráshoz használjon ! jelet: a G!f letiltja a G útválasztókat, kivéve az elárasztási csomópontokat"
 
 msgid "Misc"
-msgstr ""
+msgstr "Egyéb"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "A lekérdezésekre nem válaszoló flood node társak kitiltása (hibaarány >95%)"
@@ -6156,10 +6156,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Túlzott alagútkérések letiltása"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Ha engedélyezve van, a hálózatról feloldott társak, amelyekhez nem vagyunk közvetlenül csatlakozva - a tranzit következő ugrások éppúgy, mint a kliens alagutak végpontjai - a politika tiltások hatálya alá tartoznak. Letiltás esetén az ilyen társak kivételt élveznek, kivéve, ha közvetlenül csatlakozunk hozzájuk."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "A következő ugrási társak tiltása"
 
 msgid "Clear all bans"
 msgstr "Összes tiltás törlése"
@@ -6302,10 +6302,10 @@ msgid "I2CP Port"
 msgstr "I2CP port"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Ne kerülje meg a hálózatot a helyben üzemeltetett szolgáltatások elérésekor"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Visszacsatolás letiltása"
 
 msgid "Require username and password"
 msgstr "Felhasználónév és jelszó szükséges"
@@ -7484,13 +7484,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Padló az egyidejű következő-ugró RouterInfo keresésekhez alagútépítés során. [Alapértelmezés 10 (4 lassú rendszereken)] [Default is 10 (4 on slow systems)]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Az egyidejű következő ugrási RouterInfo keresések felső korlátja az alagútépítés feldolgozása során. A helyek a különböző következő ugrásokat számolják, nem az egyedi kéréseket: az azonos következő ugrást használó építések ugyanazt a keresést használják. Nem a magok számával arányos; a keresések hálózati várakozások. [Alapértelmezés 64 (32 lassú rendszereken)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Az indulás utáni egyidejű keresési korlát skálázásához használt, jelenlegi résztvevő alagutak százaléka. A tényleges korlát a minLookupLimit és maxLookupLimit között korlátozódik. [Alapértelmezés 40 (15 lassú rendszereken)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Az alagútépítések sorának mélysége, amelyeknél a következő ugrás feloldása folyamatban van, miközben az összes keresési hely foglalt. Úgy méretezve, hogy egy tele sor a kezdeményező építési időtúllépésén belül kiürüljön; az ennél régebbi bejegyzések a mélységtől függetlenül elavultként kerülnek eldobásra. [Alapértelmezés 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Maximális megengedett jövőbeli eltérés az alagútépítési kérések időbélyegeihez. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
@@ -7598,7 +7598,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Az útválasztó indításakor szükséges aktív társak minimális száma, mielőtt korlátozná a felfedező társválasztást. A korai indítás során az útválasztó engedékenyebb a peer-minőséggel kapcsolatban. [Alapértelmezett: 6]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Az a leghosszabb idő ezredmásodpercben, ameddig egy fogadott SYN a fogadási sorban várhat, mielőtt az accept() kivenné. Ha az accept() késik (terhelt, gazdagépen futó kiszolgáló), a kapcsolat ezen az ablakon túl elutasításra kerül, így a magasabb érték tolerálja a rövid akadásokat. A beállított érték újraindítás nélkül lép hatásba. [Alapértelmezés 60000 (60 másodperc)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Ez a specifikus beállítás lehetővé teszi, hogy engedélyezze vagy letiltsa a a routernél hostolt szerverekre küldött ping válaszait. A pingek letiltásához hozzá kell adnia a <code>i2p.streaming.answerPings=false</code> sorat a szerver konfigurációja <i>Egyedi beállítások</i> szakaszához a Tunnel Managerben."
@@ -7607,22 +7607,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Alapértelmezett maximális folyamkésleltetés ezredmásodpercben, ha nincs explicit kapcsolódási időtúllépés beállítva. [Alapértelmezés 10000 (10 mp)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Lehűlési idő ezredmásodpercben az ugyanahhoz az el nem érhető célállomáshoz végzett kapcsolódási kísérletek között. Megakadályozza az el nem érhető társak ismételt bombázását. [Alapértelmezés 5000 (5 másodperc)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "A TIME-WAIT időtartama ezredmásodpercben egy streaming kapcsolat lekapcsolódása után, amíg a későn érkező csomagokat még nyugtázzuk. Növelje nagy késleltetésű útvonalakon, ahol a végső ACK-k késhetnek. [Alapértelmezés 120000 (2 perc)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Hányszor válaszoljon egy korlátozott célpontra, mielőtt csendben eldobja a túlzó csomagokat. [Alapértelmezés 3] [Default is 3]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Ha ez a beállítás engedélyezve van, legfeljebb 50 ms véletlen pong késleltetést vezet be az útválasztó által üzemeltetett összes pinget támogató kiszolgálóhoz. Alapértelmezés szerint letiltva. Azonnal alkalmazódik az új pongokra, újraindítás nem szükséges."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "A kezdeti torlódási ablak mérete (csomagokban) az új streaming kapcsolatokhoz. A nagyobb ablak gyorsabban indítja a kapcsolatokat, de több újraküldést okozhat a torlódott útvonalakon. [Alapértelmezés 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "A streaming kapcsolódási időtúllépés felső korlátja. Megakadályozza, hogy a kapcsolatonkénti időtúllépések meghaladják ezt a plafont. Növelje nagyon nagy késleltetésű távoli eléréshez. Kapcsolatonként felülírható az ugyanezen tulajdonság beállításával egy kliens alagút speciális kliensbeállításaiban (például az IRC kliens alagút alapértelmezése 300000). [Alapértelmezés 75000 (75 másodperc)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Maximális idő ezredmásodpercben a pong válaszra várva társ pingelésekor. [Alapértelmezés 300000 (5 perc)]"
@@ -7631,43 +7631,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Ez a beállítás akkor módosítja a maximális további véletlenszerű \"pong\" késleltetést, ha engedélyezve van a ping-kapcsolatú szerverekre a beállítás (i2p.streaming.enablePongDelay). Hacsak nincs kifejezetten beállítva, akkor az alapértelmezett értéket, 50 ms-t veszi figyelembe."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "A függőben lévő kapcsolatok (SYN-ek és részleges csomagok) maximális száma a kiszolgáló fogadási sorában. Ha tele van, az új SYN-ek RESETet kapnak (a kliens újrapróbálhat) ahelyett, hogy csendben eldobnánk őket, így a kliens értesül az elutasításról. [Alapértelmezés 256 (128 lassú rendszereken)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "A maximális újraküldési késleltetés ezredmásodpercben. [Alapértelmezés 30000 (30 mp)] Increase to allow longer between retries on congested paths [Default is 30000 (30s)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "A csomagújraküldések maximális száma, mielőtt feladja a kapcsolatot. A magasabb értékek javítják a megbízhatóságot a veszteséges kapcsolatokon, de késleltetik a hiba észlelését. [Alapértelmezés 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "A maximális újraküldési időtúllépés ezredmásodpercben az exponenciális visszalépés (duplázódás) után. Meghatározza, hogy a küldő mennyi ideig várjon, mielőtt megpróbálná újraküldeni súlyos torlódások esetén. [Alapértelmezett: 30000 (30s)]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "A streaming kapcsolatok maximális oda-vissza ideje ezredmásodpercben. Korlátozza a kiszámított RTT-t, hogy megakadályozza a patologikus időtúllépési értékeket a hálózati zavarok után. [Alapértelmezés 10000 (10 másodperc)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "A streaming kapcsolatok lassú indítási ablakának maximális mérete. Korlátozza a torlódási ablakot a lassú indítás során, hogy ne terhelje túl a hálózatot. [Alapértelmezés 256 (32 lassú rendszereken)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "A streaming kapcsolatok maximális torlódási ablak mérete (csomagokban). Korlátozza egyetlen stream maximális átviteli sebességét. [Alapértelmezés 512 (384 lassú rendszereken)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "A minimális újraküldési késleltetés ezredmásodpercben. [Alapértelmezés 100 ms] Lower values allow faster recovery on lossy connections [Default is 100ms]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "A távoli célállomásokra a következő stream kérési küszöbértékeket meghaladó ideiglenes automatikus tiltás időtartama percben. A letiltott célállomások minden új bejövő kapcsolatot elutasítanak a tiltás ideje alatt. A tisztító folyamat 60 másodpercenként újraolvassa ezt az értéket, így futásidőben módosítható a <a href=/configadvanced>Haladó konfigurációs oldalon</a>. Állítsa 0-ra az automatikus tiltás teljes letiltásához. [Alapértelmezés 5 (5 perc)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "A távoli egyetlen célállomástól érkező bejövő SYN-elutasítások maximális száma a gördülő ablakon belül, mielőtt az automatikus tiltás aktiválódik. Az elutasítási számláló 60 másodpercenként a felére csökken (nem nullázódik), így az elszigetelt kitörések elhalványulnak, míg az állandó áradások felhalmozódnak. [Alapértelmezés 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "A távoli egyetlen célállomástól érkező bejövő SYN-ek engedélyezett maximális száma a <code>tempBanSynRate</code> ablakon belül, mielőtt kitörési figyelmeztetés kerülne rögzítésre. Az első figyelmeztetés csak egy figyelmeztetést naplóz; a 60 másodpercen belüli második figyelmeztetés aktiválja az automatikus tiltást. Ez a kétlépcsős kapu átengedi a legitim oldalbetöltési kitöréseket, miközben továbbra is kiszűri az állandó kapcsolatáradásokat, amelyek különben túlterhelnék az elutasítási számlálót. [Alapértelmezés 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Időablak ezredmásodpercben a SYN kitörés ellenőrzéséhez. Ha egyetlen célállomástól ezen az ablakon belül több mint <code>tempBanSynBurst</code> SYN érkezik, kitörési figyelmeztetés kerül rögzítésre; a 60 másodpercen belüli második figyelmeztetés automatikus tiltást aktivál. [Alapértelmezés 1000 (1 másodperc)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "A Tuner reaktív egyidejű stream korlátjának felső plafonja. Az útválasztó Tunerje automatikusan igazítja a célállomásonkénti egyidejű stream korlátot az igény, az elutasítások és az útválasztó állapota alapján, de egyetlen célállomást sem emelhet a saját alagútkénti <code>i2p.streaming.maxConcurrentStreams</code> beállítása fölé. Ez az érték korlátozza, hogy a Tuner milyen magasra tolhatja a felülírást. Növelje, ha nagy forgalmú szolgáltatásokat üzemeltet, és a Tuner nem tudja elég magasra emelni a korlátot. [Alapértelmezés 1024, tartomány 64–8192, újraindítás szükséges]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Időköz ezredmásodpercben az automatikus LeaseSet újraközzétételek között. [Alapértelmezés 300000 (5 perc)] [Alapértelmezés 300000 (5 perc)]"
@@ -7676,7 +7676,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "A proaktív LeaseSet újraközlés küszöbértéke ezredmásodpercben. Ha a bérlet ezen az időszakon belül jár le, a LeaseSet azonnal újra közzéteszi ahelyett, hogy megvárná a következő időszakos ciklust. [Alapértelmezett: 180000 (3 perc)]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Az útválasztó által elfogadott egyidejű I2CP kliensmunkamenetek maximális száma. [Alapértelmezés 1536 (768 lassú rendszereken)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Igaz értékre állítva letiltja a helyi-helyi visszacsatolási kézbesítést, és az összes forgalmat alagutakon keresztül kényszeríti (kimenő alagút → hálózat → bejövő alagút → helyi cél). Hasznos az alagút-útválasztási viselkedés teszteléséhez, amikor a forrás és a cél ugyanazon az útválasztón található. [Alapértelmezés szerint letiltva]"
@@ -7703,55 +7703,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Az egymást követő nulla adatátviteli hibák maximális száma, mielőtt az eepget feladná, még akkor is, ha maradnak az újrapróbálkozások. Növelje, ha az átvitelek adatok fogadása nélkül meghiúsulnak. [Alapértelmezett: 20]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Rögzített késleltetés ezredmásodpercben az eepget újrapróbálkozások között. Használjon -1 értéket ingadozó késleltetéshez (5 mp alapérték, legfeljebb 10 mp ingadozás), hogy a terhelést eloszlassa egy hibás forráson. A 0 érték azonnali újrapróbálkozást okoz. [Alapértelmezés -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Ha engedélyezve van, az eepget a HTTPS letöltésekhez a hosztneveket DNS-over-HTTPS útvon oldja fel, védve a kereséseket a helyi figyeléstől. Kihagyásra kerül, ha proxyn keresztül tölt le, vagy ha a hoszt IP-cím. [Alapértelmezés igaz]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ez a beállítás azon torrentok maximális számát határozza meg, amelyek tárhelyét egyszerre ellenőrizzük, ha több torrent egyszerre indul vagy együtt újraellenőrzésre kerül, korlátozva ezzel a lemez I/O viharzását induláskor vagy összeomlás után. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés 4, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Ez a beállítás lehetővé teszi a torrentenkénti maximális fájlszám konfigurálását, amelyet az I2PSnark torrent letöltésekor vagy létrehozásakor engedélyez. Figyelje meg, hogy ennek az alapértelmezett 2000 fájlról való jelentős növelése további konfigurációt igényelhet a gazdarendszeren a rendszer által engedélyezett maximális nyitott fájlszám növeléséhez (például <code>ulimit -n</code> a Linuxon). A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához vagy állítsa be az I2PSnark konfigurációs oldalon; a később hozzáadott torrentokra érvényes."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ha ez a beállítás engedélyezve van, időszakosan újraindítja az összes futó torrentet, hogy a célállomásaik friss azonosságokra váltanak, megszakítva ezzel az útválasztó IP-címe és a torrentek célállomásai közötti hosszú életű kapcsolatot a trackereknél és a DHT-ben. A ciklus 3 óránként plusz 1-60 perc véletlen késleltetéssel fut, kimarad, amíg bármely torrent aktívan tölt le, és csak azokat a torrenteket indítja újra, amelyek futottak. A célállomások eleve ideiglenesek, és minden újraindításkor változnak; ez a változást egy futáson belül is kiterjeszti. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés igaz, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Ez a beállítás szabályozza a kliensazonosság hamisítását: a tracker peer ID és a User-Agent, a BitTorrent kézfogás peer ID-ja, a kiterjesztés kézfogás kliensneve és a web seed letöltések mind a kiválasztott jól ismert klienst mutatják az I2PSnark helyett. Többcélú módban alapértelmezés szerint minden célállomás-készlet saját véletlen klienst kap; egycélú módban az I2PSnark önmagát azonosítja, ha nincs beállítva kliensnév vagy a \"random\" érték. Állítsa \"random\" értékre a véletlen kiválasztás kikényszerítéséhez minden módban, \"i2psnark\" értékre a klasszikus azonosság megtartásához még többcélú módban is, vagy egy kliensnévre, ha mindig azt a klienst kell utánozni. A verziósztringek a jelenlegi upstream kiadásokhoz vannak rögzítve, és konzisztensek a peer ID, a User-Agent és a kiterjesztés kézfogás között. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés: többcélú módban készletenként véletlen; a később elindított torrentokra érvényes]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Ez a beállítás opcionálisan a <code>i2psnark.clientId</code> számára véletlenszerűen választott kliensek körét az ismert kliensnevek vesszővel elválasztott részhalmazára korlátozza; az ismeretlen nevek figyelmen kívül maradnak, az üres érték pedig az összes támogatott kliens közül választ. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés: nincs beállítva, a később elindított torrentokra érvényes]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ha ez a beállítás engedélyezve van, a töredezés csökkentése érdekében a teljes fájlméretet előre lefoglalja a lemezen a letöltés megindulásakor. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés igaz, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Ha ez a beállítás engedélyezve van, BEP 47 kitöltő fájlokat ad az I2PSnark által létrehozott új torrentekhez, így minden fájl az utolsó kivételével darabhatáron végződik. A kitöltött torrentok letöltése és ellenőrzése nem változik. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés hamis; a konfigurációs fájl 30 másodpercenként újraolvasásra kerül, és a megváltozott beállítások újraindítás nélkül lépnek hatásba]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ha ez a beállítás engedélyezve van, a torrent neveket a beállított nyelvvel rendezi a helyes ábécés sorrend érdekében. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapérteldezés hamis, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Ez a beállítás vesszővel elválasztott listát definiál azokról a tracker bejelentési URL-ekről, amelyeket privát trackerként kezelünk; az ezeket használó torrentok nem oszthatók meg más társakkal DHT-n vagy PEX-en keresztül. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Az I2PSnark újraindítása szükséges]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Ez a beállítás vesszővel elválasztott név,url párokat definiál az új torrentokhoz megjelenített alapértelmezett tracker listához, felülírva a beépített listát. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Az I2PSnark újraindítása szükséges]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ha ez a beállítás engedélyezve van, kitiltja azokat a társakat, amelyek a kértük legnagyobb részét megszakítják. Miután egy társ összesen legalább 5 MB-ot kért és megszakított, a kért bájtok 90%-ánál nagyobb megszakítási arány a társ kitiltását eredményezi (mind a bejövő, mind a kimenő kapcsolatokon elutasítva) <code>i2psnark.banDiscardPeriod</code> percre. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés igaz, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ez a beállítás a túlzott eldobási aránnyal rendelkező társakra alkalmazott tiltás időtartamát határozza meg percben. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés 60, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Ez a beállítás az I2PSnark webes felület üzenetterületén megőrzött üzenetek maximális számát határozza meg. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés 50, az I2PSnark újraindítása szükséges]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Ez a beállítás az egyetlen torrent teljes tárhelyellenőrzése során a darabok párhuzamos ellenőrzéséhez használt munkás szálak számát határozza meg, például folytatáskor vagy újraellenőrzéskor. Ha nincs beállítva, a szálak száma a CPU-k számával arányos, legalább 4. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához. [Alapértelmezés max(magok / 4, 4); ellenőrzésenként beolvasva, így újraindítás nem szükséges]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Ha egy könyvtár útvonalra van állítva, a befejezetlen letöltések ebben a könyvtárban lévő ideiglenes mappába kerülnek az adatkönyvtár helyett, és minden fájl csak akkor kerül az adatkönyvtárba, ha az összes darabja már le van töltve. Ez hasznos, ha a részleges letöltéseket távol tartjuk a fő adatmeghajtótól (például egy külön, gyorsabb vagy kevésbé használt lemezen). Az ideiglenes könyvtárnak elég szabad területet kell biztosítania a legnagyobb folyamatban lévő letöltések számára. Ha nincs beállítva vagy üres, a letöltések a korábbiak szerint közvetlenül az adatkönyvtárba kerülnek. A módosításhoz adja hozzá az I2PSnark <code>i2psnark.config</code> konfigurációs fájljához vagy állítsa be az I2PSnark konfigurációs oldalon; a később hozzáadott torrentokra érvényes. [Alapértelmezés szerint letiltva]"
 
 msgid "miscellaneous"
 msgstr "egyéb"
@@ -7763,7 +7763,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Ha az érték igaz-ra van állítva, az I2P hálózati kapcsolat nélkül fut, ami hasznos lehet, ha folyamatosan újraindítja a routert a kódfrissítések teszteléséhez, mivel ez megakadályozza a hálózat megszakadását."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Ha igazra van állítva, az aktuális naplófájl és minden forgatott archívum olvashatóvá és írhatóvá válik az útválasztó által futtatott csoport számára (660 mód), így a csoport tagjai átvizsgálhatják a naplókat. A fájlok soha nem válnak mindenki által olvashatóvá. [Alapértelmezés hamis]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Ez a beállítás lehetővé teszi alternatív NTP szerverek beállítását, amelyek szükségesek ahhoz, hogy a router pontos időtartamot tartsa. [Az alapértelmezett érték: 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -9676,13 +9676,13 @@ msgid "Set Password"
 msgstr "Jelszó beállítása"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Minden útválasztó [Haladó]"
 
 msgid "Remote"
 msgstr "Távoli"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Minden útválasztó (Client NetDb) [Haladó]"
 
 msgid "Encryption type"
 msgstr "Titkosítás típus"
@@ -9734,19 +9734,19 @@ msgid "Network Peers"
 msgstr "Hálózati Partnerek"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Gyors társak"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Nagy kapacitású társak"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Elárasztási csomópont társak"
 
 msgid "Banned Peers"
 msgstr "Kitiltott Társak"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Legutóbbi társ profilok"
 
 msgid "Configure router logging options"
 msgstr "Az útválasztó naplózási beállításainak konfigurálása"

@@ -232,7 +232,7 @@ msgid "no subject"
 msgstr "không chủ đề"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Không có thư mục Drafts?"
 
 msgid "Found no valid sender address."
 msgstr "Không tìm thấy địa chỉ người gửi."

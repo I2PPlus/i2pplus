@@ -235,7 +235,7 @@ msgid "no subject"
 msgstr "कोई विषय नहीं"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "कोई Drafts फ़ोल्डर नहीं?"
 
 msgid "Found no valid sender address."
 msgstr "वैध भेजने वाले पते को नहीं मिला."

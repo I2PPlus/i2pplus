@@ -41,12 +41,12 @@ msgstr "Memulai Reseed"
 #, java-format
 msgid "Acquired {0} router info from reseed hosts"
 msgid_plural "Acquired {0} router infos from reseed hosts"
-msgstr[0] ""
+msgstr[0] "Memperoleh {0} RouterInfo dari host reseed"
 
 #, java-format
 msgid "Acquired only 1 router info from reseed hosts"
 msgid_plural "Acquired only {0} router infos from reseed hosts"
-msgstr[0] ""
+msgstr[0] "Hanya memperoleh {0} RouterInfo dari host reseed"
 
 #, java-format
 msgid "{0}Reseed{1} failed:"
@@ -568,7 +568,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Peringatan: tidak dapat mengatur layanan I2P ke start manual"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Peringatan: tidak dapat menemukan direktori instalasi I2P+"
 
 msgid "Configuration saved successfully"
 msgstr "Konfigurasi berhasil disimpan"
@@ -736,7 +736,7 @@ msgstr "Pemeriksaan update plugin gagal"
 #, java-format
 msgid "{0} plugin updated"
 msgid_plural "{0} plugins updated"
-msgstr[0] ""
+msgstr[0] "{0} plugin diperbarui"
 
 msgid "Plugin check complete"
 msgstr "Pemeriksaan plugin selesai"
@@ -1437,7 +1437,7 @@ msgid "Ban peer until restart"
 msgstr "Blokir peer sampai restart"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Diblokir secara manual melalui configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1537,7 +1537,7 @@ msgstr "Reseed dari file gagal"
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
 msgid_plural "Reseed successful, loaded {0} router infos from file."
-msgstr[0] ""
+msgstr[0] "Reseed berhasil, memuat {0} RouterInfo dari file."
 
 msgid "Reset URL list"
 msgstr "Reset daftar URL"
@@ -1581,12 +1581,12 @@ msgstr "Mematikan I2P dalam {0}"
 #, java-format
 msgid "{0} transit tunnel still active"
 msgid_plural "{0} transit tunnels still active"
-msgstr[0] ""
+msgstr[0] "{0} terowongan transit masih aktif"
 
 #, java-format
 msgid "Please wait for routing commitment to expire for {0} tunnel"
 msgid_plural "Please wait for routing commitments to expire for {0} tunnels"
-msgstr[0] ""
+msgstr[0] "Silakan tunggu komitmen perutean kedaluwarsa untuk {0} terowongan"
 
 #, java-format
 msgid "Restart in {0}"
@@ -3423,7 +3423,7 @@ msgstr "Koneksi terhambat"
 #, java-format
 msgid "{0} peer"
 msgid_plural "{0} peers"
-msgstr[0] ""
+msgstr[0] "{0} peer"
 
 msgid "UDP connections"
 msgstr "Koneksi UDP"
@@ -3515,7 +3515,7 @@ msgstr "Mereka menawarkan untuk memperkenalkan kami"
 #, java-format
 msgid "{0} fail"
 msgid_plural "{0} fails"
-msgstr[0] ""
+msgstr[0] "{0} gagal"
 
 msgid "backlogged"
 msgstr "backlogged "
@@ -3533,10 +3533,10 @@ msgid "Low Latency"
 msgstr "Latensi Rendah"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Paket yang dikirim ulang / paket yang dikirim, sebagaimana dilaporkan oleh transportasi UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "Kehilangan"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Rekan terowongan telah setuju untuk berpartisipasi"
@@ -3591,61 +3591,61 @@ msgstr "Konfigurasi peer"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} di RAM / {1} di disk"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Cap Tinggi"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Ditampilkan"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Menampilkan {0} dari {1} profil"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
+msgstr[0] "{0} profil basi disembunyikan"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Porsi profil total yang ditampilkan"
 
 msgid "peers"
 msgstr "teman sebaya"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Porsi profil tingkat yang ditampilkan"
 
 msgid "Window"
-msgstr ""
+msgstr "Jendela"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "RTT Cepat"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "RTT maksimum untuk keanggotaan tingkat cepat (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Rata-rata kehilangan peer tingkat cepat (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Rata-rata kehilangan peer berkapasitas tinggi (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Terdengar dalam batas tampilan"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Pencarian"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Tingkat keberhasilan pencarian"
 
 msgid "Stores"
-msgstr ""
+msgstr "Penyimpanan"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Tingkat keberhasilan penyimpanan"
 
 msgid "Definitions"
 msgstr "Definisi"
@@ -3716,25 +3716,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "berapa banyak peer baru yang mereka informasikan kepada kita akhir-akhir ini"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Node banjir yang diketahui"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Tanpa Gagal"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Tidak ada kegagalan pencarian (1 jam)"
 
 msgid "Response"
-msgstr ""
+msgstr "Respons"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Waktu respons pencarian (1 jam)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "Kontak dalam 1 jam"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Dihubungi dalam 1 jam"
 
 msgid "1h Fail Rate"
 msgstr "Tingkat Kegagalan dalam 1 jam"
@@ -4364,7 +4364,7 @@ msgstr "Frekuensi rata-rata seumur hidup"
 #, java-format
 msgid "{0} event"
 msgid_plural "{0} events"
-msgstr[0] ""
+msgstr[0] "{0} event"
 
 msgid "rate"
 msgstr "rate "
@@ -4409,7 +4409,7 @@ msgstr "Nilai rata-rata seumur hidup"
 #, java-format
 msgid "1 event"
 msgid_plural "{0} events"
-msgstr[0] ""
+msgstr[0] "{0} event"
 
 msgid "sent"
 msgstr "dikirim"
@@ -4718,10 +4718,10 @@ msgid "Slow Start Window Cap"
 msgstr "Batas Jendela Slow Start"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Buffer Masuk Maksimum"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Stream Konkuren Maksimum"
 
 msgid "Max SYN Sends"
 msgstr "Maks SYN Mengirim"
@@ -4736,7 +4736,7 @@ msgid "Max Retransmissions"
 msgstr "Pengiriman Ulang Maksimum"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Utas Pekerja Penerima"
 
 msgid "Writer Queue Size"
 msgstr "Ukuran Antrean Penulis"
@@ -4820,16 +4820,16 @@ msgid "Search Timeout"
 msgstr "Waktu Habis Pencarian"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Batas Pencarian"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Jendela Publikasi Ulang"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Fanout Publikasi Ulang"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Lebar Eksplorasi"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "Waktu Habis Pencarian LeaseSet"
@@ -4856,7 +4856,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Rekan Berkapasitas Tinggi Maksimum"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Ambang Penurunan Peringkat Peer yang Rugi"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Waktu Habis Permintaan Pembentukan Terowongan"
@@ -4883,25 +4883,25 @@ msgid "Max Delay Between Tests"
 msgstr "Tunda Maksimum Antar Uji"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Jendela Kegagalan Uji Terowongan"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Lantai Jendela Kegagalan Uji Terowongan"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Cooldown Kegagalan Hop Pertama"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Ambang Kegagalan Hop Pertama"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Ambang Kemacetan Masuk"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Ambang Pemangkasan Pembangunan Basi"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Ambang Batas Konkurensi"
 
 msgid "NTCP Reader Threads"
 msgstr "Utas Pembaca NTCP"
@@ -4913,7 +4913,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "Interval Failsafe Pompa NTCP"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "Tingkat Loop Idle Pompa NTCP Maksimum"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Pesan Rekan Konkuren Maksimum"
@@ -4985,7 +4985,7 @@ msgid "Max Window Size"
 msgstr "Ukuran Jendela Maks"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Pengganda Waktu Habis Koneksi"
 
 msgid "Max Message Queue Age"
 msgstr "Usia Antrean Pesan Maksimum"
@@ -5003,16 +5003,16 @@ msgid "Server Handler Threads"
 msgstr "Utas Penangan Server"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Kapasitas Antrean Penangan Server"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Utas Default Server per Terowongan"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "Utas Transfer I/O"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "Waktu Habis Stall I/O"
 
 msgid "Build Handler Threads"
 msgstr "Utas Penangan Pembentukan"
@@ -5021,7 +5021,7 @@ msgid "Client Runner Max Threads"
 msgstr "Utas Pelari Klien Maksimum"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Koneksi Default Klien Maksimum"
 
 msgid "Participating Throttle Min"
 msgstr "Throttle Partisipasi Minimum"
@@ -5099,7 +5099,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Pengganda Tutup Terowongan yang Belum Teruji"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Ukuran Filter IV Terowongan"
 
 msgid "Message Processing Throttle"
 msgstr "Batasan Pemrosesan Pesan"
@@ -5150,10 +5150,10 @@ msgid "Max congestion window during slow start."
 msgstr "Jendela kemacetan maksimum selama slow start."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Batas buffer masuk per koneksi (byte)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Batas dinamis stream konkuren per tujuan."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Total upaya SYN sebelum menyerah pada jabat tangan."
@@ -5168,7 +5168,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Pengiriman ulang sebelum membuang aliran."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Utas pemrosesan paket masuk per sesi streaming."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Waktu menganggur maksimum sebelum membuang aliran (ms)."
@@ -5258,16 +5258,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Waktu habis pencarian per-rekan (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Tenggat keras untuk setiap pencarian iteratif (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Masa hidup pesan penyimpanan publikasi ulang sewa (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Jumlah peer maksimum yang menerima sewa yang dipublikasikan ulang setelah pencarian."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Pencarian eksplorasi konkuren per siklus."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Batas tenggat adaptif untuk pencarian LeaseSet (ms)."
@@ -5294,7 +5294,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Rekan berkapasitas tinggi maksimum dalam tabel perutean."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Rasio kehilangan yang menurunkan peringkat peer dari tingkat cepat (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Waktu habis balasan pembentukan (ms)."
@@ -5321,25 +5321,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Interval maksimum antar uji terowongan (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Waktu maksimum yang boleh diambil oleh uji terowongan sebelum gagal (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Lantai untuk jendela kegagalan uji terowongan (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Berapa lama peer dilewati setelah kegagalan hop pertama (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Kegagalan sebelum peer dilewati selama cooldown."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Jumlah terowongan masuk yang di bawahnya pembangunan diberi throttle."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Porsi antrean-tunggu dari anggaran waktu habis sebelum memangkas sebuah pembangunan (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Tingkat waktu habis yang memicu pengurangan pembangunan konkuren (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Utas yang mendekripsi data NTCP masuk."
@@ -5351,7 +5351,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Interval pindai failsafe untuk pompa NTCP yang macet (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Batas iterasi pompa NTCP yang menganggur per detik (loop/s)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Batas pesan dalam-penerbangan per-rekan UDP."
@@ -5408,7 +5408,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Batas atas perkiraan RTT (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Menskalakan waktu habis koneksi setiap klien berdasarkan RTT jaringan (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Tunda sebelum kirim ulang pertama (ms)."
@@ -5432,16 +5432,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Utas penangan untuk koneksi I2PTunnel masuk."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Koneksi masuk yang boleh menunggu utas penangan server yang tersedia."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Batas default utas penangan server untuk setiap terowongan server."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Pool khusus untuk transfer data Server→Klien, membuka blokir utas penangan."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Waktu habis stall untuk transfer data Server→Klien (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Pool utas untuk pemrosesan permintaan pembentukan masuk."
@@ -5450,7 +5450,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Langit-langit untuk pool utas proksi klien."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Batas koneksi klien default."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Terowongan transit minimum yang dapat dipegang rekan mana pun."
@@ -5528,7 +5528,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Waktu habis koneksi soket TCP untuk utas penangan server terowongan (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Eksponen filter dedup IV terowongan: masing-masing dari dua buffernya menampung 2^n bit, sehingga sepasangannya memerlukan 2^(n-2) byte. Diatur dari IV yang benar-benar terlihat; terlalu kecil akan terlihat sebagai data terowongan baik yang dibuang."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Penundaan pesan rata-rata maksimum sebelum menolak transit (ms)."
@@ -5710,7 +5710,7 @@ msgid "Endpoint"
 msgstr "Endpoint "
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Tes berhasil"
@@ -6121,10 +6121,10 @@ msgid "Additional Router Caps"
 msgstr "Grup Kemampuan Router Tambahan"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Tambahkan grup caps, dipisahkan oleh spasi atau koma misal LUf,PUG. Gunakan ! untuk mengecualikan: G!f melarang router G kecuali node banjir"
 
 msgid "Misc"
-msgstr ""
+msgstr "Lain-lain"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Larang rekan node banjir yang gagal merespons kueri (tingkat kegagalan >95%)"
@@ -6145,10 +6145,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Blokir permintaan tunnel berlebihan"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Saat diaktifkan, peer yang diselesaikan dari jaringan dan yang tidak kami hubungkan secara langsung - hop berikutnya transit serta titik akhir terowongan klien - tunduk pada larangan kebijakan. Saat dinonaktifkan, peer semacam itu dibebaskan kecuali terhubung secara langsung."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Larang peer hop berikutnya"
 
 msgid "Clear all bans"
 msgstr "Hapus semua ban"
@@ -6291,10 +6291,10 @@ msgid "I2CP Port"
 msgstr "I2CP Port "
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Jangan melewati jaringan saat mengakses layanan yang di-host secara lokal"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Nonaktifkan Loopback"
 
 msgid "Require username and password"
 msgstr "Mengharuskan username dan password"
@@ -7473,13 +7473,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Lantai pada pencarian RouterInfo hop berikutnya bersamaan selama pemrosesan pembangunan terowongan. Memastikan tingkat minimum konkurensi pencarian bahkan saat sedikit terowongan berpartisipasi. [Default 10 (4 pada sistem lambat)"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Langit-langit pencarian RouterInfo hop berikutnya secara konkuren selama pemrosesan pembangunan terowongan. Slot menghitung hop berikutnya yang berbeda, bukan permintaan individual: pembangunan yang berbagi hop berikutnya menggunakan kembali satu pencarian. Tidak diskalakan berdasarkan jumlah inti; pencarian adalah waktu tunggu yang terikat jaringan. [Default adalah 64 (32 pada sistem lambat)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Persentase dari terowongan berpartisipasi yang sedang berjalan, digunakan untuk menskalakan batas pencarian konkuren setelah router mulai. Batas efektif dijepit antara minLookupLimit dan maxLookupLimit. [Default adalah 40 (15 pada sistem lambat)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Kedalaman antrean yang memuat pembangunan terowongan yang hop berikutnya sedang diselesaikan sementara semua slot pencarian sibuk. Diatur agar antrean yang penuh habis dalam waktu habis pembangunan originator; entri yang lebih tua dari anggaran tersebut dibuang sebagai basi apa pun kedalamannya. [Default adalah 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Lereng masa depan maksimum yang diizinkan untuk stempel waktu permintaan pembangunan terowongan. Permintaan dengan stempel waktu lebih jauh di masa depan dari ini ditolak sebagai potensi serangan replay. [Default 300000 (5 menit)"
@@ -7587,7 +7587,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Jumlah minimum peer aktif yang diperlukan selama startup router sebelum membatasi pemilihan peer eksplorasi. Selama startup awal router lebih lunak tentang kualitas peer. [Default 6"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Waktu maksimum dalam milidetik yang boleh ditunggu oleh SYN yang diterima di antrean penerimaan sebelum accept() mengambilnya. Jika accept() tertunda (server yang di-host sedang sibuk), koneksi ditolak setelah jendela ini, sehingga nilai yang lebih tinggi dapat mentoleransi henti singkat. Nilai yang dikonfigurasi diterapkan tanpa restart. [Default adalah 60000 (60 detik)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Pengaturan ini khusus terowongan memungkinkan Anda mengaktifkan atau menonaktifkan balasan terhadap ping yang dikirim ke server yang dihosting router. Untuk menonaktifkan ping, Anda harus menambahkan baris <code>i2p.streaming.answerPings=false</code> ke bagian <i>Opsi Khusus</i> untuk konfigurasi server di Manajer Terowongan"
@@ -7596,22 +7596,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Penundaan streaming maksimum default dalam milidetik saat tidak ada waktu habis koneksi eksplisit yang ditetapkan. [Default 10000 (10 detik)"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Periode cooldown dalam milidetik antara upaya koneksi ke tujuan tidak terjangkau yang sama. Mencegah membanjiri peer yang tidak terjangkau. [Default adalah 5000 (5 detik)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Durasi TIME-WAIT dalam milidetik setelah sebuah koneksi streaming terputus, selama itu paket yang terlambat masih diakui. Tingkatkan untuk jalur latensi tinggi di mana ACK akhir mungkin tertunda. [Default adalah 120000 (2 menit)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Jumlah kali untuk merespons tujuan yang dibatasi sebelum diam-diam menjatuhkan paket berlebih. Mencegah badai koneksi membebani router. [Default 3"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Pengaturan ini, saat diaktifkan, memperkenalkan tunda pong acak hingga 50ms untuk semua server berkemampuan ping yang di-host oleh router. Default adalah dinonaktifkan. Diterapkan segera pada pong baru, tidak perlu restart."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Ukuran jendela kemacetan awal (dalam paket) untuk koneksi streaming baru. Jendela yang lebih besar memulai koneksi lebih cepat tetapi dapat menyebabkan lebih banyak pengiriman ulang pada jalur yang padat. [Default adalah 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Jepitan batas atas pada waktu habis koneksi streaming. Mencegah waktu habis per koneksi melampaui langit-langit ini. Tingkatkan untuk akses jarak jauh dengan latensi sangat tinggi. Dapat ditimpa secara per koneksi dengan menyetel properti yang sama pada opsi klien lanjutan sebuah terowongan klien (misalnya terowongan klien IRC bernilai default 300000). [Default adalah 75000 (75 detik)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Waktu maksimum dalam milidetik untuk menunggu balasan pong saat melakukan ping ke peer. [Default 300000 (5 menit)"
@@ -7620,43 +7620,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Pengaturan ini, ketika diaktifkan, memodifikasi penundaan pong acak maksimum tambahan yang diperkenalkan untuk server yang berkemampuan ping, jika <code>i2p.streaming.enablePongDelay</code> juga diaktifkan. Kecuali jelas ditetapkan, nilai default 50ms akan digunakan"
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Jumlah maksimum koneksi tertunda (SYN dan paket parsial) dalam antrean penerimaan server. Saat penuh, SYN baru diberi RESET (klien dapat mencoba lagi) alih-alih dibuang secara diam-diam, sehingga klien tetap diberi tahu tentang penolakan tersebut. [Default adalah 256 (128 pada sistem lambat)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Penundaan transmisi ulang maksimum dalam milidetik. Interval transmisi ulang tidak akan melebihi nilai ini terlepas dari backoff. Tingkatkan untuk memungkinkan waktu lebih lama antara percobaan ulang pada jalur padat. [Default 30000 (30d)"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Jumlah maksimum pengiriman ulang paket sebelum menyerah pada sebuah koneksi. Nilai yang lebih tinggi meningkatkan keandalan pada tautan yang banyak kehilangan paket tetapi menunda deteksi kegagalan. [Default adalah 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Waktu habis transmisi ulang maksimum dalam milidetik setelah backoff eksponensial (penggandaan). Membatasi berapa lama pengirim menunggu sebelum mencoba transmisi ulang selama kemacetan parah. [Default 30000 (30d)"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Waktu tempuh bolak-balik maksimum dalam milidetik untuk koneksi streaming. Membatasi RTT yang dihitung untuk mencegah nilai waktu habis yang patologis setelah gangguan jaringan. [Default adalah 10000 (10 detik)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Ukuran jendela slow start maksimum untuk koneksi streaming. Membatasi jendela kemacetan selama slow start untuk mencegah membebani jaringan. [Default adalah 256 (32 pada sistem lambat)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Ukuran jendela kemacetan maksimum (dalam paket) untuk koneksi streaming. Membatasi throughput maksimum dari satu stream. [Default adalah 512 (384 pada sistem lambat)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Penundaan transmisi ulang minimum dalam milidetik. Paket tidak akan dikirim ulang lebih cepat dari interval ini. Nilai lebih rendah memungkinkan pemulihan lebih cepat pada koneksi lossy. [Default 100ms"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Durasi dalam menit untuk autoban sementara yang diterapkan pada tujuan jarak jauh yang melampaui ambang permintaan stream di bawah. Tujuan yang dilarang menolak semua koneksi masuk baru selama periode larangan. Pembersih membaca ulang nilai ini setiap 60 detik, sehingga dapat diubah saat berjalan melalui <a href=/configadvanced>halaman Konfigurasi Lanjutan</a>. Atur ke 0 untuk menonaktifkan autoban sepenuhnya. [Default adalah 5 (5 menit)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Jumlah maksimum penolakan SYN masuk dari satu tujuan jarak jauh dalam jendela bergulir sebelum autoban dipicu. Penghitung penolakan meluruh separuh setiap 60 detik (bukan disetel ulang), sehingga ledakan terisolasi mereda sedangkan banjir berkelanjutan terakumulasi. [Default adalah 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Jumlah maksimum SYN masuk yang diizinkan dari satu tujuan jarak jauh dalam jendela <code>tempBanSynRate</code> sebelum strike ledakan dicatat. Strike pertama hanya mencatat peringatan; strike kedua dalam 60 detik memicu autoban. Gerbang dua strike ini membiarkan ledakan pemuatan halaman yang sah lewat sambil tetap menangkap banjir koneksi berkelanjutan yang jika tidak akan membebani penghitung penolakan. [Default adalah 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Jendela waktu dalam milidetik untuk pemeriksaan ledakan SYN. Jika lebih dari <code>tempBanSynBurst</code> SYN diterima dari satu tujuan dalam jendela ini, strike ledakan dicatat; strike kedua dalam 60 detik memicu autoban. [Default adalah 1000 (1 detik)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Langit-langit atas untuk batas stream konkuren reaktif milik Tuner. Tuner router secara otomatis menyesuaikan batas stream konkuren per tujuan berdasarkan permintaan, penolakan, dan kesehatan router, tetapi tidak pernah dapat menaikkan sebuah tujuan di atas pengaturan <code>i2p.streaming.maxConcurrentStreams</code> milik terowongannya sendiri. Nilai ini membatasi seberapa tinggi Tuner diizinkan mendorong override. Tingkatkan ini jika Anda meng-host layanan dengan lalu lintas tinggi dan Tuner tidak dapat menskalakan batas cukup tinggi. [Default adalah 1024, rentang 64–8192, restart diperlukan]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Interval dalam milidetik antara publikasi ulang LeaseSet otomatis. Nilai lebih tinggi mengurangi lalu lintas netdb tetapi dapat menyebabkan info sewa basi. [Default 300000 (5 menit)"
@@ -7665,7 +7665,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Ambang dalam milidetik untuk publikasi ulang LeaseSet proaktif. Jika sewa akan kedaluwarsa dalam jendela ini, LeaseSet diterbitkan ulang segera daripada menunggu siklus periodik berikutnya. [Default 180000 (3 menit)"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Jumlah maksimum sesi klien I2CP simultan yang akan diterima oleh router. [Default adalah 1536 (768 pada sistem lambat)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Saat diatur ke true, menonaktifkan pengiriman loopback lokal-lokal dan memaksa semua lalu lintas melalui terowongan (terowongan keluar → jaringan → terowongan masuk → tujuan lokal). Berguna untuk menguji perilaku routing terowongan saat sumber dan tujuan berada di router yang sama. [Dinonaktifkan secara default"
@@ -7692,55 +7692,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Jumlah maksimum kegagalan transfer data nol berturut-turut sebelum eepget menyerah, bahkan jika percobaan ulang tersisa. Tingkatkan jika transfer gagal tanpa menerima data. [Default 20"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Tunda tetap dalam milidetik antara upaya percobaan ulang eepget. Gunakan -1 untuk tunda dengan jitter (dasar 5s ditambah hingga 10s jitter) untuk menyebarkan beban pada sumber yang tidak stabil. Nilai 0 menyebabkan percobaan ulang segera. [Default adalah -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Saat diaktifkan, eepget menyelesaikan nama host untuk pengambilan HTTPS melalui DNS-over-HTTPS, melindungi pencarian dari pengintipan lokal. Dilewati saat mengambil melalui proxy atau saat host merupakan alamat IP. [Default adalah true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini mendefinisikan jumlah maksimum torrent yang penyimpanannya diperiksa secara bersamaan, ketika beberapa torrent dimulai atau diperiksa ulang bersama, sehingga membatasi badai I/O disk saat startup atau setelah crash. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah 4, restart I2PSnark diperlukan]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Pengaturan ini memungkinkan konfigurasi jumlah maksimum file per torrent yang akan diizinkan oleh I2PSnark, saat mengunduh atau membuat sebuah torrent. Catatan bahwa menaikkan nilai ini secara signifikan dari default 2000 file mungkin memerlukan konfigurasi tambahan pada sistem host untuk meningkatkan jumlah maksimum file terbuka yang diizinkan sistem operasi (misalnya <code>ulimit -n</code> di Linux). Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code> atau atur di halaman konfigurasi I2PSnark; berlaku untuk torrent yang ditambahkan setelahnya."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini, saat diaktifkan, secara berkala memulai ulang semua torrent yang sedang berjalan sehingga tujuan mereka berputar ke identitas yang baru, memutus hubungan jangka panjang antara alamat IP router dan tujuan torrent di pelacak serta di DHT. Siklus berjalan setiap 3 jam ditambah tunda acak 1 hingga 60 menit, dilewati selama ada torrent yang sedang mengunduh secara aktif, dan hanya memulai ulang torrent yang sedang berjalan. Tujuan bersifat sementara dan berubah pada setiap restart; ini memperpanjangnya hingga dalam satu masa berjalan. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah true, restart I2PSnark diperlukan]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Pengaturan ini mengendalikan pemalsuan identitas klien: peer ID dan User-Agent pelacak, peer ID jabat tangan BitTorrent, nama klien jabat tangan ekstensi, dan pengambilan web seed semuanya disajikan sebagai klien terkenal yang dipilih alih-alih I2PSnark. Dalam mode multi-tujuan, setiap pool tujuan diberi klien acaknya sendiri secara default; dalam mode satu-tujuan, I2PSnark mengidentifikasi dirinya sendiri kecuali nama klien atau \"random\" disetel. Atur ke \"random\" untuk memaksa pemilihan acak di semua mode, \"i2psnark\" untuk menjaga identitas klasik bahkan dalam mode multi-tujuan, atau ke nama klien untuk selalu menyamar sebagai klien tersebut. String versi dikunci ke rilis hulu saat ini dan konsisten antara peer ID, User-Agent, dan jabat tangan ekstensi. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah acak per pool dalam mode multi-tujuan; berlaku untuk torrent yang dimulai setelahnya]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Pengaturan ini secara opsional membatasi klien yang dipilih lewat pemilihan acak untuk <code>i2psnark.clientId</code> ke sebuah subset nama klien yang dipisahkan koma; nama yang tidak dikenal diabaikan dan nilai kosong memilih dari semua klien yang didukung. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah tidak disetel, berlaku untuk torrent yang dimulai setelahnya]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini, saat diaktifkan, mengalokasikan terlebih dahulu ukuran file penuh di disk ketika sebuah unduhan dimulai, untuk mengurangi fragmentasi. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah true, restart I2PSnark diperlukan]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Pengaturan ini, saat diaktifkan, menambahkan file padding BEP 47 ke torrent baru yang dibuat oleh I2PSnark, sehingga setiap file kecuali yang terakhir berakhir pada batas potongan. Mengunduh dan memverifikasi torrent yang sudah dipadding tidak terpengaruh. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah false; file konfigurasi dibaca ulang setiap 30 detik dan pengaturan yang diubah diterapkan tanpa restart]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini, saat diaktifkan, mengurutkan nama torrent menggunakan bahasa yang dikonfigurasi untuk urutan abjad yang benar. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah false, restart I2PSnark diperlukan]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini mendefinisikan daftar URL pengumuman pelacak yang dipisahkan koma dan diperlakukan sebagai pelacak privat; torrent yang memakainya tidak dibagikan ke peer lain melalui DHT atau PEX. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Restart I2PSnark diperlukan]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini mendefinisikan pasangan name,url yang dipisahkan koma untuk daftar pelacak default yang ditampilkan bagi torrent baru, menggantikan daftar bawaan. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Restart I2PSnark diperlukan]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini, saat diaktifkan, melarang peer yang membatalkan sebagian besar dari yang mereka minta. Setelah sebuah peer telah meminta dan membatalkan setidaknya 5 MB secara total, rasio pembatalan di atas 90% dari byte yang dimintanya menyebabkan peer itu dilarang (ditolak pada koneksi masuk maupun keluar) selama <code>i2psnark.banDiscardPeriod</code> menit. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah true, restart I2PSnark diperlukan]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini mendefinisikan durasi dalam menit dari larangan yang diterapkan pada peer dengan rasio buang yang berlebihan. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah 60, restart I2PSnark diperlukan]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Pengaturan ini mendefinisikan jumlah maksimum pesan yang disimpan di area pesan antarmuka web I2PSnark. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah 50, restart I2PSnark diperlukan]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Pengaturan ini mendefinisikan jumlah utas pekerja yang digunakan untuk memverifikasi potongan secara paralel selama pemeriksaan penyimpanan penuh atas satu torrent, misalnya saat melanjutkan atau memeriksa ulang. Saat tidak disetel, jumlah utas berskala dengan jumlah CPU, minimal 4. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code>. [Default adalah max(cores / 4, 4); dibaca per pemeriksaan, jadi tidak perlu restart]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Ketika disetel ke path direktori, unduhan yang belum lengkap ditulis ke folder staging di direktori ini alih-alih ke direktori data, dan setiap file disalin ke direktori data hanya setelah semua potongannya terunduh. Ini berguna untuk menjaga unduhan sebagian tetap jauh dari volume data utama (misalnya pada disk terpisah yang lebih cepat atau lebih jarang dipakai). Direktori staging harus memiliki ruang kosong yang cukup untuk menampung unduhan sedang berjalan yang terbesar. Saat tidak disetel atau kosong, unduhan ditulis langsung ke direktori data seperti sebelumnya. Untuk mengubah, tambahkan ke file konfigurasi I2PSnark <code>i2psnark.config</code> atau atur di halaman konfigurasi I2PSnark; berlaku untuk torrent yang ditambahkan setelahnya. [Dinonaktifkan secara default]"
 
 msgid "miscellaneous"
 msgstr "bermacam-macam"
@@ -7752,7 +7752,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Ketika diatur menjadi true, I2P berjalan tanpa konektivitas jaringan, yang berguna jika Anda terus menjalankan ulang router untuk menguji pembaruan kode karena ini mencegah gangguan jaringan"
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Ketika disetel ke true, file log saat ini dan setiap arsip yang sudah diputar dibuat dapat dibaca dan ditulis oleh grup yang menjalankan router (mode 660), sehingga pengguna yang menjadi anggota grup tersebut dapat memeriksa log. File tidak pernah dibuat dapat dibaca oleh semua orang. [Default adalah false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Pengaturan ini mengijinkan konfigurasi server NTP alternatif yang diperlukan untuk memastikan bahwa router Anda mempertahankan waktu jam yang akurat. [Defaultnya adalah 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org"
@@ -9665,13 +9665,13 @@ msgid "Set Password"
 msgstr "Atur Kata Sandi"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Semua Router [Lanjutan]"
 
 msgid "Remote"
 msgstr "Jarak jauh"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Semua Router (Klien NetDb) [Lanjutan]"
 
 msgid "Encryption type"
 msgstr "Jenis enkripsi"
@@ -9723,19 +9723,19 @@ msgid "Network Peers"
 msgstr "Rekan Jaringan"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Peer Cepat"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Peer Berkapasitas Tinggi"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Peer Node Banjir"
 
 msgid "Banned Peers"
 msgstr "Peers yang Diblokir"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Profil Peer Terbaru"
 
 msgid "Configure router logging options"
 msgstr "Konfigurasi pilihan router log"

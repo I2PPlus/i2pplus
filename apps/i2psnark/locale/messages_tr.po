@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Veri klasörü oluşturulamadı"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Geçici dizin için yazma izni yok"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "Geçici dizin oluşturulamıyor"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Torrent dizini için yazma izni yok"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "Torrent dizini oluşturulamıyor"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Giden tünel kanalları üzerinde tünel atlama rastgeleleştirme devre dışı bırakıldı"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Her torrent için ayrı hedef etkinleştirildi"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Her torrent için ayrı hedef devre dışı bırakıldı"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Maksimum hedef sayısı {0} olarak değiştirildi"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "Sınırsız hedefler geri yüklendi (torrent başına bir tane)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Torrent başlangıç zamanlarının rastgele belirlenmesi etkinleştirildi"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Torrent başlangıç zamanlarının rastgele belirlenmesi devre dışı bırakıldı"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Başlangıç gecikmesi aralığı {0} - {1} olarak değiştirildi"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API anahtarı güncellendi."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Yeni torrentler için dosyaları önceden ayırma etkinleştirildi."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Yeni torrentler için dosyaları önceden ayırma devre dışı bırakıldı."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Özgün dosya adlarını koruma etkinleştirildi."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Özgün dosya adlarını koruma devre dışı bırakıldı."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Torrent başına maksimum dosya sayısı {0} olarak değiştirildi"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Torrent başına geçersiz maksimum dosya sayısı: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Hazırlama için geçici dizin {0} olarak değiştirildi"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Geçici dizin hazırlama devre dışı bırakıldı."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Torrent dizini {0} olarak değiştirildi"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Torrent dizini veri dizinine sıfırlandı."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyiciler listesi değiştirildi - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
@@ -302,7 +302,7 @@ msgstr "HATA - Bellek bitti, {0} torrenti oluşturulamadı"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "HATA - {0} kaynağından torrent oluşturulamıyor"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Torrentler başlatılıyor ve tüneller açılıyor"
@@ -396,7 +396,7 @@ msgstr "Torrent silindi: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Torrentler {0} içinde başlatılıyor&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Uyarı - Yeni ayarlanmış veri bölümünde sadece {0}MB indirme alanı
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Geçici depolama: yapılandırılmış geçici bölümünde indirmeler için şu anda {0}GB mevcut"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Geçici depolama: yapılandırılmış geçici bölümünde indirmeler için şu anda {0}MB mevcut"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Uyarı - Yapılandırılmış geçici bölümünde indirmeler için yalnızca {0}MB mevcut"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "I2P tüneli açılıyor"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Torrent araması çözümleniyor: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P tüneli açılıp tüm torrentler başlatılıyor."
@@ -489,14 +489,14 @@ msgstr "I2P tüneli kapatıldı."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Hedef değiştirme atlanıyor - {0} etkin indirme sürüyor"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Hedef değiştirme atlanıyor - {0} etkin indirme sürüyor"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Etkin olarak indirilen torrent yok - hedefler değiştiriliyor"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "dakika"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "I2PSnark başladığında otomatik başlatılan torrentler en erken ne kadar süre sonra yüklenir"
 
 msgid "min"
-msgstr ""
+msgstr "en az"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "I2PSnark başladığında otomatik başlatılan torrentler en geç ne kadar süre sonra yüklenir"
 
 msgid "max"
-msgstr ""
+msgstr "en fazla"
 
 msgid "Data Storage"
 msgstr "Veri Depolama"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Torrent ve indirilen/paylaşılan dosyaların kaydedileceği klasör"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Geçici dizin"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "İndirmelerin tamamlandığında veri dizinine taşınmadan önce hazırlandığı isteğe bağlı dizin. Devre dışı bırakmak için boş bırakın."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Torrent dizini"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "İndirilen verilerden ayrı olarak .torrent dosyalarının saklanacağı isteğe bağlı dizin. Veri dizininde saklamak için boş bırakın."
 
 msgid "Files readable by all"
 msgstr "Dosyalar herkes tarafından okunabilir"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Dosya izinlerini diğer yerel kullanıcıların dosyalara erişebileceği şekilde ayarlayın"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Dosyaları önceden ayır"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Dolu bir diskin indirmeleri kesmesini önlemek ve parçalar geldikçe oluşan parçalanmayı önlemek için yeni torrent dosyalarını tam boyutlarına genişlet ve torrent başladığında diskteki alanı hemen ayır"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Dosya adlarını koru"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Torrent içindeki özgün dosya adlarını koru. Devre dışı bırakıldığında, dosya adlarından dosya sistemi için geçersiz karakterler temizlenir. Etkinleştirildiğinde özgün dosya adları kullanılır; bir dosya adı dosya sisteminizin desteklemediği karakterler içeriyorsa, dosya güvenli bir yedek adla oluşturulur ve bir uyarı gösterilir"
 
 msgid "Max files per torrent"
 msgstr "Torrent başına maksimum dosya sayısı"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Tünel Yapılandırması"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Bu oturum için ana hedef (kimlik); DHT'si, izleyicileri ve kara listesi torrent başına hedeflerle paylaşılır"
 
 msgid "Our destination (identity) for this session"
 msgstr "Bu oturum için hedef (kimlik)"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Ana Hedef"
 
 msgid "Dest."
 msgstr "Hedef."
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Giden"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Çoklu hedef"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "İzleyicilerin ve DHT'nin torrentlerinizi birbirine bağlamasını engellemek için her torrent için ayrı bir hedef kullanın. Hedefler geçicidir ve yeniden başlatıldığında değişir."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Maksimum hedef"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Bu maksimumdan daha fazla torrent çalıştığında, ek torrentler bellek kullanımını sınırlamak için rastgele ve değişken boyutlu gruplar halinde hedefleri paylaşır. Sıfır, torrent başına bir hedef anlamına gelir."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Rastgele başlangıç gecikmesi"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Birlikte başlayan torrentlerin izleyiciler veya DHT eşleri tarafından ilişkilendirilememesi ve tünel oluşturmalarının yayılması için çoklu hedefli torrent başlangıçlarını rastgele bir gecikmeyle dağıt. Tüm torrentleri tek seferde hemen başlatmak için devre dışı bırakın."
 
 msgid "I2CP host"
 msgstr "I2CP sunucusu"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "I2CP ayarları"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Tarayıcı Entegrasyonu"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Tarayıcı API'sini etkinleştir"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Magnet bağlantılarının ve torrent URL'lerinin CSRF nonce olmadan, loopback'ten ya da aşağıdaki izin verilen sunuculardan eklenmesine izin ver"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "İzin verilen sunucular"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Nonce olmadan torrent eklemeye izin verilen virgülle ayrılmış sunucu adları ya da IP adresleri; loopback her zaman izinlidir"
 
 msgid "API key"
-msgstr ""
+msgstr "API anahtarı"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Uzak erişim için isteğe bağlı parola, sunucu izin listesini atlar"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Tarayıcı işleyicisini kur"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Tarayıcı işleyicisini güncelle"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Kurulu I2PSnark Bridge eklentisini v{0} sürümüne güncelle"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Magnet bağlantıları eklemek için I2PSnark Bridge eklentisini tarayıcınızda açın; eklenti kendini tarayıcıya kaydeder, yönlendirici tarafında hiçbir dosya yazılmaz"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Magnet bağlantılarını ve .torrent dosyalarını tarayıcınıza kaydeden PowerShell kurulum dosyasını indirin; I2PSnark Bridge eklentisi Firefox tabanlı bir tarayıcı gerektirir"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Magnet bağlantılarını ve .torrent dosyalarını tarayıcınıza kaydeden kurulum betiğini indirin; I2PSnark Bridge eklentisi Firefox tabanlı bir tarayıcı gerektirir"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Tarayıcı işleyici betiğini indir"
 
 msgid "Save configuration"
 msgstr "Yapılandırmayı kaydet"
@@ -957,7 +957,7 @@ msgstr "Bu ayarın 3 atlamadan daha düşük bir değere değiştirilmesi, anoni
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "I2PSnark Bridge eklentisi v{0} sürümü güncel değil, yapılandırma sayfasından v{1} sürümüne güncelleyin"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Torrenti almak için \"Torrent ekle\" düğmesine tıklayın"
@@ -1189,7 +1189,7 @@ msgstr "URL'yi girin veya torrent dosyasını seçin"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Torrent eklenirken hata oluştu: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1231,11 +1231,11 @@ msgid "Directory deleted: {0}"
 msgstr "Klasör silindi: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "Tarayıcı API'si etkinleştirildi."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "I2PSnark Bridge eklentisi açılamadı: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1312,7 +1312,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr ".torrent dosyasını ve ilgili veri dosyalarını sil"
 
 msgid "Destination"
-msgstr ""
+msgstr "Hedef"
 
 msgid "Checking"
 msgstr "Denetleniyor"
@@ -1321,7 +1321,7 @@ msgid "Allocating"
 msgstr "Yerleştiriliyor"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Yapılandırılmış tüm izleyicilere bağlanılamadı"
 
 msgid "Starting"
 msgstr "Başlatılıyor"
@@ -1513,7 +1513,7 @@ msgstr "Oluşturulma"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Fiilen indirilen dosyaların boyutu: {0}, BEP 47 dolgu dosyaları için ayrılan {1} dahil değildir"
 
 msgid "Added"
 msgstr "Eklendi"

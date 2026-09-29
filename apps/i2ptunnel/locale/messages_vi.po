@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "Có vẻ đây là một đích không hợp lệ:"
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "i2paddresshelper không thể giúp bạn với một đích như vậy!"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "Để truy cập đích có trong sổ địa chỉ của bạn, nhấp <a href=\"{0}\">tại đây</a>. Để truy cập đích của trợ giúp địa chỉ bị xung đột, nhấp <a href=\"{1}\">tại đây</a>."
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "Đích cho {0} trong sổ địa chỉ"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "Đích của trợ giúp địa chỉ bị xung đột"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "Địa chỉ Base32 bị hỏng"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "Không tìm thấy LeaseSet đích"
 
 msgid "Host"
 msgstr "Máy chủ"
@@ -42,159 +42,159 @@ msgstr "Đích đến"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "Tiếp tục đến {0} mà không lưu"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "Bạn có thể truy cập trang web mà không cần lưu vào sổ địa chỉ. Địa chỉ sẽ được ghi nhớ cho đến khi bạn khởi động lại bộ định tuyến I2P."
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "Tiếp tục mà không lưu"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "Lưu {0} vào sổ địa chỉ bộ định tuyến và tiếp tục đến trang web"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ bộ định tuyến của bạn, nơi lưu trữ các địa chỉ dựa trên đăng ký."
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "Nếu bạn muốn theo dõi các trang web đã thêm thủ công, hãy thêm vào sổ địa chỉ chính hoặc sổ địa chỉ riêng tư thay thế."
 
 msgid "Save & continue"
-msgstr ""
+msgstr "Lưu & tiếp tục"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "Lưu {0} vào sổ địa chỉ chính và tiếp tục đến trang web"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ chính của bạn. Hãy chọn tùy chọn này cho các địa chỉ mà bạn muốn giữ riêng biệt với sổ địa chỉ bộ định tuyến chính, nhưng không ngại việc công bố."
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "Lưu {0} vào sổ địa chỉ riêng tư và tiếp tục đến trang web"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "Địa chỉ này sẽ được lưu vào sổ địa chỉ riêng tư của bạn, đảm bảo nó không bao giờ được công bố."
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Địa chỉ Base32 yêu cầu mật khẩu tra cứu"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Địa chỉ Base32 yêu cầu khóa mã hóa"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Địa chỉ Base32 yêu cầu khóa mã hóa và mật khẩu tra cứu"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Giải mã địa chỉ Base32 thất bại, hãy kiểm tra khóa mã hóa"
 
 msgid "Generate"
 msgstr "Kiến tạo"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "Khóa mã hóa"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "Bạn phải nhập khóa mã hóa PSK do quản trị viên máy chủ cung cấp, hoặc tạo khóa mã hóa DH rồi gửi khóa đó cho quản trị viên máy chủ."
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "Hãy nhờ quản trị viên máy chủ hỗ trợ."
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "Nhập khóa mã hóa PSK"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "Tạo khóa mã hóa DH mới"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "Mật khẩu tra cứu"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "Bạn phải nhập mật khẩu do quản trị viên máy chủ cung cấp."
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "Outproxy HTTP"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "Nhấp vào liên kết bên dưới để lấy trợ giúp địa chỉ từ một dịch vụ nhảy"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "Đã thêm qua trợ giúp địa chỉ từ {0}"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Đã thêm qua trợ giúp địa chỉ"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "Thiếu mật khẩu tra cứu"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "Thiếu khóa riêng tư"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "Khóa riêng tư không hợp lệ"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "Khóa mã hóa mới của bạn"
 
 msgid "Router Console"
-msgstr ""
+msgstr "Bảng điều khiển bộ định tuyến"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "Sổ địa chỉ"
 
 msgid "Configuration"
 msgstr "Cấu hình"
 
 msgid "Help"
-msgstr ""
+msgstr "Trợ giúp"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "Sao chép khóa và gửi cho quản trị viên máy chủ."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "Sau khi bạn được cấp quyền, bạn có thể chuyển đến trang web."
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "Quay lại và sửa lỗi"
 
 msgid "router"
-msgstr ""
+msgstr "bộ định tuyến"
 
 msgid "master"
-msgstr ""
+msgstr "chính"
 
 msgid "private"
-msgstr ""
+msgstr "riêng tư"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "Đang chuyển hướng đến {0}"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Đang thực hiện chuyển hướng"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Đã lưu {0} vào sổ địa chỉ {1}, đang chuyển hướng."
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Không lưu được {0} vào sổ địa chỉ {1}, đang chuyển hướng."
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "Nhấp vào đây nếu bạn không được chuyển hướng tự động."
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "Đã lưu thông tin xác thực cho {0}, đang chuyển hướng."
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "Không lưu được cấu hình"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "Đã lưu các thay đổi cấu hình"
 
 msgid "Client"
 msgstr "Khách hàng"

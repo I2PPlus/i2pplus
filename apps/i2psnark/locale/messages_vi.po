@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Không thể tạo thư mục dữ liệu"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Không có quyền ghi vào thư mục tạm"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "Không thể tạo thư mục tạm"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Không có quyền ghi vào thư mục torrent"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "Không thể tạo thư mục torrent"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Ngẫu nhiên hóa nhảy đường hầm đã bị vô hiệu hóa trên các đường hầm đi ra"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Đã bật đích riêng biệt cho mỗi torrent"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Đã tắt đích riêng biệt cho mỗi torrent"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Số đích tối đa đã thay đổi thành {0}"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "Đã khôi phục số đích không giới hạn (mỗi torrent một đích)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Đã bật việc ngẫu nhiên hóa thời gian bắt đầu torrent"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Đã tắt việc ngẫu nhiên hóa thời gian bắt đầu torrent"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Phạm vi trì hoãn khởi động đã thay đổi thành {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "Khóa API đã được cập nhật."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Đã bật phân bổ trước tệp cho torrent mới."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Đã tắt phân bổ trước tệp cho torrent mới."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Đã bật giữ nguyên tên tệp gốc."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Đã tắt giữ nguyên tên tệp gốc."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Số tệp tối đa mỗi torrent đã thay đổi thành {0}"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Số tệp tối đa mỗi torrent không hợp lệ: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Thư mục tạm dùng để đặt tạm đã thay đổi thành {0}"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Đã tắt đặt tạm trong thư mục tạm."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Thư mục torrent đã thay đổi thành {0}"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Thư mục torrent đã được đặt lại về thư mục dữ liệu."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Danh sách Trình theo dõi mở đã thay đổi - cần phải khởi động lại torrent để có hiệu lực."
@@ -302,7 +302,7 @@ msgstr "ERROR - Hết bộ nhớ, không thể tạo torrent từ {0}"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "LỖI - Không thể tạo torrent từ {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Khởi tạo Tệp tin torrent và mở đường hầm"
@@ -396,7 +396,7 @@ msgstr "Đã xóa torrent: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Đang bắt đầu torrent sau {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Cảnh báo - Chỉ có {0}MB sẵn dùng cho tải xuống trên phân 
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Lưu trữ tạm: Hiện có sẵn {0}GB cho tải xuống trên phân vùng tạm được cấu hình"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Lưu trữ tạm: Hiện có sẵn {0}MB cho tải xuống trên phân vùng tạm được cấu hình"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Cảnh báo - Chỉ có {0}MB sẵn dùng cho tải xuống trên phân vùng tạm được cấu hình"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "Mở đường hầm I2P"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Đang tra cứu torrent: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Mở đường hầm I2P và bắt đầu tất cả các torrent."
@@ -489,14 +489,14 @@ msgstr "Đường hầm I2P đóng lại."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Bỏ qua luân chuyển đích - {0} tải xuống đang diễn ra"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Bỏ qua luân chuyển đích - {0} tải xuống đang diễn ra"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Không có torrent nào đang tải xuống - luân chuyển các đích"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "phút"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "Bao lâu trước khi các torrent tự khởi động được tải lên khi I2PSnark khởi động, sớm nhất"
 
 msgid "min"
-msgstr ""
+msgstr "tối thiểu"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "Bao lâu trước khi các torrent tự khởi động được tải lên khi I2PSnark khởi động, muộn nhất"
 
 msgid "max"
-msgstr ""
+msgstr "tối đa"
 
 msgid "Data Storage"
 msgstr "Lưu trữ dữ liệu"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Thư mục lưu trữ torrent và các tệp đã tải xuống/chia sẻ"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Thư mục tạm"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "Thư mục tùy chọn nơi các bản tải xuống được đặt tạm trước khi được chuyển vào thư mục dữ liệu khi hoàn tất. Để trống để tắt tính năng này."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Thư mục torrent"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "Thư mục tùy chọn để lưu các tệp .torrent riêng biệt với dữ liệu đã tải xuống. Để trống để lưu trong thư mục dữ liệu."
 
 msgid "Files readable by all"
 msgstr "Tất cả mọi người đều có thể đọc được các tập tin"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Đặt quyền truy cập tệp để cho phép người dùng cục bộ khác truy cập các tệp đã tải xuống"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Phân bổ trước dung lượng cho tệp"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Mở rộng các tệp torrent mới đến kích thước đầy đủ và cấp phát ngay dung lượng đĩa khi torrent bắt đầu, để tránh ổ đĩa đầy làm gián đoạn tải xuống và tránh phân mảnh khi các mảnh dần đến"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Giữ nguyên tên tệp"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Giữ nguyên tên tệp gốc từ torrent. Khi tắt, tên tệp sẽ được lọc để loại bỏ các ký tự không hợp lệ của hệ thống tệp. Khi bật, tên tệp gốc sẽ được sử dụng; nếu một tên tệp chứa ký tự không được hệ thống tệp của bạn hỗ trợ, tệp sẽ được tạo với một tên thay thế an toàn và sẽ hiển thị cảnh báo"
 
 msgid "Max files per torrent"
 msgstr "Số tệp tối đa cho mỗi torrent"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Cấu hình đường hầm"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Đích chính (danh tính) cho phiên này; DHT, trình theo dõi và danh sách đen của nó được chia sẻ với các đích của từng torrent"
 
 msgid "Our destination (identity) for this session"
 msgstr "Đích đến (danh tính) của chúng ta cho phiên này"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Đích chính."
 
 msgid "Dest."
 msgstr "Đích."
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Đi ra"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Nhiều đích"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "Dùng một đích riêng biệt cho mỗi torrent, để trình theo dõi và DHT không thể liên kết các torrent của bạn với nhau. Các đích là tạm thời và thay đổi khi khởi động lại."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Số đích tối đa"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Khi số torrent đang chạy nhiều hơn giới hạn tối đa này, các torrent dư sẽ dùng chung đích theo nhóm ngẫu nhiên có số lượng thay đổi, để hạn chế việc sử dụng bộ nhớ. Giá trị 0 nghĩa là mỗi torrent một đích."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Trì hoãn khởi động ngẫu nhiên"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Phân tán thời điểm bắt đầu của torrent nhiều đích bằng một độ trễ ngẫu nhiên, để các torrent khởi động cùng lúc không thể bị trình theo dõi hoặc đồng nghiệp DHT liên kết lại với nhau, đồng thời việc xây dựng đường hầm được trải đều hơn. Tắt tùy chọn này để bắt đầu ngay lập tức tất cả torrent trong một lô."
 
 msgid "I2CP host"
 msgstr "Máy chủ I2CP"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "Tùy chọn I2CP"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Tích hợp trình duyệt"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Bật API trình duyệt"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Cho phép thêm liên kết magnet và URL torrent mà không cần nonce CSRF, từ loopback hoặc từ các máy chủ được phép bên dưới"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Máy chủ được phép"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Danh sách tên máy chủ hoặc IP được phép thêm torrent mà không cần nonce, phân tách bằng dấu phẩy; loopback luôn được phép"
 
 msgid "API key"
-msgstr ""
+msgstr "Khóa API"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Mật khẩu tùy chọn cho truy cập từ xa, bỏ qua danh sách máy chủ cho phép"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Cài đặt trình xử lý trình duyệt"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Cập nhật trình xử lý trình duyệt"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Cập nhật tiện ích mở rộng I2PSnark Bridge đã cài đặt lên v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Mở tiện ích mở rộng I2PSnark Bridge trong trình duyệt của bạn để thêm liên kết magnet; tiện ích mở rộng tự đăng ký với trình duyệt, không có tệp nào được ghi ở phía bộ định tuyến"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Tải xuống trình cài đặt PowerShell đăng ký liên kết magnet và tệp .torrent với trình duyệt của bạn; tiện ích mở rộng I2PSnark Bridge yêu cầu trình duyệt thuộc họ Firefox"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Tải xuống tập lệnh cài đặt đăng ký liên kết magnet và tệp .torrent với trình duyệt của bạn; tiện ích mở rộng I2PSnark Bridge yêu cầu trình duyệt thuộc họ Firefox"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Tải xuống tập lệnh xử lý trình duyệt"
 
 msgid "Save configuration"
 msgstr "Lưu cấu hình"
@@ -957,7 +957,7 @@ msgstr "Thay đổi cài đặt này thành ít hơn 3 bước nhảy có thể 
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "Tiện ích mở rộng I2PSnark Bridge v{0} đã lỗi thời, hãy cập nhật lên v{1} tại trang cấu hình"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Nhấp vào nút \"Thêm torrent\" để tìm nạp torrent"
@@ -1187,7 +1187,7 @@ msgstr "Nhập URL hoặc chọn file torrent"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Lỗi khi thêm torrent: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1229,11 +1229,11 @@ msgid "Directory deleted: {0}"
 msgstr "Đã xóa thư mục: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "Đã bật API trình duyệt."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "Không thể mở tiện ích mở rộng I2PSnark Bridge: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1310,7 +1310,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "Xóa file .torrent và các file dữ liệu liên quan"
 
 msgid "Destination"
-msgstr ""
+msgstr "Đích đến"
 
 msgid "Checking"
 msgstr "Đang kiểm tra"
@@ -1319,7 +1319,7 @@ msgid "Allocating"
 msgstr "Phân bổ"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Không thể kết nối với tất cả các trình theo dõi đã được cấu hình"
 
 msgid "Starting"
 msgstr "Bắt đầu"
@@ -1508,7 +1508,7 @@ msgstr "Đã tạo"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Kích thước các tệp thực sự đã tải xuống: {0}, không bao gồm {1} của các tệp đệm BEP 47"
 
 msgid "Added"
 msgstr "Đã thêm"

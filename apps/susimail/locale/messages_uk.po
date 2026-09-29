@@ -238,7 +238,7 @@ msgid "no subject"
 msgstr "без теми"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Немає теки Drafts?"
 
 msgid "Found no valid sender address."
 msgstr "Адреса відправника не дійсна."

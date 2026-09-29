@@ -241,7 +241,7 @@ msgid "no subject"
 msgstr "brez naslova"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Ni mape Drafts?"
 
 msgid "Found no valid sender address."
 msgstr "Veljavnega naslovodajalca ni bilo mogoče najti."

@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "डेटा फ़ोल्डर बनाया नहीं जा सकता"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "अस्थायी डायरेक्टरी के लिए लिखने की अनुमति नहीं है"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "अस्थायी डायरेक्टरी नहीं बनाई जा सकती"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "टॉरेंट डायरेक्टरी के लिए लिखने की अनुमति नहीं है"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "टॉरेंट डायरेक्टरी नहीं बनाई जा सकती"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "निकासी टनल में टनल हॉप रैंडमाइज़ेशन अक्षम कर दिया गया है"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "प्रत्येक टॉरेंट के लिए अलग गंतव्य सक्षम किया"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "प्रत्येक टॉरेंट के लिए अलग गंतव्य अक्षम किया"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "अधिकतम गंतव्य {0} पर बदल दिए गए"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "असीमित गंतव्य पुनर्स्थापित (प्रति टॉरेंट एक)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "टॉरेंट शुरुआत समय का यादृच्छिकीकरण सक्षम किया"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "टॉरेंट शुरुआत समय का यादृच्छिकीकरण अक्षम किया"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "स्टार्टअप विलंब सीमा {0} - {1} पर बदल दी गई"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API कुंजी अपडेट किया गया।"
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "नए टॉरेंट के लिए फ़ाइलें पूर्व आवंटित करना सक्षम।"
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "नए टॉरेंट के लिए फ़ाइलें पूर्व आवंटित करना अक्षम।"
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "मूल फ़ाइल नाम सुरक्षित रखना सक्षम।"
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "मूल फ़ाइल नाम सुरक्षित रखना अक्षम।"
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "प्रति टॉरेंट अधिकतम फ़ाइलें {0} पर बदल दी गई"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "प्रति टॉरेंट अधिकतम फ़ाइलों की संख्या अमान्य: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "तैयार करने के लिए अस्थायी डायरेक्टरी {0} पर बदल दी गई"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "अस्थायी डायरेक्टरी में तैयार करना अक्षम।"
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "टॉरेंट डायरेक्टरी {0} पर बदल दी गई"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "टॉरेंट डायरेक्टरी डेटा डायरेक्टरी पर रीसेट कर दी गई।"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "ओपन ट्रैकर सूची बदल दी गई - टॉरेंट को रीस्टार्ट करना आवश्यक है।"
@@ -302,7 +302,7 @@ msgstr "त्रुटि - मेमोरी की कमी, {0} से ट
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "त्रुटि - {0} से टॉरेंट बनाने में असमर्थ"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "टॉरेंट को निर्माण कर रहे हैं और ट्यूनल खोल रहे हैं"
@@ -396,7 +396,7 @@ msgstr "टॉरेंट हटाया: {0}"
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "{0} में टॉरेंट शुरू हो रहे हैं&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "सचेतन - कॉन्फ़िग्युर्ड डेट�
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "अस्थायी स्टोरेज: सेट किए गए अस्थायी विभाजन पर डाउनलोड के लिए वर्तमान में {0}GB उपलब्ध"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "अस्थायी स्टोरेज: सेट किए गए अस्थायी विभाजन पर डाउनलोड के लिए वर्तमान में {0}MB उपलब्ध"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "चेतावनी - सेट किए गए अस्थायी विभाजन पर केवल {0}MB डाउनलोड के लिए उपलब्ध है"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "I2P ट्यूनल खोल रहे हैं"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "टॉरेंट खोज हल की जा रही है: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P ट्यूनल खोल रहे हैं और सभी टॉरेंट शुरू कर रहे हैं।"
@@ -489,14 +489,14 @@ msgstr "I2P ट्यूनल बंद हो गया।"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "गंतव्य चक्र छोड़ा जा रहा है - {0} सक्रिय डाउनलोड प्रगति पर है"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "गंतव्य चक्र छोड़ा जा रहा है - {0} सक्रिय डाउनलोड प्रगति पर हैं"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "कोई सक्रिय रूप से डाउनलोड हो रहा टॉरेंट नहीं - गंतव्य बदले जा रहे हैं"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "मिनट"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "I2PSnark शुरू होने पर स्वतः शुरू किए गए टॉरेंट सबसे पहले कितनी देर बाद लोड किए जाएं"
 
 msgid "min"
-msgstr ""
+msgstr "न्यूनतम"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "I2PSnark शुरू होने पर स्वतः शुरू किए गए टॉरेंट सबसे देर से कितनी देर बाद लोड किए जाएं"
 
 msgid "max"
-msgstr ""
+msgstr "अधिकतम"
 
 msgid "Data Storage"
 msgstr "डेटा स्टोरेज"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "टॉरेंट और डाउनलोड/साझा की फ़ाइलें संग्रहित की जाती हैं वह डायरेक्टरी"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "अस्थायी डायरेक्टरी"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "वैकल्पिक डायरेक्टरी जहाँ पूरा होने पर डेटा डायरेक्टरी में स्थानांतरित होने से पहले डाउनलोड तैयार रखे जाते हैं। अक्षम करने के लिए खाली छोड़ दें।"
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "टॉरेंट डायरेक्टरी"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr ".torrent फ़ाइलों को डाउनलोड किए गए डेटा से अलग रखने के लिए वैकल्पिक डायरेक्टरी। डेटा डायरेक्टरी में संग्रहीत करने के लिए खाली छोड़ दें।"
 
 msgid "Files readable by all"
 msgstr "सभी के लिए पढ़ने योग्य फ़ाइलें"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "डाउनलोड की फ़ाइलें पहुँचने की अनुमति देने के लिए फ़ाइल प्रवाह सेट करें"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "फ़ाइलें पूर्व आवंटित करें"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "नए टॉरेंट फ़ाइलों को उनके पूरे आकार तक फैलाएं और टॉरेंट शुरू होते ही डिस्क पर स्थान आवंटित करें, ताकि डिस्क भरने से डाउनलोड में बाधा न आए और टुकड़े आने पर विभाजन न हो"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "फ़ाइल नाम सुरक्षित रखें"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "टॉरेंट से मूल फ़ाइल नाम सुरक्षित रखें। अक्षम होने पर, फ़ाइल नामों से अवैध फ़ाइलसिस्टम अक्षर हटा दिए जाते हैं। सक्षम होने पर, मूल फ़ाइल नाम ही उपयोग किए जाते हैं; यदि किसी फ़ाइल नाम में ऐसे अक्षर हों जो आपकी फ़ाइलसिस्टम समर्थन नहीं करती, तो फ़ाइल एक सुरक्षित वैकल्पिक नाम से बनाई जाएगी और एक चेतावनी दिखाई जाएगी"
 
 msgid "Max files per torrent"
 msgstr "प्रति टॉरेंट की अधिकतम फ़ाइलें"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "टंनल सेटिंग"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "इस सत्र के लिए मुख्य गंतव्य (पहचान); इसका DHT, ट्रैकर और ब्लैकलिस्ट प्रति-टॉरेंट गंतव्यों के साथ साझा होते हैं"
 
 msgid "Our destination (identity) for this session"
 msgstr "इस सत्र के लिए हमारा गंतव्य (Identity)"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "मुख्य गंतव्य"
 
 msgid "Dest."
 msgstr "गंतव्य"
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "निकासी"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "बहु-गंतव्य"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "प्रत्येक टॉरेंट के लिए अलग गंतव्य का उपयोग करें, ताकि ट्रैकर और DHT आपके टॉरेंट को एक-दूसरे से न जोड़ सकें। गंतव्य अस्थायी होते हैं और पुनः शुरू करने पर बदल जाते हैं।"
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "अधिकतम गंतव्य"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "जब इस अधिकतम से अधिक टॉरेंट चल रहे हों, तो अतिरिक्त टॉरेंट मेमोरी उपयोग सीमित रखने के लिए यादृच्छिक, परिवर्तनीय आकार के समूहों में गंतव्य साझा करते हैं। शून्य का अर्थ है प्रति टॉरेंट एक गंतव्य।"
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "यादृच्छिक स्टार्टअप विलंब"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "बहु-गंतव्य टॉरेंट शुरुआत को एक यादृच्छिक विलंब के साथ क्रमिक करें ताकि साथ शुरू होने वाले टॉरेंट ट्रैकर या DHT पीयर द्वारा एक-दूसरे से संबंधित न किए जा सकें और सुरंग निर्माण फैलाए जाएं। सभी टॉरेंट को एक साथ तुरंत शुरू करने के लिए अक्षम करें।"
 
 msgid "I2CP host"
 msgstr "I2CP होस्ट"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "I2CP विकल्प"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "ब्राउज़र एकीकरण"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "ब्राउज़र API सक्षम करें"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "loopback या नीचे दी गई अनुमत मेजबानों से CSRF nonce के बिना magnet लिंक और टॉरेंट URL जोड़ने की अनुमति दें"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "अनुमत मेजबान"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "nonce के बिना टॉरेंट जोड़ने के लिए अनुमत होस्टनाम या IP, अल्पविराम से अलग किए गए; loopback हमेशा अनुमत है"
 
 msgid "API key"
-msgstr ""
+msgstr "API कुंजी"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "दूरस्थ पहुँच के लिए वैकल्पिक पासवर्ड, मेजबान अनुमति सूची को बायपास करता है"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "ब्राउज़र हैंडलर स्थापित करें"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "ब्राउज़र हैंडलर अपडेट करें"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "स्थापित I2PSnark Bridge एक्सटेंशन को v{0} में अपडेट करें"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "magnet लिंक जोड़ने के लिए अपने ब्राउज़र में I2PSnark Bridge एक्सटेंशन खोलें; एक्सटेंशन स्वयं को ब्राउज़र में पंजीकृत कर लेता है, राउटर-साइड कोई फ़ाइल नहीं लिखी जाती"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "वह PowerShell इंस्टॉलर डाउनलोड करें जो आपके ब्राउज़र में magnet लिंक और .torrent फ़ाइलें पंजीकृत करता है; I2PSnark Bridge एक्सटेंशन के लिए Firefox-परिवार का ब्राउज़र आवश्यक है"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "वह इंस्टॉलर स्क्रिप्ट डाउनलोड करें जो आपके ब्राउज़र में magnet लिंक और .torrent फ़ाइलें पंजीकृत करती है; I2PSnark Bridge एक्सटेंशन के लिए Firefox-परिवार का ब्राउज़र आवश्यक है"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "ब्राउज़र हैंडलर स्क्रिप्ट डाउनलोड करें"
 
 msgid "Save configuration"
 msgstr "सेटिंग को सहेजें"
@@ -957,7 +957,7 @@ msgstr "इस सेटिंग को 3 हॉप से कम करने 
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "I2PSnark Bridge एक्सटेंशन v{0} पुराना है, सेटिंग पृष्ठ पर v{1} में अपडेट करें"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "टॉरेंट प्राप्त करने के लिए \"टॉरेंट जोड़ें\" बटन पर क्लिक करें"
@@ -1189,7 +1189,7 @@ msgstr "URL दर्ज करें या टॉरेंट फ़ाइल 
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "टॉरेंट जोड़ने में त्रुटि: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1231,11 +1231,11 @@ msgid "Directory deleted: {0}"
 msgstr "डायरेक्टरी हटाई गई: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "ब्राउज़र API सक्षम।"
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "I2PSnark Bridge एक्सटेंशन खोलने में विफल: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1312,7 +1312,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr ".torrent फ़ाइल और संबंधित डेटा फ़ाइलें हटाएं"
 
 msgid "Destination"
-msgstr ""
+msgstr "गंतव्य"
 
 msgid "Checking"
 msgstr "तालीम"
@@ -1321,7 +1321,7 @@ msgid "Allocating"
 msgstr "अल्लोकेशन"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "सभी सेट किए गए ट्रैकरों से कनेक्ट करने में विफल"
 
 msgid "Starting"
 msgstr "शुरू हो रहा है"
@@ -1513,7 +1513,7 @@ msgstr "बनाया"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "वास्तव में डाउनलोड की गई फ़ाइलों का आकार: {0}, BEP 47 पैडिंग फ़ाइलों के {1} को छोड़कर"
 
 msgid "Added"
 msgstr "ोड़ा"

@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Andmekausta ei saa luua"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Ajutise kataloogi kirjutamise õigused puuduvad"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "Ajutist kataloogi ei saa luua"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Torrenti kataloogi kirjutamise õigused puuduvad"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "Torrenti kataloogi ei saa luua"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Tunnelihüpiste juhuslik kättesaadavus väljaminevatel tunnelitel on keelatud"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Iga torrendi jaoks eraldi sihtkohtade kasutamine on lubatud"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Iga torrendi jaoks eraldi sihtkohtade kasutamine on keelatud"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Maksimaalne sihtkohtade arv vahetatud {0}ks"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "Piiramatud sihtkohtade arv taastatud (üks iga torrendi kohta)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Torrenti algusaegade juhuslikustamine on lubatud"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Torrenti algusaegade juhuslikustamine on keelatud"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Käivituse viivituse vahemik vahetatud vahemikku {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API võti uuendatud."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Failide eeljaotamine uutele torrentidele on lubatud."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Failide eeljaotamine uutele torrentidele on keelatud."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Algse failinimede säilitamine on lubatud."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Algse failinimede säilitamine on keelatud."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Maksimaalne failide arv torrendi kohta vahetatud {0}ks"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Vigane maksimaalne failide arv torrendi kohta: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Ettevalmistamise ajutist kataloogi muudetud {0}ks"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Ajutise kataloogi ettevalmistamine on keelatud."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Torrenti kataloog muudetud {0}ks"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Torrenti kataloog lähtestatud andmekataloogiks."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Avalike trackerite loetelu on muutunud - torrenti tuleb taaskäivitada, et muudatus jõustuks."
@@ -302,7 +302,7 @@ msgstr "VIGA - Mälu puudus, torrenti ei saa luua {0} alusel"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "VIGA - torrenti ei saa luua {0} alusel"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Torrentsi algseadistamine ja tünnelite avamine"
@@ -396,7 +396,7 @@ msgstr "Torrent eemaldatud: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Torrentide käivitamine {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Hoiatus - Vaid {0}MB on saadaval allalaadimiseks seadistatud andmekihis"
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Vahetuskogu: {0}GB on praegu saadaval allalaadimiseks seadistatud vahetupartitsioonil"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Vahetuskogu: {0}MB on praegu saadaval allalaadimiseks seadistatud vahetupartitsioonil"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Hoiatus - Vaid {0}MB on saadaval allalaadimiseks seadistatud vahetupartitsioonil"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "I2P tünneli avamine"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Torrendi otsingu lahendamine: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P tünneli avamine ja kõik torrentid käivitatakse."
@@ -489,14 +489,14 @@ msgstr "I2P tünnel sulgetud."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Sihtkohtade tsükkel jäetakse vahele - {0} aktiivne allalaadimine on käigus"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Sihtkohtade tsükkel jäetakse vahele - {0} aktiivset allalaadimist on käigus"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Aktiivseid allalaadimisi pole - vahetatakse sihtkohti"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "minutit"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "Kui pikalt kulub enne, kui I2PSnark käivitumisel automaatselt käivitatud torrentid laaditakse, vähimalt"
 
 msgid "min"
-msgstr ""
+msgstr "miin"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "Kui pikalt kulub enne, kui I2PSnark käivitumisel automaatselt käivitatud torrentid laaditakse, kõige rohkem"
 
 msgid "max"
-msgstr ""
+msgstr "maks"
 
 msgid "Data Storage"
 msgstr "Andme salvestamine"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Kataloog, kus torrentid ja allalaaditud/jagatud failid on salvestatud"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Vahetukaust"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "Valikuline kaust, kus allalaadimised valmistatakse ette, enne kui need lõpetamisel andmekausta teisaldatakse. Jäta tühjaks, et see välja lülitada."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Torrentikaust"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "Valikuline kaust .torrent-failide hoidmiseks eraldi allalaaditud andmetest. Jäta tühjaks, et hoida andmekaustas."
 
 msgid "Files readable by all"
 msgstr "Kõigile lugemiseks kättesaadavad failid"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Määra faili õigused nii, et muud kohalikud kasutajad saaksid allalaaditud failidele juurde pääseda"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Eeljaota failid"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Laienda uued torrent-failid nende täielikule suurusele ja eralda koht kettal kohe torrendi käivitumisel, et vältida kettaruumi täitumisest tingitud allalaadimiste katkemist ja vältida fragmenteerumist lõikude saabumisel"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Säilita failinimed"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Säilita torrendi algsed failinimed. Kui see on keelatud, eemaldatakse failinimedest failisüsteemi jaoks keelatud märgid. Kui lubatud, kasutatakse algseid failinimesid; kui failinimes leidub sinu failisüsteemi poolt toetamata märke, loodakse fail ohutu varunimega ja kuvatakse hoiatus"
 
 msgid "Max files per torrent"
 msgstr "Maksimaalne failide arv torrentis"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Tunneli seadistused"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Selle sessiooni põhisihtkoht (identiteet); selle DHT, tracker ja musta loend on ühised iga torrendi sihtkohtadega"
 
 msgid "Our destination (identity) for this session"
 msgstr "Meie sihtkoht (identiteet) selles sessios"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Põhisihtkoht."
 
 msgid "Dest."
 msgstr "Siht"
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Väljaminev"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Mitmesihtkohtne"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "Kasuta iga torrendi jaoks eraldi sihtkohta, et trackerid ja DHT ei saaks sinu torrente omavahel seostada. Sihtkohad on ajutised ja muutuvad taaskäivitamisel."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Maksimaalne sihtkohtade arv"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Kui töötab rohkem torrente kui see maksimaalne arv, jagavad ülejäänud torrentid sihtkohti juhuslikes muutuva suurusega rühmades, et piirata mälukasutust. Null tähendab üht sihtkohta iga torrendi kohta."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Juhuslik käivituse viivitus"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Hajuta mitme sihtkohaga torrentide algused juhusliku viivitusega, et koos käivituvaid torrente ei saaks trackerid ega DHT-peerid omavahel seostada ning tunnelite ehitused jaotuksid. Keela, et käivitada kõik torrentid kohe kobaras."
 
 msgid "I2CP host"
 msgstr "I2CP host"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "I2CP valikud"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Brauseri integreerimine"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Luba brauseri API"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Luba magnet-linkide ja torrent-URL-ide lisamine ilma CSRF nonce'ita, loopbackist või allpool nimetatud lubatud hostidest"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Lubatud hostid"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Kommaga eraldatud hostinimed või IP-aadresid, millelt on lubatud torrente lisada ilma nonce'ita; loopback on alati lubatud"
 
 msgid "API key"
-msgstr ""
+msgstr "API võti"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Valikuline parool kaugligipääsuks, mis annab mööda lubatud hostide loendi"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Paigalda brauseri käsitlus"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Uuenda brauseri käsitlus"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Uuenda paaldatud I2PSnark Bridge laiend versiooniks v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Ava I2PSnark Bridge laiend oma brauseris magnet-linkide lisamiseks; laiend registreerib end brauseriga, ruuteri poolele faile ei kirjutata"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Laadi alla PowerShelli paaldaja, mis registreerib magnet-linkid ja .torrent-failid sinu brauseriga; I2PSnark Bridge laiend nõuab Firefoxi perekonna brauserit"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Laadi alla paaldaja skript, mis registreerib magnet-linkid ja .torrent-failid sinu brauseriga; I2PSnark Bridge laiend nõuab Firefoxi perekonna brauserit"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Laadi alla brauseri käsitluse skript"
 
 msgid "Save configuration"
 msgstr "Salvesta seadistused"
@@ -957,7 +957,7 @@ msgstr "Selle seadistuse muutmine vähem kui 3 hüppeni võib kiirust parandada 
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "I2PSnark Bridge laiend v{0} on vananenud, uuenda see v{1}-ks seadistuste lehel"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Vajuta \"Lisa torrent\" nuppu torrenti hankimiseks"
@@ -1189,7 +1189,7 @@ msgstr "Sisesta URL või vali torrenti fail"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Viga torrenti lisamisel: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1231,11 +1231,11 @@ msgid "Directory deleted: {0}"
 msgstr "Kaust kustutatud: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "Brauseri API lubatud."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "I2PSnark Bridge laiendi avamine ebaõnnestus: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1312,7 +1312,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "Kustuta .torrent fail ja seotud andmefailid"
 
 msgid "Destination"
-msgstr ""
+msgstr "Sihtkoht"
 
 msgid "Checking"
 msgstr "Kontrollimine"
@@ -1321,7 +1321,7 @@ msgid "Allocating"
 msgstr "Reserveerimine"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Ebaõnnestus ühendada kõik seadistatud trackerid"
 
 msgid "Starting"
 msgstr "Algamine"
@@ -1513,7 +1513,7 @@ msgstr "Loodud"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Tegelikult allalaaditud failide suurus: {0}, välja arvatud {1} BEP 47 täitefaili"
 
 msgid "Added"
 msgstr "Lisa"

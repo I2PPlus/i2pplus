@@ -570,7 +570,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Uyarı: I2P hizmeti manuel başlatmaya ayarlanamadı"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Uyarı: I2P+ kurulum dizini bulunamadı"
 
 msgid "Configuration saved successfully"
 msgstr "Yapılandırma kaydedildi"
@@ -1440,7 +1440,7 @@ msgid "Ban peer until restart"
 msgstr "Yeniden başlatılana dek eşi yasakla"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "configpeer ile elle yasaklandı"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3541,10 +3541,10 @@ msgid "Low Latency"
 msgstr "Düşük Gecikme"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "UDP taşımasının bildirdiği yeniden iletilen paketler / gönderilen paketler"
 
 msgid "Loss"
-msgstr ""
+msgstr "Kayıp"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Tunnels akranı katılmayı kabul etti"
@@ -3599,62 +3599,62 @@ msgstr "Peer yapılandır"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "RAM’de {0} / diskte {1}"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Yüksek Sınır"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Gösterilen"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "{1} profilden {0} tanesi gösteriliyor"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "{0} eskimiş profil gizlendi"
+msgstr[1] "{0} eskimiş profil gizlendi"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Gösterilen toplam profillerin oranı"
 
 msgid "peers"
 msgstr "akranlar"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Gösterilen katman profillerinin oranı"
 
 msgid "Window"
-msgstr ""
+msgstr "Pencere"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Hızlı RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "Hızlı katman üyeliği için azami RTT (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Hızlı katman eşlerinin ortalama kaybı (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Yüksek kapasiteli eşlerin ortalama kaybı (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Görüntüleme kesim süresi içinde duyuldu"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Aramalar"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Arama başarı oranı"
 
 msgid "Stores"
-msgstr ""
+msgstr "Depolamalar"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Depolama başarı oranı"
 
 msgid "Definitions"
 msgstr "Tanımlar"
@@ -3725,25 +3725,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "yakın zamanda kendileri hakkında bilgi veren eş sayısı"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Bilinen taşkın düğümleri"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Hatasız"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Arama hatası yok (1sa)"
 
 msgid "Response"
-msgstr ""
+msgstr "Yanıt"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Arama yanıt süresi (1sa)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "1sa İletişim"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "1 saat içinde iletişim kuruldu"
 
 msgid "1h Fail Rate"
 msgstr "1s Kayıp Oranı"
@@ -4729,10 +4729,10 @@ msgid "Slow Start Window Cap"
 msgstr "Yavaş Başlangıç Pencere Tavanı"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Azami Gelen Arabellek"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Azami Eşzamanlı Akışlar"
 
 msgid "Max SYN Sends"
 msgstr "Maksimum SYN Gönderimi"
@@ -4747,7 +4747,7 @@ msgid "Max Retransmissions"
 msgstr "Azami Yeniden İletim Sayısı"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Alıcı İşçi İş Parçacıkları"
 
 msgid "Writer Queue Size"
 msgstr "Yazıcı Kuyruk Boyutu"
@@ -4831,16 +4831,16 @@ msgid "Search Timeout"
 msgstr "Arama Zaman Aşımı"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Arama Sınırı"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Yeniden Yayın Penceresi"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Yeniden Yayın Genişliği"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Keşif Genişliği"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "LeaseSet Arama Zaman Aşımı"
@@ -4867,7 +4867,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "En Yüksek Yüksek Kapasiteli Eş"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Kayıplı Eş Düşürme Eşiği"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Tünel Kurulum İsteği Zaman Aşımı"
@@ -4894,25 +4894,25 @@ msgid "Max Delay Between Tests"
 msgstr "Testler Arası En Yüksek Gecikme"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Tünel Testi Hata Penceresi"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Tünel Testi Hata Penceresi Alt Sınırı"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "İlk Atlama Hatası Soğuma Süresi"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "İlk Atlama Hatası Eşiği"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Gelen Tıkanıklık Eşiği"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Eskimiş Oluşturma Budama Eşiği"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Eşzamanlılık Kısma Eşiği"
 
 msgid "NTCP Reader Threads"
 msgstr "NTCP Okuyucu İş Parçacıkları"
@@ -4924,7 +4924,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "NTCP Pomplayıcı Emniyet Aralığı"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "NTCP Pompalayıcı Azami Boşta Döngü Hızı"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Azami Eşzamanlı Eş İletisi"
@@ -4996,7 +4996,7 @@ msgid "Max Window Size"
 msgstr "Maksimum Pencere Boyutu"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Bağlanma Zaman Aşımı Çarpanı"
 
 msgid "Max Message Queue Age"
 msgstr "Azami İleti Kuyruğu Yaşı"
@@ -5014,16 +5014,16 @@ msgid "Server Handler Threads"
 msgstr "Sunucu İşleyici İş Parçacıkları"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Sunucu İşleyici Kuyruğu Kapasitesi"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Sunucu Tünel Başına Varsayılan İş Parçacıkları"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "G/Ç Aktarım İş Parçacıkları"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "G/Ç Duraklama Zaman Aşımı"
 
 msgid "Build Handler Threads"
 msgstr "Kurulum İşleyici İş Parçacıkları"
@@ -5032,7 +5032,7 @@ msgid "Client Runner Max Threads"
 msgstr "İstemci Çalıştırıcı Azami İş Parçacığı"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "İstemci Varsayılan Azami Bağlantı"
 
 msgid "Participating Throttle Min"
 msgstr "Katılımcı Kısıtlama En Düşük"
@@ -5110,7 +5110,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Test Edilmemiş Tünel Kapağı Çarpanı"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Tünel IV Filtre Boyutu"
 
 msgid "Message Processing Throttle"
 msgstr "Mesaj İşleme Kısıtlaması"
@@ -5161,10 +5161,10 @@ msgid "Max congestion window during slow start."
 msgstr "Yavaş başlangıç sırasında azami tıkanıklık penceresi."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Bağlantı başına gelen arabellek sınırı (bayt)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Hedef başına eşzamanlı akışlara dinamik sınır."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "El sıkışmadan vazgeçmeden önce toplam SYN girişimi."
@@ -5179,7 +5179,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Akış bırakılmadan önceki yeniden iletimler."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Her akış oturumu başına gelen paket işleme iş parçacıkları."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Bir akış bırakılmadan önceki azami boşta süre (ms)."
@@ -5269,16 +5269,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Eş başına arama zaman aşımı (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Her yinelemeli arama için kesin süre (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Kira yeniden yayın depolama iletilerinin ömrü (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Bir aramadan sonra yeniden yayınlanan kiralayı alan azami eş sayısı."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Her döngü için eşzamanlı keşif aramaları."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "LeaseSet aramaları için uyarlamalı son tarih tavanı (ms)."
@@ -5305,7 +5305,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Yönlendirme tablosundaki en yüksek yüksek kapasiteli eş."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Bir eşi hızlı katmanlardan düşüren kayıp oranı (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Kurulum yanıtı zaman aşımı (ms)."
@@ -5332,25 +5332,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Tünel testleri arasındaki en yüksek aralık (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Bir tünel testinin başarısız sayılmadan önce alabileceği azami süre (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Tünel testi hata penceresi için alt sınır (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "İlk atlama hatalarından sonra bir eşin atlanacağı süre (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Bir eş soğuma süresi boyunca atlanmadan önceki hata sayısı."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Oluşturmaların kısıldığı gelen tünel sayısının alt sınırı."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Bir oluşturmayı budamadan önce zaman aşımı bütçesinin kuyrukta bekleme oranı (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Eşzamanlı oluşturma azaltmasını tetikleyen zaman aşımı oranı (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Gelen NTCP verisini çözen iş parçacıkları."
@@ -5362,7 +5362,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Takılan NTCP pompaları için emniyet tarama aralığı (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Saniyedeki boşta NTCP pompalama yinelemesi sınırı (döngü/sn)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "UDP eşi başına uçuşan ileti sınırı."
@@ -5419,7 +5419,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT tahmini için üst sınır (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Her istemcinin bağlanma zaman aşımını ağ RTT'sine göre ölçekler (%30-200)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "İlk yeniden iletimten önceki gecikme (ms)."
@@ -5443,16 +5443,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Gelen I2PTunnel bağlantıları için işleyici iş parçacıkları."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Serbest bir sunucu işleyici iş parçacığı bekleyebilecek gelen bağlantı sayısı."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Her sunucu tüneli için sunucu işleyici iş parçacıklarının varsayılan sınırı."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Sunucu→İstemci veri aktarımı için ayrılmış havuz, işleyici iş parçacıklarını bekletmez."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Sunucu→İstemci veri aktarımları için duraklama zaman aşımı (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Gelen kurulum isteği işleme için iş parçacığı havuzu."
@@ -5461,7 +5461,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "İstemci vekil iş parçacığı havuzu tavanı."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Varsayılan istemci bağlantı sınırı."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Herhangi bir eşin tutabileceği en düşük aktarım tüneli."
@@ -5539,7 +5539,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tünel sunucu işleyici iş parçacıkları için TCP soket bağlantı zaman aşımı (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Tünel IV yinelenen eleme filtresinin üssü: iki arabelleğinden her biri 2^n bit tutar, bu nedenle çift 2^(n-2) bayt maliyetindedir. Gerçekte görülen IV'lerden boyutlandırılır; fazla küçük olması, iyi tünel verilerinin düşürülmesi olarak ortaya çıkar."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Aktarımı reddetmeden önceki maksimum ortalama mesaj gecikmesi (ms)."
@@ -5721,7 +5721,7 @@ msgid "Endpoint"
 msgstr "Varış noktası"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Test başarılı"
@@ -6132,10 +6132,10 @@ msgid "Additional Router Caps"
 msgstr "Ek Yönlendirici Sınırlamaları"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Kapasite grupları ekleyin, boşluk veya virgülle ayırın, örn. LUf,PUG. Dışlamak için ! kullanın: G!f, G yönlendiricilerini taşkın düğüm değillerse yasaklar"
 
 msgid "Misc"
-msgstr ""
+msgstr "Diğer"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Sorgulara yanıt vermeyen Flood düğümü eşlerini yasaklayın (başarısızlık oranı >%95)"
@@ -6156,10 +6156,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Aşırı tünel isteklerini yasakla"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Etkinleştirildiğinde, ağdan çözümlenen ve doğrudan bağlı olmadığımız eşler - hem aktarım sonraki atlamaları hem de istemci tüneli uç noktaları - politik yasaklarına tabidir. Devre dışı bırakıldığında, bu tür eşler doğrudan bağlı olmadıkları sürece muaftır."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Sonraki atlama eşlerini yasakla"
 
 msgid "Clear all bans"
 msgstr "Tüm yasaklamaları temizle"
@@ -6302,10 +6302,10 @@ msgid "I2CP Port"
 msgstr "I2CP Kapı Numarası"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Yerel olarak barındırılan hizmetlere erişirken ağı atlatma"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Loopback'i Devre Dışı Bırak"
 
 msgid "Require username and password"
 msgstr "Kullanıcı adı ve parola kullanılsın"
@@ -7484,13 +7484,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Tünel oluşturma işlemi sırasında eşzamanlı sonraki atlama RouterInfo aramaları için taban. Az sayıda tünel katılıyor olsa bile minimum düzeyde arama eşzamanlılığı sağlar. [Varsayılan 10 (yavaş sistemlerde 4)]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Tünel oluşturma işlenirken eşzamanlı sonraki atlama RouterInfo aramaları için üst sınır. Yuvalar bireysel istekleri değil, farklı sonraki atlamaları sayar: aynı sonraki atlamayı paylaşan oluşturmalar tek bir aramayı yeniden kullanır. Çekirdek sayısına göre ölçeklenmez; aramalar ağa bağlı beklemelerdir. [Varsayılan 64 (yavaş sistemlerde 32)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Başlangıçtan sonra eşzamanlı arama sınırını ölçeklendirmek için kullanılan mevcut katılan tünellerin yüzdesi. Etkin sınır, minLookupLimit ile maxLookupLimit arasında sabitlenir. [Varsayılan 40 (yavaş sistemlerde 15)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Tüm arama yuvaları meşgulken sonraki atlaması çözümlenen tünel oluşturmalarının tutulduğu kuyruğun derinliği. Boyut, dolu bir kuyruğun oluşturan yönlendiricinin oluşturma zaman aşımı içinde boşalması için ayarlanır; bu bütçeden eski girdiler derinlikten bağımsız olarak eskimiş sayılıp atılır. [Varsayılan 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Tünel oluşturma isteği zaman damgaları için izin verilen maksimum gelecek sapması. Bundan daha fazla gelecekte zaman damgasına sahip istekler, potansiyel tekrar saldırıları olarak reddedilir. [Varsayılan 300000 (5 dakika)]"
@@ -7598,7 +7598,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Keşif eş seçimini kısıtlamadan önce yönlendirici başlangıcında gereken minimum aktif eş sayısı. Erken başlangıçta yönlendirici eş kalitesi konusunda daha hoşgörülüdür. [Varsayılan 6]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Alınan bir SYN'in kabul kuyruğunda accept() tarafından alınana kadar bekleyebileceği azami süre (milisaniye). accept() gecikirse (dolu barındırılan sunucu) bağlantı bu pencereden sonra reddedilir, bu nedenle daha yüksek bir değer kısa süreli duraklamalara tolerans sağlar. Yapılandırılan değer yeniden başlatmadan uygulanır. [Varsayılan 60000 (60 saniye)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Bu tünele özgü ayar, yönlendirici tarafından barındırılan sunuculara gönderilen ping yanıtlarını etkinleştirmenizi veya devre dışı bırakmanızı sağlar. Ping''leri devre dışı bırakmak için Tünel Yöneticisi''nde sunucunun yapılandırmasına ilişkin <i> Özel Seçenekler </i> bölümüne <code> i2p.streaming.answerPings=false </code> satırını eklemeniz gerekir."
@@ -7607,22 +7607,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Hiçbir açık bağlantı zaman aşımı ayarlanmadığında varsayılan maksimum akış gecikmesi (milisaniye). [Varsayılan 10000 (10 saniye)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Aynı erişilemeyen hedefe yapılan bağlantı denemeleri arasındaki bekleme süresi (milisaniye). Erişilemeyen eşlere sürekli istek gönderilmesini engeller. [Varsayılan 5000 (5 saniye)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Bir akış bağlantısı kesildikten sonra geciken paketlerin hâlâ onaylandığı TIME-WAIT süresi (milisaniye). Son ACK'lerin gecikebileceği yüksek gecikmeli yollar için artırın. [Varsayılan 120000 (2 dakika)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Kısıtlanmış bir hedefe fazla paketleri sessizce düşürmeden önce yanıt verme sayısı. Bağlantı fırtınalarının yönlendiriciyi bunaltmasını önler. [Varsayılan 3]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Bu ayar etkinleştirildiğinde, yönlendiricinin barındırdığı ping etkin tüm sunucular için 50ms'ye kadar rastgele bir pong gecikmesi ekler. Varsayılan olarak devre dışıdır. Yeni pong'lara hemen uygulanır, yeniden başlatma gerekmez."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Yeni akış bağlantıları için başlangıç tıkanıklık penceresi boyutu (paket olarak). Daha büyük bir pencere bağlantıları daha hızlı başlatır ancak tıkanık yollarda daha fazla yeniden iletime yol açabilir. [Varsayılan 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Akış bağlanma zaman aşımı için üst sınır sabitlemesi. Bağlantı başına zaman aşımının bu tavanı aşmasını engeller. Çok yüksek gecikmeli uzak erişim için artırın. Bir istemci tünelinin gelişmiş istemci seçeneklerinde aynı özellik ayarlanarak bağlantı bazında geçersiz kılınabilir (örn. IRC istemci tüneli varsayılan olarak 300000 kullanır). [Varsayılan 75000 (75 saniye)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Bir eşe ping atarken pong yanıtı için beklenecek maksimum süre (milisaniye). [Varsayılan 300000 (5 dakika)]"
@@ -7631,43 +7631,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Bu ayar, etkinleştirildiğinde, <code> i2p.streaming.enablePongDelay </code> de etkinleştirilmişse, ping özellikli sunucular için getirilen maksimum ek rastgele pong gecikmesini değiştirir. Açıkça ayarlanmadığı sürece varsayılan değer olan 50 ms kullanılacaktır."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Sunucu kabul kuyruğundaki bekleyen bağlantıların (SYN'ler ve kısmi paketler) azami sayısı. Kuyruk dolduğunda yeni SYN'lere sessizce düşürülmek yerine bir RESET gönderilir (istemci yeniden deneyebilir), bu da istemcinin reddedildiğinden haberdar olmasını sağlar. [Varsayılan 256 (yavaş sistemlerde 128)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Maksimum yeniden iletim gecikmesi (milisaniye). Geri çekilmeden bağımsız olarak yeniden iletim aralığı bu değeri aşmaz. Tıkalı yollarda yeniden denemeler arasında daha uzun süreye izin vermek için artırın. [Varsayılan 30000 (30sn)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Bir bağlantıdan vazgeçmeden önceki azami paket yeniden iletim sayısı. Daha yüksek değerler kayıplı bağlantılarda güvenilirliği artırır ancak hata algılamayı geciktirir. [Varsayılan 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Üstel geri çekilmeden (ikiye katlama) sonra maksimum Yeniden İletim Zaman Aşımı (milisaniye). Şiddetli tıkanıklık sırasında gönderenin yeniden iletim denemeden önce ne kadar bekleyeceğini sınırlar. [Varsayılan 30000 (30sn)]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Akış bağlantıları için milisaniye cinsinden azami gidiş-dönüş süresi. Ağ bozulmalarından sonra patolojik zaman aşımı değerlerini önlemek için hesaplanan RTT'yi sınırlar. [Varsayılan 10000 (10 saniye)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Akış bağlantıları için azami yavaş başlangıç penceresi boyutu. Ağın aşırı yüklenmesini önlemek için yavaş başlangıç sırasındaki tıkanıklık penceresini sınırlar. [Varsayılan 256 (yavaş sistemlerde 32)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Akış bağlantıları için azami tıkanıklık penceresi boyutu (paket olarak). Tek bir akışın azami verimini sınırlar. [Varsayılan 512 (yavaş sistemlerde 384)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Minimum yeniden iletim gecikmesi (milisaniye). Paketler bu aralıktan daha hızlı yeniden gönderilmez. Düşük değerler kayıplı bağlantılarda daha hızlı kurtarmaya izin verir. [Varsayılan 100ms]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Aşağıdaki akış istek eşiklerini aşan uzak hedeflere uygulanan geçici otomatik yasağın dakika cinsinden süresi. Yasaklanan hedeflere yasak süresi boyunca tüm yeni gelen bağlantılar reddedilir. Temizleyici bu değeri her 60 saniyede bir yeniden okur, bu nedenle çalışma zamanında <a href=/configadvanced>Gelişmiş Yapılandırma sayfasından</a> değiştirilebilir. Otomatik yasağı tamamen devre dışı bırakmak için 0 olarak ayarlayın. [Varsayılan 5 (5 dakika)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Bir uzak hedeften gelen, hareketli pencere içindeki azami gelen SYN reddi sayısı; bu sınır aşıldığında otomatik yasak tetiklenir. Red sayacı sıfırlanmak yerine her 60 saniyede yarıya iner, bu nedenle tek seferlik patlamalar sönerken sürekli taşmalar birikir. [Varsayılan 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Bir uzak hedeften <code>tempBanSynRate</code> penceresi içinde izin verilen azami gelen SYN sayısı; bu sınır aşıldığında bir patlama cezası kaydedilir. İlk ceza yalnızca bir uyarı günlüğü yazar; 60 saniye içindeki ikinci ceza otomatik yasağı tetikler. Bu iki cezali kapı, meşru bir sayfa yükleme patlamasının geçmesine izin verirken, red sayacını boğacak sürekli bağlantı taşmalarını yakalar. [Varsayılan 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "SYN patlaması denetimi için milisaniye cinsinden zaman penceresi. Tek bir hedeften bu pencerede <code>tempBanSynBurst</code> sayısından fazla SYN alınırsa bir patlama cezası kaydedilir; 60 saniye içindeki ikinci ceza otomatik yasağı tetikler. [Varsayılan 1000 (1 saniye)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Tuner'ın tepkisel eşzamanlı akış sınırı için üst tavanı. Yönlendiricinin Tuner'ı talebe, reddedilmelere ve yönlendirici sağlığına göre hedef başına eşzamanlı akış sınırını otomatik olarak ayarlar, ancak bir hedefi kendi tünel başına <code>i2p.streaming.maxConcurrentStreams</code> ayarının üzerine asla çıkaramaz. Bu değer, geçersiz kılmanın Tuner tarafından ne kadar yükseltilebileceğini sınırlar. Yüksek trafikli hizmetler barındırıyor ve Tuner sınırı yeterince yükseğe çıkaramıyorsa bunu artırın. [Varsayılan 1024, aralık 64–8192, yeniden başlatma gerekir]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Otomatik LeaseSet yeniden yayınları arasındaki aralık (milisaniye). Yüksek değerler netdb trafiğini azaltır ancak güncelliğini yitirmiş kira bilgilerine neden olabilir. [Varsayılan 300000 (5 dakika)]"
@@ -7676,7 +7676,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Proaktif LeaseSet yeniden yayını için eşik (milisaniye). Bir kira bu pencere içinde sona eriyorsa, LeaseSet bir sonraki periyodik döngüyü beklemek yerine hemen yeniden yayınlanır. [Varsayılan 180000 (3 dakika)]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Yönlendiricinin kabul edeceği eşzamanlı I2CP istemci oturumlarının azami sayısı. [Varsayılan 1536 (yavaş sistemlerde 768)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "true olarak ayarlandığında, yerel-yerel geri döngü teslimatını devre dışı bırakır ve tüm trafiği tünellerden geçmeye zorlar (giden tünel → ağ → gelen tünel → yerel hedef). Kaynak ve hedef aynı yönlendiricide olduğunda tünel yönlendirme davranışını test etmek için kullanışlıdır. [Varsayılan olarak devre dışı]"
@@ -7703,55 +7703,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "eepget''in vazgeçmesinden önceki maksimum ardışık sıfır-veri aktarım hatası sayısı, yeniden denemeler kalsa bile. Aktarımlar hiç veri almadan başarısız olursa artırın. [Varsayılan 20]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "eepget yeniden deneme denemeleri arasındaki sabit gecikme (milisaniye). Kararsız bir kaynakta yükü yaymak için -1 değerini (temel 5sn ve en fazla 10sn sapma) kullanın. 0 değerleri anında yeniden denemeye neden olur. [Varsayılan -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Etkinleştirildiğinde, eepget HTTPS getirmeleri için ana adlarını DNS-over-HTTPS ile çözer ve aramaları yerel dinlemeden korur. Bir vekil üzerinden getirme yapıldığında veya ana makine bir IP adresi olduğunda atlanır. [Varsayılan true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar, birkaç torrent aynı anda başladığında veya birlikte yeniden kontrol edildiğinde depolaması aynı anda kontrol edilen azami torrent sayısını tanımlar; bu, başlangıçta veya bir çöküşten sonra disk G/Ç fırtınasını sınırlar. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan 4, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Bu ayar, bir torrent indirirken veya oluştururken I2PSnark'ın torrent başına izin vereceği azami dosya sayısının yapılandırılmasını sağlar. Bu değerin varsayılan 2000 dosyadan belirgin biçimde artırılması, işletim sisteminin izin vereceği azami açık dosya sayısını artırmak için ana sistemde ek yapılandırma gerektirebilir (örn. Linux'ta <code>ulimit -n</code>). Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin veya I2PSnark yapılandırma sayfasında ayarlayın; sonradan eklenen torrentler için geçerlidir."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar etkinleştirildiğinde, çalışan tüm torrentleri düzenli aralıklarla yeniden başlatır; böylece hedefleri taze kimliklere döner ve yönlendiricinin IP adresi ile torrentlerin hedefleri arasındaki uzun süreli bağlantı izleyicilerde ve DHT'de kopar. Döngü 3 saatte bir ve 1 ila 60 dakikalık rastgele bir gecikmeyle çalışır, herhangi bir torrent etkin olarak indirilirken atlanır ve yalnızca çalışmakta olan torrentleri yeniden başlatır. Hedefler zaten geçicidir ve her yeniden başlatmada değişir; bu, bunu bir çalışma boyunca uzatır. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan true, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Bu ayar, istemci kimliği taklidini denetler: izleyici eş kimliği ve User-Agent, BitTorrent el sıkışma eş kimliği, uzantı el sıkışma istemci adı ve ağ tohumu getirmeleri; tümü I2PSnark yerine seçilen iyi bilinen istemci olarak kendini gösterir. Çoklu hedef modunda her hedef havuzuna varsayılan olarak kendi rastgele istemcisi atanır; tek hedef modunda, bir istemci adı veya \"random\" ayarlanmadıkça I2PSnark kendisi olarak tanımlanır. Tüm modlarda rastgele seçimi zorlamak için \"random\", çoklu hedef modunda bile klasik kimliği korumak için \"i2psnark\" ya da her zaman belirli bir istemciyi taklit etmek için bir istemci adı ayarlayın. Sürüm dizeleri güncel üst sürümlere sabitlenmiştir ve eş kimliği, User-Agent ile uzantı el sıkışması boyunca tutarlıdır. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan, çoklu hedef modunda havuz başına rastgeledir; sonradan başlatılan torrentler için geçerlidir]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Bu ayar, <code>i2psnark.clientId</code> için rastgele seçimle seçilen istemcileri isteğe bağlı olarak bilinen istemci adlarının virgülle ayrılmış bir alt kümesiyle sınırlar; bilinmeyen adlar yok sayılır ve boş bir değer tüm desteklenen istemcilerden seçim yapar. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan ayarlanmamış, sonradan başlatılan torrentler için geçerlidir]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar etkinleştirildiğinde, parçalanmayı azaltmak için bir indirme başladığında dosyaların tam boyutlarını diskte önceden ayırır. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan true, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Bu ayar etkinleştirildiğinde, I2PSnark tarafından oluşturulan yeni torrentlere BEP 47 dolgu dosyaları ekler, böylece son dosya dışındaki her dosya bir parça sınırında biter. Dolgulu torrentlerin indirilmesi ve doğrulanması etkilenmez. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan false; yapılandırma dosyası her 30 saniyede bir yeniden okunur ve değişen ayarlar yeniden başlatmadan uygulanır]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar etkinleştirildiğinde, doğru alfabetik sıra için torrent adlarını yapılandırılmış dile göre sıralar. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan false, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar, özel izleyici olarak değerlendirilen izleyici duyurma URL'lerinin virgülle ayrılmış bir listesini tanımlar; bunları kullanan torrentler DHT veya PEX üzerinden diğer eşlerle paylaşılmaz. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar, yerleşik listeyi geçersiz kılarak yeni torrentler için gösterilen varsayılan izleyici listesindeki virgülle ayrılmış ad,url çiftlerini tanımlar. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar etkinleştirildiğinde, istediklerinin çoğunu iptal eden eşleri yasaklar. Bir eş toplamda en az 5 MB istediği ve iptal ettiği andan itibaren, istediği baytların %90'ından fazlasını iptal eden bir iptal oranı o eşi <code>i2psnark.banDiscardPeriod</code> dakika boyunca yasaklar (hem gelen hem giden bağlantılarda reddedilir). Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan true, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar, aşırı iptal oranına sahip eşlere uygulanan yasağın dakika cinsinden süresini tanımlar. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan 60, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Bu ayar, I2PSnark web arayüzü ileti alanında tutulan azami ileti sayısını tanımlar. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan 50, I2PSnark'ın yeniden başlatılması gerekir]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Bu ayar, tek bir torrentin tam depolama kontrolü sırasında parçaları paralel olarak doğrulamak için kullanılan işçi iş parçacığı sayısını tanımlar, örn. sürdürürken veya yeniden kontrol ederken. Ayarlanmadığında iş parçacığı sayısı CPU sayısıyla ölçeklenir, en az 4. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin. [Varsayılan max(çekirdek / 4, 4); her kontrolde okunur, bu nedenle yeniden başlatma gerekmez]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Bir dizin yoluna ayarlandığında, tamamlanmamış indirmeler veri dizini yerine bu dizindeki bir hazırlık klasörüne yazılır ve her dosya yalnızca tüm parçaları indirildikten sonra veri dizinine kopyalanır. Bu, kısmi indirmeleri ana veri biriminden uzak tutmak için kullanışlıdır (örneğin ayrı, daha hızlı veya daha az kullanılan bir diskte). Hazırlık dizininde en büyük devam eden indirmeleri tutacak kadar boş alan olmalıdır. Ayarlanmadığında veya boş olduğunda, indirmeler daha önce olduğu gibi doğrudan veri dizinine yazılır. Değiştirmek için I2PSnark'ın <code>i2psnark.config</code> yapılandırma dosyasına ekleyin veya I2PSnark yapılandırma sayfasında ayarlayın; sonradan eklenen torrentler için geçerlidir. [Varsayılan olarak devre dışı]"
 
 msgid "miscellaneous"
 msgstr "çeşitli"
@@ -7763,7 +7763,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Doğru olarak ayarlandığında, I2P ağ bağlantısı olmadan çalışır; bu, ağ kesintisini önleyeceği için kod güncellemelerini test etmek için yönlendiriciyi sürekli yeniden başlatıyorsanız yararlı olur."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "true olarak ayarlandığında, mevcut günlük dosyası ve döndürülmüş arşivler, yönlendiricinin çalıştığı grup tarafından okunabilir ve yazılabilir (mod 660) yapılır; böylece o grubun üyeleri olan kullanıcılar günlükleri inceleyebilir. Dosyalar asla herkes tarafından okunabilir yapılmaz. [Varsayılan false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Bu ayar, yönlendiricinizin doğru saat dilimini korumasını sağlamak için gereken alternatif NTP sunucularının yapılandırılmasını sağlar. [Varsayılan değer 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -9676,13 +9676,13 @@ msgid "Set Password"
 msgstr "Şifre Belirle"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Tüm Yönlendiriciler [Gelişmiş]"
 
 msgid "Remote"
 msgstr "Uzak"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Tüm Yönlendiriciler (İstemci NetDb) [Gelişmiş]"
 
 msgid "Encryption type"
 msgstr "Şifreleme türü"
@@ -9734,19 +9734,19 @@ msgid "Network Peers"
 msgstr "Ağ Akranları"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Hızlı Eşler"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Yüksek Kapasiteli Eşler"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Taşkın Düğüm Eşleri"
 
 msgid "Banned Peers"
 msgstr "Engellenmiş Eşler"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Son Eş Profilleri"
 
 msgid "Configure router logging options"
 msgstr "Yöneltici günlüğü yapılandırması"

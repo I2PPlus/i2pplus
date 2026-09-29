@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "Dette ser ut til å være et dårlig mål:"
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "i2paddresshelper kan ikke hjelpe deg med et sånt mål!"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "For å besøke målet i adresseboken din, klikk <a href=\"{0}\">her</a>. For å besøke det konfliktende adressehjelpermålet, klikk <a href=\"{1}\">her</a>."
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "Mål for {0} i adresseboken"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "Konfliktende mål for adressehjelper"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "Skadet Base32-adresse"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "Fant ikke LeaseSet for målet"
 
 msgid "Host"
 msgstr "Vert"
@@ -42,159 +42,159 @@ msgstr "Mål"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "Fortsett til {0} uten å lagre"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "Du kan navigere til nettstedet uten å lagre det i adresseboken. Adressen huskes til du starter I2P-ruteren på nytt."
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "Fortsett uten å lagre"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "Lag {0} i ruteradresseboken og fortsett til nettstedet"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "Denne adressen lagres i ruteradresseboken din, der adressene dine basert på abonnement lagres."
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "Hvis du vil holde oversikt over nettsteder du har lagt til manuelt, bør du i stedet legge dem til i hoved- eller privatadresseboken."
 
 msgid "Save & continue"
-msgstr ""
+msgstr "Lagre og fortsett"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "Lag {0} i hovedadresseboken og fortsett til nettstedet"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "Denne adressen lagres i hovedadresseboken din. Velg dette alternativet for adresser du vil holde adskilt fra hovedadresseboken i ruteren, men som du ikke har noe imot at blir publisert."
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "Lag {0} i privatadresseboken og fortsett til nettstedet"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "Denne adressen lagres i privatadresseboken din, slik at den aldri publiseres."
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Base32-adresse krever oppslagspassord"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Base32-adresse krever krypteringsnøkkel"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Base32-adresse krever krypteringsnøkkel og oppslagspassord"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Feil under dekryptering av Base32-adresse, kontroller krypteringsnøkkelen"
 
 msgid "Generate"
 msgstr "Generere"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "Krypteringsnøkkel"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "Du må enten skrive inn en PSK-krypteringsnøkkel som er levert av serveroperatøren, eller generere en DH-krypteringsnøkkel og sende den til serveroperatøren."
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "Be serveroperatøren om hjelp."
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "Skriv inn PSK-krypteringsnøkkel"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "Generer ny DH-krypteringsnøkkel"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "Oppslagspassord"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "Du må skrive inn passordet som er levert av serveroperatøren."
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "HTTP-outproxy"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "Klikk en lenke nedenfor for en adressehjelper fra en hopptjeneste"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "Lagt til via adressehjelper fra {0}"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Lagt til via adressehjelper"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "Mangler oppslagspassord"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "Mangler privat nøkkel"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "Ugyldig privat nøkkel"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "Din nye krypteringsnøkkel"
 
 msgid "Router Console"
-msgstr ""
+msgstr "Ruter Konsoll"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "Adressebok"
 
 msgid "Configuration"
 msgstr "Konfigurasjon"
 
 msgid "Help"
-msgstr ""
+msgstr "Hjelp"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "Kopier nøkkelen og send den til serveroperatøren."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "Etter at du har fått tillatelse, kan du fortsette til nettstedet."
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "Gå tilbake og rett feilen"
 
 msgid "router"
-msgstr ""
+msgstr "ruter"
 
 msgid "master"
-msgstr ""
+msgstr "hoved"
 
 msgid "private"
-msgstr ""
+msgstr "privat"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "Omdirigerer til {0}"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Omdirigering pågår"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Lagret {0} i {1}-adresseboken, omdirigerer nå."
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Kunne ikke lagre {0} i {1}-adresseboken, omdirigerer nå."
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "Klikk her hvis du ikke blir omdirigert automatisk."
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "Lagret autentiseringen for {0}, omdirigerer nå."
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "Kunne ikke lagre konfigurasjonen"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "Konfigurasjonsendringer lagret"
 
 msgid "Client"
 msgstr "Klient"

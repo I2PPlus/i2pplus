@@ -238,7 +238,7 @@ msgid "no subject"
 msgstr "žádný předmět"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Žádná složka Drafts?"
 
 msgid "Found no valid sender address."
 msgstr "Nebyla nalezena platná adresa odesílatele."

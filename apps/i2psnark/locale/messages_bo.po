@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "གནད་སྡུད་སྣོད་ཐོ་གསར་བསྐྲུན་འབད་མ་ཚུགས།"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "མིན་རྟགའི་སྣོད་ཐོར་འབྲི་བའི་ཆོག་ཐོབ་མེད།"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "མིན་རྟགའི་སྣོད་ཐོ་གསར་བསྐྲུན་མ་ཐུབ།"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "ཊོ་རེནཊི་སྣོད་ཐོར་འབྲི་བའི་ཆོག་ཐོབ་མེད།"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "ཊོ་རེནཊི་སྣོད་ཐོ་གསར་བསྐྲུན་མ་ཐུབ།"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "ཕྱིར་འདྲེན་ཊཱནེལ་ཚུ་གུ་ལུ་ཊཱནེལ་ཧོཔ་ཚུད་མི་སེལ་འཐུ་ལྕོགས་མེདཔ་བཟོ་ཡི།"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "ཊོ་རེནཊི་རེ་རེར་ལ་ལོག་པའི་འགྲེམ་ས་གནས་དགོས་པ་ལྕོགས་ཅན་བཟོ་ཡི།"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "ཊོ་རེནཊི་རེ་རེར་ལ་ལོག་པའི་འགྲེམ་ས་གནས་དགོས་པ་ལྕོགས་མེདཔ་བཟོ་ཡི།"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "འགྲེམ་ས་གནས་དགོས་པའི་མཐའ་ཚད {0} ལ་བསྒྱུར་བཅོས་འབད་ཡི།"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "ཚད་མེད་ཀྱི་འགྲེམ་ས་གནས་དགོས་པ་སོར་བརྟན་བསྒྱུར་བཅོས་ཡི། (ཊོ་རེནཊི་རེ་རེར་ལ་གཅིག)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "ཊོ་རེནཊི་འགོ་བཙུགས་དུས་ཀྱི་སེལ་འཐུང་བཟོ་རྒྱུ་ལྕོགས་ཅན་བཟོ་ཡི།"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "ཊོ་རེནཊི་འགོ་བཙུགས་དུས་ཀྱི་སེལ་འཐུང་བཟོ་རྒྱུ་མེདཔ་བཟོ་ཡི།"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "འགོ་བཙུགས་ཀྱི་འགྱངས་ཀྱི་ལྟ་གྲུབ {0} - {1} ལ་བསྒྱུར་བཅོས་འབད་ཡི།"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "API ལྡེ་མིག་དུས་མཐུན་བཟོ་ཡི།"
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "གསར་པའི་ཊོ་རེནཊི་ལ་ཡིག་སྡོམ་མཇུག་སྡོམ་སྔོན་འབད་ལྕོགས་ཅན་བཟོ་ཡི།"
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "གསར་པའི་ཊོ་རེནཊི་ལ་ཡིག་སྡོམ་མཇུག་སྡོམ་སྔོན་འབད་ལྕོགས་མེདཔ་བཟོ་ཡི།"
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "མངོན་མིང་ཡིག་སྡོམ་ཀྱི་མིང་བརྗེད་ལྕོགས་ཅན་བཟོ་ཡི།"
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "མངོན་མིང་ཡིག་སྡོམ་ཀྱི་མིང་བརྗེད་ལྕོགས་མེདཔ་བཟོ་ཡི།"
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "ཊོ་རེནཊི་རེ་རེར་ལ་ཡིག་སྡོམ་གི་མཐའ་ཚད {0} ལ་བསྒྱུར་བཅོས་འབད་ཡི།"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "ཊོ་རེནཊི་རེ་རེར་ལ་ཡིག་སྡོམ་གི་མཐའ་ཚད་ནུས་མེད།: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "བསྔོན་འགྲོའི་མིན་རྟགའི་སྣོད་ཐོ {0} ལ་བསྒྱུར་བཅོས་འབད་ཡི།"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "མིན་རྟགའི་སྣོད་ཐོར་བསྔོན་འགྲོ་ལྕོགས་མེདཔ་བཟོ་ཡི།"
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "ཊོ་རེནཊི་སྣོད་ཐོ {0} ལ་བསྒྱུར་བཅོས་འབད་ཡི།"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "ཊོ་རེནཊི་སྣོད་ཐོ་གནད་སྡུད་ཀྱི་སྣོད་ཐོར་སོར་བརྟན་བསྒྱུར་བཅོས་ཡི།"
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "ཁ་ཕྱེ་བའི་ཊེ་རེཀར་ཐོ་ཡིག་བསྒྱུར་བཅོས་འབད་ཡི། - ནུས་པ་ལྡན་བཟོ་ནིའི་དོན་ལུ་ཊོ་རེནཊི་སླར་འགོ་བཙུགས་དགོས།"
@@ -302,7 +302,7 @@ msgstr "སྐྱོན། - དྲན་ཚད་རྫོགས་སོང་
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "སྐྱོན། - {0} ནང་ནས་ཊོ་རེནཊི་གསར་བསྐྲུན་མ་ཐུབ།"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "གྲུ་ཐོར། འགོ་འབྱེད་འབད་ནི་དང་ཊཱནེལ་ཚུ་ཁ་ཕྱེ་དོ།"
@@ -396,7 +396,7 @@ msgstr "ཊོ་རེནཊི་རྩ་བསྐྲད་བཏང་ཡི
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "ཊོ་རེནཊི་ཚུ་ {0}&hellip; ནང་ནས་འགོ་བཙུགས་གནས།"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "ཉེན་བརྡ། - རིམ་སྒྲིག་འབད་ཡ
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "མིན་རྟགའི་གསོག་འཇོག།: རིམ་སྒྲིག་བྱས་པའི་མིན་རྟགའི་སྡེ་ཚན་ནས་ཕབ་ལེན་གྱི་དོན་ལ་ད་ལྟོ་ཐོབ་ཚུགས་པའི་ཆེ་ཚོར་ནི་ {0}GB།"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "མིན་རྟགའི་གསོག་འཇོག།: རིམ་སྒྲིག་བྱས་པའི་མིན་རྟགའི་སྡེ་ཚན་ནས་ཕབ་ལེན་གྱི་དོན་ལ་ད་ལྟོ་ཐོབ་ཚུགས་པའི་ཆེ་ཚོར་ནི་ {0}MB།"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "ཉེན་བརྡ། - རྒྱུན་སྒྲིག་བྱས་པའི་མིན་རྟགའི་སྡེ་ཚན་ནས་ཕབ་ལེན་གྱི་དོན་ལ་ {0}MB ཙམ་ཐོབ་ཚུགས།"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "I2P ཊཱནེལ་ཁ་ཕྱེ་དོ།"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "ཊོ་རེནཊི་འཚོལ་ཞིབ་བྱེད་བཞིན་པ།: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "I2P ཊཱནེལ་ཁ་ཕྱེ་ནི་དང་ཊོ་རེནཊི་ཆ་མཉམ་འགོ་བཙུགས་དོ།"
@@ -489,14 +489,14 @@ msgstr "I2P ཊཱནེལ་ཁ་བསྡམས་ཡོད།"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "འགྲེམ་ས་གནས་དགོས་པའི་འཁོར་བཟོ་འདོད་སྐབས་སྐྱོད། - {0} སྐྱིད་པར་ཕབ་ལེན་འབད་གནས།"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "འགྲེམ་ས་གནས་དགོས་པའི་འཁོར་བཟོ་འདོད་སྐབས་སྐྱོད། - {0} སྐྱིད་པར་ཕབ་ལེན་འབད་གནས།"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "སྐྱིད་པར་ཕབ་ལེན་འབད་མཁན་གྱི་ཊོ་རེནཊི་མེད། - འགྲེམ་ས་གནས་དགོས་པ་འཁོར་བཟོ་འདུག"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "སྐར་བ།"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "I2PSnark འགོ་བཙུགས་སྐབས་རང་འགྲོ་གིས་འགོ་བཙུགས་པའི་ཊོ་རེནཊི་ཚུ་མགྱོགས་ཤོས་ག་དུས་ལ་འཛུལ་ཐུབ།"
 
 msgid "min"
-msgstr ""
+msgstr "ཉུང་བ།"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "I2PSnark འགོ་བཙུགས་སྐབས་རང་འགྲོ་འགོག་པའི་ཊོ་རེནཊི་ཚུ་མཐའི་རྗེ་དུ་ཇི་ཙམ་མཐུན་པར་འཛུལ་ཐུབ།"
 
 msgid "max"
-msgstr ""
+msgstr "མཐའ།"
 
 msgid "Data Storage"
 msgstr "གནད་སྡུད་གསོག་འཇོག"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "ཊོ་རེནཊི་ཚུ་དང་ཕབ་ལེན་འབད་ཡོད་པའི་/རོགས་སྤྱོད་བའི་ཡིག་སྣོད་ཚུ་གསོག་འཇོག་པའི་སྣོད་ཐོ།"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "མིན་རྟགའི་སྣོད་ཐོ།"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "ཕབ་ལེན་ཚུ་མཇུག་གི་སྐབས་སུ་གནད་སྡུད་ཀྱི་སྣོད་ཐོར་ཕབ་ལེན་བསྔོན་སྐབས་གསོག་འཇུག་གི་བཀོད་དངུལ་གྱི་སྣོད་ཐོ། ལྕོགས་མེད་ཏུ་བསྒྱུར་བཅོས་ན་སེལ་བཞག།"
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "ཊོ་རེནཊི་སྣོད་ཐོ།"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "ཕབ་ལེན་ཟས་ཀྱི་གནད་སྡུད་ནས་ལྡན་པར་ .torrent ཡིག་སྡོམ་གསོག་འཇུག་གི་བཀོད་དངུལ་གྱི་སྣོད་ཐོ། གནད་སྡུད་ཀྱི་སྣོད་ཐོར་གསོག་འཇུག་ན་སེལ་བཞག།"
 
 msgid "Files readable by all"
 msgstr "ཡིག་སྣོད་ཚུ་མི་མང་གིས་ལྷག་ཆོག་པ།"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "ཕབ་ལེན་འབད་ཡོད་པའི་ཡིག་སྣོད་ཆོག་པ་གཞན་ཅིག་ལོ་གི་སྤྱོད་བའི་ལག་སྣོད་ཚུ་ལེན་བརྐྱབ་གནང་བསྡམས།"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "ཡིག་སྡོམ་མཇུག་སྡོམ་སྔོན་འབད།"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "ཊོ་རེནཊི་གསར་པའི་ཡིག་སྡོམ་ཚུ་གང་གི་མཐའ་ཆེན་གྱིས་གཏིང་ནས་བརྗིད་དགོས་ནས། ཊོ་རེནཊི་འགོ་བཙུགས་སྐབས་དུ་སྡེ་ཚན་ནང་ཁོར་ཡུག་སྤྲིན་ཐོག་ཏུ་འཇོག་དགོས། འདི་བྱས་ན་སྡེ་ཚན་ཕུན་སུམ་ཚོགས་པས་ཕབ་ལེན་འདོད་འདྲི་འབག་པར་འགོག་ཉིན་ཏེ། ཕྱོགས་ཆ་ཚུལ་འཛུལ་བཞུགས་ན་ཆན་ཕྲུ་ཆ་རྩྭའི་འབྱུང་བར་འགོག"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "ཡིག་སྡོམ་ཀྱི་མིང་བརྗེད།"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "ཊོ་རེནཊི་ནང་ནས་མངོན་མིང་ཡིག་སྡོམ་ཀྱི་མིང་བརྗེད། ལྕོགས་མེད་ཀྱི་སྐབས་སུ་ཡིག་སྡོམ་ཀྱི་མིང་ལ་ནུས་མི་འཆར་བའི་ཁུག་ཚིག་བཀག་པར་ཚགས་མ་བཟོ། ལྕོགས་ཅན་གྱི་སྐབས་སུ་མངོན་མིང་བེད་སྤྱོད། མིང་ལ་ཁྱོད་ཀྱི་ནང་གི་མཁོའི་མཁོར་བརྒྱུད་ཀྱིས་མི་འཆར་བའི་ཁུག་ཚིག་ཡོད་ན་ཡིག་སྡོམ་དེ་ནི་ཁ་ལྡན་གྱི་མིང་གཞན་དག་གིས་བསྐྱུར་དུ་འཇུག་དང་། ཉེན་བརྡ་ཞིག་མཚོན་བཞུགས་བྱེད།"
 
 msgid "Max files per torrent"
 msgstr "ཊོ་རེནཊི་རེ་གཅིག་ལུ་ཡིག་སྣོད་གི་མང་མཐའ།"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "ཊཱནེལ་རིམ་སྒྲག་སྲུང་།"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "ལཱ་སེན་འདིའི་གཙོ་བོའི་འགྲེམ་ས་གནས་དགོས་པ (ངོས་མཚན)། དེའི་ DHT། ཊེ་རེཀར་དང་བཀག་ཐོག་ཀྱང་ཊོ་རེནཊི་རེ་རེར་ལ་གྱི་འགྲེམ་ས་གནས་དགོས་པ་དང་མཉམ་བྱེད་ཤིན།"
 
 msgid "Our destination (identity) for this session"
 msgstr "ལཱ་སེན་འགྲམ་ས (ངོས་ཅན་དཔང་) དེ་ལཱ་སེན་འགྲམ་སའི་དོང་།"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "གཙོ་བོའི་འགྲེམ་ས།"
 
 msgid "Dest."
 msgstr "འགྲམ་ས།"
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "ཕྱིར་འདྲེན།"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "འགྲེམ་ས་གནས་དགོས་པ་ལས་སྣ།"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "ཊོ་རེནཊི་རེ་རེར་ལ་ལོག་པའི་འགྲེམ་ས་གནས་དགོས་པ་བེད་སྤྱོད། དེས་ན་ཊེ་རེཀར་དང་ DHT ཀྱིས་ཁྱོད་ཀྱི་ཊོ་རེནཊི་ཚུ་བར་བར་འབྲེལ་བ་བྱེད་མི་ཐུབ། འགྲེམ་ས་གནས་དགོས་པ་འདི་ནི་མིན་རྟག་ཡིན་ནས་སྐྱར་འགོའི་སྐབས་སུ་བསྒྱུར་བཏག"
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "འགྲེམ་ས་གནས་དགོས་པའི་མཐའ་ཚད།"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "འདིའི་མཐའ་ཚད་ལས་སྣ་ཚོགས་ཀྱི་ཊོ་རེནཊི་ཚུ་འབད་སྐབས་སུ་ལུས་མང་པོ་གཞན་ལ་དྲན་ཚད་མི་འདོད་པར་བྱ་བའི་ཕྱིར། ལུས་མང་པོ་དེ་ལ་ཚོགས་ཆ་སེལ་འཐུང་དང་ཆེ་ཚོར་མི་འདྲ་བའི་ཐོག་ཏུ་བརྗེད་པས་འགྲེམ་ས་གནས་དགོས་པ་མཉམ་བྱེད་ཤིན། ༠ ནི་ཊོ་རེནཊི་རེ་རེར་ལ་འགྲེམ་ས་གནས་དགོས་པ་གཅིག་ཡིན་པར་བསྟན།"
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "འགོ་བཙུགས་ཀྱི་འགྱངས་སེལ་འཐུང་།"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "བསྡུས་ནས་འགོ་བཙུགས་པའི་འགྲེམ་ས་གནས་ལས་སྣའི་ཊོ་རེནཊི་ཚུའི་འགོ་བཙུགས་སེལ་འཐུང་གི་འགྱངས་ཀྱིས་རུང་བའི་སྐབས། དེས་ཊེ་རེཀར་ཡང་ན་DHT པར་མིན་གཉིས་ཀྱིས་བརྟེན་ནས་བར་བར་འབྲེལ་བ་ངོས་ཟིན་པར་མི་ཐུབ་པར་བྱ་བའི་ཕྱིར། སྒྲོམ་ལམ་གསར་བསྐྲུན་ཀྱང་ཕྱེད་པར་བྱ་བ་དང་། ལྕོགས་མེད་ཀྱིས་ཚུ་མཐུན་དུ་བཙུགས་པར་ཅིན་དམིགས་ན་མིན།"
 
 msgid "I2CP host"
 msgstr "I2CP ཧོསཊི།"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "I2CP གདམ་ཁ་ཚུ།"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "བརའུ་སར་མཉམ་སྒྲིག།"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "བརའུ་སར་ API ལྕོགས་ཅན་བཟོ།"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "loopback ཡང་ན་འདིའི་འདིར་གཞིར་བཅུག་པའི་མཁར་གནས་ནས་CSRF nonce མེད་པར་མེག་ནེཊི་འབྲེལ་ལམ་དང་ཊོ་རེནཊི་ URL བཙུགས་པར་ཆོག"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "ཆོག་ཐོན་ཟས་ཀྱི་མཁར་གནས་ཚུལ།"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "དྲབ་ཏག་གིས་བརྗེད་པའི་མཁར་གནས་ཀྱི་མིང་ཡང་ན་ IP གང་ཡིན་ལ་nonce མེད་པར་ཊོ་རེནཊི་བཙུགས་ཐུབ། loopback ནི་ར྾ངས་ཐོང་བཟོ་རྒྱུ།"
 
 msgid "API key"
-msgstr ""
+msgstr "API ལྡེ་མིག།"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "ཕྱི་གཞིས་ལ་འཛུལ་མཁན་ལ་གསང་ཐོང་བཀན་བཀོད་དངུལ། མཁར་གནས་ཆོག་ཐོན་ཐོག་མིང་ལ་བརྒྱུད་མེད་པར་འདལ།"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "བརའུ་སར་འདོད་སྒོ་བཙུགས་འཇུག་དགོས།"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "བརའུ་སར་འདོད་སྒོ་བསྒྱུར་གནང་།"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "བསྒྲུབ་ཟས་གསར་པའི་ I2PSnark Bridge མཐུ་སྤུས་ v{0} ལ་བསྒྱུར་དགོས།"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "མེག་ནེཊི་འབྲེལ་ལམ་བཙུགས་པར་ཁྱོད་ཀྱི་བརའུ་སར་ནང་ I2PSnark Bridge མཐུ་སྤུས་ཁ་བྱང། མཐུ་སྤུས་ཀྱིས་བརའུ་སར་ལ་རང་ངོས་འཛིན་ཐོག་གནང་བསྒྲུབ་གཞག་བྱ་བ་ཡིན་ན་རོ་ཌེར་ཀྱི་ཁོངས་ལས་ཡིག་སྡོམ་གཅིག་ཀྱང་མི་བཀྲིད་པ་ཡིན།"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "PowerShell བསྒྲུབ་ཀླད་ཀྲིན་ཕབ་ལེན་དགོས། དེས་ཁྱོད་ཀྱི་བརའུ་སར་ལ་མེག་ནེཊི་འབྲེལ་ལམ་དང་ .torrent ཡིག་སྡོམ་ཐོབ་ཁུག་བསྒྲུབ་གནང་། I2PSnark Bridge མཐུ་སྤུས་ལ་ Firefox རྒྱུད་ཀྱི་བརའུ་སར་དགོས།"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "བསྒྲུབ་ཀླད་ཀྲིན་ཕབ་ལེན་དགོས། དེས་ཁྱོད་ཀྱི་བརའུ་སར་ལ་མེག་ནེཊི་འབྲེལ་ལམ་དང་ .torrent ཡིག་སྡོམ་ཐོབ་ཁུག་བསྒྲུབ་གནང་། I2PSnark Bridge མཐུ་སྤུས་ལ་ Firefox རྒྱུད་ཀྱི་བརའུ་སར་དགོས།"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "བརའུ་སར་འདོད་སྒོའི་ཀླད་ཀྲིན་ཕབ་ལེན་དགོས།"
 
 msgid "Save configuration"
 msgstr "རིམ་སྒྲག་སྲུང་།"
@@ -957,7 +957,7 @@ msgstr "སྒྲིག་སྟངས་འདི་ཧོཔ་ ༣ ལས་�
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "I2PSnark Bridge མཐུ་སྤུས་ v{0} ནི་ཟསྗུད་པ་ཡིན། བཀོད་སྒྲིག་ཤོག་ནས v{1} ལ་བསྒྱུར་དགོས།"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "ཊོ་རེནཊི་ལེན་ནིའི་དོན་ལུ་ \"ཊོ་རེནཊི་ཁ་སྐོང་\" ཨེབ་གཏང་ལུ་ཨེབ།"
@@ -1189,7 +1189,7 @@ msgstr "URL བརྐྱབ་ནི་ཡང་ན་ཊོ་རེནཊི�
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "ཊོ་རེནཊི་བཙུགས་པའི་སྐྱོན།: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1231,11 +1231,11 @@ msgid "Directory deleted: {0}"
 msgstr "སྣོད་ཐོ་བཏོན་གཏང་ཡི།: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "བརའུ་སར་ API ལྕོགས་ཅན་བཟོ་ཡི།"
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "I2PSnark Bridge མཐུ་སྤུས་ཁ་བྱང་པར་མ་ཚུགས།: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1312,7 +1312,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr ".torrent ཡིག་སྣོད་དང་འབྲེལ་བའི་གནད་སྡུད་ཡིག་སྣོད་ཚུ་བཏོན་གཏང་།"
 
 msgid "Destination"
-msgstr ""
+msgstr "འགྲེམ་ས་གནས་དགོས་པ།"
 
 msgid "Checking"
 msgstr "ཞིབ་དཔྱད་དོ།"
@@ -1321,7 +1321,7 @@ msgid "Allocating"
 msgstr "སྤྱོད་སྐོར་བཞག་པ།"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "རྒྱུན་སྒྲིག་ཟས་ཀྱི་ཊེ་རེཀར་ཆ་མཉམ་དང་མཐུད་མ་ཚུགས།"
 
 msgid "Starting"
 msgstr "འགོ་བཙུགས་དོ།"
@@ -1513,7 +1513,7 @@ msgstr "གསར་བསྐྲུན་འབད་ཡི།"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "དངོས་དུ་ཕབ་ལེན་བྱས་པའི་ཡིག་སྡོམ་གྱི་ཆེ་ཚོར།: {0}, BEP 47 འཁོར་བརྒྱད་ཡིག་སྡོམ་ {1} ཕྱེད་པ།"
 
 msgid "Added"
 msgstr "ཁ་སྐོང་བརྐྱབ་ཡི།"

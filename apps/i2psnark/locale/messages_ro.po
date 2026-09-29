@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Directorul de date nu poate fi creat"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Fără permisiuni de scriere pentru directorul temporar"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "Directorul temporar nu poate fi creat"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Fără permisiuni de scriere pentru directorul de torrente"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "Directorul de torrente nu poate fi creat"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Randomizarea sarelor de tunel a fost dezactivată pe tunelurile de ieșire"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Activată destinația separată pentru fiecare torrent"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Dezactivată destinația separată pentru fiecare torrent"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Numărul maxim de destinații a fost schimbat la {0}"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "S-au restaurat destinațiile nelimitate (una per torrent)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Activată randomizarea orelor de pornire a torrentelor"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Dezactivată randomizarea orelor de pornire a torrentelor"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Intervalul întârzierii la pornire a fost schimbat la {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "Cheia API actualizată."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Prealocarea fișierelor pentru torrentele noi a fost activată."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Prealocarea fișierelor pentru torrentele noi a fost dezactivată."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Păstrarea numelor originale ale fișierelor a fost activată."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Păstrarea numelor originale ale fișierelor a fost dezactivată."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Numărul maxim de fișiere per torrent a fost schimbat la {0}"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Număr maxim de fișiere per torrent nevalid: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Directorul temporar pentru stocarea temporară a fost schimbat la {0}"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Stocarea temporară în directorul temporar a fost dezactivată."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Directorul de torrente a fost schimbat la {0}"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Directorul de torrente a fost resetat la directorul de date."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Lista Open Tracker a fost schimbată - este necesară repornirea torrentului pentru a intra în vigoare.Lista trackerelor deschise s-a schimbat - repornirea torrentui este necesara pentru a avea efect."
@@ -302,7 +302,7 @@ msgstr "EROARE - Memorie ram plină, nu se pot crea torrente de la {0}"
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "EROARE - nu se poate crea torrent din {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Inițializarea Torrente și deschiderea tunelurilor"
@@ -396,7 +396,7 @@ msgstr "Torrent sters: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Se pornesc torrentele în {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Avertisment - Doar {0}MB sunt disponibile pentru descărcări pe partea 
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Stocare temporară: {0}GB disponibil în prezent pentru descărcări pe partiția temporară configurată"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Stocare temporară: în prezent sunt disponibile {0}MB pentru descărcări pe partiția temporară configurată"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Avertisment - Doar {0}MB sunt disponibile pentru descărcări pe partiția temporară configurată"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "Deschide tunelul I2P"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Se rezolvă căutarea torrentului: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Deschiderea tunelului I2P și pornirea tuturor torrentelor."
@@ -489,14 +489,14 @@ msgstr "Tunel I2P închis."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Se omite rotația destinațiilor - {0} descărcare activă în desfășurare"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Se omite rotația destinațiilor - {0} descărcări active în desfășurare"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Niciun torrent în descărcare activă - se rotec destinațiile"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "minute"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "Cât timp înainte de încărcarea torrentelor pornite automat la pornirea I2PSnark, cel mai devreme"
 
 msgid "min"
-msgstr ""
+msgstr "min."
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "Cât timp înainte de încărcarea torrentelor pornite automat la pornirea I2PSnark, cel mai târziu"
 
 msgid "max"
-msgstr ""
+msgstr "max."
 
 msgid "Data Storage"
 msgstr "Stocarea datelor"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Directorul în care sunt stocate torrentele și fișierele descărcate/partajateDirector în care sunt stocate torentele și fișierele descărcate / partajate"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Director temporar"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "Director opțional în care descărcările sunt stocate temporar înainte de a fi mutate în directorul de date la finalizare. Lăsați gol pentru a dezactiva."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Director de torrente"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "Director opțional în care fișierele .torrent sunt stocate separat de datele descărcate. Lăsați gol pentru a le stoca în directorul de date."
 
 msgid "Files readable by all"
 msgstr "Fișiere lizibile de către toți"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Setați permisiunile pentru fișiere pentru a permite altor utilizatori locali să acceseze fișierele descărcateSetați permisiunile de fișiere pentru a permite altor utilizatori locali să acceseze fișierele descărcate"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Prealocați fișierele"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Extindeți fișierele noi de torrent la dimensiunea lor completă și alocați spațiul pe disc imediat la pornirea torrentului, pentru a împiedica un disc plin să întrerupă descărcările și pentru a evita fragmentarea pe măsură ce piesele sosesc"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Păstrați numele fișierelor"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Păstrează numele originale ale fișierelor din torrent. Când este dezactivată, numele fișierelor sunt filtrate pentru a elimina caracterele ilegale pentru sistemul de fișiere. Când este activată, se folosesc numele originale; dacă un nume de fișier conține caractere nesuportate de sistemul dvs. de fișiere, fișierul va fi creat cu un nume de rezervă sigur și va fi afișată o avertizare"
 
 msgid "Max files per torrent"
 msgstr "Max. fișiere per torrent"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Configurarea tunelului"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Destinația principală (identitatea) pentru această sesiune; DHT-ul, trackerul și lista de blocare sunt partajate cu destinațiile per torrent"
 
 msgid "Our destination (identity) for this session"
 msgstr "Destinația (identitatea) noastră pentru această sesiune"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Dest. principală"
 
 msgid "Dest."
 msgstr "Țara dest."
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Ieșire"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Multi-destinație"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "Folosiți o destinație separată pentru fiecare torrent, astfel încât trackerele și DHT-ul să nu poată lega torrentele între ele. Destinațiile sunt temporare și se schimbă la repornire."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Număr maxim de destinații"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Când rulează mai multe torrente decât acest maxim, torrentele suplimentare partajează destinațiile în grupuri aleatoare, de dimensiune variabilă, pentru a limita utilizarea memoriei. Zero înseamnă o destinație per torrent."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Întârziere aleatorie la pornire"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Etapizați pornirile torrentelor multi-dest cu o întârziere aleatorie, astfel încât torrentele care pornesc împreună să nu poată fi corelate de trackere sau de peeri DHT, iar construcțiile tunelurilor să fie eșalonate. Dezactivați pentru a porni imediat toate torrentele dintr-un lot."
 
 msgid "I2CP host"
 msgstr "Gazdă I2CP"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "Opțiuni I2CP"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Integrare cu browserul"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Activați API-ul pentru browser"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Permiteți adăugarea linkurilor magnet și a adreselor URL de torrent fără nonce CSRF, de la loopback sau de la gazdele permise de mai jos"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Gazde permise"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Numele de gazdă sau adresele IP permise, separate prin virgulă, pentru a adăuga torrente fără nonce; loopback este întotdeauna permis"
 
 msgid "API key"
-msgstr ""
+msgstr "Cheie API"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Parolă opțională pentru accesul la distanță, care ocolește lista de gazde permise"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Instalați integrarea cu browserul"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Actualizați integrarea cu browserul"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Actualizați extensia I2PSnark Bridge instalată la v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Deschideți extensia I2PSnark Bridge în browserul dvs. pentru a adăuga linkuri magnet; extensia se înregistrează singură în browser și nu se scrie niciun fișier în router"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Descărcați instalatorul PowerShell care înregistrează linkurile magnet și fișierele .torrent în browserul dvs.; extensia I2PSnark Bridge necesită un browser din familia Firefox"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Descărcați scriptul de instalare care înregistrează linkurile magnet și fișierele .torrent în browserul dvs.; extensia I2PSnark Bridge necesită un browser din familia Firefox"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Descărcați scriptul de integrare cu browserul"
 
 msgid "Save configuration"
 msgstr "Salvare configurări"
@@ -957,7 +957,7 @@ msgstr "Schimbarea acestei setări la mai puțin de 3 hop poate îmbunătăți v
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "Extensia I2PSnark Bridge v{0} este depășită, actualizați-o la v{1} pe pagina de configurare"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Faceți click pe \"Adaugă torrent\" pentru a descărca torrentul"
@@ -1191,7 +1191,7 @@ msgstr "Introduceți adresa URL sau selectați fișierul torrent"
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Eroare la adăugarea torrentului: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1233,11 +1233,11 @@ msgid "Directory deleted: {0}"
 msgstr "Director șters: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "API pentru browser activat."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "Deschiderea extensiei I2PSnark Bridge a eșuat: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1314,7 +1314,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "Ștergeți fișierul .torrent și fișierele de date asociate"
 
 msgid "Destination"
-msgstr ""
+msgstr "Destinație"
 
 msgid "Checking"
 msgstr "Se verifică"
@@ -1323,7 +1323,7 @@ msgid "Allocating"
 msgstr "Se alocă"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Conectarea la toate trackerele configurate a eșuat"
 
 msgid "Starting"
 msgstr "Pornește"
@@ -1518,7 +1518,7 @@ msgstr "Creat"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Dimensiunea fișierelor descărcate efectiv: {0}, fără {1} din fișierele de completare BEP 47"
 
 msgid "Added"
 msgstr "Adăugat"

@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "Tämä näyttää olevan virheellinen kohde:"
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "i2paddresshelper ei voi auttaa sinua tällaisen kohteen kanssa!"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "Voit käydä osoitekirjasi kohteessa napsauttamalla <a href=\"{0}\">tätä</a>. Voit käydä ristiriitaisen osoiteapuohjelman kohteessa napsauttamalla <a href=\"{1}\">tätä</a>."
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "Osoitekirjassa oleva kohde isännälle {0}"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "Ristiriitainen osoiteapuohjelman kohde"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "Vioittunut Base32-osoite"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "Kohteen LeaseSet ei löydy"
 
 msgid "Host"
 msgstr "Verkkotietokone"
@@ -42,159 +42,159 @@ msgstr "Kohde"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "Jatka kohteeseen {0} tallentamatta"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "Voit selata sivustoa tallentamatta sitä osoitekirjaan. Osoite muistetaan, kunnes käynnistät I2P-reitittimen uudelleen."
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "Jatka tallentamatta"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "Tallenna {0} reitittimen osoitekirjaan ja jatka verkkosivustolle"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "Tämä osoite tallennetaan reitittimen osoitekirjaan, johon on tallennettu tilauspohjaiset osoitteesi."
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "Jos haluat seurata manuaalisesti lisäämiäsi sivustoja, lisää ne sen sijaan pää- tai yksityiseen osoitekirjaan."
 
 msgid "Save & continue"
-msgstr ""
+msgstr "Tallenna ja jatka"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "Tallenna {0} pääosoitekirjaan ja jatka verkkosivustolle"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "Tämä osoite tallennetaan pääosoitekirjaan. Valitse tämä vaihtoehto osoitteille, jotka haluat pitää erillään pääreitittimen osoitekirjasta, mutta et välitä julkaisemisesta."
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "Tallenna {0} yksityiseen osoitekirjaan ja jatka verkkosivustolle"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "Tämä osoite tallennetaan yksityiseen osoitekirjaasi, joten sitä ei koskaan julkaista."
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Base32-osoite vaatii hakusalasanan"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Base32-osoite vaatii salausavaimen"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Base32-osoite vaatii salausavaimen ja hakusalasanan"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Base32-osoitteen salauksen purku epäonnistui, tarkista salausavain"
 
 msgid "Generate"
 msgstr "Tuota"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "Salausavain"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "Sinun on joko annettava palvelimen operaattorin antama PSK-salausavain tai luotava DH-salausavain ja lähetettävä se palvelimen operaattorille."
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "Pyydä apua palvelimen operaattorilta."
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "Anna PSK-salausavain"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "Luo uusi DH-salausavain"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "Hakusalasana"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "Sinun on annettava palvelimen operaattorin antama salasana."
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "HTTP-välityspalvelin"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "Napsauta alla olevaa linkkiä, jotta saat osoiteapuohjelman hyppypalvelusta"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "Lisätty osoiteapuohjelman kautta, lähteestä {0}"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Lisätty osoiteapuohjelman kautta"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "Hakusalasana puuttuu"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "Yksityinen avain puuttuu"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "Virheellinen yksityinen avain"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "Uusi salausavaimesi"
 
 msgid "Router Console"
-msgstr ""
+msgstr "Reitittimen ohjauspaneeli"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "Osoitekirja"
 
 msgid "Configuration"
 msgstr "Kokoonpano"
 
 msgid "Help"
-msgstr ""
+msgstr "Ohje"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "Kopioi avain ja lähetä se palvelimen operaattorille."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "Kun sinulle on myönnetty lupa, voit jatkaa verkkosivustolle."
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "Palaa takaisin ja korjaa virhe"
 
 msgid "router"
-msgstr ""
+msgstr "reitittimen"
 
 msgid "master"
-msgstr ""
+msgstr "pääosoitekirjaan"
 
 msgid "private"
-msgstr ""
+msgstr "yksityiseen osoitekirjaan"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "Uudelleenohjataan osoitteeseen {0}"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Uudelleenohjaus käynnissä"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Tallennettu {0} {1}, ohjataan nyt uudelleen."
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Osoitteen {0} tallentaminen {1} epäonnistui, ohjataan nyt uudelleen."
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "Napsauta tästä, jos sinua ei ohjata automaattisesti."
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "Todennus verkkotunnukselle {0} tallennettu, ohjataan nyt uudelleen."
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "Kokoonpanon tallentaminen epäonnistui"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "Kokoonpanomuutokset tallennettu"
 
 msgid "Client"
 msgstr "Asiakas"

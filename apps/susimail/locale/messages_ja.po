@@ -232,7 +232,7 @@ msgid "no subject"
 msgstr "無題"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "Drafts フォルダがありませんか?"
 
 msgid "Found no valid sender address."
 msgstr "有効な差出人アドレスが見つかりませんでした。"

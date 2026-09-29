@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "この宛先は正しくないようです:"
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "i2paddresshelper はそのような宛先を処理できません!"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "アドレス帳の宛先にアクセスするには <a href=\"{0}\">ここ</a> をクリックしてください。競合しているアドレスヘルパーの宛先にアクセスするには <a href=\"{1}\">ここ</a> をクリックしてください。"
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "アドレス帳にある {0} の宛先"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "アドレスヘルパー上の宛先が競合しています"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "Base32 アドレスが破損しています"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "宛先の LeaseSet が見つかりません"
 
 msgid "Host"
 msgstr "ホスト"
@@ -42,159 +42,159 @@ msgstr "宛先"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "保存せずに {0} に進みます"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "アドレス帳に保存せずにサイトへ移動できます。このアドレスは I2P ルーターを再起動するまで記憶されます。"
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "保存せずに続行します"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "{0} をルーターアドレス帳に保存して Web サイトに進みます"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "このアドレスは、サブスクリプションを基調とするアドレスが保存されるルーターアドレス帳に保存されます。"
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "手動で追加したサイトを記録したい場合は、マスターまたはプライベートアドレス帳に追加してください。"
 
 msgid "Save & continue"
-msgstr ""
+msgstr "保存して続行"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "{0} をマスターアドレス帳に保存して Web サイトに進みます"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "このアドレスはマスターアドレス帳に保存されます。メインのルーターアドレス帳とは別に保持したいが、公開しても問題はないアドレスに対して、このオプションを選択してください。"
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "{0} をプライベートアドレス帳に保存して Web サイトに進みます"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "このアドレスはプライベートアドレス帳に保存され、公開されることはありません。"
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Base32 アドレスには検索パスワードが必要です"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Base32 アドレスには暗号化キーが必要です"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Base32 アドレスには暗号化キーと検索パスワードが必要です"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Base32 アドレスの復号に失敗しました。暗号化キーを確認してください"
 
 msgid "Generate"
 msgstr "生成"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "暗号化キー"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "サーバー管理者が提供した PSK 暗号化キーを入力するか、DH 暗号化キーを生成してサーバー管理者に送信する必要があります。"
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "サーバー管理者に支援を依頼してください。"
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "PSK 暗号化キーを入力してください"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "新しい DH 暗号化キーを生成"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "検索パスワード"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "サーバー管理者が提供したパスワードを入力する必要があります。"
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "HTTP アウトプロキシ"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "ジャンプサービスのアドレスヘルパーへのリンクは、下のリンクをクリックしてください"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "{0} からアドレスヘルパーを介して追加されました"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "アドレスヘルパーを介して追加されました"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "検索パスワードがありません"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "秘密鍵がありません"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "秘密鍵が無効です"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "新しい暗号化キー"
 
 msgid "Router Console"
-msgstr ""
+msgstr "ルーターコンソール"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "アドレス帳"
 
 msgid "Configuration"
 msgstr "構成"
 
 msgid "Help"
-msgstr ""
+msgstr "ヘルプ"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "キーをコピーしてサーバー管理者に送信してください。"
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "許可が得られたら、Web サイトに進むことができます。"
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "戻ってエラーを修正してください"
 
 msgid "router"
-msgstr ""
+msgstr "ルーター"
 
 msgid "master"
-msgstr ""
+msgstr "マスター"
 
 msgid "private"
-msgstr ""
+msgstr "プライベート"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "{0} に転送しています"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "転送処理中です"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "{0} を {1} アドレス帳に保存しました。転送します。"
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "{1} アドレス帳に {0} を保存できませんでした。転送します。"
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "自動的に転送されない場合は、ここをクリックしてください。"
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "{0} の認証情報を保存しました。転送します。"
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "設定を保存できませんでした"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "設定の変更を保存しました"
 
 msgid "Client"
 msgstr "クライアント"

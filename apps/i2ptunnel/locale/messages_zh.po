@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "目标似乎无效："
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "I2P 地址助手对您输入的目标无能为力！"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "要访问您的地址簿中的该目标，请点击<a href=\"{0}\">这里</a>。要访问冲突的地址助手目标，点击<a href=\"{1}\">这里</a>。"
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "地址簿中 {0} 的目的地"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "地址助手目标冲突"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "损坏的 Base32 地址"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "未找到目标 LeaseSet"
 
 msgid "Host"
 msgstr "主机"
@@ -42,159 +42,159 @@ msgstr "目标"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "继续{0}，而不保存"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "您可以不将站点添加到地址簿而进行浏览。地址会被记录直到您重启 I2P 路由器。"
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "继续，而不保存"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "保存 {0} 到路由地址簿并继续访问网站"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "本地址会被存储在您的路由器地址簿，您订阅的地址所存储的地方。"
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "如果您希望追踪您手动添加的站点，请将其加入私有地址簿或主要地址簿。"
 
 msgid "Save & continue"
-msgstr ""
+msgstr "保存并继续"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "保存 {0} 到主要地址簿并继续访问网站"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "本地址会被存储到您的主要地址簿。如果您希望与路由地址簿分开存储，而不介意发布的话，请选择此选项。"
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "保存 {0} 到私有地址簿并继续访问网站"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "本地址会被存储到您的私有地址簿，以保证其永不被发布。"
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Base32 地址需要查找密码"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Base32 地址需要加密密钥"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Base32 地址需要加密密钥和查找密码"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Base32 地址解密失败，检查加密密钥"
 
 msgid "Generate"
 msgstr "生成"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "加密密钥"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "您必须输入服务器操作员提供的 PSK 加密密钥，或者生成一个 DH 加密密钥并发送给服务器操作员。"
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "向服务器管理员寻求帮助."
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "输入 PSK 加密密钥"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "生成新的 DH 加密密钥"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "查找密码"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "您需要输入服务器操作员提供的密码。"
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "HTTP 出口代理"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "点击下面的链接，获取来自跳转服务的地址助手"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "已通过地址助手 {0} 添加"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "已通过地址助手添加"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "缺少查找密码"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "缺少私有密钥"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "私有密钥无效"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "您的新加密密钥"
 
 msgid "Router Console"
-msgstr ""
+msgstr "路由控制台"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "地址簿"
 
 msgid "Configuration"
 msgstr "配置文件"
 
 msgid "Help"
-msgstr ""
+msgstr "帮助"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "复制密钥，并发送给服务器管理员."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "被授予权限后，您才可以访问这个网站."
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "返回并修复错误"
 
 msgid "router"
-msgstr ""
+msgstr "路由器"
 
 msgid "master"
-msgstr ""
+msgstr "主"
 
 msgid "private"
-msgstr ""
+msgstr "私有"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "正在重定向至 {0}"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "正在进行重定向"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "目标{0}已保存至{1}地址簿中，正在重定向至此目标。"
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "目标{0}在{1}地址簿中保存失败，正在重定向至此目标。"
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "如果未能自动转到，请点击这里。"
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "已保存 {0} 的凭据，正在重定向。"
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "保存配置失败"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "配置更改已保存"
 
 msgid "Client"
 msgstr "客户端"

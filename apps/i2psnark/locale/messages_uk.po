@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "Неможливо створити каталог даних"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "Немає прав на запис для тимчасового каталогу"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "Неможливо створити тимчасовий каталог"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "Немає прав на запис для каталогу торентів"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "Неможливо створити каталог торентів"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "Вимкнена рандомізація перехопу в тунелю для виходжих тунелів"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "Увімкнено окреме призначення для кожного торрента"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "Вимкнено окреме призначення для кожного торрента"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "Максимальну кількість призначень змінено на {0}"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "Відновлено необмежену кількість призначень (по одному на торрент)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "Увімкнено рандомізацію часу запуску торентів"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "Вимкнено рандомізацію часу запуску торентів"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "Діапазон затримки запуску змінено на {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "Ключ API оновлено."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "Попереднє виділення файлів для нових торентів увімкнено."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "Попереднє виділення файлів для нових торентів вимкнено."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "Збереження оригінальних назв файлів увімкнено."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "Збереження оригінальних назв файлів вимкнено."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "Максимальну кількість файлів на торрент змінено на {0}"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "Недійсна максимальна кількість файлів на торрент: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "Тимчасовий каталог для підготовки змінено на {0}"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "Тимчасове зберігання підготовчих файлів вимкнено."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "Каталог торентів змінено на {0}"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "Каталог торентів скинуто до каталогу даних."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Список відкритих трекерів змінено - для вступу в силу потрібно перезапустити торрент."
@@ -302,7 +302,7 @@ msgstr "ПОМИЛКА – Брак пам’яті, неможливо ство
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "ПОМИЛКА – неможливо створити торрент із {0}"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "Ініціалізація Торренти і відкриття тунелів"
@@ -396,7 +396,7 @@ msgstr "Торрент вилучено: {0}"
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "Запуск торентів через {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "Попередження - доступно лише {0}МБ для за
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Тимчасове сховище: {0}ГБ наразі доступне для завантажень на налаштованому тимчасовому розділі"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "Тимчасове сховище: наразі доступно {0}МБ для завантажень на налаштованому тимчасовому розділі"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "Попередження - доступно лише {0}МБ для завантажень на налаштованому тимчасовому розділі"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "Відкриття тунелю I2P"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "Розв’язування пошуку торента: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "Відкриття тунелю I2P і запуск всіх торрентів."
@@ -489,14 +489,14 @@ msgstr "I2P-тунель закритий."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "Пропуск циклу призначень — {0} активне завантаження триває"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "Пропуск циклу призначень — {0} активних завантажень триває"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "Немає активно завантажуваних торентів — виконується зміна призначень"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "хвилин"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "Найменший час до завантаження автоматично запущених торентів під час запуску I2PSnark"
 
 msgid "min"
-msgstr ""
+msgstr "мін"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "Найбільший час до завантаження автоматично запущених торентів під час запуску I2PSnark"
 
 msgid "max"
-msgstr ""
+msgstr "макс"
 
 msgid "Data Storage"
 msgstr "Зберігання даних"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Каталог, де зберігаються торренти та завантажені/загальні файли"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "Тимчасовий каталог"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "Необов’язковий каталог, де завантаження тимчасово зберігаються перед переміщенням до каталогу даних після завершення. Залиште порожнім, щоб вимкнути."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "Каталог торентів"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "Необов’язковий каталог для окремого зберігання файлів .torrent. Залиште порожнім, щоб зберігати їх у каталозі даних."
 
 msgid "Files readable by all"
 msgstr "Файли доступні для читання всім"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Установіть права доступу до файлів, щоб дозволити іншим локальним користувачам отримувати доступ до завантажених файлів"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "Попередньо виділяти файли"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "Розширювати нові файли торентів до повного розміру і відразу виділяти місце на диску під час запуску торрента, щоб заповнення диска не переривало завантаження та щоб уникнути фрагментації в міру надходження частин"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "Зберігати назви файлів"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "Зберігати оригінальні назви файлів із торрента. Коли вимкнено, назви файлів фільтруються для вилучення недопустимих символів файлової системи. Коли увімкнено, використовуються оригінальні назви; якщо назва містить символи, не підтримувані вашою файловою системою, файл буде створено з безпечною резервною назвою та буде показано попередження"
 
 msgid "Max files per torrent"
 msgstr "Максимальна кількість файлів на торрент"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "Конфігурація тунелю"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "Основне призначення (ідентифікатор) для цього сеансу; його DHT, трекер і чорний список є спільними з призначеннями для окремих торентів"
 
 msgid "Our destination (identity) for this session"
 msgstr "Наше призначення (ідентифікатор) для цього сеансу"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "Основне призначення"
 
 msgid "Dest."
 msgstr "Призначення"
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "Вихідний"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "Багатопризначення"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "Використовувати окреме призначення для кожного торрента, щоб трекери та DHT не могли пов’язати ваші торренти між собою. Призначення тимчасові та змінюються після перезапуску."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "Максимум призначень"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "Коли активних торентів більше, ніж цей максимум, зайві торренти спільно використовують призначення у випадкових групах змінного розміру, щоб обмежити використання пам’яті. Нуль означає одне призначення на торрент."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "Випадкова затримка запуску"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "Розподіляти запуск торентів із багатьма призначеннями за допомогою випадкової затримки, щоб торенти, які запускаються одночасно, не могли бути зіставлені трекерами або пірами DHT, а будівництво тунелів було розподілене в часі. Вимкніть, щоб запускати всі торренти одразу пакетом."
 
 msgid "I2CP host"
 msgstr "I2CP хост"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "Параметри I2CP"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "Інтеграція з браузером"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "Увімкнути API браузера"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "Дозволити додавання magnet-посилань та URL-адрес торентів без CSRF nonce з loopback або з дозволених хостів, наведених нижче"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Дозволені хости"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "Імена хостів або IP-адреси, розділені комами, яким дозволено додавати торренти без nonce; loopback завжди дозволено"
 
 msgid "API key"
-msgstr ""
+msgstr "Ключ API"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "Необов’язковий пароль для віддаленого доступу, оминає список дозволених хостів"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "Установити обробник браузера"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "Оновити обробник браузера"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "Оновити встановлене розширення I2PSnark Bridge до v{0}"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "Відкрийте розширення I2PSnark Bridge у браузері, щоб додавати magnet-посилання; розширення реєструє себе в браузері, файли на боці роутера не записуються"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Завантажте інсталятор PowerShell, який реєструє magnet-посилання та файли .torrent у вашому браузері; для розширення I2PSnark Bridge потрібен браузер сімейства Firefox"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "Завантажте скрипт інсталятора, який реєструє magnet-посилання та файли .torrent у вашому браузері; для розширення I2PSnark Bridge потрібен браузер сімейства Firefox"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "Завантажити скрипт обробника браузера"
 
 msgid "Save configuration"
 msgstr "Зберегти налаштування"
@@ -957,7 +957,7 @@ msgstr "Зміна цього параметра на менше ніж 3 стр
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "Розширення I2PSnark Bridge v{0} застаріло, оновіть до v{1} на сторінці налаштувань"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "Натисніть \"Додати торрент\" щоб отримати торрент"
@@ -1191,7 +1191,7 @@ msgstr "Введіть URL-адресу або виберіть торрент-�
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "Помилка додавання торрента: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1233,11 +1233,11 @@ msgid "Directory deleted: {0}"
 msgstr "Директорію видалено: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "API браузера увімкнено."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "Не вдалося відкрити розширення I2PSnark Bridge: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1314,7 +1314,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "Видалити файл .torrent і пов’язані з ним файли даних"
 
 msgid "Destination"
-msgstr ""
+msgstr "Призначення"
 
 msgid "Checking"
 msgstr "Перевірка"
@@ -1323,7 +1323,7 @@ msgid "Allocating"
 msgstr "Розподіл"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "Не вдалося підключитися до всіх налаштованих трекерів"
 
 msgid "Starting"
 msgstr "Запуск"
@@ -1518,7 +1518,7 @@ msgstr "Створено"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "Розмір фактично завантажених файлів: {0}, без урахування {1} файлів-заповнювачів BEP 47"
 
 msgid "Added"
 msgstr "Додано"

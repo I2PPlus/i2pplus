@@ -27,16 +27,16 @@ msgid "Data directory cannot be created"
 msgstr "دایرکتوری داده نمی تواند ایجاد شود"
 
 msgid "No write permissions for temp directory"
-msgstr ""
+msgstr "بدون مجوز نوشتن برای دایرکتوری موقت"
 
 msgid "Temp directory cannot be created"
-msgstr ""
+msgstr "دایرکتوری موقت نمی‌تواند ایجاد شود"
 
 msgid "No write permissions for torrent directory"
-msgstr ""
+msgstr "بدون مجوز نوشتن برای دایرکتوری تورنت"
 
 msgid "Torrent directory cannot be created"
-msgstr ""
+msgstr "دایرکتوری تورنت نمی‌تواند ایجاد شود"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
@@ -78,27 +78,27 @@ msgid "Disabled tunnel hop randomization on Outbound tunnels"
 msgstr "رندومیزاسیون برد و برگشت تونل روی تونل‌های خروجی غیرفعال شد"
 
 msgid "Enabled a separate destination for each torrent"
-msgstr ""
+msgstr "مقصد جداگانه برای هر تورنت فعال شد"
 
 msgid "Disabled a separate destination for each torrent"
-msgstr ""
+msgstr "مقصد جداگانه برای هر تورنت غیرفعال شد"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr ""
+msgstr "حداکثر مقصدها به {0} تغییر کرد"
 
 msgid "Unlimited destinations restored (one per torrent)"
-msgstr ""
+msgstr "مقصدهای نامحدود بازیابی شد (یک مقصد برای هر تورنت)"
 
 msgid "Enabled randomizing torrent start times"
-msgstr ""
+msgstr "تصادفی‌سازی زمان شروع تورنت‌ها فعال شد"
 
 msgid "Disabled randomizing torrent start times"
-msgstr ""
+msgstr "تصادفی‌سازی زمان شروع تورنت‌ها غیرفعال شد"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr ""
+msgstr "محدوده تأخیر راه‌اندازی به {0} - {1} تغییر کرد"
 
 #, java-format
 msgid "Refresh time changed to {0}"
@@ -221,38 +221,38 @@ msgid "API key updated."
 msgstr "کلید API به روز شد."
 
 msgid "Preallocate files for new torrents enabled."
-msgstr ""
+msgstr "پیش‌تخصیص فایل‌ها برای تورنت‌های جدید فعال شد."
 
 msgid "Preallocate files for new torrents disabled."
-msgstr ""
+msgstr "پیش‌تخصیص فایل‌ها برای تورنت‌های جدید غیرفعال شد."
 
 msgid "Preserve original file names enabled."
-msgstr ""
+msgstr "حفظ نام فایل‌های اصلی فعال شد."
 
 msgid "Preserve original file names disabled."
-msgstr ""
+msgstr "حفظ نام فایل‌های اصلی غیرفعال شد."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr ""
+msgstr "حداکثر فایل در هر تورنت به {0} تغییر کرد"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
-msgstr ""
+msgstr "حداکثر نامعتبر فایل در هر تورنت: {0}"
 
 #, java-format
 msgid "Temp directory for staging changed to {0}"
-msgstr ""
+msgstr "دایرکتوری موقت برای ذخیره موقت به {0} تغییر کرد"
 
 msgid "Temp directory staging disabled."
-msgstr ""
+msgstr "ذخیره موقت در دایرکتوری موقت غیرفعال شد."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
-msgstr ""
+msgstr "دایرکتوری تورنت به {0} تغییر کرد"
 
 msgid "Torrent directory reset to data directory."
-msgstr ""
+msgstr "دایرکتوری تورنت به دایرکتوری داده بازنشانی شد."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "باز کردن لیست ردیاب تغییر کرد - برای اعمال شدن به راه اندازی مجدد تورنت نیاز است."
@@ -302,7 +302,7 @@ msgstr "ERROR - حافظه خالی است، نمی توان تورنت از {0}
 
 #, java-format
 msgid "ERROR - cannot create torrent from {0}"
-msgstr ""
+msgstr "ERROR - نمی‌توان تورنت را از {0} ایجاد کرد"
 
 msgid "Initializing I2PSnark and opening tunnels"
 msgstr "راه اندازی تورنت‌ها و باز کردن تونل ها"
@@ -396,7 +396,7 @@ msgstr "تورنت حذف شد: \"{0}\""
 
 #, java-format
 msgid "Starting torrents in {0}&hellip;"
-msgstr ""
+msgstr "شروع تورنت‌ها در {0}&hellip;"
 
 #, java-format
 msgid "Down bandwidth limit is {0} KB/s"
@@ -428,15 +428,15 @@ msgstr "هشدار - فقط {0} مگابایت برای دانلود در بخش
 
 #, java-format
 msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "ذخیره سازی: {0}گیگابایت در حال حاضر برای دانلودها در پارتیشن موقت پیکربندی شده در دسترس است"
 
 #, java-format
 msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
-msgstr ""
+msgstr "ذخیره سازی: {0}مگابایت در حال حاضر برای دانلودها در پارتیشن موقت پیکربندی شده در دسترس است"
 
 #, java-format
 msgid "Warning - Only {0}MB available for downloads on configured temp partition"
-msgstr ""
+msgstr "هشدار - فقط {0} مگابایت برای دانلود در بخش موقت تنظیم شده در دسترس است"
 
 #, java-format
 msgid "Download finished: {0}"
@@ -463,7 +463,7 @@ msgstr "در حال باز کردن تونل I2P"
 
 #, java-format
 msgid "Resolving torrent lookup: {0}"
-msgstr ""
+msgstr "در حال انجام جستجوی تورنت: {0}"
 
 msgid "Opening the I2P tunnel and starting all torrents."
 msgstr "در حال باز کردن تونل I2P و شروع تمام تورنت ها."
@@ -489,14 +489,14 @@ msgstr "تونل I2P بسته شد."
 
 #, java-format
 msgid "Skipping destination cycle - {0} active download in progress"
-msgstr ""
+msgstr "رد شدن از گردش مقصدها - {0} دانلود فعال در حال انجام است"
 
 #, java-format
 msgid "Skipping destination cycle - {0} active downloads in progress"
-msgstr ""
+msgstr "رد شدن از گردش مقصدها - {0} دانلود فعال در حال انجام است"
 
 msgid "No actively downloading torrents - cycling destinations"
-msgstr ""
+msgstr "هیچ تورنتی با دانلود فعال وجود ندارد - در حال گردش مقصدها"
 
 #, java-format
 msgid "Cannot check {0}"
@@ -715,16 +715,16 @@ msgid "minutes"
 msgstr "دقیقه"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr ""
+msgstr "حداقل زمان پیش از بارگذاری تورنت‌های خودکار هنگام شروع I2PSnark"
 
 msgid "min"
-msgstr ""
+msgstr "حداقل"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr ""
+msgstr "حداکثر زمان پیش از بارگذاری تورنت‌های خودکار هنگام شروع I2PSnark"
 
 msgid "max"
-msgstr ""
+msgstr "حداکثر"
 
 msgid "Data Storage"
 msgstr "ذخیره سازی داده ها"
@@ -736,16 +736,16 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "دایرکتوری که در آن تورنت ها و فایل های دانلود شده/اشتراک گذاری شده ذخیره می شوند"
 
 msgid "Temp directory"
-msgstr ""
+msgstr "دایرکتوری موقت"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
-msgstr ""
+msgstr "دایرکتوری اختیاری که دانلودها پیش از انتقال به دایرکتوری داده هنگام تکمیل، در آن ذخیره موقت می‌شوند. برای غیرفعال کردن، خالی بگذارید."
 
 msgid "Torrent directory"
-msgstr ""
+msgstr "دایرکتوری تورنت"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
-msgstr ""
+msgstr "دایرکتوری اختیاری برای نگهداری فایل‌های .torrent جدا از داده‌های دانلود شده. برای نگهداری در دایرکتوری داده، خالی بگذارید."
 
 msgid "Files readable by all"
 msgstr "فایل ها قابل خواندن توسط همه"
@@ -754,16 +754,16 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "مجوزهای فایل را تنظیم کنید تا به سایر کاربران محلی اجازه دهید به فایل های دانلود شده دسترسی داشته باشند"
 
 msgid "Preallocate files"
-msgstr ""
+msgstr "پیش‌تخصیص فایل‌ها"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
-msgstr ""
+msgstr "فایل‌های تورنت جدید را در آغاز تورنت به اندازه کاملشان گسترش دهید و فضای دیسک را بلافاصله تخصیص دهید تا پر شدن دیسک دانلودها را قطع نکند و با رسیدن قطعات از تکه‌تکه شدن جلوگیری شود"
 
 msgid "Preserve file names"
-msgstr ""
+msgstr "حفظ نام فایل‌ها"
 
 msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
-msgstr ""
+msgstr "حفظ نام فایل‌های اصلی از تورنت. در حالت غیرفعال، نام فایل‌ها فیلتر می‌شود تا نویسه‌های غیرمجاز سیستم فایل حذف شوند. در حالت فعال، نام فایل‌های اصلی استفاده می‌شود؛ اگر نام فایلی شامل نویسه‌هایی باشد که سیستم فایل شما از آن‌ها پشتیبانی نمی‌کند، فایل با یک نام جایگزین ایمن ساخته خواهد شد و هشداری نمایش داده می‌شود"
 
 msgid "Max files per torrent"
 msgstr "حداکثر فایل در هر تورنت"
@@ -775,13 +775,13 @@ msgid "Tunnel Configuration"
 msgstr "پیکربندی تونل"
 
 msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
-msgstr ""
+msgstr "مقصد اصلی (هویت) برای این جلسه؛ DHT، ردیاب و فهرست سیاه آن با مقصدهای هر تورنت به اشتراک گذاشته می‌شود"
 
 msgid "Our destination (identity) for this session"
 msgstr "مقصد (هویت) ما برای این جلسه"
 
 msgid "Primary Dest."
-msgstr ""
+msgstr "مقصد اصلی"
 
 msgid "Dest."
 msgstr "مقصد."
@@ -808,22 +808,22 @@ msgid "Outbound"
 msgstr "خروجی"
 
 msgid "Multi-destination"
-msgstr ""
+msgstr "چندمقصدی"
 
 msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
-msgstr ""
+msgstr "برای هر تورنت یک مقصد جداگانه استفاده کنید، به طوری که ردیاب‌ها و DHT نتوانند تورنت‌های شما را به یکدیگر مرتبط کنند. مقصدها موقتی هستند و با هر راه‌اندازی مجدد تغییر می‌کنند."
 
 msgid "Maximum destinations"
-msgstr ""
+msgstr "حداکثر مقصدها"
 
 msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
-msgstr ""
+msgstr "وقتی تعداد تورنت‌های در حال اجرا از این حداکثر بیشتر شود، تورنت‌های اضافی مقصدها را در گروه‌های تصادفی با اندازه متغیر به اشتراک می‌گذارند تا مصرف حافظه محدود بماند. صفر یعنی یک مقصد برای هر تورنت."
 
 msgid "Random startup delay"
-msgstr ""
+msgstr "تأخیر تصادفی راه‌اندازی"
 
 msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
-msgstr ""
+msgstr "شروع تدریجی تورنت‌های چندمقصدی با یک تأخیر تصادفی، به طوری که تورنت‌هایی که با هم آغاز می‌شوند نتوانند توسط ردیاب‌ها یا همتایان DHT به یکدیگر مرتبط شوند و ساخت تونل‌ها پراکنده شود. برای شروع فوری همه تورنت‌ها به صورت یکجا، این گزینه را غیرفعال کنید."
 
 msgid "I2CP host"
 msgstr "میزبان I2CP"
@@ -835,47 +835,47 @@ msgid "I2CP options"
 msgstr "گزینه های I2CP"
 
 msgid "Browser Integration"
-msgstr ""
+msgstr "یکپارچه‌سازی مرورگر"
 
 msgid "Enable browser API"
-msgstr ""
+msgstr "فعال سازی API مرورگر"
 
 msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
-msgstr ""
+msgstr "اجازه افزودن پیوندهای magnet و URLهای تورنت بدون nonce از نوع CSRF، از loopback یا میزبان‌های مجاز زیر"
 
 msgid "Allowed hosts"
-msgstr ""
+msgstr "میزبان‌های مجاز"
 
 msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
-msgstr ""
+msgstr "نام میزبان‌ها یا IPهای جداشده با کاما که مجاز به افزودن تورنت بدون nonce هستند؛ loopback همیشه مجاز است"
 
 msgid "API key"
-msgstr ""
+msgstr "کلید API"
 
 msgid "Optional password for remote access, bypasses host allow list"
-msgstr ""
+msgstr "رمز عبور اختیاری برای دسترسی از راه دور، که فهرست میزبان‌های مجاز را دور می‌زند"
 
 msgid "Install browser handler"
-msgstr ""
+msgstr "نصب یاور مرورگر"
 
 msgid "Update browser handler"
-msgstr ""
+msgstr "به‌روزرسانی یاور مرورگر"
 
 #, java-format
 msgid "Update the installed I2PSnark Bridge extension to v{0}"
-msgstr ""
+msgstr "افزونه نصب‌شده I2PSnark Bridge را به نسخه {0} به‌روز کنید"
 
 msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
-msgstr ""
+msgstr "افزونه I2PSnark Bridge را در مرورگر خود باز کنید تا پیوندهای magnet را اضافه کنید؛ افزونه خودش را در مرورگر ثبت می‌کند و هیچ فایلی در سمت روتر نوشته نمی‌شود"
 
 msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "بارگیری اسکریپت نصب‌کننده PowerShell که پیوندهای magnet و فایل‌های .torrent را در مرورگر شما ثبت می‌کند؛ افزونه I2PSnark Bridge به مرورگری از خانواده Firefox نیاز دارد"
 
 msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
-msgstr ""
+msgstr "بارگیری اسکریپت نصب‌کننده‌ای که پیوندهای magnet و فایل‌های .torrent را در مرورگر شما ثبت می‌کند؛ افزونه I2PSnark Bridge به مرورگری از خانواده Firefox نیاز دارد"
 
 msgid "Download browser handler script"
-msgstr ""
+msgstr "بارگیری اسکریپت یاور مرورگر"
 
 msgid "Save configuration"
 msgstr "ذخیره سازی پیکربندی"
@@ -957,7 +957,7 @@ msgstr "تغییر این تنظیم به کمتر از 3 پرش ممکن است
 
 #, java-format
 msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
-msgstr ""
+msgstr "افزونه I2PSnark Bridge نسخه {0} قدیمی است، آن را در صفحه پیکربندی به نسخه {1} به‌روز کنید"
 
 msgid "Click \"Add torrent\" button to fetch torrent"
 msgstr "برای واکشی تورنت روی دکمه \"افزودن تورنت\" کلیک کنید"
@@ -1189,7 +1189,7 @@ msgstr "URL را وارد کنید یا فایل تورنت را انتخاب ک
 
 #, java-format
 msgid "Error adding the torrent: {0}"
-msgstr ""
+msgstr "خطا در افزودن تورنت: {0}"
 
 #, java-format
 msgid "Error uploading the torrent file: {0}"
@@ -1231,11 +1231,11 @@ msgid "Directory deleted: {0}"
 msgstr "دایرکتوری حذف شد: {0}"
 
 msgid "Browser API enabled."
-msgstr ""
+msgstr "API مرورگر فعال شد."
 
 #, java-format
 msgid "Failed to open the I2PSnark Bridge extension: {0}"
-msgstr ""
+msgstr "باز کردن افزونه I2PSnark Bridge ناموفق بود: {0}"
 
 #, java-format
 msgid " files or folders were excluded from \"{0}\" due to filter rules."
@@ -1312,7 +1312,7 @@ msgid "Delete .torrent file and associated data files"
 msgstr "فایل تورنت و فایل های داده مرتبط را حذف کنید"
 
 msgid "Destination"
-msgstr ""
+msgstr "مقصد"
 
 msgid "Checking"
 msgstr "چک کردن"
@@ -1321,7 +1321,7 @@ msgid "Allocating"
 msgstr "تخصیص"
 
 msgid "Failed to connect to all configured trackers"
-msgstr ""
+msgstr "اتصال به همه ردیاب‌های پیکربندی‌شده ناموفق بود"
 
 msgid "Starting"
 msgstr "راه اندازی"
@@ -1513,7 +1513,7 @@ msgstr "ساخته شده"
 
 #, java-format
 msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
-msgstr ""
+msgstr "اندازه فایل‌های دانلود شده واقعی: {0}، بدون احتساب {1} فایل پرکننده BEP 47"
 
 msgid "Added"
 msgstr "افزوده شد"

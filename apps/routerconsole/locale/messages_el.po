@@ -570,7 +570,7 @@ msgid "Warning: could not set the I2P+ service to manual start"
 msgstr "Προειδοποίηση: δεν ήταν δυνατή η ρύθμιση της υπηρεσίας I2P σε μη αυτόματη εκκίνηση"
 
 msgid "Warning: could not locate the I2P+ install directory"
-msgstr ""
+msgstr "Προειδοποίηση: δεν ήταν δυνατή η εύρεση του καταλόγου εγκατάστασης του I2P+"
 
 msgid "Configuration saved successfully"
 msgstr "Επιτυχής αποθήκευση ρυθμίσεων"
@@ -1440,7 +1440,7 @@ msgid "Ban peer until restart"
 msgstr "Αποκλεισμός ομότιμου μέχρι την επανεκκίνηση"
 
 msgid "Manually banned via configpeer"
-msgstr ""
+msgstr "Απαγορευμένος χειροκίνητα μέσω configpeer"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -3541,10 +3541,10 @@ msgid "Low Latency"
 msgstr "Χαμηλή καθυστέρηση"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
-msgstr ""
+msgstr "Πακέτα που επαναμεταδόθηκαν / πακέτα που στάλθηκαν, όπως αναφέρει η μεταφορά UDP"
 
 msgid "Loss"
-msgstr ""
+msgstr "Απώλεια"
 
 msgid "Tunnels peer has agreed to participate in"
 msgstr "Σήραγγες συμφώνησε να συμμετάσχει"
@@ -3599,62 +3599,62 @@ msgstr "Ρύθμιση ομότιμου"
 
 #, java-format
 msgid "{0} in RAM / {1} on disk"
-msgstr ""
+msgstr "{0} στη μνήμη RAM / {1} στον δίσκο"
 
 msgid "High Cap"
-msgstr ""
+msgstr "Υψηλή Χωρητικότητα"
 
 msgid "Displayed"
-msgstr ""
+msgstr "Εμφανίζονται"
 
 #, java-format
 msgid "Showing {0} of {1} profiles"
-msgstr ""
+msgstr "Εμφανίζονται {0} από {1} προφίλ"
 
 #, java-format
 msgid "{0} stale profile hidden"
 msgid_plural "{0} stale profiles hidden"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Αποκρύφθηκε {0} παλαιό προφίλ"
+msgstr[1] "Αποκρύφθηκαν {0} παλαιά προφίλ"
 
 msgid "Share of total profiles shown"
-msgstr ""
+msgstr "Ποσοστό συνολικών προφίλ που εμφανίζονται"
 
 msgid "peers"
 msgstr "συνομήλικοι"
 
 msgid "Share of tier profiles shown"
-msgstr ""
+msgstr "Ποσοστό προφίλ βαθμίδας που εμφανίζονται"
 
 msgid "Window"
-msgstr ""
+msgstr "Παράθυρο"
 
 msgid "Fast RTT"
-msgstr ""
+msgstr "Γρήγορο RTT"
 
 msgid "Max RTT for fast-tier membership (ms)"
-msgstr ""
+msgstr "Μέγιστο RTT για ένταξη στην ταχεία βαθμίδα (ms)"
 
 msgid "Average loss of fast-tier peers (%)"
-msgstr ""
+msgstr "Μέση απώλεια των ομοτίμων ταχείας βαθμίδας (%)"
 
 msgid "Average loss of high-capacity peers (%)"
-msgstr ""
+msgstr "Μέση απώλεια των ομοτίμων υψηλής χωρητικότητας (%)"
 
 msgid "Heard from within the display cutoff"
-msgstr ""
+msgstr "Ακούστηκε εντός του ορίου εμφάνισης"
 
 msgid "Lookups"
-msgstr ""
+msgstr "Αναζητήσεις"
 
 msgid "Lookup success rate"
-msgstr ""
+msgstr "Ποσοστό επιτυχίας αναζητήσεων"
 
 msgid "Stores"
-msgstr ""
+msgstr "Αποθηκεύσεις"
 
 msgid "Store success rate"
-msgstr ""
+msgstr "Ποσοστό επιτυχίας αποθηκεύσεων"
 
 msgid "Definitions"
 msgstr "Ορισμοί"
@@ -3725,25 +3725,25 @@ msgid "how many new peers have they told us about lately?"
 msgstr "για πόσους νέους συνομηλίκους μας είπαν τελευταία?"
 
 msgid "Known floodfills"
-msgstr ""
+msgstr "Γνωστοί κόμβοι πλημμύρας"
 
 msgid "No-Fail"
-msgstr ""
+msgstr "Χωρίς Αποτυχίες"
 
 msgid "No lookup failures (1h)"
-msgstr ""
+msgstr "Καμία αποτυχία αναζήτησης (1h)"
 
 msgid "Response"
-msgstr ""
+msgstr "Απόκριση"
 
 msgid "Lookup response time (1h)"
-msgstr ""
+msgstr "Χρόνος απόκρισης αναζητήσεων (1h)"
 
 msgid "1h Contact"
-msgstr ""
+msgstr "Επικοινωνία 1h"
 
 msgid "Contacted within 1h"
-msgstr ""
+msgstr "Επικοινωνήθηκε εντός 1h"
 
 msgid "1h Fail Rate"
 msgstr "Ρυθμός αποτυχίας 1 ώρας"
@@ -4729,10 +4729,10 @@ msgid "Slow Start Window Cap"
 msgstr "Ανώτατο Όριο Παραθύρου Slow Start"
 
 msgid "Max Inbound Buffer"
-msgstr ""
+msgstr "Μέγιστο Εισερχόμενο Buffer"
 
 msgid "Max Concurrent Streams"
-msgstr ""
+msgstr "Μέγιστες Ταυτόχρονες Ροές"
 
 msgid "Max SYN Sends"
 msgstr "Μέγιστη αποστολή SYN"
@@ -4747,7 +4747,7 @@ msgid "Max Retransmissions"
 msgstr "Μέγιστες Επαναμεταδόσεις"
 
 msgid "Receive Worker Threads"
-msgstr ""
+msgstr "Νήματα Εργατών Λήψης"
 
 msgid "Writer Queue Size"
 msgstr "Μέγεθος Ουράς Εγγραφέα"
@@ -4831,16 +4831,16 @@ msgid "Search Timeout"
 msgstr "Χρονικό Όριο Αναζήτησης"
 
 msgid "Search Cap"
-msgstr ""
+msgstr "Όριο Αναζητήσεων"
 
 msgid "Republish Window"
-msgstr ""
+msgstr "Παράθυρο Αναδημοσίευσης"
 
 msgid "Republish Fanout"
-msgstr ""
+msgstr "Εύρος Αναδημοσίευσης"
 
 msgid "Exploratory Breadth"
-msgstr ""
+msgstr "Εύρος Διερευνητικών Αναζητήσεων"
 
 msgid "LeaseSet Lookup Timeout"
 msgstr "Χρονικό Όριο Αναζήτησης LeaseSet"
@@ -4867,7 +4867,7 @@ msgid "Maximum High Capacity Peers"
 msgstr "Μέγιστοι Κόμβοι Υψηλής Χωρητικότητας"
 
 msgid "Lossy Peer Demotion Threshold"
-msgstr ""
+msgstr "Κατώφλι Υποβάθμισης Ομοτίμων με Απώλειες"
 
 msgid "Tunnel Build Request Timeout"
 msgstr "Χρονικό Όριο Αιτήματος Κατασκευής Σήραγγας"
@@ -4894,25 +4894,25 @@ msgid "Max Delay Between Tests"
 msgstr "Μέγιστη Καθυστέρηση μεταξύ Ελέγχων"
 
 msgid "Tunnel Test Failure Window"
-msgstr ""
+msgstr "Παράθυρο Αστοχίας Δοκιμής Σήραγγας"
 
 msgid "Tunnel Test Failure Window Floor"
-msgstr ""
+msgstr "Κατώτατο Όριο Παραθύρου Αστοχίας Δοκιμής Σήραγγας"
 
 msgid "First-Hop Failure Cooldown"
-msgstr ""
+msgstr "Περίοδος Ψύξης Αποτυχιών Πρώτου Άλματος"
 
 msgid "First-Hop Failure Threshold"
-msgstr ""
+msgstr "Κατώφλι Αποτυχιών Πρώτου Άλματος"
 
 msgid "Inbound Congestion Threshold"
-msgstr ""
+msgstr "Κατώφλι Εισερχόμενης Συμφόρησης"
 
 msgid "Stale Build Pruning Threshold"
-msgstr ""
+msgstr "Κατώφλι Αποκλάδευσης Παλαιών Κατασκευών"
 
 msgid "Concurrency Throttle Threshold"
-msgstr ""
+msgstr "Κατώφλι Περιορισμού Ταυτοχρονισμού"
 
 msgid "NTCP Reader Threads"
 msgstr "Νήματα Ανάγνωσης NTCP"
@@ -4924,7 +4924,7 @@ msgid "NTCP Pumper Failsafe Interval"
 msgstr "Διάστημα Ασφαλείας NTCP Pumper"
 
 msgid "NTCP Pumper Max Idle Loop Rate"
-msgstr ""
+msgstr "Μέγιστος Ρυθμός Βρόχων Αδράνειας NTCP Pumper"
 
 msgid "Max Concurrent Peer Messages"
 msgstr "Μέγιστα Ταυτόχρονα Μηνύματα Κόμβου"
@@ -4996,7 +4996,7 @@ msgid "Max Window Size"
 msgstr "Μέγιστο μέγεθος παραθύρου"
 
 msgid "Connect Timeout Multiplier"
-msgstr ""
+msgstr "Πολλαπλασιαστής Χρονικού Ορίου Σύνδεσης"
 
 msgid "Max Message Queue Age"
 msgstr "Μέγιστη Ηλικία Ουράς Μηνυμάτων"
@@ -5014,16 +5014,16 @@ msgid "Server Handler Threads"
 msgstr "Νήματα Χειριστή Διακομιστή"
 
 msgid "Server Handler Queue Capacity"
-msgstr ""
+msgstr "Χωρητικότητα Ουράς Χειριστή Διακομιστή"
 
 msgid "Server Default Threads per Tunnel"
-msgstr ""
+msgstr "Προεπιλεγμένα Νήματα Διακομιστή ανά Σήραγγα"
 
 msgid "I/O Transfer Threads"
-msgstr ""
+msgstr "Νήματα Μεταφοράς Εισόδου/Εξόδου"
 
 msgid "I/O Stall Timeout"
-msgstr ""
+msgstr "Χρονικό Όριο Στάσης Εισόδου/Εξόδου"
 
 msgid "Build Handler Threads"
 msgstr "Νήματα Χειριστή Κατασκευής"
@@ -5032,7 +5032,7 @@ msgid "Client Runner Max Threads"
 msgstr "Μέγιστα Νήματα Client Runner"
 
 msgid "Client Default Max Connections"
-msgstr ""
+msgstr "Μέγιστες Προεπιλεγμένες Συνδέσεις Πελάτη"
 
 msgid "Participating Throttle Min"
 msgstr "Ελάχιστος Πνιγμός Συμμετοχής"
@@ -5110,7 +5110,7 @@ msgid "Untested Tunnel Cap Multiplier"
 msgstr "Μη δοκιμασμένος πολλαπλασιαστής καλύμματος σήραγγας"
 
 msgid "Tunnel IV Filter Size"
-msgstr ""
+msgstr "Μέγεθος Φίλτρου IV Σήραγγας"
 
 msgid "Message Processing Throttle"
 msgstr "γκάζι επεξεργασίας μηνυμάτων"
@@ -5161,10 +5161,10 @@ msgid "Max congestion window during slow start."
 msgstr "Μέγιστο παράθυρο συμφόρησης κατά το slow start."
 
 msgid "Per-connection inbound buffer cap (bytes)."
-msgstr ""
+msgstr "Όριο του εισερχόμενου buffer ανά σύνδεση (bytes)."
 
 msgid "Dynamic cap on concurrent streams per destination."
-msgstr ""
+msgstr "Δυναμικό όριο ταυτόχρονων ροών ανά προορισμό."
 
 msgid "Total SYN attempts before giving up on a handshake."
 msgstr "Συνολικές προσπάθειες SYN πριν εγκαταλείψουν μια χειραψία."
@@ -5179,7 +5179,7 @@ msgid "Retransmissions before dropping the stream."
 msgstr "Επαναμεταδόσεις πριν την απόρριψη της ροής."
 
 msgid "Inbound packet processing threads per streaming session."
-msgstr ""
+msgstr "Νήματα επεξεργασίας εισερχόμενων πακέτων ανά συνεδρία ροής."
 
 msgid "Max idle time before dropping a stream (ms)."
 msgstr "Μέγιστος χρόνος αδράνειας πριν την απόρριψη μιας ροής (ms)."
@@ -5269,16 +5269,16 @@ msgid "Per-peer lookup timeout (ms)."
 msgstr "Χρονικό όριο αναζήτησης ανά κόμβο (ms)."
 
 msgid "Hard deadline for each iterative search (ms)."
-msgstr ""
+msgstr "Απόλυτη προθεσμία για κάθε επαναληπτική αναζήτηση (ms)."
 
 msgid "Lifetime of lease republish store messages (ms)."
-msgstr ""
+msgstr "Διάρκεια ζωής των μηνυμάτων αποθήκευσης αναδημοσίευσης μίσθωσης (ms)."
 
 msgid "Max peers that receive a republished lease after a search."
-msgstr ""
+msgstr "Μέγιστοι ομότιμοι που λαμβάνουν αναδημοσιευμένη μίσθωση μετά από αναζήτηση."
 
 msgid "Concurrent exploratory searches per cycle."
-msgstr ""
+msgstr "Ταυτόχρονες διερευνητικές αναζητήσεις ανά κύκλο."
 
 msgid "Adaptive deadline cap for LeaseSet lookups (ms)."
 msgstr "Προσαρμοστικό ανώτατο όριο προθεσμίας για αναζητήσεις LeaseSet (ms)."
@@ -5305,7 +5305,7 @@ msgid "Max high-capacity peers in routing table."
 msgstr "Μέγιστοι κόμβοι υψηλής χωρητικότητας στον πίνακα δρομολόγησης."
 
 msgid "Loss ratio that demotes a peer from the fast tiers (%)."
-msgstr ""
+msgstr "Αναλογία απωλειών που υποβαθμίζει έναν ομότιμο από τις ταχείες βαθμίδες (%)."
 
 msgid "Build reply timeout (ms)."
 msgstr "Χρονικό όριο απάντησης κατασκευής (ms)."
@@ -5332,25 +5332,25 @@ msgid "Max interval between tunnel tests (ms)."
 msgstr "Μέγιστο διάστημα μεταξύ ελέγχων σήραγγας (ms)."
 
 msgid "Max time a tunnel test may take before failure (ms)."
-msgstr ""
+msgstr "Μέγιστος χρόνος που μπορεί να διαρκέσει μια δοκιμή σήραγγας πριν αποτύχει (ms)."
 
 msgid "Floor for the tunnel test failure window (ms)."
-msgstr ""
+msgstr "Κατώτατο όριο για το παράθυρο αστοχίας δοκιμής σήραγγας (ms)."
 
 msgid "How long a peer is skipped after first-hop failures (ms)."
-msgstr ""
+msgstr "Για πόσο παραλείπεται ένας ομότιμος μετά από αποτυχίες πρώτου άλματος (ms)."
 
 msgid "Failures before a peer is skipped during cooldown."
-msgstr ""
+msgstr "Αποτυχίες πριν παραλειφθεί ένας ομότιμος κατά την περίοδο ψύξης."
 
 msgid "Inbound tunnel count below which builds are throttled."
-msgstr ""
+msgstr "Αριθμός εισερχόμενων σηράγγων κάτω από τον οποίο περιορίζονται οι κατασκευές."
 
 msgid "Queue-wait fraction of timeout budget before pruning a build (%)."
-msgstr ""
+msgstr "Κλάσμα αναμονής στην ουρά του προϋπολογισμού χρονικού ορίου πριν αποκλαδευτεί μια κατασκευή (%)."
 
 msgid "Timeout rate that triggers concurrent build reduction (%)."
-msgstr ""
+msgstr "Ποσοστό χρονικών ορίων που ενεργοποιεί τη μείωση των ταυτόχρονων κατασκευών (%)."
 
 msgid "Threads decrypting inbound NTCP data."
 msgstr "Νήματα που αποκρυπτογραφούν εισερχόμενα δεδομένα NTCP."
@@ -5362,7 +5362,7 @@ msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "Διάστημα σάρωσης ασφαλείας για κολλημένες αντλίες NTCP (ms)."
 
 msgid "Cap on idle NTCP pump iterations per second (loops/s)."
-msgstr ""
+msgstr "Όριο των επαναλήψεων αντλίας NTCP σε αδράνεια ανά δευτερόλεπτο (βρόχοι/s)."
 
 msgid "In-flight message limit per UDP peer."
 msgstr "Όριο μηνυμάτων εν κινήσει ανά κόμβο UDP."
@@ -5419,7 +5419,7 @@ msgid "Upper bound on RTT estimate (ms)."
 msgstr "Ανώτατο όριο στην εκτίμηση RTT (ms)."
 
 msgid "Scales each client's connect timeout by network RTT (30-200%)."
-msgstr ""
+msgstr "Κλιμακώνει το χρονικό όριο σύνδεσης κάθε πελάτη ανάλογα με το RTT του δικτύου (30-200%)."
 
 msgid "Delay before first retransmit (ms)."
 msgstr "Καθυστέρηση πριν την πρώτη επαναμετάδοση (ms)."
@@ -5443,16 +5443,16 @@ msgid "Handler threads for incoming I2PTunnel connections."
 msgstr "Νήματα χειρισμού για εισερχόμενες συνδέσεις I2PTunnel."
 
 msgid "Inbound connections that may wait for a free server handler thread."
-msgstr ""
+msgstr "Εισερχόμενες συνδέσεις που επιτρέπεται να περιμένουν ένα διαθέσιμο νήμα χειριστή διακομιστή."
 
 msgid "Default cap on server handler threads for each server tunnel."
-msgstr ""
+msgstr "Προεπιλεγμένο όριο νημάτων χειριστή διακομιστή για κάθε σήραγγα διακομιστή."
 
 msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr ""
+msgstr "Αποκλειστική ομάδα για τη μεταφορά δεδομένων Server→Client, απελευθερώνει τα νήματα χειριστή."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
-msgstr ""
+msgstr "Χρονικό όριο στάσης για μεταφορές δεδομένων Server→Client (ms)."
 
 msgid "Thread pool for inbound build request processing."
 msgstr "Ομάδα νημάτων για την επεξεργασία εισερχόμενων αιτημάτων κατασκευής."
@@ -5461,7 +5461,7 @@ msgid "Ceiling for client proxy thread pool."
 msgstr "Ανώτατο όριο για την ομάδα νημάτων διαμεσολάβησης πελάτη."
 
 msgid "Default client connection cap."
-msgstr ""
+msgstr "Προεπιλεγμένο όριο συνδέσεων πελάτη."
 
 msgid "Min transit tunnels any peer can hold."
 msgstr "Ελάχιστες σήραγγες διέλευσης που μπορεί να διατηρεί οποιοσδήποτε κόμβος."
@@ -5539,7 +5539,7 @@ msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Χρονικό όριο σύνδεσης υποδοχής TCP για νήματα χειριστή διακομιστή σήραγγας (ms)."
 
 msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr ""
+msgstr "Εκθέτης του φίλτρου αφαίρεσης διπλολογιών IV της σήραγγας: καθένας από τους δύο εσωτερικούς του buffers χωράει 2^n bit, άρα το ζεύγος κοστίζει 2^(n-2) byte. Ορίζεται βάσει των IV που παρατηρήθηκαν στην πράξη· αν είναι πολύ μικρός εκδηλώνεται ως απόρριψη καλών δεδομένων σήραγγας."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Μέγιστη μέση καθυστέρηση μηνύματος πριν από την απόρριψη της μετάδοσης (ms)."
@@ -5721,7 +5721,7 @@ msgid "Endpoint"
 msgstr "Τελικό σημείο"
 
 msgid "ms"
-msgstr ""
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Δοκιμή επιτυχής"
@@ -6132,10 +6132,10 @@ msgid "Additional Router Caps"
 msgstr "Πρόσθετες Δυνατότητες Δρομολογητή"
 
 msgid "Add caps groups, separated by spaces or commas e.g. LUf,PUG. Use ! to exclude: G!f bans G routers unless floodfill"
-msgstr ""
+msgstr "Προσθέστε ομάδες δυνατοτήτων, χωρισμένες με κενά ή κόμματα π.χ. LUf,PUG. Χρησιμοποιήστε το ! για εξαίρεση: το G!f απαγορεύει τους δρομολογητές G εκτός από κόμβους πλημμύρας"
 
 msgid "Misc"
-msgstr ""
+msgstr "Διάφορα"
 
 msgid "Ban floodfill peers that fail to respond to queries (failure rate >95%)"
 msgstr "Απαγόρευση ομότιμων κόμβων πλημμύρας που αποτυγχάνουν να απαντήσουν σε ερωτήματα (ποσοστό αποτυχίας >95%)"
@@ -6156,10 +6156,10 @@ msgid "Ban excessive tunnel requests"
 msgstr "Αποκλεισμός υπερβολικών αιτημάτων σήραγγας"
 
 msgid "When enabled, peers resolved from the network that we are not directly connected to - transit next hops as well as client tunnel endpoints - are subject to policy bans. When disabled, such peers are exempt unless directly connected."
-msgstr ""
+msgstr "Όταν είναι ενεργοποιημένο, οι ομότιμοι που επιλύονται από το δίκτυο και με τους οποίους δεν έχουμε άμεση σύνδεση - τα επόμενα άλματα διέλευσης καθώς και τα άκρα των σηράγγων πελάτη - υπόκεινται σε απαγορεύσεις πολιτικής. Όταν είναι απενεργοποιημένο, τέτοιοι ομότιμοι εξαιρούνται εκτός αν συνδέονται άμεσα."
 
 msgid "Ban next-hop peers"
-msgstr ""
+msgstr "Απαγόρευση ομοτίμων επόμενου άλματος"
 
 msgid "Clear all bans"
 msgstr "Εκκαθάριση όλων των αποκλεισμών"
@@ -6302,10 +6302,10 @@ msgid "I2CP Port"
 msgstr "Θύρα I2CP"
 
 msgid "Do not bypass the network when accessing locally hosted services"
-msgstr ""
+msgstr "Να μην παρακάμπτεται το δίκτυο κατά την πρόσβαση σε τοπικά φιλοξενούμενες υπηρεσίες"
 
 msgid "Disable Loopback"
-msgstr ""
+msgstr "Απενεργοποίηση τοπικού βρόχου"
 
 msgid "Require username and password"
 msgstr "Απαιτείται όνομα χρήστη και κωδικός πρόσβασης"
@@ -7484,13 +7484,13 @@ msgid "Floor on concurrent next-hop RouterInfo lookups during tunnel build proce
 msgstr "Κατώτατο όριο ταυτόχρονων αναζητήσεων RouterInfo επόμενου άλματος κατά την επεξεργασία κατασκευής σήραγγας. Διασφαλίζει ένα ελάχιστο επίπεδο ταυτοχρονίας αναζήτησης ακόμη και όταν λίγες σήραγγες συμμετέχουν. [Προεπιλογή 10 (4 σε αργά συστήματα)]"
 
 msgid "Ceiling on concurrent next-hop RouterInfo lookups during tunnel build processing. Slots count distinct next hops, not individual requests: builds sharing a next hop reuse one search. Not cores-scaled; lookups are network-bound waits. [Default is 64 (32 on slow systems)]"
-msgstr ""
+msgstr "Ανώτατο όριο ταυτόχρονων αναζητήσεων RouterInfo επόμενου άλματος κατά την επεξεργασία κατασκευής σήραγγας. Οι θέσεις μετρούν διακριτά επόμενα άλματα, όχι επιμέρους αιτήματα: οι κατασκευές που μοιράζονται ένα επόμενο άλμα επαναχρησιμοποιούν μία αναζήτηση. Δεν κλιμακώνεται ανάλογα με τους πυρήνες· οι αναζητήσεις είναι αναμονές δικτύου. [Προεπιλογή 64 (32 σε αργά συστήματα)]"
 
 msgid "Percentage of current participating tunnels used to scale the concurrent lookup limit after startup. The effective limit is clamped between minLookupLimit and maxLookupLimit. [Default is 40 (15 on slow systems)]"
-msgstr ""
+msgstr "Ποσοστό των τρεχουσών συμμετεχουσών σηράγγων που χρησιμοποιείται για την κλιμάκωση του ορίου ταυτόχρονων αναζητήσεων μετά την εκκίνηση. Το αποτελεσματικό όριο περιορίζεται μεταξύ minLookupLimit και maxLookupLimit. [Προεπιλογή 40 (15 σε αργά συστήματα)]"
 
 msgid "Depth of the queue holding tunnel builds whose next hop is being resolved while all lookup slots are busy. Sized so a full queue drains within the originator's build timeout; entries older than that budget are discarded as stale regardless of depth. [Default is 256]"
-msgstr ""
+msgstr "Βάθος της ουράς που φιλοξενεί κατασκευές σηράγγων των οποίων το επόμενο άλμα επιλύεται ενώ όλες οι θέσεις αναζήτησης είναι κατειλημμένες. Ορίζεται ώστε μια πλήρως γεμάτη ουρά να εκκεντρώνεται εντός του χρονικού ορίου κατασκευής του δημιουργού· οι καταχωρίσεις παλαιότερες από αυτόν τον προϋπολογισμό απορρίπτονται ως παλαιές ανεξαρτήτως βάθους. [Προεπιλογή 256]"
 
 msgid "Maximum allowable future skew for tunnel build request timestamps. Requests with timestamps farther in the future than this are rejected as potential replay attacks. [Default is 300000 (5 minutes)]"
 msgstr "Μέγιστη επιτρεπόμενη μελλοντική απόκλιση για χρονικές σημάνσεις αιτημάτων κατασκευής σήραγγας. Αιτήματα με χρονικές σημάνσεις πιο μελλοντικές από αυτό απορρίπτονται ως πιθανές επιθέσεις επανάληψης. [Προεπιλογή 300000 (5 λεπτά)]"
@@ -7598,7 +7598,7 @@ msgid "Minimum number of active peers required during router startup before rest
 msgstr "Ελάχιστος αριθμός ενεργών συνομηλίκων που απαιτείται κατά την εκκίνηση του δρομολογητή πριν από τον περιορισμό της επιλογής διερευνητικών συνομηλίκων. Κατά την πρώιμη εκκίνηση, ο δρομολογητής είναι πιο ανεκτικός ως προς την ποιότητα συνομηλίκων. [Προεπιλογή 6]"
 
 msgid "Maximum time in milliseconds a received SYN may wait in the accept queue before accept() pulls it. If accept() is delayed (busy hosted server) the connection is refused after this window, so a higher value tolerates brief stalls. The configured value is applied without a restart. [Default is 60000 (60 seconds)]"
-msgstr ""
+msgstr "Μέγιστος χρόνος σε χιλιοστά του δευτερολέπτου που ένα ληφθέν SYN μπορεί να περιμένει στην ουρά αποδοχής πριν το αναλάβει η accept(). Εάν η accept() καθυστερεί (πολυσύχνονος φιλοξενούμενος διακομιστής) η σύνδεση απορρίπτεται μετά από αυτό το παράθυρο, οπότε μια υψηλότερη τιμή ανεχεται σύντομες παύσεις. Η ρυθμισμένη τιμή εφαρμόζεται χωρίς επανεκκίνηση. [Προεπιλογή 60000 (60 δευτερόλεπτα)]"
 
 msgid "This tunnel-specific setting allows you to enable or disable replies to pings sent to servers hosted by the router. To disable pings, you must add the line <code>i2p.streaming.answerPings=false</code> to the <i>Custom Options</i> section for the server's configuration in the Tunnel Manager."
 msgstr "Αυτή η ρύθμιση για τον συγκεκριμένο σήραγγα σάς επιτρέπει να ενεργοποιήσετε ή να απενεργοποιήσετε τις απαντήσεις σε αιτήματα ping που αποστέλλονται σε διακομιστές που φιλοξενούνται από το δρομολογητή. Για να απενεργοποιήσετε τα ping, πρέπει να προσθέσετε τη γραμμή <code>i2p.streaming.answerPings=false</code> στην ενότητα <i>Προσαρμοσμένες επιλογές</i> για τη διαμόρφωση του διακομιστή στον Διαχειριστή Σήραγγων."
@@ -7607,22 +7607,22 @@ msgid "Default maximum stream delay in milliseconds when no explicit connect tim
 msgstr "Προεπιλεγμένη μέγιστη καθυστέρηση ροής σε χιλιοστά του δευτερολέπτου όταν δεν έχει οριστεί ρητό χρονικό όριο σύνδεσης. [Προεπιλογή 10000 (10 δευτερόλεπτα)]"
 
 msgid "Cooldown period in milliseconds between connection attempts to the same unreachable destination. Prevents hammering unreachable peers. [Default is 5000 (5 seconds)]"
-msgstr ""
+msgstr "Περίοδος ψύξης σε χιλιοστά του δευτερολέπτου μεταξύ των προσπαθειών σύνδεσης προς τον ίδιο μη προσβάσιμο προορισμό. Αποτρέπει τις επανειλημμένες προσπάθειες προς μη προσβάσιμους ομότιμους. [Προεπιλογή 5000 (5 δευτερόλεπτα)]"
 
 msgid "The TIME-WAIT duration in milliseconds after a streaming connection disconnects, during which late packets are still acknowledged. Increase for high-latency paths where final ACKs may be delayed. [Default is 120000 (2 minutes)]"
-msgstr ""
+msgstr "Η διάρκεια TIME-WAIT σε χιλιοστά του δευτερολέπτου μετά την αποσύνδεση μιας σύνδεσης ροής, κατά την οποία τα καθυστερημένα πακέτα εξακολουθούν να επιβεβαιώνονται. Αυξήστε την για διαδρομές υψηλής καθυστέρησης όπου οι τελικές επιβεβαιώσεις ACK ενδέχεται να καθυστερήσουν. [Προεπιλογή 120000 (2 λεπτά)]"
 
 msgid "Number of times to respond to a throttled destination before silently dropping excess packets. Prevents connection storms from overwhelming the router. [Default is 3]"
 msgstr "Αριθμός φορών για απάντηση σε περιορισμένο προορισμό πριν από σιωπηλή απόρριψη υπερβολικών πακέτων. Αποτρέπει καταιγισμούς σύνδεσης από υπερφόρτωση του δρομολογητή. [Προεπιλογή 3]"
 
 msgid "This setting, when enabled, introduces a random pong delay of up to 50ms for all ping-enabled servers hosted by the router. Default is disabled. Applied immediately to new pongs, no restart required."
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, εισάγει τυχαία καθυστέρηση pong έως 50ms για όλους τους διακομιστές με υποστήριξη ping που φιλοξενεί ο δρομολογητής. Η προεπιλογή είναι απενεργοποιημένη. Εφαρμόζεται αμέσως στα νέα pong, χωρίς επανεκκίνηση."
 
 msgid "Initial congestion window size (in packets) for new streaming connections. A larger window starts connections faster but may cause more retransmissions on congested paths. [Default is 64]"
-msgstr ""
+msgstr "Αρχικό μέγεθος παραθύρου συμφόρησης (σε πακέτα) για νέες συνδέσεις ροής. Ένα μεγαλύτερο παράθυρο ξεκινά τις συνδέσεις γρηγορότερα αλλά μπορεί να προκαλέσει περισσότερες επαναμεταδόσεις σε συμφορημένες διαδρομές. [Προεπιλογή 64]"
 
 msgid "The upper bound clamp on streaming connect timeout. Prevents per-connection timeouts from exceeding this ceiling. Increase for very high-latency remote access. May be overridden on a per-connection basis by setting the same property in a client tunnel's advanced client options (e.g. the IRC client tunnel defaults to 300000). [Default is 75000 (75 seconds)]"
-msgstr ""
+msgstr "Το ανώτατο όριο που επιβάλλεται στο χρονικό όριο σύνδεσης ροής. Αποτρέπει τα χρονικά όρια ανά σύνδεση από την υπέρβαση αυτού του ορίου. Αυξήστε το για απομακρυσμένη πρόσβαση πολύ υψηλής καθυστέρησης. Μπορεί να παρακαμφθεί ανά σύνδεση ορίζοντας την ίδια ιδιότητα στις σύνθετες επιλογές πελάτη μιας σήραγγας πελάτη (π.χ. η σήραγγα πελάτη IRC έχει προεπιλογή 300000). [Προεπιλογή 75000 (75 δευτερόλεπτα)]"
 
 msgid "Maximum time in milliseconds to wait for a pong reply when pinging a peer. [Default is 300000 (5 minutes)]"
 msgstr "Μέγιστος χρόνος σε χιλιοστά του δευτερολέπτου για αναμονή απάντησης pong κατά την εκτέλεση ping σε συνομήλικο. [Προεπιλογή 300000 (5 λεπτά)]"
@@ -7631,43 +7631,43 @@ msgid "This setting, when enabled, modifies the maximum additional random pong d
 msgstr "Αυτή η ρύθμιση, όταν ενεργοποιηθεί, τροποποιεί τη μέγιστη επιπρόσθετη τυχαία καθυστέρηση pong που εισάγεται για τους διακομιστές που υποστηρίζουν ping, εάν το <code>i2p.streaming.enablePongDelay</code> είναι επίσης ενεργοποιημένο. Εκτός αν οριστεί ρητά, θα χρησιμοποιηθεί η προεπιλεγμένη τιμή των 50ms."
 
 msgid "Maximum number of pending connections (SYNs and partial packets) in the server accept queue. When full, new SYNs are sent a RESET (the client may retry) rather than silently dropped, which keeps the client informed of the refusal. [Default is 256 (128 on slow systems)]"
-msgstr ""
+msgstr "Μέγιστος αριθμός εκκρεμών συνδέσεων (SYN και ημιτελή πακέτα) στην ουρά αποδοχής του διακομιστή. Όταν γεμίσει, στα νέα SYN αποστέλλεται RESET (ο πελάτης μπορεί να δοκιμάσει ξανά) αντί να απορριφθούν σιωπηλά, κάτι που κρατά τον πελάτη ενήμερο για την άρνηση. [Προεπιλογή 256 (128 σε αργά συστήματα)]"
 
 msgid "The maximum retransmission delay in milliseconds. Retransmit interval will not exceed this value regardless of backoff. Increase to allow longer between retries on congested paths. [Default is 30000 (30s)]"
 msgstr "Η μέγιστη καθυστέρηση επαναμετάδοσης σε χιλιοστά του δευτερολέπτου. Το διάστημα επαναμετάδοσης δεν θα υπερβεί αυτή την τιμή. Αυξήστε για να επιτρέψετε περισσότερο χρόνο μεταξύ επαναλήψεων. [Προεπιλογή 30000 (30δ)]"
 
 msgid "Maximum number of packet retransmissions before giving up on a connection. Higher values improve reliability on lossy links but delay failure detection. [Default is 32]"
-msgstr ""
+msgstr "Μέγιστος αριθμός επαναμεταδόσεων πακέτων πριν εγκαταλειφθεί μια σύνδεση. Υψηλότερες τιμές βελτιώνουν την αξιοπιστία σε συνδέσεις με απώλειες αλλά καθυστερούν τον εντοπισμό της αστοχίας. [Προεπιλογή 32]"
 
 msgid "The maximum Retransmission TimeOut in milliseconds after exponential backoff (doubling). Caps how long the sender waits before attempting retransmission during severe congestion. [Default is 30000 (30s)]"
 msgstr "Το μέγιστο χρονικό όριο επαναμετάδοσης σε χιλιοστά του δευτερολέπτου μετά από εκθετική οπισθοδρόμηση (διπλασιασμό). Περιορίζει πόσο χρόνο περιμένει ο αποστολέας πριν επιχειρήσει επαναμετάδοση. [Προεπιλογή 30000 (30δ)]"
 
 msgid "Maximum round-trip time in milliseconds for streaming connections. Caps the computed RTT to prevent pathological timeout values after network disturbances. [Default is 10000 (10 seconds)]"
-msgstr ""
+msgstr "Μέγιστος χρόνος μετ' επιστροφής σε χιλιοστά του δευτερολέπτου για συνδέσεις ροής. Περιορίζει το υπολογισμένο RTT ώστε να αποτρέπονται μη φυσιολογικές τιμές χρονικού ορίου μετά από διαταραχές του δικτύου. [Προεπιλογή 10000 (10 δευτερόλεπτα)]"
 
 msgid "Maximum slow start window size for streaming connections. Caps the congestion window during slow start to prevent overwhelming the network. [Default is 256 (32 on slow systems)]"
-msgstr ""
+msgstr "Μέγιστο μέγεθος παραθύρου αργής εκκίνησης για συνδέσεις ροής. Περιορίζει το παράθυρο συμφόρησης κατά την αργή εκκίνηση, ώστε να μην κατακλύζεται το δίκτυο. [Προεπιλογή 256 (32 σε αργά συστήματα)]"
 
 msgid "Maximum congestion window size (in packets) for streaming connections. Caps the maximum throughput of a single stream. [Default is 512 (384 on slow systems)]"
-msgstr ""
+msgstr "Μέγιστο μέγεθος παραθύρου συμφόρησης (σε πακέτα) για συνδέσεις ροής. Περιορίζει τη μέγιστη ρυθμαπόδοση μιας μεμονωμένης ροής. [Προεπιλογή 512 (384 σε αργά συστήματα)]"
 
 msgid "The minimum retransmission delay in milliseconds. Packets will not be resent faster than this interval. Lower values allow faster recovery on lossy connections. [Default is 100ms]"
 msgstr "Η ελάχιστη καθυστέρηση επαναμετάδοσης σε χιλιοστά του δευτερολέπτου. Τα πακέτα δεν θα αποσταλούν ξανά γρηγορότερα από αυτό το διάστημα. Χαμηλότερες τιμές επιτρέπουν ταχύτερη ανάκτηση. [Προεπιλογή 100ms]"
 
 msgid "Duration in minutes for a temporary autoban imposed on remote destinations that exceed the stream request thresholds below. Banned destinations are refused all new inbound connections for the ban period. The sweeper re-reads this value every 60 seconds, so it may be changed at runtime via the <a href=/configadvanced>Advanced Configuration page</a>. Set to 0 to disable the autoban entirely. [Default is 5 (5 minutes)]"
-msgstr ""
+msgstr "Διάρκεια σε λεπτά της προσωρινής αυτόματης απαγόρευσης που επιβάλλεται σε απομακρυσμένους προορισμούς οι οποίοι υπερβαίνουν τα κατώφλια αιτημάτων ροής παρακάτω. Στους απαγορευμένους προορισμούς απορρίπτονται όλες οι νέες εισερχόμενες συνδέσεις για τη διάρκεια της απαγόρευσης. Ο καθαριστής επαναδιαβάζει αυτή την τιμή κάθε 60 δευτερόλεπτα, οπότε μπορεί να αλλαχτεί κατά τη λειτουργία μέσω της <a href=/configadvanced>σελίδας Σύνθετης Διαμόρφωσης</a>. Ορίστε σε 0 για πλήρη απενεργοποίηση της αυτόματης απαγόρευσης. [Προεπιλογή 5 (5 λεπτά)]"
 
 msgid "Maximum number of inbound SYN refusals from a single remote destination within a rolling window before the autoban is triggered. The refusal counter decays by half every 60 seconds (rather than resetting), so isolated bursts fade while sustained floods accumulate. [Default is 100]"
-msgstr ""
+msgstr "Μέγιστος αριθμός απορρίψεων εισερχόμενων SYN από έναν μόνο απομακρυσμένο προορισμό μέσα σε κινητό παράθυρο, πριν ενεργοποιηθεί η αυτόματη απαγόρευση. Ο μετρητής απορρίψεων υποδιπλασιάζεται κάθε 60 δευτερόλεπτα (αντί να μηδενίζεται), ώστε οι μεμονωμένες ριπές να εξασθενούν ενώ οι συνεχείς πλημμύρες σωρεύονται. [Προεπιλογή 100]"
 
 msgid "Maximum number of inbound SYNs permitted from a single remote destination within the <code>tempBanSynRate</code> window before a burst strike is recorded. A first strike only logs a warning; a second strike within 60 seconds triggers the autoban. This two-strike gate lets a legitimate page-load burst through while still catching sustained connection floods that would otherwise overwhelm the refusal counter. [Default is 40]"
-msgstr ""
+msgstr "Μέγιστος αριθμός εισερχόμενων SYN που επιτρέπονται από έναν μόνο απομακρυσμένο προορισμό μέσα στο παράθυρο <code>tempBanSynRate</code> πριν καταγραφεί επίπεδη απόρριψη. Η πρώτη επίπεδη απόρριψη καταγράφει μόνο μια προειδοποίηση· η δεύτερη μέσα σε 60 δευτερόλεπτα ενεργοποιεί την αυτόματη απαγόρευση. Αυτό το φίλτρο δύο επίπεδων απορρίψεων επιτρέπει μια νόμιμη ομαδική φόρτωση σελίδας, ενώ εξακολουθεί να εντοπίζει συνεχείς πλημμύρες συνδέσεων που θα κατέκλυζαν τον μετρητή απορρίψεων. [Προεπιλογή 40]"
 
 msgid "Time window in milliseconds for the SYN burst check. If more than <code>tempBanSynBurst</code> SYNs are received from a single destination within this window, a burst strike is recorded; a second strike within 60 seconds triggers an autoban. [Default is 1000 (1 second)]"
-msgstr ""
+msgstr "Παράθυρο χρόνου σε χιλιοστά του δευτερολέπτου για τον έλεγχο ριπής SYN. Αν ληφθούν περισσότερα από <code>tempBanSynBurst</code> SYN από έναν μόνο προορισμό μέσα σε αυτό το παράθυρο, καταγράφεται επίπεδη απόρριψη· η δεύτερη μέσα σε 60 δευτερόλεπτα ενεργοποιεί αυτόματη απαγόρευση. [Προεπιλογή 1000 (1 δευτερόλεπτο)]"
 
 msgid "Upper ceiling for the Tuner's reactive concurrent-stream cap. The router's Tuner automatically adjusts the per-destination concurrent stream limit based on demand, refusals, and router health, but can never raise a destination above its own per-tunnel <code>i2p.streaming.maxConcurrentStreams</code> setting. This value bounds how high the Tuner is allowed to push the override. Increase this if you host high-traffic services and the Tuner cannot scale the cap high enough. [Default is 1024, range 64–8192, restart required]"
-msgstr ""
+msgstr "Ανώτατο όριο για την αντιδραστική επιβολή του Tuner στον αριθμό ταυτόχρονων ροών. Ο Tuner του δρομολογητή ρυθμίζει αυτόματα το όριο ταυτόχρονων ροών ανά προορισμό βάσει της ζήτησης, των αρνήσεων και της κατάστασης του δρομολογητή, αλλά δεν μπορεί ποτέ να αυξήσει έναν προορισμό πάνω από τη δική του ρύθμιση ανά σήραγγα <code>i2p.streaming.maxConcurrentStreams</code>. Αυτή η τιμή περιορίζει το πόσο ψηλά επιτρέπεται να σπρώξει ο Tuner την επιβαλλόμενη τιμή. Αυξήστε την αν φιλοξενείτε υπηρεσίες υψηλής κίνησης και ο Tuner δεν μπορεί να κλιμακώσει το όριο αρκετά. [Προεπιλογή 1024, εύρος 64–8192, απαιτείται επανεκκίνηση]"
 
 msgid "Interval in milliseconds between automated LeaseSet republishes. Higher values reduce netdb traffic but may cause stale lease info. [Default is 300000 (5 minutes)]"
 msgstr "Διάστημα σε χιλιοστά του δευτερολέπτου μεταξύ αυτοματοποιημένων αναδημοσιεύσεων LeaseSet. Υψηλότερες τιμές μειώνουν την κίνηση netdb αλλά μπορεί να προκαλέσουν παρωχημένες πληροφορίες μίσθωσης. [Προεπιλογή 300000 (5 λεπτά)]"
@@ -7676,7 +7676,7 @@ msgid "Threshold in milliseconds for proactive LeaseSet republish. If a lease is
 msgstr "Κατώφλι σε χιλιοστά του δευτερολέπτου για προληπτική αναδημοσίευση LeaseSet. Εάν μια μίσθωση λήγει εντός αυτού του παραθύρου, το LeaseSet αναδημοσιεύεται άμεσα αντί να περιμένει τον επόμενο περιοδικό κύκλο. [Προεπιλογή 180000 (3 λεπτά)]"
 
 msgid "The maximum number of simultaneous I2CP client sessions the router will accept. [Default is 1536 (768 on slow systems)]"
-msgstr ""
+msgstr "Ο μέγιστος αριθμός ταυτόχρονων συνεδριών πελάτη I2CP που θα δεχτεί ο δρομολογητής. [Προεπιλογή 1536 (768 σε αργά συστήματα)]"
 
 msgid "When set to true, disables local-local loopback delivery and forces all traffic through tunnels (outbound tunnel → network → inbound tunnel → local destination). Useful for testing tunnel routing behavior when the source and destination are on the same router. [Disabled by default]"
 msgstr "Όταν είναι true, απενεργοποιεί την παράδοση τοπικού βρόχου και αναγκάζει όλη την κίνηση μέσω σηράγγων (εξερχόμενη σήραγγα → δίκτυο → εισερχόμενη σήραγγα → τοπικός προορισμός). Χρήσιμο για δοκιμή συμπεριφοράς δρομολόγησης σηράγγων. [Απενεργοποιημένο από προεπιλογή]"
@@ -7703,55 +7703,55 @@ msgid "Maximum number of consecutive zero-data transfer failures before eepget g
 msgstr "Μέγιστος αριθμός διαδοχικών αποτυχιών μεταφοράς μηδενικών δεδομένων πριν τα παρατήσει το eepget, ακόμη κι αν απομένουν επαναλήψεις. Αυξήστε εάν οι μεταφορές αποτυγχάνουν χωρίς να λάβουν δεδομένα. [Προεπιλογή 20]"
 
 msgid "Fixed delay in milliseconds between eepget retry attempts. Use -1 for a jittered delay (base 5s plus up to 10s of jitter) to spread load on a flaky source. Values of 0 cause an immediate retry. [Default is -1]"
-msgstr ""
+msgstr "Σταθερή καθυστέρηση σε χιλιοστά του δευτερολέπτου μεταξύ των προσπαθειών επανάληψης του eepget. Χρησιμοποιήστε -1 για καθυστέρηση με τυχαίο κόμμα (βάση 5s έως και 10s κόμμα) ώστε να κατανέμεται το φορτίο σε μια ασταθή πηγή. Οι τιμές 0 προκαλούν άμεση επανάληψη. [Προεπιλογή -1]"
 
 msgid "When enabled, eepget resolves hostnames for HTTPS fetches via DNS-over-HTTPS, protecting lookups from local snooping. Bypassed when fetching through a proxy or when the host is an IP address. [Default is true]"
-msgstr ""
+msgstr "Όταν είναι ενεργοποιημένο, το eepget επιλύει τα ονόματα κεντρικών υπολογιστών για λήψεις HTTPS μέσω DNS-over-HTTPS, προστατεύοντας τις αναζητήσεις από τοπική παρακολούθηση. Παρακάμπτεται όταν η λήψη γίνεται μέσω διαμεσολαβητή ή όταν ο κεντρικός υπολογιστής είναι διεύθυνση IP. [Προεπιλογή: true]"
 
 msgid "This setting defines the maximum number of torrents whose storage is checked at the same time, when several torrents start or are rechecked together, bounding the disk I/O storm on startup or after a crash. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 4, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση καθορίζει τον μέγιστο αριθμό τορρέντ των οποίων ο αποθηκευμένος χώρος ελέγχεται ταυτόχρονα, όταν ξεκινούν ή επανελέγχονται μαζί πολλά τορρέντ, περιορίζοντας την καταιγίδα εισόδου/εξόδου στον δίσκο κατά την εκκίνηση ή μετά από κρίση. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή 4, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting allows configuration of the maximum number of files per torrent I2PSnark will permit, when downloading or creating a torrent. Note that substantially increasing this value from the default of 2000 files may require additional configuration on the host system to increase the maximum number of open files the operating system will permit (e.g. <code>ulimit -n</code> on Linux). To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards."
-msgstr ""
+msgstr "Αυτή η ρύθμιση επιτρέπει τη διαμόρφωση του μέγιστου αριθμού αρχείων ανά τορρέντ που θα επιτρέπει το I2PSnark, κατά τη λήψη ή τη δημιουργία ενός τορρέντ. Σημειώστε ότι η σημαντική αύξηση αυτής της τιμής από την προεπιλογή των 2000 αρχείων μπορεί να απαιτήσει πρόσθετη διαμόρφωση στο κύριο σύστημα, ώστε να αυξηθεί ο μέγιστος αριθμός ανοιχτών αρχείων που επιτρέπει το λειτουργικό σύστημα (π.χ. <code>ulimit -n</code> σε Linux). Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code> ή ορίστε το στη σελίδα ρυθμίσεων του I2PSnark· ισχύει για τα τορρέντ που προστίθενται μετά."
 
 msgid "This setting, when enabled, periodically restarts all running torrents so their destinations rotate to fresh identities, breaking long-lived linkage between the router's IP address and the torrents' destinations at trackers and in the DHT. The cycle runs every 3 hours plus a random delay of 1 to 60 minutes, is skipped while any torrent is actively downloading, and restarts only the torrents that were running. Destinations are temporary and change on every restart anyway; this extends that to within a run. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, επανεκκινεί περιοδικά όλα τα τορρέντ που εκτελούνται, ώστε οι προορισμοί τους να εναλλάσσονται σε νέες ταυτότητες, διακόπτοντας τη μακροχρόνια σύνδεση ανάμεσα στη διεύθυνση IP του δρομολογητή και στους προορισμούς των τορρέντ στους tracker και στο DHT. Ο κύκλος εκτελείται κάθε 3 ώρες συν τυχαία καθυστέρηση από 1 έως 60 λεπτά, παραλείπεται όσο κάποιο τορρέντ λαμβάνει ενεργά δεδομένα και επανεκκινεί μόνο τα τορρέντ που εκτελούνταν. Οι προορισμοί είναι προσωρινοί και αλλάζουν σε κάθε επανεκκίνηση ούτως ή άλλως· αυτή η ρύθμιση επεκτείνει την αλλαγή αυτή και εντός μιας περιόδου λειτουργίας. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: true, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting controls client identity spoofing: the tracker peer ID and User-Agent, the BitTorrent handshake peer ID, the extension handshake client name, and web seed fetches all present as the selected well-known client instead of I2PSnark. In multi-destination mode each destination pool is assigned its own random client by default; in single-destination mode I2PSnark identifies as itself unless a client name or \"random\" is set. Set to \"random\" to force random selection in all modes, \"i2psnark\" to keep the classic identity even in multi-destination mode, or to a client name to always impersonate that client. Version strings are pinned to current upstream releases and are consistent across the peer ID, User-Agent and extension handshake. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is random per pool in multi-destination mode; applies to torrents started afterwards]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση ελέγχει την απομίμηση ταυτότητας πελάτη: το peer ID και το User-Agent του tracker, το peer ID της χειραψίας BitTorrent, το όνομα πελάτη της χειραψίας επεκτάσεων και οι λήψεις από web seed εμφανίζονται όλα ως ο επιλεγμένος γνωστός πελάτης αντί για το I2PSnark. Σε λειτουργία πολλαπλών προορισμών, σε κάθε ομάδα προορισμών ανατίθεται από προεπιλογή δικός της τυχαίος πελάτης· σε λειτουργία μονού προορισμού το I2PSnark ταυτίζεται με τον εαυτό του εκτός αν οριστεί όνομα πελάτη ή η τιμή «random». Ορίστε «random» για να επιβάλλεται τυχαία επιλογή σε όλες τις λειτουργίες, «i2psnark» για να διατηρείται η κλασική ταυτότητα ακόμη και σε λειτουργία πολλαπλών προορισμών, ή ένα όνομα πελάτη για να υποκιμάζεται πάντα αυτός ο πελάτης. Οι συμβολοσειρές έκδοσης είναι δεσμευμένες στις τρέχουσες εκδόσεις upstream και είναι συνεπείς στο peer ID, στο User-Agent και στη χειραψία επεκτάσεων. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: τυχαίο ανά ομάδα σε λειτουργία πολλαπλών προορισμών· ισχύει για τα τορρέντ που ξεκινούν μετά]"
 
 msgid "This setting optionally restricts the clients chosen by random selection for <code>i2psnark.clientId</code> to a comma-separated subset of known client names; unknown names are ignored and an empty value selects from all supported clients. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is unset, applies to torrents started afterwards]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, προαιρετικά, περιορίζει τους πελάτες που επιλέγονται με τυχαία επιλογή για το <code>i2psnark.clientId</code> σε ένα υποσύνολο γνωστών ονομάτων πελατών, χωρισμένο με κόμματα· τα άγνωστα ονόματα αγνοούνται και κενή τιμή επιλέγει από όλους τους υποστηριζόμενους πελάτες. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: μη ορισμένο· ισχύει για τα τορρέντ που ξεκινούν μετά]"
 
 msgid "This setting, when enabled, preallocates the full file sizes on disk when a download starts, to reduce fragmentation. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, προκαλεί την προκατανομή του πλήρους μεγέθους των αρχείων στον δίσκο όταν ξεκινά μια λήψη, ώστε να μειωθεί ο κατακερματισμός. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: true, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting, when enabled, adds BEP 47 padding files to new torrents created by I2PSnark, so each file except the last ends on a piece boundary. Downloading and verifying padded torrents is unaffected. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false; the configuration file is re-read every 30 seconds and changed settings are applied without a restart]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, προσθέτει αρχεία στοιβαγοδινής BEP 47 στα νέα τορρέντ που δημιουργεί το I2PSnark, ώστε κάθε αρχείο εκτός από το τελευταίο να τελειώνει σε όριο κομματιού. Η λήψη και η επαλήθευση των τορρέντ με στοιβαγοδινή δεν επηρεάζονται. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: false· το αρχείο ρυθμίσεων διαβάζεται ξανά κάθε 30 δευτερόλεπτα και οι αλλαγές εφαρμόζονται χωρίς επανεκκίνηση]"
 
 msgid "This setting, when enabled, sorts torrent names using the configured language for correct alphabetical order. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is false, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, ταξινομεί τα ονόματα των τορρέντ χρησιμοποιώντας τη ρυθμισμένη γλώσσα για σωστή αλφαβητική σειρά. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: false, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting defines a comma-separated list of tracker announce URLs treated as private trackers; torrents using them are not shared with other peers via DHT or PEX. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση καθορίζει μια λίστα με διευθύνσεις URL ανακοίνωσης tracker, χωρισμένες με κόμματα, που θεωρούνται ιδιωτικοί trackers· τα τορρέντ που τις χρησιμοποιούν δεν κοινοποιούνται σε άλλους ομότιμους μέσω DHT ή PEX. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting defines comma-separated name,url pairs for the default tracker list shown for new torrents, overriding the built-in list. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση καθορίζει ζεύγη name,url χωρισμένα με κόμματα για την προεπιλεγμένη λίστα tracker που εμφανίζεται στα νέα τορρέντ, αντικαθιστώντας την ενσωματωμένη λίστα. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting, when enabled, bans peers that cancel most of what they request. Once a peer has requested and cancelled at least 5 MB in total, a cancel ratio above 90% of the bytes it requested gets the peer banned (rejected on both incoming and outgoing connections) for <code>i2psnark.banDiscardPeriod</code> minutes. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is true, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, απαγορεύει τους ομότιμους που ακυρώνουν το μεγαλύτερο μέρος όσων ζητούν. Μόλις ένας ομότιμος έχει ζητήσει και ακυρώσει συνολικά τουλάχιστον 5 MB, ποσοστό ακυρώσεων άνω του 90% των byte που ζήτησε οδηγεί σε απαγόρευση του ομότιμου (απόρριψη τόσο στις εισερχόμενες όσο και στις εξερχόμενες συνδέσεις) για <code>i2psnark.banDiscardPeriod</code> λεπτά. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή: true, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting defines the duration in minutes of the ban applied to peers with an excessive discard ratio. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 60, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση καθορίζει τη διάρκεια σε λεπτά της απαγόρευσης που επιβάλλεται σε ομότιμους με υπερβολικό ποσοστό απορριπτομένων δεδομένων. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή 60, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting defines the maximum number of messages kept in the I2PSnark web interface message area. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is 50, restart of I2PSnark required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση καθορίζει τον μέγιστο αριθμό μηνυμάτων που διατηρούνται στην περιοχή μηνυμάτων της διεπαφής ιστού του I2PSnark. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή 50, απαιτείται επανεκκίνηση του I2PSnark]"
 
 msgid "This setting defines the number of worker threads used to verify pieces in parallel during a full storage check of a single torrent, e.g. when resuming or rechecking. When unset, the thread count scales with the CPU count, at least 4. To change, add to I2PSnark's configuration file <code>i2psnark.config</code>. [Default is max(cores / 4, 4); read per check, so no restart required]"
-msgstr ""
+msgstr "Αυτή η ρύθμιση καθορίζει τον αριθμό των νημάτων εργατών που χρησιμοποιούνται για την παράλληλη επαλήθευση των κομματιών κατά τον πλήρη έλεγχο αποθηκευμένου ενός μεμονωμένου τορρέντ, π.χ. κατά την συνέχιση ή τον επανέλεγχο. Όταν δεν έχει οριστεί, ο αριθμός των νημάτων κλιμακώνεται με τον αριθμό των πυρήνων CPU, τουλάχιστον 4. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code>. [Προεπιλογή max(cores / 4, 4)· διαβάζεται σε κάθε έλεγχο, άρα δεν απαιτείται επανεκκίνηση]"
 
 msgid "When set to a directory path, incomplete downloads are written to a staging folder in this directory instead of the data directory, and each file is copied into the data directory only when all of its pieces have been downloaded. This is useful for keeping partial downloads off the main data volume (for example on a separate, faster or less heavily used disk). The staging directory must have enough free space to hold the largest in-progress downloads. When unset or empty, downloads are written directly to the data directory as before. To change, add to I2PSnark's configuration file <code>i2psnark.config</code> or set on the I2PSnark configuration page; applies to torrents added afterwards. [Disabled by default]"
-msgstr ""
+msgstr "Όταν οριστεί σε διαδρομή καταλόγου, οι ατελείς λήψεις γράφονται σε έναν φάκελο προστασίας μέσα σε αυτόν τον κατάλογο αντί στον κατάλογο δεδομένων, και κάθε αρχείο αντιγράφεται στον κατάλογο δεδομένων μόνο όταν έχουν ληφθεί όλα τα κομμάτιά του. Αυτό είναι χρήσιμο για να μένουν τα μερικώς λημμένα αρχεία εκτός του κύριου τόμου δεδομένων (π.χ. σε ξεχωριστό, ταχύτερο ή λιγότερο φορτωμένο δίσκο). Ο κατάλογος προστασίας πρέπει να έχει αρκετό ελεύθερο χώρο για τις μεγαλύτερες λήψεις σε εξέλιξη. Όταν δεν έχει οριστεί ή είναι κενός, οι λήψεις γράφονται απευθείας στον κατάλογο δεδομένων όπως πριν. Για αλλαγή, προσθέστε στο αρχείο ρυθμίσεων του I2PSnark <code>i2psnark.config</code> ή ορίστε το στη σελίδα ρυθμίσεων του I2PSnark· ισχύει για τα τορρέντ που προστίθενται μετά. [Απενεργοποιημένο από προεπιλογή]"
 
 msgid "miscellaneous"
 msgstr "διάφορα"
@@ -7763,7 +7763,7 @@ msgid "When set to true, I2P runs without network connectivity, which is helpful
 msgstr "Όταν ορίζεται σε true, το I2P λειτουργεί χωρίς δικτυακή σύνδεση, πράγμα που είναι χρήσιμο αν επανεκκινείτε συνεχώς τον δρομολογητή για να δοκιμάσετε ενημερώσεις κώδικα καθώς αποτρέπει διαταραχές στο δίκτυο."
 
 msgid "When set to true, the current log file and any rotated archives are made readable and writable by the group that the router runs under (mode 660), so that users who are members of that group can inspect the logs. The files are never made world-readable. [Default is false]"
-msgstr ""
+msgstr "Όταν οριστεί σε true, το τρέχον αρχείο καταγραφής και τυχόν περιστραμμένα αρχεία γίνονται αναγνώσιμα και εγγράψιμα από την ομάδα στην οποία εκτελείται ο δρομολογητής (mode 660), ώστε οι χρήστες που είναι μέλη αυτής της ομάδας να μπορούν να εξετάσουν τις καταγραφές. Τα αρχεία δεν γίνονται ποτέ αναγνώσιμα από όλους. [Προεπιλογή: false]"
 
 msgid "This setting permits the configuration of alternative NTP servers required to ensure that your router maintains accurate clock time. [Default is 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
 msgstr "Αυτή η ρύθμιση επιτρέπει τη διαμόρφωση εναλλακτικών διακομιστών NTP που απαιτούνται για να διατηρείται η ακριβής χρονική στιγμή του δρομολογητή σας. [Η προεπιλογή είναι 0.pool.ntp.org,1.pool.ntp.org,2.pool.ntp.org]"
@@ -9676,13 +9676,13 @@ msgid "Set Password"
 msgstr "Ορισμός Κωδικού Πρόσβασης"
 
 msgid "All Routers [Advanced]"
-msgstr ""
+msgstr "Όλοι οι δρομολογητές [Σύνθετη]"
 
 msgid "Remote"
 msgstr "Απομακρυσμένος"
 
 msgid "All Routers (Client NetDb) [Advanced]"
-msgstr ""
+msgstr "Όλοι οι δρομολογητές (Client NetDb) [Σύνθετη]"
 
 msgid "Encryption type"
 msgstr "Τύπος κρυπτογράφησης"
@@ -9734,19 +9734,19 @@ msgid "Network Peers"
 msgstr "Δικτυακοί Συνομιλητές"
 
 msgid "Fast Peers"
-msgstr ""
+msgstr "Γρήγοροι Ομότιμοι"
 
 msgid "High Capacity Peers"
-msgstr ""
+msgstr "Ομότιμοι Υψηλής Χωρητικότητας"
 
 msgid "Floodfill Peers"
-msgstr ""
+msgstr "Ομότιμοι Κόμβων Πλημμύρας"
 
 msgid "Banned Peers"
 msgstr "Απαγορευμένοι συνομήλικοι"
 
 msgid "Recent Peer Profiles"
-msgstr ""
+msgstr "Πρόσφατα Προφίλ Ομοτίμων"
 
 msgid "Configure router logging options"
 msgstr "Διαμόρφωση επιλογών καταγραφής δρομολογητή"

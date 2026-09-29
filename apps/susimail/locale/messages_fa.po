@@ -235,7 +235,7 @@ msgid "no subject"
 msgstr "بدون موضوع"
 
 msgid "No Drafts folder?"
-msgstr ""
+msgstr "پوشه Drafts وجود ندارد؟"
 
 msgid "Found no valid sender address."
 msgstr "هیچ آدرس ارسال کننده معتبری یافت نشد"

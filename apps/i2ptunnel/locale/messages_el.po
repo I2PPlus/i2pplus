@@ -9,27 +9,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "This seems to be a bad destination:"
-msgstr ""
+msgstr "Αυτό φαίνεται να είναι κακός προορισμός:"
 
 msgid "i2paddresshelper cannot help you with a destination like that!"
-msgstr ""
+msgstr "Το i2paddresshelper δεν μπορεί να σας βοηθήσει με έναν τέτοιο προορισμό!"
 
 #, java-format
 msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
-msgstr ""
+msgstr "Για να επισκεφτείτε τον προορισμό στο βιβλίο διευθύνσεων σας, κάντε κλικ <a href=\"{0}\">εδώ</a>. Για να επισκεφτείτε τον συγκρουόμενο προορισμό του βοηθού διεύθυνσης, κάντε κλικ <a href=\"{1}\">εδώ</a>."
 
 #, java-format
 msgid "Destination for {0} in addressbook"
-msgstr ""
+msgstr "Προορισμός για {0} στο βιβλίο διευθύνσεων"
 
 msgid "Conflicting address helper destination"
-msgstr ""
+msgstr "Προορισμός βοηθού διεύθυνσης σε σύγκρουση"
 
 msgid "Corrupt Base32 address"
-msgstr ""
+msgstr "Κατεστραμμένη διεύθυνση Base32"
 
 msgid "Destination LeaseSet not found"
-msgstr ""
+msgstr "Το LeaseSet του προορισμού δεν βρέθηκε"
 
 msgid "Host"
 msgstr "Διακομιστής"
@@ -42,159 +42,159 @@ msgstr "Προορισμός"
 
 #, java-format
 msgid "Continue to {0} without saving"
-msgstr ""
+msgstr "Συνέχεια στο {0} χωρίς αποθήκευση"
 
 msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
-msgstr ""
+msgstr "Μπορείτε να μεταβείτε στον ιστότοπο χωρίς να τον αποθηκεύσετε στο βιβλίο διευθύνσεων. Η διεύθυνση θα θυμόμαστε μέχρι να επανεκκινήσετε τον δρομολογητή I2P σας."
 
 msgid "Continue without saving"
-msgstr ""
+msgstr "Συνέχεια χωρίς αποθήκευση"
 
 #, java-format
 msgid "Save {0} to router address book and continue to website"
-msgstr ""
+msgstr "Αποθήκευση του {0} στο βιβλίο διευθύνσεων του δρομολογητή και συνέχεια στην ιστοσελίδα"
 
 msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
-msgstr ""
+msgstr "Αυτή η διεύθυνση θα αποθηκευτεί στο Βιβλίο διευθύνσεων δρομολογητή σας, όπου αποθηκεύονται οι διευθύνσεις που βασίζονται σε συνδρομές."
 
 msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
-msgstr ""
+msgstr "Αν θέλετε να κρατάτε αρχείο των ιστότοπων που προσθέσατε χειροκίνητα, προσθέστε τους στο Κύριο ή στο Ιδιωτικό βιβλίο διευθύνσεων."
 
 msgid "Save & continue"
-msgstr ""
+msgstr "Αποθήκευση & συνέχεια"
 
 #, java-format
 msgid "Save {0} to master addressbook and continue to website"
-msgstr ""
+msgstr "Αποθήκευση του {0} στο κύριο βιβλίο διευθύνσεων και συνέχεια στην ιστοσελίδα"
 
 msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
-msgstr ""
+msgstr "Αυτή η διεύθυνση θα αποθηκευτεί στο Κύριο βιβλίο διευθύνσεων σας. Επιλέξτε αυτή την επιλογή για διευθύνσεις που θέλετε να διατηρείτε ξεχωριστά από το κύριο βιβλίο διευθύνσεων του δρομολογητή, αλλά δεν σας πειράζει αν δημοσιεύονται."
 
 #, java-format
 msgid "Save {0} to private addressbook and continue to website"
-msgstr ""
+msgstr "Αποθήκευση του {0} στο ιδιωτικό βιβλίο διευθύνσεων και συνέχεια στην ιστοσελίδα"
 
 msgid "This address will be saved to your Private addressbook, ensuring it is never published."
-msgstr ""
+msgstr "Αυτή η διεύθυνση θα αποθηκευτεί στο Ιδιωτικό βιβλίο διευθύνσεων σας, διασφαλίζοντας ότι δεν δημοσιεύεται ποτέ."
 
 msgid "Base32 address requires lookup password"
-msgstr ""
+msgstr "Η διεύθυνση Base32 απαιτεί κωδικό πρόσβασης αναζήτησης"
 
 msgid "Base32 address requires encryption key"
-msgstr ""
+msgstr "Η διεύθυνση Base32 απαιτεί κλειδί κρυπτογράφησης"
 
 msgid "Base32 address requires encryption key and lookup password"
-msgstr ""
+msgstr "Η διεύθυνση Base32 απαιτεί κλειδί κρυπτογράφησης και κωδικό πρόσβασης αναζήτησης"
 
 msgid "Base32 address decryption failure, check encryption key"
-msgstr ""
+msgstr "Αποτυχία αποκρυπτογράφησης διεύθυνσης Base32, ελέγξτε το κλειδί κρυπτογράφησης"
 
 msgid "Generate"
 msgstr "Δημιουργία"
 
 msgid "Encryption key"
-msgstr ""
+msgstr "Κλειδί κρυπτογράφησης"
 
 msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
-msgstr ""
+msgstr "Πρέπει είτε να εισαγάγετε ένα κλειδί κρυπτογράφησης PSK που παρέχεται από τον χειριστή του διακομιστή, είτε να δημιουργήσετε ένα κλειδί κρυπτογράφησης DH και να το στείλετε στον χειριστή του διακομιστή."
 
 msgid "Ask the server operator for help."
-msgstr ""
+msgstr "Ζητήστε βοήθεια από τον χειριστή του διακομιστή."
 
 msgid "Enter PSK encryption key"
-msgstr ""
+msgstr "Εισαγάγετε το κλειδί κρυπτογράφησης PSK"
 
 msgid "Generate new DH encryption key"
-msgstr ""
+msgstr "Δημιουργία νέου κλειδιού κρυπτογράφησης DH"
 
 msgid "Lookup password"
-msgstr ""
+msgstr "Κωδικός πρόσβασης αναζήτησης"
 
 msgid "You must enter the password provided by the server operator."
-msgstr ""
+msgstr "Πρέπει να εισαγάγετε τον κωδικό πρόσβασης που παρέχεται από τον χειριστή του διακομιστή."
 
 msgid "HTTP Outproxy"
-msgstr ""
+msgstr "Outproxy HTTP"
 
 msgid "Click a link below for an address helper from a jump service"
-msgstr ""
+msgstr "Κάντε κλικ σε έναν σύνδεσμο παρακάτω για έναν βοηθό διεύθυνσης από μια υπηρεσία jump"
 
 #, java-format
 msgid "Added via address helper from {0}"
-msgstr ""
+msgstr "Προστέθηκε μέσω βοηθού διευθύνσης από {0}"
 
 msgid "Added via address helper"
-msgstr ""
+msgstr "Προστέθηκε μέσω βοηθού διευθύνσης"
 
 msgid "Missing lookup password"
-msgstr ""
+msgstr "Λείπει ο κωδικός πρόσβασης αναζήτησης"
 
 msgid "Missing private key"
-msgstr ""
+msgstr "Λείπει το ιδιωτικό κλειδί"
 
 msgid "Invalid private key"
-msgstr ""
+msgstr "Μη έγκυρο ιδιωτικό κλειδί"
 
 msgid "Your new encryption key"
-msgstr ""
+msgstr "Το νέο σας κλειδί κρυπτογράφησης"
 
 msgid "Router Console"
-msgstr ""
+msgstr "Κονσόλα Router"
 
 msgid "Addressbook"
-msgstr ""
+msgstr "Βιβλίο διευθύνσεων"
 
 msgid "Configuration"
 msgstr "Διαμόρφωση"
 
 msgid "Help"
-msgstr ""
+msgstr "Βοήθεια"
 
 msgid "Copy the key and send it to the server operator."
-msgstr ""
+msgstr "Αντιγράψτε το κλειδί και στείλτε το στον χειριστή του διακομιστή."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr ""
+msgstr "Μόλις σας δοθεί άδεια, μπορείτε να συνεχίσετε στην ιστοσελίδα."
 
 msgid "Go back and fix the error"
-msgstr ""
+msgstr "Επιστρέψτε πίσω και διορθώστε το σφάλμα"
 
 msgid "router"
-msgstr ""
+msgstr "δρομολογητή"
 
 msgid "master"
-msgstr ""
+msgstr "κύριου"
 
 msgid "private"
-msgstr ""
+msgstr "ιδιωτικού"
 
 #, java-format
 msgid "Redirecting to {0}"
-msgstr ""
+msgstr "Ανακατεύθυνση στο {0}"
 
 msgid "Redirection in progress"
-msgstr ""
+msgstr "Η ανακατεύθυνση βρίσκεται σε εξέλιξη"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Αποθηκεύτηκε το {0} στο βιβλίο διευθύνσεων {1}, ανακατεύθυνση τώρα."
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr ""
+msgstr "Αποτυχία αποθήκευσης του {0} στο βιβλίο διευθύνσεων {1}, ανακατεύθυνση τώρα."
 
 msgid "Click here if you are not redirected automatically."
-msgstr ""
+msgstr "Κάντε κλικ εδώ αν δεν ανακατευθείστε αυτόματα."
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr ""
+msgstr "Αποθηκεύτηκε ο έλεγχος ταυτότητας για το {0}, ανακατεύθυνση τώρα."
 
 msgid "Failed to save configuration"
-msgstr ""
+msgstr "Αποτυχία αποθήκευσης της διαμόρφωσης"
 
 msgid "Configuration changes saved"
-msgstr ""
+msgstr "Οι αλλαγές διαμόρφωσης αποθηκεύτηκαν"
 
 msgid "Client"
 msgstr "Πελάτης"
