@@ -835,6 +835,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void optionsUpdated(I2PTunnel tunnel) {
         if (getTunnel() != tunnel || sockMgr == null) {return;}
         Properties props = tunnel.getClientOptions();
+        if (props == null) {return;}
         // Bounded write timeout keeps a stalled outbound peer from holding a handler thread
         // for the full streaming disconnect timeout (default 120s). see effectiveWriteTimeout()
         long wt = effectiveWriteTimeout(props);

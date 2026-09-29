@@ -112,9 +112,11 @@ public class HttpHeaderFormatter {
             buf.append("\n* Request: ").append(request);
         }
         for (Map.Entry<String, List<String>> e : headers.entrySet()) {
+            List<String> values = e.getValue();
+            if (values == null || values.isEmpty()) {continue;}
             String name = e.getKey();
             String lcName = name.toLowerCase().trim();
-            String value = stripLineBreaks(e.getValue().iterator().next().trim());
+            String value = stripLineBreaks(values.get(0).trim());
             boolean hasUA = name.toLowerCase().contains("user-agent") && !value.isEmpty();
             if (request.toLowerCase().contains("head")) {continue;}
             if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
@@ -124,7 +126,7 @@ public class HttpHeaderFormatter {
                 (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
                 continue;
             }
-            for (String val : e.getValue()) {
+            for (String val : values) {
                 buf.append("\n* ").append(stripLineBreaks(name.trim())).append(": ").append(stripLineBreaks(val.trim()));
             }
         }
