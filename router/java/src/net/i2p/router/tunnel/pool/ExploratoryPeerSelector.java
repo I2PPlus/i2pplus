@@ -28,12 +28,12 @@ import net.i2p.util.SystemVersion;
         /**
          *  Counts selections discarded because every candidate was banlisted.
          *
-         *  <p>Exists to prove the discard branch is reachable. The change that
+         *  <p>Exists to keep the discard branch above honest. The change that
          *  replaced restoring the banned selection with discarding it was
-         *  justified by a build-capacity figure, and that justification is only
-         *  sound if the branch actually fires; if the stat stays at zero over a
-         *  long run the change is dead code and should be reverted rather than
-         *  kept on an unverified claim.
+         *  originally justified by a build-capacity figure that no measurement
+         *  supported, and the branch then recorded 0 occurrences over roughly
+         *  two hours. Rather than re-assert a benefit, this counter makes the
+         *  frequency observable so the branch can be re-evaluated on evidence.
          *
          *  <p>Must be created before use: {@code StatManager.addRateData} on an
          *  unregistered name silently drops the sample.
@@ -412,14 +412,17 @@ import net.i2p.util.SystemVersion;
         // Mirrors ClientPeerSelector.filterBannedPeers.
         //
         // When every candidate is banlisted the selection is DISCARDED rather
-        // than restored. Restoring it re-dispatched a build we already know
-        // cannot succeed: BuildHandler drops the request on arrival, the build
-        // slot is consumed, and the next cycle draws the same banned peers
-        // again. Measured at ~4.5 wasted build requests per minute against
-        // ~8% of client build capacity. Discarding leaves the pool short for
-        // one cycle, which is the honest signal that its peer set has collapsed
-        // and needs a wider recency window (see TunnelPool's starvation bypass)
-        // rather than the same doomed peers re-tried.
+        // than restored: a restored selection dispatches a build the handler is
+        // guaranteed to drop, spending a build slot on a peer already known
+        // unusable, and the next cycle draws the same banned peers again.
+        //
+        // Measured reachability: the branch recorded 0 occurrences over roughly
+        // two hours of operation, because the candidate pool is never entirely
+        // banlisted in practice. It is kept as a cheap guard for the case where
+        // the banlist does grow to cover every candidate — an earlier comment
+        // here claimed a measured build-capacity saving, which no measurement
+        // supported. tunnel.peerSelection.epsAllBannedDiscarded records the
+        // frequency so the claim can be re-tested rather than assumed.
         Banlist banlist = ctx != null ? ctx.banlist() : null;
         if (banlist != null && rv.size() > 1) {
             List<Hash> before = new ArrayList<>(rv);

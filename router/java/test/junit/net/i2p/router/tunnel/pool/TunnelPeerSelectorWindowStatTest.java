@@ -114,40 +114,53 @@ public class TunnelPeerSelectorWindowStatTest {
     // ---- banSeverity: pure label for the rejection log ----
 
     @Test
-    public void permanentBanPointsAtTheSelector() {
-        String s = BuildHandler.banSeverity(true, true);
-        assertTrue("a permanent ban should be attributed to peer selection, got: " + s,
-                   s.contains("selector"));
+    public void aYoungBanIsReportedAsInFlight() {
+        // A tunnel build takes tens of seconds, so a ban recorded 5s ago could
+        // not have been visible to the selector that dispatched this request.
+        String s = BuildHandler.banSeverity(5_000L);
+        assertTrue("a young ban means the selection was correct, got: " + s,
+                   s.contains("in-flight"));
     }
 
     @Test
-    public void longBanIsReportedAsPredatingTheBuild() {
-        String s = BuildHandler.banSeverity(false, true);
-        assertTrue(s.contains(">=1h"));
+    public void anOldBanIsReportedAsPredatingTheBuild() {
+        String s = BuildHandler.banSeverity(600_000L);
+        assertTrue(s.contains("predates this build"));
+        assertTrue("the age should be reported in seconds, got: " + s, s.contains("600s"));
     }
 
     @Test
-    public void shortBanIsReportedAsAppliedDuringTheBuild() {
-        String s = BuildHandler.banSeverity(false, false);
-        assertTrue("a short ban points at in-flight banning, got: " + s,
-                   s.contains("during this build"));
+    public void thresholdBoundaryIsInclusiveOfTheOlderSide() {
+        long t = BuildHandler.BAN_INFLIGHT_THRESHOLD_MS;
+        assertTrue("exactly at the threshold counts as predating",
+                   BuildHandler.banSeverity(t).contains("predates"));
+        assertTrue("one ms under the threshold is still in flight",
+                   BuildHandler.banSeverity(t - 1).contains("in-flight"));
     }
 
     @Test
-    public void severityLabelIsNeverNull() {
-        for (boolean forever : new boolean[] { true, false }) {
-            for (boolean hostile : new boolean[] { true, false }) {
-                assertNotNull(BuildHandler.banSeverity(forever, hostile));
-                assertFalse(BuildHandler.banSeverity(forever, hostile).isEmpty());
-            }
+    public void unknownAgeIsSaysSoRatherThanGuessing() {
+        // A negative age means the entry predates the addedOn field or the peer
+        // is not banned. Reporting a direction there would be a guess.
+        String s = BuildHandler.banSeverity(-1L);
+        assertTrue(s.contains("unknown"));
+        assertFalse("must not claim a direction it cannot know: " + s,
+                    s.contains("in-flight") || s.contains("predates"));
+    }
+
+    @Test
+    public void severityLabelIsNeverNullOrEmpty() {
+        long[] ages = { -1L, 0, 1, 59_999L, 60_000L, 3_600_000L, Long.MAX_VALUE / 2 };
+        for (long age : ages) {
+            String s = BuildHandler.banSeverity(age);
+            assertNotNull(s);
+            assertFalse("empty label for age " + age, s.isEmpty());
         }
     }
 
     @Test
-    public void severityClassesAreDistinguishable() {
-        assertNotEquals(BuildHandler.banSeverity(true, true),
-                        BuildHandler.banSeverity(false, true));
-        assertNotEquals(BuildHandler.banSeverity(false, true),
-                        BuildHandler.banSeverity(false, false));
+    public void youngAndOldBansAreDistinguishable() {
+        assertNotEquals(BuildHandler.banSeverity(5_000L).contains("in-flight"),
+                        BuildHandler.banSeverity(600_000L).contains("in-flight"));
     }
 }

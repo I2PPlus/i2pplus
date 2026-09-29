@@ -109,6 +109,22 @@ public class Banlist {
     public static class Entry {
         /** When it should expire, per the i2p clock. */
         public long expireOn;
+        /**
+         *  When this ban was first recorded, per the i2p clock; 0 when unknown.
+         *
+         *  <p>Separate from {@link #expireOn} because the ban duration varies by
+         *  class and by transport, so the start time cannot be derived from the
+         *  expiry. Needed to answer "was this peer already banned when the build
+         *  was dispatched, or did the ban land mid-flight" — the two need
+         *  different fixes, and only the duration was previously observable.
+         *
+         *  <p>On a re-ban that keeps the older, longer expiry this retains the
+         *  <em>original</em> start time: what matters is how long the banlist
+         *  has been holding this peer, not when the latest report arrived.
+         *
+         *  @since 0.9.71+
+         */
+        public long addedOn;
         /** Why they were banlisted. */
         public String cause;
         /** Separate code so cause can contain {0} for translation. */
@@ -986,6 +1002,7 @@ public class Banlist {
 
         Entry e = new Entry();
         e.expireOn = expireOn;
+        e.addedOn = _context.clock().now();
         e.cause = reason;
         e.causeCode = reasonCode;
         e.transports = null;
@@ -1000,6 +1017,11 @@ public class Banlist {
             // take the oldest expiration and cause, combine transports
             if (old.expireOn > e.expireOn) {
                 e.expireOn = old.expireOn;
+                // The standing ban is the older one, so its start time is the
+                // start of the ban this peer is currently serving. Carrying the
+                // new time over would make a peer look freshly banned on every
+                // re-ban, which is the opposite of what the age is for.
+                e.addedOn = old.addedOn;
                 e.cause = old.cause;
                 e.causeCode = old.causeCode;
             }
@@ -1141,6 +1163,34 @@ public class Banlist {
             Entry entry = _entries.get(peer);
             return entry != null && entry.expireOn >= _context.clock().now() + 60*60*1000L;
         } else {return false;}
+    }
+
+    /**
+     *  How long the banlist has been holding a peer, in milliseconds.
+     *
+     *  <p>This is the discriminator between the two reasons a build request
+     *  arrives naming a banlisted peer, which need different fixes:
+     *  <ul>
+     *   <li>old age — the ban predates the build, so peer selection handed out
+     *       a peer the banlist already held, which is a selection bug;</li>
+     *   <li>young age — the ban landed while the build was in flight, so the
+     *       selection was correct and only a selection-time cooldown would stop
+     *       the next request repeating it.</li>
+     *  </ul>
+     *  The ban <em>duration</em> class cannot substitute: a peer permanently
+     *  banned mid-flight and one banned last week both report as permanent.
+     *
+     * @param peer the router hash to check
+     * @return age of the standing ban in ms, or -1 if the peer is not
+     *         currently banlisted or the entry predates this field
+     * @since 0.9.71+
+     */
+    public long getBanAge(Hash peer) {
+        if (peer == null) {return -1;}
+        Entry entry = _entries.get(peer);
+        if (entry == null || entry.expireOn <= _context.clock().now()) {return -1;}
+        if (entry.addedOn <= 0) {return -1;}
+        return Math.max(0, _context.clock().now() - entry.addedOn);
     }
 
     /**
