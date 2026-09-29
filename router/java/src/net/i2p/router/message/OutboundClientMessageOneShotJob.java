@@ -1221,12 +1221,12 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
         // rotate away from failing tunnels faster than TestJob alone.
         // Hard dispatch statuses and soft send timeouts (3) are reported;
         // remote-destination failures (bad LS, bad encryption) are not the
-        // tunnel's fault.  Soft timeouts use a higher removal bar inside
-        // reportSendFailure so congestion cannot mass-remove healthy tunnels.
-        if (_outTunnel != null &&
-            (isTunnelRelatedFailure(status) || isSoftSendFailure(status))) {
-            getContext().tunnelManager().reportSendFailure(_outTunnel, status);
-        }
+          // tunnel's fault.  Soft timeouts use a higher removal bar inside
+          // reportSendFailure so congestion cannot mass-remove healthy tunnels.
+          if (_outTunnel != null &&
+              shouldBlameOutboundTunnel(status, isLocallyHostedDestination(_to))) {
+              getContext().tunnelManager().reportSendFailure(_outTunnel, status);
+          }
         // Pool-empty liveness signal: 14 (expired while queued) and 16 (no
         // tunnels) mean OUR pools were starving when the data phase needed
         // them — nudge them now instead of waiting for the next build-timer
@@ -1328,6 +1328,46 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
      */
     static boolean isSoftSendFailure(int status) {
         return status == MessageStatusMessage.STATUS_SEND_BEST_EFFORT_FAILURE;
+    }
+
+    /**
+     *  Whether a failed send should be charged to the outbound tunnel.
+     *
+     *  <p>Pure, so the blame rule is testable without a router.
+     *
+     *  <p>A destination this router hosts produces its own reply, so a missing
+     *  one is our own fault — a saturated handler pool, an aborted body, a slow
+     *  upstream — and says nothing about the tunnel that delivered the request.
+     *  Charging those failures to the tunnel makes the pool condemn its own
+     *  healthy egress; the resulting starvation guarantees the next request
+     *  fails too, so the service can never recover.
+     *
+     * @param status        the I2CP MessageStatusMessage failure code
+     * @param locallyHosted true if this router hosts the destination
+     * @return true if the outbound tunnel should be reported as failing
+     * @since 0.9.71+
+     */
+    static boolean shouldBlameOutboundTunnel(int status, boolean locallyHosted) {
+        if (locallyHosted) {return false;}
+        return isTunnelRelatedFailure(status) || isSoftSendFailure(status);
+    }
+
+    /**
+     *  Whether this router hosts the given destination.
+     *
+     *  <p>The registry lookup is not pure, so it is kept out of
+     *  {@link #shouldBlameOutboundTunnel(int, boolean)} and pinned by tests at
+     *  the decision level instead.
+     *
+     *  @param to destination the message was sent to; may be null
+     *  @return true if the destination is a local service
+     * @since 0.9.71+
+     */
+    private boolean isLocallyHostedDestination(Destination to) {
+        if (to == null) {return false;}
+        Hash h = to.getHash();
+        return h != null && getContext().clientManager() != null
+               && getContext().clientManager().isLocal(h);
     }
 
     /**
