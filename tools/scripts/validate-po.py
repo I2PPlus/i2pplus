@@ -82,6 +82,16 @@ def validate_with_polib(filepath, check_empty=False):
     # Check 2: unbalanced format placeholders (compare unique sets)
     # Skip English templates — empty msgstr is expected in source files
     is_english = '_en.po' in filepath or filepath.endswith('/messages_en.po')
+    # Which msgid each plural form corresponds to depends on the catalog's
+    # plural count: msgstr[0] mirrors msgid and msgstr[1..] mirror
+    # msgid_plural, but a single-form language (ja, zh, vi, ko, ...) uses
+    # msgstr[0] for every count, so that one form must carry the placeholders
+    # of both. Checking every form against msgid alone reports correct
+    # translations as mismatches.
+    nplurals = 1
+    m = re.search(r'nplurals\s*=\s*(\d+)', po.metadata.get('Plural-Forms', ''))
+    if m:
+        nplurals = int(m.group(1))
     if not is_english:
         for entry in po:
             if not entry.msgid:
@@ -90,6 +100,7 @@ def validate_with_polib(filepath, check_empty=False):
             if not src_ph:
                 continue
             if entry.msgid_plural:
+                plural_ph = set(re.findall(r'\{(\d+)\}', entry.msgid_plural))
                 for idx, form in entry.msgstr_plural.items():
                     if not form:
                         # Untranslated form: gettext falls back to the msgid at
@@ -97,11 +108,13 @@ def validate_with_polib(filepath, check_empty=False):
                         # non-plural branch below and msgfmt --check-format,
                         # which both skip empty msgstr.
                         continue
+                    expect = (src_ph if idx == '0' else plural_ph) if nplurals > 1 \
+                        else (src_ph | plural_ph)
                     tgt_ph = set(re.findall(r'\{(\d+)\}', form))
-                    if tgt_ph != src_ph:
+                    if tgt_ph != expect:
                         errors.append(
                             f"  FORMAT_MISMATCH line {entry.linenum} msgstr[{idx}]: "
-                            f"msgid has {{{','.join(sorted(src_ph))}}}, "
+                            f"expected {{{','.join(sorted(expect))}}}, "
                             f"msgstr has {{{','.join(sorted(tgt_ph)) if tgt_ph else 'none'}}}"
                         )
             elif entry.msgstr:
