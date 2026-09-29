@@ -919,21 +919,6 @@ public class TunnelPool {
     }
 
     /**
-     *  Scan the pool from a random start index for a usable tunnel.  Skips
-     *  last-resort tunnels (recording the first seen), failed tunnels, and
-     *  tunnels over the max consecutive-failure cap — test failures are
-     *  often reply-path problems, not tunnel quality, so let data prove the
-     *  tunnel works.  A candidate is accepted when it is non-expired and
-     *  its next peer is not backlogged (inbound pools skip the backlog
-     *  check, and short tunnels are exempt); the first pass additionally
-     *  requires length &gt; 1.  Backlogged candidates are recorded as a
-     *  fallback.
-     *
-     *  @param longTunnelsOnly first-pass mode (zero-hop-avoiding pools): long tunnels only
-     *  @param lastResortTunnel first-pass result, kept by the second pass if set
-     *  @return the scan result
-     */
-    /**
      *  Select a tunnel to serve as a test round's partner, preferring partners
      *  that have demonstrated they work.
      *
@@ -1023,6 +1008,23 @@ public class TunnelPool {
         return 3;
     }
 
+    /**
+     *  Scan the pool from a random start index for a usable tunnel.  Skips
+     *  last-resort tunnels (recording the first seen), failed tunnels, and
+     *  tunnels over the max consecutive-failure cap — test failures are
+     *  often reply-path problems, not tunnel quality, so let data prove the
+     *  tunnel works.  A candidate is accepted when it is non-expired and
+     *  its next peer is not backlogged (inbound pools skip the backlog
+     *  check, and short tunnels are exempt); the first pass additionally
+     *  requires length &gt; 1.  Backlogged candidates are recorded as a
+     *  fallback.
+     *
+     *  @param startIdx where the scan starts, for a positionally unbiased pass
+     *  @param now current time in ms, for the expiry check
+     *  @param longTunnelsOnly first-pass mode (zero-hop-avoiding pools): long tunnels only
+     *  @param lastResortTunnel first-pass result, kept by the second pass if set
+     *  @return the scan result
+     */
     private ScanResult scanPoolForTunnel(int startIdx, long now, boolean longTunnelsOnly, TunnelInfo lastResortTunnel) {
         TunnelInfo backloggedTunnel = null;
         for (int i = 0; i < _tunnels.size(); i++) {
@@ -3079,24 +3081,6 @@ public class TunnelPool {
     }
 
     /**
-     *  Mark a failing tunnel for retention using the count that triggered the
-     *  decision.  Soft removals pass the soft counter while
-     *  getConsecutiveFailures() may still be 0 — fail() would no-op on the
-     *  hard counter alone.
-     *
-     *  The tunnel is marked, not dropped: {@link #passesScanGates(TunnelInfo,
-     *  long, boolean)} and the usable counts already exclude FAILING and
-     *  FAILED tunnels, so it stops receiving work and stops holding a good
-     *  slot, while {@link #addTunnel(TunnelInfo)} keeps building replacements
-     *  against the usable count rather than the raw pool size.  The tunnel
-     *  then either carries real traffic — {@link #clearFailingOnTraffic()}
-     *  promotes it back to GOOD once the traffic marker is fresh — or ages
-     *  out with the rest of its generation.
-     *
-     *  @param cfg the tunnel that failed
-     *  @param failures the count that exceeded the removal bar
-     */
-    /**
      * Whether a failure report is a repeat of a condemnation already made.
      * A tunnel that is both dead and FAILED has been excluded from selection
      * and had its replacement requested already, so re-processing only re-logs,
@@ -3114,6 +3098,24 @@ public class TunnelPool {
         return isDead && status == TunnelTestStatus.FAILED;
     }
 
+    /**
+     *  Mark a failing tunnel for retention using the count that triggered the
+     *  decision.  Soft removals pass the soft counter while
+     *  getConsecutiveFailures() may still be 0 — fail() would no-op on the
+     *  hard counter alone.
+     *
+     *  The tunnel is marked, not dropped: {@link #passesScanGates(TunnelInfo,
+     *  long, boolean)} and the usable counts already exclude FAILING and
+     *  FAILED tunnels, so it stops receiving work and stops holding a good
+     *  slot, while {@link #addTunnel(TunnelInfo)} keeps building replacements
+     *  against the usable count rather than the raw pool size.  The tunnel
+     *  then either carries real traffic — {@link #clearFailingOnTraffic()}
+     *  promotes it back to GOOD once the traffic marker is fresh — or ages
+     *  out with the rest of its generation.
+     *
+     *  @param cfg the tunnel that failed
+     *  @param failures the count that exceeded the removal bar
+     */
     private void failWithCount(TunnelInfo cfg, int failures) {
         if (failures <= 1) {return;}
         boolean isDead = cfg.getTunnelFailed();

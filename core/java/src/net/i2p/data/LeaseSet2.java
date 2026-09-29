@@ -61,7 +61,6 @@ public class LeaseSet2 extends LeaseSet {
     private List<PublicKey> _encryptionKeys;
     /** If this leaseset was formerly blinded, the blinded hash, so we can find it again */
     private Hash _blindedHash;
-    /** If true, ignore server key preference (for testing). */
     /** Flag bit for offline keys. */
     private static final int FLAG_OFFLINE_KEYS = 0x01;
     /** Flag bit for unpublished lease set. */

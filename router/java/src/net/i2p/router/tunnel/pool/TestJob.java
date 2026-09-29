@@ -99,13 +99,6 @@ public class TestJob extends JobImpl {
      *  reply is judged against the same window used to set the expiration. */
     private int _testPeriod;
 
-
-    /**
-     * Adaptive test timeout multiplier. Starts at 1.0, increases by 25% when
-     * the rolling average exceeds 1500ms, capped at 2.0.
-     * @since 0.9.71+
-     */
-
     /**
      * Number of times a test can be deferred for lack of a partner tunnel
      * before the paired pool is kicked to rebuild.  Prevents test deadlock
@@ -196,20 +189,6 @@ public class TestJob extends JobImpl {
     static final long YOUNG_TUNNEL_GRACE_MS = 3 * 60 * 1000L;
 
     /**
-     *  Excuse a failed round because the tunnel is still inside its grace
-     *  period: it has not yet had a realistic chance to settle, join the
-     *  LeaseSet, or carry the traffic that would prove it, so the round is
-     *  observed but not charged.  Without this, the fastest retest interval
-     *  plus a four-strike threshold condemns a new tunnel in about 90s — a
-     *  sixth of its lifetime — and the pool never settles.
-     *
-     *  <p>Split out of {@link #testFailed}, which is already well past the
-     *  complexity budget, so this does not add to it.
-     *
-     * @return true when the round was deferred
-     *  @since 0.9.71+
-     */
-    /**
      *  Probe the far endpoint of a tunnel whose test round just failed, and
      *  record whether it was still reachable.
      *
@@ -287,6 +266,20 @@ public class TestJob extends JobImpl {
         return "FarEndUnknown";
     }
 
+    /**
+     *  Excuse a failed round because the tunnel is still inside its grace
+     *  period: it has not yet had a realistic chance to settle, join the
+     *  LeaseSet, or carry the traffic that would prove it, so the round is
+     *  observed but not charged.  Without this, the fastest retest interval
+     *  plus a four-strike threshold condemns a new tunnel in about 90s — a
+     *  sixth of its lifetime — and the pool never settles.
+     *
+     *  <p>Split out of {@link #testFailed}, which is already well past the
+     *  complexity budget, so this does not add to it.
+     *
+     * @return true when the round was deferred
+     *  @since 0.9.71+
+     */
     private boolean deferIfTooYoungToJudge() {
         if (!withinYoungTunnelGrace(_cfg.getCreationTime(), System.currentTimeMillis())) {
             return false;
@@ -337,18 +330,6 @@ public class TestJob extends JobImpl {
     private static final Map<Hash, long[]> _inboundReplyPartnerTally = new ConcurrentHashMap<>();
     private static final Map<Hash, long[]> _outboundReplyPartnerTally = new ConcurrentHashMap<>();
 
-    /**
-     *  Whether a failing round is evidence about its reply partner rather than
-     *  about the tunnel under test, because the same partner was already
-     *  blamed for a recent failed round.  Pure and static so the attribution
-     *  rule is testable without a router.
-     *
-     * @param memory partner to last-blamed timestamps, may be null
-     * @param replyPartner the tunnel the reply should have come back through
-     * @param now current time in ms
-     * @return true when this partner was blamed within the memory window
-     *  @since 0.9.71+
-     */
     /**
      *  The pool manager, reached through this job's own pool rather than
      *  {@code RouterContext.tunnelManager()}.  The latter is the public
@@ -3734,12 +3715,6 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Called when the tunnel test fails: record the failure, defer the round
-     * or mark the tunnel through the pool, and schedule the next test.
-     *
-     * @param timeToFail time in milliseconds the test ran before failing
-     */
-    /**
      *  Defer a round because the same reply partner was already blamed for a
      *  recent failure, and kick the reply pool so the side that is actually
      *  degraded is the side that rebuilds.  Bounded by
@@ -3770,6 +3745,12 @@ public class TestJob extends JobImpl {
         return true;
     }
 
+    /**
+     * Called when the tunnel test fails: record the failure, defer the round
+     * or mark the tunnel through the pool, and schedule the next test.
+     *
+     * @param timeToFail time in milliseconds the test ran before failing
+     */
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();

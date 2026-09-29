@@ -1073,16 +1073,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     }
 
     /**
-     * Effective exclude caps, adapting to build success.
-     * During low build success (&lt;40%), relax exclusions for M, N, O, D, and P caps.
-     * Also relax during first 5 minutes of uptime when build success is unknown.
+     *  Exclusion caps to apply, adapting to build success.  During low build
+     *  success (&lt;40%) the M, N, O, D and P exclusions are relaxed, as they
+     *  are during the first five minutes of uptime when the ratio is not yet
+     *  meaningful.
+     *  <p>Never null: {@link #getExcludeCaps} substitutes DEFAULT_EXCLUDE_CAPS
+     *  for a missing setting, and this folds away any null that survives so
+     *  the callers can iterate the result without a guard.
      *
-     * @param ctx the router context
-     * @param buildSuccess the build success ratio, fetched once per selection
-     * @return non-null, possibly empty
+     *  @param ctx the router context
+     *  @param buildSuccess the build success ratio, fetched once per selection
+     *  @return non-null, possibly empty
      */
     private static String getEffectiveExcludeCaps(RouterContext ctx, double buildSuccess) {
-        return relaxedExcludeCaps(getExcludeCaps(ctx), buildSuccess, ctx.router().getUptime());
+        String configured = getExcludeCaps(ctx);
+        String relaxed = relaxedExcludeCaps(configured, buildSuccess, ctx.router().getUptime());
+        return relaxed != null ? relaxed : configured;
     }
 
     /**

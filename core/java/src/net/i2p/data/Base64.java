@@ -294,28 +294,7 @@ public class Base64 {
 
     /* ********  E N C O D I N G   M E T H O D S  ******** */
 
-    /**
-     * Encodes up to three bytes of the array <var>source</var>
-     * and writes the resulting four Base64 bytes to <var>destination</var>.
-     * The source and destination arrays can be manipulated
-     * anywhere along their length by specifying
-     * <var>srcOffset</var> and <var>destOffset</var>.
-     * This method does not check to make sure your arrays
-     * are large enough to accomodate <var>srcOffset</var> + 3 for
-     * the <var>source</var> array or <var>destOffset</var> + 4 for
-     * the <var>destination</var> array.
-     * The actual number of significant bytes in your array is
-     * given by <var>numSigBytes</var>.
-     *
-     * @param source the array to convert
-     * @param srcOffset the index where conversion begins
-     * @param numSigBytes the number of significant bytes in your array
-     * @param destination the array to hold the conversion
-     * @param destOffset the index where output will be put
-     * @return the <var>destination</var> array
-     * @since 1.3
-     */
-/***** unused (standard alphabet)
+/* unused (standard alphabet)
     private static byte[] encode3to4(byte[] source, int srcOffset, int numSigBytes, byte[] destination, int destOffset) {
         //           1         2         3
         // 01234567890123456789012345678901 Bit position
@@ -401,15 +380,7 @@ public class Base64 {
         } // end switch
     } // end encode3to4
 
-    /**
-     * Encodes a byte array into Base64 notation.
-     * Equivalen to calling
-     * <code>encodeBytes( source, 0, source.length )</code>
-     *
-     * @param source The data to convert
-     * @since 1.4
-     */
-/***** unused
+/* unused
     private static String encodeBytes(byte[] source) {
         return encodeBytes(source, false); // don't add newlines
     } // end encodeBytes
@@ -454,16 +425,7 @@ public class Base64 {
         return standardDecode(new String(chars));
     }
 
-    /**
-     * Encodes a byte array into Base64 notation.
-     * Equivalen to calling
-     * <code>encodeBytes( source, 0, source.length )</code>
-     *
-     * @param source The data to convert
-     * @param breakLines Break lines at 80 characters or less.
-     * @since 1.4
-     */
-/***** unused
+/* unused
     private static String encodeBytes(byte[] source, boolean breakLines) {
         return encodeBytes(source, 0, source.length, breakLines);
     } // end encodeBytes
