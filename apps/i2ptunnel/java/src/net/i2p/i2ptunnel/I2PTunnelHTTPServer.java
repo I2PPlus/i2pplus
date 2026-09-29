@@ -485,6 +485,56 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Ceiling on a progress-scaled window, ms. @since 0.9.71+ */
     private static final long MAX_STALL_WINDOW_MS = 600_000L;
 
+    /** Stall side reported when both stamps are equally stale. @since 0.9.71+ */
+    static final String STALL_SIDE_INDETERMINATE = "source or destination (indeterminate)";
+    /** @since 0.9.71+ */
+    static final String STALL_SIDE_SOURCE = "source (local backend silent)";
+    /** @since 0.9.71+ */
+    static final String STALL_SIDE_DESTINATION = "destination (I2P egress congested)";
+    /**
+     *  Below this many bytes a body has moved too little for a "moved nothing,
+     *  and only a read is blocked" claim, so equally stale stamps are reported
+     *  as destination anyway. @since 0.9.71+
+     */
+    private static final long STALL_SIDE_INDETERMINATE_MAX_BYTES = 1024L;
+
+    /**
+     *  Which side of a stalled body transfer stopped making progress.
+     *
+     *  <p>Read and write stamps are updated either side of the same copy step,
+     *  so a body blocked mid-write ages both equally: the read that fed the
+     *  blocked write is stamped, then the write never completes to stamp
+     *  itself. The two therefore look identical to a body blocked mid-read,
+     *  and only the progress counter separates them -- a body that has moved
+     *  meaningful bytes and then gone quiet is sitting in a blocked write,
+     *  because a blocked read would have had nothing to hand the previous
+     *  write.
+     *
+     *  <p>Reporting the ambiguous case as the source is actively misleading: a
+     *  45MB download that stalled after 3.2MB was logged as "local backend
+     *  silent" while the same backend served the whole file in 4ms on a fresh
+     *  connection, sending every diagnosis to the wrong layer.
+     *
+     * @param readAgeMs age of the last-read stamp
+     * @param writeAgeMs age of the last-write stamp
+     * @param bytesTransferred bytes already moved by the body
+     * @return one of {@link #STALL_SIDE_SOURCE}, {@link #STALL_SIDE_DESTINATION},
+     *         or {@link #STALL_SIDE_INDETERMINATE}
+     * @since 0.9.71+
+     */
+    static String classifyStalledSide(long readAgeMs, long writeAgeMs, long bytesTransferred) {
+        // Write fresher than read: the sink is moving, so the source went quiet.
+        if (writeAgeMs < readAgeMs)
+            return STALL_SIDE_SOURCE;
+        // Read fresher than write: the source is moving, so the sink backed up.
+        if (readAgeMs < writeAgeMs)
+            return STALL_SIDE_DESTINATION;
+        // Equally stale: only progress separates a blocked read from a blocked write.
+        if (bytesTransferred < STALL_SIDE_INDETERMINATE_MAX_BYTES)
+            return STALL_SIDE_DESTINATION;
+        return STALL_SIDE_INDETERMINATE;
+    }
+
     /**
      *  Close a stream, ignoring failures. Used by stall/teardown paths where
      *  the close is best-effort (the stream may already be dead) and the goal
@@ -2404,16 +2454,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             }
             _stallEventCount.incrementAndGet();
             if (_log != null && _log.shouldWarn()) {
-                // Name the side that actually stopped moving. A fresh read stamp
-                // with a stale write stamp means the Sender is blocked writing to
-                // the I2P side, i.e. egress congestion, not a silent local
-                // source -- reporting "no read progress" for that sent every
-                // diagnosis at the wrong layer.
+                // Name the side that actually stopped moving, and say so plainly
+                // when the stamps cannot tell the two apart. See
+                // classifyStalledSide() for why "no read progress" alone used to
+                // point every bulk-transfer diagnosis at the local backend.
                 long nowNanos = System.nanoTime();
                 long readAgeMs = (nowNanos - _body.getLastReadNanos()) / 1_000_000L;
                 long writeAgeMs = (nowNanos - _body.getLastWriteNanos()) / 1_000_000L;
-                String side = (readAgeMs <= writeAgeMs) ? "source (local backend silent)"
-                                                        : "destination (I2P egress congested)";
+                String side = classifyStalledSide(readAgeMs, writeAgeMs,
+                                                 _body.getBytesTransferred());
                 _log.warn("[HTTPServer] Async body stalled on the " + side +
                           " - read idle " + readAgeMs + "ms, write idle " + writeAgeMs + "ms" +
                           " after " + _body.getBytesTransferred() + " bytes transferred" +
