@@ -252,10 +252,23 @@ if [ -f "$CUSTOM_PROFILE" ]; then
     else
         echo "  Warning: failed to import quality profile: $(echo "$RESP" | python3 -c 'import sys,json; d=json.load(sys.stdin); print(d.get(\"errors\",[{}])[0].get(\"msg\",\"unknown\"))' 2>/dev/null)"
     fi
-    # Deactivate high-risk rules that cause breakage
-    # S1444: public mutable fields in internal DTOs (news/blocklist parsers) are
-    # the established pattern; accessors would touch parser + JSP sites for no gain
-    for RULE in S1168 S1481 S1444; do
+    # Deactivate rules that fight the codebase's established conventions.
+    # These are ALSO absent from i2pplus-custom-java.xml — the restore above
+    # re-activates anything present in that file, so removing them there is
+    # what actually takes effect. The calls here are belt-and-braces for
+    # profiles imported by other means.
+    #   S100/S101/S115/S3008/S3400: naming. The repo uses the _camelCase
+    #     convention for private fields (_context, _log, _tunnels). S3008
+    #     rejects the leading underscore and S115 rejects the UPPER_SNAKE
+    #     alternative, so every compliant field is reported by one or the
+    #     other. Silenced rather than churned.
+    #   S1168: returning null from public APIs is the documented contract
+    #     across crypto/addressbook; changing it would ripple into callers.
+    #   S1444: public mutable fields in internal DTOs (news/blocklist
+    #     parsers) are the established pattern; accessors would touch
+    #     parser + JSP sites for no gain.
+    #   S1481: unused locals that mark a deliberate side-effect ordering.
+    for RULE in S100 S101 S115 S3008 S3400 S1168 S1444 S1481; do
         LD_PRELOAD="" curl -s -u "${SONAR_USER}:${SONAR_PASSWORD}" \
             -X POST "${SONAR_HOST}/api/qualityprofiles/deactivate_rule" \
             --data-urlencode "rule=java:${RULE}" \
