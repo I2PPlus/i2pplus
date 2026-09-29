@@ -139,6 +139,9 @@ public class TunnelPool {
     private long _lastNoTunnelsWarningTime;
     private long _lastLastResortLogTime;
     private long _lastSelectPeersFailureWarnTime;
+    /** Rate-limit stamps for the data-phase failure / condemnation log lines. */
+    private long _lastSendFailureLogTime;
+    private long _lastCondemnWarnTime;
     /**
      *  Dynamic pool scaling: when a pool repeatedly collapses (EMERGENCY fires),
      *  increase the effective tunnel count. More parallel tunnels = more
@@ -2999,7 +3002,14 @@ public class TunnelPool {
             cfg.incrementTestFailures();
         }
         int failures = soft ? cfg.getSoftFailures() : cfg.getConsecutiveFailures();
-        if (_log.shouldInfo()) {
+        // Both the per-failure INFO and the crossing WARN are rate-limited per
+        // pool. A client racing several tunnels at once turns one congestion
+        // event into a status-3 timeout on each of them, and the resulting
+        // log flood costs more than the signal is worth: the counters and the
+        // pool state already carry the story.
+        long now = _context.clock().now();
+        if (_log.shouldInfo() && shouldLogSendFailure(now, _lastSendFailureLogTime)) {
+            _lastSendFailureLogTime = now;
             _log.info(toString() + " -> Data-phase failure (status=" + status +
                       (soft ? ", soft" : "") +
                       ") for tunnel, failures now " + failures +
@@ -3007,7 +3017,8 @@ public class TunnelPool {
         }
         boolean overBar = exceedsRemovalThreshold(failures, soft);
         if (overBar) {
-            if (_log.shouldWarn()) {
+            if (_log.shouldWarn() && shouldLogSendFailure(now, _lastCondemnWarnTime)) {
+                _lastCondemnWarnTime = now;
                 _log.warn(toString() + " -> Marking tunnel failing after " +
                           failures +
                           (soft ? " soft" : " cumulative") +
@@ -3097,6 +3108,31 @@ public class TunnelPool {
     }
 
     /**
+     *  Whether a soft failure count crosses the soft marking bar. Exposed so a
+     *  test can assert that a saturated soft streak still condemns, without
+     *  duplicating the threshold.
+     *
+     *  @param failures soft failure count
+     *  @return true if the tunnel should be marked and retained
+     *  @since 0.9.71+
+     */
+    public static boolean exceedsSoftRemovalThreshold(int failures) {
+        return exceedsRemovalThreshold(failures, true);
+    }
+
+    /**
+     *  The soft failure count that marks a tunnel for retention. Exposed so a
+     *  test can assert that the soft streak ceiling sits above the bar it exists
+     *  to cross.
+     *
+     *  @return the soft removal bar
+     *  @since 0.9.71+
+     */
+    public static int softRemovalThreshold() {
+        return SOFT_REMOVAL_THRESHOLD;
+    }
+
+    /**
      *  Does this pool publish a LeaseSet to the network?
      *  Structural: inbound + non-exploratory. Additionally, for
      *  I2CP pools, the session's i2cp.dontPublishLeaseSet option
@@ -3115,12 +3151,23 @@ public class TunnelPool {
 
     /**
      * Whether a failure report is a repeat of a condemnation already made.
-     * A tunnel that is both dead and FAILED has been excluded from selection
-     * and had its replacement requested already, so re-processing only re-logs,
-     * asks the pool for a tunnel it does not need, and lets the failure count
-     * of a retained-but-dead tunnel keep climbing.  The escalation that does
-     * matter — a soft-only failure turning FAILING into FAILED — is not
-     * matched here, because the status is not FAILED yet.
+     *
+     * <p>A condemned tunnel is retained until it expires and is replaced
+     * immediately, so it keeps receiving work and keeps reporting failures for
+     * its whole remaining lifetime. Re-processing those reports only re-logs,
+     * asks the pool for a replacement it already has, and lets the failure
+     * counter of a retained tunnel climb without bound.
+     *
+     * <p>The test is "would {@code fail()} change anything", not "is this the
+     * terminal state". A soft-only cascade marks the tunnel FAILING and leaves
+     * it there; requiring the hard counter to be tripped as well meant a
+     * retained-but-soft-failing tunnel was re-condemned on every subsequent
+     * status-3 timeout, and the observed effect was one WARN per failure with
+     * the count running past a thousand on a single tunnel inside an hour.
+     *
+     * <p>The one case that must still proceed is the escalation from a
+     * soft-only FAILING tunnel to a hard FAILED one, because that is the report
+     * which actually removes the tunnel from selection.
      *
      * @param isDead whether the tunnel's hard failure counter is tripped
      * @param status the tunnel's current test status, may be null
@@ -3128,7 +3175,11 @@ public class TunnelPool {
      * @since 0.9.71+
      */
     static boolean alreadyCondemned(boolean isDead, TunnelTestStatus status) {
-        return isDead && status == TunnelTestStatus.FAILED;
+        if (status == TunnelTestStatus.FAILED)
+            return true;
+        // Soft-only condemnation: re-marking FAILING is a no-op. Escalate only
+        // when the hard counter is tripped and FAILED is therefore the new state.
+        return status == TunnelTestStatus.FAILING && !isDead;
     }
 
     /**
@@ -5984,6 +6035,26 @@ public class TunnelPool {
         return uptime > SELECT_PEERS_FAILURE_SILENCE_MS &&
                now - lastWarnTime >= SELECT_PEERS_FAILURE_WARN_INTERVAL_MS;
     }
+
+    /**
+     *  Whether a data-phase failure or condemnation line should be logged now.
+     *  Rate-limited per pool to one line per
+     *  {@link #SEND_FAILURE_LOG_INTERVAL_MS}. State changes are never rate
+     *  limited: {@link #failWithCount(TunnelInfo, int)} and
+     *  {@link #tellProfileFailed(TunnelInfo)} still run on every report, only
+     *  the log line is suppressed.
+     *
+     * @param now the current time in ms
+     * @param lastLogTime the last log time for this stream, ms
+     * @return true if the line should be logged
+     * @since 0.9.71+
+     */
+    static boolean shouldLogSendFailure(long now, long lastLogTime) {
+        return now - lastLogTime >= SEND_FAILURE_LOG_INTERVAL_MS;
+    }
+
+    /** Minimum gap between data-phase failure log lines, per pool. */
+    private static final long SEND_FAILURE_LOG_INTERVAL_MS = 10_000L;
 
     /** Silent in the first 3 minutes of uptime: peers are still being discovered. */
     private static final long SELECT_PEERS_FAILURE_SILENCE_MS = 3L * 60 * 1000;
