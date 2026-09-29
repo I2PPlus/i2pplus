@@ -13,6 +13,7 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ArraySet;
 import net.i2p.util.SystemVersion;
@@ -22,7 +23,47 @@ import net.i2p.util.SystemVersion;
  * ordered by XOR distance from a random key.
  *
  */
-class ExploratoryPeerSelector extends TunnelPeerSelector {
+    class ExploratoryPeerSelector extends TunnelPeerSelector {
+
+        /**
+         *  Counts selections discarded because every candidate was banlisted.
+         *
+         *  <p>Exists to prove the discard branch is reachable. The change that
+         *  replaced restoring the banned selection with discarding it was
+         *  justified by a build-capacity figure, and that justification is only
+         *  sound if the branch actually fires; if the stat stays at zero over a
+         *  long run the change is dead code and should be reverted rather than
+         *  kept on an unverified claim.
+         *
+         *  <p>Must be created before use: {@code StatManager.addRateData} on an
+         *  unregistered name silently drops the sample.
+         *
+         *  @since 0.9.71+
+         */
+        static final String EPS_ALL_BANNED_STAT = "tunnel.peerSelection.epsAllBannedDiscarded";
+        private static final long[] EPS_STAT_RATES = {
+            RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR
+        };
+
+        /**
+         *  Record a discarded selection, creating the stat on first use.
+         *
+         *  <p>{@code StatManager.addRateData} silently drops samples for an
+         *  unregistered name, so creation is not optional here. No "already
+         *  created" guard is needed because {@code createRequiredRateStat} is
+         *  itself idempotent.
+         *
+         * @param ctx router context; null is ignored
+         *  @since 0.9.71+
+         */
+        private static void noteAllBannedDiscard(RouterContext ctx) {
+            if (ctx == null || ctx.statManager() == null) {return;}
+            ctx.statManager().createRequiredRateStat(
+                EPS_ALL_BANNED_STAT,
+                "Exploratory selections discarded because every peer was banlisted",
+                "Tunnels", EPS_STAT_RATES);
+            ctx.statManager().addRateData(EPS_ALL_BANNED_STAT, 1);
+        }
 
     /**
      *  Cooldown entries for exploratory selections, recorded when checkTunnel
@@ -386,6 +427,9 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             if (rv.isEmpty()) {
                 if (log.shouldWarn()) {
                     log.warn("EPS all selected peers were banlisted -> discarding selection for redraw");
+                }
+                if (ctx != null && ctx.statManager() != null) {
+                    noteAllBannedDiscard(ctx);
                 }
                 rv.clear();
             } else if (rv.size() != before.size() && log.shouldDebug()) {
