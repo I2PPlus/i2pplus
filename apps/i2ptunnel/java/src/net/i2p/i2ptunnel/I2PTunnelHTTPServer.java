@@ -1127,6 +1127,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 socket.setReadTimeout(readTimeout);
                 Socket s = getSocket(peerHash, socket.getLocalPort());
                 long afterSocket = getTunnel().getContext().clock().now();
+                if (_log.shouldInfo()) {
+                    // The local port is client-driven (socket.getLocalPort()), not
+                    // read from any eepgsite config, so a failing request is
+                    // otherwise impossible to attribute to a backend. Log the
+                    // resolved target and both timeout budgets: the I2P-side
+                    // per-read budget and the local socket's header-read budget.
+                    _log.info("[HTTPServer] " + toString() + " localport=" + socket.getLocalPort()
+                              + " backend=" + getSocketString(socket.getLocalPort())
+                              + " i2pReadTimeout=" + readTimeout
+                              + " localHeaderReadTimeout=" + SERVER_READ_TIMEOUT_GET
+                              + " peer=" + peerB32);
+                }
 
                 // Instead of i2ptunnelrunner, use something that reads the HTTP
                 // request from the socket, modifies the headers, sends the request
@@ -1201,7 +1213,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                               ex.getMessage().replace(": Name or service not known", "") +
                               " "  + tunnelId + "\n* Client: " + peerB32);
                 } else {
-                    _log.warn("[HTTPServer] Request error: " + ex.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
+                    _log.warn("[HTTPServer] Request error: " + ex.getMessage() + " " + tunnelId +
+                              "\n* Client: " + peerB32 +
+                              "\n* Backend: " + getSocketString(socket.getLocalPort()) +
+                              " (localport=" + socket.getLocalPort() + ")");
                 }
         } catch (OutOfMemoryError oom) {
             // Often actually a file handle limit problem so we can safely send a response
