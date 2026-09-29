@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
-import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.util.MaskedIPSet;

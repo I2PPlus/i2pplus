@@ -1839,8 +1839,8 @@ public class I2PTunnelRunner extends I2PAppThread implements DoneCallback {
                         if (_log.shouldWarn())
                             _log.warn(direction + " Connection dropped: client pool saturated");
                         onNoDataFailure(ree);
-                        try {i2ps.close();} catch (IOException ioe) {}
-                        try {s.close();} catch (IOException ioe) {}
+                        try {i2ps.close();} catch (IOException ioe) { /* ignore */ }
+                        try {s.close();} catch (IOException ioe) { /* ignore */ }
                         return;
                     }
                 } else {

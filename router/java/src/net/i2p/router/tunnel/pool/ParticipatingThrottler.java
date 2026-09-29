@@ -1,10 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.Arrays;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.BanLogger;
 import net.i2p.router.Router;

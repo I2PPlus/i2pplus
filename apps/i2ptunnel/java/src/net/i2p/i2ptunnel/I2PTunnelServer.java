@@ -1118,7 +1118,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      * Close an I2P socket silently, ignoring any exceptions.
      */
     private static void closeSilently(I2PSocket s) {
-        if (s != null) try { s.close(); } catch (IOException ioe) {}
+        if (s != null) try { s.close(); } catch (IOException ioe) { /* ignore */ }
     }
 
     /**

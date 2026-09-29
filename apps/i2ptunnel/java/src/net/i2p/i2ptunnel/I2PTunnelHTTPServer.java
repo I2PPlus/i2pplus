@@ -1165,8 +1165,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     try {
                         _clientExecutor.execute(t);
                     } catch (RejectedExecutionException ree) {
-                        try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) {}
-                        try { socket.close(); } catch (IOException ioe) {}
+                        try { sendError(socket, ERR_UNAVAILABLE); } catch (IOException ioe) { /* ignore */ }
+                        try { socket.close(); } catch (IOException ioe) { /* ignore */ }
                         if (_log.shouldWarn())
                             _log.warn("[HTTPServer] Executor pool saturated, rejecting request " + tunnelId + "\n* Client: " + peerB32);
                         return;

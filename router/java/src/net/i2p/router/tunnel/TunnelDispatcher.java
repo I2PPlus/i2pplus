@@ -138,7 +138,7 @@ public class TunnelDispatcher implements Service {
         if (t >= 0.0f) return t;
         String p = ctx.getProperty("router.transitThrottleFactor");
         if (p != null) {
-            try { return Float.parseFloat(p); } catch (NumberFormatException nfe) {}
+            try { return Float.parseFloat(p); } catch (NumberFormatException nfe) { /* use default */ }
         }
         return def;
     }
