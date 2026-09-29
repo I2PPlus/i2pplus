@@ -63,7 +63,7 @@ public class WebAppStarter {
 
     private static Log _log;
     static {
-        try { _log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class); } catch (Throwable t) {}
+        try { _log = ContextHelper.getContext(null).logManager().getLog(WebAppStarter.class); } catch (Throwable t) { /* no context during static init; _log stays null and the class continues without logging */ }
         // see DefaultServlet javadocs
         String pfx = "org.eclipse.jetty.servlet.Default.";
         // this enables javascript to be cached as immutable
@@ -81,7 +81,8 @@ public class WebAppStarter {
         } catch (ClassNotFoundException e) {
             // Expected if annotation classes are not available
         } catch (Exception e) {
-            _log.error("Error checking annotation classes", e);
+            // _log is null when the context itself could not be created above
+            if (_log != null) { _log.error("Error checking annotation classes", e); }
         }
         HAS_ANNOTATION_CLASSES = found;
 
