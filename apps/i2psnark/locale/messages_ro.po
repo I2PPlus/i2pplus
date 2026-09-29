@@ -255,7 +255,7 @@ msgid "Torrent directory reset to data directory."
 msgstr "Directorul de torrente a fost resetat la directorul de date."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "Lista Open Tracker a fost schimbată - este necesară repornirea torrentului pentru a intra în vigoare.Lista trackerelor deschise s-a schimbat - repornirea torrentui este necesara pentru a avea efect."
+msgstr "Lista Open Tracker a fost schimbată - este necesară repornirea torrentului pentru a intra în vigoare."
 
 msgid "Private tracker list changed - affects newly created torrents only."
 msgstr "Lista de urmărire privată a fost schimbată - afectează numai torrentele nou create.Lista trackerelor private s-a schimbat - afectează doar nou-createle torrente."
@@ -733,7 +733,7 @@ msgid "Data directory"
 msgstr "Dosar cu date"
 
 msgid "Directory where torrents and downloaded/shared files are stored"
-msgstr "Directorul în care sunt stocate torrentele și fișierele descărcate/partajateDirector în care sunt stocate torentele și fișierele descărcate / partajate"
+msgstr "Directorul în care sunt stocate torrentele și fișierele descărcate/partajate"
 
 msgid "Temp directory"
 msgstr "Director temporar"
@@ -751,7 +751,7 @@ msgid "Files readable by all"
 msgstr "Fișiere lizibile de către toți"
 
 msgid "Set file permissions to allow other local users to access the downloaded files"
-msgstr "Setați permisiunile pentru fișiere pentru a permite altor utilizatori locali să acceseze fișierele descărcateSetați permisiunile de fișiere pentru a permite altor utilizatori locali să acceseze fișierele descărcate"
+msgstr "Setați permisiunile pentru fișiere pentru a permite altor utilizatori locali să acceseze fișierele descărcate"
 
 msgid "Preallocate files"
 msgstr "Prealocați fișierele"

@@ -160,7 +160,7 @@ msgid "Go back and fix the error"
 msgstr "Vraťte se a opravte chybu"
 
 msgid "router"
-msgstr "Router"
+msgstr "router"
 
 msgid "master"
 msgstr "hlavní"

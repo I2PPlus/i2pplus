@@ -255,7 +255,7 @@ msgid "Torrent directory reset to data directory."
 msgstr "Torrentkatalogen återställd till datakatalogen."
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
-msgstr "Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft.Listan över offentliga bevakare förändrad - torrenten måste startas om för att inställningen ska träda i kraft."
+msgstr "Öppen spårningslista ändrad - omstart av torrent krävs för att träda i kraft."
 
 msgid "Private tracker list changed - affects newly created torrents only."
 msgstr "Privat bevakarlista ändrad - påverkar bara nyligen skapade torrenter."

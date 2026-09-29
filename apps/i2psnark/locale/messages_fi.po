@@ -245,7 +245,7 @@ msgid "Temp directory for staging changed to {0}"
 msgstr "Väliaikaishakemisto vaihdettu arvoon {0}"
 
 msgid "Temp directory staging disabled."
-msgstr "Väliaikaishakemiston käyttö vaiheistuksessa poistettu käytöstä."
+msgstr "Väliaikaishakemiston etuvaraus poistettu käytöstä."
 
 #, java-format
 msgid "Torrent directory changed to {0}"
@@ -715,13 +715,13 @@ msgid "minutes"
 msgstr "minuuttia"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr "Kuinka kauan ennen automaattisesti käynnistettävien torrentein lataamista, kun I2PSnark käynnistyy, vähintään"
+msgstr "Kuinka kauan ennen automaattisesti käynnistettävien torrenttien lataamista, kun I2PSnark käynnistyy, vähintään"
 
 msgid "min"
 msgstr "vähintään"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr "Kuinka kauan ennen automaattisesti käynnistettävien torrentein lataamista, kun I2PSnark käynnistyy, enintään"
+msgstr "Kuinka kauan ennen automaattisesti käynnistettävien torrenttien lataamista, kun I2PSnark käynnistyy, enintään"
 
 msgid "max"
 msgstr "enintään"
@@ -754,7 +754,7 @@ msgid "Set file permissions to allow other local users to access the downloaded 
 msgstr "Aseta tiedostojen käyttöoikeudet, jotta muut paikalliset käyttäjät voivat käyttää ladattuja tiedostoja"
 
 msgid "Preallocate files"
-msgstr "Varaja tiedostot etukäteen"
+msgstr "Varaa tiedostotilaa etukäteen"
 
 msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
 msgstr "Laajenna uudet torrent-tiedostot täyteen kokoonsa ja varaa levytila heti torrentin käynnistyessä, jotta levyn täyttyminen ei keskeytä latauksia ja pirstaloituminen vältetään kappaleiden saapuessa"
@@ -766,7 +766,7 @@ msgid "Preserve original file names from the torrent. When disabled, filenames a
 msgstr "Säilytä torrentin alkuperäiset tiedostonimet. Kun toiminto on poistettu käytöstä, tiedostonimistä suodatetaan tiedostojärjestelmän laittomat merkit. Kun toiminto on käytössä, alkuperäisiä tiedostonimiä käytetään; jos tiedostonimessä on merkkejä, joita tiedostojärjestelmäsi ei tue, tiedosto luodaan turvallisella korvaavalla nimellä ja näytetään varoitus"
 
 msgid "Max files per torrent"
-msgstr "Enimmäistiedostot per torrent"
+msgstr "Tiedostojen enimmäismäärä torrentia kohti"
 
 msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
 msgstr "Tiedostojen enimmäismäärä torrentia kohden – huomaa, että seurantalaitteet voivat asettaa omat rajoituksensa ja käyttöjärjestelmäsi voi rajoittaa avoimien tiedostojen määrää, mikä estää monien tiedostojen (ja myöhempien torrentien) lataamisen"
@@ -784,7 +784,7 @@ msgid "Primary Dest."
 msgstr "Pääkohde"
 
 msgid "Dest."
-msgstr "Koh."
+msgstr "Kohd."
 
 msgid "Inbound Settings"
 msgstr "Saapuvien asetukset"

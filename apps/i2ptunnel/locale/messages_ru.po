@@ -32,7 +32,7 @@ msgid "Destination LeaseSet not found"
 msgstr "LeaseSet для адреса назначения не найден"
 
 msgid "Host"
-msgstr "Адрес"
+msgstr "Хост"
 
 msgid "Base32"
 msgstr "Base32"

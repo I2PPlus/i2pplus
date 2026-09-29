@@ -40,7 +40,7 @@ msgstr "Torrenti kataloogi ei saa luua"
 
 #, java-format
 msgid "Total uploaders limit changed to {0}"
-msgstr "Kokkuülesaajate piir vahetatud {0}ks"
+msgstr "Kokkuülesaajate piir muudetud {0}ks"
 
 #, java-format
 msgid "Minimum uploaders limit is {0}"
@@ -48,7 +48,7 @@ msgstr "Üleslaadijate miinimum piir on {0}"
 
 #, java-format
 msgid "Up BW limit changed to {0}KBps"
-msgstr "Üleslaadimise BW piir vahetatud {0}KBps"
+msgstr "Üleslaadimise BW piir muudetud {0}KBps"
 
 #, java-format
 msgid "Minimum up bandwidth limit is {0}KBps"
@@ -56,7 +56,7 @@ msgstr "Üleslaadimise bändivõrgu piiri minimaalne väärtus on {0}KBps"
 
 #, java-format
 msgid "Maximum download speed changed to {0}KB/s"
-msgstr "Maksimaalne allalaadimiskiirus vahetatud {0}KB/s"
+msgstr "Maksimaalne allalaadimiskiirus muudetud {0}KB/s"
 
 #, java-format
 msgid "Download speed limit is {0}KB/s"
@@ -85,7 +85,7 @@ msgstr "Iga torrendi jaoks eraldi sihtkohtade kasutamine on keelatud"
 
 #, java-format
 msgid "Maximum destinations changed to {0}"
-msgstr "Maksimaalne sihtkohtade arv vahetatud {0}ks"
+msgstr "Maksimaalne sihtkohtade arv muudetud {0}ks"
 
 msgid "Unlimited destinations restored (one per torrent)"
 msgstr "Piiramatud sihtkohtade arv taastatud (üks iga torrendi kohta)"
@@ -98,18 +98,18 @@ msgstr "Torrenti algusaegade juhuslikustamine on keelatud"
 
 #, java-format
 msgid "Startup delay range changed to {0} - {1}"
-msgstr "Käivituse viivituse vahemik vahetatud vahemikku {0} - {1}"
+msgstr "Käivituse viivituse vahemik muudetud {0} - {1}"
 
 #, java-format
 msgid "Refresh time changed to {0}"
-msgstr "Värskendusaeg vahetatud {0}ks"
+msgstr "Värskendusaeg muudetud {0}ks"
 
 msgid "Refresh disabled"
 msgstr "Värskendus keelatud"
 
 #, java-format
 msgid "Page size changed to {0}"
-msgstr "Lehekülje suurus vahetatud {0}ks"
+msgstr "Lehekülje suurus muudetud {0}ks"
 
 msgid "New files will be publicly readable"
 msgstr "Uued failid on avalikult lugemisväärsed"
@@ -131,14 +131,14 @@ msgstr "Lugematu"
 
 #, java-format
 msgid "Data directory changed to {0}"
-msgstr "Andmekausta asukoht vahetatud {0}ks"
+msgstr "Andmekausta asukoht muudetud {0}ks"
 
 msgid "I2CP and tunnel changes will take effect after stopping all torrents"
 msgstr "I2CP ja tünneli muudatused jõustuvad kõigi torrentide peatamisel"
 
 #, java-format
 msgid "I2CP options changed to: {0}"
-msgstr "I2CP valikud vahetatud {0}ks"
+msgstr "I2CP valikud muudetud {0}ks"
 
 msgid "Disconnecting old I2CP destination"
 msgstr "Van I2CP sihtkoht katkestatakse"
@@ -234,7 +234,7 @@ msgstr "Algse failinimede säilitamine on keelatud."
 
 #, java-format
 msgid "Maximum files per torrent changed to {0}"
-msgstr "Maksimaalne failide arv torrendi kohta vahetatud {0}ks"
+msgstr "Maksimaalne failide arv torrendi kohta muudetud {0}ks"
 
 #, java-format
 msgid "Invalid maximum files per torrent: {0}"
@@ -715,13 +715,13 @@ msgid "minutes"
 msgstr "minutit"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
-msgstr "Kui pikalt kulub enne, kui I2PSnark käivitumisel automaatselt käivitatud torrentid laaditakse, vähimalt"
+msgstr "Kui pikalt kulub enne, kui I2PSnark käivitumisel automaatselt käivitatud torrentid laaditakse, vähimat"
 
 msgid "min"
 msgstr "miin"
 
 msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
-msgstr "Kui pikalt kulub enne, kui I2PSnark käivitumisel automaatselt käivitatud torrentid laaditakse, kõige rohkem"
+msgstr "Kui pikalt kulub enne, kui I2PSnark käivitumisel automaatselt käivitatud torrentid laaditakse, hiljemalt"
 
 msgid "max"
 msgstr "maks"
@@ -736,13 +736,13 @@ msgid "Directory where torrents and downloaded/shared files are stored"
 msgstr "Kataloog, kus torrentid ja allalaaditud/jagatud failid on salvestatud"
 
 msgid "Temp directory"
-msgstr "Vahetukaust"
+msgstr "Ajutine kataloog"
 
 msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
 msgstr "Valikuline kaust, kus allalaadimised valmistatakse ette, enne kui need lõpetamisel andmekausta teisaldatakse. Jäta tühjaks, et see välja lülitada."
 
 msgid "Torrent directory"
-msgstr "Torrentikaust"
+msgstr "Torrentikataloog"
 
 msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
 msgstr "Valikuline kaust .torrent-failide hoidmiseks eraldi allalaaditud andmetest. Jäta tühjaks, et hoida andmekaustas."

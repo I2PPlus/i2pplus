@@ -99,7 +99,7 @@ msgid "You must either enter a PSK encryption key provided by the server operato
 msgstr "您必须输入服务器操作员提供的 PSK 加密密钥，或者生成一个 DH 加密密钥并发送给服务器操作员。"
 
 msgid "Ask the server operator for help."
-msgstr "向服务器管理员寻求帮助."
+msgstr "向服务器操作员寻求帮助."
 
 msgid "Enter PSK encryption key"
 msgstr "输入 PSK 加密密钥"
@@ -151,10 +151,10 @@ msgid "Help"
 msgstr "帮助"
 
 msgid "Copy the key and send it to the server operator."
-msgstr "复制密钥，并发送给服务器管理员."
+msgstr "复制密钥，并发送给服务器操作员."
 
 msgid "After you are granted permission, you may proceed to the website."
-msgstr "被授予权限后，您才可以访问这个网站."
+msgstr "被授予权限后，您可以访问这个网站。"
 
 msgid "Go back and fix the error"
 msgstr "返回并修复错误"
@@ -177,18 +177,18 @@ msgstr "正在进行重定向"
 
 #, java-format
 msgid "Saved {0} to the {1} addressbook, redirecting now."
-msgstr "目标{0}已保存至{1}地址簿中，正在重定向至此目标。"
+msgstr "{0}已保存至{1}地址簿中，正在重定向。"
 
 #, java-format
 msgid "Failed to save {0} to the {1} addressbook, redirecting now."
-msgstr "目标{0}在{1}地址簿中保存失败，正在重定向至此目标。"
+msgstr "{0}在{1}地址簿中保存失败，正在重定向。"
 
 msgid "Click here if you are not redirected automatically."
-msgstr "如果未能自动转到，请点击这里。"
+msgstr "如果未能自动重定向，请点击这里。"
 
 #, java-format
 msgid "Saved the authentication for {0}, redirecting now."
-msgstr "已保存 {0} 的凭据，正在重定向。"
+msgstr "已保存 {0} 的认证信息，正在重定向。"
 
 msgid "Failed to save configuration"
 msgstr "保存配置失败"

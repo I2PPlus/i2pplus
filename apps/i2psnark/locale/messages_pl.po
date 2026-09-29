@@ -75,7 +75,7 @@ msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
 msgstr "+0/1 tunnelhop randomisatie ingeschakeld op outbound tunnels"
 
 msgid "Disabled tunnel hop randomization on Outbound tunnels"
-msgstr "+0/1 tunnelhop randomisatie uitgeschakeld op outbound tunnels"
+msgstr "Wyłączono losowanie skoków tunelu na tunelach wychodzących"
 
 msgid "Enabled a separate destination for each torrent"
 msgstr "Włączono osobny cel dla każdego torrenta"
@@ -781,7 +781,7 @@ msgid "Our destination (identity) for this session"
 msgstr "Nasz adres docelowy (identyfikacja) dla tej sesji"
 
 msgid "Primary Dest."
-msgstr "Główny cel"
+msgstr "Główny cel docelowy"
 
 msgid "Dest."
 msgstr "Miejsce docelowe"

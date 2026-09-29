@@ -832,7 +832,7 @@ msgid "I2CP port"
 msgstr "Port I2CP"
 
 msgid "I2CP options"
-msgstr "Opsi I2pC"
+msgstr "Opsi I2CP"
 
 msgid "Browser Integration"
 msgstr "Integrasi Peramban"
