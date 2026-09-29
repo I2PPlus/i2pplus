@@ -80,8 +80,11 @@
       More TODO here. jsonrpc2 lib uses MessageContext which depends on servlet
      -->
   <target name="compileSocketJar" depends="builddep">
+    <!-- Separate destdir: this compiles the same sources as "compile" but against the
+         narrower cpSocket classpath, so sharing ${build.dir}/obj would let the two
+         entry points interleave classes built against different classpaths. -->
     <mkdir dir="${build.dir}"/>
-    <mkdir dir="${build.dir}/obj"/>
+    <mkdir dir="${build.dir}/obj-socket"/>
     <javac
       sourcepath=""
       srcdir="./java"
@@ -89,7 +92,7 @@
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="${build.dir}/obj"
+      destdir="${build.dir}/obj-socket"
       classpath="${cpSocket}">
       <compilerarg line="${javac.compilerargs}"/>
       <classpath refid="cpSocket"/>
@@ -124,7 +127,7 @@
   <target name="socketJar" depends="compileSocketJar">
     <!-- set if unset -->
     <property name="workspace.changes.tr" value=""/>
-    <jar destfile="${build.dir}/i2pcontrol.jar" basedir="${build.dir}/obj" includes="**/*.class">
+    <jar destfile="${build.dir}/i2pcontrol.jar" basedir="${build.dir}/obj-socket" includes="**/*.class">
       <manifest>
         <attribute name="Implementation-Version" value="${full.version}"/>
         <attribute name="Built-By" value="${build.built-by}"/>

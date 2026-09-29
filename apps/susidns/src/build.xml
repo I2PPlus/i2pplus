@@ -264,6 +264,10 @@
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${build.dir}/${project}.war">
       <srcfiles dir="." includes="svg/*"/>
+      <!-- The jsp are precompiled into ${jsp.build.dir}/WEB-INF/classes and packaged below,
+           so the war is stale whenever precompilejsp re-runs.
+           Keep this in sync with precompilejsp.uptodate above. -->
+      <srcfiles dir="." includes="jsp/*.jsp"/>
     </uptodate>
     <condition property="shouldListChanges">
       <and>

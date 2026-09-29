@@ -451,7 +451,10 @@
 
   <target name="warUpToDate">
     <uptodate property="war.uptodate" targetfile="${build.dir}/i2ptunnel.war">
-      <srcfiles dir="../jsp" excludes="web.xml, web-fragment.xml, **/*.java, *.jsp, *.jsi"/>
+      <!-- Do NOT exclude *.jsp/*.jsi: they are precompiled into ${jsp.build.dir}/WEB-INF/classes
+           and packaged below, so the war is stale whenever precompilejsp re-runs.
+           Keep this in sync with precompilejsp.uptodate below. -->
+      <srcfiles dir="../jsp" excludes="web.xml, web-fragment.xml, **/*.java"/>
       <srcfiles dir="${build.dir}/obj" includes="**/ui/*.class **/web/*.class"/>
     </uptodate>
     <condition property="shouldListChanges2">
@@ -582,11 +585,12 @@
     <mkdir dir="${build.dir}/testobj"/>
     <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
     <property name="mockito.home" value="${basedir}/../../../tools/test/mockito"/>
-    <!-- We need the ant runtime, as it includes junit -->
+    <!-- junit is on the classpath below, so we do not need the ant runtime
+         (includeAntRuntime) which would mask genuinely missing entries -->
     <javac srcdir="./test/junit" debug="true" source="${javac.version}"
       target="${javac.version}"
       release="${javac.release}"
-      includeAntRuntime="true"
+      includeAntRuntime="false"
       encoding="UTF-8"
       deprecation="on" destdir="${build.dir}/testobj">
       <compilerarg line="${javac.compilerargs}"/>

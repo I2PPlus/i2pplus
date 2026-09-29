@@ -318,7 +318,7 @@
     <javac srcdir="./src/test/junit" debug="true" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       debuglevel="lines,vars,source"
-      includeAntRuntime="true"
+      includeAntRuntime="false"
       encoding="UTF-8"
       destdir="${build.dir}/obj_test">
       <classpath>

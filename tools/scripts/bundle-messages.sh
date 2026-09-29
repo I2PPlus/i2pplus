@@ -134,7 +134,10 @@ if [ "$TYPE" = "java" ]; then
         fi
     done
     if [ "$ALL_UPTODATE" = "1" ] && [ "$POUPDATE" != "1" ]; then
-        rm -f "$TMPFILE"; echo "INFO: Using cached translation bundles"; exit 0
+        # Leading '*' is deliberate: ConciseLogger only surfaces <exec> output
+        # whose line starts with '*' (see tools/build ConciseLogger.messageLogged),
+        # so an "INFO:" prefixed line is silently dropped from the build log.
+        rm -f "$TMPFILE"; echo "* translations: already compiled, reusing cached bundles"; exit 0
     fi
 
     for i in $PO_GLOB; do
@@ -221,7 +224,9 @@ elif [ "$TYPE" = "mo" ]; then
         fi
     done
     if [ "$ALL_UPTODATE" = "1" ] && [ "$POUPDATE" != "1" ]; then
-        rm -f "$TMPFILE"; exit 0
+        # Leading '*' is deliberate: ConciseLogger only surfaces <exec> output
+        # whose line starts with '*' (see tools/build ConciseLogger.messageLogged).
+        rm -f "$TMPFILE"; echo "* translations: already compiled, reusing cached bundles"; exit 0
     fi
 
     for i in $PO_GLOB; do

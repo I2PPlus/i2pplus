@@ -54,22 +54,22 @@
   </target>
 
   <target name="compileDemo" depends="jar">
-    <mkdir dir="./buildDemo"/>
-    <mkdir dir="./buildDemo/obj"/>
+    <mkdir dir="${build.dir}/buildDemo"/>
+    <mkdir dir="${build.dir}/buildDemo/obj"/>
     <javac
       srcdir="./demo"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./buildDemo/obj"
+      destdir="${build.dir}/buildDemo/obj"
       classpath="${core.java.build.dir}/i2p.jar:./build/mstreaming.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="jarDemo" depends="jar, compileDemo">
-    <jar destfile="${build.dir}/mstreamingDemo.jar" basedir="./buildDemo/obj" includes="**/*.class" update="true"/>
+    <jar destfile="${build.dir}/mstreamingDemo.jar" basedir="${build.dir}/buildDemo/obj" includes="**/*.class" update="true"/>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">

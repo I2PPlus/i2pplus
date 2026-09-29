@@ -17,6 +17,17 @@
   <condition property="no.bundle">
     <isfalse value="${require.gettext}"/>
   </condition>
+  <!-- The unix path shells out to bundle-messages.sh exactly once. Its translation
+       coverage summary is console-only reporting (grep / msgfmt statistics, no
+       file writes), so pass the no-coverage flag by default to keep that second
+       shell-out out of the build. Set -Dcoverage=true to print the report.
+       NB: this must be <arg line="...">, not <arg value="..."> - an empty line
+       adds no argument, whereas an empty value would pass a blank arg that the
+       script rejects via its usage trap. -->
+  <property name="coverage" value="false"/>
+  <condition property="bundle.no.coverage.arg" value="--no-coverage" else="">
+    <isfalse value="${coverage}"/>
+  </condition>
   <condition property="depend.available">
     <typefound name="depend"/>
   </condition>
@@ -121,14 +132,7 @@
       <arg value="."/>
       <arg value="--build-dir"/>
       <arg value="${build.dir}"/>
-    </exec>
-    <exec executable="sh" osfamily="unix" failifexecutionfails="false" failonerror="false">
-      <arg value="../../tools/scripts/bundle-messages.sh"/>
-      <arg value="--dir"/>
-      <arg value="."/>
-      <arg value="--build-dir"/>
-      <arg value="${build.dir}"/>
-      <arg value="--no-coverage"/>
+      <arg line="${bundle.no.coverage.arg}"/>
     </exec>
     <exec executable="sh" osfamily="mac" failifexecutionfails="true" failonerror="${require.gettext}">
       <arg value="../../tools/scripts/bundle-messages.sh"/>
@@ -316,7 +320,7 @@
     <javac srcdir="./test/junit" debug="true" source="${javac.version}" target="${javac.version}" deprecation="on"
       release="${javac.release}"
       debuglevel="lines,vars,source"
-      includeAntRuntime="true"
+      includeAntRuntime="false"
       encoding="UTF-8"
       destdir="${build.dir}/testobj">
       <classpath>

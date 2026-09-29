@@ -1561,6 +1561,33 @@
     </copy>
   </target>
 
+  <!-- The translation catalogs and the per-module message bundles are all produced
+       quietly: the .mo files are copied with quiet="true", the module bundlers only
+       print on their cached path, and the compiled messages_*.class go straight into
+       each jar. So a build log never says whether translations were compiled or
+       reused, and a missing bundle only shows up later as untranslated pages.
+       Report the state explicitly. "already compiled" means the .mo is newer than the
+       .po it came from, i.e. the bundler took its cached path. -->
+  <target name="reportTranslations" depends="prep-script-translation"
+          description="Report whether the translation catalogs are compiled or reused">
+    <resourcecount property="tx.mo.count">
+      <fileset dir="${build.root}installer/resources/locale/build/mo" includes="**/*.mo" erroronmissingdir="false"/>
+    </resourcecount>
+    <uptodate property="tx.mo.fresh"
+              targetfile="${build.root}installer/resources/locale/build/mo/de/LC_MESSAGES/i2prouter.mo">
+      <srcfiles dir="installer/resources/locale/po" includes="*.po"/>
+    </uptodate>
+    <condition property="tx.mo.state" value="already compiled" else="compiled this run">
+      <isset property="tx.mo.fresh"/>
+    </condition>
+    <condition property="tx.mo.summary"
+               value="WARNING: no translation catalogs were produced - gettext is missing, or no.bundle is set"
+               else="Translations: ${tx.mo.count} catalogs, ${tx.mo.state}.">
+      <equals arg1="${tx.mo.count}" arg2="0"/>
+    </condition>
+    <echo>${tx.mo.summary}</echo>
+  </target>
+
   <target name="javadoc" depends="getReleaseNumber, getBuildNumber">
     <ant dir="apps/jetty" target="ensureJettylib">
       <property name="core.java.build.dir" location="${build.root}core/java/build"/>
@@ -2856,6 +2883,19 @@
     </copy>
   </target>
 
+  <!-- The four conditional updater targets below used to issue four separate
+       <antcall>s, and each antcall starts a fresh Ant project that re-executes its
+       target's whole dependency closure with no memoisation shared with the
+       parent. Grouping the work into one target keeps that property isolation while
+       launching a single sub-project, so the prep graph resolves once per variant
+       instead of four times. Cross-variant double work is still possible if a user
+       names two updater targets in one command - they write the same output file,
+       so that invocation is already ambiguous. -->
+  <target name="updater-work" depends="timestamp.started, prepupdate, zipit, timestamp.stopped"/>
+  <target name="updater-work-compact" depends="timestamp.started, prepupdatecompact, zipit, timestamp.stopped"/>
+  <target name="updater-work-200" depends="timestamp.started, prepupdate, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater-work-200compact" depends="timestamp.started, prepupdatecompact, pack200, zipit200, timestamp.stopped"/>
+
   <target name="updater" depends="check-updater">
     <if>
       <isset property="updater.uptodate"/>
@@ -2863,10 +2903,7 @@
         <echo>dist/i2pupdate.zip already up to date, skipping rebuild...${line.separator}Note: if you updated jbigi.jar / tools.jar / utility.jar, delete and rebuild</echo>
       </then>
       <else>
-        <antcall target="timestamp.started"/>
-        <antcall target="prepupdate"/>
-        <antcall target="zipit"/>
-        <antcall target="timestamp.stopped"/>
+        <antcall target="updater-work"/>
       </else>
     </if>
   </target>
@@ -2877,10 +2914,7 @@
         <echo>dist/i2pupdate.zip already up to date, skipping rebuild...</echo>
       </then>
       <else>
-        <antcall target="timestamp.started"/>
-        <antcall target="prepupdatecompact"/>
-        <antcall target="zipit"/>
-        <antcall target="timestamp.stopped"/>
+        <antcall target="updater-work-compact"/>
       </else>
     </if>
   </target>
@@ -2908,7 +2942,36 @@
   <target name="updaterWithJettyFixes" depends="timestamp.started, prepjupdatefixes, preplicenses, zipit, timestamp.stopped"/>
   <target name="updaterWithJettyRepack" depends="timestamp.started, prepjupdate, repack200, zipit, timestamp.stopped"/>
   <target name="updaterWithLicenses" depends="timestamp.started, prepupdate, preplicenses, zipit, timestamp.stopped"/>
-  <target name="check-updater">
+  <!-- Updater staleness is timestamp based, so it cannot see uncommitted work:
+       an edited, staged or untracked file leaves the payload on disk describing
+       a tree that no longer exists. Set workspace.dirty whenever the tree is not
+       clean so every conditional updater target forces a rebuild. The isset guard
+       matters - outside a git checkout the exec never sets the property, and
+       without it an unresolved ${...} would read as "dirty" forever. -->
+  <target name="check-workspace-clean" description="Set workspace.dirty if the source tree has uncommitted changes">
+    <exec executable="git" outputproperty="git.status.porcelain" failonerror="false" failifexecutionfails="false">
+      <arg value="status"/>
+      <arg value="--porcelain"/>
+    </exec>
+    <condition property="workspace.dirty">
+      <and>
+        <isset property="git.status.porcelain"/>
+        <not>
+          <equals arg1="${git.status.porcelain}" arg2="" trim="true"/>
+        </not>
+      </and>
+    </condition>
+    <echo level="verbose" message="git status --porcelain: ${git.status.porcelain}"/>
+  </target>
+
+  <!-- Payload resources are copied verbatim into the updater, so they are part of
+       the staleness set. Without these a theme, eepsite, certificate, geoip
+       database, .po or doc edit is reported as "already up to date". Ant has no
+       way to share a srcfiles list between two uptodate tasks, so the block is
+       repeated verbatim in each. Every dir listed must exist - Ant fails the
+       build on a missing srcfiles dir, and an empty one would pass vacuously. -->
+
+  <target name="check-updater" depends="check-workspace-clean">
     <mkdir dir="${build.dir}"/>
     <uptodate property="updater.sources.clean" targetfile="dist/i2pupdate.zip">
       <srcfiles dir="core/java/src" includes="**/*.java"/>
@@ -2924,18 +2987,34 @@
       <srcfiles dir="apps/susidns/src" includes="**/*.java"/>
       <srcfiles dir="apps/desktopgui/src" includes="**/*.java"/>
       <srcfiles dir="apps/jetty/java/src" includes="**/*.java"/>
+      <srcfiles dir="installer/resources/console/themes"/>
+      <srcfiles dir="installer/resources/eepsite"/>
+      <srcfiles dir="installer/resources/eepsite-jetty9.3"/>
+      <srcfiles dir="installer/resources/certificates"/>
+      <srcfiles dir="installer/resources/geoip"/>
+      <srcfiles dir="installer/resources/locale/po"/>
+      <srcfiles dir="docs"/>
     </uptodate>
     <if>
-      <not><isset property="updater.sources.clean"/></not>
+      <or>
+        <not><isset property="updater.sources.clean"/></not>
+        <isset property="workspace.dirty"/>
+      </or>
       <then>
         <delete file="dist/i2pupdate.zip" quiet="true"/>
+      </then>
+    </if>
+    <if>
+      <isset property="workspace.dirty"/>
+      <then>
+        <echo>Source tree has uncommitted changes -> forcing updater rebuild.${line.separator}Commit or stash the tree for incremental updater builds.</echo>
       </then>
     </if>
     <uptodate property="updater.uptodate" targetfile="dist/i2pupdate.zip">
       <srcfiles dir="${build.root}build" includes="*.jar *.war" excludes="jbigi.jar tools.jar utility.jar"/>
     </uptodate>
   </target>
-  <target name="check-updater200">
+  <target name="check-updater200" depends="check-workspace-clean">
     <mkdir dir="${build.dir}"/>
     <uptodate property="updater200.sources.clean" targetfile="dist/i2pupdate200.zip">
       <srcfiles dir="core/java/src" includes="**/*.java"/>
@@ -2951,11 +3030,27 @@
       <srcfiles dir="apps/susidns/src" includes="**/*.java"/>
       <srcfiles dir="apps/desktopgui/src" includes="**/*.java"/>
       <srcfiles dir="apps/jetty/java/src" includes="**/*.java"/>
+      <srcfiles dir="installer/resources/console/themes"/>
+      <srcfiles dir="installer/resources/eepsite"/>
+      <srcfiles dir="installer/resources/eepsite-jetty9.3"/>
+      <srcfiles dir="installer/resources/certificates"/>
+      <srcfiles dir="installer/resources/geoip"/>
+      <srcfiles dir="installer/resources/locale/po"/>
+      <srcfiles dir="docs"/>
     </uptodate>
     <if>
-      <not><isset property="updater200.sources.clean"/></not>
+      <or>
+        <not><isset property="updater200.sources.clean"/></not>
+        <isset property="workspace.dirty"/>
+      </or>
       <then>
         <delete file="dist/i2pupdate200.zip" quiet="true"/>
+      </then>
+    </if>
+    <if>
+      <isset property="workspace.dirty"/>
+      <then>
+        <echo>Source tree has uncommitted changes -> forcing updater200 rebuild.${line.separator}Commit or stash the tree for incremental updater builds.</echo>
       </then>
     </if>
     <uptodate property="updater200.uptodate" targetfile="dist/i2pupdate200.zip">
@@ -2970,11 +3065,7 @@
         <echo>dist/i2pupdate200.zip already up to date, skipping rebuild...${line.separator}Note: if you updated jbigi.jar / tools.jar / utility.jar, delete and rebuild</echo>
       </then>
       <else>
-        <antcall target="timestamp.started"/>
-        <antcall target="prepupdate"/>
-        <antcall target="pack200"/>
-        <antcall target="zipit200"/>
-        <antcall target="timestamp.stopped"/>
+        <antcall target="updater-work-200"/>
       </else>
     </if>
   </target>
@@ -3010,7 +3101,7 @@
   <target name="updater200WithJettyAndJbigi" depends="timestamp.started, prepjupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyAndLicences" depends="timestamp.started, prepjupdate, preplicenses, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJetty" depends="timestamp.started, prepjupdate, pack200, zipit200, timestamp.stopped"/>
-  <target name="updater200WithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, repack200, zipit, timestamp.stopped"/>
+  <target name="updater200WithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, repack200, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyFixesAndJbigi" depends="timestamp.started, prepjupdatefixes, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyFixes" depends="timestamp.started, prepjupdatefixes, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithLicences" depends="timestamp.started, prepupdate, preplicenses, pack200, zipit200, timestamp.stopped"/>
@@ -3033,15 +3124,19 @@
 
   <target name="zipit" depends="getReleaseNumber">
     <!-- As of release 0.8.8, the router will enforce a zipfile comment equal to the version number
-         in the sud/su2 header, since the version in the header is NOT covered by the signature. -->
-    <zip destfile="./dist/i2pupdate.zip" level="9" basedir="${pkg.temp.dir}" excludes="README.md" whenempty="fail" comment="${release.number}"/>
+         in the sud/su2 header, since the version in the header is NOT covered by the signature.
+         Level 6, not 9: the heavy updater variants carry jbigi (20MB of prebuilt natives) and
+         the decompressed geoip mmdb (18MB), which are already compressed - levels 6 and 9
+         produce a byte-identical archive while level 9 costs ~4x the CPU (measured 5.8s vs
+         1.6s on a 39MB payload). The lean payload is unaffected either way. -->
+    <zip destfile="./dist/i2pupdate.zip" level="6" basedir="${pkg.temp.dir}" excludes="README.md" whenempty="fail" comment="${release.number}"/>
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/i2pupdate.zip"/>
     </antcall>
   </target>
 
   <target name="zipit200" depends="getReleaseNumber">
-    <zip destfile="./dist/i2pupdate200.zip" level="9" basedir="${pkg.temp.dir}" excludes="README.md" whenempty="fail" comment="${release.number}"/>
+    <zip destfile="./dist/i2pupdate200.zip" level="6" basedir="${pkg.temp.dir}" excludes="README.md" whenempty="fail" comment="${release.number}"/>
     <exec executable="sh" osfamily="unix" failonerror="false">
       <arg value="-c"/>
       <arg value="if [ -f ${java.io.tmpdir}/build-i2p/.pack200-before ]; then before=$(cat ${java.io.tmpdir}/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${java.io.tmpdir}/build-i2p/.pack200-before; fi"/>
@@ -3170,7 +3265,7 @@
     </exec>
   </target>
 
-  <target name="prepupdate" depends="build2, prepupdateSmall, preplicenses, prepConsoleDocUpdates, prepCertificates, prep-script-translation, truncatehistory">
+  <target name="prepupdate" depends="build2, prepupdateSmall, preplicenses, prepConsoleDocUpdates, prepCertificates, reportTranslations, truncatehistory">
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/sam.jar" todir="${pkg.temp.dir}/lib/"/>
       <copy quiet="true" verbose="false" file="${build.root}build/i2psnark.jar" todir="${pkg.temp.dir}/lib"/>
@@ -3194,7 +3289,6 @@
   </target>
 
   <target name="truncatehistory">
-    <copy quiet="true" verbose="false" file="docs/history.txt" todir="${pkg.temp.dir}/"/>
     <!-- the following overwrites history.txt on unix to shrink the update file -->
     <copy quiet="true" verbose="false" file="docs/history.txt" tofile="${pkg.temp.dir}/history.txt" overwrite="true">
       <filterchain>
@@ -3244,11 +3338,19 @@
   <!-- Updater for existing installs; translations are omitted - they are regenerated
        only just before a release (prepupdate). prepcompactNoBundle sets no.bundle for
        the whole compact chain (per-module message bundles and the top-level locale/
-       gettext .mo files); pass -Dno.bundle=false to force them -->
+       gettext .mo files); pass -Dno.bundle=false to force them.
+
+       no.bundle is a plain immutable property, so it stays set for every later
+       target in the same invocation. Naming a compact and a non-compact variant in
+       one `ant` command would therefore strip translations from the non-compact
+       build as well. That is left as-is deliberately: all the updater variants
+       write the same dist/i2pupdate.zip, so such an invocation is already
+       ambiguous, and scoping the flag would mean re-plumbing the `unless="no.bundle"`
+       guards in ~10 module build files for no gain in the supported usage. -->
   <target name="prepcompactNoBundle" description="Compact updaters skip translation bundling (dev builds)">
     <property name="no.bundle" value="true"/>
   </target>
-  <target name="prepupdatecompact" depends="prepcompactNoBundle, build2, prepupdateEssential, prepProxyDocs, prepCertificates, truncatehistory">
+  <target name="prepupdatecompact" depends="prepcompactNoBundle, build2, prepupdateEssential, prepProxyDocs, prepCertificates, reportTranslations, truncatehistory">
     <parallel>
       <copy quiet="true" verbose="false" file="${build.root}build/i2psnark.jar" todir="${pkg.temp.dir}/lib"/>
       <copy quiet="true" verbose="false" file="${build.root}build/i2psnark.war" todir="${pkg.temp.dir}/webapps/"/>
@@ -3356,6 +3458,11 @@
       <srcfiles dir="${build.root}build" includes="*.jar *.war" excludes="jbigi.jar tools.jar utility.jar"/>
     </uptodate>
   </target>
+  <!-- izpack-patches must stay a depends, not an <antcall> into the rebuild
+       branch: it carries the <taskdef name="izpack">, and a taskdef registered in
+       an antcall's sub-project does not reach the parent, so <izpack> below then
+       fails with "failed to create task or type izpack". The ~0.15s it costs on
+       the already-up-to-date path is not worth trading a working installer for. -->
   <target name="installer" depends="check-installer, izpack-patches">
     <if>
       <isset property="installer.uptodate"/>
@@ -3366,8 +3473,12 @@
         <echo>Building dist/install.jar (IzPack4)...</echo>
         <antcall target="timestamp.started"/>
         <antcall target="preppkg"/>
-        <antcall target="buildProperties"/>
-        <antcall target="buildUtilityJar"/>
+        <!-- buildProperties and buildUtilityJar both already ran inside the preppkg
+             sub-project (preppkg-windows depends on buildUtilityJar; buildCore runs
+             buildProperties). An antcall starts a fresh Ant project, so nothing is
+             memoised and the second call re-parses the build file and re-executes git
+             and the loadfiles for a jar already on disk. Neither install.xml nor
+             i2pinstaller.xml references any property buildProperties sets. -->
         <izpack input="${build.root}/izpack/4/install.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
         <ant target="installerexe"/>
         <antcall target="sha256sum">

@@ -48,22 +48,22 @@
   </target>
 
   <target name="compileTest" depends="jar">
-    <mkdir dir="./buildTest"/>
-    <mkdir dir="./buildTest/obj"/>
+    <mkdir dir="${build.dir}/buildTest"/>
+    <mkdir dir="${build.dir}/buildTest/obj"/>
     <javac
       srcdir="./test/junit"
       debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
       release="${javac.release}"
       includeAntRuntime="false"
       encoding="UTF-8"
-      destdir="./buildTest/obj"
+      destdir="${build.dir}/buildTest/obj"
       classpath="${build.dir}/zxing.jar">
       <compilerarg line="${javac.compilerargs}"/>
     </javac>
   </target>
 
   <target name="jarTest" depends="jar, compileTest">
-    <jar destfile="${build.dir}/zxingTest.jar" basedir="./buildTest/obj" includes="**/*.class" update="true"/>
+    <jar destfile="${build.dir}/zxingTest.jar" basedir="${build.dir}/buildTest/obj" includes="**/*.class" update="true"/>
   </target>
 
   <target name="listChangedFiles" depends="jarUpToDate" if="shouldListChanges">
