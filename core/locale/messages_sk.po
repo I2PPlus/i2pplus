@@ -1,0 +1,81 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: sk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0,number,####} ms"
+msgid_plural "{0,number,####} ms"
+msgstr[0] "{0,number,####} milisekunda"
+msgstr[1] "{0,number,####} milisekundy"
+
+#, java-format
+msgid "{0} sec"
+msgid_plural "{0} sec"
+msgstr[0] "{0} sekunda"
+msgstr[1] "{0} sekundy"
+
+#, java-format
+msgid "{0} min"
+msgid_plural "{0} min"
+msgstr[0] "{0} minúta"
+msgstr[1] "{0} minúty"
+
+#, java-format
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0} hodina"
+msgstr[1] "{0} hodiny"
+
+#, java-format
+msgid "{0} day"
+msgid_plural "{0} days"
+msgstr[0] "{0} deň"
+msgstr[1] "{0} dni"
+
+#, java-format
+msgid "{0} year"
+msgid_plural "{0} years"
+msgstr[0] "{0} rok"
+msgstr[1] "{0} roky"
+
+msgid "n/a"
+msgstr "nedostupné"
+
+#, java-format
+msgid "{0,number,####} ns"
+msgid_plural "{0,number,###} ns"
+msgstr[0] "{0,number,####} nanosekunda"
+msgstr[1] "{0,number,###} nanosekundy"
+
+#, java-format
+msgid "{0,number,####} μs"
+msgid_plural "{0,number,###} μs"
+msgstr[0] "{0,number,####} mikrosekunda"
+msgstr[1] "{0,number,###} mikrosekundy"
+
+msgid "CRIT"
+msgstr "CRIT"
+
+msgid "DEBUG"
+msgstr "DEBUG"
+
+msgid "ERROR"
+msgstr "CHYBA"
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid "WARN"
+msgstr "WARN"
+
+#, java-format
+msgid "{0} similar message omitted"
+msgid_plural "{0} similar messages omitted"
+msgstr[0] "{0} podobná správa vynechaná"
+msgstr[1] "{0} podobných správ vynechaných"
