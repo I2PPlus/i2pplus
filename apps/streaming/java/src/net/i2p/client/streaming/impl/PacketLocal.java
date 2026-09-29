@@ -268,11 +268,15 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
      */
     public void incrementNACKs() {
         final int cnt = _nackCount.incrementAndGet();
-        if (cnt >= Connection.FAST_RETRANSMIT_THRESHOLD && (!_retransmitted) &&
+        // Read the connection once: it is cleared when the connection goes away,
+        // and the guard below has to cover the newResendPacketEvent() call as
+        // well as the RTT read, not just the read.
+        final Connection con = _connection;
+        if (cnt >= Connection.FAST_RETRANSMIT_THRESHOLD && (!_retransmitted) && con != null &&
             _lastSend > 0 && _lastSend < _context.clock().now() -
-                Math.max(4000, _connection != null ? _connection.getOptions().getRTT() : 4000)) {
+                Math.max(4000, con.getOptions().getRTT())) {
             _retransmitted = true;
-            Connection.ResendPacketEvent evt = _connection.newResendPacketEvent(this);
+            Connection.ResendPacketEvent evt = con.newResendPacketEvent(this);
             evt.fastRetransmit();
 
             if (_log.shouldDebug()) {
