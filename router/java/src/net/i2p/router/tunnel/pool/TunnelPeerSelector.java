@@ -39,6 +39,7 @@ import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.FloodfillReliability;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.transport.TransportUtil;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ArraySet;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -2231,10 +2232,20 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
 
     /** Stat name for the live window multiplier. @see #publishWindowMultiplier */
     public static final String WINDOW_MULTIPLIER_STAT = "tunnel.peerSelection.windowMultiplier";
-    /** Guards one-time stat creation; the setter runs on a tuning cycle, not a hot path. */
-    private static volatile boolean _windowMultiplierStatCreated;
+    /**
+     *  Rate periods for {@link #WINDOW_MULTIPLIER_STAT}. Must not be null:
+     *  {@code RateStat} dereferences the array in its constructor, so a null
+     *  here throws before the stat is registered. The window is a level rather
+     *  than a rate, so a single short period is enough to show the current
+     *  value; the longer periods are kept so the entry renders consistently
+     *  with its neighbours on {@code /stats}.
+     *  @since 0.9.71+
+     */
+    private static final long[] WINDOW_MULTIPLIER_RATES = {
+        RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR
+    };
     /** Last value handed to the stat, so repeated publishes stay quiet. */
-    private static volatile int _lastPublishedMultiplier;
+    private static volatile int _lastPublishedMultiplier = Integer.MIN_VALUE;
 
     /**
      *  Publish the current activity-window multiplier.
@@ -2250,33 +2261,40 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  stat's average equal to the current multiplier instead of an average
      *  over the history, and avoids a sample on every selection.
      *
+     *  <p>Neither the stat creation nor the data call may propagate: this runs
+     *  from {@link TunnelPool}'s emergency path, and a failing instrument must
+     *  not stop an emergency build. Failures are logged at WARN — which is how
+     *  the original null-periods NPE was found — and
+     *  {@code TunnelPeerSelectorWindowStatTest} asserts the stat is actually
+     *  registered, so a silently dead instrument cannot recur.
+     *
      * @param ctx router context; null is ignored so callers on odd paths do not
      *            need a null check of their own
      * @since 0.9.71+
      */
     public static void publishWindowMultiplier(RouterContext ctx) {
         if (ctx == null) {return;}
+        // No "already created" guard: createRequiredRateStat returns
+        // immediately when the name is registered, so calling it every time is
+        // a cheap map lookup and is inherently idempotent. A static guard looked
+        // equivalent but silently assumed one StatManager for the process
+        // lifetime, so any replacement (an in-process restart, a test harness)
+        // left the stat permanently unregistered.
         try {
-            if (!_windowMultiplierStatCreated) {
-                synchronized (TunnelPeerSelector.class) {
-                    if (!_windowMultiplierStatCreated) {
-                        ctx.statManager().createRequiredRateStat(
-                            WINDOW_MULTIPLIER_STAT,
-                            "Peer activity window multiplier (higher = more peers eligible)",
-                            "Tunnels", null);
-                        _windowMultiplierStatCreated = true;
-                        _lastPublishedMultiplier = Integer.MIN_VALUE;
-                    }
-                }
-            }
+            ctx.statManager().createRequiredRateStat(
+                WINDOW_MULTIPLIER_STAT,
+                "Peer activity window multiplier (higher = more peers eligible)",
+                "Tunnels", WINDOW_MULTIPLIER_RATES);
             int current = _windowMultiplier;
             if (current == _lastPublishedMultiplier) {return;}
             _lastPublishedMultiplier = current;
             ctx.statManager().addRateData(WINDOW_MULTIPLIER_STAT, current);
         } catch (RuntimeException re) {
-            // Observability must never break selection.
+            // Reset so a later publish retries rather than being silenced
+            // forever by a stale marker.
+            _lastPublishedMultiplier = Integer.MIN_VALUE;
             ctx.logManager().getLog(TunnelPeerSelector.class)
-               .log(Log.WARN, "Cannot publish window multiplier", re);
+               .log(Log.WARN, "Cannot record window multiplier", re);
         }
     }
 
