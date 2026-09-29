@@ -233,42 +233,42 @@ public class BuildExecutor implements Runnable {
      *
      *  @since 0.9.71+
      */
-    private static volatile long FIRST_HOP_FAILURE_COOLDOWN_MS = 2 * 60 * 1000L;
+    private static volatile long _firstHopCooldownMs = 2 * 60 * 1000L;
 
     /**
-     *  Number of failures within {@link #FIRST_HOP_FAILURE_COOLDOWN_MS}
+     *  Number of failures within {@link #_firstHopCooldownMs}
      *  required to skip a peer as first hop.  A single transient failure
      *  should not permanently exclude a peer; repeated failures indicate
      *  a persistent issue.
      *
      *  @since 0.9.71+
      */
-    private static volatile int FIRST_HOP_FAILURE_THRESHOLD = 3;
+    private static volatile int _firstHopFailureThreshold = 3;
 
     /**
      *  The first-hop failure cooldown in milliseconds.
      *  @return the cooldown in ms
      *  @since 0.9.71+
      */
-    public static long getFirstHopFailureCooldownMs() { return FIRST_HOP_FAILURE_COOLDOWN_MS; }
+    public static long getFirstHopFailureCooldownMs() { return _firstHopCooldownMs; }
     /**
      *  Set the first-hop failure cooldown (called by Tuner).
      *  @param ms cooldown in ms (60000-600000)
      *  @since 0.9.71+
      */
-    public static void setFirstHopFailureCooldownMs(long ms) { FIRST_HOP_FAILURE_COOLDOWN_MS = Math.max(60_000, Math.min(600_000, ms)); }
+    public static void setFirstHopFailureCooldownMs(long ms) { _firstHopCooldownMs = Math.max(60_000, Math.min(600_000, ms)); }
     /**
      *  The first-hop failure threshold count.
      *  @return the threshold
      *  @since 0.9.71+
      */
-    public static int getFirstHopFailureThreshold() { return FIRST_HOP_FAILURE_THRESHOLD; }
+    public static int getFirstHopFailureThreshold() { return _firstHopFailureThreshold; }
     /**
      *  Set the first-hop failure threshold (called by Tuner).
      *  @param count threshold count (1-10)
      *  @since 0.9.71+
      */
-    public static void setFirstHopFailureThreshold(int count) { FIRST_HOP_FAILURE_THRESHOLD = Math.max(1, Math.min(10, count)); }
+    public static void setFirstHopFailureThreshold(int count) { _firstHopFailureThreshold = Math.max(1, Math.min(10, count)); }
     /**
      *  Stale build pruning threshold fraction.  When the time elapsed
      *  since a build was configured exceeds this fraction of the adaptive
@@ -277,7 +277,7 @@ public class BuildExecutor implements Runnable {
      *
      *  @since 0.9.71+
      */
-    private static volatile int STALE_BUILD_THRESHOLD_PCT = 40;
+    private static volatile int _staleBuildThresholdPct = 40;
 
     /**
      *  Maximum concurrent in-flight builds per pool per direction (inbound
@@ -298,17 +298,17 @@ public class BuildExecutor implements Runnable {
      *  @return the threshold percentage (30-80)
      *  @since 0.9.71+
      */
-    public static int getStaleBuildThresholdPct() { return STALE_BUILD_THRESHOLD_PCT; }
+    public static int getStaleBuildThresholdPct() { return _staleBuildThresholdPct; }
     /**
      *  Set the stale build pruning threshold (called by Tuner).
      *  @param val the threshold percentage (30-80)
      *  @since 0.9.71+
      */
-    public static void setStaleBuildThresholdPct(int val) { STALE_BUILD_THRESHOLD_PCT = Math.max(30, Math.min(80, val)); }
+    public static void setStaleBuildThresholdPct(int val) { _staleBuildThresholdPct = Math.max(30, Math.min(80, val)); }
     /**
      * Per-pool consecutive build failure tracking for backoff.
-     * When a pool exceeds CONSECUTIVE_FAILURE_THRESHOLD, builds are
-     * paused for POOL_BACKOFF_MS to prevent build storms.
+     * When a pool exceeds _consecutiveFailureThreshold, builds are
+     * paused for _poolBackoffMs to prevent build storms.
      * Maps: TunnelPool -> [consecutiveFailures, backoffUntilMs]
      *
      * Threshold of 5 allows transient failures (network hiccups, slow peers)
@@ -321,11 +321,11 @@ public class BuildExecutor implements Runnable {
      * fully collapses.  Previous 8s was too short to prevent repeated storms
      * when the underlying issue was transient.
      */
-    private static volatile int CONSECUTIVE_FAILURE_THRESHOLD = 5;
-    private static volatile long POOL_BACKOFF_MS = 12 * 1000L;
+    private static volatile int _consecutiveFailureThreshold = 5;
+    private static volatile long _poolBackoffMs = 12 * 1000L;
 
     /**
-     *  Jittered backoff: randomize within ±33% of {@link #POOL_BACKOFF_MS}
+     *  Jittered backoff: randomize within ±33% of {@link #_poolBackoffMs}
      *  to prevent synchronized backoff where all pools are skipped in the
      *  same cycle.  With a 12s base, the effective range is 8-16s.
      *
@@ -333,8 +333,8 @@ public class BuildExecutor implements Runnable {
      *  @since 0.9.71+
      */
     private long jitteredBackoff() {
-        long jitter = POOL_BACKOFF_MS / 3;
-        return POOL_BACKOFF_MS - jitter + _context.random().nextLong(2 * jitter + 1);
+        long jitter = _poolBackoffMs / 3;
+        return _poolBackoffMs - jitter + _context.random().nextLong(2 * jitter + 1);
     }
 
     /**
@@ -342,25 +342,25 @@ public class BuildExecutor implements Runnable {
      * @return the threshold
      * @since 0.9.70+
      */
-    public static int getPoolFailureThreshold() { return CONSECUTIVE_FAILURE_THRESHOLD; }
+    public static int getPoolFailureThreshold() { return _consecutiveFailureThreshold; }
     /**
      * The pool failure threshold.
      * @param val the threshold value (1-20)
      * @since 0.9.70+
      */
-    public static void setPoolFailureThreshold(int val) { CONSECUTIVE_FAILURE_THRESHOLD = Math.max(1, Math.min(20, val)); }
+    public static void setPoolFailureThreshold(int val) { _consecutiveFailureThreshold = Math.max(1, Math.min(20, val)); }
     /**
      * The pool backoff time in milliseconds.
      * @return the backoff in ms
      * @since 0.9.70+
      */
-    public static long getPoolBackoffMs() { return POOL_BACKOFF_MS; }
+    public static long getPoolBackoffMs() { return _poolBackoffMs; }
     /**
      * The pool backoff time in milliseconds.
      * @param val the backoff in ms (1000-60000)
      * @since 0.9.70+
      */
-    public static void setPoolBackoffMs(long val) { POOL_BACKOFF_MS = Math.max(1000, Math.min(60000, val)); }
+    public static void setPoolBackoffMs(long val) { _poolBackoffMs = Math.max(1000, Math.min(60000, val)); }
     private final ConcurrentHashMap<TunnelPool, long[]> _poolFailureState = new ConcurrentHashMap<>(64);
     private long _lastKeepAliveTime;
     private volatile long _adaptiveTimeout;
@@ -456,7 +456,7 @@ public class BuildExecutor implements Runnable {
     /**
      *  The adaptive maximum concurrent builds, adjusted based on the
      *  current timeout rate.  Returns the throttled value when the
-     *  timeout rate exceeds {@link #CONCURRENCY_THROTTLE_THRESHOLD},
+     *  timeout rate exceeds {@link #_concurrencyThrottleThreshold},
      *  otherwise returns the configured maximum.
      *
      *  @return adaptive maximum concurrent builds
@@ -764,30 +764,30 @@ public class BuildExecutor implements Runnable {
      *
      *  @since 0.9.71+
      */
-    private static double CONCURRENCY_THROTTLE_THRESHOLD = 0.30;
-    private static double CONCURRENCY_RESTORE_THRESHOLD = 0.15;
-    private static double CONCURRENCY_RESTORE_SUCCESS_THRESHOLD = 0.80;
+    private static double _concurrencyThrottleThreshold = 0.30;
+    private static double _concurrencyRestoreThreshold = 0.15;
+    private static double _concurrencyRestoreSuccessThreshold = 0.80;
 
     /**
      *  The concurrency throttle threshold as a percentage (0-100).
      *  @return the threshold percentage
      *  @since 0.9.71+
      */
-    public static int getConcurrencyThrottleThresholdPct() { return (int) (CONCURRENCY_THROTTLE_THRESHOLD * 100); }
+    public static int getConcurrencyThrottleThresholdPct() { return (int) (_concurrencyThrottleThreshold * 100); }
     /**
      *  Set the concurrency throttle threshold (called by Tuner).
      *  @param pct the threshold percentage (15-50)
      *  @since 0.9.71+
      */
     public static void setConcurrencyThrottleThresholdPct(int pct) {
-        CONCURRENCY_THROTTLE_THRESHOLD = Math.max(0.15, Math.min(0.50, pct / 100.0));
+        _concurrencyThrottleThreshold = Math.max(0.15, Math.min(0.50, pct / 100.0));
     }
     /**
      *  The concurrency restore threshold as a percentage (0-100).
      *  @return the restore threshold percentage
      *  @since 0.9.71+
      */
-    public static int getConcurrencyRestoreThresholdPct() { return (int) (CONCURRENCY_RESTORE_THRESHOLD * 100); }
+    public static int getConcurrencyRestoreThresholdPct() { return (int) (_concurrencyRestoreThreshold * 100); }
 
     /**
      *  Calculate the per-iteration build cap from the current timeout rate.
@@ -799,8 +799,8 @@ public class BuildExecutor implements Runnable {
      *  @since 0.9.71+
      */
     static int calculatePerIterationCap(double timeoutRate) {
-        if (timeoutRate <= CONCURRENCY_RESTORE_THRESHOLD) return 4;
-        if (timeoutRate <= CONCURRENCY_THROTTLE_THRESHOLD) return 3;
+        if (timeoutRate <= _concurrencyRestoreThreshold) return 4;
+        if (timeoutRate <= _concurrencyThrottleThreshold) return 3;
         if (timeoutRate <= 0.50) return 2;
         return 1;
     }
@@ -850,7 +850,7 @@ public class BuildExecutor implements Runnable {
         } else if (successRate > 0.50) {
             // Moderate success — modest increase.
             _adaptiveTimeout += 2 * 1000L;  // +2s
-        } else if (timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD) {
+        } else if (timeoutRate > _concurrencyThrottleThreshold) {
             // High timeout rate — increase timeout significantly to reduce
             // spurious timeouts that waste build slots and drive the
             // cascade further.  The concurrency throttle (below) handles
@@ -872,7 +872,7 @@ public class BuildExecutor implements Runnable {
         // too many concurrent build replies.  Reducing concurrency improves
         // per-build success rate at the cost of slower aggregate build speed.
         int baseMax = getMaxConcurrentBuilds();
-        if (timeoutRate > CONCURRENCY_THROTTLE_THRESHOLD) {
+        if (timeoutRate > _concurrencyThrottleThreshold) {
             // Throttle: reduce by 20% per threshold crossing (floored at 60% of base).
             // Softer step (was 75%/50%) to avoid over-throttling on transient spikes.
             int throttled = (int) (baseMax * 0.80);
@@ -880,8 +880,8 @@ public class BuildExecutor implements Runnable {
             if (_adaptiveMaxConcurrentBuilds > throttled) {
                 _adaptiveMaxConcurrentBuilds = throttled;
             }
-        } else if (timeoutRate < CONCURRENCY_RESTORE_THRESHOLD &&
-                   successRate > CONCURRENCY_RESTORE_SUCCESS_THRESHOLD) {
+        } else if (timeoutRate < _concurrencyRestoreThreshold &&
+                   successRate > _concurrencyRestoreSuccessThreshold) {
             // Restore: increase by 25% toward base (never exceed base).
             // Faster recovery (was 10%) to avoid prolonged throttling after
             // a transient spike subsides.
@@ -1207,10 +1207,10 @@ public class BuildExecutor implements Runnable {
                 if (pool != null) {
                     long[] state = getOrCreatePoolState(pool);
                     synchronized (state) {
-                        if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
+                        if (state[0] < _consecutiveFailureThreshold) {
                             state[0]++;
                         }
-                        if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
+                        if (state[0] >= _consecutiveFailureThreshold) {
                             state[1] = _context.clock().now() + jitteredBackoff();
                         }
                     }
@@ -1676,7 +1676,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      *  Check if a pool is in backoff due to consecutive build failures.
-     *  Uses a jittered backoff window (8-16s, centered on {@link #POOL_BACKOFF_MS})
+     *  Uses a jittered backoff window (8-16s, centered on {@link #_poolBackoffMs})
      *  to prevent synchronized backoff where all pools are skipped in the same
      *  cycle.  During collapse (0 usable tunnels), backoff is skipped entirely
      *  so collapsed pools get rebuilt immediately instead of waiting.
@@ -1811,7 +1811,7 @@ public class BuildExecutor implements Runnable {
                 long elapsed = _context.clock().now() - created;
                 long timeoutBudget = calculateAdaptiveTimeout(cfg);
                 // Prune if we've used >threshold% of the timeout budget before dispatch
-                if (elapsed > (timeoutBudget * STALE_BUILD_THRESHOLD_PCT / 100)) {
+                if (elapsed > (timeoutBudget * _staleBuildThresholdPct / 100)) {
                     if (_log.shouldDebug()) {
                         _log.debug("buildTunnel() GATED (stale): elapsed " + (elapsed / 1000) + "s of " +
                                   (timeoutBudget / 1000) + "s budget for " + cfg);
@@ -1862,7 +1862,7 @@ public class BuildExecutor implements Runnable {
      *  {@link PooledTunnelCreatorConfig#isBypassPacing()}.
      *
      *  Also skips peers that have recently failed as first hops more than
-     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} times within the cooldown window.
+     *  {@link #_firstHopFailureThreshold} times within the cooldown window.
      *
      *  @param cfg the prospective build
      *  @return true if a build to the same first hop is already in flight
@@ -1918,7 +1918,7 @@ public class BuildExecutor implements Runnable {
         long[] state = _firstHopFailureHistory.computeIfAbsent(hash, k -> new long[2]);
         synchronized (state) {
             // Decay: if last failure was more than cooldown ago, reset count
-            if (state[1] > 0 && (now - state[1]) > FIRST_HOP_FAILURE_COOLDOWN_MS) {
+            if (state[1] > 0 && (now - state[1]) > _firstHopCooldownMs) {
                 state[0] = 0;
             }
             state[0]++;
@@ -1928,7 +1928,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      *  Check whether a peer has recently failed as a first hop more than
-     *  {@link #FIRST_HOP_FAILURE_THRESHOLD} times within the cooldown window.
+     *  {@link #_firstHopFailureThreshold} times within the cooldown window.
      *  Used by {@link #hasBuildInFlightToFirstHop} to skip peers with a
      *  pattern of repeated first-hop failures.
      *
@@ -1943,12 +1943,12 @@ public class BuildExecutor implements Runnable {
         synchronized (state) {
             if (state[1] == 0) {return false;}
             long now = _context.clock().now();
-            if ((now - state[1]) > FIRST_HOP_FAILURE_COOLDOWN_MS) {
+            if ((now - state[1]) > _firstHopCooldownMs) {
                 // Expired: prune entry to prevent memory leak
                 _firstHopFailureHistory.remove(hash);
                 return false;
             }
-            return state[0] >= FIRST_HOP_FAILURE_THRESHOLD;
+            return state[0] >= _firstHopFailureThreshold;
         }
     }
 
@@ -2019,10 +2019,10 @@ public class BuildExecutor implements Runnable {
         } else if (countsAsPoolFailure(result)) {
             long[] state = getOrCreatePoolState(pool);
             synchronized (state) {
-                if (state[0] < CONSECUTIVE_FAILURE_THRESHOLD) {
+                if (state[0] < _consecutiveFailureThreshold) {
                     state[0]++;
                 }
-                if (state[0] >= CONSECUTIVE_FAILURE_THRESHOLD) {
+                if (state[0] >= _consecutiveFailureThreshold) {
                     state[1] = _context.clock().now() + jitteredBackoff();
                     if (_log.shouldDebug()) {
                         _log.debug("Pool backoff engaged after " + (int) state[0] +

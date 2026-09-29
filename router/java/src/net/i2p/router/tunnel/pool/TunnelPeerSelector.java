@@ -2247,7 +2247,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // every 30s was the main CPU cost; 200 is sufficient to keep sessions
         // alive for the top-tier peers that builds actually need.
         Set<Hash> targets = new HashSet<>(256);
-        // Must use mutable set — locked_selectPeers may add to the exclude set
+        // Must use mutable set — lockedSelectPeers may add to the exclude set
         rctx.profileOrganizer().selectFastPeers(200, new HashSet<>(4), targets);
         // Also add top HighCap to cover more candidates
         rctx.profileOrganizer().selectHighCapacityPeers(200, targets, targets);

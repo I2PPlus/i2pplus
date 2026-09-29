@@ -51,8 +51,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private static volatile int _numHandlerThreads = 4;
     private static final AtomicInteger _handlerThreadId = new AtomicInteger(1);
     private final CopyOnWriteArrayList<I2PThread> _handlerThreads;
-    private final int DEFAULT_MAX_PCT_TUNNELS;
-    private final int STARTUP_MAX_PCT_TUNNELS;
+    private final int _defaultMaxPctTunnels;
+    private final int _startupMaxPctTunnels;
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
     private static final String PROP_SLOW_TUNNEL_THRESHOLD = "router.tunnel.slowThreshold";
     private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
@@ -116,11 +116,11 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         setBuildHandlerThreads(numHandlerThreads);
 
         if (isFirewalled()) {
-            DEFAULT_MAX_PCT_TUNNELS = 30;
-            STARTUP_MAX_PCT_TUNNELS = 50;
+            _defaultMaxPctTunnels = 30;
+            _startupMaxPctTunnels = 50;
         } else {
-            DEFAULT_MAX_PCT_TUNNELS = 10;
-            STARTUP_MAX_PCT_TUNNELS = 30;
+            _defaultMaxPctTunnels = 10;
+            _startupMaxPctTunnels = 30;
         }
 
         // The following are for TestJob
@@ -1639,7 +1639,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public Set<Hash> selectPeersInTooManyTunnels() {
         Set<Hash> rv = new HashSet<>();
         long uptime = _context.router().getUptime();
-        long max = uptime > 30*60*1000L ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
+        long max = uptime > 30*60*1000L ? _defaultMaxPctTunnels : _startupMaxPctTunnels;
 
         // Increase threshold under low tunnel build success
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();

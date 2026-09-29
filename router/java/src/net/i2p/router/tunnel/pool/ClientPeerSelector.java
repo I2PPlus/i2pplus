@@ -42,8 +42,6 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final long PRECONNECT_TIMEOUT_THRESHOLD_MS = 15 * 1000L;
     /** Pre-connect cooldown: peers connected within this window don't need pre-connect again. */
     private static final long PRECONNECT_COOLDOWN_MS = 5 * 60 * 1000L;
-    /** Property to enable/disable pre-connect fallback on build failure. */
-    private static final String PROP_PRECONNECT_ENABLED = "i2p.tunnel.preConnect.enabled";
     /** Property to enable/disable conditional pre-connect in selectFirstHop. */
     static final String PROP_PRECONNECT_OPTIMIZE = "i2p.tunnel.preConnect.optimize";
     /** Default: true. */

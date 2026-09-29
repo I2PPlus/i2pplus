@@ -147,16 +147,6 @@ public class TestJob extends JobImpl {
     private static final int MAX_POST_KICK_DEFERRALS = 2 * MAX_DEFERRED;
     private int _postKickDeferrals = 0;
     /**
-     *  How long a reply partner's failure stays attributed to it.  A round that
-     *  fails through the same partner within this window is evidence about that
-     *  partner's reply path rather than about the tunnel under test — which is
-     *  the one thing the aggregate pass/fail counters cannot express, because
-     *  a single test bit has no way to separate the tunnel from the leg the
-     *  reply came back through.
-     *  @since 0.9.71+
-     */
-    private static final long REPLY_PARTNER_MEMORY_MS = 30 * 60 * 1000L;
-    /**
      *  Upper bound on remembered reply partners, so a router that churns
      *  through many destinations cannot grow this without limit.  Reaching the
      *  cap evicts the oldest entries.
@@ -969,7 +959,25 @@ public class TestJob extends JobImpl {
 
 
     /**
-     * Register the four per-direction test outcome stats written by
+     * The per-direction event names registered by
+     * {@link #registerDirectionStats}, excluding the pass/fail pair which
+     * {@link #directionStat(boolean, boolean)} spells itself.  Held in
+     * registration order.
+     *
+     * <p>Declared in one place so a test can assert the registered set.  A
+     * stat that is registered but never emitted sits at zero forever and
+     * reads as "this never happens" rather than "this is broken", which is
+     * how two dead per-direction counters survived a review here.
+     *
+     * @since 0.9.71+
+     */
+    static final String[] DIRECTION_EVENTS = {
+        "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
+        "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown"
+    };
+
+    /**
+     * Register the per-direction test outcome stats written by
      * {@link #testSuccessful(int)} and by the test-failure handler.
      *
      * The failure counters are written before the inbound traffic exemption is
@@ -980,24 +988,6 @@ public class TestJob extends JobImpl {
      * @param periods rate periods to record them over
      * @since 0.9.71+
      */
-    /**
-     *  The per-direction event names registered by
-     *  {@link #registerDirectionStats}, excluding the pass/fail pair which
-     *  {@link #directionStat(boolean, boolean)} spells itself.
-     *
-     *  <p>Declared in one place so a test can assert the registered set.  A
-     *  stat that is registered but never emitted sits at zero forever and
-     *  reads as "this never happens" rather than "this is broken", which is
-     *  how two dead per-direction counters survived a review here.
-     *
-     *  @return the event names, in registration order
-     *  @since 0.9.71+
-     */
-    static final String[] DIRECTION_EVENTS = {
-        "ConfirmPassed", "ConfirmFailed", "GraceDeferred", "Condemned",
-        "FarEndEstablished", "FarEndUnreachable", "FarEndUnknown"
-    };
-
     static void registerDirectionStats(StatManager stats, long[] periods) {
         stats.createRequiredRateStat(directionStat(true, true),
                 "Inbound tunnel tests passed (count)", "Tunnels", periods);

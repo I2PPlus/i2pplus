@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- * Tests the candidate-sample cap used by locked_selectPeers
+ * Tests the candidate-sample cap used by lockedSelectPeers
  * ({@link ProfileOrganizer#maxCandidateSample(int, int)}).
  *
  * <p>Scanning all ~670 tier peers per selection was a CPU hot path;

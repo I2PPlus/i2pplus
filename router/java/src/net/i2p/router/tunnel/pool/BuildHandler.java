@@ -81,7 +81,7 @@ public class BuildHandler implements Runnable {
     private volatile boolean _isRunning;
     private final Object _startupLock = new Object();
     private ExplState _explState = ExplState.NONE; // NOSONAR S1170
-    private final String MIN_VERSION_HONOR_CAPS = "0.9.58";
+    private final String _minVersionHonorCaps = "0.9.58";
     private static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
     private enum ExplState {NONE, IB, OB, BOTH}
     private static final boolean IS_SLOW = SystemVersion.isSlow();
@@ -835,7 +835,7 @@ public class BuildHandler implements Runnable {
                         String fromVersion = fromRI.getVersion();
                         // If fromVersion is greater than 0.9.58, then then ban the router due to it
                         // disrespecting our congestion flags
-                        if (fromVersion != null && VersionComparator.comp(fromVersion, MIN_VERSION_HONOR_CAPS) >= 0) {
+                        if (fromVersion != null && VersionComparator.comp(fromVersion, _minVersionHonorCaps) >= 0) {
                             _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + from, 1);
                             _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability" + fromVersion, 1);
                         }
