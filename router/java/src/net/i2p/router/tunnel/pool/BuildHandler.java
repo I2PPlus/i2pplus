@@ -595,7 +595,29 @@ public class BuildHandler implements Runnable {
     }
 
     /**
-     * Blocking call to handle a single inbound request
+     *  Classify why a next-hop peer is banlisted, for the rejection log.
+     *
+     *  <p>Pure and static so the classification is testable without a banlist.
+     *  The banlist exposes no ban timestamp, so this reports the <em>severity
+     *  class</em> rather than an age: a permanent or hostile (>=1h) ban is one
+     *  the peer selector could and should have filtered at selection time,
+     *  which points at peer selection; a shorter ban is much more likely to
+     *  have landed while the build request was in flight, which points at
+     *  needing a selection-time cooldown instead.
+     *
+     * @param forever  whether the peer carries a permanent ban
+     * @param hostile  whether the peer carries a ban of at least one hour
+     * @return a short label for the log line, never null
+     * @since 0.9.71+
+     */
+    static String banSeverity(boolean forever, boolean hostile) {
+        if (forever) {return "permanent ban, selector should have filtered";}
+        if (hostile) {return "ban >=1h, likely predates this build";}
+        return "short ban, likely applied during this build";
+    }
+
+    /**
+     *  Blocking call to handle a single inbound request
      */
     private void handleInboundRequest() {
         BuildMessageState state = null;
@@ -885,7 +907,17 @@ public class BuildHandler implements Runnable {
         }
         if (_context.banlist().isBanlisted(nextPeer)) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping Tunnel Request -> Next peer [" + nextPeer.toBase64().substring(0,6) + "] is banned");
+                // Report the ban's severity class, not just that it is banned.
+                // A long-lived ban is one the selector could and should have
+                // filtered, so it points at peer selection; a short ban is far
+                // more likely to have landed while this request was in flight,
+                // which points at needing a selection-time cooldown. The banlist
+                // exposes no ban timestamp, so this is a class proxy rather than
+                // an exact age.
+                _log.warn("Dropping Tunnel Request -> Next peer ["
+                          + nextPeer.toBase64().substring(0,6) + "] is banned ("
+                          + banSeverity(_context.banlist().isBanlistedForever(nextPeer),
+                                        _context.banlist().isBanlistedHostile(nextPeer)) + ")");
             }
             _context.statManager().addRateData("tunnel.buildBanHit", 1);
             if (from != null) {_context.commSystem().mayDisconnect(from);}
