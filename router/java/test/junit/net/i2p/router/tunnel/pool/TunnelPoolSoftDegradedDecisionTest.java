@@ -161,6 +161,7 @@ public class TunnelPoolSoftDegradedDecisionTest {
     public void testSoftRemovalThreshold() {
         // Set to 7 from 5 to reduce mark-and-replace cycle frequency without
         // being as aggressive as 5 (which broke the soft-threshold test).
-        assertEquals(7, TunnelPool.SOFT_REMOVAL_THRESHOLD);
+        // Lowered 7 -> 5 so degraded tunnels rotate out sooner.
+        assertEquals(5, TunnelPool.SOFT_REMOVAL_THRESHOLD);
     }
 }

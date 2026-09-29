@@ -99,6 +99,13 @@ public class TestJob extends JobImpl {
      *  reply is judged against the same window used to set the expiration. */
     private int _testPeriod;
 
+
+    /**
+     * Adaptive test timeout multiplier. Starts at 1.0, increases by 25% when
+     * the rolling average exceeds 1500ms, capped at 2.0.
+     * @since 0.9.71+
+     */
+
     /**
      * Number of times a test can be deferred for lack of a partner tunnel
      * before the paired pool is kicked to rebuild.  Prevents test deadlock
@@ -3210,7 +3217,7 @@ public class TestJob extends JobImpl {
 
         // Compute the test period once for this round and reuse it when judging
         // the reply — recomputing from live stats could shift the window.
-        _testPeriod = getTestPeriod();
+        _testPeriod = (int) getAdaptiveTimeout(getTestPeriod());
         ctx.statManager().addRateData("tunnel.testPeriod", _testPeriod);
         long testExpiration = now + _testPeriod;
 
@@ -3347,6 +3354,35 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     *  Update the rolling average test duration and adapt the timeout multiplier.
+     *  Called after each test completion (success or failure).
+     *
+     *  @param durationMs the test duration in ms
+     *  @since 0.9.71+
+     */
+      private void updateTestDuration(long durationMs) {
+          _pool.updateAdaptiveTestDuration(durationMs);
+      }
+
+
+      /**
+       *  Get the current test timeout, adapted to the rolling average duration.
+       *
+       *  <p>The adaptive state lives on the pool, not on this job: a
+       *  {@code TestJob} is constructed per build-request batch, so per-instance
+       *  state resets to 1.0 before it can ever accumulate and the adaptation
+       *  never engages.
+       *
+       *  @param baseTimeout the base timeout in ms
+       *  @return the adapted timeout in ms
+       *  @since 0.9.71+
+       */
+      long getAdaptiveTimeout(long baseTimeout) {
+          return _pool.getAdaptiveTestTimeout(baseTimeout);
+      }
+
+
+    /**
      * Called when the tunnel test completes successfully.
      * Updates statistics and schedules the next test.
      * @param ms time in milliseconds the test took to succeed
@@ -3361,6 +3397,7 @@ public class TestJob extends JobImpl {
 
         // Update success history for adaptive testing frequency
         updateSuccessHistory(true);
+        updateTestDuration(ms);
 
         ctx.statManager().addRateData("tunnel.testSuccessLength", _cfg.getLength());
         ctx.statManager().addRateData("tunnel.testSuccessTime", ms);
@@ -3498,6 +3535,11 @@ public class TestJob extends JobImpl {
         if (tunerBackoff > 100) {
             scaled = scaled * tunerBackoff / 100;
         }
+          // Adaptive frequency: a high rolling average duration means tests are
+          // slow, so retest less often to keep slow rounds from filling the queue.
+          if (_pool.getAdaptiveAvgTestDuration() > 2000) {
+              scaled += scaled / 2;
+          }
         scaled = Math.min(scaled, getMaxTestDelay(getContext()) * 2);
         // Add a small jitter to avoid thundering herd (ensure positive jitter)
         int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
@@ -3744,6 +3786,7 @@ public class TestJob extends JobImpl {
             decrementIfCounted();
             return;
         }
+        updateTestDuration(timeToFail);
         probeFarEndpoint(_cfg);
 
         // Reply-path protection: the partner tunnel is the one the round was

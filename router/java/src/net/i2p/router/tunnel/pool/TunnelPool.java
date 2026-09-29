@@ -167,9 +167,142 @@ public class TunnelPool {
      *  Congestion / slow destinations must not mass-remove healthy tunnels
      *  at the hard-failure bar (4), but a tunnel that times out dozens of
      *  times with no successful tests still rotates out.
+     *  Lowered from 7 to 5 so degraded tunnels are marked failing sooner,
+     *  reducing the mark-and-replace cycle frequency.  A tunnel with 5+ soft
+     *  failures is degraded and should be excluded from selection promptly.
      *  @since 0.9.71+
      */
-    static final int SOFT_REMOVAL_THRESHOLD = 7;
+    static final int SOFT_REMOVAL_THRESHOLD = 5;
+    /**
+     * Pre-emergency threshold: fraction of target below which builds start immediately.
+     * @since 0.9.71+
+     */
+    static final double PRE_EMERGENCY_FRACTION = 0.25;
+
+    /**
+     *  Builds started in one pre-emergency burst. Named so it stays consistent
+     *  with {@link #PRE_EMERGENCY_FRACTION} rather than sitting as a bare
+     *  literal in the trigger.
+     *  @since 0.9.71+
+     */
+    static final int PRE_EMERGENCY_BURST = 4;
+
+    /**
+     *  Absolute ceiling on builds in flight per pool and direction, applied to
+     *  every build path including the pre-emergency burst.
+     *
+     *  <p>Bounds the damage from any single path bypassing the normal guards.
+     *  Without it a pool that stays below the emergency threshold starts a
+     *  burst on every cycle while its builds neither complete nor fail, and the
+     *  in-progress count climbs without limit — observed at 99 concurrent
+     *  outbound builds in a 4-tunnel pool, which starves every other pool for
+     *  build capacity while fixing nothing.
+     *
+     *  @since 0.9.71+
+     */
+    static final int MAX_INPROGRESS_PER_POOL_DIR = 16;
+
+    /**
+     *  Rolling average test duration for this pool, ms; 0 until the first
+     *  completion is recorded. Held here rather than on {@link TestJob}
+     *  because a TestJob is created per build-request batch and discarded, so
+     *  per-job state never accumulates far enough to adapt anything.
+     *  @since 0.9.71+
+     */
+    private volatile long _adaptiveAvgTestDuration;
+
+    /**
+     *  Test timeout multiplier for this pool, 1.0 until adapted.
+     *  @since 0.9.71+
+     */
+    private volatile double _adaptiveTestMultiplier = 1.0;
+
+    /**
+     *  Fold a completed test duration into the rolling average.
+     *
+     *  <p>Pure so the smoothing is testable without a router.
+     *
+     *  @param avg  current average, 0 if none
+     *  @param sample the duration just observed, ms
+     *  @return the updated average
+     *  @since 0.9.71+
+     */
+    static long updatedAvgTestDuration(long avg, long sample) {
+        if (avg <= 0) {return Math.max(0, sample);}
+        return (long)(avg * 0.9 + sample * 0.1);
+    }
+
+    /**
+     *  Next test timeout multiplier for a given rolling average.
+     *
+     *  <p>Pure. Rises when tests are consistently slow so a slow-but-alive
+     *  tunnel is not condemned for exceeding a window that was never long
+     *  enough for it, and falls back when they are not. Capped at
+     *  {@link #MAX_ADAPTIVE_TEST_MULTIPLIER} so a persistently slow path cannot
+     *  widen the window without bound and mask genuinely dead tunnels.
+     *
+     *  @param mult     current multiplier
+     *  @param avgMs    rolling average test duration, ms
+     *  @return the updated multiplier
+     *  @since 0.9.71+
+     */
+    static double updatedAdaptiveTestMultiplier(double mult, long avgMs) {
+        if (avgMs > SLOW_TEST_AVG_MS) {
+            return Math.min(mult * 1.25, MAX_ADAPTIVE_TEST_MULTIPLIER);
+        }
+        if (avgMs < FAST_TEST_AVG_MS) {
+            return Math.max(mult * 0.95, 1.0);
+        }
+        return mult;
+    }
+
+    /**
+     *  Rolling average test duration above which the test window is widened.
+     *  @since 0.9.71+
+     */
+    static final long SLOW_TEST_AVG_MS = 2000;
+
+    /**
+     *  Rolling average test duration below which the test window is narrowed.
+     *  @since 0.9.71+
+     */
+    static final long FAST_TEST_AVG_MS = 1000;
+
+    /**
+     *  Hard ceiling on the adaptive test timeout multiplier. A dead tunnel must
+     *  still be condemned, so the window cannot be widened without limit.
+     *  @since 0.9.71+
+     */
+    static final double MAX_ADAPTIVE_TEST_MULTIPLIER = 2.0;
+
+    /**
+     *  Record a completed test duration and adapt this pool's test window.
+     *
+     *  @param durationMs elapsed test time, ms
+     *  @since 0.9.71+
+     */
+    void updateAdaptiveTestDuration(long durationMs) {
+        long avg = updatedAvgTestDuration(_adaptiveAvgTestDuration, durationMs);
+        _adaptiveAvgTestDuration = avg;
+        _adaptiveTestMultiplier = updatedAdaptiveTestMultiplier(_adaptiveTestMultiplier, avg);
+    }
+
+    /**
+     *  @return this pool's rolling average test duration, 0 if none recorded
+     *  @since 0.9.71+
+     */
+    long getAdaptiveAvgTestDuration() { return _adaptiveAvgTestDuration; }
+
+    /**
+     *  Adapt a base test timeout to this pool's observed test speed.
+     *
+     *  @param baseTimeout the configured timeout, ms
+     *  @return the adapted timeout, ms
+     *  @since 0.9.71+
+     */
+    long getAdaptiveTestTimeout(long baseTimeout) {
+        return (long)(baseTimeout * _adaptiveTestMultiplier);
+    }
     /**
      *  Soft-failure count at which a still-usable tunnel is treated as
      *  degraded for ensure-throttle and deficit purposes.  Below the soft
@@ -4678,15 +4811,21 @@ public class TunnelPool {
      *
      *  @return true to skip the build cycle
      */
-    private boolean shouldSkipDueToInProgress(int safeActive, int target, int inProgress) {
-        int cap;
-        if (safeActive > 0) {
-            cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6)
-                                        : Math.max(target + 1, 2);
-        } else {
-            cap = Math.min(target + 2, 8);
-        }
-        if (inProgress >= cap) {
+      private boolean shouldSkipDueToInProgress(int safeActive, int target, int inProgress) {
+          int cap;
+          if (safeActive > 0) {
+              cap = (safeActive < target) ? Math.min(Math.max(target * 2, 4), 6)
+                                          : Math.max(target + 1, 2);
+          } else {
+              cap = Math.min(target + 2, 8);
+          }
+          // The absolute ceiling wins over the per-state heuristic, so a pool
+          // that keeps missing its target cannot keep stacking builds.
+          if (cap > MAX_INPROGRESS_PER_POOL_DIR) {
+              cap = MAX_INPROGRESS_PER_POOL_DIR;
+          }
+          if (inProgress >= cap) {
+
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> Skipping build: inProgress(" +
                           inProgress + ") >= cap " + cap +
@@ -5253,10 +5392,30 @@ public class TunnelPool {
      *  from silently draining to zero, avoiding tunnel collapse cascades.
      */
     void ensureSufficientTunnels() {
+          // Pre-emergency: if pool is below 25% of target, start builds immediately
+          int target = getEffectiveTarget();
+          int healthy = getHealthyTunnelCount();
+          if (target > 0 && healthy >= 0 && healthy < target * PRE_EMERGENCY_FRACTION) {
+              // This path bypasses the throttle, but it must not bypass the
+              // in-progress caps: a burst started on every cycle with no ceiling
+              // is what drove a pool to 99 concurrent builds.
+              if (shouldSkipDueToInProgress(healthy, target, getInProgressCount())) {return;}
+              if (_log.shouldWarn()) {
+                  _log.warn(toString() + " -> Pre-emergency (" + healthy + "/" +
+                            target + " healthy) -> starting " + PRE_EMERGENCY_BURST + " builds immediately");
+              }
+              int budget = Math.max(0, MAX_INPROGRESS_PER_POOL_DIR - getInProgressCount());
+              for (int i = 0; i < PRE_EMERGENCY_BURST && i < budget; i++) {
+                  PooledTunnelCreatorConfig cfg = configureNewTunnel();
+                  if (cfg != null) {
+                      _manager.getExecutor().buildTunnel(cfg);
+                  }
+              }
+              return;
+          }
+
         // Fast-path: if healthy tunnels are below 50% of target, start builds immediately
         // without waiting for the throttle. A thin pool is an emergency.
-        int target = getEffectiveTarget();
-        int healthy = getHealthyTunnelCount();
         if (target > 0 && healthy < target / 2) {
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Thin pool (" + healthy + "/" + target + " healthy) -> fast-path pre-build");

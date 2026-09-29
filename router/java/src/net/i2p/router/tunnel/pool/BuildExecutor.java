@@ -213,6 +213,20 @@ public class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Hash, long[]> _firstHopFailureHistory = new ConcurrentHashMap<>(64);
 
     /**
+     *  Last dispatch time per first-hop peer, for staggering builds.
+     *  Maps: Hash -> dispatch timestamp in ms.
+     *
+     *  @since 0.9.71+
+     */
+    private final ConcurrentHashMap<Hash, Long> _lastDispatchTime = new ConcurrentHashMap<>(64);
+
+    /**
+     *  Bound on the first-hop stagger map before dead entries are pruned.
+     *  @since 0.9.71+
+     */
+    private static final int STAGGER_TRACK_MAX = 256;
+
+    /**
      *  Maximum age (ms) for first-hop failure history entries.
      *  Entries older than this are ignored during lookup.
      *  Tunable via {@link Tuner}.
@@ -590,6 +604,10 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Failed"), "Outbound builds failed", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat(buildDirectionStat(true, "TimedOut"), "Inbound builds timed out", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat(buildDirectionStat(false, "TimedOut"), "Outbound builds timed out", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildTimeout", "Build timed out (count)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildReject", "Build rejected (count)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildNoTunnels", "Build returned NO_TUNNELS (count)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildDupId", "Build duplicate ID (count)", "Tunnels", RATES);
 
         StatManager statMgr = _context.statManager(); // Get stat manager, get recognized bandwidth tiers
         String bwTiers = RouterInfo.BW_CAPABILITY_CHARS; // For each bandwidth tier, create tunnel build agree/reject/expire stats
@@ -1736,6 +1754,31 @@ public class BuildExecutor implements Runnable {
             return;
         }
 
+        // Stagger: minimum 2s between dispatches to the same first hop
+        Hash firstHop = BuildRequestor.getBuildRequestPeer(cfg);
+        if (firstHop != null) {
+            Long lastDispatch = _lastDispatchTime.get(firstHop);
+            long now = System.currentTimeMillis();
+            if (lastDispatch != null && now - lastDispatch < MIN_BUILD_SPACING_MS) {
+                if (_log.shouldDebug()) {
+                    _log.debug("Staggering build for " + cfg + " — first hop [" +
+                               firstHop.toBase64().substring(0, 6) + "] dispatched " +
+                               (now - lastDispatch) + "ms ago");
+                }
+                cfg.getTunnelPool().removeInProgress(cfg);
+                return;
+            }
+            _lastDispatchTime.put(firstHop, now);
+            if (_lastDispatchTime.size() > STAGGER_TRACK_MAX) {
+                // Drop only entries that can no longer suppress anything. The
+                // stagger window is milliseconds long, so anything older is
+                // dead weight; clearing the whole map instead would silently
+                // disable the guard for every hop, including live ones.
+                long cutoff = now - MIN_BUILD_SPACING_MS;
+                _lastDispatchTime.entrySet().removeIf(e -> e.getValue() < cutoff);
+            }
+        }
+
         // Early ban filtering: check if any hop is banned before dispatching.
         // BuildHandler emits buildBanHit when it receives a request for a banned
         // peer, but by then the build slot is wasted.  Checking all hops here
@@ -1936,6 +1979,20 @@ public class BuildExecutor implements Runnable {
                 _log.info("Build failed -> " + detail + " for " + cfg);
             } else {
                 _log.info("Build complete (" + result + ") for " + cfg);
+            }
+        }
+        if (result != Result.SUCCESS) {
+            if (_log.shouldInfo()) {
+                _log.info("Build failed for " + cfg + " -> reason=" + result);
+            }
+            if (result == Result.TIMEOUT) {
+                _context.statManager().addRateData("tunnel.buildTimeout", 1);
+            } else if (result == Result.REJECT) {
+                _context.statManager().addRateData("tunnel.buildReject", 1);
+            } else if (result == Result.NO_TUNNELS) {
+                _context.statManager().addRateData("tunnel.buildNoTunnels", 1);
+            } else if (result == Result.DUP_ID) {
+                _context.statManager().addRateData("tunnel.buildDupId", 1);
             }
         }
         cfg.getTunnelPool().buildComplete(cfg, result);
