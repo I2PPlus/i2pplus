@@ -393,6 +393,16 @@ public abstract class BuildRequestor {
                                               BuildExecutor exec, Log log) {
         I2NPMessage msg = msgIn;
         Hash ibgw = getBuildRequestPeer(cfg);
+        if (ibgw == null) {
+            // Length-0 inbound config: there is no first hop to address the
+            // ShortTBM to, so the request can never be routed. Fail the build
+            // instead of dereferencing null.
+            if (log.shouldWarn()) {
+                log.warn("No first hop to send an Inbound TunnelBuildMessage for " + cfg);
+            }
+            exec.buildComplete(cfg, OTHER_FAILURE, "No first hop for inbound build");
+            return false;
+        }
         // Wrap in garlic if IBGW != OBEP (to hide IBGW from OBEP)
         if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
             RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
@@ -426,6 +436,14 @@ public abstract class BuildRequestor {
                                              TunnelInfo pairedTunnel, I2NPMessage msg,
                                              BuildExecutor exec, Log log, long firstHopTimeout) {
         Hash nextHop = getBuildRequestPeer(cfg);
+        if (nextHop == null) {
+            // Length-1 outbound config: getBuildRequestPeer() has no hop to
+            // return, so there is nothing to address the request to. Fail the
+            // build rather than dereferencing null below.
+            log.warn("No next hop for outbound build: " + cfg);
+            exec.buildComplete(cfg, OTHER_FAILURE, "No next hop for outbound build");
+            return;
+        }
 
         // Add fuzz to expiration to obscure tunnel structure
         msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000L));
