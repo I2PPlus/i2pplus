@@ -124,7 +124,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      *  occurs for this long, the transfer is considered stalled and cancelled.
      *  Measured between progress events, not as a total transfer deadline —
      *  multi-minute I2P downloads are expected and must not be killed. */
-    static volatile long ioStallTimeoutMs = 60 * 1000L;
+    /**
+     *  Floor for the configured stall window, ms. A window below this is
+     *  shorter than any pause in a bulk transfer over a congested path and
+     *  aborts healthy downloads; bodies that have moved megabytes scale up
+     *  further via {@link #computeStallWindowMs}.
+     *  @since 0.9.71+
+     */
+    static final long STALL_WINDOW_FLOOR_MS = 60_000L;
+    static volatile long ioStallTimeoutMs = STALL_WINDOW_FLOOR_MS;
     /** Monotonically increasing counter of stall events detected by runOnIO
      *  or the Sender. Used by the Tuner as the observed signal for stall
      *  timeout adjustment. */
@@ -309,11 +317,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /**
      *  Set the I/O stall timeout in ms (called by Tuner via reflection).
      *
-     *  @param val new timeout in ms (clamped to [5000, 300000])
+     *  <p>The floor matches the Tuner's own floor: a window below
+     *  {@link #STALL_WINDOW_FLOOR_MS} is shorter than any pause in a bulk
+     *  transfer, so it aborts healthy downloads rather than freeing threads.
+     *  Bulk bodies get a larger window still via
+     *  {@link #computeStallWindowMs}.
+     *
+     *  @param val new timeout in ms (clamped to [STALL_WINDOW_FLOOR_MS, 300000])
      *  @since 0.9.71+
      */
     public static void setIOStallTimeoutMs(long val) {
-        ioStallTimeoutMs = Math.max(5000L, Math.min(300_000L, val));
+        ioStallTimeoutMs = Math.max(STALL_WINDOW_FLOOR_MS, Math.min(300_000L, val));
     }
 
     /**
@@ -433,6 +447,43 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             return false;
         return nowNanos - lastReadNanos >= stallNs;
     }
+
+    /**
+     *  Stall window for a body that has already moved {@code bytesTransferred}.
+     *
+     *  <p>The configured window is right for a small response but wrong for a
+     *  bulk one: over a congested path a 45MB transfer routinely pauses for
+     *  many seconds between copy steps, and a single fixed window either kills
+     *  the transfer or, if sized for the bulk case, pins a worker for minutes
+     *  behind a dead peer. The response {@code Content-Length} is not available
+     *  here (it is never parsed, and gzip and chunked bodies have no useful
+     *  declared length anyway), so the window scales with progress instead: a
+     *  body that has already moved megabytes has demonstrably earned patience.
+     *
+     * @param baseMs configured window, {@link #ioStallTimeoutMs}
+     * @param bytesTransferred bytes already moved by the body
+     * @return the window to apply, ms
+     * @since 0.9.71+
+     */
+    static long computeStallWindowMs(long baseMs, long bytesTransferred) {
+        if (baseMs <= 0)
+            return 0;
+        long scale = 1;
+        if (bytesTransferred >= BULK_STALL_32M) scale = 8;
+        else if (bytesTransferred >= BULK_STALL_8M) scale = 4;
+        else if (bytesTransferred >= BULK_STALL_1M) scale = 2;
+        long scaled = baseMs * scale;
+        return Math.min(MAX_STALL_WINDOW_MS, scaled);
+    }
+
+    /** Progress thresholds for {@link #computeStallWindowMs}. @since 0.9.71+ */
+    private static final long BULK_STALL_1M = 1024L * 1024L;
+    /** @since 0.9.71+ */
+    private static final long BULK_STALL_8M = 8L * 1024L * 1024L;
+    /** @since 0.9.71+ */
+    private static final long BULK_STALL_32M = 32L * 1024L * 1024L;
+    /** Ceiling on a progress-scaled window, ms. @since 0.9.71+ */
+    private static final long MAX_STALL_WINDOW_MS = 600_000L;
 
     /**
      *  Close a stream, ignoring failures. Used by stall/teardown paths where
@@ -2344,7 +2395,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 cancel();
                 return;
             }
-            long stallNs = ioStallTimeoutMs * 1_000_000L;
+            long stallMs = computeStallWindowMs(ioStallTimeoutMs, _body.getBytesTransferred());
+            long stallNs = stallMs * 1_000_000L;
             if (!isBodyWatchdogStalled(_body.getLastReadNanos(), System.nanoTime(), stallNs)) {
                 // Self-reschedule; cancel() in a later run terminates us.
                 schedule(POLL_MS);
@@ -2364,7 +2416,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                                         : "destination (I2P egress congested)";
                 _log.warn("[HTTPServer] Async body stalled on the " + side +
                           " - read idle " + readAgeMs + "ms, write idle " + writeAgeMs + "ms" +
-                          " after " + _body.getBytesTransferred() + " bytes transferred, closing" +
+                          " after " + _body.getBytesTransferred() + " bytes transferred" +
+                          " (window " + stallMs + "ms), closing" +
                           _body.getName());
             }
             closeQuietly(_browserin);
@@ -2456,7 +2509,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // not a stall. Idle is measured from the last completed copy step
                     // by runOnIO via getLastReadNanos(); the inter-read break below
                     // only fires when successive reads themselves were far apart.
-                    if (stallNs > ioStallTimeoutMs * 1_000_000L) {
+                    if (stallNs > computeStallWindowMs(ioStallTimeoutMs, _bytesTransferred) * 1_000_000L) {
                         _stallEventCount.incrementAndGet();
                         if (_log != null && _log.shouldWarn()) {
                             _log.warn("[HTTPServer] Stall detected in " + _name +
