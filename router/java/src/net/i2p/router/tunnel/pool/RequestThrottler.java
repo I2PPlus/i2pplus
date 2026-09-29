@@ -352,6 +352,20 @@ public class RequestThrottler {
     private static final String PROP_BAN_EXCESSIVE_REQUESTS = "router.banlist.enableExcessiveTunnelRequestsBan";
 
     /**
+     * Constrain a configured property to an allowed range. Used so a single
+     * expression both reads the property and clamps it, rather than storing
+     * the raw value and overwriting it on the next line.
+     *
+     * @param val the value read from the properties
+     * @param lo the lowest permitted value
+     * @param hi the highest permitted value
+     * @return val limited to [lo, hi]
+     */
+    private static int clamp(int val, int lo, int hi) {
+        return Math.max(lo, Math.min(hi, val));
+    }
+
+    /**
      * Creates a new RequestThrottler bound to the given router context.
      * Initializes the request counter, burst detector, ban logger, and
      * configures tunable parameters from router properties.
@@ -376,12 +390,9 @@ public class RequestThrottler {
         _reqMaxLimit = ctx.getProperty("i2p.tunnel.requestThrottle.maxLimit", 300);
         _reqPercentLimit = ctx.getProperty("i2p.tunnel.requestThrottle.percentLimit", 20);
         _reqBurst1sThreshold = ctx.getProperty("i2p.tunnel.requestThrottle.burst1sThreshold", 10);
-        _reqRejectThreshold = ctx.getProperty("i2p.tunnel.requestThrottle.rejectThreshold", 70);
-        _reqRejectSteepness = ctx.getProperty("i2p.tunnel.requestThrottle.rejectSteepness", 200);
-        _reqLoadWeight = ctx.getProperty("i2p.tunnel.requestThrottle.loadWeight", 100);
-        _reqRejectThreshold = Math.max(30, Math.min(100, _reqRejectThreshold));
-        _reqRejectSteepness = Math.max(100, Math.min(500, _reqRejectSteepness));
-        _reqLoadWeight = Math.max(0, Math.min(300, _reqLoadWeight));
+        _reqRejectThreshold = clamp(ctx.getProperty("i2p.tunnel.requestThrottle.rejectThreshold", 70), 30, 100);
+        _reqRejectSteepness = clamp(ctx.getProperty("i2p.tunnel.requestThrottle.rejectSteepness", 200), 100, 500);
+        _reqLoadWeight = clamp(ctx.getProperty("i2p.tunnel.requestThrottle.loadWeight", 100), 0, 300);
         _highLoadLagMs = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadLagMs", 1000);
         _highLoadCpuPct = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadCpuPct", 95);
         _highLoadSysLoadPct = ctx.getProperty("i2p.tunnel.requestThrottle.highLoadSysLoadPct", 90);

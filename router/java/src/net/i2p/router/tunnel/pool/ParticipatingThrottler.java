@@ -210,6 +210,20 @@ public class ParticipatingThrottler {
     DROP
 }
 
+    /**
+     * Constrain a configured property to an allowed range, so a single
+     * expression both reads the property and clamps it rather than storing
+     * the raw value and overwriting it unread on the next line.
+     *
+     * @param val the value read from the properties
+     * @param lo the lowest permitted value
+     * @param hi the highest permitted value
+     * @return val limited to [lo, hi]
+     */
+    private static int clamp(int val, int lo, int hi) {
+        return Math.max(lo, Math.min(hi, val));
+    }
+
     /** Participating throttler */
     ParticipatingThrottler(RouterContext ctx) {
         this.context = ctx;
@@ -217,21 +231,17 @@ public class ParticipatingThrottler {
         this._log = ctx.logManager().getLog(ParticipatingThrottler.class);
         _banLogger = new BanLogger();
         _banLogger.initialize(ctx);
-        // Initialize from config, Tuner will override at runtime
-        _minLimit = ctx.getProperty("i2p.tunnel.participatingThrottle.minLimit", SystemVersion.isSlow() ? 40 : 80);
-        _maxLimit = ctx.getProperty("i2p.tunnel.participatingThrottle.maxLimit", SystemVersion.isSlow() ? 150 : 300);
-        _percentLimit = ctx.getProperty("i2p.tunnel.participatingThrottle.percentLimit", 10);
+        // Initialize from config, Tuner will override at runtime.
+        // Each read is clamped in the same expression so the raw value is
+        // never stored and then overwritten unread.
         // Enforce minimums to prevent integer division truncation to zero
-        _minLimit = Math.max(20, _minLimit);
-        _maxLimit = Math.max(50, _maxLimit);
-        _percentLimit = Math.max(5, _percentLimit);
+        _minLimit = Math.max(20, ctx.getProperty("i2p.tunnel.participatingThrottle.minLimit", SystemVersion.isSlow() ? 40 : 80));
+        _maxLimit = Math.max(50, ctx.getProperty("i2p.tunnel.participatingThrottle.maxLimit", SystemVersion.isSlow() ? 150 : 300));
+        _percentLimit = Math.max(5, ctx.getProperty("i2p.tunnel.participatingThrottle.percentLimit", 10));
         // Probabilistic rejection params, Tuner will override at runtime
-        _rejectThreshold = ctx.getProperty("i2p.tunnel.participatingThrottle.rejectThreshold", 70);
-        _rejectSteepness = ctx.getProperty("i2p.tunnel.participatingThrottle.rejectSteepness", 200);
-        _loadWeight = ctx.getProperty("i2p.tunnel.participatingThrottle.loadWeight", 100);
-        _rejectThreshold = Math.max(30, Math.min(100, _rejectThreshold));
-        _rejectSteepness = Math.max(100, Math.min(500, _rejectSteepness));
-        _loadWeight = Math.max(0, Math.min(300, _loadWeight));
+        _rejectThreshold = clamp(ctx.getProperty("i2p.tunnel.participatingThrottle.rejectThreshold", 70), 30, 100);
+        _rejectSteepness = clamp(ctx.getProperty("i2p.tunnel.participatingThrottle.rejectSteepness", 200), 100, 500);
+        _loadWeight = clamp(ctx.getProperty("i2p.tunnel.participatingThrottle.loadWeight", 100), 0, 300);
         ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingAccept", "Participating throttle accepts", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingReject", "Participating throttle rejects", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.throttleParticipatingDrop", "Participating throttle drops", "Tunnels [Participating]", RATES);
