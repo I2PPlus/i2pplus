@@ -1,3 +1,49 @@
+2026-09-29 dr|z3d
+  * Tuner: Activity window keyed on peer supply, not build success;
+    ample fast peers pin the floor, startup grace exempts; null
+    context to getObservedStat; param-update failure rate limit
+  * Tunnel.pool: Window multiplier published, registered reliably;
+    starvation bypass defers to peer supply; all-banlisted
+    exploratory selections discarded and counted; ban severity class
+    reported; 90s retest gap; builds-in-flight cap; adaptive test
+    window; partners ranked by proven health; far-endpoint diagnostics
+  * I2PTunnel: Stalled source vs congested destination in the body
+    watchdog; 60s stall floor; window scaled by bytes transferred;
+    indeterminate side on equal staleness; transfer logs name the far
+    side and report bytes/sec; body aborted when the io pool saturates
+  * Tunnel: Soft failure streak saturates, no re-condemn; ban start
+    time separates in-flight from stale rejections
+  * Streaming: Outbound tunnel rotated on stall; adaptive throughput
+    floor; dead choke-depth stats fixed
+  * Core: Stall registry for transparent rotation; multipart EEPoST
+    bodies to the in-memory buffer
+  * Console: All tunables editable; two tunnel descriptions condensed;
+    tunnel tables balanced
+  * Router: Empty blocks annotated with reasons; throttler properties
+    clamped on store; null first hop fails the build; statics
+    renamed to _camelCase
+
+2026-09-28 dr|z3d
+  * Tunnel.pool: Failed test round confirmed against a different
+    partner; per-direction build outcome stats; one outcome bucket per
+    build; verified traffic trusted both ways, reply-leg failures
+    attributed; young tunnels not condemned; partners ranked by proven
+    health; far-endpoint diagnostics
+  * Tunnel: HopConfig start gate released before the drain loop;
+    failure counter saturated; test-round byte credit split from real
+    traffic; build timestamp recorded; counters atomic not
+    synchronized; fragment scan bounded by the high-water mark
+  * Router: Bloom entry size overrun, Long.MIN_VALUE encoding and
+    isKnown double counting fixed; over-cap decay deferred; per-thread
+    scratch pool; load and RTT lookups hoisted out of the build scan
+  * Bloom: Decaying filter window rotated by lock-free token swap;
+    memory accounted, sizing helpers added
+  * Tuner: IV filter m auto-tuned against a target false positive rate
+  * Streaming: 3 distinct SYN burst windows required before autoban,
+    count configurable
+  * Core: JMX load average behind a 1s TTL; EepGet retry-backoff tests
+    no longer wait out the real 5s default
+
 2026-09-27 dr|z3d
   * Tunnel: Unthrottle the test pump and record per-direction test
     outcomes as counts; retain and revive failing tunnels until
@@ -12,9 +58,13 @@
     protocols and redact digest auth; bound body resume by wall clock
     and clamp the retry ramp; restore the caller's connect timeout
     after the failover walk
+  * I2PTunnel: Purge the deprecated SocketErrorListener interface and
+    its no-op overrides
   * Streaming: Publish lifetime RTT and window only once a sample exists
   * Installer: Report a failed wrapper.config rewrite instead of
     silent exit
+  * Console: Always render the bandwidth footer; add a testing CSS
+    state
 
 2026-09-26 dr|z3d
   * Core: Align data, HTTP, naming, session contracts
