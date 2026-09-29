@@ -298,9 +298,117 @@ class Connection {
      *  released; sampling the aggregate (scaling the value by the period)
      *  preserves the display stats with a fraction of the Rate lock traffic. */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
-    /** Sample counters for the choke-size stats (one per call site). */
+    /** Sample counters for the choke-size stats (one per call site).
+     *  Monotonic per connection: the emission test is a mask on the counter,
+     *  so a counter that resets can only fire again once it has climbed back
+     *  to the next multiple of the period. */
     private int _chokeSizeBeginCnt;
     private int _chokeSizeEndCnt;
+
+    // ---------------------------------------------------------------------
+    // Adaptive throughput floor (stall / throttle detection)
+    //
+    // A streaming Connection is not bound to one of our outbound tunnels: the
+    // egress tunnel is chosen per message in the router's
+    // OutboundClientMessageOneShotJob. What a Connection can measure is the
+    // goodput it is actually achieving, so the floor is self-referential rather
+    // than a fixed bytes-per-second constant. The detectors below only report;
+    // acting on the verdict is the router layer's decision.
+    // ---------------------------------------------------------------------
+
+    /** Verdict of one floor evaluation. @since 0.9.71+ */
+    enum StallState {
+        /** Healthy, or not enough history to judge. */
+        NONE,
+        /** Bytes arriving, but far below this connection's own baseline. */
+        THROTTLED,
+        /** No bytes at all for longer than the grace period. */
+        STALLED
+    }
+
+    /**
+     * Consecutive sub-floor windows tolerated before the baseline is
+     * re-established from the observed rate. Without this the baseline would
+     * hold a stale high-water mark forever; with a plain EWMA it would instead
+     * decay toward the degraded rate within a few windows and silently excuse
+     * exactly the sustained slowdown the detector exists to catch. Requiring a
+     * long run of sub-floor windows distinguishes a real capacity change from a
+     * transient dip.
+     * @since 0.9.71+
+     */
+    private static final int FLOOR_REBASE_WINDOWS = 10;
+
+    /** Rolling goodput sample window. @since 0.9.71+ */
+    private static final long FLOOR_SAMPLE_MS = 10000;
+
+    /**
+     * Samples required before the floor arms. A connection that starts slow
+     * must never be judged against a baseline built from its own slow start,
+     * which is the failure mode that would leave this detector permanently
+     * inert on exactly the cold-pool case it exists to catch.
+     * @since 0.9.71+
+     */
+    private static final int FLOOR_MIN_SAMPLES = 3;
+
+    /**
+     * Fraction of the baseline below which the link counts as throttled.
+     * @since 0.9.71+
+     */
+    private static final double FLOOR_RATIO = 0.35;
+
+    /**
+     * Absolute floor in bytes/sec, capping the proportional floor so a very
+     * small baseline is not held to a bar it can never clear.
+     * @since 0.9.71+
+     */
+    private static final double FLOOR_ABSOLUTE_BPS = 8192;
+
+    /**
+     * Grace with no bytes at all before reporting a hard stall. Generous
+     * relative to {@link #FLOOR_SAMPLE_MS} so a single quiet window does not
+     * trip it.
+     * @since 0.9.71+
+     */
+    private static final long STALL_GRACE_MS = 30000;
+
+    /** Weight of a new goodput sample in the baseline EWMA, scaled by 100. @since 0.9.71+ */
+    private static final int FLOOR_EWMA_PERCENT = 30;
+
+    /** EWMA of achieved goodput in bytes/sec, 0 until the floor arms. @since 0.9.71+ */
+    private double _floorBaselineBps;
+
+    /** Completed goodput samples backing {@link #_floorBaselineBps}. @since 0.9.71+ */
+    private int _floorSamples;
+
+    /** Bytes counted toward the sample open at {@link #_floorSampleStart}. @since 0.9.71+ */
+    private long _floorSampleBytes;
+
+    /** Clock value at which the current goodput sample opened. @since 0.9.71+ */
+    private long _floorSampleStart;
+
+    /** Clock value of the most recent observed progress, for stall detection. @since 0.9.71+ */
+    private long _lastProgressAt;
+
+    /**
+     * Consecutive sample windows that fell below the floor. Reset by any
+     * at-or-above-floor window.
+     * @since 0.9.71+
+     */
+    private int _floorBelowCount;
+
+    /**
+     * Periodic floor evaluation. Armed only once a baseline exists, so a
+     * connection that never transfers data does not pay for a timer, and it is
+     * what makes a hard stall observable at all: the ACK path can only evaluate
+     * the floor when bytes are being acknowledged, so a connection that has
+     * gone entirely quiet would otherwise never be examined.
+     * @since 0.9.71+
+     */
+    private final FloorCheckEvent _floorCheckEvent;
+
+    /** Last reported verdict, so the caller can log a rising edge only. @since 0.9.71+ */
+    private StallState _lastStallState = StallState.NONE;
+
 
     /** Atomic long. */
     private final AtomicLong _lifetimeBytesSent = new AtomicLong();
@@ -937,6 +1045,7 @@ class Connection {
         _retransmitEvent = new RetransmitEvent();
         _pacedEvent = new PacedPacketEvent();
         _tlpEvent = new TLProbeEvent();
+        _floorCheckEvent = new FloorCheckEvent();
         _ackDupEvent = new AckDupEvent();
         _ackedList = new ArrayList<>(8);
 
@@ -1048,14 +1157,17 @@ class Connection {
             // lock, and the timer/estimator thread takes _outboundPacketsLock
             // in the opposite order (see ackPackets / RetransmitEvent comments).
             int windowCeiling = getWindowCeiling();
-            boolean send = false;
-            int chokeSize = 0;
-            synchronized (_outboundPacketsLock) {
-                if (!started && (++_chokeSizeBeginCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0) {
-                    _context.statManager().addRateData("stream.chokeSizeBegin",
-                                                       outboundSizeLocked() * (long) TELEMETRY_SAMPLE_PERIOD);
-                }
-                if (start + 5*60*1000 < now) {return false;}
+              boolean send = false;
+              int chokeSize = 0;
+              synchronized (_outboundPacketsLock) {
+                  // Sample while !started: these are the iterations that observe
+                  // the window actually full, which is what the stat measures.
+                  if (!started && shouldSampleChokeSizeBegin(++_chokeSizeBeginCnt)) {
+                      _chokeSizeBeginCnt = 0;
+                      _context.statManager().addRateData("stream.chokeSizeBegin",
+                                                         outboundSizeLocked());
+                  }
+                  if (start + 5*60*1000 < now) {return false;}
 
                 if (!isConnectedOrError()) {return false;}
                 started = true;
@@ -1102,13 +1214,13 @@ class Connection {
                     send = true;
                 }
             }
-            if (send) {
-                if ((++_chokeSizeEndCnt & (TELEMETRY_SAMPLE_PERIOD - 1)) == 0) {
-                    _context.statManager().addRateData("stream.chokeSizeEnd",
-                                                       chokeSize * (long) TELEMETRY_SAMPLE_PERIOD);
+                if (send) {
+                    if (shouldSampleChokeSizeEnd(++_chokeSizeEndCnt)) {
+                        _chokeSizeEndCnt = 0;
+                        _context.statManager().addRateData("stream.chokeSizeEnd", chokeSize);
+                    }
+                    return true;
                 }
-                return true;
-            }
         }
     }
 
@@ -1268,6 +1380,288 @@ class Connection {
         return lastWarnTime <= 0 || now - lastWarnTime >= minIntervalMs;
     }
 
+    /**
+     * Whether a completed packet release should emit a
+     * {@code stream.chokeSizeEnd} sample.
+     *
+     * <p>Pure helper for the send branch of {@link #packetSendChoke(long)} so the
+     * sampling cadence is unit-testable without a router. The caller increments
+     * its counter once per successful send and emits when this returns true.
+     *
+     * @param counter post-increment value of the per-connection end-sample counter
+     * @return true if this release should be recorded
+     * @since 0.9.71+
+     */
+    static boolean shouldSampleChokeSizeEnd(int counter) {
+        return counter >= TELEMETRY_SAMPLE_PERIOD;
+    }
+
+    /**
+     * Whether a first-block iteration should emit a {@code stream.chokeSizeBegin}
+     * sample.
+     *
+     * <p>Pure helper for the wait branch of {@link #packetSendChoke(long)}. The
+     * stat exists to tell the Tuner how deep the outbound window was when we
+     * started blocking, so it must be emitted while {@code started} is still
+     * false — that is, on the iterations that actually observe the window full.
+     *
+     * <p>The prior expression combined {@code !started} with a power-of-two mask
+     * on a counter incremented in the same statement, so the only iterations that
+     * could satisfy both were the 1st (counter=1) and the 17th — and the 17th
+     * has {@code started == true} and is filtered out. No iteration could ever
+     * emit, leaving the stat permanently zero and every Tuner parameter reading
+     * {@code stream.chokeSizeBegin} pinned at its default.
+     *
+     * @param counter post-increment value of the per-connection begin-sample counter
+     * @return true if this first block should be recorded
+     * @since 0.9.71+
+     */
+    static boolean shouldSampleChokeSizeBegin(int counter) {
+        return counter >= TELEMETRY_SAMPLE_PERIOD;
+    }
+
+    /**
+     * Decide whether a connection is delivering far below its own established
+     * rate, is fully stalled, or is healthy.
+     *
+     * <p>Pure, so the arming rules are testable without a router. The order
+     * matters: a hard stall is reported even when the baseline is unknown,
+     * because "no bytes at all" is unambiguous on its own, while a throttle
+     * verdict is only available once there is a baseline to compare against.
+     *
+     * <p>A throttle requires {@code observedBps > 0}. A window that saw no bytes
+     * is either a stall — which the grace above already covers — or simply a
+     * quiet window, and a latency-bound stream produces those routinely, so
+     * scoring them as throttled would report a fault on a healthy path.
+     *
+     * @param now            current clock value
+     * @param lastProgressAt clock value of the last observed progress
+     * @param observedBps    goodput measured over the current sample window
+     * @param ratio          fraction of baseline below which the link is throttled
+     * @param samples        completed goodput samples backing the baseline
+     * @param baselineBps    EWMA baseline, 0 if not yet established
+     * @param absFloorBps    absolute floor capping the proportional floor
+     * @param stallGraceMs   time with no bytes before a hard stall is reported
+     * @return the verdict; never null
+     * @since 0.9.71+
+     */
+    static StallState stallVerdict(long now, long lastProgressAt, double observedBps, double ratio,
+                                   int samples, double baselineBps, double absFloorBps,
+                                   long stallGraceMs) {
+        if (lastProgressAt > 0 && now - lastProgressAt >= stallGraceMs) {
+            return StallState.STALLED;
+        }
+        // The minimum sample count is the real arming guard: a baseline built
+        // from one or two observations is compared against its own slow start,
+        // which would make the floor fire immediately or never, depending on
+        // which way that start happened to fall.
+        if (samples < FLOOR_MIN_SAMPLES || baselineBps <= 0 || observedBps <= 0) {
+            return StallState.NONE;
+        }
+        double floor = baselineBps * ratio;
+        if (floor > absFloorBps) {
+            floor = absFloorBps;
+        }
+        if (observedBps < floor) {
+            return StallState.THROTTLED;
+        }
+        return StallState.NONE;
+    }
+
+    /**
+     * Fold a completed goodput sample into the baseline EWMA.
+     *
+     * <p>Pure. The baseline tracks capacity changes rather than freezing at the
+     * first observation, but it moves slowly enough that a transient dip does
+     * not immediately become the new reference the next window is judged
+     * against — without that, a single slow window would excuse itself.
+     *
+     * @param baseline  current EWMA, 0 if none
+     * @param sampleBps goodput of the sample just completed
+     * @param percent   weight of the new sample, scaled by 100
+     * @return the updated EWMA
+     * @since 0.9.71+
+     */
+    static double updatedBaseline(double baseline, double sampleBps, int percent) {
+        if (baseline <= 0) {
+            return sampleBps;
+        }
+        if (percent <= 0) {
+            return baseline;
+        }
+        if (percent >= 100) {
+            return sampleBps;
+        }
+        return baseline + (sampleBps - baseline) * (percent / 100.0);
+    }
+
+    /**
+     * Roll the goodput sample forward, returning the rate of the window that
+     * just closed.
+     *
+     * <p>Pure. A window that closed having seen no bytes reports 0, which the
+     * caller feeds to {@link #updatedBaseline} — a quiet window must not be
+     * allowed to pull the baseline to zero and disarm the detector.
+     *
+     * @param bytes     bytes counted in the closing window
+     * @param elapsedMs duration of the closing window
+     * @return goodput in bytes/sec, 0 if the window was too short to measure
+     * @since 0.9.71+
+     */
+    static double sampleRateBps(long bytes, long elapsedMs) {
+        if (bytes <= 0 || elapsedMs <= 0) {
+            return 0;
+        }
+        return (bytes * 1000.0) / elapsedMs;
+    }
+
+    /**
+     * Record acknowledged progress and, when a goodput window has closed, fold
+     * its rate into the baseline and evaluate the floor.
+     *
+     * <p>Called from the ACK path outside {@code _outboundPacketsLock}. Only
+     * the rising edge of a verdict is reported, so a persistently throttled
+     * connection does not re-report on every ACK.
+     *
+     * @param ackedPackets packets acknowledged in this batch
+     * @param messageSize  negotiated message size, used to convert to bytes
+     * @since 0.9.71+
+     */
+    private void noteProgress(int ackedPackets, int messageSize) {
+        long now = _context.clock().now();
+        if (_floorSampleStart == 0) {
+            _floorSampleStart = now;
+        }
+        // Must advance on every observed progress, not only on the first: held
+        // at its initial value it makes now-_lastProgressAt grow without bound,
+        // so the stall grace trips once and every healthy connection then
+        // reports STALLED for the rest of its life.
+        _lastProgressAt = now;
+        _floorSampleBytes += Math.max(0, ackedPackets) * (long) Math.max(0, messageSize);
+        long elapsed = now - _floorSampleStart;
+        if (elapsed < FLOOR_SAMPLE_MS) {
+            return;
+        }
+        double bps = sampleRateBps(_floorSampleBytes, elapsed);
+        _floorSampleBytes = 0;
+        _floorSampleStart = now;
+        _floorCheckEvent.scheduleCheck(FLOOR_SAMPLE_MS);
+        evaluateFloor(now, bps);
+    }
+
+    /**
+     * Roll the baseline forward and report the verdict for one closed window.
+     *
+     * <p>The baseline is only moved by a window that met the floor, or by a
+     * long enough run of windows that did not. Letting a single slow window
+     * pull the baseline down is what makes a self-referential floor disarm
+     * itself: the reference falls to meet the observation and the next window
+     * trivially passes.
+     *
+     * @param now  clock value the window closed at
+     * @param bps  goodput measured over the window
+     * @since 0.9.71+
+     */
+    private void evaluateFloor(long now, double bps) {
+        // Report first: the verdict must reflect the floor that was in force
+        // when the window closed, not one already moved by this same window.
+        reportStallState(stallVerdict(now, _lastProgressAt, bps, FLOOR_RATIO, _floorSamples,
+                                      _floorBaselineBps, FLOOR_ABSOLUTE_BPS, STALL_GRACE_MS));
+        if (bps <= 0) {
+            // A quiet window must not drag the baseline to zero and disarm the
+            // detector, so only a sample that actually saw bytes updates it.
+            return;
+        }
+        if (_floorBaselineBps <= 0) {
+            _floorBaselineBps = bps;
+        } else if (bps < Math.min(_floorBaselineBps * FLOOR_RATIO, FLOOR_ABSOLUTE_BPS)) {
+            _floorBelowCount++;
+            if (_floorBelowCount >= FLOOR_REBASE_WINDOWS) {
+                // Sustained: treat as a genuine capacity change and adopt it,
+                // rather than reporting THROTTLED forever.
+                _floorBaselineBps = bps;
+                _floorBelowCount = 0;
+            }
+        } else {
+            _floorBelowCount = 0;
+            _floorBaselineBps = updatedBaseline(_floorBaselineBps, bps, FLOOR_EWMA_PERCENT);
+        }
+        _floorSamples++;
+        if (_floorSamples == FLOOR_MIN_SAMPLES) {
+            _floorCheckEvent.arm();
+        }
+    }
+    /**
+     *  Periodic evaluation of the throughput floor.
+     *
+     *  <p>The ACK path can only reach the floor while bytes are being
+     *  acknowledged, so a connection that has gone entirely quiet would never
+     *  be examined and a hard stall would be undetectable from there. This
+     *  timer closes that gap. It is armed only once a baseline exists, so
+     *  connections that never transfer data do not pay for it.
+     *
+     *  @since 0.9.71+
+     */
+    private class FloorCheckEvent extends SimpleTimer2.TimedEvent {
+
+        FloorCheckEvent() {
+            super(_timer);
+            setFuzz(500);
+        }
+
+        /** Start the periodic check now that a baseline is available. */
+        void arm() {
+            schedule(FLOOR_SAMPLE_MS);
+        }
+
+        /** Reschedule on the next sample boundary. */
+        void scheduleCheck(long delay) {
+            schedule(delay);
+        }
+
+        @Override
+        public void timeReached() {
+            if (!_connected.get() || _floorSamples < FLOOR_MIN_SAMPLES) {
+                return;
+            }
+            long now = _context.clock().now();
+            reportStallState(stallVerdict(now, _lastProgressAt, 0, FLOOR_RATIO, _floorSamples,
+                                          _floorBaselineBps, FLOOR_ABSOLUTE_BPS, STALL_GRACE_MS));
+            schedule(FLOOR_SAMPLE_MS);
+        }
+    }
+
+    /**
+     *  Emit {@code stream.con.stallDetected} and {@code stream.con.throttleDetected}
+
+     * on the rising edge of a verdict.
+     *
+     * @param verdict current evaluation
+     * @since 0.9.71+
+     */
+    private void reportStallState(StallState verdict) {
+        if (verdict == _lastStallState) {
+            return;
+        }
+        _lastStallState = verdict;
+        switch (verdict) {
+            case STALLED:
+                _context.statManager().addRateData("stream.con.stallDetected", 1);
+                if (_log.shouldWarn()) {
+                    _log.warn("Stream has made no progress for " + (STALL_GRACE_MS / 1000)
+                              + "s (no bytes acknowledged) on " + this);
+                }
+                break;
+            case THROTTLED:
+                _context.statManager().addRateData("stream.con.throttleDetected", 1);
+                if (_log.shouldWarn()) {
+                    _log.warn("Stream goodput fell well below this connection's own baseline on " + this);
+                }
+                break;
+            default:
+                break;
+        }
+    }
     /**
      *  Graduated congestion response: the window is cut by an amount that
      *  scales with the number of CONSECUTIVE loss events since the last
@@ -1980,17 +2374,19 @@ class Connection {
                 }
             }
         }
-        // Outside the lock: the bandwidth estimator (which has its own lock)
-        // and the TLP timer. The timer thread takes _outboundPacketsLock in the
-        // opposite order, so these must not run inside the critical section.
-        if (!_ackedList.isEmpty()) {
-            _bwEstimator.addSample(_ackedList.size());
-        }
+          // Outside the lock: the bandwidth estimator (which has its own lock)
+          // and the TLP timer. The timer thread takes _outboundPacketsLock in the
+          // opposite order, so these must not run inside the critical section.
+          if (!_ackedList.isEmpty()) {
+              _bwEstimator.addSample(_ackedList.size());
+              noteProgress(_ackedList.size(), _options.getMaxMessageSize());
+          }
         if (doReArmTLP) {
             _tlpEvent.scheduleProbe(getPTO());
         }
         if (doCancelTLP) {
             _tlpEvent.cancel();
+        _floorCheckEvent.cancel();
         }
         // Call RetransmitEvent outside _outboundPacketsLock
         // to prevent deadlock with RetransmitEvent.timeReached()
@@ -2068,6 +2464,7 @@ class Connection {
                 // our own CLOSE and then disconnect in notifyLastPacketAcked.
                 _retransmitEvent.cancel();
                 _tlpEvent.cancel();
+        _floorCheckEvent.cancel();
                 _activityTimer.cancel();
                 synchronized (_connectLock) {_connectLock.notifyAll();}
             }
@@ -2205,6 +2602,7 @@ class Connection {
         // is idempotent.
         _retransmitEvent.cancel();
         _tlpEvent.cancel();
+        _floorCheckEvent.cancel();
         _activityTimer.cancel();
         synchronized (_connectLock) {_connectLock.notifyAll();}
 
@@ -2280,6 +2678,7 @@ class Connection {
         _activityTimer.cancel();
         _retransmitEvent.cancel();
         _tlpEvent.cancel();
+        _floorCheckEvent.cancel();
         _inputStream.streamErrorOccurred(new IOException("Socket closed"));
 
         if (_log.shouldInfo()) {_log.info("Connection disconnect complete\n" + toString());}

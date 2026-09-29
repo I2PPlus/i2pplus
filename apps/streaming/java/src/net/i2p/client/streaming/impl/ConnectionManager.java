@@ -1273,8 +1273,14 @@ class ConnectionManager {
         _context.statManager().createRequiredRateStat("stream.connectionCreated", "Number of outbound stream connections created", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectFailed", "Elapsed time (ms) of a failed outbound connect attempt", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.connectTime", "Elapsed time (ms) of a successful outbound connect", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        _context.statManager().createRequiredRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
-        _context.statManager().createRequiredRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
+          _context.statManager().createRequiredRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
+          _context.statManager().createRequiredRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
+          // Adaptive throughput floor, reported by Connection.noteProgress() on the
+          // rising edge of a verdict. STALLED = no bytes acknowledged for the
+          // grace period; THROTTLED = bytes arriving but far below this
+          // connection's own established baseline (see Connection.stallVerdict).
+          _context.statManager().createRequiredRateStat("stream.con.stallDetected", "Streams that stopped delivering bytes entirely", "Stream", RATES);
+          _context.statManager().createRequiredRateStat("stream.con.throttleDetected", "Streams delivering far below their own established rate", "Stream", RATES);
         // Stats for PacketQueue
         _context.statManager().createRequiredRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);
