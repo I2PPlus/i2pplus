@@ -275,8 +275,12 @@ class ExpireJob extends JobImpl {
                     && te.untestedExtensions < MAX_UNTESTED_EXTENSIONS) {
                 te.untestedExtensions++;
                 te.expirationTime = now + UNTESTED_EXTENSION_MS;
-                if (log.shouldInfo()) {
-                    log.info("Extending UNTESTED tunnel " + te.tunnelKey +
+                // Bookkeeping, not a fault: extensions are bounded by
+                // MAX_UNTESTED_EXTENSIONS and this fires for every young tunnel
+                // in the pool. At INFO it was the largest single INFO source in
+                // the router log.
+                if (log.shouldDebug()) {
+                    log.debug("Extending UNTESTED tunnel " + te.tunnelKey +
                         " (+" + UNTESTED_EXTENSION_MS + "ms, extension " +
                         te.untestedExtensions + "/" + MAX_UNTESTED_EXTENSIONS + ")");
                 }
@@ -293,8 +297,9 @@ class ExpireJob extends JobImpl {
             }
             poolsToRefresh.add(pool);
             te.phase1Complete = true;
-            if (log.shouldInfo()) {
-                log.info("Phase 1 complete for tunnel " + te.tunnelKey +
+            // Routine eviction bookkeeping (see the UNTESTED extension note).
+            if (log.shouldDebug()) {
+                log.debug("Phase 1 complete for tunnel " + te.tunnelKey +
                     " (removed from pool, LeaseSet refresh pending)");
             }
             // Never allow immediate phase 2 - always enforce grace period
@@ -324,16 +329,17 @@ class ExpireJob extends JobImpl {
                 } catch (Exception e) {
                     log.warn("Failed to remove tunnel " + te.tunnelKey + " from dispatcher", e);
                 }
-                if (log.shouldInfo()) {
-                    log.info("Phase 2 complete for tunnel " + te.tunnelKey +
+                // Routine eviction bookkeeping (see the UNTESTED extension note).
+                if (log.shouldDebug()) {
+                    log.debug("Phase 2 complete for tunnel " + te.tunnelKey +
                         " (removed from dispatcher)");
                 }
             }
             _expirations.remove(te.tunnelKey);
         }
 
-        if (log.shouldInfo() && (!readyToExpire.isEmpty() || !readyToDrop.isEmpty())) {
-            log.info("ExpireJob processed " + readyToExpire.size() + " phase 1, " +
+        if (log.shouldDebug() && (!readyToExpire.isEmpty() || !readyToDrop.isEmpty())) {
+            log.debug("ExpireJob processed " + readyToExpire.size() + " phase 1, " +
                 readyToDrop.size() + " phase 2, " + _expirations.size() + " remaining");
         }
     }

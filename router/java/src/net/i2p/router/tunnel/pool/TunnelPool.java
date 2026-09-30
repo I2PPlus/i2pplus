@@ -371,6 +371,15 @@ public class TunnelPool {
      *  @since 0.9.70
      */
     private long _lastPreBuildTime;
+
+    /**
+     *  True once this pool has ever reported a non-zero healthy count. Used to
+     *  distinguish a pool's initial fill (0 healthy, entirely normal) from a
+     *  pool that had tunnels and drained to zero (genuine degradation worth a
+     *  WARN). Set in {@link #ensureSufficientTunnels()}.
+     *  @since 0.9.71+
+     */
+    private volatile boolean _everHadHealthyTunnel;
     private static final long PRE_BUILD_THROTTLE_MS = 60_000;
     private volatile long _lastEmergencyBuildTime;
     private static final long EMERGENCY_COOLDOWN_MS = 30_000;
@@ -5540,7 +5549,20 @@ public class TunnelPool {
               // in-progress caps: a burst started on every cycle with no ceiling
               // is what drove a pool to 99 concurrent builds.
               if (shouldSkipDueToInProgress(healthy, target, getInProgressCount())) {return;}
-              if (_log.shouldWarn()) {
+              if (healthy == 0) {_everHadHealthyTunnel = true;}
+              // A pool's very first fill always reports 0 healthy, so warning on
+              // it flagged the normal birth of every short-lived pool (I2PSnark
+              // creates a fresh lookup pool per operation, and 99% of those
+              // reached a full pool in under 400ms). Once a pool has actually
+              // held a healthy tunnel, a drop to 0 is genuine degradation and
+              // stays at WARN.
+              boolean initialFill = healthy == 0 && !_everHadHealthyTunnel;
+              if (initialFill) {
+                  if (_log.shouldDebug())
+                      _log.debug(toString() + " -> Pre-emergency (" + healthy + "/" +
+                                 target + " healthy) -> initial fill, starting " +
+                                 PRE_EMERGENCY_BURST + " builds immediately");
+              } else if (_log.shouldWarn()) {
                   _log.warn(toString() + " -> Pre-emergency (" + healthy + "/" +
                             target + " healthy) -> starting " + PRE_EMERGENCY_BURST + " builds immediately");
               }
