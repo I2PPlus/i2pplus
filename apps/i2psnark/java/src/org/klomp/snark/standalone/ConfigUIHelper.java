@@ -33,9 +33,10 @@ public class ConfigUIHelper {
 
     /**
      * Each language has the ISO code, the flag, the name, and the optional country name.
-     * Alphabetical by the ISO code please. See http://en.wikipedia.org/wiki/ISO_639-1 . Any
-     * language-specific flag added to the icon set must be added to the top-level build.xml for the
-     * updater. As of 0.9.12, ISO 639-2 three-letter codes are supported also.
+     * Alphabetical by the English language name please (not by the ISO code). See
+     * http://en.wikipedia.org/wiki/ISO_639-1 . Any language-specific flag added to the icon set
+     * must be added to the top-level build.xml for the updater. As of 0.9.12, ISO 639-2
+     * three-letter codes are supported also.
      *
      * <p>Country flag unused.
      */
@@ -43,6 +44,7 @@ public class ConfigUIHelper {
         {"ar", "lang_ar", "Arabic عربية", null},
         {"az", "az", "Azerbaijani", null},
         {"bn", "bn", "Bengali বাংলা", null},
+        {"ca", "lang_ca", "Catalan", null},
         {"cs", "cz", "Čeština", null},
         {"zh", "cn", "Chinese 中文", null},
         {"da", "dk", "Dansk", null},
