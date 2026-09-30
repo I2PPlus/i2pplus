@@ -2396,9 +2396,56 @@ public class ProfileOrganizer {
      *  start is rotated (see {@link #lockedSelectPeers}) so selections are
      *  spread across the tier instead of re-examining its first few entries.
      *
+     *  <p>This floor, not the {@code howMany * 20} term, is what governs
+     *  single-hop selection: every first-hop and last-hop call passes
+     *  {@code howMany = 1}, giving {@code max(20, MIN)}.  The floor therefore
+     *  sets how many candidates the caller's first-hop quality loop has to
+     *  reject from before it relaxes its transport-session requirement, and
+     *  that loop is what stands between a build and a gateway that cannot
+     *  receive it.  A thin sample makes the loop run dry and descend rather
+     *  than reject.
+     *
+     *  <p>Raised from 64 to {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} (256).  Note
+     *  this is 12x the {@code howMany * 20} term the formula intends, so the
+     *  constant is the operative value for hop selection and is treated as a
+     *  tunable rather than a detail.  Configurable via
+     *  {@code profileOrganizer.minCandidateSample} so it can be raised to 512
+     *  without a rebuild if 256 proves insufficient.
+     *
      *  @since 0.9.71+
      */
-    private static final int MIN_CANDIDATE_SAMPLE = 64;
+    /** Default floor for candidates examined per selection. @since 0.9.71+ */
+    static final int DEFAULT_MIN_CANDIDATE_SAMPLE = 256;
+    /** Upper bound, so a typo cannot turn selection into a full tier scan. @since 0.9.71+ */
+    static final int MAX_CANDIDATE_SAMPLE = 1024;
+    /** Property for the floor; see {@link #getMinCandidateSample}. */
+    public static final String PROP_MIN_CANDIDATE_SAMPLE = "profileOrganizer.minCandidateSample";
+    private static volatile int _minCandidateSample = DEFAULT_MIN_CANDIDATE_SAMPLE;
+
+    /**
+     *  Read the candidate-sample floor, honouring the configured override.
+     *  Clamped to {@code [16, }{@link #MAX_CANDIDATE_SAMPLE}{@code ]} so a bad
+     *  value degrades to a sane range rather than scanning the whole tier or
+     *  collapsing to a single candidate.
+     *
+     *  @param ctx the router context
+     *  @return the floor to use for {@code maxCandidateSample}
+     *  @since 0.9.71+
+     */
+    public static int getMinCandidateSample(RouterContext ctx) {
+        if (ctx == null) {return _minCandidateSample;}
+        return Math.max(16, Math.min(MAX_CANDIDATE_SAMPLE,
+                                    ctx.getProperty(PROP_MIN_CANDIDATE_SAMPLE, _minCandidateSample)));
+    }
+
+    /**
+     *  Override the candidate-sample floor at runtime.
+     *  @param val the new floor, clamped to {@code [16, }{@link #MAX_CANDIDATE_SAMPLE}{@code ]}
+     *  @since 0.9.71+
+     */
+    public static void setMinCandidateSample(int val) {
+        _minCandidateSample = Math.max(16, Math.min(MAX_CANDIDATE_SAMPLE, val));
+    }
 
     /**
      *  Minimum delay between "tier returned no candidates" warnings.  A starved
@@ -2429,10 +2476,25 @@ public class ProfileOrganizer {
      *  @since 0.9.71+
      */
     static int maxCandidateSample(int howMany, int peerCount) {
+        return maxCandidateSample(howMany, peerCount, _minCandidateSample);
+    }
+
+    /**
+     *  Candidate-sample cap for a configurable floor.  Split out from
+     *  {@link #maxCandidateSample(int, int)} so the arithmetic is testable
+     *  without a RouterContext.
+     *
+     *  @param howMany peers the caller wants
+     *  @param peerCount size of the tier being sampled
+     *  @param floor minimum candidates to examine regardless of {@code howMany}
+     *  @return maximum candidates to examine, never negative
+     *  @since 0.9.71+
+     */
+    static int maxCandidateSample(int howMany, int peerCount, int floor) {
         if (peerCount <= 0)
             return 0;
         int need = Math.max(howMany, 1) * 20;
-        return Math.min(peerCount, Math.max(need, MIN_CANDIDATE_SAMPLE));
+        return Math.min(peerCount, Math.max(need, floor));
     }
 
     private void lockedSelectPeers(Map<Hash, PeerProfile> peers, int howMany, Set<Hash> toExclude,
@@ -2471,7 +2533,7 @@ public class ProfileOrganizer {
         int peerCount = peers.size();
         if (peerCount == 0)
             return;
-        int maxCandidates = maxCandidateSample(howMany, peerCount);
+        int maxCandidates = maxCandidateSample(howMany, peerCount, getMinCandidateSample(_context));
         long k0 = 0;
         long k1 = 0;
         if (subTierMode != null) {
@@ -3883,6 +3945,30 @@ public class ProfileOrganizer {
      */
     public int getFastPeerCount() {
         return _fastPeers.size();
+    }
+
+    /**
+     *  Current high-capacity tier population.  Paired with
+     *  {@link #getFastPeerCount()} so first-hop selection can report the pool
+     *  it drew from: a 256-candidate sample means something very different
+     *  against a 200-peer tier (the whole pool) than a 1500-peer one (a
+     *  fraction), and the two call for different responses.
+     *
+     *  @return the number of peers in the high-capacity tier
+     *  @since 0.9.71+
+     */
+    public int getHighCapPeerCount() {
+        return _highCapacityPeers.size();
+    }
+
+    /**
+     *  The candidate-sample floor currently in effect, for logging.
+     *  @param ctx the router context
+     *  @return the floor passed to {@link #maxCandidateSample}
+     *  @since 0.9.71+
+     */
+    public int getEffectiveCandidateSample(RouterContext ctx) {
+        return getMinCandidateSample(ctx);
     }
 
     /**
