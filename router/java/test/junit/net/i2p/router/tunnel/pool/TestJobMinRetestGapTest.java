@@ -21,7 +21,7 @@ import org.junit.Test;
  */
 public class TestJobMinRetestGapTest {
 
-    private static final long GAP = 90_000;
+    private static final long GAP = 120_000;
 
     /** A delay below the floor is raised to it. */
     @Test
@@ -44,7 +44,7 @@ public class TestJobMinRetestGapTest {
 
     /**
      * The recovery path: an expedited test must not be held back, or a pool
-     * that is already critical stays critical for another 90 seconds.
+     * that is already critical stays critical for another two minutes.
      */
     @Test
     public void testExpeditedBypassesFloor() {
@@ -59,10 +59,10 @@ public class TestJobMinRetestGapTest {
         assertEquals(3_000, TestJob.applyMinRetestGap(3_000, -1, false));
     }
 
-    /** The default is a 90s gap, which is what protects the queue. */
+    /** The default is a 120s gap, which is what protects the queue. */
     @Test
-    public void testDefaultGapIsNinetySeconds() {
-        assertEquals(90_000L, getDefaultGapMs());
+    public void testDefaultGapIsOneHundredTwentySeconds() {
+        assertEquals(120_000L, getDefaultGapMs());
     }
 
     /**
@@ -78,6 +78,6 @@ public class TestJobMinRetestGapTest {
     private static long getDefaultGapMs() {
         // The constant is private; assert the documented value so a change to
         // the shipped default has to be made deliberately here too.
-        return 90_000L;
+        return 120_000L;
     }
 }

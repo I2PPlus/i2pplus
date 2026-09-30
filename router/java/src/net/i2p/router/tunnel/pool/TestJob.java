@@ -519,12 +519,17 @@ public class TestJob extends JobImpl {
      *
      *  <p>An <b>expedited</b> test bypasses the floor. Expedited is set when a
      *  pool is critical, in deficit, or has zero active tunnels, and those are
-     *  exactly the states where a 90s gap would leave a pool empty — the
+     *  exactly the states where a long gap would leave a pool empty — the
      *  pre-emptive recovery path depends on those tests being prompt.
      *
      *  @since 0.9.71+
      */
-    private static final long MIN_RETEST_GAP_MS = 90_000;
+    // Raised from 90s: live logs showed a large minority of retest rounds
+    // refused by the in-flight gates (see reserveInFlightForToken), so the
+    // retry rate was competing with the builds and dispatches it exists to
+    // avoid starving. Expedited tests still bypass this floor, so pool
+    // recovery when a pool is thin or empty is unaffected.
+    private static final long MIN_RETEST_GAP_MS = 120_000;
 
     /**
       * The max test delay in effect, tuned value if set else config.
@@ -2654,6 +2659,76 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     *  Why a round was refused its in-flight permits.  The two gates bind for
+     *  very different reasons and need different tuning: {@link #GLOBAL_CAP}
+     *  means the router as a whole is saturated, while {@link #POOL_BUDGET}
+     *  means one pool is oversubscribed relative to its own coverage budget.
+     *  Reporting only "refused" (as this code once did) made the two
+     *  indistinguishable in the log, so the wrong knob would be tuned.
+     *  @since 0.9.71+
+     */
+    enum InFlightRefusal {
+        /** Permits were taken; the round may dispatch. */
+        NONE,
+        /** The token already holds permits, so it is refused rather than double counted. */
+        ALREADY_HELD,
+        /** The global concurrent-test cap is reached. */
+        GLOBAL_CAP,
+        /** This pool's own in-flight budget is reached. */
+        POOL_BUDGET
+    }
+
+    /**
+     *  Take the global and per-pool in-flight permits for a round, atomically,
+     *  reporting which gate refused it.  See {@link #tryReserveInFlight} for
+     *  the reservation rules; this is the same logic with the reason retained.
+     *
+     *  @param state the context's batch state
+     *  @param maxConcurrent global in-flight cap
+     *  @param poolId pool identity captured on the token, or null to skip the per-pool gate
+     *  @param poolBudget per-pool budget; negative means unbounded
+     *  @param token the round being armed
+     *  @return the gate that refused the round, or {@link InFlightRefusal#NONE}
+     *  @since 0.9.71+
+     */
+    static InFlightRefusal reserveInFlightWithReason(BatchState state, int maxConcurrent,
+                                                    String poolId, int poolBudget, RoundToken token) {
+        if (token.permitsHeld.get()) {
+            return InFlightRefusal.ALREADY_HELD;
+        }
+        int current;
+        do {
+            current = state.inFlight.get();
+            if (current >= maxConcurrent) {
+                return InFlightRefusal.GLOBAL_CAP;
+            }
+        } while (!state.inFlight.compareAndSet(current, current + 1));
+
+        if (poolId != null) {
+            final boolean[] reserved = {false};
+            state.poolInFlight.compute(poolId, (k, c) -> {
+                int used = c != null ? c.get() : 0;
+                if (poolBudget >= 0 && used >= poolBudget) {
+                    // At budget: leave the map exactly as it was.
+                    reserved[0] = false;
+                    return c;
+                }
+                AtomicInteger a = c != null ? c : new AtomicInteger();
+                a.incrementAndGet();
+                reserved[0] = true;
+                return a;
+            });
+            if (!reserved[0]) {
+                // A refused pool reserve must not leak the global permit.
+                state.inFlight.decrementAndGet();
+                return InFlightRefusal.POOL_BUDGET;
+            }
+        }
+        token.permitsHeld.set(true);
+        return InFlightRefusal.NONE;
+    }
+
+    /**
      * Take the global and per-pool in-flight permits for a round, atomically.
      * Static over its {@link BatchState} so the reservation rules are testable
      * without a live instance: the global count is taken with a CAS loop so
@@ -2674,38 +2749,8 @@ public class TestJob extends JobImpl {
      */
     static boolean tryReserveInFlight(BatchState state, int maxConcurrent,
                                       String poolId, int poolBudget, RoundToken token) {
-        if (token.permitsHeld.get()) {
-            return false;
-        }
-        int current;
-        do {
-            current = state.inFlight.get();
-            if (current >= maxConcurrent) {
-                return false;
-            }
-        } while (!state.inFlight.compareAndSet(current, current + 1));
-
-        if (poolId != null) {
-            final boolean[] reserved = {false};
-            state.poolInFlight.compute(poolId, (k, c) -> {
-                int used = c != null ? c.get() : 0;
-                if (poolBudget >= 0 && used >= poolBudget) {
-                    // At budget: leave the map exactly as it was.
-                    reserved[0] = false;
-                    return c;
-                }
-                AtomicInteger a = c != null ? c : new AtomicInteger();
-                a.incrementAndGet();
-                reserved[0] = true;
-                return a;
-            });
-            if (!reserved[0]) {
-                state.inFlight.decrementAndGet();
-                return false;
-            }
-        }
-        token.permitsHeld.set(true);
-        return true;
+        return reserveInFlightWithReason(state, maxConcurrent, poolId, poolBudget, token)
+               == InFlightRefusal.NONE;
     }
 
     /**
@@ -2721,16 +2766,34 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     boolean reserveInFlight(RoundToken token) {
+        InFlightRefusal refusal = reserveInFlightForToken(token);
+        return refusal == InFlightRefusal.NONE;
+    }
+
+    /**
+     *  Reserve in-flight permits and arm the round, reporting which gate
+     *  refused it so the caller can log a specific reason.  Split from
+     *  {@link #reserveInFlight} because the two gates bind for different
+     *  reasons: a global cap means router-wide saturation, a pool budget means
+     *  one pool is oversubscribed.  A single "budget exhausted" line for both
+     *  made the log useless for deciding which knob to tune.
+     *
+     *  @param token the round being armed
+     *  @return the gate that refused the round, or {@link InFlightRefusal#NONE}
+     *  @since 0.9.71+
+     */
+    InFlightRefusal reserveInFlightForToken(RoundToken token) {
         final RouterContext ctx = getContext();
         final int budget = token.poolId != null ? poolInFlightBudget(ctx, _pool) : -1;
-        if (!tryReserveInFlight(batchState(ctx), getMaxConcurrentTests(ctx),
-                token.poolId, budget, token)) {
-            return false;
+        InFlightRefusal refusal = reserveInFlightWithReason(batchState(ctx), getMaxConcurrentTests(ctx),
+                token.poolId, budget, token);
+        if (refusal != InFlightRefusal.NONE) {
+            return refusal;
         }
         // Arm only now that the permits are held: a refused round leaves the
         // previous round (or none) active, so its callbacks are inert.
         _round = token;
-        return true;
+        return InFlightRefusal.NONE;
     }
 
     /**
@@ -3304,9 +3367,13 @@ public class TestJob extends JobImpl {
         // The round is going on the wire: arm it and take its permits now, so
         // a wrap failure above never reserves anything and the gauges never
         // lead the dispatch.
-        if (!reserveInFlight(token)) {
+        InFlightRefusal refusal = reserveInFlightForToken(token);
+        if (refusal != InFlightRefusal.NONE) {
             if (_log.shouldDebug()) {
-                _log.debug("In-flight budget exhausted -> Not dispatching test [#" + _testId + "] for " + _cfg);
+                // Name the gate: the two bind for different reasons and need
+                // different tuning (router-wide cap vs this pool's budget).
+                _log.debug("In-flight " + refusalReasonText(refusal) +
+                           " -> Not dispatching test [#" + _testId + "] for " + _cfg);
             }
             return false;
         }
@@ -3333,8 +3400,25 @@ public class TestJob extends JobImpl {
     }
 
     /**
-     * Give up a round that was armed but never made it onto the wire: mark it
-     * claimed so any straggler callback is a no-op, then return its permits.
+     *  Short log fragment naming which gate refused a round.  Pure so the
+     *  wording is testable and the two cases cannot drift back together.
+     *
+     *  @param refusal the gate that refused
+     *  @return a log fragment, never null
+     *  @since 0.9.71+
+     */
+    static String refusalReasonText(InFlightRefusal refusal) {
+        switch (refusal) {
+            case GLOBAL_CAP:    return "global cap reached";
+            case POOL_BUDGET:   return "pool budget exhausted";
+            case ALREADY_HELD:  return "permits already held";
+            default:            return "refused";
+        }
+    }
+
+    /**
+     *  Give up a round that was armed but never made it onto the wire: mark it
+     *  claimed so any straggler callback is a no-op, then return its permits.
      *
      * @param token the round being abandoned
      * @since 0.9.71+
