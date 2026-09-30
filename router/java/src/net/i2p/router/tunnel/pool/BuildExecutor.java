@@ -618,6 +618,12 @@ public class BuildExecutor implements Runnable {
             statMgr.createRequiredRateStat("tunnel.tierReject" + bwTier, "Rejected joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
             statMgr.createRequiredRateStat("tunnel.tierExpire" + bwTier, "Expired joins from bandwidth tier " + bwTier, "Tunnels [Participating]", RATES);
         }
+        // Counts gateway non-replies that caused an immediate fast/high-cap
+        // eviction.  Paired with tunnel.tierExpire* this shows whether the
+        // contacted hop or a later hop is what fails.
+        statMgr.createRequiredRateStat("tunnel.firstHopUnreachableDemoted",
+                                        "First-hop peers evicted immediately for not answering a build request",
+                                        "Tunnels [Participating]", RATES);
     }
 
     /**
@@ -1410,13 +1416,24 @@ public class BuildExecutor implements Runnable {
                 if (_ghostPeerManager != null) {
                     _ghostPeerManager.recordTimeout(peer);
                 }
-                // Immediate tier demotion: peers that fail to respond to build
-                // requests are removed from fast/high-cap tiers without waiting
-                // for the slower data-phase demoteIfUnreachable strike path.
-                // This prevents re-selection of unresponsive peers in subsequent
-                // builds where ghost filtering may not yet be active (first
-                // timeout) or the ghost cooldown has just expired.
+                // Immediate tier eviction.  The contacted hop is the gateway:
+                // the build is already lost, so this is a definitive signal for
+                // this role specifically, and the peer leaves the fast/high-cap
+                // tiers now rather than after the strike threshold.
+                //
+                // demoteIfUnreachable needs DEMOTE_STRIKE_THRESHOLD (3)
+                // consecutive first-hop non-replies, so a peer could absorb two
+                // dead builds and still be drawn from the high-cap tier for the
+                // third.  Re-selection was the problem that threshold was added
+                // to prevent.  demoteIfUnreachableNow evicts on this failure and
+                // the ghost mark above (threshold 1, 5 min) keeps it out of the
+                // tiers via the promotion gate, so eviction is immediate
+                // without becoming a re-promotion loop.
+                _context.profileOrganizer().demoteIfUnreachableNow(peer);
+                // Keep the strike counter running so the 3rd failure still
+                // installs the longer demoteIfUnreachable cooldown.
                 _context.profileOrganizer().demoteIfUnreachable(peer);
+                _context.statManager().addRateData("tunnel.firstHopUnreachableDemoted", 1);
             }
         }
     }
