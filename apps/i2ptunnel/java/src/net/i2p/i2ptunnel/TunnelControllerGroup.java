@@ -117,12 +117,32 @@ public class TunnelControllerGroup implements ClientApp {
     /** Server handler idle keepalive */
     private static final long SERVER_KEEPALIVE_MS = (long) 30*1000;
 
-    /** Global server-handler thread budget ceiling (Tuner param max, heap-clamped in the Tuner). */
+    /** Heap-safety ceiling on summed server handler threads (Tuner param, heap-clamped in the Tuner). */
     static final int SERVER_HANDLER_MAX_THREADS = 16384;
     /** Per-tunnel server-handler cap ceiling (Tuner per-tunnel param max). */
     static final int SERVER_HANDLER_PER_TUNNEL_MAX = 4096;
     /** Absolute floor for a live server tunnel's handler pool. */
     static final int SERVER_HANDLER_FLOOR = 4;
+
+    /**
+     *  Worker threads kept for a server tunnel that is currently serving
+     *  nothing. Deliberately 1, not {@link #SERVER_HANDLER_FLOOR}: a fixed
+     *  floor is charged against every open server tunnel before any demand
+     *  weighting is applied, so on a router with many eepsites it consumed
+     *  almost the entire budget and left the busiest tunnel with a handful of
+     *  threads while it rejected connections. An idle tunnel costs one thread
+     *  and grows on its own demand.
+     *  @since 0.9.71+
+     */
+    static final int SERVER_HANDLER_IDLE = 1;
+
+    /**
+     *  Extra threads a saturated pool is granted beyond its current load, so a
+     *  pool that is exactly full can still accept the connection that is being
+     *  admitted right now instead of rejecting it and then growing.
+     *  @since 0.9.71+
+     */
+    static final int SERVER_HANDLER_HEADROOM = 1;
 
     /** Private runner pools for client and server tunnels, keyed by tunnel
      *  identity (I2PTunnel or I2PTunnelServer). Each pool is a share of the
@@ -143,7 +163,7 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.71+ */
     static final int RUNNER_BURST_QUEUE = 64;
 
-    /** Tuned by Tuner: global budget for server handler threads, summed over all server tunnels */
+    /** Tuned by Tuner: heap-safety ceiling on summed server handler threads across all server tunnels */
     private static volatile int serverHandlerThreads = Math.max(SystemVersion.getCores() * 4, 16);
     /** Tuned by Tuner */
     private static volatile int clientRunnerMax = 1024;
@@ -152,21 +172,24 @@ public class TunnelControllerGroup implements ClientApp {
 
     /**
      *  The number of server handler threads available in total across all server
-     *  tunnels: the global budget for the per-tunnel handler pools.
+     *  tunnels: the heap-safety ceiling for the per-tunnel handler pools.
      *  @return the global server handler thread budget
      *  @since 0.9.71+
      */
     public static int getServerHandlerThreads() { return serverHandlerThreads; }
     /**
-     *  Clamp and set the global budget for server handler threads, 2 to
-     *  {@value #SERVER_HANDLER_MAX_THREADS}. The budget is the sum over all
-     *  server tunnels; each tunnel's pool is a share of it, capped by its
-     *  per-tunnel ceiling ({@link #getServerThreadsPerTunnel()}). The high
-     *  ceiling lets the Tuner keep pace with sustained inbound load where
-     *  workers stall on slow inbound I2P writes rather than finishing quickly;
-     *  the memory-derived clamp in the Tuner keeps the reachable ceiling at what
-     *  the max heap can host. Live pools are rebalanced to the new budget.
-     *  @param val the desired budget
+     *  Clamp and set the heap-safety ceiling on summed server handler threads,
+     *  2 to {@value #SERVER_HANDLER_MAX_THREADS}. This is not a budget the pools
+     *  divide: each pool is sized from its own inbound demand by
+     *  {@link #serverThreadsForDemand} and capped by its per-tunnel ceiling
+     *  ({@link #getServerThreadsPerTunnel()}), and this value only trims every
+     *  pool proportionally via {@link #scaleDemandsToCeiling} when the total is
+     *  unsupportable. The high ceiling lets the Tuner keep pace with sustained
+     *  inbound load where workers stall on slow inbound I2P writes rather than
+     *  finishing quickly; the memory-derived clamp in the Tuner keeps the
+     *  reachable ceiling at what the max heap can host. Live pools are
+     *  rebalanced to the new ceiling.
+     *  @param val the desired ceiling
      *  @since 0.9.71+
      */
     public static void setServerHandlerThreads(int val) {
@@ -304,7 +327,7 @@ public class TunnelControllerGroup implements ClientApp {
 
     /** Tuned by Tuner: default per-tunnel ceiling on server handler threads. */
     private static volatile int serverThreadsPerTunnel =
-        Math.max(32, Math.min(SERVER_HANDLER_PER_TUNNEL_MAX, SystemVersion.getCores() * 8));
+        Math.max(64, Math.min(SERVER_HANDLER_PER_TUNNEL_MAX, SystemVersion.getCores() * 16));
 
     /**
      *  The default per-tunnel ceiling on server handler threads (the private
@@ -2070,17 +2093,20 @@ public class TunnelControllerGroup implements ClientApp {
     private void rebalanceServerExecutors() {
         int n = _serverHandlers.size();
         if (n == 0) {return;}
-        int budget = serverHandlerThreads;
-        int[] desired = new int[n];
+        // Each pool asks for what its own traffic needs; the global value is only
+        // a heap-safety ceiling applied afterwards, not a budget handed out up
+        // front. See serverThreadsForDemand for why the shared budget was the
+        // thing starving the busiest eepsite.
+        int[] demand = new int[n];
         int idx = 0;
         for (ServerHandler h : _serverHandlers.values()) {
             int cap = h.override >= SERVER_HANDLER_FLOOR ? h.override : serverThreadsPerTunnel;
             ThreadPoolExecutor ex = h.executor;
             int q = ex != null ? ex.getQueue().size() : 0;
             int a = ex != null ? ex.getActiveCount() : 0;
-            desired[idx++] = claimServerHandlerShare(cap, SERVER_HANDLER_FLOOR, q, a);
+            demand[idx++] = serverThreadsForDemand(q, a, cap);
         }
-        int[] alloc = allocateServerThreads(budget, desired, SERVER_HANDLER_FLOOR);
+        int[] alloc = scaleDemandsToCeiling(demand, serverHandlerThreads);
         idx = 0;
         int total = 0;
         for (ServerHandler h : _serverHandlers.values()) {
@@ -2200,6 +2226,82 @@ public class TunnelControllerGroup implements ClientApp {
         out[n - 1] = f + (int) left;
         return out;
     }
+
+    /**
+     *  Worker threads one server tunnel needs, from its own demand alone.
+     *
+     *  <p>Each server tunnel is sized independently. There is no global budget
+     *  to divide, because dividing one is what made the busiest eepsite
+     *  unusable: every open server tunnel was charged a floor first, so with
+     *  twenty eepsites the floor consumed the budget and the pool actually
+     *  serving requests was left with a ceiling of about a dozen threads. It
+     *  then refused connections outright while nineteen idle eepsites held
+     *  their reservations. Those idle pools were not consuming threads anyway —
+     *  {@code allowCoreThreadTimeOut(true)} reclaims them after the keepalive —
+     *  so the budget bought contention and nothing else.
+     *
+     *  <p>Sizing is the load itself: every queued task needs a thread and every
+     *  busy thread already has one, so {@code queueDepth + active + headroom}
+     *  is both the minimum that keeps up and the size at which nothing queues.
+     *  A dormant tunnel sits at {@link #SERVER_HANDLER_IDLE} and grows on its
+     *  own demand. The per-tunnel ceiling still applies, so one destination
+     *  cannot take the whole machine.
+     *
+     *  <p>Pure decision, no router context, so the policy is testable.
+     *
+     *  @param queueDepth tasks waiting for a handler thread
+     *  @param active     handler threads currently busy
+     *  @param cap        this tunnel's ceiling (override or Tuner default)
+     *  @return worker threads for this pool, in [1, cap]
+     *  @since 0.9.71+
+     */
+    static int serverThreadsForDemand(int queueDepth, int active, int cap) {
+        int ceiling = Math.max(1, cap);
+        int load = Math.max(0, queueDepth) + Math.max(0, active);
+        if (load <= 0) {return Math.min(SERVER_HANDLER_IDLE, ceiling);}
+        int need = load + SERVER_HANDLER_HEADROOM;
+        if (need >= ceiling) {return ceiling;}
+        return need;
+    }
+
+    /**
+     *  Scale per-pool demands down to a global ceiling, proportionally.
+     *
+     *  <p>A safety valve against exhausting the heap, not a budget the pools
+     *  compete for: each pool is sized by its own demand first, and only if the
+     *  total is genuinely unsupportable is every pool trimmed together.
+     *  Trimming is proportional to demand, so the busiest tunnel keeps the
+     *  largest share and no pool drops below {@link #SERVER_HANDLER_IDLE}.
+     *
+     *  <p>Pure, so the allocation policy is testable without a group.
+     *
+     *  @param demand  per-pool thread demand, indexed to match the pools
+     *  @param ceiling total handler threads the JVM can support
+     *  @return per-pool allocation, each in [1, its own demand]
+     *  @since 0.9.71+
+     */
+    static int[] scaleDemandsToCeiling(int[] demand, int ceiling) {
+        int n = (demand != null) ? demand.length : 0;
+        int[] out = new int[n];
+        if (n == 0) {return out;}
+        long sum = 0;
+        for (int i = 0; i < n; i++) {
+            int d = Math.max(SERVER_HANDLER_IDLE, demand[i]);
+            out[i] = d;
+            sum += d;
+        }
+        if (ceiling <= 0 || sum <= ceiling) {return out;}
+        long left = ceiling;
+        for (int i = 0; i < n - 1; i++) {
+            long share = (long) out[i] * ceiling / sum;
+            int give = (int) Math.max(SERVER_HANDLER_IDLE, Math.min(out[i], share));
+            out[i] = give;
+            left -= give;
+        }
+        out[n - 1] = (int) Math.max(SERVER_HANDLER_IDLE, Math.min(out[n - 1], left));
+        return out;
+    }
+
 
     /**
      *  Per-tunnel server-handler pool state: the explicit per-tunnel cap
