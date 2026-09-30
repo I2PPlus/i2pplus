@@ -60,7 +60,6 @@ public class I2PTunnelHTTPServerHelperTest {
         public Destination getThisDestination() { return null; }
         public I2PSocketOptions getOptions() { return null; }
         public void setOptions(I2PSocketOptions options) {}
-        public void setSocketErrorListener(SocketErrorListener lsnr) {}
         public long getLifetimeBytesSent() { return 0; }
         public long getLifetimeBytesReceived() { return 0; }
     }

@@ -57,7 +57,6 @@ public class I2PTunnelHTTPServerTest {
         public Destination getThisDestination() {return null;}
         public I2PSocketOptions getOptions() {return null;}
         public void setOptions(I2PSocketOptions options) {}
-        public void setSocketErrorListener(SocketErrorListener lsnr) {}
     }
 
     private static Map<String, List<String>> map(String key, String value) {

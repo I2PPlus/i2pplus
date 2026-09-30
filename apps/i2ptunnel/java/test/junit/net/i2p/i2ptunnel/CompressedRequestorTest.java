@@ -64,7 +64,6 @@ public class CompressedRequestorTest {
         public Destination getThisDestination() {return null;}
         public I2PSocketOptions getOptions() {return null;}
         public void setOptions(I2PSocketOptions options) {}
-        public void setSocketErrorListener(SocketErrorListener lsnr) {}
     }
 
     private ThreadPoolExecutor _executor;
