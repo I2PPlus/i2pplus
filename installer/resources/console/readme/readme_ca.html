@@ -1,0 +1,70 @@
+<div lang="ca">
+
+<ul class=links>
+
+<li><b>Inici</b><br>
+Si tot just heu iniciat I2P+, el nombre de <i>Peers actius</i> indicat a la secció <i>Peers</i> de la barra lateral hauria de començar a créixer durant els propers minuts, i també veureu un <i>Destí local</i> anomenat <i>Clients compartits</i> a la secció <i>Túnels de servei</i>, i possiblement altres clients i servidors segons com estigui configurat I2P. Aquests <i>Destinacions locals</i> proporcionen connexions a serveis en diferents <a href="/help/faq#portfaq" title="Llista de ports d’ús habitual" class=consolelink>ports</a> de la xarxa I2P, cosa que permet que funcionin BitTorrent, el correu electrònic, el proxy web i altres serveis. La vostra <a href="/netdb" class=consolelink>Base de dades de la xarxa</a> indica tots els peers coneguts localment a la xarxa. També podeu supervisar les <a href="/peers" class=consolelink>connexions entre peers</a> existents, revisar els <a href="/profiles?f=1" class=consolelink>perfils de rendiment dels peers</a> i consultar els <a href="/tunnels" class=consolelink>túnels</a> actius i el seu estat.</li>
+
+<li><b>Integració a la xarxa</b><br>
+La primera vegada que inicieu I2P+ pot trigar uns minuts a arrencar-vos (integrar-vos) a la xarxa i a trobar peers addicionals per optimitzar la vostra integració, així que sigueu pacients. Quan apareguin estrelles verdes al costat de les vostres <i>Destinacions locals</i> a la secció <i>Túnels de servei</i> de la barra lateral, podreu fer moltes coses amb I2P, i a continuació us en presentem algunes.</li>
+
+<li><b>Estat de la xarxa</b><br>
+Un cop I2P+ hagi tingut temps de provar la vostra connectivitat de xarxa, l’indicador d’Estat de la xarxa a la barra lateral hauria d’indicar, en condicions ideals, "OK". Si l’estat indica "Protegït per un tallafoc", I2P+ continuarà funcionant encara que el rendiment de la xarxa no serà òptim, i la vostra capacitat de contribuir amb ample de banda a la xarxa quedarà obstacleïda. Per obtenir un rendiment òptim, considereu obrir el vostre <a href="/confignet#udpconfig" class=consolelink>port extern d’I2P+</a> al tallafoc i al router que us ha proporcionat l’ISP. Podeu trobar més informació sobre els missatges d’estat a la <a href="/help/ui#reachabilityhelp" class=consolelink>pàgina d’ajuda de la interfície d’usuari</a>.</li>
+
+<li><b>Subscripcions a la llibreta d’adreces</b><br>
+Perquè I2P+ pugui resoldre automàticament els noms d’amfitió .i2p, es basa principalment en subscripcions a serveis que proporcionen traducció DNS per a amfitions coneguts. Si heu instal·lat I2P+ en comptes d’actualitzar des d’I2P, ja tindreu prou <a href="/dns?subscriptions" class=consolelink>subscripcions a la llibreta d’adreces</a> configurades; després de la instal·lació, la vostra <a href="/dns" class=consolelink>llibreta d’adreces</a> s’hauria d’omplir amb noms d’amfitió dels serveis actius a la xarxa sense cap intervenció. Si heu actualitzat des d’I2P, consulteu la <a href="/help/faq#addressbooksubs" class=consolelink>secció de subscripcions a la llibreta d’adreces</a> de les <a href="/help/faq" class=consolelink>PMF</a> per obtenir ajuda per afegir-hi més subscripcions.
+</li>
+
+<li><b>Configuració del navegador</b><br>
+Per navegar per llocs web de la xarxa, haureu de configurar el navegador perquè utilitzi el proxy HTTP per defecte configurat al port 4444, que també proporciona un <i>outproxy</i> i que permet navegar anònimament per llocs de la clearnet. A la pàgina de Configuració de la secció d’ajuda trobareu una <a href="/help/configuration#browserconfig" class=consolelink>petita guia per configurar Firefox</a>, o bé consulteu la secció següent per obtenir un enllaç a la guia de configuració per a diversos navegadors. Un cop hagueu configurat el navegador i les subscripcions a la llibreta d’adreces, <a href="http://notbob.i2p/" target=_blank>notbob.i2p</a> és un excel·lent lloc per descobrir contingut a la xarxa.
+</li>
+
+</ul>
+
+<h3>Serveis a I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Internet invisible &amp; navegació web pública</b><br>
+A I2P podeu accedir als llocs web allotjats a I2P ("eepsites") o navegar anònimament per la web normal mitjançant el proxy web integrat a I2P (outproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>Configureu el navegador</a> perquè utilitzi el proxy HTTP a <code>127.0.0.1 port 4444</code> i, a continuació, navegueu fins a un lloc web d’un servei ocult o fins a una adreça <code>http://</code> normal sense xifrar. Per desactivar o canviar l’accés a l’outproxy de l’internet normal, elimineu o modifiqueu l’entrada d’outproxy per a <code>false.i2p</code> o <code>purokishi.i2p</code> a la secció <i>Outproxies</i> de la <a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>pàgina d’edició</a> del túnel del client proxy HTTP al <a href="/i2ptunnelmgr" class=consolelink>Gestor de túnels</a>.</li>
+
+<li><b>Correu electrònic anònim</b><br>
+El sistema de correu basat en I2P de Postman es pot consultar mitjançant el <a href="/webmail" class=consolelink>client de correu integrat d’I2P</a> (Susimail) o qualsevol client de correu estàndard. Una passarel·la de correu permet rebre correu procedent d’adreces d’internet normals; la vostra adreça <code>@mail.i2p</code> també és contactable a través de <code>@i2pmail.org</code>. Per obtenir un compte, visiteu <a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
+
+<li><b>Transferència anònima de fitxers</b><br>
+<a href="/torrents" class=consolelink>I2PSnark</a> està integrat a I2P i ofereix transferències BitTorrent anònimes i xifrades. Alternativament, hi ha <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a> (el successor d’Azureus/Vuze), un client BitTorrent que admet torrenting a través d’I2P, i <a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a>, un client BitTorrent exclusiu d’I2P escrit en go. Altres serveis inclouen l’allotjament de fitxers basat en navegador, com ara <a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a> i <a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>Xat anònim</b><br>
+Inicieu el vostre client IRC (p. ex. <a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>) i connecteu-vos al <a href="irc://127.0.0.1:6668/i2p" class=chatlink>servidor</a> a <code>127.0.0.1 port 6668</code>. No heu de configurar cap proxy al client IRC; I2P us proporciona un túnel IRC local (configurat al client IRC com a servidor IRC o amfitrió remot). Un cop hi sigueu, <code>#saltr</code> i <code>#i2p-dev</code> són només alguns dels canals disponibles als quals podríeu adherir-vos. També hi ha una aplicació de missatgeria instantània multiplataforma basada en I2P, disponible a <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>Allotjament web anònim i xifrat</b><br>
+I2P ve amb un servidor web per allotjar el vostre propi lloc web a la xarxa I2P: una instància de <a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a> escoltant a <a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>. Després d’iniciar el <a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>Túnel del servidor web d’I2P</a> preconfigurat, el vostre lloc serà visible (però no es podrà descobrir) per als altres. Les instruccions per configurar el vostre lloc i registrar un domini .i2p es proporcionen a la <a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>secció d’ajuda</a>.</li>
+
+<li id=plugins><b>Connectors per a I2P</b><br>
+Visiteu la <a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>pàgina de connectors de zzz</a> per obtenir enllaços de baixada directa de diversos connectors. Si sou desenvolupador, es proporciona un <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>framework</a> independent del llenguatge per escriure els vostres propis connectors.</li>
+
+</ul>
+
+<h3 id=trouble>Informació per a desenvolupadors &amp; col·laboradors</h3>
+
+<ul class=links>
+
+<li><b>Informar d’errors</b><br>
+Per informar d’un error, creeu un tiquet a <a href="https://github.com/I2PPlus/i2pplus/issues" class=sitelink target=_blank rel=noreferrer>github.com/I2PPlus/i2pplus/issues</a>. Per a les discussions relacionades amb el desenvolupament, visiteu el <a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>fòrum de desenvolupadors de zzz</a> o el <a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>canal de desenvolupadors</a> (#i2p-dev) de la xarxa IRC d’I2P.</li>
+
+<li><b>Desenvolupar a I2P</b><br>
+Si sou desenvolupador, podríeu considerar escriure les vostres pròpies <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>aplicacions d’I2P</a> o millorar la seguretat de la vostra aplicació aprofitant la xarxa I2P. Els protocols <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a> i <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a> estan <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>proporcionats</a>, i també és possible el <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>streaming en temps real</a>. També proporcionem accés complet a l’<a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>API de Java</a>, i les biblioteques bàsiques d’I2P s’allotgen al <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>repositori Apache Maven</a>. Els desenvolupadors poden consultar el codi font a <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P) o a <a href="https://github.com/I2PPlus/i2pplus/" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P+). Per compilar des del codi font calen un <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>Java SDK</a> i <a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a>.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Participeu!</b><br>
+I2P es desenvolupa i es manté sobretot gràcies a la participació gratuïta i voluntària de membres de la comunitat. Podeu trobar més informació sobre com participar a la <a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>pàgina de voluntaris</a> del lloc web oficial.</li>
+
+<li><b>I2P+</b><br>
+Per obtenir més informació sobre I2P+, visiteu <a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a> o <a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>, o unint-vos al canal <a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a> de la xarxa IRC d’I2P. Els pegats per a I2P+ són benvinguts; envieu les pull requests a través de <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
+
+</ul>
+
+</div>

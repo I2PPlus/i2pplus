@@ -1,0 +1,70 @@
+<div lang="id">
+
+<ul class=links>
+
+<li><b>Memulai</b><br>
+Jika Anda baru saja memulai I2P+, jumlah <i>Peer Aktif</i> yang ditunjukkan di bagian <i>Peers</i> pada bilah sisi akan mulai bertambah dalam beberapa menit ke depan, dan Anda juga akan melihat <i>Tujuan Lokal</i> bernama <i>Shared Clients</i> terdaftar di bagian <i>Tunnel Layanan</i>, serta mungkin klien dan server lain tergantung pada cara I2P dikonfigurasi. <i>Tujuan Lokal</i> ini menyediakan koneksi ke layanan pada <a href="/help/faq#portfaq" title="Daftar port yang umum digunakan" class=consolelink>port</a> yang berbeda di jaringan I2P, sehingga memungkinkan BitTorrent, email, web proxy, dan layanan lainnya berfungsi. <a href="/netdb" class=consolelink>Basis Data Jaringan</a> Anda menunjukkan semua peer yang diketahui secara lokal di jaringan. Anda juga dapat memantau <a href="/peers" class=consolelink>koneksi peer</a> yang sudah ada, meninjau <a href="/profiles?f=1" class=consolelink>profil kinerja peer</a>, dan melihat <a href="/tunnels" class=consolelink>tunnel</a> aktif beserta statusnya.</li>
+
+<li><b>Integrasi Jaringan</b><br>
+Saat pertama kali Anda memulai I2P+, mungkin diperlukan beberapa menit untuk melakukan bootstrap (mengintegrasikan) Anda ke dalam jaringan dan menemukan peer tambahan guna menyempurnakan integrasi Anda, jadi mohon sabar. Setelah bintang hijau muncul di sebelah <i>Tujuan Lokal</i> Anda di bagian <i>Tunnel Layanan</i> pada bilah sisi, ada berbagai hal yang dapat Anda lakukan dengan I2P, dan di bawah ini kami memperkenalkan beberapa di antaranya kepada Anda.</li>
+
+<li><b>Status Jaringan</b><br>
+Setelah I2P+ diberi waktu untuk menguji konektivitas jaringan Anda, indikator Status Jaringan pada bilah sisi idealnya akan menampilkan "OK". Jika status menampilkan "Firewalled", I2P+ tetap akan berfungsi meskipun kinerja jaringan tidak akan optimal, dan kemampuan Anda untuk menyumbangkan bandwidth ke jaringan akan terhambat. Untuk kinerja optimal, mohon pertimbangkan untuk membuka <a href="/confignet#udpconfig" class=consolelink>port eksternal I2P+</a> Anda pada firewall dan router yang disediakan oleh ISP Anda. Informasi lebih lanjut tentang pesan status tersebut tersedia di <a href="/help/ui#reachabilityhelp" class=consolelink>halaman bantuan Antarmuka Pengguna</a>.</li>
+
+<li><b>Langganan Buku Alamat</b><br>
+Agar I2P+ dapat menyelesaikan nama host .i2p secara otomatis, I2P+ terutama mengandalkan langganan ke layanan yang menyediakan penerjemahan DNS untuk host yang dikenal. Jika Anda memasang I2P+ alih-alih melakukan peningkatan dari I2P, Anda sudah akan memiliki cukup banyak <a href="/dns?subscriptions" class=consolelink>langganan buku alamat</a> yang terkonfigurasi; setelah pemasangan, <a href="/dns" class=consolelink>buku alamat</a> Anda seharusnya sudah terisi dengan nama host untuk layanan aktif di jaringan tanpa perlu intervensi. Jika Anda telah melakukan peningkatan dari I2P, periksa <a href="/help/faq#addressbooksubs" class=consolelink>bagian langganan buku alamat</a> di <a href="/help/faq" class=consolelink>FAQ</a> untuk bantuan menambahkan langganan tambahan.
+</li>
+
+<li><b>Konfigurasi Peramban</b><br>
+Untuk menjelajahi situs web di jaringan, Anda perlu mengonfigurasi peramban Anda agar menggunakan HTTP proxy bawaan yang dikonfigurasi pada port 4444, yang juga menyediakan <i>outproxy</i> sehingga memungkinkan penjelajahan anonim atas situs di clearnet. <a href="/help/configuration#browserconfig" class=consolelink>Panduan singkat untuk mengonfigurasi Firefox</a> disediakan pada halaman Konfigurasi di bagian bantuan, atau lihat bagian di bawah ini untuk tautan ke panduan pengaturan multibrowser. Setelah Anda mengonfigurasi peramban dan langganan buku alamat Anda, <a href="http://notbob.i2p/" target=_blank>notbob.i2p</a> adalah situs yang bagus untuk menemukan konten di jaringan.
+</li>
+
+</ul>
+
+<h3>Layanan di I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Internet Tak Kasat Mata &amp; Penjelajahan Web Publik</b><br>
+Di I2P Anda dapat mengakses situs web yang di-host di I2P ("eepsite") atau menjelajahi web biasa secara anonim melalui web proxy (outproxy) bawaan I2P. <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>Konfigurasikan peramban Anda</a> agar menggunakan HTTP proxy di <code>127.0.0.1 port 4444</code>, lalu jelajahi sebuah situs web layanan tersembunyi atau alamat <code>http://</code> biasa yang tidak terenkripsi. Untuk menonaktifkan atau mengubah akses outproxy ke internet biasa, hapus atau ubah entri outproxy untuk <code>false.i2p</code> atau <code>purokishi.i2p</code> di bagian <i>Outproxies</i> pada <a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>halaman edit</a> tunnel klien HTTP Proxy di <a href="/i2ptunnelmgr" class=consolelink>Tunnel Manager</a>.</li>
+
+<li><b>Email Anonim</b><br>
+Sistem email berbasis I2P dari Postman dapat diakses melalui <a href="/webmail" class=consolelink>klien email bawaan I2P</a> (Susimail) atau klien email standar apa pun. Gateway email memungkinkan email diterima dari alamat internet biasa; alamat <code>@mail.i2p</code> Anda juga dapat dihubungi melalui <code>@i2pmail.org</code>. Untuk memperoleh akun, kunjungi <a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
+
+<li><b>Transfer File Anonim</b><br>
+<a href="/torrents" class=consolelink>I2PSnark</a> terintegrasi ke dalam I2P, menyediakan transfer BitTorrent yang anonim dan terenkripsi. Sebagai alternatif, ada <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a> (penerus Azureus/Vuze), yaitu klien BitTorrent yang mendukung torrent melalui I2P, dan <a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a>, klien BitTorrent khusus I2P yang ditulis dengan go. Layanan tambahan mencakup hosting file berbasis peramban seperti <a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a> dan <a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>Chat Anonim</b><br>
+Mulai klien IRC Anda (misalnya <a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>) dan sambungkan ke <a href="irc://127.0.0.1:6668/i2p" class=chatlink>server</a> di <code>127.0.0.1 port 6668</code>. Anda tidak perlu mengonfigurasi proxy di klien IRC Anda; I2P menyediakan tunnel IRC lokal (dikonfigurasi di klien IRC Anda sebagai server IRC atau remote host). Setelah tiba di sana, <code>#saltr</code> dan <code>#i2p-dev</code> hanyalah beberapa dari channel yang tersedia yang mungkin ingin Anda gabung. Ada juga aplikasi pesan instan lintas platform berbasis I2P, tersedia di <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>Hosting Web Anonim Terenkripsi</b><br>
+I2P dilengkapi dengan webserver untuk meng-hosting situs web Anda sendiri di jaringan I2P: sebuah instans <a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a> yang mendengarkan di <a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>. Setelah memulai <a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>Tunnel Webserver I2P</a> yang telah dikonfigurasi sebelumnya, situs Anda akan terlihat (tapi tidak dapat ditemukan) oleh pihak lain. Petunjuk untuk menyiapkan situs Anda dan mendaftarkan domain .i2p disediakan di <a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>bagian bantuan</a>.</li>
+
+<li id=plugins><b>Plugin untuk I2P</b><br>
+Kunjungi <a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>halaman plugin zzz</a> untuk tautan unduhan langsung beberapa plugin. Jika Anda adalah pengembang, disediakan <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>framework</a> yang independen terhadap bahasa untuk menulis plugin Anda sendiri.</li>
+
+</ul>
+
+<h3 id=trouble>Informasi untuk Pengembang &amp; Kontributor</h3>
+
+<ul class=links>
+
+<li><b>Melaporkan Bug</b><br>
+Untuk melaporkan bug, silakan buat tiket di <a href="https://github.com/I2PPlus/i2pplus/issues" class=sitelink target=_blank rel=noreferrer>github.com/I2PPlus/i2pplus/issues</a>. Untuk diskusi terkait pengembang, silakan kunjungi <a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>forum pengembang zzz</a> atau <a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>channel pengembang</a> (#i2p-dev) di jaringan IRC I2P.</li>
+
+<li><b>Mengembangkan di I2P</b><br>
+Jika Anda adalah pengembang, Anda mungkin mempertimbangkan untuk menulis <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>aplikasi I2P</a> Anda sendiri atau meningkatkan keamanan aplikasi Anda dengan memanfaatkan jaringan I2P. Kedua protokol <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a> dan <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a> telah <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>disediakan</a>, dan <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>streaming waktu nyata</a> juga memungkinkan. Kami juga menyediakan akses penuh ke <a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>Java API</a>, dan pustaka inti I2P di-host di <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>repositori Apache Maven</a>. Pengembang dapat menjelajahi kode sumber di <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P) atau <a href="https://github.com/I2PPlus/i2pplus/" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P+). <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>Java SDK</a> dan <a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a> diperlukan untuk membangun dari kode sumber.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Ikut Berlibat!</b><br>
+I2P dikembangkan dan dipelihara terutama melalui partisipasi sukarela tanpa pendanaan dari anggota komunitas. Informasi lebih lanjut tentang cara Anda berpartisipasi tersedia di <a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>halaman sukarelawan</a> pada situs web resmi.</li>
+
+<li><b>I2P+</b><br>
+Untuk informasi lebih lanjut tentang I2P+, silakan kunjungi <a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a> atau <a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>, atau bergabunglah dengan channel <a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a> di jaringan IRC I2P. Kontribusi patch untuk I2P+ kami terima dengan senang; silakan kirim pull request melalui <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
+
+</ul>
+
+</div>
