@@ -26,6 +26,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.TunnelTestStatus;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.tunnel.TunnelCreatorConfig;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
@@ -1029,6 +1030,72 @@ public class BuildExecutor implements Runnable {
     }
 
     /**
+     *  Describe the peers an expired build was routed through, at DEBUG.
+     *
+     *  <p>An expire is counted as a single outcome, but each one silently also
+     *  costs a test round and a test partner, so the reason a peer looked
+     *  selectable and then never answered is the signal worth having. Reported
+     *  per hop so a 0-hop build and a 3-hop build stay distinguishable.
+     *
+     *  <p>The three reachability fields are deliberately separate because they
+     *  imply different fixes. A peer already known unreachable is a selection
+     *  filter that did not fire. A peer never established and silent is a draw
+     *  that reached past the activity window. A peer that is established and
+     *  still silent accepts a connection and then ignores build requests, which
+     *  neither recency nor reachability filtering will address.
+     *
+     *  <p>{@code wasUnreachable} and {@code isConnecting} are declared on
+     *  {@link CommSystemFacade} with a {@code false} default and are only
+     *  meaningful through the live implementation, which is what
+     *  {@code _context.commSystem()} returns.
+     *
+     *  @param cfg the expired build's config
+     *  @since 0.9.71+
+     */
+    private void logExpiredPeers(TunnelCreatorConfig cfg) {
+        CommSystemFacade commSystem = _context.commSystem();
+        long now = _context.clock().now();
+        int length = cfg.getLength();
+        StringBuilder buf = new StringBuilder(160);
+        buf.append("Build expired unanswered after ");
+        buf.append(length).append(length == 1 ? " hop" : " hops");
+        for (int hop = 0; hop < length; hop++) {
+            Hash peer = cfg.getPeer(hop);
+            buf.append("; hop ").append(hop).append(' ');
+            if (peer == null) {
+                buf.append("was never assigned");
+                continue;
+            }
+            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
+            long lastHeardFrom = (profile != null) ? profile.getLastHeardFrom() : 0;
+            buf.append(peer.toBase64().substring(0, 6));
+            buf.append(", unreachable=").append(commSystem.wasUnreachable(peer));
+            buf.append(", established=").append(commSystem.isEstablished(peer));
+            buf.append(", connecting=").append(commSystem.isConnecting(peer));
+            buf.append(", last heard from ");
+            if (lastHeardFrom > 0) {
+                buf.append(describeAge(now - lastHeardFrom)).append(" ago");
+            } else {
+                buf.append("never");
+            }
+        }
+        _log.debug(buf.toString());
+    }
+
+    /**
+     *  Human-readable elapsed time for diagnostic log output.
+     *
+     *  @param ms elapsed milliseconds
+     *  @return a compact duration such as "412s", "8m" or "2h"
+     *  @since 0.9.71+
+     */
+    private static String describeAge(long ms) {
+        if (ms < 60 * 1000L) {return (ms / 1000L) + "s";}
+        if (ms < 60 * 60 * 1000L) {return (ms / (60 * 1000L)) + "m";}
+        return (ms / (60 * 60 * 1000L)) + "h";
+    }
+
+    /**
      *  Feedforward timeout floor derived from the network's recent baseline RTT
      *  (udp.sendConfirmTime, the time to send a message and receive its ACK).
      *  Returns a timeout floor of recent RTT plus a fixed margin, so build
@@ -1222,6 +1289,8 @@ public class BuildExecutor implements Runnable {
                 } else {
                     _context.statManager().addRateData("tunnel.buildClientExpire", 1);
                 }
+                if (_log.shouldDebug())
+                    logExpiredPeers(cfg);
             }
         }
 
