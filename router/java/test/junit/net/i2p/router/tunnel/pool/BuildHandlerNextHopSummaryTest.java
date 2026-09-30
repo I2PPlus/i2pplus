@@ -77,13 +77,22 @@ public class BuildHandlerNextHopSummaryTest {
                    BuildHandler.nextHopSummaryText(new long[] {80, 20, 0}, 60_000).contains("unreachable"));
     }
 
-    /** Counting must accumulate into the right buckets. */
+    /**
+     *  Counting must accumulate into the right buckets.
+     *
+     *  <p>Every call passes the log and the clock, never a counting-only
+     *  variant.  That is the regression this pins: the first version of the
+     *  feature had a second overload that only incremented, and both hot-path
+     *  call sites used it, so the counters moved and the summary never fired.
+     *  Unit tests of the function itself passed the whole time.  Requiring the
+     *  log at every call site makes a silent split impossible again.
+     */
     @Test
     public void countingAccumulatesPerOutcome() {
-        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED);
-        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED);
-        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT);
-        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_DROPPED);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED, null, 0);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_REPLIED, null, 0);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_TIMEOUT, null, 0);
+        BuildHandler.countNextHopOutcome(BuildHandler.NEXT_HOP_DROPPED, null, 0);
         long[] c = BuildHandler.snapshotNextHopOutcomes();
         assertEquals(2, c[0]);
         assertEquals(1, c[1]);
@@ -93,10 +102,29 @@ public class BuildHandlerNextHopSummaryTest {
     /** An out-of-range outcome must be ignored, not corrupt a bucket. */
     @Test
     public void invalidOutcomeIsIgnored() {
-        BuildHandler.countNextHopOutcome(-1);
-        BuildHandler.countNextHopOutcome(99);
+        BuildHandler.countNextHopOutcome(-1, null, 0);
+        BuildHandler.countNextHopOutcome(99, null, 0);
         long[] c = BuildHandler.snapshotNextHopOutcomes();
         assertEquals(0, c[0] + c[1] + c[2]);
+    }
+
+    /**
+     *  The dropped bucket must be reachable from production, not only from a
+     *  test.  A bucket nothing writes to always reads zero, which looks like a
+     *  healthy router and hides the rejections entirely — so assert the source
+     *  actually records the two drop paths we care about.
+     */
+    @Test
+    public void droppedBucketIsWiredToRealDropPaths() throws Exception {
+        java.io.File src = new java.io.File("router/java/src/net/i2p/router/tunnel/pool/BuildHandler.java");
+        if (!src.isFile()) {src = new java.io.File("src/net/i2p/router/tunnel/pool/BuildHandler.java");}
+        org.junit.Assume.assumeTrue("source not available", src.isFile());
+        String body = new String(java.nio.file.Files.readAllBytes(src.toPath()), "UTF-8");
+        int dropped = body.split("NEXT_HOP_DROPPED,", -1).length - 1;
+        assertTrue("NEXT_HOP_DROPPED must be recorded on real drop paths, found " + dropped,
+                   dropped >= 2);
+        assertTrue("a counting-only overload must not exist alongside the logging one",
+                   !body.contains("static void countNextHopOutcome(int outcome) {"));
     }
 
     /**

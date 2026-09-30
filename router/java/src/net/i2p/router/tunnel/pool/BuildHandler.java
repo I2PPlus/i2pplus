@@ -929,6 +929,7 @@ public class BuildHandler implements Runnable {
                           + banSeverity(_context.banlist().getBanAge(nextPeer)) + ")");
             }
             _context.statManager().addRateData("tunnel.buildBanHit", 1);
+            countNextHopOutcome(NEXT_HOP_DROPPED, _log, _context.clock().now());
             if (from != null) {_context.commSystem().mayDisconnect(from);}
             return -1;
         }
@@ -1541,6 +1542,7 @@ public class BuildHandler implements Runnable {
                 (!_context.commSystem().haveOutboundCapacity(96)) &&
                 (!_context.commSystem().isEstablished(nextPeer))) {
                 _context.statManager().addRateData("tunnel.dropConnLimits", 1);
+                countNextHopOutcome(NEXT_HOP_DROPPED, _log, _context.clock().now());
                 if (shouldLog) {_log.warn("Dropping Tunnel Request -> Congestion control enabled (close to our limit) " + (_log.shouldInfo() ? req : ""));}
                 return;
             }
@@ -1550,7 +1552,7 @@ public class BuildHandler implements Runnable {
                        + "] after " + (recvDelay >= 1 ? recvDelay + "ms" : "") + " with response [#" + response
                        + "] from " + (from != null ? "[" + fromPeer + "]" : "tunnel") + req);
         }
-        countNextHopOutcome(NEXT_HOP_REPLIED);
+        countNextHopOutcome(NEXT_HOP_REPLIED, _log, _context.clock().now());
         int records = state.msg.getRecordCount();
         int ourSlot = -1;
         for (int j = 0; j < records; j++) {
@@ -1902,7 +1904,7 @@ public class BuildHandler implements Runnable {
             if (log.shouldDebug()) {
                 log.debug("Timeout (" + (getNextHopLookupTimeout(getContext()) / 1000) + "s) contacting next hop" + _cfg);
             }
-            countNextHopOutcome(NEXT_HOP_TIMEOUT);
+            countNextHopOutcome(NEXT_HOP_TIMEOUT, log, getContext().clock().now());
         }
 
         /**
@@ -1911,7 +1913,10 @@ public class BuildHandler implements Runnable {
          *  rate is visible without grepping DEBUG.
          *  @since 0.9.71+
          */
-        void countReplied() { countNextHopOutcome(NEXT_HOP_REPLIED); }
+        void countReplied() {
+            Log log = getContext().logManager().getLog(BuildHandler.class);
+            countNextHopOutcome(NEXT_HOP_REPLIED, log, getContext().clock().now());
+        }
     }
 
     /**
@@ -1969,16 +1974,6 @@ public class BuildHandler implements Runnable {
         if (!_nextHopSummaryLog.compareAndSet(last, now)) {return false;}
         log.warn(nextHopSummaryText(snapshotNextHopOutcomes(), now - last));
         return true;
-    }
-
-    /**
-     *  Count an outcome with no summary logging, for the hot per-event path.
-     *  @param outcome one of the NEXT_HOP_* constants
-     *  @since 0.9.71+
-     */
-    static void countNextHopOutcome(int outcome) {
-        if (outcome < 0 || outcome >= NEXT_HOP_OUTCOMES) {return;}
-        _nextHopOutcomes[outcome].incrementAndGet();
     }
 
     /**
