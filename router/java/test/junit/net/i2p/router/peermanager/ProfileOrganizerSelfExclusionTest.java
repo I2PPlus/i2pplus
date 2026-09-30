@@ -12,23 +12,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *  Tests that a router is never selectable as one of its own tunnel hops.
+ *  Tests that a router is not selectable through the normal selection path.
  *
- *  <p>The bug: the local RouterInfo is present in our own netdb, so the
- *  self-entry is a legitimate candidate. The tier drawers
- *  ({@code lockedSelectPeers}, {@code lockedSelectActive}) excluded self
- *  individually, but {@code selectRemainderFromAllPeers} — the path used when
- *  the tiers cannot supply enough peers — went through
- *  {@link ProfileOrganizer#isSelectable(Hash)}, which had no self check. The
- *  result on a live router was the local identity being returned as a hop in
- *  every expiring build, at every hop position, which made 100% of those builds
- *  fail and dragged measured build success down by tens of points.
+ *  <p>The local RouterInfo sits in our own netdb, so we are a candidate in
+ *  every pool. We are nevertheless <em>meant</em> to appear in a client
+ *  tunnel, at one end — {@code ClientPeerSelector.finalizeSelection} inserts
+ *  us directly and {@code ExploratoryPeerSelector} excludes us outright,
+ *  neither through this path. These tests therefore cover only the invariant
+ *  that selection must not hand us out as a candidate hop, which is defence in
+ *  depth: the tier drawers excluded self individually, but
+ *  {@code selectRemainderFromAllPeers} went through
+ *  {@link ProfileOrganizer#isSelectable(Hash)} without doing so, and the two
+ *  protections could disagree.
  *
- *  <p>A router is always already in the chain it is building, so selecting
- *  ourselves as an extra hop can only produce a build that loops back and never
- *  completes. The guard now lives in {@code passesBasicGates}, the chokepoint
- *  every selection path funnels through, so this is asserted at that level
- *  rather than per selection loop.
+ *  <p>Deliberately not claimed here: that this fixed an observed build
+ *  failure. A router showing up in an expiring-build log line is the expected
+ *  gateway, not evidence of self-selection. Whether we were ever drawn at a
+ *  mid-hop remains unestablished.
  *
  *  @since 0.9.71+
  */
@@ -60,13 +60,13 @@ public class ProfileOrganizerSelfExclusionTest {
     }
 
     /**
-     *  The core contract: we are not selectable, no matter what else is true.
-     *  Checked before any banlist or netdb work so the guard cannot be
-     *  reordered behind a cheaper test and accidentally dropped.
+     *  The core contract: selection never offers us as a candidate. Checked
+     *  before any banlist or netdb work so the guard cannot be reordered behind
+     *  a cheaper test and accidentally dropped.
      */
     @Test
     public void weAreNotSelectable() {
-        assertFalse("a router must never be selectable as its own tunnel hop",
+        assertFalse("selection must never hand out the local router as a candidate",
                     _org.isSelectable(_us));
     }
 

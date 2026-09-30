@@ -2510,7 +2510,11 @@ public class ProfileOrganizer {
                 skipExcluded++;
                 continue;
             }
-            if (matches.contains(peer) || (_us != null && _us.equals(peer))) {
+            // Self-exclusion is not repeated here: passesBasicGates runs on
+            // every candidate a few lines below and rejects us there, so a
+            // local check would only double-count us in skipPicked and make
+            // the tier-starvation warning name the wrong gate.
+            if (matches.contains(peer)) {
                 skipPicked++;
                 continue;
             }
@@ -2624,7 +2628,9 @@ public class ProfileOrganizer {
             Hash peer = iter.next();
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
-            if (_us != null && _us.equals(peer)) continue;
+            // Self-exclusion is handled by passesBasicGates, reached via
+            // isSelectable below. No local check, so the skip is not counted
+            // twice.
             boolean ok = isSelectable(peer, buildSuccess);
             if (ok) {
                 ok = mask <= 0 || notRestricted(peer, ipSet, mask);
@@ -2682,15 +2688,27 @@ public class ProfileOrganizer {
      *  <p>The self check is first because this is the chokepoint every
      *  selection path funnels through, including
      *  {@link #selectRemainderFromAllPeers} via {@link #isSelectable(Hash, double)}.
-     *  A router is always already in the chain it is building, so selecting
-     *  ourselves as another hop can only produce a build that loops back and
-     *  never completes.  This has bitten us before: the local RouterInfo is
-     *  present in our own netdb, and the tier drawers
-     *  ({@code lockedSelectPeers}, {@code lockedSelectActive}) exclude self
-     *  locally, but the remainder path used when tiers cannot supply enough
-     *  peers did not, so we were returned as a hop and every build containing
-     *  us expired.  Checking here rather than in each selection loop means no
-     *  present or future path can reintroduce it.
+     *  The local RouterInfo is present in our own netdb, so we are a legitimate
+     *  entry in every candidate pool.
+     *
+     *  <p>Note that we are <em>supposed</em> to be in the tunnel we build, at
+     *  one end: {@code ClientPeerSelector.finalizeSelection} inserts us
+     *  directly, and {@code ExploratoryPeerSelector} adds us to its exclude
+     *  set. Neither goes through this method, so excluding us here costs
+     *  nothing. What this guard prevents is being drawn as an <em>extra</em>
+     *  hop — a mid-hop in a tunnel we are already an end of, which can only
+     *  produce a build that loops back on itself. The tier drawers
+     *  ({@code lockedSelectPeers}, {@code lockedSelectActive}) each excluded
+     *  self locally; the remainder path used when tiers cannot supply enough
+     *  peers did not, so the two protections could disagree. Checking here
+     *  rather than in each selection loop means no present or future path can
+     *  reintroduce the gap.
+     *
+     *  <p>Scope, stated precisely because it was previously overstated: this
+     *  guard has not been shown to fix any observed build failure. A router
+     *  appearing in an expiring-build log line is expected — it is the
+     *  gateway — so that log is not evidence of self-selection. Whether we
+     *  were being drawn at a mid-hop has not been established.
      *
      *  @since 0.9.71+
      */
