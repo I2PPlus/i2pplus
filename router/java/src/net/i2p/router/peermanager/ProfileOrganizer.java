@@ -2676,9 +2676,28 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Returns false when the peer is banlisted or recently failed as first hop.
+     *  Returns false when the peer is us, banlisted, or recently failed as
+     *  first hop.
+     *
+     *  <p>The self check is first because this is the chokepoint every
+     *  selection path funnels through, including
+     *  {@link #selectRemainderFromAllPeers} via {@link #isSelectable(Hash, double)}.
+     *  A router is always already in the chain it is building, so selecting
+     *  ourselves as another hop can only produce a build that loops back and
+     *  never completes.  This has bitten us before: the local RouterInfo is
+     *  present in our own netdb, and the tier drawers
+     *  ({@code lockedSelectPeers}, {@code lockedSelectActive}) exclude self
+     *  locally, but the remainder path used when tiers cannot supply enough
+     *  peers did not, so we were returned as a hop and every build containing
+     *  us expired.  Checking here rather than in each selection loop means no
+     *  present or future path can reintroduce it.
+     *
+     *  @since 0.9.71+
      */
     private boolean passesBasicGates(Hash peer) {
+        // Null-safe: _us is set by PeerManager's constructor, but a null here
+        // must not turn a self-exclusion into an NPE on the hot path.
+        if (_us != null && _us.equals(peer)) return false;
         if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) return false;
         // Ghost peers are rejected here rather than filtered after selection:
         // a candidate slot spent on a peer that only times out on builds is a
