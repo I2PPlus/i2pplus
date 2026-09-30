@@ -886,6 +886,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
         NoRouteToHostException lastEx = null;
         int timeoutFailures = 0;
+        int legsFailed = 0;
         // The per-leg timeout has to travel on the options object, which the
         // caller owns and may reuse. Hold the caller's value so it is always
         // handed back unchanged: a shrunken timeout left behind would silently
@@ -920,19 +921,29 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     lastEx = e;
                     boolean timedOut = isConnectTimeout(e);
                     if (timedOut) {timeoutFailures++;}
+                    legsFailed++;
                     int state = poolState();
                     boolean poolDown = state <= -1;
                     boolean poolBuilding = state == 0;
                     boolean more = shouldContinueFailover(tunnelCount, i + 1, timeoutFailures, poolDown, poolBuilding);
-                    if (_log.shouldWarn()) {
-                        _log.warn("Connect failed (tunnel " + i + "/" + tunnelCount + "): " + e.getMessage() +
-                                  (more ? ", retrying..." : ", giving up"));
+                    // Per-leg detail is an intermediate step within one logical
+                    // connect, so it belongs at DEBUG: at WARN it fanned a single
+                    // failure out into one line per configured leg. The overall
+                    // outcome is reported once, after the walk.
+                    if (_log.shouldDebug()) {
+                        _log.debug("Connect failed (tunnel " + i + "/" + tunnelCount + "): " +
+                                   e.getMessage() + (more ? ", retrying..." : ", giving up"));
                     }
                     if (!more) {break;}
                 }
             }
         } finally {
             opt.setConnectTimeout(callerTimeoutMs);
+        }
+        if (legsFailed > 0 && _log.shouldWarn()) {
+            _log.warn("Connect failed after " + legsFailed + "/" + tunnelCount + " tunnel legs" +
+                      (timeoutFailures > 0 ? " (" + timeoutFailures + " timed out)" : "") + ": " +
+                      (lastEx != null ? lastEx.getMessage() : "no route to host"));
         }
         throw (lastEx != null) ? lastEx :
             new NoRouteToHostException("Failed to connect after " + tunnelCount + " attempts");

@@ -1464,6 +1464,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final int _initialValue;
         /** True until first update() call — applies persisted value from autotune.config. */
         protected boolean _firstTick = true;
+        /**
+         *  True once a stale persisted default has been reported, so the
+         *  permanent condition is logged at DEBUG exactly once per param
+         *  instead of on every tuning cycle.
+         *  @since 0.9.71+
+         */
+        private boolean _staleDefaultLogged;
         /** User-set override value, or Integer.MIN_VALUE if unset. */
         protected volatile int _override;
         /** Whether autotuning is active for this parameter. */
@@ -1783,16 +1790,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-/**
-         * Re-read the default value from autotune.config for live updates.
+        /**
+         *  Re-read the default value from autotune.config for live updates.
          *
-         * <p>Called once per tuning cycle. When a user saves a new default
-         * via the console form, this method picks it up and uses it as the
-         * auto-revert target. If the persisted default differs from the
-         * factory default (code-level default), it is treated as stale and
-         * ignored — the factory default is the authoritative source of truth.
+         *  <p>Called once per tuning cycle. When a user saves a new default
+         *  via the console form, this method picks it up and uses it as the
+         *  auto-revert target. If the persisted default differs from the
+         *  factory default (code-level default), it is treated as stale and
+         *  ignored — the factory default is the authoritative source of truth.
          *
-         * @since 0.9.70+
+         *  <p>A stale default is a persistent config state, not a recurring
+         *  event: it stays in autotune.config until edited, so re-announcing it
+         *  every cycle produced thousands of identical WARN lines for a
+         *  condition the code already handles correctly. It is therefore
+         *  reported once per param at DEBUG, and WARN stays free for things
+         *  that actually need attention.
+         *
+         *  @since 0.9.70+
          */
         public void refreshDefault(RouterContext ctx) {
             int persistedDefault = _autotune.getInt(_name + ".default", _factoryDefault);
@@ -1800,9 +1814,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             // A mismatch indicates stale persistence from a previous code version,
             // and overriding _defaultValue would break auto-revert below.
             if (persistedDefault != _factoryDefault) {
-                if (_log.shouldWarn())
-                    _log.warn(_name + " stale persisted default " + persistedDefault +
-                              " ignored, using factory default " + _factoryDefault);
+                if (_log.shouldDebug() && !_staleDefaultLogged) {
+                    _log.debug(_name + " stale persisted default " + persistedDefault +
+                               " ignored, using factory default " + _factoryDefault);
+                    _staleDefaultLogged = true;
+                }
                 return;
             }
             if (persistedDefault != _defaultValue) {
