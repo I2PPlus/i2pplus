@@ -346,3 +346,345 @@ msgstr "Адреса, добавленные в основную адресну�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "address book"
+msgstr "адресная книга"
+
+msgid "Router"
+msgstr "Маршрутизатор"
+
+msgid "Master"
+msgstr "Основная"
+
+msgid "Private"
+msgstr "Приватная"
+
+msgid "Published"
+msgstr "Опубликованная"
+
+msgid "Blacklist"
+msgstr "Чёрный список"
+
+msgid "Configuration"
+msgstr "Настройки"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Book"
+msgstr "Книга"
+
+msgid "No entries"
+msgstr "Нет записей"
+
+msgid "Add new destination"
+msgstr "Добавить новый адрес назначения"
+
+msgid "Import from hosts.txt file"
+msgstr "Импорт из файла hosts.txt"
+
+msgid "other"
+msgstr "прочие"
+
+msgid "Export in hosts.txt format"
+msgstr "Экспорт в формате hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Экспорт результатов в формате hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Экспорт книги в формате hosts.txt"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "latest"
+msgstr "недавние"
+
+msgid "Alive"
+msgstr "Доступен"
+
+msgid "Dead"
+msgstr "Недоступен"
+
+msgid "all"
+msgstr "все"
+
+msgid "Info"
+msgstr "Инфо"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Hostname"
+msgstr "Имя хоста"
+
+msgid "Encryption"
+msgstr "Шифрование"
+
+msgid "Link (b32)"
+msgstr "Ссылка (b32)"
+
+msgid "Destination"
+msgstr "Адрес назначения"
+
+msgid "Added"
+msgstr "Добавлен"
+
+msgid "Status"
+msgstr "Состояние"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Выберите узлы для удаления из адресной книги"
+
+msgid "More information on this entry"
+msgstr "Подробнее об этой записи"
+
+msgid "unknown"
+msgstr "неизвестно"
+
+msgid "Base 32 address"
+msgstr "Адрес Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Ссылка на помощник: поделиться адресом узла с возможностью добавить его в адресную книгу"
+
+msgid "Mark for deletion"
+msgstr "Отметить для удаления"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "This book currently contains no entries."
+msgstr "В этой книге пока нет записей."
+
+msgid "e.g. newdomain.i2p"
+msgstr "например newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 или B32"
+
+msgid "Full destination or b32 address"
+msgstr "Полный адрес назначения или адрес b32"
+
+msgid "Select file"
+msgstr "Выберите файл"
+
+msgid "blacklist"
+msgstr "чёрный список"
+
+msgid "Blacklist Management"
+msgstr "Управление чёрным списком"
+
+msgid "File location"
+msgstr "Расположение файла"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Введите адреса I2P, которые нужно внести в чёрный список (по одному в строке)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Файл чёрного списка содержит имена хостов I2P, доступ к которым нужно заблокировать через HTTP-прокси и исключить из показа в адресной книге."
+
+msgid "configuration"
+msgstr "настройки"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker уже выполняет проверку"
+
+msgid "Run HostChecker"
+msgstr "Запустить HostChecker"
+
+msgid "Hints"
+msgstr "Подсказки"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Пути к файлам и каталогам здесь отсчитываются от рабочего каталога адресной книги — обычно ~/.i2p/addressbook/ (Linux) или %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Если вы хотите добавить записи в адресную книгу вручную, добавляйте их в приватную или основную адресную книгу."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Адресную книгу маршрутизатора и опубликованную адресную книгу обновляет приложение адресной книги."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "При публикации адресной книги туда попадают ВСЕ адреса назначения из основной адресной книги и адресной книги маршрутизатора."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Используйте приватную адресную книгу для приватных адресов — они не публикуются."
+
+msgid "Options"
+msgstr "Параметры"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Файл со списком URL-адресов подписок (изменять не нужно)"
+
+msgid "Update interval in hours"
+msgstr "Интервал обновления в часах"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Ваш общедоступный файл hosts.txt (укажите путь в корневом каталоге вашего веб-сервера)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Ваш файл hosts.txt (не изменяйте)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Ваша личная адресная книга; эти узлы будут опубликованы"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Ваша приватная адресная книга; она никогда не публикуется"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Порт вашего eepProxy (изменять не нужно)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Имя хоста вашего eepProxy (изменять не нужно)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Обновлять ли опубликованную адресную книгу"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Файл с заголовками etags из полученных URL-адресов подписок (изменять не нужно)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Файл с отметками времени изменения для каждого полученного URL-адреса подписки (изменять не нужно)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Файл для журнала активности (при желании укажите /dev/null)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Название темы, которая заменяет выбранную в консоли (по умолчанию — тема, выбранная в консоли)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Интервал (в часах) запуска HostChecker (по умолчанию 4 часа)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Максимум одновременных проверок при запуске HostChecker (по умолчанию 16, максимум 160)"
+
+msgid "delete hosts"
+msgstr "удаление узлов"
+
+msgid "addressbook"
+msgstr "адресная книга"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Address Helper"
+msgstr "Адресный помощник"
+
+msgid "link"
+msgstr "ссылка"
+
+msgid "Encoded Name"
+msgstr "Закодированное имя"
+
+msgid "Base 32 Address"
+msgstr "Адрес Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Хеш Base 64"
+
+msgid "Public Key"
+msgstr "Открытый ключ"
+
+msgid "Signing Key"
+msgstr "Ключ подписи"
+
+msgid "Certificate"
+msgstr "Сертификат"
+
+msgid "Validated"
+msgstr "Проверен"
+
+msgid "no"
+msgstr "нет"
+
+msgid "yes"
+msgstr "да"
+
+msgid "Added Date"
+msgstr "Дата добавления"
+
+msgid "Last Modified"
+msgstr "Последнее изменение"
+
+msgid "Notes"
+msgstr "Заметки"
+
+msgid "Add notes about domain"
+msgstr "Добавьте заметки о домене"
+
+msgid "Visual Identification for"
+msgstr "Визуальное опознавание для"
+
+msgid "Create your own identification images"
+msgstr "Создайте собственные изображения для опознавания"
+
+msgid "Launch Image Generator"
+msgstr "Запустить генератор изображений"
+
+msgid "Introduction"
+msgstr "Введение"
+
+msgid "What is the addressbook?"
+msgstr "Что такое адресная книга?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Приложение адресной книги входит в состав вашей установки I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Оно регулярно обновляет ваш файл hosts.txt из распределённых источников, так называемых \"подписок\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Подписаться на дополнительные сайты просто: добавьте их в файл <a href=\"subscriptions\">подписок</a>."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Подробнее о правилах именования в I2P читайте в <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>обзоре</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Как работает приложение адресной книги?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Приложение регулярно опрашивает ваши подписки и объединяет их содержимое с адресной книгой \"маршрутизатора\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Затем оно также объединяет вашу \"основную\" адресную книгу с адресной книгой маршрутизатора."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Если это настроено, адресная книга маршрутизатора записывается в \"опубликованную\" адресную книгу, которая будет общедоступна, если вы работаете через eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Маршрутизатор также использует приватную адресную книгу, которая не объединяется и не публикуется."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Узлы из приватной адресной книги доступны вам, но их адреса никогда не распространяются."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Приватную адресную книгу также можно использовать для альтернативных имён узлов из других адресных книг."
+
+msgid "subscription log"
+msgstr "журнал подписки"
+
+msgid "Subscription Log"
+msgstr "Журнал подписки"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Последние (без некорректных доменов)"
+
+msgid "subscriptions"
+msgstr "подписки"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Файл подписок содержит список URL-адресов i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Приложение адресной книги регулярно проверяет этот список на наличие новых eepsite."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Эти URL-адреса указывают на опубликованные файлы hosts.txt."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Список URL-адресов подписок приведён в разделе FAQ."

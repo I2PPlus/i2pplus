@@ -338,3 +338,345 @@ msgstr "Endereços adicionados manualmente ao catálogo de endereços mestre ser
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Os hosts que você recebe de suas assinaturas serão mesclados com o catálogo de endereços do seu roteador."
+
+msgid "Import"
+msgstr "Importar"
+
+msgid "address book"
+msgstr "livro de endereços"
+
+msgid "Router"
+msgstr "Roteador"
+
+msgid "Master"
+msgstr "Mestre"
+
+msgid "Private"
+msgstr "Privado"
+
+msgid "Published"
+msgstr "Publicado"
+
+msgid "Blacklist"
+msgstr "Lista negra"
+
+msgid "Configuration"
+msgstr "Configuração"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "Book"
+msgstr "Livro"
+
+msgid "No entries"
+msgstr "Sem entradas"
+
+msgid "Add new destination"
+msgstr "Adicionar novo destino"
+
+msgid "Import from hosts.txt file"
+msgstr "Importar do arquivo hosts.txt"
+
+msgid "other"
+msgstr "outros"
+
+msgid "Export in hosts.txt format"
+msgstr "Exportar em formato hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Exportar os resultados em formato hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Exportar o livro em formato hosts.txt"
+
+msgid "Search"
+msgstr "Pesquisar"
+
+msgid "latest"
+msgstr "recentes"
+
+msgid "Alive"
+msgstr "Online"
+
+msgid "Dead"
+msgstr "Inacessível"
+
+msgid "all"
+msgstr "todos"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Hostname"
+msgstr "Nome de host"
+
+msgid "Encryption"
+msgstr "Criptografia"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Destino"
+
+msgid "Added"
+msgstr "Adicionado"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Selecionar hosts para exclusão do livro de endereços"
+
+msgid "More information on this entry"
+msgstr "Mais informações sobre esta entrada"
+
+msgid "unknown"
+msgstr "desconhecido"
+
+msgid "Base 32 address"
+msgstr "Endereço Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Link auxiliar para compartilhar o endereço do host com a opção de adicionar ao livro de endereços"
+
+msgid "Mark for deletion"
+msgstr "Marcar para exclusão"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "This book currently contains no entries."
+msgstr "Este livro não contém nenhuma entrada no momento."
+
+msgid "e.g. newdomain.i2p"
+msgstr "ex.: newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 ou B32"
+
+msgid "Full destination or b32 address"
+msgstr "Destino completo ou endereço b32"
+
+msgid "Select file"
+msgstr "Selecionar arquivo"
+
+msgid "blacklist"
+msgstr "lista negra"
+
+msgid "Blacklist Management"
+msgstr "Gerenciamento da lista negra"
+
+msgid "File location"
+msgstr "Local do arquivo"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Digite os endereços I2P a adicionar à lista negra (um por linha)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "O arquivo da lista negra contém uma lista de nomes de host I2P que devem ter o acesso bloqueado pelo proxy HTTP e ser excluídos da exibição do livro de endereços."
+
+msgid "configuration"
+msgstr "configuração"
+
+msgid "HostChecker is already running a scan"
+msgstr "O HostChecker já está executando uma varredura"
+
+msgid "Run HostChecker"
+msgstr "Executar HostChecker"
+
+msgid "Hints"
+msgstr "Dicas"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Os caminhos de arquivos e diretórios aqui são relativos ao diretório de trabalho do livro de endereços, que normalmente é ~/.i2p/addressbook/ (Linux) ou %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Se quiser adicionar linhas manualmente a um livro de endereços, adicione-as aos livros de endereços privado ou mestre."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "O livro de endereços do roteador e o publicado são atualizados pelo aplicativo de livro de endereços."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Quando você publica seu livro de endereços, TODOS os destinos dos livros mestre e do roteador aparecem nele."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Use o livro de endereços privado para destinos privados; eles não são publicados."
+
+msgid "Options"
+msgstr "Opções"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Arquivo com a lista de URLs de assinaturas (não precisa alterar)"
+
+msgid "Update interval in hours"
+msgstr "Intervalo de atualização em horas"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Seu arquivo hosts.txt público (escolha um caminho dentro da raiz de documentos do seu servidor web)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Seu hosts.txt (não altere)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Seu livro de endereços pessoal; estes hosts serão publicados"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Seu livro de endereços privado; nunca é publicado"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Porta do seu eepProxy (não precisa alterar)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Nome de host do seu eepProxy (não precisa alterar)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Se o livro de endereços publicado deve ser atualizado"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Arquivo com o cabeçalho etags das URLs de assinatura consultadas (não precisa alterar)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Arquivo com a data de modificação de cada URL de assinatura consultada (não precisa alterar)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Arquivo onde registrar as atividades (altere para /dev/null se preferir)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Nome do tema de substituição a usar (por padrão, o tema escolhido no console)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Intervalo (em horas) para executar o verificador de hosts (padrão: 4 horas)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Número máximo de pings simultâneos ao executar o verificador de hosts (padrão: 16, máximo: 160)"
+
+msgid "delete hosts"
+msgstr "apagar hosts"
+
+msgid "addressbook"
+msgstr "livro de endereços"
+
+msgid "Details"
+msgstr "Detalhes"
+
+msgid "Address Helper"
+msgstr "Auxiliar de endereço"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Nome codificado"
+
+msgid "Base 32 Address"
+msgstr "Endereço Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Hash Base 64"
+
+msgid "Public Key"
+msgstr "Chave pública"
+
+msgid "Signing Key"
+msgstr "Chave de assinatura"
+
+msgid "Certificate"
+msgstr "Certificado"
+
+msgid "Validated"
+msgstr "Validado"
+
+msgid "no"
+msgstr "não"
+
+msgid "yes"
+msgstr "sim"
+
+msgid "Added Date"
+msgstr "Data de adição"
+
+msgid "Last Modified"
+msgstr "Última modificação"
+
+msgid "Notes"
+msgstr "Notas"
+
+msgid "Add notes about domain"
+msgstr "Adicionar notas sobre o domínio"
+
+msgid "Visual Identification for"
+msgstr "Identificação visual de"
+
+msgid "Create your own identification images"
+msgstr "Crie suas próprias imagens de identificação"
+
+msgid "Launch Image Generator"
+msgstr "Abrir o gerador de imagens"
+
+msgid "Introduction"
+msgstr "Introdução"
+
+msgid "What is the addressbook?"
+msgstr "O que é o livro de endereços?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "O aplicativo de livro de endereços faz parte da sua instalação do I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Ele atualiza regularmente seu arquivo hosts.txt a partir de fontes distribuídas ou \"assinaturas\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Assinar sites adicionais é fácil: basta adicioná-los ao seu arquivo de <a href=\"subscriptions\">assinaturas</a>."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Para mais informações sobre nomes no I2P, veja <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>a visão geral</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Como funciona o aplicativo de livro de endereços?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "O aplicativo de livro de endereços consulta regularmente suas assinaturas e mescla o conteúdo delas no seu livro de endereços do \"roteador\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Em seguida, ele também mescla seu livro de endereços \"mestre\" no livro de endereços do roteador."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Se estiver configurado, o livro de endereços do roteador é gravado no livro de endereços \"publicado\", que ficará disponível publicamente se você tiver um eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "O roteador também usa um livro de endereços privado, que não é mesclado nem publicado."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Você pode acessar os hosts do livro de endereços privado, mas seus endereços nunca são distribuídos a terceiros."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "O livro de endereços privado também pode ser usado para apelidos de hosts presentes nos seus outros livros de endereços."
+
+msgid "subscription log"
+msgstr "registro de assinaturas"
+
+msgid "Subscription Log"
+msgstr "Registro de Assinaturas"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Mais recentes (excluindo domínios inválidos)"
+
+msgid "subscriptions"
+msgstr "assinaturas"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "O arquivo de assinaturas contém uma lista de URLs i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "O aplicativo de livro de endereços verifica regularmente essa lista em busca de novos eepsites."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Essas URLs apontam para arquivos hosts.txt publicados."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Consulte o FAQ para ver uma lista de URLs de assinatura."

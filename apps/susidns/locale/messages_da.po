@@ -338,3 +338,345 @@ msgstr "Adresser, der manuelt tilføjes til din masteradressebog, vil fusionere 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Værter, du modtager fra dine abonnementer, fusionerer med din routeradressebog."
+
+msgid "Import"
+msgstr "Import"
+
+msgid "address book"
+msgstr "adressebog"
+
+msgid "Router"
+msgstr "Router"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "Published"
+msgstr "Udgivet"
+
+msgid "Blacklist"
+msgstr "Sortliste"
+
+msgid "Configuration"
+msgstr "Konfiguration"
+
+msgid "Help"
+msgstr "Hjælp"
+
+msgid "Book"
+msgstr "Bog"
+
+msgid "No entries"
+msgstr "Ingen poster"
+
+msgid "Add new destination"
+msgstr "Tilføj ny destination"
+
+msgid "Import from hosts.txt file"
+msgstr "Importér fra hosts.txt-fil"
+
+msgid "other"
+msgstr "andet"
+
+msgid "Export in hosts.txt format"
+msgstr "Eksportér i hosts.txt-format"
+
+msgid "Export results in hosts.txt format"
+msgstr "Eksportér resultater i hosts.txt-format"
+
+msgid "Export book in hosts.txt format"
+msgstr "Eksportér bogen i hosts.txt-format"
+
+msgid "Search"
+msgstr "Søg"
+
+msgid "latest"
+msgstr "seneste"
+
+msgid "Alive"
+msgstr "I live"
+
+msgid "Dead"
+msgstr "Død"
+
+msgid "all"
+msgstr "alle"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Hostname"
+msgstr "Værtsnavn"
+
+msgid "Encryption"
+msgstr "Kryptering"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Added"
+msgstr "Tilføjet"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Vælg værter til sletning fra adressebogen"
+
+msgid "More information on this entry"
+msgstr "Mere information om denne post"
+
+msgid "unknown"
+msgstr "ukendt"
+
+msgid "Base 32 address"
+msgstr "base 32-adresse"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Hjælpelink til at dele værtsadresse med mulighed for at føje den til adressebogen"
+
+msgid "Mark for deletion"
+msgstr "Markér til sletning"
+
+msgid "Cancel"
+msgstr "Annuller"
+
+msgid "This book currently contains no entries."
+msgstr "Denne bog indeholder i øjeblikket ingen poster."
+
+msgid "e.g. newdomain.i2p"
+msgstr "f.eks. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 eller B32"
+
+msgid "Full destination or b32 address"
+msgstr "Fuld destination eller b32-adresse"
+
+msgid "Select file"
+msgstr "Vælg fil"
+
+msgid "blacklist"
+msgstr "sortliste"
+
+msgid "Blacklist Management"
+msgstr "Håndtering af sortliste"
+
+msgid "File location"
+msgstr "Placering af fil"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Indtast I2P-adresser, der skal sortlistes (én per linje)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Sortlistefilen indeholder en liste over I2P-værtsnavne, der skal blokeres for adgang via HTTP-proxyen og holdes ude af visningen i adressebogen."
+
+msgid "configuration"
+msgstr "konfiguration"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker kører allerede en scanning"
+
+msgid "Run HostChecker"
+msgstr "Kør HostChecker"
+
+msgid "Hints"
+msgstr "Tips"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Fil- og mappestier her er relative til adressebogens arbejdsmappe, som normalt er ~/.i2p/addressbook/ (Linux) eller %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Hvis du vil tilføje linjer manuelt til en adressebog, skal du tilføje dem til den private eller masteradressebogen."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Routeradressebogen og den udgivne adressebog opdateres af adressebogsprogrammet."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Når du udgiver din adressebog, vises ALLE destinationer fra master- og routeradressebogen der."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Brug den private adressebog til private destinationer - de udgives ikke."
+
+msgid "Options"
+msgstr "Indstillinger"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Fil med listen over abonnements-URL'er (behøver ikke ændres)"
+
+msgid "Update interval in hours"
+msgstr "Opdateringsinterval i timer"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Din offentlige hosts.txt-fil (vælg en sti i din webservers dokumentroot)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Din hosts.txt (ændr ikke)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Din personlige adressebog - disse værter udgives"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Din private adressebog - den udgives aldrig"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Port til din eepProxy (behøver ikke ændres)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Værtsnavn for din eepProxy (behøver ikke ændres)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Om den udgivne adressebog skal opdateres"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Fil med etags-header fra de hentede abonnements-URL'er (behøver ikke ændres)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Fil med ændringstidspunkt for hver hentet abonnements-URL (behøver ikke ændres)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Fil til at logge aktivitet til (sæt den til /dev/null, hvis du vil)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Navn på det tema, der skal tilsidesættes (som standard er det tema, der er valgt i konsollen)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interval (i timer) mellem kørsler af HostChecker (standard er 4 timer)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Maksimalt antal samtidige pings ved kørsel af HostChecker (standard er 16, maksimum er 160)"
+
+msgid "delete hosts"
+msgstr "slet værter"
+
+msgid "addressbook"
+msgstr "adressebog"
+
+msgid "Details"
+msgstr "Detaljer"
+
+msgid "Address Helper"
+msgstr "Adressehjælper"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Kodet navn"
+
+msgid "Base 32 Address"
+msgstr "base 32-adresse"
+
+msgid "Base 64 Hash"
+msgstr "base 64-hash"
+
+msgid "Public Key"
+msgstr "Offentlig nøgle"
+
+msgid "Signing Key"
+msgstr "Signaturnøgle"
+
+msgid "Certificate"
+msgstr "Certifikat"
+
+msgid "Validated"
+msgstr "Valideret"
+
+msgid "no"
+msgstr "nej"
+
+msgid "yes"
+msgstr "ja"
+
+msgid "Added Date"
+msgstr "Tilføjelsesdato"
+
+msgid "Last Modified"
+msgstr "Sidst ændret"
+
+msgid "Notes"
+msgstr "Noter"
+
+msgid "Add notes about domain"
+msgstr "Tilføj noter om domænet"
+
+msgid "Visual Identification for"
+msgstr "Visuel identifikation for"
+
+msgid "Create your own identification images"
+msgstr "Lav dine egne identifikationsbilleder"
+
+msgid "Launch Image Generator"
+msgstr "Start billedgenerator"
+
+msgid "Introduction"
+msgstr "Introduktion"
+
+msgid "What is the addressbook?"
+msgstr "Hvad er adressebogen?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Adressebogsprogrammet er en del af din I2P-installation."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Det opdaterer regelmæssigt din hosts.txt-fil fra distribuerede kilder eller \"abonnementer\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Det er nemt at abonnere på flere sites - læg dem bare ind i din <a href=\"subscriptions\">abonnementsfil</a>."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Se <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>oversigten</a> for at læse mere om navngivning i I2P."
+
+msgid "How does the addressbook application work?"
+msgstr "Hvordan fungerer adressebogsprogrammet?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Adressebogsprogrammet henter regelmæssigt dine abonnementer og fletter deres indhold ind i din \"router\"-adressebog."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Derefter fletter den også din \"master\"-adressebog ind i routeradressebogen."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Hvis det er konfigureret, skrives routeradressebogen nu til den \"udgivne\" adressebog, som er offentligt tilgængelig, hvis du kører et eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Routeren bruger også en privat adressebog, som hverken flettes eller udgives."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Du kan tilgå værterne i den private adressebog, men deres adresser distribueres aldrig til andre."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Den private adressebog kan også bruges til aliaser for værter i dine andre adressebøger."
+
+msgid "subscription log"
+msgstr "abonnementslog"
+
+msgid "Subscription Log"
+msgstr "Abonnementslog"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Nyeste (undtagen dårlige domæner)"
+
+msgid "subscriptions"
+msgstr "abonnementer"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Abonnementsfilen indeholder en liste over i2p-URL'er."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Adressebogsprogrammet tjekker regelmæssigt denne liste efter nye eepsites."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "De URL'er henviser til udgivne hosts.txt-filer."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Se FAQ'en for en liste over abonnements-URL'er."

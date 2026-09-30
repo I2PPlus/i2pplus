@@ -338,3 +338,345 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
+
+msgid "Import"
+msgstr "Impordi"
+
+msgid "address book"
+msgstr "aadressiraamat"
+
+msgid "Router"
+msgstr "Rooter"
+
+msgid "Master"
+msgstr "Põhi"
+
+msgid "Private"
+msgstr "Privaatne"
+
+msgid "Published"
+msgstr "Avaldatud"
+
+msgid "Blacklist"
+msgstr "Must nimekiri"
+
+msgid "Configuration"
+msgstr "Seaded"
+
+msgid "Help"
+msgstr "Abi"
+
+msgid "Book"
+msgstr "Raamat"
+
+msgid "No entries"
+msgstr "Kirjeid pole"
+
+msgid "Add new destination"
+msgstr "Lisa uus sihtkoht"
+
+msgid "Import from hosts.txt file"
+msgstr "Impordi hosts.txt failist"
+
+msgid "other"
+msgstr "muu"
+
+msgid "Export in hosts.txt format"
+msgstr "Ekspordi hosts.txt vormingus"
+
+msgid "Export results in hosts.txt format"
+msgstr "Ekspordi tulemused hosts.txt vormingus"
+
+msgid "Export book in hosts.txt format"
+msgstr "Ekspordi raamat hosts.txt vormingus"
+
+msgid "Search"
+msgstr "Otsi"
+
+msgid "latest"
+msgstr "uusim"
+
+msgid "Alive"
+msgstr "Kättesaadav"
+
+msgid "Dead"
+msgstr "Kättesaamatu"
+
+msgid "all"
+msgstr "kõik"
+
+msgid "Info"
+msgstr "Teave"
+
+msgid "Type"
+msgstr "Tüüp"
+
+msgid "Hostname"
+msgstr "Määri nimi"
+
+msgid "Encryption"
+msgstr "Krüpteerimine"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Sihtkoht"
+
+msgid "Added"
+msgstr "Lisatud"
+
+msgid "Status"
+msgstr "Olek"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Vali aadressiraamatust kustutatavad hostid"
+
+msgid "More information on this entry"
+msgstr "Lisainfo selle kirje kohta"
+
+msgid "unknown"
+msgstr "tundmatu"
+
+msgid "Base 32 address"
+msgstr "Base 32 aadress"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Aadressiabi link hosti aadressi jagamiseks koos võimalusega lisada see aadressiraamatusse"
+
+msgid "Mark for deletion"
+msgstr "Märgi kustutamiseks"
+
+msgid "Cancel"
+msgstr "Loobu"
+
+msgid "This book currently contains no entries."
+msgstr "Selles raamatus pole praegu kirjeid."
+
+msgid "e.g. newdomain.i2p"
+msgstr "nt newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 või B32"
+
+msgid "Full destination or b32 address"
+msgstr "Täielik sihtkoht või b32 aadress"
+
+msgid "Select file"
+msgstr "Vali fail"
+
+msgid "blacklist"
+msgstr "must nimekiri"
+
+msgid "Blacklist Management"
+msgstr "Musta nimekirja haldamine"
+
+msgid "File location"
+msgstr "Faili asukoht"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Sisestage musta nimekirja I2P aadressid (üks rea kohta)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Musta nimekirja fail sisaldab nende I2P määri nimede loendit, millele tuleb HTTP vahendusserveri kaudu ligipääs blokeerida ja mis jäetakse aadressiraamatus näitamisest välja."
+
+msgid "configuration"
+msgstr "seaded"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker juba käivitab skaneerimist"
+
+msgid "Run HostChecker"
+msgstr "Käivita HostChecker"
+
+msgid "Hints"
+msgstr "Näpunäited"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Siin toodud faili- ja kaustateed on suhtelised aadressiraamatu töökaustaga, mis on tavaliselt ~/.i2p/addressbook/ (Linux) või %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Kui soovid aadressiraamatusse ridu käsitsi lisada, lisa need privaatsesse või põhi aadressiraamatusse."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Rooteri- ja avaldatud aadressiraamatut uuendab aadressiraamatu rakendus."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Kui avaldad oma aadressiraamatu, ilmub sinna KÕIK põhi- ja rooteri aadressiraamatute sihtkoht."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Privaatsete sihtkohtade jaoks kasuta privaatset aadressiraamatut, neid ei avaldata."
+
+msgid "Options"
+msgstr "Valikud"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Fail tellimuste URL-de loendiga (pole vaja muuta)"
+
+msgid "Update interval in hours"
+msgstr "Uuendamise intervall tundides"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Sinu avalik hosts.txt fail (vali tee oma veebiserveri dokumendijuure sees)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Sinu hosts.txt (ära muuda)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Sinu isiklik aadressiraamat, neid hoste avaldatakse"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Sinu privaatne aadressiraamat, seda ei avaldata kunagi"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Sinu eepProxy port (pole vaja muuta)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Sinu eepProxy määri nimi (pole vaja muuta)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Kas uuendada avaldatud aadressiraamatut"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Fail haitud tellimuste URL-de etags päisega (pole vaja muuta)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Fail iga haitud tellimuse URL muutmise ajatempliga (pole vaja muuta)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Fail, kuhu kirjutatakse toimingute logi (soovi korral muuda /dev/null)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Kasutatava teema ülekirjutuse nimi (vaikeväärtus on konsoolis valitud teema)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Host checkeri käivitamise intervall tundides (vaikeväärtus on 4 tundi)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Host checkeri käivitamisel maksimaalne paralleelsete pingide arv (vaikeväärtus 16, maksimum 160)"
+
+msgid "delete hosts"
+msgstr "hostide kustutamine"
+
+msgid "addressbook"
+msgstr "aadressiraamat"
+
+msgid "Details"
+msgstr "Detailid"
+
+msgid "Address Helper"
+msgstr "Aadressiabi"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Kodeeritud nimi"
+
+msgid "Base 32 Address"
+msgstr "Base 32 aadress"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 räsi"
+
+msgid "Public Key"
+msgstr "Avalik võti"
+
+msgid "Signing Key"
+msgstr "Allkirjastusvõti"
+
+msgid "Certificate"
+msgstr "Sertifikaat"
+
+msgid "Validated"
+msgstr "Kontrollitud"
+
+msgid "no"
+msgstr "ei"
+
+msgid "yes"
+msgstr "jah"
+
+msgid "Added Date"
+msgstr "Lisamiskuupäev"
+
+msgid "Last Modified"
+msgstr "Viimati muudetud"
+
+msgid "Notes"
+msgstr "Märkused"
+
+msgid "Add notes about domain"
+msgstr "Lisa domeeni kohta märkuseid"
+
+msgid "Visual Identification for"
+msgstr "Visuaalne identifitseerimine"
+
+msgid "Create your own identification images"
+msgstr "Loo oma identifitseerimispildid"
+
+msgid "Launch Image Generator"
+msgstr "Käivita pildigeneraator"
+
+msgid "Introduction"
+msgstr "Sissejuhatus"
+
+msgid "What is the addressbook?"
+msgstr "Mis on aadressiraamat?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Aadressiraamatu rakendus on osa sinu I2P paigaldusest."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "See uuendab regulaarselt sinu hosts.txt faili hajutatud allikatest ehk \"tellimustest\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Tellimuste lisamine teistele saitidele on lihtne – lisa need lihtsalt oma <a href=\"subscriptions\">tellimuste</a> faili."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Lisainfo nimeandmete kohta I2P-s: <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>ülevaade</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Kuidas aadressiraamatu rakendus töötab?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Aadressiraamatu rakendus kontrollib regulaarselt sinu tellimusi ja liidab nende sisu sinu \"rooteri\" aadressiraamatusse."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Seejärel liidab see ka sinu \"põhi\" aadressiraamatu rooteri aadressiraamatusse."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Kui see on seadistatud, kirjutatakse rooteri aadressiraamat nüüd \"avaldatud\" aadressiraamatusse, mis on üldkättesaadav, kui käitad eepsaidi."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Rooter kasutab ka privaatset aadressiraamatut, mida ei liideta ega avaldata."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Privaatses aadressiraamatus olevaid hoste saad sina kasutada, kuid nende aadresse ei jagata kunagi teistele."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Privaatset aadressiraamatut saab kasutada ka teiste aadressiraamatute hostide aliaste jaoks."
+
+msgid "subscription log"
+msgstr "tellimuste logi"
+
+msgid "Subscription Log"
+msgstr "Tellimuste logi"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Kõige uuemad (halvad domeenid välja jäetud)"
+
+msgid "subscriptions"
+msgstr "tellimused"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Tellimuste fail sisaldab i2p URL-de loendit."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Aadressiraamatu rakendus kontrollib seda loendit regulaarselt uute eepsaidide leidmiseks."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Need URL-id viitavad avaldatud hosts.txt failidele."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Tellimuste URL-de loendi leidmiseks vaata FAQ-d."

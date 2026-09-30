@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: he\n"
@@ -35,7 +34,9 @@ msgid "Host name cannot contain \"{0}\""
 msgstr "שם המחשב אינו יכול להכיל את \"{0}\""
 
 #, java-format
-msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is"
+" unavailable in this JVM"
 msgstr "שם המחשב \"{0}\" דורש המרה ל-ASCII אך ספריית ההמרה אינה זמינה ב-JVM זה"
 
 msgid "Source"
@@ -118,8 +119,11 @@ msgid "Host name {0} is already in address book, unchanged."
 msgstr "שם המחשב {0} כבר נמצא בפנקס הכתובות, ללא שינוי."
 
 #, java-format
-msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "שם המחשב {0} כבר נמצא בפנקס הכתובות עם יעד שונה. לחץ על \"החלף\" כדי לדרוס."
+msgid ""
+"Host name {0} is already in address book with a different destination. Click"
+" \"Replace\" to overwrite."
+msgstr ""
+"שם המחשב {0} כבר נמצא בפנקס הכתובות עם יעד שונה. לחץ על \"החלף\" כדי לדרוס."
 
 msgid "Unable to resolve Base 32 address"
 msgstr "לא ניתן לפתור כתובת Base 32"
@@ -160,10 +164,16 @@ msgstr "פנקס הכתובות נשמר."
 msgid "ERROR: Could not write addressbook file."
 msgstr "שגיאה: לא ניתן לכתוב את קובץ פנקס הכתובות."
 
-msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
-msgstr "שליחת הטופס אינה תקינה, כנראה משום השתמשת בכפתור \"חזרה\" או \"טען מחדש\" בדפדפן שלך. נא לשלוח שוב."
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
+msgstr ""
+"שליחת הטופס אינה תקינה, כנראה משום השתמשת בכפתור \"חזרה\" או \"טען מחדש\" "
+"בדפדפן שלך. נא לשלוח שוב."
 
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
 msgstr "אם הבעיה נמשכת, ודא שהפעלת cookies בדפדפן שלך."
 
 msgid "Save"
@@ -280,23 +290,40 @@ msgstr "לא ניתן לעדכן את המינויים: פרוקסי HTTP אינ
 msgid "Subscriptions reloaded."
 msgstr "המינויים נטענו מחדש."
 
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "אם SusiDNS מוגדר לפרסם את פנקס הכתובות של הנתב, הרשומות יופיעו בפנקס הכתובות המפורסם שלך ויישמרו בקובץ hosts.txt לשיתוף."
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for"
+" sharing."
+msgstr ""
+"אם SusiDNS מוגדר לפרסם את פנקס הכתובות של הנתב, הרשומות יופיעו בפנקס הכתובות"
+" המפורסם שלך ויישמרו בקובץ hosts.txt לשיתוף."
 
 msgid "Published Addressbook"
 msgstr "פנקס כתובות מפורסם"
 
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "כדי להגדיר את SusiDNS לדחוף את פנקס הכתובות של הנתב אל פנקס הכתובות המפורסם שלך, הגדר 'should_publish=true' בדף ההגדרות."
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
+msgstr ""
+"כדי להגדיר את SusiDNS לדחוף את פנקס הכתובות של הנתב אל פנקס הכתובות המפורסם "
+"שלך, הגדר 'should_publish=true' בדף ההגדרות."
 
-msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
-msgstr "כל המחשבים המארחים הנגזרים מהמינויים יופיעו בפנקס הכתובות הזה, בנוסף לאלה שתוסיף ידנית כאן או לפנקס הכתובות הראשי שלך."
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
+msgstr ""
+"כל המחשבים המארחים הנגזרים מהמינויים יופיעו בפנקס הכתובות הזה, בנוסף לאלה "
+"שתוסיף ידנית כאן או לפנקס הכתובות הראשי שלך."
 
 msgid "Router Addressbook"
 msgstr "פנקס כתובות של הנתב"
 
-msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
-msgstr "מחשבים מארחים שתוסיף כאן ידנית לא יתפרסמו לעולם. ניתן גם להוסיף כאן כינויים למחשבים מארחים בפנקסי כתובות אחרים."
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
+msgstr ""
+"מחשבים מארחים שתוסיף כאן ידנית לא יתפרסמו לעולם. ניתן גם להוסיף כאן כינויים "
+"למחשבים מארחים בפנקסי כתובות אחרים."
 
 msgid "Private Addressbook"
 msgstr "פנקס כתובות פרטי"
@@ -304,23 +331,37 @@ msgstr "פנקס כתובות פרטי"
 msgid "Local Records"
 msgstr "רשומות מקומיות"
 
-msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
-msgstr "יישומי I2P (כולל פרוקסי HTTP) משתמשים במחשבים המארחים שבפנקסי הכתובות המקומיים שלך כדי לפתור שמות מחשב של .i2p."
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
+msgstr ""
+"יישומי I2P (כולל פרוקסי HTTP) משתמשים במחשבים המארחים שבפנקסי הכתובות "
+"המקומיים שלך כדי לפתור שמות מחשב של .i2p."
 
-msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
 msgstr "מינויים נוספים ניתן למצוא במקטע השאלות הנפוצות בדף העזרה של הנתב."
 
 msgid "Subscriptions"
 msgstr "מינויים"
 
-msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
-msgstr "מחשבים מארחים המתקבלים מהמינויים שלך נוספים לפנקס הכתובות של הנתב, ומסונכרנים אוטומטית (כל 12 שעות כברירת מחדל)."
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book,"
+" and are automatically synced (by default every 12 hours)."
+msgstr ""
+"מחשבים מארחים המתקבלים מהמינויים שלך נוספים לפנקס הכתובות של הנתב, "
+"ומסונכרנים אוטומטית (כל 12 שעות כברירת מחדל)."
 
 msgid "Configure Subscriptions"
 msgstr "הגדר מינויים"
 
-msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
-msgstr "אם תוסיף כאן מחשבים מארחים ידנית, הם ייכללו בפנקס הכתובות המפורסם שלך (אם מוגדר)."
+msgid ""
+"If you manually add hosts here, they will be included your Published address"
+" book (if configured)."
+msgstr ""
+"אם תוסיף כאן מחשבים מארחים ידנית, הם ייכללו בפנקס הכתובות המפורסם שלך (אם "
+"מוגדר)."
 
 msgid "Master Addressbook"
 msgstr "פנקס כתובות ראשי"
@@ -331,8 +372,11 @@ msgstr "ניתן לחיפוש לפי"
 msgid "I2P applications"
 msgstr "יישומי I2P"
 
-msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
-msgstr "פנקסי הכתובות הראשי, של הנתב והפרטי משמשים יחד כרשות ה-DNS עבור יישומי I2P."
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
+msgstr ""
+"פנקסי הכתובות הראשי, של הנתב והפרטי משמשים יחד כרשות ה-DNS עבור יישומי I2P."
 
 msgid "Optional,"
 msgstr "אופציונלי,"
@@ -340,11 +384,440 @@ msgstr "אופציונלי,"
 msgid "for websites"
 msgstr "לאתרי אינטרנט"
 
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "אם תגדיר את SusiDNS לפרסם את פנקס הכתובות של הנתב, הוא יייצא קובץ hosts.txt המכיל את כל המחשבים המארחים (כברירת מחדש לשורש ה-eepsite שלך)."
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export"
+" a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
+msgstr ""
+"אם תגדיר את SusiDNS לפרסם את פנקס הכתובות של הנתב, הוא יייצא קובץ hosts.txt "
+"המכיל את כל המחשבים המארחים (כברירת מחדש לשורש ה-eepsite שלך)."
 
-msgid "Addresses manually added to your Master address book will merge with your Router address book."
-msgstr "כתובות שנוספו ידנית לפנקס הכתובות הראשי שלך יתמזגו עם פנקס הכתובות של הנתב."
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
+msgstr ""
+"כתובות שנוספו ידנית לפנקס הכתובות הראשי שלך יתמזגו עם פנקס הכתובות של הנתב."
 
-msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
 msgstr "מחשבים מארחים שאתה מקבל מהמינויים שלך יתמזגו עם פנקס הכתובות של הנתב."
+
+msgid "Import"
+msgstr "ייבא"
+
+msgid "address book"
+msgstr "פנקס כתובות"
+
+msgid "Router"
+msgstr "נתב"
+
+msgid "Master"
+msgstr "ראשי"
+
+msgid "Private"
+msgstr "פרטי"
+
+msgid "Published"
+msgstr "מפורסם"
+
+msgid "Blacklist"
+msgstr "רשימת חסימה"
+
+msgid "Configuration"
+msgstr "הגדרות"
+
+msgid "Help"
+msgstr "עזרה"
+
+msgid "Book"
+msgstr "פנקס"
+
+msgid "No entries"
+msgstr "אין רשומות"
+
+msgid "Add new destination"
+msgstr "הוסף יעד חדש"
+
+msgid "Import from hosts.txt file"
+msgstr "ייבא מקובץ hosts.txt"
+
+msgid "other"
+msgstr "אחר"
+
+msgid "Export in hosts.txt format"
+msgstr "ייצא בפורמט hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "ייצא תוצאות בפורמט hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "ייצא את הפנקס בפורמט hosts.txt"
+
+msgid "Search"
+msgstr "חפש"
+
+msgid "latest"
+msgstr "אחרון"
+
+msgid "Alive"
+msgstr "חי"
+
+msgid "Dead"
+msgstr "מת"
+
+msgid "all"
+msgstr "הכל"
+
+msgid "Info"
+msgstr "מידע"
+
+msgid "Type"
+msgstr "סוג"
+
+msgid "Hostname"
+msgstr "שם מחשב"
+
+msgid "Encryption"
+msgstr "הצפנה"
+
+msgid "Link (b32)"
+msgstr "קישור (b32)"
+
+msgid "Destination"
+msgstr "יעד"
+
+msgid "Added"
+msgstr "נוסף"
+
+msgid "Status"
+msgstr "מצב"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "בחר מחשבים מארחים למחיקה מפנקס הכתובות"
+
+msgid "More information on this entry"
+msgstr "מידע נוסף על רשומה זו"
+
+msgid "unknown"
+msgstr "לא ידוע"
+
+msgid "Base 32 address"
+msgstr "כתובת Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr ""
+"קישור עוזר הכתובות לשיתוף כתובת המחשב המארח עם אפשרות להוסיף לפנקס הכתובות"
+
+msgid "Mark for deletion"
+msgstr "סמן למחיקה"
+
+msgid "Cancel"
+msgstr "ביטל"
+
+msgid "This book currently contains no entries."
+msgstr "פנקס זה אינו מכיל כרגע רשומות."
+
+msgid "e.g. newdomain.i2p"
+msgstr "לדוגמה newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 או B32"
+
+msgid "Full destination or b32 address"
+msgstr "יעד מלא או כתובת b32"
+
+msgid "Select file"
+msgstr "בחר קובץ"
+
+msgid "blacklist"
+msgstr "רשימת חסימה"
+
+msgid "Blacklist Management"
+msgstr "ניהול רשימת חסימה"
+
+msgid "File location"
+msgstr "מיקום הקובץ"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "הזן כתובות I2P לחסימה (אחת בכל שורה)"
+
+msgid ""
+"The blacklist file contains a list of I2P hostnames that should be blocked "
+"from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+"קובץ רשימת החסימה מכיל רשימה של שמות מחשב של I2P שיש לחסום גישה אליהם דרך "
+"פרוקסי HTTP, ולהוציג אותם מתצוגת פנקס הכתובות."
+
+msgid "configuration"
+msgstr "הגדרות"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker כבר מריץ סריקה"
+
+msgid "Run HostChecker"
+msgstr "הפעל את HostChecker"
+
+msgid "Hints"
+msgstr "רמזים"
+
+msgid ""
+"File and directory paths here are relative to the addressbook's working "
+"directory, which is normally ~/.i2p/addressbook/ (Linux) or "
+"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr ""
+"נתיבי הקבצים והתיקיות כאן הם יחסיים לתיקיית העבודה של פנקס הכתובות, שבדרך "
+"כלל היא ~/.i2p/addressbook/ (Linux) או %LOCALAPPDATA%\\I2P\\addressbook\\ "
+"(Windows)."
+
+msgid ""
+"If you want to manually add lines to an addressbook, add them to the private"
+" or master addressbooks."
+msgstr ""
+"אם ברצונך להוסיף שורות באופן ידני לפנקס כתובות, הוסף אותן לפנקסי הכתובות "
+"הפרטי או הראשי."
+
+msgid ""
+"The router addressbook and the published addressbook are updated by the "
+"addressbook application."
+msgstr ""
+"פנקס הכתובות של הנתב ופנקס הכתובות המפורסם מתעדכנים על ידי יישום פנקס "
+"הכתובות."
+
+msgid ""
+"When you publish your addressbook, ALL destinations from the master and "
+"router addressbooks appear there."
+msgstr ""
+"כאשר אתה מפרסם את פנקס הכתובות שלך, כל היעדים מפנקסי הכתובות הראשי ושל הנתב "
+"מופיעים שם."
+
+msgid ""
+"Use the private addressbook for private destinations, these are not "
+"published."
+msgstr "השתמש בפנקס הכתובות הפרטי עבור יעדים פרטיים, אלה אינם מפורסמים."
+
+msgid "Options"
+msgstr "אפשרויות"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "קובץ המכיל את רשימת כתובות ה-URL של המינויים (אין צורך לשנות)"
+
+msgid "Update interval in hours"
+msgstr "מרווח עדכון בשעות"
+
+msgid ""
+"Your public hosts.txt file (choose a path within your webserver document "
+"root)"
+msgstr ""
+"קובץ ה-hosts.txt הציבורי שלך (בחר נתיב בתוך שורש המסמכים של שרת האינטרנט "
+"שלך)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "קובץ ה-hosts.txt שלך (אל תשנה)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "פנקס הכתובות האישי שלך, מחשבים מארחים אלה יפורסמו"
+
+msgid "Your private addressbook, it is never published"
+msgstr "פנקס הכתובות הפרטי שלך, הוא לעולם אינו מפורסם"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "פורט עבור ה-eepProxy שלך (אין צורך לשנות)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "שם מחשב עבור ה-eepProxy שלך (אין צורך לשנות)"
+
+msgid "Whether to update the published addressbook"
+msgstr "אם לעדכן את פנקס הכתובות המפורסם"
+
+msgid ""
+"File containing the etags header from the fetched subscription URLs (no need"
+" to change)"
+msgstr ""
+"קובץ המכיל את כותרת ה-etags מכתובות ה-URL של המינויים שנאספו (אין צורך "
+"לשנות)"
+
+msgid ""
+"File containing the modification timestamp for each fetched subscription URL"
+" (no need to change)"
+msgstr ""
+"קובץ המכיל את חותמת זמן השינוי עבור כל כתובת URL של מינוי שנאספה (אין צורך "
+"לשנות)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "קובץ ליומן הפעילות (שנה ל-/dev/null אם תרצה)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr ""
+"שם ערכת הנושא לעקיפות שיש להשתמש (ברירת המחדל היא ערכת הנושא שנבחרה במסוף)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "מרווח (בשעות) להרצת בודק המחשבים המארחים (ברירת המחדל היא 4 שעות)"
+
+msgid ""
+"Maximum concurrent pings when running host checker (Default is 16, max is "
+"160)"
+msgstr ""
+"מספר מרבי של pings מקביליים בעת הרצת בודק המחשבים המארחים (ברירת המחדל היא "
+"16, המרבי הוא 160)"
+
+msgid "delete hosts"
+msgstr "מחיקת מארחים"
+
+msgid "addressbook"
+msgstr "פנקס כתובות"
+
+msgid "Details"
+msgstr "פרטים"
+
+msgid "Address Helper"
+msgstr "עוזר הכתובות"
+
+msgid "link"
+msgstr "קישור"
+
+msgid "Encoded Name"
+msgstr "שם מקודד"
+
+msgid "Base 32 Address"
+msgstr "כתובת Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Hash של Base 64"
+
+msgid "Public Key"
+msgstr "מפתח ציבורי"
+
+msgid "Signing Key"
+msgstr "מפתח חתימה"
+
+msgid "Certificate"
+msgstr "תעודה"
+
+msgid "Validated"
+msgstr "מאומת"
+
+msgid "no"
+msgstr "לא"
+
+msgid "yes"
+msgstr "כן"
+
+msgid "Added Date"
+msgstr "תאריך הוספה"
+
+msgid "Last Modified"
+msgstr "תאריך שינוי אחרון"
+
+msgid "Notes"
+msgstr "הערות"
+
+msgid "Add notes about domain"
+msgstr "הוסף הערות על הדומיין"
+
+msgid "Visual Identification for"
+msgstr "זיהוי חזותי עבור"
+
+msgid "Create your own identification images"
+msgstr "צור תמונות זיהוי משלך"
+
+msgid "Launch Image Generator"
+msgstr "הפעל את מחולל התמונות"
+
+msgid "Introduction"
+msgstr "מבוא"
+
+msgid "What is the addressbook?"
+msgstr "מהו פנקס כתובות?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "יישום פנקס הכתובות הוא חלק מהתקנת ה-I2P שלך."
+
+msgid ""
+"It regularly updates your hosts.txt file from distributed sources or "
+"\"subscriptions\"."
+msgstr ""
+"הוא מעדכן באופן קבוע את קובץ ה-hosts.txt שלך ממקורות מבוזרים או "
+"מ\"מינויים\"."
+
+msgid ""
+"Subscribing to additional sites is easy, just add them to your <a "
+"href=\"subscriptions\">subscriptions</a> file."
+msgstr ""
+"הרשמה לאתרים נוספים היא קלה, פשוט הוסף אותם ל<a href=\"subscriptions\">קובץ "
+"המינויים</a> שלך."
+
+msgid ""
+"For more information on naming in I2P, see <a "
+"href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr ""
+"למידע נוסף על השמות ב-I2P, ראה את <a "
+"href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>הסקירה</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "כיצד עובד יישום פנקס הכתובות?"
+
+msgid ""
+"The addressbook application regularly polls your subscriptions and merges "
+"their content into your \"router\" address book."
+msgstr ""
+"יישום פנקס הכתובות סוקר באופן קבוע את המינויים שלך וממזג את תוכנם אל פנקס "
+"הכתובות של \"הנתב\"."
+
+msgid ""
+"Then it merges your \"master\" address book into the router address book as "
+"well."
+msgstr ""
+"לאחר מכן הוא ממזג גם את פנקס הכתובות \"הראשי\" שלך אל פנקס הכתובות של הנתב."
+
+msgid ""
+"If configured, the router address book is now written to the \"published\" "
+"address book, which will be publicly available if you are running an "
+"eepsite."
+msgstr ""
+"אם מוגדר, פנקס הכתובות של הנתב נכתב כעת אל פנקס הכתובות \"המפורסם\", אשר "
+"יהיה זמין בציבור אם אתה מפעיל eepsite."
+
+msgid ""
+"The router also uses a private address book, which is not merged or "
+"published."
+msgstr "הנתב משתמש גם בפנקס כתובות פרטי, אשר אינו ממוזג ואינו מפורסם."
+
+msgid ""
+"Hosts in the private address book can be accessed by you but their addresses"
+" are never distributed to others."
+msgstr ""
+"מחשבים מארחים בפנקס הכתובות הפרטי נגישים לך, אך כתובותיהם לעולם אינן מופצות "
+"לאחרים."
+
+msgid ""
+"The private address book can also be used for aliases of hosts in your other"
+" address books."
+msgstr ""
+"ניתן להשתמש בפנקס הכתובות הפרטי גם עבור כינויים של מחשבים מארחים בפנקסי "
+"הכתובות האחרים שלך."
+
+msgid "subscription log"
+msgstr "יומן המינויים"
+
+msgid "Subscription Log"
+msgstr "יומן המינויים"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "האחרונים ביותר (למעט דומיינים פגומים)"
+
+msgid "subscriptions"
+msgstr "מינויים"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "קובץ המינויים מכיל רשימה של כתובות URL של i2p."
+
+msgid ""
+"The addressbook application regularly checks this list for new eepsites."
+msgstr "יישום פנקס הכתובות בודק באופן קבוע ברשימה זו eepsites חדשים."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "כתובות URL אלה מפנות לקובצי hosts.txt מפורסמים."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "ראה את השאלות הנפוצות לרשימת כתובות URL של מינויים."

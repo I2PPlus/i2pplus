@@ -338,3 +338,345 @@ msgstr "Adressen die handmatig aan uw masteradresboek zijn toegevoegd, worden sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hosts die u via uw abonnementen ontvangt, worden samengevoegd met het adresboek van uw router."
+
+msgid "Import"
+msgstr "Importeren"
+
+msgid "address book"
+msgstr "adresboek"
+
+msgid "Router"
+msgstr "Router"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "Private"
+msgstr "Privé"
+
+msgid "Published"
+msgstr "Gepubliceerd"
+
+msgid "Blacklist"
+msgstr "Blacklist"
+
+msgid "Configuration"
+msgstr "Configuratie"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "Book"
+msgstr "Boek"
+
+msgid "No entries"
+msgstr "Geen items"
+
+msgid "Add new destination"
+msgstr "Nieuwe destination toevoegen"
+
+msgid "Import from hosts.txt file"
+msgstr "Importeren uit hosts.txt-bestand"
+
+msgid "other"
+msgstr "Overig"
+
+msgid "Export in hosts.txt format"
+msgstr "Exporteren in hosts.txt-formaat"
+
+msgid "Export results in hosts.txt format"
+msgstr "Resultaten exporteren in hosts.txt-formaat"
+
+msgid "Export book in hosts.txt format"
+msgstr "Boek exporteren in hosts.txt-formaat"
+
+msgid "Search"
+msgstr "Zoeken"
+
+msgid "latest"
+msgstr "Nieuwste"
+
+msgid "Alive"
+msgstr "Bereikbaar"
+
+msgid "Dead"
+msgstr "Onbereikbaar"
+
+msgid "all"
+msgstr "Alle"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Hostname"
+msgstr "Hostnaam"
+
+msgid "Encryption"
+msgstr "Encryptie"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Added"
+msgstr "Toegevoegd"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Selecteer hosts om uit het adresboek te verwijderen"
+
+msgid "More information on this entry"
+msgstr "Meer informatie over dit item"
+
+msgid "unknown"
+msgstr "onbekend"
+
+msgid "Base 32 address"
+msgstr "Base 32-adres"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Helperlink om het hostadres te delen, met optie om toe te voegen aan het adresboek"
+
+msgid "Mark for deletion"
+msgstr "Markeren voor verwijdering"
+
+msgid "Cancel"
+msgstr "Annuleren"
+
+msgid "This book currently contains no entries."
+msgstr "Dit boek bevat momenteel geen items."
+
+msgid "e.g. newdomain.i2p"
+msgstr "bijv. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 of B32"
+
+msgid "Full destination or b32 address"
+msgstr "Volledige destination of b32-adres"
+
+msgid "Select file"
+msgstr "Bestand selecteren"
+
+msgid "blacklist"
+msgstr "blacklist"
+
+msgid "Blacklist Management"
+msgstr "Blacklistbeheer"
+
+msgid "File location"
+msgstr "Bestandslocatie"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Voer I2P-adressen in om op de blacklist te zetten (één per regel)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Het blacklistbestand bevat een lijst met I2P-hostnamen die geblokkeerd moeten worden voor toegang via de HTTP-proxy en die niet in het adresboek getoond mogen worden."
+
+msgid "configuration"
+msgstr "configuratie"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker voert al een scan uit"
+
+msgid "Run HostChecker"
+msgstr "HostChecker uitvoeren"
+
+msgid "Hints"
+msgstr "Tips"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "De bestands- en mappaden hier zijn relatief aan de werkmap van het adresboek, normaal ~/.i2p/addressbook/ (Linux) of %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Als je handmatig regels aan een adresboek wilt toevoegen, voeg ze dan toe aan het privé- of het masteradresboek."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Het routeradresboek en het gepubliceerde adresboek worden bijgewerkt door de adresboektoepassing."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Als je je adresboek publiceert, verschijnen ALLE destinations uit het master- en routeradresboek daarin."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Gebruik het privéadresboek voor privé-destinations; deze worden niet gepubliceerd."
+
+msgid "Options"
+msgstr "Opties"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Bestand met de lijst met abonnement-URL's (hoeft niet te worden gewijzigd)"
+
+msgid "Update interval in hours"
+msgstr "Update-interval in uren"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Je openbare hosts.txt-bestand (kies een pad binnen de documentroot van je webserver)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Je hosts.txt (niet wijzigen)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Je persoonlijke adresboek; deze hosts worden gepubliceerd"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Je privéadresboek; dit wordt nooit gepubliceerd"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Poort voor je eepProxy (hoeft niet te worden gewijzigd)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Hostnaam voor je eepProxy (hoeft niet te worden gewijzigd)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Of het gepubliceerde adresboek bijgewerkt moet worden"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Bestand met de etags-header van de opgehaalde abonnement-URL's (hoeft niet te worden gewijzigd)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Bestand met de wijzigingstijd van elke opgehaalde abonnement-URL (hoeft niet te worden gewijzigd)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Bestand om activiteiten naar te loggen (zet het op /dev/null als je wilt)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Naam van het thema dat moet worden gebruikt (standaard het thema dat in de console is gekozen)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interval (in uren) voor het uitvoeren van de hostchecker (standaard 4 uur)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Maximaal gelijktijdige pings bij het uitvoeren van de hostchecker (standaard 16, maximaal 160)"
+
+msgid "delete hosts"
+msgstr "hosts verwijderen"
+
+msgid "addressbook"
+msgstr "adresboek"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Address Helper"
+msgstr "Adreshelper"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Gecodeerde naam"
+
+msgid "Base 32 Address"
+msgstr "Base 32-adres"
+
+msgid "Base 64 Hash"
+msgstr "Base 64-hash"
+
+msgid "Public Key"
+msgstr "Publieke sleutel"
+
+msgid "Signing Key"
+msgstr "Ondertekensleutel"
+
+msgid "Certificate"
+msgstr "Certificaat"
+
+msgid "Validated"
+msgstr "Gevalideerd"
+
+msgid "no"
+msgstr "nee"
+
+msgid "yes"
+msgstr "ja"
+
+msgid "Added Date"
+msgstr "Toevoegdatum"
+
+msgid "Last Modified"
+msgstr "Laatst gewijzigd"
+
+msgid "Notes"
+msgstr "Notities"
+
+msgid "Add notes about domain"
+msgstr "Notities over het domein toevoegen"
+
+msgid "Visual Identification for"
+msgstr "Visuele identificatie voor"
+
+msgid "Create your own identification images"
+msgstr "Maak je eigen identificatie-afbeeldingen"
+
+msgid "Launch Image Generator"
+msgstr "Afbeeldingengenerator starten"
+
+msgid "Introduction"
+msgstr "Inleiding"
+
+msgid "What is the addressbook?"
+msgstr "Wat is het adresboek?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "De adresboektoepassing maakt deel uit van je I2P-installatie."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Deze werkt je hosts.txt-bestand regelmatig bij vanuit gedistribueerde bronnen of \"abonnementen\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Abonneren op extra sites is eenvoudig: voeg ze gewoon toe aan je <a href=\"subscriptions\">abonnementen</a>-bestand."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Meer informatie over naamgeving in I2P vind je in <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>het overzicht</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Hoe werkt de adresboektoepassing?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "De adresboektoepassing raadpleegt je abonnementen regelmatig en voegt de inhoud ervan samen in je \"router\"-adresboek."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Vervolgens voegt ze je \"master\"-adresboek ook samen met het routeradresboek."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Indien geconfigureerd wordt het routeradresboek nu naar het \"gepubliceerde\" adresboek geschreven, dat openbaar beschikbaar is als je een eepsite draait."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "De router gebruikt ook een privéadresboek dat niet wordt samengevoegd of gepubliceerd."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Hosts in het privéadresboek zijn voor jou toegankelijk, maar hun adressen worden nooit aan anderen verspreid."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Het privéadresboek kan ook worden gebruikt voor aliassen van hosts in je andere adresboeken."
+
+msgid "subscription log"
+msgstr "abonnementlogboek"
+
+msgid "Subscription Log"
+msgstr "Abonnementlogboek"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Meest recente (behalve slechte domeinen)"
+
+msgid "subscriptions"
+msgstr "abonnementen"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Het abonnementenbestand bevat een lijst met i2p-URL's."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "De adresboektoepassing controleert deze lijst regelmatig op nieuwe eepsites."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Die URL's verwijzen naar gepubliceerde hosts.txt-bestanden."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Raadpleeg de FAQ voor een lijst met abonnement-URL's."

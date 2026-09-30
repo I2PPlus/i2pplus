@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: sw\n"
@@ -35,8 +34,12 @@ msgid "Host name cannot contain \"{0}\""
 msgstr "Jina la mashine haliwezi kuwa na \"{0}\""
 
 #, java-format
-msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
-msgstr "Jina la mashine \"{0}\" linahitaji kubadilishwa kuwa ASCII, lakini maktaba ya kubadilisha hayapatikani katika JVM hii"
+msgid ""
+"Host name \"{0}\" requires conversion to ASCII but the conversion library is"
+" unavailable in this JVM"
+msgstr ""
+"Jina la mashine \"{0}\" linahitaji kubadilishwa kuwa ASCII, lakini maktaba "
+"ya kubadilisha hayapatikani katika JVM hii"
 
 msgid "Source"
 msgstr "Chanzo"
@@ -115,11 +118,16 @@ msgstr "Badilisha"
 
 #, java-format
 msgid "Host name {0} is already in address book, unchanged."
-msgstr "Jina la mashine {0} tayari liko katika kitabu cha anwani, hakibadilika."
+msgstr ""
+"Jina la mashine {0} tayari liko katika kitabu cha anwani, hakibadilika."
 
 #, java-format
-msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
-msgstr "Jina la mashine {0} tayari liko katika kitabu cha anwani lakini lenye lengo tofauti. Bofya \"Badilisha\" ili kuandika upya."
+msgid ""
+"Host name {0} is already in address book with a different destination. Click"
+" \"Replace\" to overwrite."
+msgstr ""
+"Jina la mashine {0} tayari liko katika kitabu cha anwani lakini lenye lengo "
+"tofauti. Bofya \"Badilisha\" ili kuandika upya."
 
 msgid "Unable to resolve Base 32 address"
 msgstr "Imeshindwa kutatua anwani ya Base 32"
@@ -160,11 +168,19 @@ msgstr "Kitabu cha anwani kimehifadhiwa."
 msgid "ERROR: Could not write addressbook file."
 msgstr "HITILAFU: Imeshindwa kuandika faili ya kitabu cha anwani."
 
-msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
-msgstr "Wasilisho la fomu si sahihi, huenda kwa sababu umetumia kitufe cha \"nyuma\" au \"onyesha upya\" kwenye kivinjari chenu. Tafadhali utume tena."
+msgid ""
+"Invalid form submission, probably because you used the \"back\" or "
+"\"reload\" button on your browser. Please resubmit."
+msgstr ""
+"Wasilisho la fomu si sahihi, huenda kwa sababu umetumia kitufe cha \"nyuma\""
+" au \"onyesha upya\" kwenye kivinjari chenu. Tafadhali utume tena."
 
-msgid "If the problem persists, verify that you have cookies enabled in your browser."
-msgstr "Ikiwa tatizo limeendelea, hakikisha kwamba cookies zimewashwa kwenye kivinjari chenu."
+msgid ""
+"If the problem persists, verify that you have cookies enabled in your "
+"browser."
+msgstr ""
+"Ikiwa tatizo limeendelea, hakikisha kwamba cookies zimewashwa kwenye "
+"kivinjari chenu."
 
 msgid "Save"
 msgstr "Hifadhi"
@@ -206,7 +222,7 @@ msgid "Delete Entry"
 msgstr "Futa Kielimu"
 
 msgid "Delete Selected"
-msgstr "Futa Zilizochaguliwa"
+msgstr "Futa zilizochaguliwa"
 
 #, java-format
 msgid "Failed to delete Destination for {0} from naming service {1}"
@@ -235,7 +251,8 @@ msgstr[0] "Lengo moja limewekwa kwenye orodha nyeusi."
 msgstr[1] "Malengo {0} yamewekwa kwenye orodha nyeusi."
 
 msgid "No valid entries selected to blacklist."
-msgstr "Hakuna vielimu sahihi vilivyochaguliwa ili kuingia kwenye orodha nyeusi."
+msgstr ""
+"Hakuna vielimu sahihi vilivyochaguliwa ili kuingia kwenye orodha nyeusi."
 
 msgid "Save Notes"
 msgstr "Hifadhi Maelezo"
@@ -280,23 +297,43 @@ msgstr "Haiwezi kusasisha usajili: proksi ya HTTP haifanyi kazi!"
 msgid "Subscriptions reloaded."
 msgstr "Usajili umeonyeshwa upya."
 
-msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
-msgstr "Ikiwa SusiDNS imesanidiwa kuchapisha kitabu chenu cha anwani cha routeri, vielimu vitatokea katika kitabu chenu cha anwani kilichochapishwa na kuhifadhiwa katika faili ya hosts.txt kwa kushiriki."
+msgid ""
+"If SusiDNS is configured to publish your Router address book, the entries "
+"will appear in your Published address book and saved to a hosts.txt file for"
+" sharing."
+msgstr ""
+"Ikiwa SusiDNS imesanidiwa kuchapisha kitabu chenu cha anwani cha routeri, "
+"vielimu vitatokea katika kitabu chenu cha anwani kilichochapishwa na "
+"kuhifadhiwa katika faili ya hosts.txt kwa kushiriki."
 
 msgid "Published Addressbook"
 msgstr "Kitabu cha Anwani Kilichochapishwa"
 
-msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
-msgstr "Ili kusanidi SusiDNS kusukuma kitabu chenu cha anwani cha routeri hadi kwenye kitabu chenu cha anwani kilichochapishwa, weka 'should_publish=true' kwenye kurasa ya mipangilio."
+msgid ""
+"To configure SusiDNS to push your Router address book to your Published "
+"address book, set 'should_publish=true' on the configuration page."
+msgstr ""
+"Ili kusanidi SusiDNS kusukuma kitabu chenu cha anwani cha routeri hadi "
+"kwenye kitabu chenu cha anwani kilichochapishwa, weka 'should_publish=true' "
+"kwenye kurasa ya mipangilio."
 
-msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
-msgstr "Mashine zote zinazotokana na usajili zitaonekana katika kitabu hiki cha anwani, pamoja na zote unazoongeza hapa kwa mkono au kwenye kitabu chenu cha anwani kuu."
+msgid ""
+"All hosts derived from subscriptions will appear in this address book, in "
+"addition to any you manually add here or to your Master address book."
+msgstr ""
+"Mashine zote zinazotokana na usajili zitaonekana katika kitabu hiki cha "
+"anwani, pamoja na zote unazoongeza hapa kwa mkono au kwenye kitabu chenu cha"
+" anwani kuu."
 
 msgid "Router Addressbook"
 msgstr "Kitabu cha Anwani cha Routeri"
 
-msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
-msgstr "Mashine unazoongeza hapa kwa mkono hazitachapishwa kamwe. Unaweza pia kuongeza majina lingine ya mashine katika vitabu vingine vya anwani hapa."
+msgid ""
+"Hosts you manually add here will never be published. You can also add "
+"aliases to hosts in other address books here."
+msgstr ""
+"Mashine unazoongeza hapa kwa mkono hazitachapishwa kamwe. Unaweza pia "
+"kuongeza majina lingine ya mashine katika vitabu vingine vya anwani hapa."
 
 msgid "Private Addressbook"
 msgstr "Kitabu cha Anwani Bina"
@@ -304,23 +341,40 @@ msgstr "Kitabu cha Anwani Bina"
 msgid "Local Records"
 msgstr "Rekodi za Ndani"
 
-msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
-msgstr "Programu za I2P (pamoja na proksi ya HTTP) zinatumia mashine katika vitabu vyenu vya anwani vya ndani kutatua majina ya mashine ya .i2p."
+msgid ""
+"I2P applications (including the HTTP proxy) use the hosts in your local "
+"address books to resolve .i2p hostnames."
+msgstr ""
+"Programu za I2P (pamoja na proksi ya HTTP) zinatumia mashine katika vitabu "
+"vyenu vya anwani vya ndani kutatua majina ya mashine ya .i2p."
 
-msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
-msgstr "Usajili zaidi zinaweza kupatikana katika sekhsen ya Maswali Yanayoulizwa Mara kwa Mara kwenye kurasa ya msaada ya Routeri."
+msgid ""
+"Additional subscriptions can be found in the FAQ section of the Router help "
+"page."
+msgstr ""
+"Usajili zaidi zinaweza kupatikana katika sekhsen ya Maswali Yanayoulizwa "
+"Mara kwa Mara kwenye kurasa ya msaada ya Routeri."
 
 msgid "Subscriptions"
 msgstr "Usajili"
 
-msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
-msgstr "Mashine zinazopatikana kutoka usajili wenu zinaongezwa katika kitabu chenu cha anwani cha routeri, na zinasawazishwa kwa moja kwa moja (kwa default kila saa 12)."
+msgid ""
+"Hosts sourced from your subscriptions are added to your Router address book,"
+" and are automatically synced (by default every 12 hours)."
+msgstr ""
+"Mashine zinazopatikana kutoka usajili wenu zinaongezwa katika kitabu chenu "
+"cha anwani cha routeri, na zinasawazishwa kwa moja kwa moja (kwa default "
+"kila saa 12)."
 
 msgid "Configure Subscriptions"
 msgstr "Sanidi Usajili"
 
-msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
-msgstr "Ikiwa unaongeza mashine hapa kwa mkono, zitaongezwa katika kitabu chenu cha anwani kilichochapishwa (ikiwa imesanidiwa)."
+msgid ""
+"If you manually add hosts here, they will be included your Published address"
+" book (if configured)."
+msgstr ""
+"Ikiwa unaongeza mashine hapa kwa mkono, zitaongezwa katika kitabu chenu cha "
+"anwani kilichochapishwa (ikiwa imesanidiwa)."
 
 msgid "Master Addressbook"
 msgstr "Kitabu cha Anwani Kuu"
@@ -331,8 +385,12 @@ msgstr "Inayotafutika kwa"
 msgid "I2P applications"
 msgstr "Programu za I2P"
 
-msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
-msgstr "Vitabu vya anwani kuu, cha routeri na cha bina kwa pamoja vinahudumia kama mamlaka ya DNS kwa programu za I2P."
+msgid ""
+"The Master, Router and Private address books collectively serve as the DNS "
+"authority for I2P applications."
+msgstr ""
+"Vitabu vya anwani kuu, cha routeri na cha bina kwa pamoja vinahudumia kama "
+"mamlaka ya DNS kwa programu za I2P."
 
 msgid "Optional,"
 msgstr "Si lazima,"
@@ -340,11 +398,458 @@ msgstr "Si lazima,"
 msgid "for websites"
 msgstr "kwa tovuti"
 
-msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
-msgstr "Ikiwa unasanidi SusiDNS kuchapisha kitabu chenu cha anwani cha routeri, itatoa faili ya hosts.txt yenye mashine zote (kwa default hadi mzizi wa eepsite yenu)."
+msgid ""
+"If you configure SusiDNS to publish your Router address book, it will export"
+" a hosts.txt file containing all the hosts (by default to the root of your "
+"eepsite)."
+msgstr ""
+"Ikiwa unasanidi SusiDNS kuchapisha kitabu chenu cha anwani cha routeri, "
+"itatoa faili ya hosts.txt yenye mashine zote (kwa default hadi mzizi wa "
+"eepsite yenu)."
 
-msgid "Addresses manually added to your Master address book will merge with your Router address book."
-msgstr "Anwani zilizoongezwa kwa mkono katika kitabu chenu cha anwani kuu zitaunganishwa na kitabu chenu cha anwani cha routeri."
+msgid ""
+"Addresses manually added to your Master address book will merge with your "
+"Router address book."
+msgstr ""
+"Anwani zilizoongezwa kwa mkono katika kitabu chenu cha anwani kuu "
+"zitaunganishwa na kitabu chenu cha anwani cha routeri."
 
-msgid "Hosts you receive from your subscriptions will merge with your Router address book."
-msgstr "Mashine unayopokea kutoka usajili wenu zitaunganishwa na kitabu chenu cha anwani cha routeri."
+msgid ""
+"Hosts you receive from your subscriptions will merge with your Router "
+"address book."
+msgstr ""
+"Mashine unayopokea kutoka usajili wenu zitaunganishwa na kitabu chenu cha "
+"anwani cha routeri."
+
+msgid "Import"
+msgstr "Ingiza"
+
+msgid "address book"
+msgstr "kitabu cha anwani"
+
+msgid "Router"
+msgstr "Routeri"
+
+msgid "Master"
+msgstr "Kuu"
+
+msgid "Private"
+msgstr "Bina"
+
+msgid "Published"
+msgstr "Imechapishwa"
+
+msgid "Blacklist"
+msgstr "Orodha Nyeusi"
+
+msgid "Configuration"
+msgstr "Mipangilio"
+
+msgid "Help"
+msgstr "Msaada"
+
+msgid "Book"
+msgstr "Kitabu"
+
+msgid "No entries"
+msgstr "Hakuna vielimu"
+
+msgid "Add new destination"
+msgstr "Ongeza lengo jipya"
+
+msgid "Import from hosts.txt file"
+msgstr "Ingiza kutoka faili ya hosts.txt"
+
+msgid "other"
+msgstr "Nyingine"
+
+msgid "Export in hosts.txt format"
+msgstr "Toa katika muundo wa hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Toa matokeo katika muundo wa hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Toa kitabu katika muundo wa hosts.txt"
+
+msgid "Search"
+msgstr "Tafuta"
+
+msgid "latest"
+msgstr "Mpya"
+
+msgid "Alive"
+msgstr "Hai"
+
+msgid "Dead"
+msgstr "Kufa"
+
+msgid "all"
+msgstr "zote"
+
+msgid "Info"
+msgstr "Taarifa"
+
+msgid "Type"
+msgstr "Aina"
+
+msgid "Hostname"
+msgstr "Jina la Mashine"
+
+msgid "Encryption"
+msgstr "Usimbuzi"
+
+msgid "Link (b32)"
+msgstr "Kiungo (b32)"
+
+msgid "Destination"
+msgstr "Lengo"
+
+msgid "Added"
+msgstr "Imeongezwa"
+
+msgid "Status"
+msgstr "Hali"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Chagua mashine za kufuta kutoka kitabu cha anwani"
+
+msgid "More information on this entry"
+msgstr "Taarifa zaidi za kielumu hiki"
+
+msgid "unknown"
+msgstr "Havijulikani"
+
+msgid "Base 32 address"
+msgstr "Anwani ya Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr ""
+"Kiungo cha msaidia wa kushiriki anwani ya mashine chenye chaguo la kuongeza "
+"kwenye kitabu cha anwani"
+
+msgid "Mark for deletion"
+msgstr "Chora kwa kufutwa"
+
+msgid "Cancel"
+msgstr "Ghairi"
+
+msgid "This book currently contains no entries."
+msgstr "Kitabu hiki kwa sasa hakina vielimu."
+
+msgid "e.g. newdomain.i2p"
+msgstr "k.v. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 au B32"
+
+msgid "Full destination or b32 address"
+msgstr "Lengo kamili au anwani ya b32"
+
+msgid "Select file"
+msgstr "Chagua faili"
+
+msgid "blacklist"
+msgstr "orydha nyeusi"
+
+msgid "Blacklist Management"
+msgstr "Usimamizi wa Orodha Nyeusi"
+
+msgid "File location"
+msgstr "Mahali pa faili"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr ""
+"Weka anwani za I2P za kuingia kwenye orodha nyeusi (moja kwa kila mstari)"
+
+msgid ""
+"The blacklist file contains a list of I2P hostnames that should be blocked "
+"from access via the HTTP proxy, and excluded from the address book display."
+msgstr ""
+"Faili ya orodha nyeusi ina orodha ya majina ya mashine ya I2P ambayo "
+"yanapaswa kuzuiwa kupata ufikiaji kupitia proksi ya HTTP, na kutenguliwa "
+"kuonyeshwa katika kitabu cha anwani."
+
+msgid "configuration"
+msgstr "mipangilio"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker tayari inaendesha ukaguzi"
+
+msgid "Run HostChecker"
+msgstr "Endesha HostChecker"
+
+msgid "Hints"
+msgstr "Mielekeo"
+
+msgid ""
+"File and directory paths here are relative to the addressbook's working "
+"directory, which is normally ~/.i2p/addressbook/ (Linux) or "
+"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr ""
+"Njia za faili na katalogi hapa ni za kuhusu katalogi ya kazi ya kitabu cha "
+"anwani, ambayo kawaida ni ~/.i2p/addressbook/ (Linux) au "
+"%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid ""
+"If you want to manually add lines to an addressbook, add them to the private"
+" or master addressbooks."
+msgstr ""
+"Ikiwa unataka kuongeza mistari kwa mkono kwenye kitabu cha anwani, ongeza "
+"kwenye vitabu vya anwani vya bina au vya kuu."
+
+msgid ""
+"The router addressbook and the published addressbook are updated by the "
+"addressbook application."
+msgstr ""
+"Kitabu cha anwani cha routeri na kitabu cha anwani kilichochapishwa "
+"husasishwa na programu ya kitabu cha anwani."
+
+msgid ""
+"When you publish your addressbook, ALL destinations from the master and "
+"router addressbooks appear there."
+msgstr ""
+"Unapochapisha kitabu chenu cha anwani, MALENGO YOTE kutoka vitabu vya anwani"
+" vya kuu na vya routeri huonekana pale."
+
+msgid ""
+"Use the private addressbook for private destinations, these are not "
+"published."
+msgstr ""
+"Tumia kitabu cha anwani cha bina kwa malengo ya bina, hayajachapishwa."
+
+msgid "Options"
+msgstr "Vichaguo"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Faili yenye orodha ya URL za usajili (hakuna lazima kubadilisha)"
+
+msgid "Update interval in hours"
+msgstr "Kipindi cha kusasisha kwa saa"
+
+msgid ""
+"Your public hosts.txt file (choose a path within your webserver document "
+"root)"
+msgstr ""
+"Faili yako ya umma ya hosts.txt (chagua njia ndani ya katalogi kuu ya seva "
+"yako ya tovuti)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Faili yako ya hosts.txt (usibadilise)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Kitabu chenu cha anwani bina, mashine haya yatachapishwa"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Kitabu chenu cha anwani bina, hakichapishwa kamwe"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Bandari ya eepProxy yako (hakuna lazima kubadilisha)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Jina la mashine la eepProxy yako (hakuna lazima kubadilisha)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Kama unapaswa kusasisha kitabu cha anwani kilichochapishwa"
+
+msgid ""
+"File containing the etags header from the fetched subscription URLs (no need"
+" to change)"
+msgstr ""
+"Faili yenye kichwa cha etags kutoka URL za usajili zilizofukuliwa (hakuna "
+"lazima kubadilisha)"
+
+msgid ""
+"File containing the modification timestamp for each fetched subscription URL"
+" (no need to change)"
+msgstr ""
+"Faili yenye muhanga wa muda wa mabadiliko kwa kila URL ya usajili "
+"iliyofukuliwa (hakuna lazima kubadilisha)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr ""
+"Faili ya kuandika kumbukumbu ya shughuli (badilisha kuwa /dev/null "
+"unapopenda)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr ""
+"Jina la mandhari mbadala ya kutumia (inatumia mandhari iliyochaguliwa na "
+"konsola)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr ""
+"Kipindi (kwa saa) cha kuendesha kihakuzi cha mashine (default ni saa 4)"
+
+msgid ""
+"Maximum concurrent pings when running host checker (Default is 16, max is "
+"160)"
+msgstr ""
+"Kikomo cha juu cha pings za wakati mmoja wakati wa kuendesha kihakuzi cha "
+"mashine (Default ni 16, cha juu ni 160)"
+
+msgid "delete hosts"
+msgstr "futa mashine"
+
+msgid "addressbook"
+msgstr "kitabu cha anwani"
+
+msgid "Details"
+msgstr "Maelezo"
+
+msgid "Address Helper"
+msgstr "Msaidia wa Anwani"
+
+msgid "link"
+msgstr "kiungo"
+
+msgid "Encoded Name"
+msgstr "Jina Lililosimbwa"
+
+msgid "Base 32 Address"
+msgstr "Anwani ya Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Hash ya Base 64"
+
+msgid "Public Key"
+msgstr "Ufafanuzi wa umma"
+
+msgid "Signing Key"
+msgstr "Ufafanuzi wa Saini"
+
+msgid "Certificate"
+msgstr "Cheti"
+
+msgid "Validated"
+msgstr "Imethibitishwa"
+
+msgid "no"
+msgstr "hapana"
+
+msgid "yes"
+msgstr "ndiyo"
+
+msgid "Added Date"
+msgstr "Tarehe ya Kuongezwa"
+
+msgid "Last Modified"
+msgstr "Ilibadilika Mwisho"
+
+msgid "Notes"
+msgstr "Vidokezo"
+
+msgid "Add notes about domain"
+msgstr "Ongeza maelezo kuhusu domaini"
+
+msgid "Visual Identification for"
+msgstr "Utambulisho wa Picha kwa"
+
+msgid "Create your own identification images"
+msgstr "Tengeneza picha zako mwenyewe za utambulisho"
+
+msgid "Launch Image Generator"
+msgstr "Fungua Kizazi cha Picha"
+
+msgid "Introduction"
+msgstr "Utangulizi"
+
+msgid "What is the addressbook?"
+msgstr "Kitabu cha anwani ni nini?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Programu ya kitabu cha anwani ni sehemu ya usakinishaji wako wa I2P."
+
+msgid ""
+"It regularly updates your hosts.txt file from distributed sources or "
+"\"subscriptions\"."
+msgstr ""
+"Inasasisha kwa kawaida faili yako ya hosts.txt kutoka vyanzo vilivyousambaza"
+" au \"usajili\"."
+
+msgid ""
+"Subscribing to additional sites is easy, just add them to your <a "
+"href=\"subscriptions\">subscriptions</a> file."
+msgstr ""
+"Kujisajili kwa tovuti zaidi ni rahisi, ongeza tu kwenye faili yako ya <a "
+"href=\"subscriptions\">usajili</a>."
+
+msgid ""
+"For more information on naming in I2P, see <a "
+"href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr ""
+"Kwa taarifa zaidi kuhusu majina kwenye I2P, angalia <a "
+"href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>muhtasari</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Programu ya kitabu cha anwani inafanya kazi vipi?"
+
+msgid ""
+"The addressbook application regularly polls your subscriptions and merges "
+"their content into your \"router\" address book."
+msgstr ""
+"Programu ya kitabu cha anwani inauliza kwa kawaida usajili wenu na "
+"kuyakamilisha yaliyomo yake kwenye kitabu chenu cha anwani cha \"routeri\"."
+
+msgid ""
+"Then it merges your \"master\" address book into the router address book as "
+"well."
+msgstr ""
+"Kisha ndiyo inakamilisha kitabu chenu cha anwani cha \"kuu\" kwenye kitabu "
+"cha anwani cha routeri pia."
+
+msgid ""
+"If configured, the router address book is now written to the \"published\" "
+"address book, which will be publicly available if you are running an "
+"eepsite."
+msgstr ""
+"Ikiwa imesanidiwa, kitabu cha anwani cha routeri sasa huandikwa kwenye "
+"kitabu cha anwani cha \"kilichochapishwa\", ambacho kitapatikana kwa umma "
+"ikiwa unaendesha eepsite."
+
+msgid ""
+"The router also uses a private address book, which is not merged or "
+"published."
+msgstr ""
+"Routeri pia inatumia kitabu cha anwani cha bina, ambacho hakuunganishwi wala"
+" hakichapishwi."
+
+msgid ""
+"Hosts in the private address book can be accessed by you but their addresses"
+" are never distributed to others."
+msgstr ""
+"Mashine katika kitabu cha anwani cha bina zinaweza kufikiliwa nawe, lakini "
+"anwani zao hazikusambazwe kamwe kwa wengine."
+
+msgid ""
+"The private address book can also be used for aliases of hosts in your other"
+" address books."
+msgstr ""
+"Kitabu cha anwani cha bina pia kinaweza kutumika kwa majina lingine ya "
+"mashine katika vitabu vyako vingine vya anwani."
+
+msgid "subscription log"
+msgstr "kumbukumbu ya usajili"
+
+msgid "Subscription Log"
+msgstr "Kumbukumbu ya Usajili"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Zilizo hivi karibuni (bila kuhesabiwa domaini mbaya)"
+
+msgid "subscriptions"
+msgstr "usajili"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Faili ya usajili ina orodha ya URL za i2p."
+
+msgid ""
+"The addressbook application regularly checks this list for new eepsites."
+msgstr ""
+"Programu ya kitabu cha anwani inaangalia orodha hii kwa kawaida kwa eepsites"
+" mpya."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "URL hizo zinarejerekea faili za hosts.txt zilizochapishwa."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Angalia MYKM kwa orodha ya URL za usajili."

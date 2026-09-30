@@ -338,3 +338,345 @@ msgstr "Les adreces afegides manualment a la vostra llibreta d’adreces mestra 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Els amfitrionis que rebeu de les vostres subscripcions es fusionaran amb la vostra llibreta d’adreces del router."
+
+msgid "Import"
+msgstr "Importa"
+
+msgid "address book"
+msgstr "llibreta d’adreces"
+
+msgid "Router"
+msgstr "Router"
+
+msgid "Master"
+msgstr "Mestra"
+
+msgid "Private"
+msgstr "Privada"
+
+msgid "Published"
+msgstr "Publicada"
+
+msgid "Blacklist"
+msgstr "Llista negra"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "Book"
+msgstr "Llibreta"
+
+msgid "No entries"
+msgstr "Sense entrades"
+
+msgid "Add new destination"
+msgstr "Afegir una adreça de destinació nova"
+
+msgid "Import from hosts.txt file"
+msgstr "Importar des del fitxer hosts.txt"
+
+msgid "other"
+msgstr "altres"
+
+msgid "Export in hosts.txt format"
+msgstr "Exporta en format hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Exporta els resultats en format hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Exporta la llibreta en format hosts.txt"
+
+msgid "Search"
+msgstr "Cerca"
+
+msgid "latest"
+msgstr "recents"
+
+msgid "Alive"
+msgstr "Actiu"
+
+msgid "Dead"
+msgstr "Inactiu"
+
+msgid "all"
+msgstr "tots"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Type"
+msgstr "Tipus"
+
+msgid "Hostname"
+msgstr "Nom d’amfitrió"
+
+msgid "Encryption"
+msgstr "Xifratge"
+
+msgid "Link (b32)"
+msgstr "Enllaç (b32)"
+
+msgid "Destination"
+msgstr "Destinació"
+
+msgid "Added"
+msgstr "Afegit"
+
+msgid "Status"
+msgstr "Estat"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Seleccioneu els amfitrionis per suprimir-los de la llibreta d’adreces"
+
+msgid "More information on this entry"
+msgstr "Més informació sobre aquesta entrada"
+
+msgid "unknown"
+msgstr "desconegut"
+
+msgid "Base 32 address"
+msgstr "Adreça Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Enllaç de l’ajudant per compartir l’adreça de l’amfitrió, amb l’opció d’afegir-la a la llibreta d’adreces"
+
+msgid "Mark for deletion"
+msgstr "Marqueu per a la supressió"
+
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgid "This book currently contains no entries."
+msgstr "Actualment, aquesta llibreta no conté cap entrada."
+
+msgid "e.g. newdomain.i2p"
+msgstr "p. ex. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 o B32"
+
+msgid "Full destination or b32 address"
+msgstr "adreça de destinació completa o adreça b32"
+
+msgid "Select file"
+msgstr "Seleccioneu el fitxer"
+
+msgid "blacklist"
+msgstr "llista negra"
+
+msgid "Blacklist Management"
+msgstr "Gestió de la llista negra"
+
+msgid "File location"
+msgstr "Ubicació del fitxer"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Introduïu les adreces I2P que vulgueu afegir a la llista negra (una per línia)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "El fitxer de la llista negra conté una llista de noms d’amfitrió d’I2P que s’han de bloquejar per impedir l’accés a través del proxy HTTP i que queden exclosos de la visualització de la llibreta d’adreces."
+
+msgid "configuration"
+msgstr "configuració"
+
+msgid "HostChecker is already running a scan"
+msgstr "El HostChecker ja està fent una exploració"
+
+msgid "Run HostChecker"
+msgstr "Executa el HostChecker"
+
+msgid "Hints"
+msgstr "Consells"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Els camins de fitxers i directoris d’aquí són relatius al directori de treball de la llibreta d’adreces, que normalment és ~/.i2p/addressbook/ (Linux) o %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Si voleu afegir línies manualment a una llibreta d’adreces, feu-ho a les llibretes d’adreces privada o mestra."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "La llibreta d’adreces del router i la llibreta d’adreces publicada les actualitza l’aplicació de la llibreta d’adreces."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Quan publiqueu la vostra llibreta d’adreces, hi apareixen TOTES les adreces de destinació de les llibretes d’adreces mestra i del router."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Utilitzeu la llibreta d’adreces privada per a les adreces de destinació privades; aquestes no es publiquen."
+
+msgid "Options"
+msgstr "Opcions"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Fitxer amb la llista d’URL de subscripció (no cal modificar-lo)"
+
+msgid "Update interval in hours"
+msgstr "Intervalle d’actualització en hores"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "El vostre fitxer hosts.txt públic (trieu un camí dins de l’arrel de documents del vostre servidor web)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "El vostre hosts.txt (no el canvieu)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "La vostra llibreta d’adreces personal; aquests amfitrionis es publicaran"
+
+msgid "Your private addressbook, it is never published"
+msgstr "La vostra llibreta d’adreces privada; mai no es publica"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Port del vostre eepProxy (no cal modificar-lo)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Nom d’amfitrió del vostre eepProxy (no cal modificar-lo)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Si cal actualitzar la llibreta d’adreces publicada"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Fitxer amb la capçalera etags de les URL de subscripció obtingudes (no cal modificar-lo)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Fitxer amb la marca de temps de modificació de cada URL de subscripció obtinguda (no cal modificar-lo)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Fitxer on es registra l’activitat (si ho preferiu, canvieu-lo a /dev/null)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Nom del tema de substitució que cal utilitzar (per defecte, el tema seleccionat a la consola)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interval (en hores) per executar el comprovador d’amfitrionis (per defecte, 4 hores)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Nombre màxim de pings simultanis en executar el comprovador d’amfitrionis (per defecte, 16; màxim, 160)"
+
+msgid "delete hosts"
+msgstr "suprimir amfitrionis"
+
+msgid "addressbook"
+msgstr "llibreta d’adreces"
+
+msgid "Details"
+msgstr "Detalls"
+
+msgid "Address Helper"
+msgstr "Ajudant d’adreces"
+
+msgid "link"
+msgstr "enllaç"
+
+msgid "Encoded Name"
+msgstr "Nom codificat"
+
+msgid "Base 32 Address"
+msgstr "Adreça Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Resum Base 64"
+
+msgid "Public Key"
+msgstr "Clau pública"
+
+msgid "Signing Key"
+msgstr "Clau de signatura"
+
+msgid "Certificate"
+msgstr "Certificat"
+
+msgid "Validated"
+msgstr "Validat"
+
+msgid "no"
+msgstr "no"
+
+msgid "yes"
+msgstr "sí"
+
+msgid "Added Date"
+msgstr "Data d’afegiment"
+
+msgid "Last Modified"
+msgstr "Darrera modificació"
+
+msgid "Notes"
+msgstr "Notes"
+
+msgid "Add notes about domain"
+msgstr "Afegiu notes sobre el domini"
+
+msgid "Visual Identification for"
+msgstr "Identificació visual de"
+
+msgid "Create your own identification images"
+msgstr "Creeu les vostres pròpies imatges d’identificació"
+
+msgid "Launch Image Generator"
+msgstr "Obreu el generador d’imatges"
+
+msgid "Introduction"
+msgstr "Introducció"
+
+msgid "What is the addressbook?"
+msgstr "Què és la llibreta d’adreces?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "L’aplicació de la llibreta d’adreces forma part de la vostra instal·lació d’I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Actualitza periòdicament el vostre fitxer hosts.txt a partir de fonts distribuïdes o de les \"subscripcions\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Subscriure’s a llocs addicionals és fàcil: només cal que els afegiu al fitxer de <a href=\"subscriptions\">subscripcions</a>."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Per obtenir més informació sobre els noms a I2P, consulteu <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>la visió general</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Com funciona l’aplicació de la llibreta d’adreces?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "L’aplicació de la llibreta d’adreces consulta periòdicament les vostres subscripcions i en fusiona el contingut a la vostra llibreta d’adreces \"router\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "A continuació, també fusiona la vostra llibreta d’adreces \"master\" amb la llibreta d’adreces del router."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Si està configurat així, la llibreta d’adreces del router s’escriu a la llibreta d’adreces \"published\", que estarà disponible públicament si teniu un eepsite en marxa."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "El router també utilitza una llibreta d’adreces privada, que no es fusiona ni es publica."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Podeu accedir als amfitrionis de la llibreta d’adreces privada, però les seves adreces mai no es distribueixen a altres."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "La llibreta d’adreces privada també es pot fer servir per als àlies d’amfitrionis de les altres llibretes d’adreces."
+
+msgid "subscription log"
+msgstr "registre de subscripcions"
+
+msgid "Subscription Log"
+msgstr "Registre de subscripcions"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Més recents (excloent els dominis dolents)"
+
+msgid "subscriptions"
+msgstr "subscripcions"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "El fitxer de subscripcions conté una llista d’URL d’i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "L’aplicació de la llibreta d’adreces comprova periòdicament aquesta llista per buscar eepsites nous."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Aquestes URL apunten a fitxers hosts.txt publicats."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Consulteu les PMF per obtenir una llista d’URL de subscripció."

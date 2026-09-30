@@ -338,3 +338,345 @@ msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reiti
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."
+
+msgid "Import"
+msgstr "Tuo"
+
+msgid "address book"
+msgstr "osoitekirja"
+
+msgid "Router"
+msgstr "Reititin"
+
+msgid "Master"
+msgstr "Pääkirja"
+
+msgid "Private"
+msgstr "Yksityinen"
+
+msgid "Published"
+msgstr "Julkaistu"
+
+msgid "Blacklist"
+msgstr "Estolista"
+
+msgid "Configuration"
+msgstr "Asetukset"
+
+msgid "Help"
+msgstr "Ohje"
+
+msgid "Book"
+msgstr "Kirja"
+
+msgid "No entries"
+msgstr "Ei merkintöjä"
+
+msgid "Add new destination"
+msgstr "Lisää uusi kohde"
+
+msgid "Import from hosts.txt file"
+msgstr "Tuo hosts.txt-tiedostosta"
+
+msgid "other"
+msgstr "Muu"
+
+msgid "Export in hosts.txt format"
+msgstr "Vie hosts.txt-muotoon"
+
+msgid "Export results in hosts.txt format"
+msgstr "Vie tulokset hosts.txt-muotoon"
+
+msgid "Export book in hosts.txt format"
+msgstr "Vie kirja hosts.txt-muotoon"
+
+msgid "Search"
+msgstr "Hae"
+
+msgid "latest"
+msgstr "Uusimmat"
+
+msgid "Alive"
+msgstr "Tavoitettavissa"
+
+msgid "Dead"
+msgstr "Ei tavoitettavissa"
+
+msgid "all"
+msgstr "Kaikki"
+
+msgid "Info"
+msgstr "Tiedot"
+
+msgid "Type"
+msgstr "Tyyppi"
+
+msgid "Hostname"
+msgstr "Isäntänimi"
+
+msgid "Encryption"
+msgstr "Salaus"
+
+msgid "Link (b32)"
+msgstr "Linkki (b32)"
+
+msgid "Destination"
+msgstr "Kohde"
+
+msgid "Added"
+msgstr "Lisätty"
+
+msgid "Status"
+msgstr "Tila"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Valitse poistettavat isännät osoitekirjasta"
+
+msgid "More information on this entry"
+msgstr "Lisätietoja tästä merkinnästä"
+
+msgid "unknown"
+msgstr "tuntematon"
+
+msgid "Base 32 address"
+msgstr "Base 32 -osoite"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Avustinlinkki isäntäosoitteen jakamiseen ja lisäämiseen osoitekirjaan"
+
+msgid "Mark for deletion"
+msgstr "Merkitse poistettavaksi"
+
+msgid "Cancel"
+msgstr "Peruuta"
+
+msgid "This book currently contains no entries."
+msgstr "Tässä kirjassa ei ole tällä hetkellä yhtään merkintää."
+
+msgid "e.g. newdomain.i2p"
+msgstr "esim. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 tai B32"
+
+msgid "Full destination or b32 address"
+msgstr "Täysi kohde tai b32-osoite"
+
+msgid "Select file"
+msgstr "Valitse tiedosto"
+
+msgid "blacklist"
+msgstr "estolista"
+
+msgid "Blacklist Management"
+msgstr "Estolistan hallinta"
+
+msgid "File location"
+msgstr "Tiedoston sijainti"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Kirjoita estettävät I2P-osoitteet (yksi riviä kohti)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Estolistatiedostossa on luettelo I2P-isäntänimistä, joiden käyttö HTTP-välityspalvelimen kautta estetään ja jotka piilotetaan osoitekirjan näkymästä."
+
+msgid "configuration"
+msgstr "asetukset"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker suorittaa jo skannausta"
+
+msgid "Run HostChecker"
+msgstr "Suorita HostChecker"
+
+msgid "Hints"
+msgstr "Vihjeitä"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Tiedosto- ja hakemistopolut tässä ovat suhteessa osoitekirjan työhakemistoon, joka on yleensä ~/.i2p/addressbook/ (Linux) tai %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Jos haluat lisätä osoitekirjaan rivejä manuaalisesti, lisää ne yksityiseen tai pääosoitekirjaan."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Reitittimen osoitekirjaa ja julkaistua osoitekirjaa päivittää osoitekirjasovellus."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Kun julkaiset osoitekirjasi, sinne ilmestyvät KAIKKI kohteet pää- ja reitittimen osoitekirjoista."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Käytä yksityistä osoitekirjaa yksityisille kohteille, niitä ei julkaista."
+
+msgid "Options"
+msgstr "Vaihtoehdot"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Tiedosto, jossa on tilausosoitteiden luettelo (ei tarvitse muuttaa)"
+
+msgid "Update interval in hours"
+msgstr "Päivitysväli tunneissa"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Julkinen hosts.txt-tiedostosi (valitse polku verkkopalvelimesi juurihakemistosta)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Oma hosts.txt-tiedostosi (älä muuta)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Oma osoitekirjasi, nämä isännät julkaistaan"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Oma yksityinen osoitekirjasi, sitä ei koskaan julkaista"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "eepProxy-portti (ei tarvitse muuttaa)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "eepProxy-isäntänimi (ei tarvitse muuttaa)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Päivitetäänkö julkaistua osoitekirjaa"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Tiedosto, jossa on haettujen tilausosoitteiden etags-otsake (ei tarvitse muuttaa)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Tiedosto, jossa on kunkin haetun tilausosoitteen muokkausaikaleima (ei tarvitse muuttaa)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Tiedosto, johon kirjoitetaan tapahtumat (vaihda halutessasi tiedostoon /dev/null)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Käytettävän korvausteeman nimi (oletusarvoisesti konsolissa valittu teema)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Isäntien tarkistuksen väli tunneissa (oletusarvo on 4 tuntia)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Isäntien tarkistuksen samanaikaisten pingitusten enimmäismäärä (oletusarvo 16, enintään 160)"
+
+msgid "delete hosts"
+msgstr "poista isännät"
+
+msgid "addressbook"
+msgstr "osoitekirja"
+
+msgid "Details"
+msgstr "Tiedot"
+
+msgid "Address Helper"
+msgstr "Osoiteavustin"
+
+msgid "link"
+msgstr "linkki"
+
+msgid "Encoded Name"
+msgstr "Koodattu nimi"
+
+msgid "Base 32 Address"
+msgstr "Base 32 -osoite"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 -tiiviste"
+
+msgid "Public Key"
+msgstr "Julkinen avain"
+
+msgid "Signing Key"
+msgstr "Allekirjoitusavain"
+
+msgid "Certificate"
+msgstr "Varmento"
+
+msgid "Validated"
+msgstr "Validoitu"
+
+msgid "no"
+msgstr "ei"
+
+msgid "yes"
+msgstr "kyllä"
+
+msgid "Added Date"
+msgstr "Lisäyspäivä"
+
+msgid "Last Modified"
+msgstr "Viimeksi muokattu"
+
+msgid "Notes"
+msgstr "Muistiinpanot"
+
+msgid "Add notes about domain"
+msgstr "Lisää muistiinpanot domeenista"
+
+msgid "Visual Identification for"
+msgstr "Visuaalinen tunnistus sivustolle"
+
+msgid "Create your own identification images"
+msgstr "Luo omat tunnistuskuvasi"
+
+msgid "Launch Image Generator"
+msgstr "Avaa kuvageneraattori"
+
+msgid "Introduction"
+msgstr "Johdanto"
+
+msgid "What is the addressbook?"
+msgstr "Mikä on osoitekirja?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Osoitekirjasovellus on osa I2P-asennuksestasi."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Se päivittää säännöllisesti hosts.txt-tiedostoasi hajautetuista lähteistä tai \"tilauksista\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Uusille sivustoille tilaaminen on helppoa: lisää ne vain <a href=\"subscriptions\">tilaukset</a>-tiedostoon."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Lisätietoja I2P:n nimeämisestä saat <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>yleiskatsauksesta</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Miten osoitekirjasovellus toimii?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Osoitekirjasovellus käy säännöllisesti tilausstasi läpi ja yhdistää niiden sisällön \"reitittimen\" osoitekirjaasi."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Sitten se yhdistää \"pää\"-osoitekirjasi reitittimen osoitekirjaan."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Jos se on määritetty, reitittimen osoitekirja kirjoitetaan nyt \"julkaistuun\" osoitekirjaan, joka on julkisesti saatavilla, jos ylläpidät eep-sivustoa."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Reititin käyttää myös yksityistä osoitekirjaa, jota ei yhdistetä eikä julkaista."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Yksityisen osoitekirjan isäntiin pääset itse, mutta heidän osoitteitaan ei koskaan jaeta muille."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Yksityistä osoitekirjaa voi käyttää myös muiden osoitekirjojesi isäntien aliaksille."
+
+msgid "subscription log"
+msgstr "tilausloki"
+
+msgid "Subscription Log"
+msgstr "Tilausloki"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Uusimmat (lukuun ottamatta huonoja domeeneja)"
+
+msgid "subscriptions"
+msgstr "tilaukset"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Tilaustiedostossa on luettelo i2p-osoitteista."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Osoitekirjasovellus tarkistaa tämän luettelon säännöllisesti uusien eep-sivustojen varalta."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Nämä osoitteet viittaavat julkaistuihin hosts.txt-tiedostoihin."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Katso tilausosoitteiden luettelo UKK:sta."

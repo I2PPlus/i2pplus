@@ -338,3 +338,345 @@ msgstr "Sizin Üst adres kitabınıza manuel olaraq əlavə etdiyiniz ünvandıl
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Abunələrinizdən ala biləcəyiniz mənzillər Ruternin adres kitabınıza birləşdiriləcəkdir."
+
+msgid "Import"
+msgstr "İdxal et"
+
+msgid "address book"
+msgstr "adres kitabı"
+
+msgid "Router"
+msgstr "Ruter"
+
+msgid "Master"
+msgstr "Üst"
+
+msgid "Private"
+msgstr "Gizli"
+
+msgid "Published"
+msgstr "Nəşr olunmuş"
+
+msgid "Blacklist"
+msgstr "Qara siyahı"
+
+msgid "Configuration"
+msgstr "Tənzimləmə"
+
+msgid "Help"
+msgstr "Yardım"
+
+msgid "Book"
+msgstr "Kitab"
+
+msgid "No entries"
+msgstr "Qeyd yoxdur"
+
+msgid "Add new destination"
+msgstr "Yeni nöqtə əlavə et"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt faylından idxal et"
+
+msgid "other"
+msgstr "digər"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt formatında ixrac et"
+
+msgid "Export results in hosts.txt format"
+msgstr "Nəticələri hosts.txt formatında ixrac et"
+
+msgid "Export book in hosts.txt format"
+msgstr "Kitabı hosts.txt formatında ixrac et"
+
+msgid "Search"
+msgstr "Axtar"
+
+msgid "latest"
+msgstr "ən yenilər"
+
+msgid "Alive"
+msgstr "Canlı"
+
+msgid "Dead"
+msgstr "Ölü"
+
+msgid "all"
+msgstr "hamısı"
+
+msgid "Info"
+msgstr "Məlumat"
+
+msgid "Type"
+msgstr "Növ"
+
+msgid "Hostname"
+msgstr "Mənzil adı"
+
+msgid "Encryption"
+msgstr "Şifrələmə"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Nöqtə"
+
+msgid "Added"
+msgstr "Əlavə edilmə"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Adres kitabından silmək üçün mənzilləri seçin"
+
+msgid "More information on this entry"
+msgstr "Bu qeyd haqqında daha çox məlumat"
+
+msgid "unknown"
+msgstr "naməlum"
+
+msgid "Base 32 address"
+msgstr "Base 32 ünvan"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Mənzil ünvanını paylaşmaq və adres kitabına əlavə etmək imkanı verən köməkçi link"
+
+msgid "Mark for deletion"
+msgstr "Silmək üçün işarələ"
+
+msgid "Cancel"
+msgstr "Ləğv et"
+
+msgid "This book currently contains no entries."
+msgstr "Bu kitab hazırda heç bir qeyd içərmir."
+
+msgid "e.g. newdomain.i2p"
+msgstr "məs. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 və ya B32"
+
+msgid "Full destination or b32 address"
+msgstr "Tam nöqtə və ya b32 ünvan"
+
+msgid "Select file"
+msgstr "Fayl seçin"
+
+msgid "blacklist"
+msgstr "qara siyahı"
+
+msgid "Blacklist Management"
+msgstr "Qara Siyahının İdarə Edilməsi"
+
+msgid "File location"
+msgstr "Faylın yeri"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Qara siyahıya əlavə etmək üçün I2P ünvanlarını daxil edin (hər sətirdə bir)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Qara siyahı faylı HTTP proksi vasitəsilə girişi bağlanmalı və adres kitabında göstərilməməli olan I2P mənzil adlarının siyahısını ehtiva edir."
+
+msgid "configuration"
+msgstr "tənzimləmə"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker artıq yoxlama aparır"
+
+msgid "Run HostChecker"
+msgstr "HostChecker-i işə sal"
+
+msgid "Hints"
+msgstr "Məsləhətlər"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Burada fayl və qovluq yolları adres kitabının iş qovluğuna nəzərən verilir; bu adətən ~/.i2p/addressbook/ (Linux) və ya %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) olur."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Sətirləri əl ilə adres kitabına əlavə etmək istəyirsinizsə, onları gizli və ya üst adres kitablara əlavə edin."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Ruter adres kitabı və nəşr olunmuş adres kitabı adres kitabı tətbiqi tərəfindən yenilənir."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Adres kitabınızı nəşr etdiyiniz zaman üst və ruter adres kitablardan BÜTÜN nöqtələr orada görünür."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Gizli nöqtələr üçün gizli adres kitabından istifadə edin, onlar nəşr olunmur."
+
+msgid "Options"
+msgstr "Seçimlər"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Abunə URL-lərinin siyahısını saxlayan fayl (dəyişməyə ehtiyac yoxdur)"
+
+msgid "Update interval in hours"
+msgstr "Yeniləmə intervalı (saatla)"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Sizin ictimai hosts.txt faylınız (vebserverinizin sənəd kökü daxilində yol seçin)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Sizin hosts.txt faylınız (dəyişməyin)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Sizin fərdi adres kitabınız, bu mənzillər nəşr olunacaq"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Sizin gizli adres kitabınız, heç vaxt nəşr olunmur"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "eepProxy üçün port (dəyişməyə ehtiyac yoxdur)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "eepProxy üçün mənzil adı (dəyişməyə ehtiyac yoxdur)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Nəşr olunmuş adres kitabının yenilənməsi"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Götürülən abunə URL-lərindən etags başlığını saxlayan fayl (dəyişməyə ehtiyac yoxdur)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Hər götürülən abunə URL-si üçün dəyişdirilmə vaxtını saxlayan fayl (dəyişməyə ehtiyac yoxdur)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Fəaliyyətin qeydə alınacağı fayl (hələnizə istəsəniz /dev/null edin)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "İstifadə olunacaq əvəz mövzu adı (standart olaraq konsoldan seçilmiş mövzu)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Mənzil yoxlayıcısının işləmə intervalı (saatla, standart 4 saat)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Mənzil yoxlayıcısı işləyərkən maksimum paralel ping sayı (standart 16, maksimum 160)"
+
+msgid "delete hosts"
+msgstr "mənzilləri sil"
+
+msgid "addressbook"
+msgstr "adres kitabı"
+
+msgid "Details"
+msgstr "Təfərrüatlar"
+
+msgid "Address Helper"
+msgstr "Ünvan Köməkçisi"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Kodlaşdırılmış ad"
+
+msgid "Base 32 Address"
+msgstr "Base 32 ünvan"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 hash"
+
+msgid "Public Key"
+msgstr "Açıq açar"
+
+msgid "Signing Key"
+msgstr "İmza açarı"
+
+msgid "Certificate"
+msgstr "Sertifikat"
+
+msgid "Validated"
+msgstr "Təsdiqlənmiş"
+
+msgid "no"
+msgstr "xeyr"
+
+msgid "yes"
+msgstr "bəli"
+
+msgid "Added Date"
+msgstr "Əlavə tarixi"
+
+msgid "Last Modified"
+msgstr "Son dəyişdirilmə"
+
+msgid "Notes"
+msgstr "Qeydlər"
+
+msgid "Add notes about domain"
+msgstr "Domen haqqında qeyd əlavə edin"
+
+msgid "Visual Identification for"
+msgstr "Vizual identifikasiya"
+
+msgid "Create your own identification images"
+msgstr "Özünüzlə aid identifikasiya şəkilləri yaradın"
+
+msgid "Launch Image Generator"
+msgstr "Şəkil generatorini işə sal"
+
+msgid "Introduction"
+msgstr "Giriş"
+
+msgid "What is the addressbook?"
+msgstr "Adres kitabı nədir?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Adres kitabı tətbiqi I2P quraşdırmanızın bir hissəsidir."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "O, paylanan mənbələrdən və ya \"abunələrdən\" hosts.txt faylınızı mütəmadi yeniləyir."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Əlavə saytlara abunə olmaq asandır, sadəcə onları <a href=\"subscriptions\">abunələr</a> faylınıza əlavə edin."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P-də adlandırma haqqında daha çox məlumat üçün <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>icmaliya</a> baxın."
+
+msgid "How does the addressbook application work?"
+msgstr "Adres kitabı tətbiqi necə işləyir?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Adres kitabı tətbiqi abunələrinizi mütəmadi yoxlayır və onların məzmununu \"ruter\" adres kitabınıza birləşdirir."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Sonra o həmçinin \"üst\" adres kitabınızı ruter adres kitabına birləşdirir."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Tənzimləndiyi halda, ruter adres kitabı indi \"nəşr olunmuş\" adres kitabına yazılır və eepsite işlədiriyisinizsə, o ictimai olaraq əlçatan olacaq."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Ruter həmçinin birləşdirilməyən və nəşr olunmayan gizli adres kitabından istifadə edir."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Gizli adres kitabındakı mənzillərə siz daxil ola bilərsiniz, lakin onların ünvanları heç vaxt başqalarına paylanmır."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Gizli adres kitabından digər adres kitablardakı mənzillərin təkalları üçün də istifadə oluna bilər."
+
+msgid "subscription log"
+msgstr "abunə günlüyü"
+
+msgid "Subscription Log"
+msgstr "Abunə Günlüyü"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Ən son (pis domenlər istisna olunur)"
+
+msgid "subscriptions"
+msgstr "abunələr"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Abunə faylı i2p URL-lərinin siyahısını ehtiva edir."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Adres kitabı tətbiqi bu siyahını yeni eepsitelər üçün mütəmadi yoxlayır."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Həmin URL-lər nəşr olunmuş hosts.txt fayllarına aiddir."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Abunə URL-lərinin siyahısı üçün FAQ bölməsinə baxın."

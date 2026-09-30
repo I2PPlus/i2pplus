@@ -338,3 +338,345 @@ msgstr "Adresy ručne pridané do hlavného adresára sa zlúčia s adresárom s
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelia z vašich odberov sa zlúčia s adresárom smerovača."
+
+msgid "Import"
+msgstr "Importovať"
+
+msgid "address book"
+msgstr "adresár"
+
+msgid "Router"
+msgstr "Smerovač"
+
+msgid "Master"
+msgstr "Hlavný"
+
+msgid "Private"
+msgstr "Súkromný"
+
+msgid "Published"
+msgstr "Publikovaný"
+
+msgid "Blacklist"
+msgstr "Čierna listina"
+
+msgid "Configuration"
+msgstr "Konfigurácia"
+
+msgid "Help"
+msgstr "Pomoc"
+
+msgid "Book"
+msgstr "Kniha"
+
+msgid "No entries"
+msgstr "Žiadne záznamy"
+
+msgid "Add new destination"
+msgstr "Pridať nový cieľ"
+
+msgid "Import from hosts.txt file"
+msgstr "Import zo súboru hosts.txt"
+
+msgid "other"
+msgstr "iné"
+
+msgid "Export in hosts.txt format"
+msgstr "Export v formáte hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Export výsledkov v formáte hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Export knihy v formáte hosts.txt"
+
+msgid "Search"
+msgstr "Hľadať"
+
+msgid "latest"
+msgstr "najnovšie"
+
+msgid "Alive"
+msgstr "dostupné"
+
+msgid "Dead"
+msgstr "nedostupné"
+
+msgid "all"
+msgstr "všetky"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Type"
+msgstr "Typ"
+
+msgid "Hostname"
+msgstr "Názov hostiteľa"
+
+msgid "Encryption"
+msgstr "Šifrovanie"
+
+msgid "Link (b32)"
+msgstr "Odkaz (b32)"
+
+msgid "Destination"
+msgstr "Cieľ"
+
+msgid "Added"
+msgstr "Pridané"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Vyberte hostiteľov na zmazanie z adresára"
+
+msgid "More information on this entry"
+msgstr "Viac informácií o tomto zázname"
+
+msgid "unknown"
+msgstr "neznáme"
+
+msgid "Base 32 address"
+msgstr "Adresa Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Pomocný odkaz na zdieľanie adresy hostiteľa s možnosťou pridania do adresára"
+
+msgid "Mark for deletion"
+msgstr "Označiť na zmazanie"
+
+msgid "Cancel"
+msgstr "Zrušiť"
+
+msgid "This book currently contains no entries."
+msgstr "Táto kniha zatiaľ neobsahuje žiadne záznamy."
+
+msgid "e.g. newdomain.i2p"
+msgstr "napr. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 alebo B32"
+
+msgid "Full destination or b32 address"
+msgstr "Plný cieľ alebo b32 adresa"
+
+msgid "Select file"
+msgstr "Vyberte súbor"
+
+msgid "blacklist"
+msgstr "čierna listina"
+
+msgid "Blacklist Management"
+msgstr "Správa čiernej listiny"
+
+msgid "File location"
+msgstr "Umiestnenie súboru"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Zadajte I2P adresy na čiernu listinu (jedna na riadok)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Súbor čiernej listiny obsahuje zoznam I2P názvov hostiteľov, ktoré majú byť zablokované pri prístupe cez HTTP proxy a vylúčené zo zobrazenia v adresári."
+
+msgid "configuration"
+msgstr "konfigurácia"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker už vykonáva kontrolu"
+
+msgid "Run HostChecker"
+msgstr "Spustiť HostChecker"
+
+msgid "Hints"
+msgstr "Nápovedy"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Cesty k súborom a priečinkom sú tu relatívne voči pracovnému adresáru aplikácie, ktorým je štandardne ~/.i2p/addressbook/ (Linux) alebo %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Ak chcete do adresára pridať riadky ručne, pridajte ich do súkromného alebo hlavného adresára."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Adresár smerovača aj publikovaný adresár aktualizuje aplikácia adresára."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Pri publikovaní adresára sa tam objavia VŠETKY ciele z hlavného adresára a adresára smerovača."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Súkromný adresár použite na súkromné ciele, tie sa nepublikujú."
+
+msgid "Options"
+msgstr "Možnosti"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Súbor so zoznamom URL adries odberov (nie je potrebné meniť)"
+
+msgid "Update interval in hours"
+msgstr "Interval aktualizácie v hodinách"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Váš verejný súbor hosts.txt (vyberte cestu v koreňovej mape webservera)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Váš hosts.txt (nemeniť)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Váš osobný adresár, títo hostitelia budú publikovaní"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Váš súkromný adresár, nikdy nie je publikovaný"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Port pre váš eepProxy (nie je potrebné meniť)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Názov hostiteľa vášho eepProxy (nie je potrebné meniť)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Či aktualizovať publikovaný adresár"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Súbor s hlavičkou etags z načítaných URL adries odberov (nie je potrebné meniť)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Súbor s časovou pečiatkou úpravy každej načítanej URL adresy odberu (nie je potrebné meniť)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Súbor, do ktorého sa zapisuje aktivita (ak chcete, zmeňte na /dev/null)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Názov témy, ktorá má nadradiť predvolenú (predvolene téma vybratá v konzole)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interval (v hodinách) spúšťania kontroly hostiteľov (predvolene 4 hodiny)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Maximálny počet súbežných pingov pri kontrole hostiteľov (predvolene 16, maximum 160)"
+
+msgid "delete hosts"
+msgstr "zmazanie hostiteľov"
+
+msgid "addressbook"
+msgstr "adresár"
+
+msgid "Details"
+msgstr "Podrobnosti"
+
+msgid "Address Helper"
+msgstr "Address Helper"
+
+msgid "link"
+msgstr "odkaz"
+
+msgid "Encoded Name"
+msgstr "Kódovaný názov"
+
+msgid "Base 32 Address"
+msgstr "Adresa Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Kontrolný súčet Base 64"
+
+msgid "Public Key"
+msgstr "Verejný kľúč"
+
+msgid "Signing Key"
+msgstr "Podpisový kľúč"
+
+msgid "Certificate"
+msgstr "Certifikát"
+
+msgid "Validated"
+msgstr "Overené"
+
+msgid "no"
+msgstr "nie"
+
+msgid "yes"
+msgstr "áno"
+
+msgid "Added Date"
+msgstr "Dátum pridania"
+
+msgid "Last Modified"
+msgstr "Naposledy zmenené"
+
+msgid "Notes"
+msgstr "Poznámky"
+
+msgid "Add notes about domain"
+msgstr "Pridať poznámky k doméne"
+
+msgid "Visual Identification for"
+msgstr "Vizuálna identifikácia pre"
+
+msgid "Create your own identification images"
+msgstr "Vytvorte si vlastné identifikačné obrázky"
+
+msgid "Launch Image Generator"
+msgstr "Spustiť generátor obrázkov"
+
+msgid "Introduction"
+msgstr "Úvod"
+
+msgid "What is the addressbook?"
+msgstr "Čo je adresár?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Aplikácia adresára je súčasťou vašej inštalácie I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Pravidelne aktualizuje váš súbor hosts.txt z distribuovaných zdrojov alebo z \"odberov\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Odoberať ďalšie stránky je jednoduché, stačí ich pridať do súboru <a href=\"subscriptions\">odberov</a>."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Viac informácií o pomenovaní v I2P nájdete v <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>prehľade</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Ako funguje aplikácia adresára?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Aplikácia adresára pravidelne načítava vaše odbery a zlučuje ich obsah do vášho \"smerovacieho\" adresára."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Potom zlučuje aj váš \"hlavný\" adresár do smerovacieho adresára."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Ak je tak nastavené, smerovací adresár sa teraz zapíše do \"publikovaného\" adresára, ktorý bude verejne dostupný, ak prevádzkujete eepstránku."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Smerovač používa aj súkromný adresár, ktorý sa nezlučuje ani nepublikuje."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Hostitelia v súkromnom adresári sú vám dostupní, ale ich adresy sa nikdy nešíria k ostatným."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Súkromný adresár možno použiť aj na aliasy hostiteľov z ostatných adresárov."
+
+msgid "subscription log"
+msgstr "záznam odberov"
+
+msgid "Subscription Log"
+msgstr "Záznam odberov"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Najnovšie (okrem chybných domén)"
+
+msgid "subscriptions"
+msgstr "odbery"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Súbor odberov obsahuje zoznam i2p URL adries."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Aplikácia adresára pravidelne kontroluje tento zoznam na nové eepstránky."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Tieto URL adrese odkazujú na publikované súbory hosts.txt."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Zoznam URL adries odberov nájdete v FAQ."

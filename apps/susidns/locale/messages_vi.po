@@ -330,3 +330,345 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
+
+msgid "Import"
+msgstr "Nhập"
+
+msgid "address book"
+msgstr "sổ địa chỉ"
+
+msgid "Router"
+msgstr "Bộ định tuyến"
+
+msgid "Master"
+msgstr "Chính"
+
+msgid "Private"
+msgstr "Riêng"
+
+msgid "Published"
+msgstr "Đã xuất bản"
+
+msgid "Blacklist"
+msgstr "Danh sách đen"
+
+msgid "Configuration"
+msgstr "Cấu hình"
+
+msgid "Help"
+msgstr "Trợ giúp"
+
+msgid "Book"
+msgstr "Sổ"
+
+msgid "No entries"
+msgstr "Không có mục nào"
+
+msgid "Add new destination"
+msgstr "Thêm đích đến mới"
+
+msgid "Import from hosts.txt file"
+msgstr "Nhập từ tệp hosts.txt"
+
+msgid "other"
+msgstr "khác"
+
+msgid "Export in hosts.txt format"
+msgstr "Xuất theo định dạng hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Xuất kết quả theo định dạng hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Xuất sổ theo định dạng hosts.txt"
+
+msgid "Search"
+msgstr "Tìm kiếm"
+
+msgid "latest"
+msgstr "mới nhất"
+
+msgid "Alive"
+msgstr "Có thể truy cập"
+
+msgid "Dead"
+msgstr "Không thể truy cập"
+
+msgid "all"
+msgstr "tất cả"
+
+msgid "Info"
+msgstr "Thông tin"
+
+msgid "Type"
+msgstr "Loại"
+
+msgid "Hostname"
+msgstr "Tên máy chủ"
+
+msgid "Encryption"
+msgstr "Mã hóa"
+
+msgid "Link (b32)"
+msgstr "Liên kết (b32)"
+
+msgid "Destination"
+msgstr "Đích đến"
+
+msgid "Added"
+msgstr "Đã thêm"
+
+msgid "Status"
+msgstr "Trạng thái"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Chọn máy chủ để xóa khỏi sổ địa chỉ"
+
+msgid "More information on this entry"
+msgstr "Thông tin chi tiết về mục này"
+
+msgid "unknown"
+msgstr "không rõ"
+
+msgid "Base 32 address"
+msgstr "Địa chỉ Cơ sở 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Liên kết trợ lý để chia sẻ địa chỉ máy chủ, kèm tùy chọn thêm vào sổ địa chỉ"
+
+msgid "Mark for deletion"
+msgstr "Đánh dấu để xóa"
+
+msgid "Cancel"
+msgstr "Hủy"
+
+msgid "This book currently contains no entries."
+msgstr "Sổ này hiện chưa có mục nào."
+
+msgid "e.g. newdomain.i2p"
+msgstr "ví dụ: newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 hoặc B32"
+
+msgid "Full destination or b32 address"
+msgstr "Đích đến đầy đủ hoặc địa chỉ b32"
+
+msgid "Select file"
+msgstr "Chọn tệp"
+
+msgid "blacklist"
+msgstr "danh sách đen"
+
+msgid "Blacklist Management"
+msgstr "Quản lý danh sách đen"
+
+msgid "File location"
+msgstr "Vị trí tệp"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Nhập các địa chỉ I2P cần đưa vào danh sách đen (mỗi dòng một địa chỉ)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Tệp danh sách đen chứa danh sách các tên máy chủ I2P cần bị chặn khi truy cập qua proxy HTTP, đồng thời bị loại khỏi hiển thị trong sổ địa chỉ."
+
+msgid "configuration"
+msgstr "cấu hình"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker đang chạy một lần quét"
+
+msgid "Run HostChecker"
+msgstr "Chạy HostChecker"
+
+msgid "Hints"
+msgstr "Gợi ý"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Các đường dẫn tệp và thư mục ở đây là tương đối so với thư mục làm việc của sổ địa chỉ, thường là ~/.i2p/addressbook/ (Linux) hoặc %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Nếu muốn thêm thủ công các dòng vào một sổ địa chỉ, hãy thêm vào sổ địa chỉ Riêng hoặc Chính."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Sổ địa chỉ Bộ định tuyến và sổ địa chỉ Đã xuất bản do ứng dụng sổ địa chỉ cập nhật."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Khi bạn xuất bản sổ địa chỉ của mình, TẤT CẢ các đích đến từ sổ địa chỉ Chính và Bộ định tuyến sẽ xuất hiện ở đó."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Hãy dùng sổ địa chỉ Riêng cho các đích đến riêng tư; những đích này sẽ không được xuất bản."
+
+msgid "Options"
+msgstr "Tùy chọn"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Tệp chứa danh sách các URL đăng ký (không cần thay đổi)"
+
+msgid "Update interval in hours"
+msgstr "Khoảng thời gian cập nhật, tính bằng giờ"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Tệp hosts.txt công khai của bạn (hãy chọn một đường dẫn trong thư mục gốc tài liệu của máy chủ web)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Tệp hosts.txt của bạn (đừng thay đổi)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Sổ địa chỉ cá nhân của bạn, các máy chủ này sẽ được xuất bản"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Sổ địa chỉ riêng tư của bạn, nó không bao giờ được xuất bản"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Cổng cho eepProxy của bạn (không cần thay đổi)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Tên máy chủ cho eepProxy của bạn (không cần thay đổi)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Có cập nhật sổ địa chỉ Đã xuất bản hay không"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Tệp chứa header etags từ các URL đăng ký đã tải (không cần thay đổi)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Tệp chứa dấu thời gian sửa đổi của từng URL đăng ký đã tải (không cần thay đổi)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Tệp ghi nhật ký hoạt động (đổi thành /dev/null nếu bạn muốn)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Tên giao diện thay thế cần dùng (mặc định là giao diện đã chọn trong bảng điều khiển)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Khoảng thời gian chạy trình kiểm tra máy chủ, tính bằng giờ (mặc định là 4 giờ)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Số ping đồng thời tối đa khi chạy trình kiểm tra máy chủ (mặc định là 16, tối đa là 160)"
+
+msgid "delete hosts"
+msgstr "xóa máy chủ"
+
+msgid "addressbook"
+msgstr "sổ địa chỉ"
+
+msgid "Details"
+msgstr "Chi tiết"
+
+msgid "Address Helper"
+msgstr "Trợ lý địa chỉ"
+
+msgid "link"
+msgstr "liên kết"
+
+msgid "Encoded Name"
+msgstr "Tên đã mã hóa"
+
+msgid "Base 32 Address"
+msgstr "Địa chỉ Cơ sở 32"
+
+msgid "Base 64 Hash"
+msgstr "Hàm băm Cơ sở 64"
+
+msgid "Public Key"
+msgstr "Khóa công khai"
+
+msgid "Signing Key"
+msgstr "Khóa ký"
+
+msgid "Certificate"
+msgstr "Chứng chỉ"
+
+msgid "Validated"
+msgstr "Đã xác minh"
+
+msgid "no"
+msgstr "không"
+
+msgid "yes"
+msgstr "có"
+
+msgid "Added Date"
+msgstr "Ngày thêm"
+
+msgid "Last Modified"
+msgstr "Sửa đổi lần cuối"
+
+msgid "Notes"
+msgstr "Ghi chú"
+
+msgid "Add notes about domain"
+msgstr "Thêm ghi chú về miền"
+
+msgid "Visual Identification for"
+msgstr "Định danh trực quan cho"
+
+msgid "Create your own identification images"
+msgstr "Tự tạo ảnh định danh của bạn"
+
+msgid "Launch Image Generator"
+msgstr "Mở trình tạo ảnh"
+
+msgid "Introduction"
+msgstr "Giới thiệu"
+
+msgid "What is the addressbook?"
+msgstr "Sổ địa chỉ là gì?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Ứng dụng sổ địa chỉ là một phần của bản cài đặt I2P của bạn."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Nó thường xuyên cập nhật tệp hosts.txt của bạn từ các nguồn phân tán hoặc \"đăng ký\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Đăng ký thêm các trang khác rất dễ, chỉ cần thêm chúng vào tệp <a href=\"subscriptions\">đăng ký</a> của bạn."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Để biết thêm về cách đặt tên trong I2P, hãy xem <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>phần tổng quan</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Ứng dụng sổ địa chỉ hoạt động như thế nào?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Ứng dụng sổ địa chỉ thường xuyên kiểm tra các đăng ký của bạn và hợp nhất nội dung của chúng vào sổ địa chỉ \"Bộ định tuyến\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Sau đó nó cũng hợp nhất sổ địa chỉ \"Chính\" của bạn vào sổ địa chỉ Bộ định tuyến."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Nếu được cấu hình, sổ địa chỉ Bộ định tuyến sẽ được ghi vào sổ địa chỉ \"Đã xuất bản\", vốn sẽ công khai nếu bạn đang vận hành một eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Bộ định tuyến cũng dùng một sổ địa chỉ riêng tư, vốn không được hợp nhất hay xuất bản."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Bạn có thể truy cập các máy chủ trong sổ địa chỉ riêng tư, nhưng địa chỉ của chúng không bao giờ được phân phối cho người khác."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Sổ địa chỉ riêng tư cũng có thể dùng để đặt bí danh cho các máy chủ trong những sổ địa chỉ khác của bạn."
+
+msgid "subscription log"
+msgstr "nhật ký đăng ký"
+
+msgid "Subscription Log"
+msgstr "Nhật ký đăng ký"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Mới nhất (không tính các miền lỗi)"
+
+msgid "subscriptions"
+msgstr "đăng ký"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Tệp đăng ký chứa danh sách các URL i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Ứng dụng sổ địa chỉ thường xuyên kiểm tra danh sách này để tìm eepsite mới."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Các URL đó trỏ tới những tệp hosts.txt đã được xuất bản."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Xem phần Câu hỏi thường gặp để biết danh sách các URL đăng ký."

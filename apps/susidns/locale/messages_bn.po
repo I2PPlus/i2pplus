@@ -338,3 +338,345 @@ msgstr "আপনার মাস্টার ঠিকানা বইতে �
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "আপনার সাবস্ক্রিপশন থেকে প্রাপ্ত হোস্টগুলি আপনার রাউটার ঠিকানা বইতে একীভূত হবে।"
+
+msgid "Import"
+msgstr "আমদানি"
+
+msgid "address book"
+msgstr "ঠিকানা বই"
+
+msgid "Router"
+msgstr "রাউটার"
+
+msgid "Master"
+msgstr "মাস্টার"
+
+msgid "Private"
+msgstr "ব্যক্তিগত"
+
+msgid "Published"
+msgstr "প্রকাশিত"
+
+msgid "Blacklist"
+msgstr "ব্ল্যাকলিস্ট"
+
+msgid "Configuration"
+msgstr "কনফিগারেশন"
+
+msgid "Help"
+msgstr "সাহায্য"
+
+msgid "Book"
+msgstr "বই"
+
+msgid "No entries"
+msgstr "কোনো এন্ট্রি নেই"
+
+msgid "Add new destination"
+msgstr "নতুন গন্তব্য যোগ করুন"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt ফাইল থেকে আমদানি করুন"
+
+msgid "other"
+msgstr "অন্যান্য"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt ফরম্যাটে রপ্তানি করুন"
+
+msgid "Export results in hosts.txt format"
+msgstr "ফলাফল hosts.txt ফরম্যাটে রপ্তানি করুন"
+
+msgid "Export book in hosts.txt format"
+msgstr "বই hosts.txt ফরম্যাটে রপ্তানি করুন"
+
+msgid "Search"
+msgstr "অনুসন্ধান"
+
+msgid "latest"
+msgstr "সর্বশেষ"
+
+msgid "Alive"
+msgstr "সক্রিয়"
+
+msgid "Dead"
+msgstr "নিষ্ক্রিয়"
+
+msgid "all"
+msgstr "সব"
+
+msgid "Info"
+msgstr "তথ্য"
+
+msgid "Type"
+msgstr "ধরন"
+
+msgid "Hostname"
+msgstr "হোস্টনাম"
+
+msgid "Encryption"
+msgstr "এনক্রিপশন"
+
+msgid "Link (b32)"
+msgstr "লিঙ্ক (b32)"
+
+msgid "Destination"
+msgstr "গন্তব্য"
+
+msgid "Added"
+msgstr "যোগের সময়"
+
+msgid "Status"
+msgstr "অবস্থা"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "ঠিকানা বই থেকে মুছে ফেলার জন্য হোস্ট নির্বাচন করুন"
+
+msgid "More information on this entry"
+msgstr "এই এন্ট্রি সম্পর্কে আরও তথ্য"
+
+msgid "unknown"
+msgstr "অজানা"
+
+msgid "Base 32 address"
+msgstr "বেস 32 ঠিকানা"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "হোস্ট ঠিকানা ভাগ করে নেওয়ার হেল্পার লিঙ্ক, ঠিকানা বইয়ে যোগ করার সুবিধাসহ"
+
+msgid "Mark for deletion"
+msgstr "মুছে ফেলার জন্য চিহ্নিত করুন"
+
+msgid "Cancel"
+msgstr "বাতিল"
+
+msgid "This book currently contains no entries."
+msgstr "এই বইয়ে বর্তমানে কোনো এন্ট্রি নেই।"
+
+msgid "e.g. newdomain.i2p"
+msgstr "যেমন newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 বা B32"
+
+msgid "Full destination or b32 address"
+msgstr "সম্পূর্ণ গন্তব্য বা b32 ঠিকানা"
+
+msgid "Select file"
+msgstr "ফাইল নির্বাচন করুন"
+
+msgid "blacklist"
+msgstr "ব্ল্যাকলিস্ট"
+
+msgid "Blacklist Management"
+msgstr "ব্ল্যাকলিস্ট ব্যবস্থাপনা"
+
+msgid "File location"
+msgstr "ফাইলের অবস্থান"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "ব্ল্যাকলিস্ট করতে I2P ঠিকানা লিখুন (প্রতি লাইনে একটি)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "ব্ল্যাকলিস্ট ফাইলে এমন I2P হোস্টনামের তালিকা থাকে, যেগুলি HTTP প্রক্সির মাধ্যমে প্রবেশাধিকার বন্ধ রাখা এবং ঠিকানা বইয়ের প্রদর্শন থেকে বাদ দেওয়া উচিত।"
+
+msgid "configuration"
+msgstr "কনফিগারেশন"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker ইতিমধ্যেই একটি স্ক্যান চালাচ্ছে"
+
+msgid "Run HostChecker"
+msgstr "HostChecker চালান"
+
+msgid "Hints"
+msgstr "ইঙ্গিত"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "এখানকার ফাইল ও ডিরেক্টরির পথগুলো ঠিকানাবইয়ের কার্যকর ডিরেক্টরির সাপেক্ষ, যা সাধারণত ~/.i2p/addressbook/ (Linux) বা %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)।"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "কোনো ঠিকানা বইয়ে ম্যানুয়ালি লাইন যোগ করতে চাইলে সেগুলো ব্যক্তিগত বা মাস্টার ঠিকানা বইয়ে যোগ করুন।"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "রাউটার ঠিকানা বই এবং প্রকাশিত ঠিকানা বই ঠিকানাবই অ্যাপ্লিকেশন দ্বারা আপডেট করা হয়।"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "আপনি যখন ঠিকানাবই প্রকাশ করবেন, তখন মাস্টার ও রাউটার ঠিকানা বইয়ের সব গন্তব্যই সেখানে দেখা যাবে।"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "ব্যক্তিগত গন্তব্যের জন্য ব্যক্তিগত ঠিকানা বই ব্যবহার করুন, এগুলো প্রকাশিত হয় না।"
+
+msgid "Options"
+msgstr "অপশন"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "সাবস্ক্রিপশন URL-এর তালিকা রাখা ফাইল (পরিবর্তনের দরকার নেই)"
+
+msgid "Update interval in hours"
+msgstr "ঘন্টায় আপডেটের ব্যবধান"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "আপনার পাবলিক hosts.txt ফাইল (ওয়েবসার্ভারের ডকুমেন্ট রুটের মধ্যে একটি পথ বেছে নিন)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "আপনার hosts.txt (পরিবর্তন করবেন না)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "আপনার ব্যক্তিগত ঠিকানা বই, এই হোস্টগুলো প্রকাশিত হবে"
+
+msgid "Your private addressbook, it is never published"
+msgstr "আপনার ব্যক্তিগত ঠিকানা বই, এটি কখনও প্রকাশিত হয় না"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "আপনার eepProxy-এর পোর্ট (পরিবর্তনের দরকার নেই)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "আপনার eepProxy-এর হোস্টনাম (পরিবর্তনের দরকার নেই)"
+
+msgid "Whether to update the published addressbook"
+msgstr "প্রকাশিত ঠিকানা বই আপডেট করা হবে কি না"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "আনা সাবস্ক্রিপশন URL থেকে প্রাপ্ত etags হেডার রাখা ফাইল (পরিবর্তনের দরকার নেই)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "প্রতিটি আনা সাবস্ক্রিপশন URL-এর পরিবর্তনের সময়স্ট্যাম্প রাখা ফাইল (পরিবর্তনের দরকার নেই)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "কার্যকলাপ লিখে রাখার ফাইল (চাইলে /dev/null-এ বদলে নিতে পারেন)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "ব্যবহারের জন্য ওভাররাইড থিমের নাম (ডিফল্টরূপে কনসোলে নির্বাচিত থিম)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "হোস্ট চেকার চালানোর ব্যবধান (ঘন্টায়; ডিফল্টরূপে 4 ঘণ্টা)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "হোস্ট চেকার চালানোর সময় সর্বাধিক একসঙ্গে পিং (ডিফল্টরূপে 16, সর্বোচ্চ 160)"
+
+msgid "delete hosts"
+msgstr "হোস্ট মুছে ফেলা"
+
+msgid "addressbook"
+msgstr "ঠিকানাবই"
+
+msgid "Details"
+msgstr "বিবরণ"
+
+msgid "Address Helper"
+msgstr "অ্যাড্রেস হেল্পার"
+
+msgid "link"
+msgstr "লিঙ্ক"
+
+msgid "Encoded Name"
+msgstr "এনকোড করা নাম"
+
+msgid "Base 32 Address"
+msgstr "বেস 32 ঠিকানা"
+
+msgid "Base 64 Hash"
+msgstr "বেস 64 হ্যাশ"
+
+msgid "Public Key"
+msgstr "পাবলিক কী"
+
+msgid "Signing Key"
+msgstr "সাইনিং কী"
+
+msgid "Certificate"
+msgstr "সার্টিফিকেট"
+
+msgid "Validated"
+msgstr "যাচাইকৃত"
+
+msgid "no"
+msgstr "না"
+
+msgid "yes"
+msgstr "হ্যাঁ"
+
+msgid "Added Date"
+msgstr "যোগের তারিখ"
+
+msgid "Last Modified"
+msgstr "সর্বশেষ পরিবর্তিত"
+
+msgid "Notes"
+msgstr "নোট"
+
+msgid "Add notes about domain"
+msgstr "ডোমেইন সম্পর্কে নোট লিখুন"
+
+msgid "Visual Identification for"
+msgstr "ভিজ্যুয়াল শনাক্তকরণ"
+
+msgid "Create your own identification images"
+msgstr "নিজের শনাক্তকরণ ছবি তৈরি করুন"
+
+msgid "Launch Image Generator"
+msgstr "ইমেজ জেনারেটর চালান"
+
+msgid "Introduction"
+msgstr "ভূমিকা"
+
+msgid "What is the addressbook?"
+msgstr "ঠিকানাবই কী?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "ঠিকানাবই অ্যাপ্লিকেশন আপনার I2P ইনস্টলেশনের একটি অংশ।"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "এটি বিতরণকৃত উৎস বা \"সাবস্ক্রিপশন\" থেকে নিয়মিতভাবে আপনার hosts.txt ফাইল আপডেট করে।"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "অতিরিক্ত সাইটে সাবস্ক্রাইব করা খুব সহজ, সেগুলো আপনার <a href=\"subscriptions\">সাবস্ক্রিপশন</a> ফাইলেই যোগ করুন।"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P-তে নামকরণ সম্পর্কে আরও তথ্যের জন্য <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>সংক্ষিপ্ত পরিচিতি</a> দেখুন।"
+
+msgid "How does the addressbook application work?"
+msgstr "ঠিকানাবই অ্যাপ্লিকেশন কীভাবে কাজ করে?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "ঠিকানাবই অ্যাপ্লিকেশন নিয়মিতভাবে আপনার সাবস্ক্রিপশনগুলো যাচাই করে এবং সেগুলোর বিষয়বস্তু আপনার \"রাউটার\" ঠিকানা বইয়ে মিলিয়ে দেয়।"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "তারপর এটি আপনার \"মাস্টার\" ঠিকানা বইকেও রাউটার ঠিকানা বইয়ে মিলিয়ে দেয়।"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "কনফিগার করা থাকলে রাউটার ঠিকানা বইটি এখন \"প্রকাশিত\" ঠিকানা বইয়ে লেখা হয়, যা আপনি eepসাইট চালালে সবার জন্য উন্মুক্ত থাকে।"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "রাউটার একটি ব্যক্তিগত ঠিকানা বইও ব্যবহার করে, যা মিলিয়ে দেওয়া বা প্রকাশ করা হয় না।"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "ব্যক্তিগত ঠিকানা বইয়ের হোস্টগুলো আপনি ব্যবহার করতে পারেন, তবে সেগুলোর ঠিকানা কখনও অন্যদের কাছে বিতরণ করা হয় না।"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "ব্যক্তিগত ঠিকানা বই আপনার অন্যান্য ঠিকানা বইয়ের হোস্টগুলোর উপনাম রাখার জন্যও ব্যবহার করা যায়।"
+
+msgid "subscription log"
+msgstr "সাবস্ক্রিপশন লগ"
+
+msgid "Subscription Log"
+msgstr "সাবস্ক্রিপশন লগ"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "সর্বশেষগুলো (খারাপ ডোমেইন বাদে)"
+
+msgid "subscriptions"
+msgstr "সাবস্ক্রিপশন"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "সাবস্ক্রিপশন ফাইলে i2p URL-এর একটি তালিকা থাকে।"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "ঠিকানাবই অ্যাপ্লিকেশন নতুন eepসাইট খুঁজে বের করতে নিয়মিতভাবে এই তালিকাটি যাচাই করে।"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "সেই URL গুলো প্রকাশিত hosts.txt ফাইলগুলোকে নির্দেশ করে।"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "সাবস্ক্রিপশন URL-এর তালিকার জন্য FAQ দেখুন।"

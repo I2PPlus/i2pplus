@@ -346,3 +346,345 @@ msgstr "Adresele adăugate manual în agenda dvs. de adrese Master se vor contop
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Gazdele pe care le primiți de la abonamentele dvs. se vor contopi cu agenda de adrese a routerului."
+
+msgid "Import"
+msgstr "Importare"
+
+msgid "address book"
+msgstr "agendă"
+
+msgid "Router"
+msgstr "Router"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "Private"
+msgstr "Private"
+
+msgid "Published"
+msgstr "Publicat"
+
+msgid "Blacklist"
+msgstr "Listă neagră"
+
+msgid "Configuration"
+msgstr "Configurare"
+
+msgid "Help"
+msgstr "Ajutor"
+
+msgid "Book"
+msgstr "Agendă"
+
+msgid "No entries"
+msgstr "Nicio intrare"
+
+msgid "Add new destination"
+msgstr "Adaugă destinație nouă"
+
+msgid "Import from hosts.txt file"
+msgstr "Importare din fișierul hosts.txt"
+
+msgid "other"
+msgstr "altele"
+
+msgid "Export in hosts.txt format"
+msgstr "Export în format hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Export rezultate în format hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Export agendă în format hosts.txt"
+
+msgid "Search"
+msgstr "Căutare"
+
+msgid "latest"
+msgstr "ultimele"
+
+msgid "Alive"
+msgstr "Accesibil"
+
+msgid "Dead"
+msgstr "Inaccesibil"
+
+msgid "all"
+msgstr "toate"
+
+msgid "Info"
+msgstr "Informații"
+
+msgid "Type"
+msgstr "Tip"
+
+msgid "Hostname"
+msgstr "Nume de gazdă"
+
+msgid "Encryption"
+msgstr "Criptare"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Destinație"
+
+msgid "Added"
+msgstr "Adăugat"
+
+msgid "Status"
+msgstr "Stare"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Selectați gazde pentru ștergere din agendă"
+
+msgid "More information on this entry"
+msgstr "Mai multe informații despre această intrare"
+
+msgid "unknown"
+msgstr "necunoscut"
+
+msgid "Base 32 address"
+msgstr "adresă Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Link de helper pentru a partaja adresa gazdei, cu opțiunea de a o adăuga în agendă"
+
+msgid "Mark for deletion"
+msgstr "Marchează pentru ștergere"
+
+msgid "Cancel"
+msgstr "Anulează"
+
+msgid "This book currently contains no entries."
+msgstr "Această agendă nu conține momentan nicio intrare."
+
+msgid "e.g. newdomain.i2p"
+msgstr "ex. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 sau B32"
+
+msgid "Full destination or b32 address"
+msgstr "Destinație completă sau adresă b32"
+
+msgid "Select file"
+msgstr "Selectați fișier"
+
+msgid "blacklist"
+msgstr "listă neagră"
+
+msgid "Blacklist Management"
+msgstr "Administrarea listei negre"
+
+msgid "File location"
+msgstr "Locația fișierului"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Introduceți adrese I2P de adăugat pe lista neagră (una pe linie)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Fișierul listei negre conține o listă de nume de gazdă I2P care ar trebui blocate pentru acces prin proxy-ul HTTP și excluse din afișarea în agendă."
+
+msgid "configuration"
+msgstr "configurare"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker rulează deja o scanare"
+
+msgid "Run HostChecker"
+msgstr "Rulează HostChecker"
+
+msgid "Hints"
+msgstr "Indicații"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Calea fișierelor și a directoarelor de aici este relativă la directorul de lucru al agendei, care este în mod normal ~/.i2p/addressbook/ (Linux) sau %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Dacă doriți să adăugați manual linii într-o agendă, adăugați-le în agendele private sau master."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Agenda de adrese a routerului și agenda de adrese publicată sunt actualizate de aplicația pentru agenda de adrese."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Când publicați agenda de adrese, TOATE destinațiile din agendele master și a routerului apar acolo."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Folosiți agenda privată pentru destinațiile private; acestea nu sunt publicate."
+
+msgid "Options"
+msgstr "Opțiuni"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Fișierul cu lista URL-urilor abonamentelor (nu trebuie modificat)"
+
+msgid "Update interval in hours"
+msgstr "Interval de actualizare (în ore)"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Fișierul dvs. hosts.txt public (alegeți o cale în rădăcina documentelor a serverului web)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Fișierul dvs. hosts.txt (nu îl modificați)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Agenda dvs. personală; aceste gazde vor fi publicate"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Agenda dvs. privată; nu este publicată niciodată"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Portul pentru eepProxy (nu trebuie modificat)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Numele de gazdă pentru eepProxy (nu trebuie modificat)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Actualizează agenda de adrese publicată"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Fișierul cu antetul etags din URL-urile de abonament preluate (nu trebuie modificat)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Fișierul cu marca de timp a modificării pentru fiecare URL de abonament preluat (nu trebuie modificat)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Fișierul în care se scrie jurnalul de activitate (dacă doriți, îl puteți schimba cu /dev/null)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Numele temei de înlocuire care va fi folosită (implicit, tema selectată în consolă)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interval (în ore) pentru rularea verificatorului de gazde (implicit, 4 ore)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Numărul maxim de ping-uri simultane la rularea verificatorului de gazde (implicit 16, maxim 160)"
+
+msgid "delete hosts"
+msgstr "șterge gazdele"
+
+msgid "addressbook"
+msgstr "agendă"
+
+msgid "Details"
+msgstr "Detalii"
+
+msgid "Address Helper"
+msgstr "Helper de adresă"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Nume codat"
+
+msgid "Base 32 Address"
+msgstr "Adresă Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Amprentă Base 64"
+
+msgid "Public Key"
+msgstr "Cheie publică"
+
+msgid "Signing Key"
+msgstr "Cheie de semnare"
+
+msgid "Certificate"
+msgstr "Certificat"
+
+msgid "Validated"
+msgstr "Validat"
+
+msgid "no"
+msgstr "nu"
+
+msgid "yes"
+msgstr "da"
+
+msgid "Added Date"
+msgstr "Data adăugării"
+
+msgid "Last Modified"
+msgstr "Ultima modificare"
+
+msgid "Notes"
+msgstr "Note"
+
+msgid "Add notes about domain"
+msgstr "Adaugă note despre domeniu"
+
+msgid "Visual Identification for"
+msgstr "Identificare vizuală pentru"
+
+msgid "Create your own identification images"
+msgstr "Creați-vă propriile imagini de identificare"
+
+msgid "Launch Image Generator"
+msgstr "Lansează generatorul de imagini"
+
+msgid "Introduction"
+msgstr "Introducere"
+
+msgid "What is the addressbook?"
+msgstr "Ce este agenda de adrese?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Aplicația pentru agenda de adrese face parte din instalarea dvs. a I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Aceasta actualizează regulat fișierul dvs. hosts.txt din surse distribuite sau din \"abonamente\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Abonarea la site-uri suplimentare este simplă: adăugați-le în fișierul <a href=\"subscriptions\">abonamentelor</a> dvs."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Pentru mai multe informații despre denumirea în I2P, consultați <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>prezentarea generală</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Cum funcționează aplicația pentru agenda de adrese?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Aplicația pentru agenda de adrese verifică regulat abonamentele dvs. și integrează conținutul lor în agenda dvs. de adrese \"router\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Apoi integrează și agenda dvs. de adrese \"master\" în agenda de adrese a routerului."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Dacă este configurată astfel, agenda de adrese a routerului este acum scrisă în agenda de adrese \"publicată\", care va fi disponibilă public dacă rulați un eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Routerul folosește și o agendă de adrese privată, care nu este integrată și nu este publicată."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Gazdele din agenda de adrese privată vă sunt accesibile, dar adresele lor nu sunt niciodată distribuite altora."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Agenda de adrese privată poate fi folosită și pentru aliasuri ale gazdelor din celelalte agende de adrese."
+
+msgid "subscription log"
+msgstr "jurnal de abonamente"
+
+msgid "Subscription Log"
+msgstr "Jurnal de abonamente"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Cele mai recente (fără domeniile invalide)"
+
+msgid "subscriptions"
+msgstr "abonamente"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Fișierul de abonamente conține o listă de URL-uri i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Aplicația pentru agenda de adrese verifică regulat această listă, căutând eepsite-uri noi."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Aceste URL-uri trimit la fișiere hosts.txt publicate."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Consultați FAQ pentru o listă de URL-uri de abonament."

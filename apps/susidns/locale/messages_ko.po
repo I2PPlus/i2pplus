@@ -330,3 +330,345 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
+
+msgid "Import"
+msgstr "가져오기"
+
+msgid "address book"
+msgstr "주소록"
+
+msgid "Router"
+msgstr "라우터"
+
+msgid "Master"
+msgstr "마스터"
+
+msgid "Private"
+msgstr "비공개"
+
+msgid "Published"
+msgstr "게시됨"
+
+msgid "Blacklist"
+msgstr "블랙리스트"
+
+msgid "Configuration"
+msgstr "설정"
+
+msgid "Help"
+msgstr "도움말"
+
+msgid "Book"
+msgstr "주소록"
+
+msgid "No entries"
+msgstr "항목 없음"
+
+msgid "Add new destination"
+msgstr "목적지 추가"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt 파일에서 가져오기"
+
+msgid "other"
+msgstr "기타"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt 형식으로 내보내기"
+
+msgid "Export results in hosts.txt format"
+msgstr "검색 결과를 hosts.txt 형식으로 내보내기"
+
+msgid "Export book in hosts.txt format"
+msgstr "주소록을 hosts.txt 형식으로 내보내기"
+
+msgid "Search"
+msgstr "검색"
+
+msgid "latest"
+msgstr "최신순"
+
+msgid "Alive"
+msgstr "접속 가능"
+
+msgid "Dead"
+msgstr "접속 불가"
+
+msgid "all"
+msgstr "전체"
+
+msgid "Info"
+msgstr "정보"
+
+msgid "Type"
+msgstr "유형"
+
+msgid "Hostname"
+msgstr "호스트 이름"
+
+msgid "Encryption"
+msgstr "암호화"
+
+msgid "Link (b32)"
+msgstr "링크 (b32)"
+
+msgid "Destination"
+msgstr "목적지"
+
+msgid "Added"
+msgstr "추가됨"
+
+msgid "Status"
+msgstr "상태"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "주소록에서 삭제할 호스트 선택"
+
+msgid "More information on this entry"
+msgstr "이 항목의 자세한 정보"
+
+msgid "unknown"
+msgstr "알 수 없음"
+
+msgid "Base 32 address"
+msgstr "Base 32 주소"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "호스트 주소를 공유하고 주소록에 추가할 수 있는 도우미 링크"
+
+msgid "Mark for deletion"
+msgstr "삭제 대상으로 표시"
+
+msgid "Cancel"
+msgstr "취소"
+
+msgid "This book currently contains no entries."
+msgstr "이 주소록에는 현재 항목이 없습니다."
+
+msgid "e.g. newdomain.i2p"
+msgstr "예: newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 또는 B32"
+
+msgid "Full destination or b32 address"
+msgstr "전체 목적지 주소 또는 b32 주소"
+
+msgid "Select file"
+msgstr "파일 선택"
+
+msgid "blacklist"
+msgstr "블랙리스트"
+
+msgid "Blacklist Management"
+msgstr "블랙리스트 관리"
+
+msgid "File location"
+msgstr "파일 위치"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "블랙리스트에 추가할 I2P 주소를 입력하세요 (한 줄에 하나씩)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "블랙리스트 파일에는 HTTP 프록시를 통한 접근을 차단하고 주소록에 표시하지 않을 I2P 호스트 이름 목록이 들어 있습니다."
+
+msgid "configuration"
+msgstr "설정"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker가 이미 검색 중입니다"
+
+msgid "Run HostChecker"
+msgstr "HostChecker 실행"
+
+msgid "Hints"
+msgstr "참고 사항"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "여기에서 파일과 디렉터리 경로는 주소록의 작업 디렉터리를 기준으로 하며, 작업 디렉터리는 보통 ~/.i2p/addressbook/ (Linux) 또는 %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)입니다."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "주소록에 수동으로 줄을 추가하려면 비공개 또는 마스터 주소록에 추가하세요."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "라우터 주소록과 게시된 주소록은 주소록 애플리케이션이 갱신합니다."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "주소록을 게시하면 마스터와 라우터 주소록의 모든 목적지가 게시된 주소록에 나타납니다."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "개인 목적지는 비공개 주소록에 추가하세요. 이 목적지들은 게시되지 않습니다."
+
+msgid "Options"
+msgstr "설정 항목"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "구독 URL 목록이 들어 있는 파일 (변경할 필요 없음)"
+
+msgid "Update interval in hours"
+msgstr "업데이트 주기(시간)"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "공개용 hosts.txt 파일 (웹 서버 문서 루트 안의 경로를 지정하세요)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "사용자 hosts.txt (변경하지 마세요)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "개인 주소록이며, 이 호스트들은 게시됩니다"
+
+msgid "Your private addressbook, it is never published"
+msgstr "비공개 주소록이며, 게시되지 않습니다"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "eepProxy 포트 (변경할 필요 없음)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "eepProxy 호스트 이름 (변경할 필요 없음)"
+
+msgid "Whether to update the published addressbook"
+msgstr "게시된 주소록을 갱신할지 여부"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "가져온 구독 URL의 etags 헤더가 저장된 파일 (변경할 필요 없음)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "가져온 구독 URL별 수정 시각이 저장된 파일 (변경할 필요 없음)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "활동을 기록할 로그 파일 (원하지 않으면 /dev/null로 변경하세요)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "사용할 테마 이름 (기본값은 콘솔에서 선택한 테마)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "호스트 검사 실행 주기(시간) (기본값은 4시간)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "호스트 검사 실행 시 최대 동시 핑 수 (기본값은 16, 최대 160)"
+
+msgid "delete hosts"
+msgstr "호스트 삭제"
+
+msgid "addressbook"
+msgstr "주소록"
+
+msgid "Details"
+msgstr "상세 정보"
+
+msgid "Address Helper"
+msgstr "주소 도우미"
+
+msgid "link"
+msgstr "링크"
+
+msgid "Encoded Name"
+msgstr "인코딩된 이름"
+
+msgid "Base 32 Address"
+msgstr "Base 32 주소"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 해시"
+
+msgid "Public Key"
+msgstr "공개 키"
+
+msgid "Signing Key"
+msgstr "서명 키"
+
+msgid "Certificate"
+msgstr "인증서"
+
+msgid "Validated"
+msgstr "검증됨"
+
+msgid "no"
+msgstr "아니오"
+
+msgid "yes"
+msgstr "예"
+
+msgid "Added Date"
+msgstr "추가일"
+
+msgid "Last Modified"
+msgstr "최종 수정일"
+
+msgid "Notes"
+msgstr "메모"
+
+msgid "Add notes about domain"
+msgstr "도메인에 대한 메모 추가"
+
+msgid "Visual Identification for"
+msgstr "시각적 식별 이미지"
+
+msgid "Create your own identification images"
+msgstr "직접 식별 이미지를 만들어 보세요"
+
+msgid "Launch Image Generator"
+msgstr "이미지 생성기 실행"
+
+msgid "Introduction"
+msgstr "소개"
+
+msgid "What is the addressbook?"
+msgstr "주소록이란?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "주소록 애플리케이션은 I2P 설치 패키지에 포함되어 있습니다."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "분산된 소스나 \"구독\"을 이용해 hosts.txt 파일을 정기적으로 갱신합니다."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "다른 사이트를 구독하려면 <a href=\"subscriptions\">구독</a> 파일에 추가하기만 하면 됩니다."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P의 이름 지정에 대한 자세한 내용은 <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>개요</a>를 참고하세요."
+
+msgid "How does the addressbook application work?"
+msgstr "주소록 애플리케이션은 어떻게 동작하나요?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "주소록 애플리케이션은 구독을 정기적으로 가져와 그 내용을 \"라우터\" 주소록에 병합합니다."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "이어서 \"마스터\" 주소록도 라우터 주소록에 병합합니다."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "설정된 경우 라우터 주소록의 내용이 \"게시된\" 주소록에 기록되며, eepsite를 운영 중이라면 누구나 접근할 수 있습니다."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "라우터는 병합되거나 게시되지 않는 비공개 주소록도 사용합니다."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "비공개 주소록의 호스트는 사용자가 직접 접근할 수 있지만, 그 주소가 다른 사용자에게 전달되지는 않습니다."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "비공개 주소록은 다른 주소록에 있는 호스트의 별칭으로도 사용할 수 있습니다."
+
+msgid "subscription log"
+msgstr "구독 로그"
+
+msgid "Subscription Log"
+msgstr "구독 로그"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "최신 항목 (잘못된 도메인 제외)"
+
+msgid "subscriptions"
+msgstr "구독"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "구독 파일에는 i2p URL 목록이 들어 있습니다."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "주소록 애플리케이션은 이 목록에서 새로운 eepsite를 정기적으로 찾아냅니다."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "이 URL들은 게시된 hosts.txt 파일을 가리킵니다."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "구독 URL 목록은 FAQ를 참고하세요."

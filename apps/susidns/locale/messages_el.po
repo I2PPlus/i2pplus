@@ -338,3 +338,345 @@ msgstr "Οι διευθύνσεις που προστέθηκαν χειροκί
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή σας."
+
+msgid "Import"
+msgstr "Εισαγωγή"
+
+msgid "address book"
+msgstr "βιβλίο διευθύνσεων"
+
+msgid "Router"
+msgstr "Δρομολογητής"
+
+msgid "Master"
+msgstr "Κύριο"
+
+msgid "Private"
+msgstr "Ιδιωτικό"
+
+msgid "Published"
+msgstr "Δημοσιευμένο"
+
+msgid "Blacklist"
+msgstr "Μαύρη λίστα"
+
+msgid "Configuration"
+msgstr "Ρυθμίσεις"
+
+msgid "Help"
+msgstr "Βοήθεια"
+
+msgid "Book"
+msgstr "Βιβλίο"
+
+msgid "No entries"
+msgstr "Καμία καταχώρηση"
+
+msgid "Add new destination"
+msgstr "Προσθήκη νέου προορισμού"
+
+msgid "Import from hosts.txt file"
+msgstr "Εισαγωγή από αρχείο hosts.txt"
+
+msgid "other"
+msgstr "άλλοι"
+
+msgid "Export in hosts.txt format"
+msgstr "Εξαγωγή σε μορφή hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Εξαγωγή αποτελεσμάτων σε μορφή hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Εξαγωγή βιβλίου σε μορφή hosts.txt"
+
+msgid "Search"
+msgstr "Αναζήτηση"
+
+msgid "latest"
+msgstr "πρόσφατα"
+
+msgid "Alive"
+msgstr "Προσβάσιμοι"
+
+msgid "Dead"
+msgstr "Μη προσβάσιμοι"
+
+msgid "all"
+msgstr "όλοι"
+
+msgid "Info"
+msgstr "Πληροφορίες"
+
+msgid "Type"
+msgstr "Τύπος"
+
+msgid "Hostname"
+msgstr "Όνομα κεντρικού υπολογιστή"
+
+msgid "Encryption"
+msgstr "Κρυπτογράφηση"
+
+msgid "Link (b32)"
+msgstr "Σύνδεσμος (b32)"
+
+msgid "Destination"
+msgstr "Προορισμός"
+
+msgid "Added"
+msgstr "Προστέθηκε"
+
+msgid "Status"
+msgstr "Κατάσταση"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Επιλέξτε κεντρικούς υπολογιστές για διαγραφή από το βιβλίο διευθύνσεων"
+
+msgid "More information on this entry"
+msgstr "Περισσότερες πληροφορίες για αυτή την καταχώρηση"
+
+msgid "unknown"
+msgstr "άγνωστο"
+
+msgid "Base 32 address"
+msgstr "Διεύθυνση Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Σύνδεσμος βοηθού για κοινή χρήση της διεύθυνσης κεντρικού υπολογιστή, με δυνατότητα προσθήκης στο βιβλίο διευθύνσεων"
+
+msgid "Mark for deletion"
+msgstr "Σήμανση για διαγραφή"
+
+msgid "Cancel"
+msgstr "Ακύρωση"
+
+msgid "This book currently contains no entries."
+msgstr "Αυτό το βιβλίο δεν περιέχει προς το παρόν καταχωρήσεις."
+
+msgid "e.g. newdomain.i2p"
+msgstr "π.χ. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 ή B32"
+
+msgid "Full destination or b32 address"
+msgstr "Πλήρης προορισμός ή διεύθυνση b32"
+
+msgid "Select file"
+msgstr "Επιλογή αρχείου"
+
+msgid "blacklist"
+msgstr "μαύρη λίστα"
+
+msgid "Blacklist Management"
+msgstr "Διαχείριση μαύρης λίστας"
+
+msgid "File location"
+msgstr "Τοποθεσία αρχείου"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Εισάγετε διευθύνσεις I2P για τη μαύρη λίστα (μία ανά γραμμή)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Το αρχείο της μαύρης λίστας περιέχει μια λίστα ονομάτων κεντρικών υπολογιστών I2P που πρέπει να αποκλειστούν από την πρόσβαση μέσω του διακομιστή μεσολάβησης HTTP και να εξαιρούνται από την εμφάνιση στο βιβλίο διευθύνσεων."
+
+msgid "configuration"
+msgstr "ρυθμίσεις"
+
+msgid "HostChecker is already running a scan"
+msgstr "Το HostChecker εκτελεί ήδη σάρωση"
+
+msgid "Run HostChecker"
+msgstr "Εκτέλεση HostChecker"
+
+msgid "Hints"
+msgstr "Συμβουλές"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Οι διαδρομές αρχείων και καταλόγων εδώ είναι σχετικές με τον κατάλογο εργασίας του βιβλίου διευθύνσεων, ο οποίος συνήθως είναι ~/.i2p/addressbook/ (Linux) ή %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Αν θέλετε να προσθέσετε γραμμές χειροκίνητα σε ένα βιβλίο διευθύνσεων, προσθέστε τες στο ιδιωτικό ή στο κύριο βιβλίο διευθύνσεων."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Το βιβλίο διευθύνσεων του δρομολογητή και το δημοσιευμένο βιβλίο διευθύνσεων ενημερώνονται από την εφαρμογή βιβλίου διευθύνσεων."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Όταν δημοσιεύετε το βιβλίο διευθύνσεών σας, εμφανίζονται εκεί ΟΛΟΙ οι προορισμοί από το κύριο και από το βιβλίο διευθύνσεων του δρομολογητή."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Χρησιμοποιήστε το ιδιωτικό βιβλίο διευθύνσεων για ιδιωτικούς προορισμούς, αυτοί δεν δημοσιεύονται."
+
+msgid "Options"
+msgstr "Επιλογές"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "Αρχείο με τη λίστα των URL συνδρομών (δεν χρειάζεται αλλαγή)"
+
+msgid "Update interval in hours"
+msgstr "Διάστημα ενημέρωσης σε ώρες"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Το δημόσιο αρχείο hosts.txt σας (επιλέξτε μια διαδρομή μέσα στον ριζικό φάκελο του διακομιστή σας)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Το hosts.txt σας (μην το αλλάξετε)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Το κύριο βιβλίο διευθύνσεών σας, αυτοί οι κεντρικοί υπολογιστές θα δημοσιευτούν"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Το ιδιωτικό βιβλίο διευθύνσεών σας, δεν δημοσιεύεται ποτέ"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Θύρα για το eepProxy σας (δεν χρειάζεται αλλαγή)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Όνομα κεντρικού υπολογιστή για το eepProxy σας (δεν χρειάζεται αλλαγή)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Αν γίνεται ενημέρωση του δημοσιευμένου βιβλίου διευθύνσεων"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "Αρχείο με την κεφαλίδα etags από τα URL συνδρομών που ανακτήθηκαν (δεν χρειάζεται αλλαγή)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "Αρχείο με τη χρονική σήμανση τροποποίησης για κάθε URL συνδρομής που ανακτήθηκε (δεν χρειάζεται αλλαγή)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "Αρχείο για την καταγραφή της δραστηριότητας (αλλάξτε το σε /dev/null αν θέλετε)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Όνομα θέματος παράκαμψης που θα χρησιμοποιείται (προεπιλογή: το θέμα που έχει επιλεγχθεί στην κονσόλα)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Διάστημα (σε ώρες) μεταξύ των εκτελέσεων του HostChecker (προεπιλογή: 4 ώρες)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Μέγιστος αριθμός ταυτόχρονων ping κατά την εκτέλεση του HostChecker (προεπιλογή: 16, μέγιστο: 160)"
+
+msgid "delete hosts"
+msgstr "διαγραφή κεντρικών υπολογιστών"
+
+msgid "addressbook"
+msgstr "βιβλίο διευθύνσεων"
+
+msgid "Details"
+msgstr "Λεπτομέρειες"
+
+msgid "Address Helper"
+msgstr "Βοηθός διεύθυνσης"
+
+msgid "link"
+msgstr "σύνδεσμος"
+
+msgid "Encoded Name"
+msgstr "Κωδικοποιημένο όνομα"
+
+msgid "Base 32 Address"
+msgstr "Διεύθυνση Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Κατάληψη Base 64"
+
+msgid "Public Key"
+msgstr "Δημόσιο κλειδί"
+
+msgid "Signing Key"
+msgstr "Κλειδί υπογραφής"
+
+msgid "Certificate"
+msgstr "Πιστοποιητικό"
+
+msgid "Validated"
+msgstr "Επικυρωμένο"
+
+msgid "no"
+msgstr "όχι"
+
+msgid "yes"
+msgstr "ναι"
+
+msgid "Added Date"
+msgstr "Ημερομηνία προσθήκης"
+
+msgid "Last Modified"
+msgstr "Τελευταία τροποποίηση"
+
+msgid "Notes"
+msgstr "Σημειώσεις"
+
+msgid "Add notes about domain"
+msgstr "Προσθέστε σημειώσεις για τον τομέα"
+
+msgid "Visual Identification for"
+msgstr "Οπτική ταυτοποίηση για"
+
+msgid "Create your own identification images"
+msgstr "Δημιουργήστε τις δικές σας εικόνες ταυτοποίησης"
+
+msgid "Launch Image Generator"
+msgstr "Άνοιγμα γεννήτριας εικόνων"
+
+msgid "Introduction"
+msgstr "Εισαγωγή"
+
+msgid "What is the addressbook?"
+msgstr "Τι είναι το βιβλίο διευθύνσεων;"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Η εφαρμογή βιβλίου διευθύνσεων αποτελεί μέρος της εγκατάστασης του I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Ενημερώνει τακτικά το αρχείο hosts.txt σας από κατανεμημένες πηγές ή από \"συνδρομές\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Η εγγραφή σε πρόσθετα sites είναι εύκολη, απλώς προσθέστε τα στο αρχείο <a href=\"subscriptions\">συνδρομών</a> σας."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Για περισσότερες πληροφορίες σχετικά με την ονοματοδοσία στο I2P, δείτε <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>την επισκόπηση</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Πώς λειτουργεί η εφαρμογή βιβλίου διευθύνσεων;"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά τις συνδρομές σας και ενσωματώνει το περιεχόμενό τους στο βιβλίο διευθύνσεων \"δρομολογητή\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Στη συνέχεια ενσωματώνει και το βιβλίο διευθύνσεων \"κύριο\" στο βιβλίο διευθύνσεων του δρομολογητή."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Εάν έχει ρυθμιστεί, το βιβλίο διευθύνσεων του δρομολογητή αποθηκεύεται πλέον στο βιβλίο διευθύνσεων \"δημοσιευμένο\", το οποίο είναι δημόσια διαθέσιμο αν εκτελείτε ένα eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Ο δρομολογητής χρησιμοποιεί επίσης ένα ιδιωτικό βιβλίο διευθύνσεων, το οποίο δεν ενσωματώνεται ούτε δημοσιεύεται."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Οι κεντρικοί υπολογιστές του ιδιωτικού βιβλίου διευθύνσεων είναι προσβάσιμοι από εσάς, αλλά οι διευθύνσεις τους δεν μεταδίδονται ποτέ σε άλλους."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Το ιδιωτικό βιβλίο διευθύνσεων μπορεί επίσης να χρησιμοποιείται για εναλλακτικά ονόματα κεντρικών υπολογιστών στα άλλα βιβλία διευθύνσεών σας."
+
+msgid "subscription log"
+msgstr "αρχείο καταγραφής συνδρομών"
+
+msgid "Subscription Log"
+msgstr "Αρχείο καταγραφής συνδρομών"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Πιο πρόσφατα (εξαιρουμένων των κακών τομέων)"
+
+msgid "subscriptions"
+msgstr "συνδρομές"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Το αρχείο συνδρομών περιέχει μια λίστα URL του i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Η εφαρμογή βιβλίου διευθύνσεων ελέγχει τακτικά αυτή τη λίστα για νέα eepsites."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Αυτά τα URL παραπέμπουν σε δημοσιευμένα αρχεία hosts.txt."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Δείτε τις Συχνές Ερωτήσεις για μια λίστα URL συνδρομών."

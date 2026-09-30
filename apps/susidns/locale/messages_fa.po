@@ -338,3 +338,345 @@ msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
+
+msgid "Import"
+msgstr "درون‌ریزی"
+
+msgid "address book"
+msgstr "دفترچه آدرس"
+
+msgid "Router"
+msgstr "روتر"
+
+msgid "Master"
+msgstr "اصلی"
+
+msgid "Private"
+msgstr "خصوصی"
+
+msgid "Published"
+msgstr "منتشرشده"
+
+msgid "Blacklist"
+msgstr "لیست سیاه"
+
+msgid "Configuration"
+msgstr "پیکربندی"
+
+msgid "Help"
+msgstr "راهنما"
+
+msgid "Book"
+msgstr "دفتر"
+
+msgid "No entries"
+msgstr "بدون ورودی"
+
+msgid "Add new destination"
+msgstr "افزودن مقصد جدید"
+
+msgid "Import from hosts.txt file"
+msgstr "درون‌ریزی از فایل hosts.txt"
+
+msgid "other"
+msgstr "سایر"
+
+msgid "Export in hosts.txt format"
+msgstr "برون‌ریزی با قالب hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "برون‌ریزی نتایج با قالب hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "برون‌ریزی دفتر با قالب hosts.txt"
+
+msgid "Search"
+msgstr "جستجو"
+
+msgid "latest"
+msgstr "تازه‌ترین"
+
+msgid "Alive"
+msgstr "در دسترس"
+
+msgid "Dead"
+msgstr "خارج از دسترس"
+
+msgid "all"
+msgstr "همه"
+
+msgid "Info"
+msgstr "اطلاعات"
+
+msgid "Type"
+msgstr "نوع"
+
+msgid "Hostname"
+msgstr "نام میزبان"
+
+msgid "Encryption"
+msgstr "رمزنگاری"
+
+msgid "Link (b32)"
+msgstr "پیوند (b32)"
+
+msgid "Destination"
+msgstr "مقصد"
+
+msgid "Added"
+msgstr "افزوده"
+
+msgid "Status"
+msgstr "وضعیت"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "میزبان‌ها را برای حذف از دفترچه آدرس انتخاب کنید"
+
+msgid "More information on this entry"
+msgstr "اطلاعات بیشتر درباره این ورودی"
+
+msgid "unknown"
+msgstr "نامشخص"
+
+msgid "Base 32 address"
+msgstr "آدرس پایه 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "پیوند کمک یار برای هم‌رسانی آدرس میزبان، با امکان افزودن به دفترچه آدرس"
+
+msgid "Mark for deletion"
+msgstr "علامت‌گذاری برای حذف"
+
+msgid "Cancel"
+msgstr "لغو"
+
+msgid "This book currently contains no entries."
+msgstr "این دفتر در حال حاضر هیچ ورودی‌ای ندارد."
+
+msgid "e.g. newdomain.i2p"
+msgstr "مثال: newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 یا B32"
+
+msgid "Full destination or b32 address"
+msgstr "مقصد کامل یا آدرس b32"
+
+msgid "Select file"
+msgstr "انتخاب فایل"
+
+msgid "blacklist"
+msgstr "لیست سیاه"
+
+msgid "Blacklist Management"
+msgstr "مدیریت لیست سیاه"
+
+msgid "File location"
+msgstr "محل فایل"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "آدرس‌های I2P را برای افزودن به لیست سیاه وارد کنید (هر خط یک آدرس)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "فایل لیست سیاه شامل فهرستی از نام‌های میزبان I2P است که باید دسترسی به آن‌ها از طریق پروکسی HTTP مسدود شود و از نمایش در دفترچه آدرس کنار گذاشته شوند."
+
+msgid "configuration"
+msgstr "پیکربندی"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker هم‌اکنون در حال اجرای بررسی است"
+
+msgid "Run HostChecker"
+msgstr "اجرای HostChecker"
+
+msgid "Hints"
+msgstr "نکته‌ها"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "مسیر فایل‌ها و پوشه‌های اینجا نسبت به پوشه کاری دفترچه آدرس است که به‌طور معمول ~/.i2p/addressbook/ (لینوکس) یا %LOCALAPPDATA%\\I2P\\addressbook\\ (ویندوز) می‌باشد."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "اگر می‌خواهید خطی را دستی به یک دفترچه آدرس اضافه کنید، آن را به دفترچه آدرس خصوصی یا اصلی اضافه کنید."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "دفترچه آدرس روتر و دفترچه آدرس منتشرشده توسط برنامه دفترچه آدرس به‌روزرسانی می‌شوند."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "هنگام انتشار دفترچه آدرس خود، همه مقصدهای دفترچه آدرس اصلی و روتر در آن ظاهر می‌شوند."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "از دفترچه آدرس خصوصی برای مقصدهای خصوصی استفاده کنید؛ این مقصدها منتشر نمی‌شوند."
+
+msgid "Options"
+msgstr "گزینه‌ها"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "فایلی شامل فهرست URLهای اشتراک (نیازی به تغییر نیست)"
+
+msgid "Update interval in hours"
+msgstr "فاصله به‌روزرسانی بر حسب ساعت"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "فایل عمومی hosts.txt شما (مسیری در ریشه اسناد وب‌سرور خود انتخاب کنید)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "فایل hosts.txt شما (تغییر ندهید)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "دفترچه آدرس شخصی شما؛ این میزبان‌ها منتشر می‌شوند"
+
+msgid "Your private addressbook, it is never published"
+msgstr "دفترچه آدرس خصوصی شما؛ هرگز منتشر نمی‌شود"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "درگاه eepProxy شما (نیازی به تغییر نیست)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "نام میزبان eepProxy شما (نیازی به تغییر نیست)"
+
+msgid "Whether to update the published addressbook"
+msgstr "به‌روزرسانی دفترچه آدرس منتشرشده"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "فایلی شامل سرایند etags مربوط به URLهای اشتراک دریافت‌شده (نیازی به تغییر نیست)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "فایلی شامل زمان آخرین تغییر برای هر URL اشتراک دریافت‌شده (نیازی به تغییر نیست)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "فایلی برای ثبت گزارش فعالیت (در صورت تمایل آن را /dev/null کنید)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "نام پوسته جایگزین برای استفاده (به‌طور پیش‌فرض، پوسته انتخاب‌شده در کنسول)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "فاصله (به ساعت) اجرای بررسیگر میزبان (پیش‌فرض 4 ساعت)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "بیشینه پینگ‌های هم‌زمان هنگام اجرای بررسیگر میزبان (پیش‌فرض 16، حداکثر 160)"
+
+msgid "delete hosts"
+msgstr "حذف میزبان‌ها"
+
+msgid "addressbook"
+msgstr "دفترچه آدرس"
+
+msgid "Details"
+msgstr "جزئیات"
+
+msgid "Address Helper"
+msgstr "کمک یار آدرس"
+
+msgid "link"
+msgstr "پیوند"
+
+msgid "Encoded Name"
+msgstr "نام کدگذاری‌شده"
+
+msgid "Base 32 Address"
+msgstr "آدرس پایه 32"
+
+msgid "Base 64 Hash"
+msgstr "هش پایه 64"
+
+msgid "Public Key"
+msgstr "کلید عمومی"
+
+msgid "Signing Key"
+msgstr "کلید امضا"
+
+msgid "Certificate"
+msgstr "گواهی"
+
+msgid "Validated"
+msgstr "تأییدشده"
+
+msgid "no"
+msgstr "خیر"
+
+msgid "yes"
+msgstr "بله"
+
+msgid "Added Date"
+msgstr "تاریخ افزودن"
+
+msgid "Last Modified"
+msgstr "آخرین تغییر"
+
+msgid "Notes"
+msgstr "یادداشت‌ها"
+
+msgid "Add notes about domain"
+msgstr "افزودن یادداشت درباره دامنه"
+
+msgid "Visual Identification for"
+msgstr "شناسه بصری برای"
+
+msgid "Create your own identification images"
+msgstr "ساخت تصاویر شناسایی دلخواه"
+
+msgid "Launch Image Generator"
+msgstr "اجرای مولد تصویر"
+
+msgid "Introduction"
+msgstr "مقدمه"
+
+msgid "What is the addressbook?"
+msgstr "دفترچه آدرس چیست؟"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "برنامه دفترچه آدرس بخشی از نصب I2P شماست."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "این برنامه فایل hosts.txt شما را به‌طور منظم از منابع توزیع‌شده یا \"اشتراک‌ها\" به‌روزرسانی می‌کند."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "اشتراک در سایت‌های دیگر آسان است؛ کافی است آن‌ها را به فایل <a href=\"subscriptions\">اشتراک‌های</a> خود اضافه کنید."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "برای اطلاعات بیشتر درباره نام‌گذاری در I2P، <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>مرور کلی</a> را ببینید."
+
+msgid "How does the addressbook application work?"
+msgstr "برنامه دفترچه آدرس چگونه کار می‌کند؟"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "برنامه دفترچه آدرس به‌طور منظم اشتراک‌های شما را بررسی می‌کند و محتوای آن‌ها را در دفترچه آدرس \"روتر\" شما ادغام می‌کند."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "سپس دفترچه آدرس \"اصلی\" شما را نیز در دفترچه آدرس روتر ادغام می‌کند."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "در صورت پیکربندی، دفترچه آدرس روتر در دفترچه آدرس \"منتشرشده\" نوشته می‌شود؛ اگر eepsite اجرا می‌کنید این دفترچه به‌طور عمومی در دسترس خواهد بود."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "روتر همچنین از یک دفترچه آدرس خصوصی استفاده می‌کند که نه ادغام می‌شود و نه منتشر."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "میزبان‌های دفترچه آدرس خصوصی برای خودتان در دسترس‌اند، اما آدرسشان هرگز به دیگران توزیع نمی‌شود."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "دفترچه آدرس خصوصی را می‌توان برای نام‌های مستعار میزبان‌های سایر دفترچه‌های آدرس شما هم به کار برد."
+
+msgid "subscription log"
+msgstr "گزارش اشتراک"
+
+msgid "Subscription Log"
+msgstr "گزارش اشتراک"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "تازه‌ترین موارد (بدون دامنه‌های نامعتبر)"
+
+msgid "subscriptions"
+msgstr "اشتراک‌ها"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "فایل اشتراک شامل فهرستی از URLهای i2p است."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "برنامه دفترچه آدرس به‌طور منظم این فهرست را برای یافتن eepsiteهای تازه بررسی می‌کند."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "این URLها به فایل‌های منتشرشده hosts.txt اشاره دارند."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "برای دیدن فهرست URLهای اشتراک، پرسش‌های متداول را ببینید."

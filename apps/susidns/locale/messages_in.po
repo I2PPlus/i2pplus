@@ -330,3 +330,345 @@ msgstr "Addressbook yang ditambahkan secara manual ke addressbook master akan be
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Host yang Anda dapatkan dari langganan akan bergabung dengan addressbook router."
+
+msgid "Import"
+msgstr "Impor"
+
+msgid "address book"
+msgstr "buku alamat"
+
+msgid "Router"
+msgstr "Router"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "Published"
+msgstr "Terbit"
+
+msgid "Blacklist"
+msgstr "Blacklist"
+
+msgid "Configuration"
+msgstr "Konfigurasi"
+
+msgid "Help"
+msgstr "Bantuan"
+
+msgid "Book"
+msgstr "Buku"
+
+msgid "No entries"
+msgstr "Tidak ada entri"
+
+msgid "Add new destination"
+msgstr "Tambahkan destinasi baru"
+
+msgid "Import from hosts.txt file"
+msgstr "Impor dari file hosts.txt"
+
+msgid "other"
+msgstr "lainnya"
+
+msgid "Export in hosts.txt format"
+msgstr "Ekspor dalam format hosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "Ekspor hasil dalam format hosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "Ekspor buku dalam format hosts.txt"
+
+msgid "Search"
+msgstr "Cari"
+
+msgid "latest"
+msgstr "terbaru"
+
+msgid "Alive"
+msgstr "Aktif"
+
+msgid "Dead"
+msgstr "Mati"
+
+msgid "all"
+msgstr "semua"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Type"
+msgstr "Jenis"
+
+msgid "Hostname"
+msgstr "Nama host"
+
+msgid "Encryption"
+msgstr "Enkripsi"
+
+msgid "Link (b32)"
+msgstr "Tautan (b32)"
+
+msgid "Destination"
+msgstr "Destinasi"
+
+msgid "Added"
+msgstr "Ditambahkan"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Pilih host yang akan dihapus dari buku alamat"
+
+msgid "More information on this entry"
+msgstr "Informasi lebih lanjut tentang entri ini"
+
+msgid "unknown"
+msgstr "tidak diketahui"
+
+msgid "Base 32 address"
+msgstr "Alamat Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Tautan pembantu untuk berbagi alamat host, dengan opsi menambahkan ke buku alamat"
+
+msgid "Mark for deletion"
+msgstr "Tandai untuk dihapus"
+
+msgid "Cancel"
+msgstr "Batal"
+
+msgid "This book currently contains no entries."
+msgstr "Buku ini saat ini tidak berisi entri apa pun."
+
+msgid "e.g. newdomain.i2p"
+msgstr "mis. newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 atau B32"
+
+msgid "Full destination or b32 address"
+msgstr "Destinasi lengkap atau alamat b32"
+
+msgid "Select file"
+msgstr "Pilih file"
+
+msgid "blacklist"
+msgstr "blacklist"
+
+msgid "Blacklist Management"
+msgstr "Manajemen Blacklist"
+
+msgid "File location"
+msgstr "Lokasi file"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Masukkan alamat I2P untuk ditambahkan ke blacklist (satu per baris)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "File blacklist berisi daftar nama host I2P yang harus diblokir dari akses melalui proksi HTTP dan tidak ditampilkan di buku alamat."
+
+msgid "configuration"
+msgstr "konfigurasi"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker sedang menjalankan pemindaian"
+
+msgid "Run HostChecker"
+msgstr "Jalankan HostChecker"
+
+msgid "Hints"
+msgstr "Petunjuk"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Path file dan direktori di sini bersifat relatif terhadap direktori kerja buku alamat, yang biasanya ~/.i2p/addressbook/ (Linux) atau %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Jika ingin menambahkan baris secara manual ke buku alamat, tambahkan ke buku alamat privat atau master."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Buku alamat router dan buku alamat terbit diperbarui oleh aplikasi buku alamat."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Ketika Anda menerbitkan buku alamat, SEMUA destinasi dari buku alamat master dan router akan muncul di sana."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Gunakan buku alamat privat untuk destinasi privat; destinasi ini tidak diterbitkan."
+
+msgid "Options"
+msgstr "Pilihan"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "File yang berisi daftar URL langganan (tidak perlu diubah)"
+
+msgid "Update interval in hours"
+msgstr "Interval pembaruan dalam jam"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "File hosts.txt publik Anda (pilih path di dalam document root server web Anda)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "hosts.txt Anda (jangan diubah)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Buku alamat pribadi Anda; host di sini akan diterbitkan"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Buku alamat privat Anda, tidak pernah diterbitkan"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Port untuk eepProxy Anda (tidak perlu diubah)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Nama host untuk eepProxy Anda (tidak perlu diubah)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Apakah buku alamat terbit diperbarui"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "File yang berisi header etags dari URL langganan yang diambil (tidak perlu diubah)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "File yang berisi stempel waktu modifikasi untuk setiap URL langganan yang diambil (tidak perlu diubah)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "File untuk mencatat aktivitas (ubah ke /dev/null jika Anda mau)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Nama tema pengganti yang digunakan (default ke tema yang dipilih di konsol)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interval (dalam jam) untuk menjalankan host checker (default 4 jam)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Jumlah ping bersamaan maksimum saat menjalankan host checker (default 16, maksimum 160)"
+
+msgid "delete hosts"
+msgstr "hapus host"
+
+msgid "addressbook"
+msgstr "buku alamat"
+
+msgid "Details"
+msgstr "Rincian"
+
+msgid "Address Helper"
+msgstr "Address Helper"
+
+msgid "link"
+msgstr "tautan"
+
+msgid "Encoded Name"
+msgstr "Nama Terenkode"
+
+msgid "Base 32 Address"
+msgstr "Alamat Base 32"
+
+msgid "Base 64 Hash"
+msgstr "Hash Base 64"
+
+msgid "Public Key"
+msgstr "Kunci Publik"
+
+msgid "Signing Key"
+msgstr "Kunci Penandatanganan"
+
+msgid "Certificate"
+msgstr "Sertifikat"
+
+msgid "Validated"
+msgstr "Tervalidasi"
+
+msgid "no"
+msgstr "tidak"
+
+msgid "yes"
+msgstr "ya"
+
+msgid "Added Date"
+msgstr "Tanggal Ditambahkan"
+
+msgid "Last Modified"
+msgstr "Terakhir Diubah"
+
+msgid "Notes"
+msgstr "Catatan"
+
+msgid "Add notes about domain"
+msgstr "Tambahkan catatan tentang domain"
+
+msgid "Visual Identification for"
+msgstr "Identitas Visual untuk"
+
+msgid "Create your own identification images"
+msgstr "Buat gambar identitas Anda sendiri"
+
+msgid "Launch Image Generator"
+msgstr "Jalankan Pembuat Gambar"
+
+msgid "Introduction"
+msgstr "Pendahuluan"
+
+msgid "What is the addressbook?"
+msgstr "Apa itu buku alamat?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Aplikasi buku alamat ini merupakan bagian dari instalasi I2P Anda."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Aplikasi ini secara berkala memperbarui file hosts.txt Anda dari sumber yang tersebar atau \"langganan\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Berlangganan ke situs tambahan mudah dilakukan, cukup tambahkan ke file <a href=\"subscriptions\">langganan</a> Anda."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Untuk informasi lebih lanjut tentang penamaan di I2P, lihat <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>ikhtisarnya</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Bagaimana cara kerja aplikasi buku alamat?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Aplikasi buku alamat secara berkala memeriksa langganan Anda dan menggabungkan isinya ke dalam buku alamat \"router\"."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Kemudian buku alamat \"master\" Anda juga digabungkan ke dalam buku alamat router."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Jika dikonfigurasi, buku alamat router sekarang ditulis ke buku alamat \"terbit\", yang akan tersedia secara publik jika Anda menjalankan sebuah eepsite."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Router juga menggunakan buku alamat privat, yang tidak digabungkan maupun diterbitkan."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Host di dalam buku alamat privat dapat Anda akses, tetapi alamatnya tidak pernah dibagikan kepada orang lain."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Buku alamat privat juga dapat digunakan untuk alias host di buku alamat Anda yang lain."
+
+msgid "subscription log"
+msgstr "log langganan"
+
+msgid "Subscription Log"
+msgstr "Log Langganan"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Terbaru (tidak termasuk domain buruk)"
+
+msgid "subscriptions"
+msgstr "langganan"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "File langganan berisi daftar URL i2p."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Aplikasi buku alamat secara berkala memeriksa daftar ini untuk mencari eepsite baru."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "URL tersebut menunjuk ke file hosts.txt yang telah diterbitkan."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Lihat FAQ untuk daftar URL langganan."

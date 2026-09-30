@@ -330,3 +330,345 @@ msgstr "マスター アドレス帳に手動で追加されたアドレスは�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "サブスクリプションから受け取ったホストは、ルーターのアドレス帳と統合されます。"
+
+msgid "Import"
+msgstr "インポート"
+
+msgid "address book"
+msgstr "アドレス帳"
+
+msgid "Router"
+msgstr "ルーター"
+
+msgid "Master"
+msgstr "マスター"
+
+msgid "Private"
+msgstr "プライベート"
+
+msgid "Published"
+msgstr "公開済み"
+
+msgid "Blacklist"
+msgstr "ブラックリスト"
+
+msgid "Configuration"
+msgstr "設定"
+
+msgid "Help"
+msgstr "ヘルプ"
+
+msgid "Book"
+msgstr "ブック"
+
+msgid "No entries"
+msgstr "エントリなし"
+
+msgid "Add new destination"
+msgstr "新しい宛先を追加"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt ファイルからインポート"
+
+msgid "other"
+msgstr "その他"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt 形式でエクスポート"
+
+msgid "Export results in hosts.txt format"
+msgstr "結果を hosts.txt 形式でエクスポート"
+
+msgid "Export book in hosts.txt format"
+msgstr "ブックを hosts.txt 形式でエクスポート"
+
+msgid "Search"
+msgstr "検索"
+
+msgid "latest"
+msgstr "最新"
+
+msgid "Alive"
+msgstr "オンライン"
+
+msgid "Dead"
+msgstr "接続不可"
+
+msgid "all"
+msgstr "すべて"
+
+msgid "Info"
+msgstr "情報"
+
+msgid "Type"
+msgstr "タイプ"
+
+msgid "Hostname"
+msgstr "ホスト名"
+
+msgid "Encryption"
+msgstr "暗号化"
+
+msgid "Link (b32)"
+msgstr "リンク (b32)"
+
+msgid "Destination"
+msgstr "宛先"
+
+msgid "Added"
+msgstr "追加日"
+
+msgid "Status"
+msgstr "状態"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "アドレス帳から削除するホストを選択してください"
+
+msgid "More information on this entry"
+msgstr "このエントリの詳細情報"
+
+msgid "unknown"
+msgstr "不明"
+
+msgid "Base 32 address"
+msgstr "Base 32 アドレス"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "ホストアドレスを共有し、アドレス帳への追加も選べるヘルパーリンク"
+
+msgid "Mark for deletion"
+msgstr "削除対象としてマーク"
+
+msgid "Cancel"
+msgstr "キャンセル"
+
+msgid "This book currently contains no entries."
+msgstr "このブックには現在エントリがありません。"
+
+msgid "e.g. newdomain.i2p"
+msgstr "例: newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 または B32"
+
+msgid "Full destination or b32 address"
+msgstr "完全な宛先または b32 アドレス"
+
+msgid "Select file"
+msgstr "ファイルを選択"
+
+msgid "blacklist"
+msgstr "ブラックリスト"
+
+msgid "Blacklist Management"
+msgstr "ブラックリスト管理"
+
+msgid "File location"
+msgstr "ファイルの位置"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "ブラックリストに登録する I2P アドレスを入力します (1 行に 1 個)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "ブラックリストファイルには、HTTP プロキシ経由のアクセスをブロックし、アドレス帳の表示から除外すべき I2P ホスト名の一覧が含まれます。"
+
+msgid "configuration"
+msgstr "設定"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker はすでにスキャンを実行中です"
+
+msgid "Run HostChecker"
+msgstr "HostChecker を実行"
+
+msgid "Hints"
+msgstr "ヒント"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "ここでのファイルとディレクトリのパスは、アドレス帳の作業ディレクトリからの相対パスです。通常は Linux では ~/.i2p/addressbook/、Windows では %LOCALAPPDATA%\\I2P\\addressbook\\ です。"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "アドレス帳に行を手動で追加したい場合は、プライベートまたはマスターのアドレス帳に追加してください。"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "ルーターのアドレス帳と公開されたアドレス帳は、アドレス帳アプリケーションによって更新されます。"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "アドレス帳を公開すると、マスターとルーターのアドレス帳にあるすべての宛先がそこに載ります。"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "非公開の宛先にはプライベートアドレス帳を使用してください。これらは公開されません。"
+
+msgid "Options"
+msgstr "オプション"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "購読 URL の一覧を含むファイル (変更の必要はありません)"
+
+msgid "Update interval in hours"
+msgstr "更新間隔 (時間)"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "公開する hosts.txt ファイル (Web サーバーのドキュメントルート内のパスを指定してください)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "現在の hosts.txt (変更しないでください)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "個人のアドレス帳。これらのホストは公開されます"
+
+msgid "Your private addressbook, it is never published"
+msgstr "個人のプライベートアドレス帳。公開されることはありません"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "eepProxy のポート (変更の必要はありません)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "eepProxy のホスト名 (変更の必要はありません)"
+
+msgid "Whether to update the published addressbook"
+msgstr "公開されたアドレス帳を更新するかどうか"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "取得した購読 URL の etags ヘッダーを含むファイル (変更の必要はありません)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "取得した各購読 URL の更新タイムスタンプを含むファイル (変更の必要はありません)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "アクティビティログの出力先ファイル (必要なら /dev/null に変更してください)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "使用するオーバーライドテーマの名前 (デフォルトはコンソールで選択したテーマ)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "ホストチェッカーの実行間隔 (時間単位、デフォルトは 4 時間)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "ホストチェッカー実行時の同時 ping の最大数 (デフォルトは 16、最大は 160)"
+
+msgid "delete hosts"
+msgstr "ホストを削除"
+
+msgid "addressbook"
+msgstr "アドレス帳"
+
+msgid "Details"
+msgstr "詳細"
+
+msgid "Address Helper"
+msgstr "アドレスヘルパー"
+
+msgid "link"
+msgstr "リンク"
+
+msgid "Encoded Name"
+msgstr "エンコード済み名"
+
+msgid "Base 32 Address"
+msgstr "Base 32 アドレス"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 ハッシュ"
+
+msgid "Public Key"
+msgstr "公開鍵"
+
+msgid "Signing Key"
+msgstr "署名鍵"
+
+msgid "Certificate"
+msgstr "証明書"
+
+msgid "Validated"
+msgstr "検証済み"
+
+msgid "no"
+msgstr "いいえ"
+
+msgid "yes"
+msgstr "はい"
+
+msgid "Added Date"
+msgstr "追加日時"
+
+msgid "Last Modified"
+msgstr "最終更新"
+
+msgid "Notes"
+msgstr "メモ"
+
+msgid "Add notes about domain"
+msgstr "ドメインに関するメモを追加"
+
+msgid "Visual Identification for"
+msgstr "視覚識別の対象"
+
+msgid "Create your own identification images"
+msgstr "自分自身の識別画像を作成します"
+
+msgid "Launch Image Generator"
+msgstr "画像ジェネレーターを起動"
+
+msgid "Introduction"
+msgstr "はじめに"
+
+msgid "What is the addressbook?"
+msgstr "アドレス帳とは何ですか？"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "アドレス帳アプリケーションは I2P インストールの一部です。"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "アドレス帳アプリケーションは、分散されたソースや「購読」から hosts.txt ファイルを定期的に更新します。"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "追加のサイトへの購読は簡単です。<a href=\"subscriptions\">購読</a> ファイルに追加するだけで構いません。"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P におけるネーミングの詳細については、<a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>概要</a> を参照してください。"
+
+msgid "How does the addressbook application work?"
+msgstr "アドレス帳アプリケーションはどのように動作しますか？"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "アドレス帳アプリケーションは購読を定期的に取得し、その内容を「ルーター」のアドレス帳にマージします。"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "続けて、「マスター」のアドレス帳もルーターのアドレス帳にマージされます。"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "設定されていれば、ルーターのアドレス帳は「公開済み」のアドレス帳に書き出され、eepsite を公開している場合は一般に公開されます。"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "ルーターはプライベートアドレス帳も使用しますが、マージも公開も行われません。"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "プライベートアドレス帳のホストにはあなたがアクセスできますが、そのアドレスが他者に配布されることはありません。"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "プライベートアドレス帳は、他のアドレス帳にあるホストのエイリアスとして使うこともできます。"
+
+msgid "subscription log"
+msgstr "購読ログ"
+
+msgid "Subscription Log"
+msgstr "購読ログ"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "最新 (不正なドメインを除く)"
+
+msgid "subscriptions"
+msgstr "購読"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "購読ファイルには i2p の URL の一覧が含まれています。"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "アドレス帳アプリケーションは、この一覧を定期的に確認し、新しい eepsite を探します。"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "これらの URL は公開された hosts.txt ファイルを指しています。"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "購読 URL の一覧については FAQ を参照してください。"

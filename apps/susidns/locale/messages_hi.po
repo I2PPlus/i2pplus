@@ -338,3 +338,345 @@ msgstr "मास्टर पत्रिका में मानवीय �
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "सब्सक्रिप्शन से आपको मिले मेजबान आपकी राउटर पत्रिका में मिलेंगे।"
+
+msgid "Import"
+msgstr "आयात"
+
+msgid "address book"
+msgstr "पता पुस्तिका"
+
+msgid "Router"
+msgstr "राउटर"
+
+msgid "Master"
+msgstr "मास्टर"
+
+msgid "Private"
+msgstr "निजी"
+
+msgid "Published"
+msgstr "प्रकाशित"
+
+msgid "Blacklist"
+msgstr "ब्लैकलिस्ट"
+
+msgid "Configuration"
+msgstr "कॉन्फ़िगरेशन"
+
+msgid "Help"
+msgstr "मदद"
+
+msgid "Book"
+msgstr "पुस्तक"
+
+msgid "No entries"
+msgstr "कोई प्रविष्टि नहीं"
+
+msgid "Add new destination"
+msgstr "नया गंतव्य जोड़ें"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt फ़ाइल से आयात करें"
+
+msgid "other"
+msgstr "अन्य"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt प्रारूप में निर्यात करें"
+
+msgid "Export results in hosts.txt format"
+msgstr "परिणाम hosts.txt प्रारूप में निर्यात करें"
+
+msgid "Export book in hosts.txt format"
+msgstr "पुस्तक hosts.txt प्रारूप में निर्यात करें"
+
+msgid "Search"
+msgstr "खोजें"
+
+msgid "latest"
+msgstr "नवीनतम"
+
+msgid "Alive"
+msgstr "पहुँच योग्य"
+
+msgid "Dead"
+msgstr "पहुँच से बाहर"
+
+msgid "all"
+msgstr "सभी"
+
+msgid "Info"
+msgstr "जानकारी"
+
+msgid "Type"
+msgstr "प्रकार"
+
+msgid "Hostname"
+msgstr "होस्ट नाम"
+
+msgid "Encryption"
+msgstr "एन्क्रिप्शन"
+
+msgid "Link (b32)"
+msgstr "लिंक (b32)"
+
+msgid "Destination"
+msgstr "गंतव्य"
+
+msgid "Added"
+msgstr "जोड़ा गया"
+
+msgid "Status"
+msgstr "स्थिति"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "पता पुस्तिका से हटाने के लिए होस्ट चुनें"
+
+msgid "More information on this entry"
+msgstr "इस प्रविष्टि के बारे में और जानकारी"
+
+msgid "unknown"
+msgstr "अज्ञात"
+
+msgid "Base 32 address"
+msgstr "बेस 32 पता"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "होस्ट पता साझा करने के लिए सहायक लिंक, पता पुस्तिका में जोड़ने के विकल्प के साथ"
+
+msgid "Mark for deletion"
+msgstr "हटाने के लिए चिह्नित करें"
+
+msgid "Cancel"
+msgstr "रद्द करें"
+
+msgid "This book currently contains no entries."
+msgstr "इस पुस्तक में अभी कोई प्रविष्टि नहीं है।"
+
+msgid "e.g. newdomain.i2p"
+msgstr "जैसे newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 या B32"
+
+msgid "Full destination or b32 address"
+msgstr "पूरा गंतव्य या b32 पता"
+
+msgid "Select file"
+msgstr "फ़ाइल चुनें"
+
+msgid "blacklist"
+msgstr "ब्लैकलिस्ट"
+
+msgid "Blacklist Management"
+msgstr "ब्लैकलिस्ट प्रबंधन"
+
+msgid "File location"
+msgstr "फ़ाइल स्थान"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "ब्लैकलिस्ट में शामिल करने के लिए I2P पते दर्ज करें (प्रति पंक्ति एक)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "ब्लैकलिस्ट फ़ाइल में उन I2P होस्टनामों की सूची होती है जिन्हें HTTP प्रोक्सी के ज़रिए पहुँच से बंद रखा जाना चाहिए और पता पुस्तिका की सूची में नहीं दिखाया जाना चाहिए।"
+
+msgid "configuration"
+msgstr "कॉन्फ़िगरेशन"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker पहले से ही स्कैन चला रहा है"
+
+msgid "Run HostChecker"
+msgstr "HostChecker चलाएं"
+
+msgid "Hints"
+msgstr "संकेत"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "यहाँ दिए गए फ़ाइल और डायरेक्टरी के पथ पता पुस्तिका की कार्यशील डायरेक्टरी के सापेक्ष हैं, जो सामान्यतः ~/.i2p/addressbook/ (Linux) या %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) होती है।"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "यदि आप किसी पता पुस्तिका में पंक्तियाँ स्वयं जोड़ना चाहते हैं, तो उन्हें निजी या मास्टर पता पुस्तिका में जोड़ें।"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "राउटर पता पुस्तिका और प्रकाशित पता पुस्तिका, पता पुस्तिका एप्लिकेशन द्वारा अपडेट की जाती हैं।"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "जब आप अपनी पता पुस्तिका प्रकाशित करते हैं, तो मास्टर और राउटर पता पुस्तिका के सभी गंतव्य वहाँ दिखाई देते हैं।"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "निजी गंतव्यों के लिए निजी पता पुस्तिका का उपयोग करें, ये प्रकाशित नहीं होते।"
+
+msgid "Options"
+msgstr "विकल्प"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "सब्सक्रिप्शन URL की सूची वाली फ़ाइल (बदलने की आवश्यकता नहीं)"
+
+msgid "Update interval in hours"
+msgstr "अपडेट अंतराल (घंटों में)"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "आपकी सार्वजनिक hosts.txt फ़ाइल (अपने वेबसर्वर के डॉक्यूमेंट रूट के भीतर कोई पथ चुनें)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "आपकी hosts.txt (इसे न बदलें)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "आपकी व्यक्तिगत पता पुस्तिका, इन होस्ट्स को प्रकाशित किया जाएगा"
+
+msgid "Your private addressbook, it is never published"
+msgstr "आपकी निजी पता पुस्तिका, इसे कभी प्रकाशित नहीं किया जाता"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "आपके eepProxy का पोर्ट (बदलने की आवश्यकता नहीं)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "आपके eepProxy का होस्ट नाम (बदलने की आवश्यकता नहीं)"
+
+msgid "Whether to update the published addressbook"
+msgstr "प्रकाशित पता पुस्तिका अपडेट करनी है या नहीं"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "फ़ेच किए गए सब्सक्रिप्शन URL से मिला etags हेडर रखने वाली फ़ाइल (बदलने की आवश्यकता नहीं)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "हर फ़ेच किए गए सब्सक्रिप्शन URL का संशोधन टाइमस्टैम्प रखने वाली फ़ाइल (बदलने की आवश्यकता नहीं)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "गतिविधि लॉग करने के लिए फ़ाइल (चाहें तो /dev/null कर दें)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "उपयोग की जाने वाली ओवरराइड थीम का नाम (कंसोल में चुनी गई थीम)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "होस्ट चेकर चलाने का अंतराल (घंटों में) (डिफ़ॉल्ट 4 घंटे)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "होस्ट चेकर चलाते समय एक साथ अधिकतम पिंग (डिफ़ॉल्ट 16, अधिकतम 160)"
+
+msgid "delete hosts"
+msgstr "होस्ट हटाएं"
+
+msgid "addressbook"
+msgstr "पता पुस्तिका"
+
+msgid "Details"
+msgstr "विवरण"
+
+msgid "Address Helper"
+msgstr "पता सहायक"
+
+msgid "link"
+msgstr "लिंक"
+
+msgid "Encoded Name"
+msgstr "एन्कोडेड नाम"
+
+msgid "Base 32 Address"
+msgstr "बेस 32 पता"
+
+msgid "Base 64 Hash"
+msgstr "बेस 64 हैश"
+
+msgid "Public Key"
+msgstr "सार्वजनिक कुंजी"
+
+msgid "Signing Key"
+msgstr "साइनिंग कुंजी"
+
+msgid "Certificate"
+msgstr "प्रमाणपत्र"
+
+msgid "Validated"
+msgstr "सत्यापित"
+
+msgid "no"
+msgstr "नहीं"
+
+msgid "yes"
+msgstr "हाँ"
+
+msgid "Added Date"
+msgstr "जोड़ने की तिथि"
+
+msgid "Last Modified"
+msgstr "अंतिम बदलाव"
+
+msgid "Notes"
+msgstr "नोट्स"
+
+msgid "Add notes about domain"
+msgstr "डोमेन के बारे में नोट्स जोड़ें"
+
+msgid "Visual Identification for"
+msgstr "इसके लिए दृश्य पहचान"
+
+msgid "Create your own identification images"
+msgstr "अपने पहचान चित्र बनाएं"
+
+msgid "Launch Image Generator"
+msgstr "इमेज जनरेटर शुरू करें"
+
+msgid "Introduction"
+msgstr "परिचय"
+
+msgid "What is the addressbook?"
+msgstr "पता पुस्तिका क्या है?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "पता पुस्तिका एप्लिकेशन आपके I2P संस्थापन का हिस्सा है।"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "यह वितरित स्रोतों या \"सब्सक्रिप्शन\" से आपकी hosts.txt फ़ाइल को नियमित रूप से अपडेट करता है।"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "अतिरिक्त साइटों की सदस्यता लेना आसान है, बस उन्हें अपनी <a href=\"subscriptions\">सब्सक्रिप्शन</a> फ़ाइल में जोड़ दें।"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P में नामकरण के बारे में अधिक जानकारी के लिए <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>अवलोकन</a> देखें।"
+
+msgid "How does the addressbook application work?"
+msgstr "पता पुस्तिका एप्लिकेशन कैसे काम करता है?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "पता पुस्तिका एप्लिकेशन नियमित रूप से आपके सब्सक्रिप्शन देखता है और उनकी सामग्री आपकी \"राउटर\" पता पुस्तिका में मिला देता है।"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "इसके बाद यह आपकी \"मास्टर\" पता पुस्तिका को भी राउटर पता पुस्तिका में मिला देता है।"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "यदि यह कॉन्फ़िगर किया गया हो, तो राउटर पता पुस्तिका अब \"प्रकाशित\" पता पुस्तिका में लिखी जाती है, जो आपके eepsite को चलाने पर सार्वजनिक रूप से उपलब्ध होगी।"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "राउटर एक निजी पता पुस्तिका भी उपयोग करता है, जिसे न मिलाया जाता है और न प्रकाशित किया जाता है।"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "निजी पता पुस्तिका के होस्ट्स आपके द्वारा देखे जा सकते हैं, पर उनके पते कभी दूसरों को नहीं भेजे जाते।"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "निजी पता पुस्तिका का उपयोग आपकी अन्य पता पुस्तिकाओं के होस्ट्स के अलियास रखने के लिए भी किया जा सकता है।"
+
+msgid "subscription log"
+msgstr "सब्सक्रिप्शन लॉग"
+
+msgid "Subscription Log"
+msgstr "सब्सक्रिप्शन लॉग"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "सबसे नवीनतम (खराब डोमेन को छोड़कर)"
+
+msgid "subscriptions"
+msgstr "सब्सक्रिप्शन"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "सब्सक्रिप्शन फ़ाइल में i2p URL की सूची होती है।"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "पता पुस्तिका एप्लिकेशन नियमित रूप से नए eepsites के लिए इस सूची की जाँच करता है।"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "ये URL प्रकाशित hosts.txt फ़ाइलों को दर्शाते हैं।"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "सब्सक्रिप्शन URL की सूची के लिए FAQ देखें।"
