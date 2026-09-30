@@ -93,6 +93,89 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     /** Max wait for DNS resolution of non-I2P hostnames in the HTTP proxy. */
     private static final int DNS_TIMEOUT_MS = 5000;
 
+    /**
+     *  Minimum interval between per-client "Request error" warnings. A single
+     *  torrent client reconnecting without sending a request produced 1000+
+     *  read timeouts in one rotation, which buried every other warning.
+     *  @since 0.9.71+
+     */
+    static final long REQUEST_ERROR_LOG_INTERVAL_MS = 5 * 60 * 1000;
+
+    /**
+     *  Cap on distinct clients tracked for warning rate limiting, so a
+     *  flood from many distinct peers cannot grow this map without bound.
+     *  @since 0.9.71+
+     */
+    static final int MAX_TRACKED_ERROR_CLIENTS = 1024;
+
+    /**
+     *  Last time each client was logged for a request error, for rate limiting.
+     *  Keyed on the base32 destination; bounded by {@link #MAX_TRACKED_ERROR_CLIENTS}.
+     *  @since 0.9.71+
+     */
+    private static final Map<String, Long> _lastErrorLogTime = new ConcurrentHashMap<>(64);
+
+    /**
+     *  Decide whether a request-error warning should be emitted for a client.
+     *  First occurrence for a client is always logged; subsequent ones only
+     *  after {@link #REQUEST_ERROR_LOG_INTERVAL_MS}. Evicts the oldest entries
+     *  once the tracking map is full, so a burst of distinct peers cannot
+     *  grow it without bound.
+     *
+     *  @param peerB32 client base32, may be null
+     *  @param now current time in ms
+     *  @return true if the caller should log at WARN
+     *  @since 0.9.71+
+     */
+    static boolean shouldLogRequestError(String peerB32, long now) {
+        if (peerB32 == null) {return true;}
+        Long last = _lastErrorLogTime.get(peerB32);
+        if (last != null && (now - last) < REQUEST_ERROR_LOG_INTERVAL_MS) {return false;}
+        if (_lastErrorLogTime.size() >= MAX_TRACKED_ERROR_CLIENTS) {
+            evictOldestErrorClients(now);
+        }
+        _lastErrorLogTime.put(peerB32, now);
+        return true;
+    }
+
+    /**
+     *  Free space in the tracking map, guaranteeing it never exceeds
+     *  {@link #MAX_TRACKED_ERROR_CLIENTS}. First drops clients whose last
+     *  warning is older than the log interval; if that is not enough (a burst
+     *  of distinct peers inside one interval leaves nothing stale), the single
+     *  oldest entry is evicted so the bound always holds. This runs only on the
+     *  overflow path, never on the normal per-request check.
+     *
+     *  @param now current time in ms
+     *  @since 0.9.71+
+     */
+    private static void evictOldestErrorClients(long now) {
+        _lastErrorLogTime.entrySet().removeIf(e -> (now - e.getValue()) >= REQUEST_ERROR_LOG_INTERVAL_MS);
+        if (_lastErrorLogTime.size() < MAX_TRACKED_ERROR_CLIENTS) {return;}
+        String oldestKey = null;
+        long oldestTime = Long.MAX_VALUE;
+        for (Map.Entry<String, Long> e : _lastErrorLogTime.entrySet()) {
+            if (e.getValue() < oldestTime) {
+                oldestTime = e.getValue();
+                oldestKey = e.getKey();
+            }
+        }
+        if (oldestKey != null) {_lastErrorLogTime.remove(oldestKey);}
+    }
+
+    /**
+     *  Test seam: clear the request-error rate limiting state.
+     *  @since 0.9.71+
+     */
+    static void resetRequestErrorLimiter() { _lastErrorLogTime.clear(); }
+
+    /**
+     *  Test seam: number of clients currently tracked.
+     *  @return tracked client count
+     *  @since 0.9.71+
+     */
+    static int trackedErrorClients() { return _lastErrorLogTime.size(); }
+
     /** Dedicated executor for non-blocking DNS lookups with bounded timeout. */
     private static final ExecutorService _dnsResolver = Executors.newCachedThreadPool(r -> {
         Thread t = new Thread(r, "DNS-Resolver");
@@ -1393,7 +1476,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else {
                 try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                 catch (IOException ioe) { /* ignored */ }
-                if (log.shouldWarn() && ste.getMessage() != null) {
+                // Rate limited per client: a torrent client that reconnects
+                // without ever sending a request generates thousands of these.
+                if (log.shouldWarn() && ste.getMessage() != null
+                        && shouldLogRequestError(peerB32, ctx.clock().now())) {
                     log.warn("[HTTPServer] Request error: " + ste.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
                 }
             }
@@ -1407,7 +1493,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } else {
                 try {sendError(socket, ERR_BAD_REQUEST);}
                 catch (IOException ioe) { /* ignored */ }
-                if (log.shouldWarn() && eofe.getMessage() != null) {
+                if (log.shouldWarn() && eofe.getMessage() != null
+                        && shouldLogRequestError(peerB32, ctx.clock().now())) {
                     log.warn("[HTTPServer] Request error: " + eofe.getMessage() + " " + tunnelId + "\n* Client: " + peerB32);
                 }
             }
