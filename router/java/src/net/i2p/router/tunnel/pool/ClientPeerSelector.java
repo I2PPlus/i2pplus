@@ -20,6 +20,7 @@ import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.peermanager.FloodfillReliability;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.ArraySet;
 
@@ -37,6 +38,12 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final int ESTABLISHED_PREF_ATTEMPTS = 3;
     /** First-hop quality attempts before accepting any tier-passing peer. */
     private static final int CONNECTING_PREF_ATTEMPTS = 5;
+    /** How often the accepted-first-hop tier line may be written, per tier. @since 0.9.71+ */
+    private static final long TIER_LOG_INTERVAL_MS = 60L * 1000;
+    /** Last write time per accepted tier key, for rate limiting. @since 0.9.71+ */
+    private final Map<String, Long> _tierLogTime = new ConcurrentHashMap<>(8);
+    /** Accepts per tier since the last log line, so volume is visible. @since 0.9.71+ */
+    private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** If the build timeout exceeds this value, the message survives the ~8.5s transport handshake,
      *  so preConnectTo() is unnecessary and adds ~8.5s of avoidable latency. */
     private static final long PRECONNECT_TIMEOUT_THRESHOLD_MS = 15 * 1000L;
@@ -872,6 +879,9 @@ class ClientPeerSelector extends TunnelPeerSelector {
             // to widen the acceptable peer pool faster and reduce
             // first-hop selection starvation.
             int tier = (matches.size() < 3 || params.buildSuccess < 0.70) ? 1 : 0;
+            Hash acceptedFirstHop = null;
+            int acceptedTier = -1;
+            int acceptedAttempt = -1;
             while (qualityAttempts < 16 && !matches.isEmpty()) {
                 qualityAttempts++;
                 tier = firstHopQualityTier(qualityAttempts, inStartup, tier);
@@ -933,8 +943,18 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                     continue;
                 }
+                // Accepted: this candidate cleared every gate at the current
+                // tier.  Recorded so the tier that actually produced a gateway is
+                // observable — a tier-2 accept has no transport-session
+                // requirement, so an unreachable gateway is only explicable
+                // after the fact, and the ladder walked to tier 2 on its own.
+                acceptedFirstHop = firstHop;
+                acceptedTier = tier;
+                acceptedAttempt = qualityAttempts;
                 break;
             }
+            logAcceptedFirstHopTier(ctx, acceptedFirstHop, acceptedTier, acceptedAttempt,
+                                    qualityAttempts, matches.size(), params.buildSuccess);
             // Fallback: if quality loop exhausted all candidates without
             // finding a suitable peer, accept the last remaining candidate
             // rather than returning empty — one attempt with a mediocre
@@ -1092,6 +1112,78 @@ class ClientPeerSelector extends TunnelPeerSelector {
      *  @param inStartup whether the router is in the startup grace period
      *  @param currentTier the tier before this attempt
      *  @return the tier for this attempt
+     *  @since 0.9.71+
+     */
+    /**
+     *  Log the quality tier that actually produced this build's first hop.
+     *
+     *  <p>The first-hop quality ladder relaxes its reachability requirement as
+     *  attempts accumulate: tiers 0 and 1 require the peer to be established or
+     *  connecting, tier 2 requires neither.  A gateway taken at tier 2 is
+     *  therefore one we have no transport session with, and cannot receive a
+     *  build request — which is indistinguishable, from the outside, from a
+     *  peer that went silent.  This line is the only way to tell those apart
+     *  after the fact.
+     *
+     *  <p>Rate limited to one line per {@link #TIER_LOG_INTERVAL_MS} per tier so
+     *  a busy build loop cannot turn the diagnosis into the noise it is meant
+     *  to explain; the counters accumulate regardless and are reported in the
+     *  same line.  The limiter uses {@code compute} rather than
+     *  {@code replace(k, old, new)}: {@code replace} is a no-op returning false
+     *  when the key is absent, so the first log for each tier would never
+     *  happen and the key would never be inserted.
+     *
+     *  @param ctx the router context
+     *  @param firstHop the accepted gateway, or null if none was accepted
+     *  @param tier the tier it was accepted at, or -1
+     *  @param attempt the attempt number it was accepted on, or -1
+     *  @param attempts total quality attempts made
+     *  @param remaining candidates left in the set
+     *  @since 0.9.71+
+     */
+    private void logAcceptedFirstHopTier(RouterContext ctx, Hash firstHop, int tier,
+                                         int attempt, int attempts, int remaining,
+                                         double buildSuccess) {
+        if (tier < 0) {return;}
+        String key = "tier" + tier;
+        _tierLogCount.merge(key, 1L, Long::sum);
+        long now = ctx.clock().now();
+        long[] logged = new long[1];
+        _tierLogTime.compute(key, (k, last) -> {
+            long prev = last == null ? 0L : last;
+            if (now - prev < TIER_LOG_INTERVAL_MS) {return prev;}
+            logged[0] = 1L;
+            return now;
+        });
+        if (logged[0] == 0L) {return;}
+        if (log.shouldInfo()) {
+            ProfileOrganizer po = ctx.profileOrganizer();
+            boolean established = ctx.commSystem().isEstablished(firstHop);
+            boolean connecting = ctx.commSystem().isConnecting(firstHop);
+            log.info("First hop accepted at tier " + tier + " after " + attempt + "/" + attempts +
+                     " attempts (" + remaining + " left, " + _tierLogCount.get(key) + " since last log)" +
+                     " established=" + established + " connecting=" + connecting +
+                     " buildSuccess=" + String.format("%.2f", buildSuccess) +
+                     " fastTier=" + po.getFastPeerCount() +
+                     " highCap=" + po.getHighCapPeerCount() +
+                     " sample=" + po.getEffectiveCandidateSample(ctx) +
+                     (established || connecting ? "" : "  <-- NO transport session") +
+                     " " + firstHop.toBase32().substring(0, 6));
+        }
+    }
+
+    /**
+     *  Build first-hop quality tier.  Pure so the ladder is testable.
+     *
+     *  <p>Tier 0 and 1 require an established or connecting peer; tier 2
+     *  requires neither.  The ladder reaches tier 2 after
+     *  {@link #CONNECTING_PREF_ATTEMPTS} rejections, which is the point where
+     *  an unreachable gateway stops being filtered out.
+     *
+     *  @param attempts 1-based quality attempt count
+     *  @param inStartup whether the router is inside its startup grace period
+     *  @param currentTier the tier to start from
+     *  @return the tier to apply for this attempt
      *  @since 0.9.71+
      */
     static int firstHopQualityTier(int attempts, boolean inStartup, int currentTier) {
