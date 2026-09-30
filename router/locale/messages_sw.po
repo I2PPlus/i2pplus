@@ -1,0 +1,163 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "Vizuri"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: Vizuri; IPv6: Inajaribu"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: Vizuri; IPv6: Imezuliwa na firewall"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: Inajaribu; IPv6: Vizuri"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: Imezuliwa na firewall; IPv6: Vizuri"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: Imezimwa; IPv6: Vizuri"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: NAT simetriki; IPv6: Vizuri"
+
+msgid "Symmetric NAT"
+msgstr "NAT simetriki"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: NAT simetriki; IPv6: Inajaribu"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: Imezuliwa na firewall; IPv6: Inajaribu"
+
+msgid "Firewalled"
+msgstr "Imezuliwa na firewall"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: Inajaribu; IPv6: Imezuliwa na firewall"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: Imezimwa; IPv6: Inajaribu"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: Imezimwa; IPv6: Imezuliwa na firewall"
+
+msgid "Disconnected"
+msgstr "Haijaunganishwa"
+
+msgid "Port Conflict"
+msgstr "Mgongano wa bandari"
+
+msgid "Testing"
+msgstr "Inajaribu"
+
+msgid "Starting up"
+msgstr "Inaanza"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "Inakataa maombi yote ya tuneli:<br>"
+
+msgid "Hidden Mode"
+msgstr "Modi ya siri"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "Inakataa maombi ya tuneli:<br>"
+
+msgid "High message delay"
+msgstr "Ucheleweshaji mkubwa wa ujumbe"
+
+msgid "Declining requests: "
+msgstr "Inakataa maombi: "
+
+msgid "Limit reached"
+msgstr "Kikomo kimefikwa"
+
+msgid "Participation disabled"
+msgstr "Ushiriki umezimwa"
+
+msgid "High system load"
+msgstr "Mzigo mkubwa wa mfumo"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "Inatupilia mbali maombi yote ya tuneli:<br>"
+
+msgid "High number of requests"
+msgstr "Idadi mkubwa ya maombi"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "Inatupilia mbali maombi mengi ya tuneli:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "Inakubali maombi mengi ya tuneli"
+
+msgid "Accepting tunnel requests"
+msgstr "Inakubali maombi ya tuneli"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "Inakataa maombi: Kikomo cha kasi"
+
+msgid "Declining requests"
+msgstr "Inakataa maombi"
+
+msgid "Shutting down"
+msgstr "Inasitisha"
+
+msgid "Restarting"
+msgstr "Inaanzisha upya"
+
+msgid "Declining Tunnel Requests"
+msgstr "Inakataa maombi ya tuneli"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "Inatupa maombi ya tuneli: Polepole sana"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "Inatupa maombi ya tuneli: Ucheleweshaji mkubwa wa kazi"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "Inatupa maombi ya tuneli:<br>Mzigo mkubwa wa CPU"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "Inatupa maombi ya tuneli: Imezidiwa"
+
+msgid "Declining requests:"
+msgstr "Inakataa maombi:"
+
+msgid "Request overload"
+msgstr "Mwingiliano wa maombi"
+
+msgid "Connection limit reached"
+msgstr "Kikomo cha muunganisho kimefikwa"
+
+msgid "Transit throttle drop"
+msgstr "Kutupa kwa udhibiti wa transit"
+
+msgid "Transit throttle reject"
+msgstr "Kutupilia mbali kwa udhibiti wa transit"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Inatupa maombi ya tuneli: Mzigo mkubwa"
+
+msgid "Transit request throttle"
+msgstr "Udhibiti wa ombi la transit"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Inatupa maombi ya tuneli: Muda wa foleni"

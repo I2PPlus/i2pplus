@@ -1,0 +1,100 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Huduma zinazohusiana na cryptocurrency"
+
+msgid "Controlled substances marketplaces"
+msgstr "Masoko ya vitu vinavyodhibitiwa"
+
+msgid "E-book libraries and publishing"
+msgstr "Maktaba za vitabu vya kidijitali na uchapishaji"
+
+msgid "File hosting and storage services"
+msgstr "Huduma za kuhosti na kuhifadhi faili"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Kushiriki faili kwa peer hadi peer"
+
+msgid "Discussion forums and message boards"
+msgstr "Foruma za majadiliano na bango za ujumbe"
+
+msgid "Image galleries and photo sharing"
+msgstr "Galeria za picha na kushiriki foto"
+
+msgid "Gaming servers and communities"
+msgstr "Seva za michezo na jamii"
+
+msgid "Git repositories and code hosting"
+msgstr "Repozitori za Git na kuhosti msimbo"
+
+msgid "Help and support resources"
+msgstr "Rasilizi za usaidizi na msaada"
+
+msgid "Human rights and civil liberties"
+msgstr "Haki za binadamu na uhuru wa raia"
+
+msgid "Official I2P infrastructure services"
+msgstr "Huduma rasmi za miundiko ya I2P"
+
+msgid "News and media outlets"
+msgstr "Vituo vya habari na vyonyesho"
+
+msgid "Text/code paste services"
+msgstr "Huduma za kubandika maandishi na msimbo"
+
+msgid "Personal websites and blogs"
+msgstr "Tovuti za bina na blogu"
+
+msgid "Internet radio and streaming"
+msgstr "Redio ya intaneti na mtiririko"
+
+msgid "Search engines and directories"
+msgstr "Mafuta ya utafutaji na katalogi"
+
+msgid "Software repositories and downloads"
+msgstr "Repozitori za programu na vipakuliwa"
+
+msgid "Statistics and analytics"
+msgstr "Takwimu na uchambuzi"
+
+msgid "Utilities and web tools"
+msgstr "Huduma za kusaidia na zana za tovuti"
+
+msgid "Torrent and content trackers"
+msgstr "Trackers za torrent na za maudhui"
+
+msgid "Conspiracy / Religious content"
+msgstr "Maudhui ya mashauri / ya kidini"
+
+msgid "Unclassified or pending review"
+msgstr "Haikuwekwa kundi au inasubiri ukaguzi"
+
+msgid "Not yet categorized"
+msgstr "Bado haijawekwa kundi"
+
+msgid "Video streaming and media"
+msgstr "Mtiririko wa video na media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki na nyaraka za ushiriki"
+
+msgid "Work in progress / development"
+msgstr "Kazi inayoendelea / usanidi"

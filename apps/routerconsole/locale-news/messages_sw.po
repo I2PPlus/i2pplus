@@ -1,0 +1,58 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "I2P+ installation complete!"
+msgstr "Usakinishaji wa I2P+ umekamilika!"
+
+msgid "Welcome to I2P+!"
+msgstr "Karibu I2P+!"
+
+#, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
+msgstr "Tafadhali {0}na subira{1} wakati I2P+ inaanza na kutafuta peer."
+
+#, java-format
+msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgstr "Wakati mnasubiri, tafadhali {0}badilisha mipangilio yenu ya kasi{1} kwenye {2}kurasa ya mipangilio{3}."
+
+#, java-format
+msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
+msgstr "Mnaweza pia kuendesha jaribio la kasi kupitia {0}Mwongoza wa Mpangilio{1} ili kusaidia kubaini kasi yenu, na mwongozo kwa watumiaji wapya na nyaraka zaidi ikiwa ni pamoja na Maswali Yanayoulizwa Mara kwa Mara, zipo katika {2}sekshen ya msaada{1}."
+
+#, java-format
+msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgstr "Mnapenda pia kuwasha sasisho za I2P+ kwenye {0}kurasa ya mipangilio ya sasisho{1}."
+
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr "Pia mnaweza kusanidi kivinjari chenu kutumia proksi ya I2P ili kufikia eepsites."
+
+msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
+msgstr "Ingiza tu 127.0.0.1 (au localhost) bandari 4444 kama proksi ya http katika mipangilio ya kivinjari chenu."
+
+msgid "Do not use SOCKS for this."
+msgstr "Usitumie SOCKS kwa hili."
+
+#, java-format
+msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr "Taarifa zaidi zinaweza kupatikana kwenye {0}kurasa ya mipangilio ya proksi ya kivinjari ya I2P{1}."
+
+#, java-format
+msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
+msgstr "Elekeza mteja wenu wa IRC kwenye {0}localhost:6668{1} na sema hello kwetu kwenye {2}#saltR{3}."

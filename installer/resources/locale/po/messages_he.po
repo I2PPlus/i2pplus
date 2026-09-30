@@ -1,0 +1,154 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "נכשלת טעינת ה-wrapper"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME כבר פועל."
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "מריץ $APP_LONG_NAME"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "ממתין ל-$APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "אזהרה: ייתכן שהפעלת $APP_LONG_NAME נכשלה."
+
+msgid "Must be root to perform this action."
+msgstr "יש להיות root כדי לבצע פעולה זו."
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "מפעיל $APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "עוצר $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME לא היה פועל."
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "לא ניתן לעצור את $APP_LONG_NAME."
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "ממתין ליציאת $APP_LONG_NAME"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "עצירת $APP_LONG_NAME נכשלה."
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME נעצר."
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "עוצר את $APP_LONG_NAME באופן מדורג"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME לא פועל."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME פועל: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME פועל: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "daemon של $APP_LONG_NAME כבר מותקן."
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "מתקין את daemon של $APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "התקנה אינה נתמכת כרגע עבור $DIST_OS"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "מסיר את daemon של $APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "daemon של $APP_LONG_NAME אינו מותקן כרגע."
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "הסרה אינה נתמכת כרגע עבור $DIST_OS"
+
+msgid "Commands:"
+msgstr "פקודות:"
+
+msgid "Launch in the current console."
+msgstr "הפעלה במסוף הנוכחי."
+
+msgid "Start in the background as a daemon process."
+msgstr "הפעלה ברקע כתהליך daemon."
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "עצירה אם פועל כתהליך daemon או במסוף אחר."
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "עצירה מדורגת, עשויה להימשך עד 11 דקות או יותר."
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "הפעלה מחדש מדורגת, עשויה להימשך עד 11 דקות או יותר."
+
+msgid "Stop if running and then start."
+msgstr "עצירה אם התהליך פועל, ואז הפעלה."
+
+msgid "Restart only if already running."
+msgstr "הפעלה מחדש רק אם כבר פועל."
+
+msgid "Query the current status."
+msgstr "שאילתת המצב הנוכחי."
+
+msgid "Install to start automatically when system boots."
+msgstr "התקנה לצורך הפעלה אוטומטית בעת עליית המערכת."
+
+msgid "Uninstall."
+msgstr "הסרה."
+
+msgid "Request a Java thread dump if running."
+msgstr "בקשת thread dump של Java אם התהליך פועל."
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "נא לערוך את i2prouter ולהגדיר את המשתנה RUN_AS_USER"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "הרצת I2P כמשתמש root אינה *מומלצת*."
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "כדי להריץ בכל זאת כמשתמש root, ערוך את i2prouter והגדר ALLOW_ROOT=true."

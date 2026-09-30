@@ -1,0 +1,1681 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Magnet"
+msgstr "magnet"
+
+msgid "Unable to connect to I2P"
+msgstr "לא ניתן להתחבר ל-I2P"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "שגיאה בהתחברות ל-I2P - בדוק את הגדרות ה-I2CP!"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "הגדר את I2PSnark עם אפשרויות I2CP"
+
+msgid "No write permissions for data directory"
+msgstr "אין הרשאות כתיבה עבור תיקיית הנתונים"
+
+msgid "Data directory cannot be created"
+msgstr "לא ניתן ליצור את תיקיית הנתונים"
+
+msgid "No write permissions for temp directory"
+msgstr "אין הרשאות כתיבה עבור תיקייה זמנית"
+
+msgid "Temp directory cannot be created"
+msgstr "לא ניתן ליצור את תיקייה הזמנית"
+
+msgid "No write permissions for torrent directory"
+msgstr "אין הרשאות כתיבה עבור תיקיית torrent"
+
+msgid "Torrent directory cannot be created"
+msgstr "לא ניתן ליצור את תיקיית torrent"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "מגבלת העלאות כוללת שונתה ל-{0}"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "מגבלת העלאות מזערית היא {0}"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "מגבלת רוחב פס להעלאה שונתה ל-{0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "מגבלת רוחב פס מזערית להעלאה היא {0}KBps"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "מהירות הורדה מרבית שונתה ל-{0}KB/s"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "מגבלת מהירות הורדה היא {0}KB/s"
+
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr "הערה: ייתכן שיהיה עליך לעצור ולהפעיל מחדש את ה-torrents או להפעיל מחדש את I2PSnark כדי שהשינוי ייכנס לתוקף."
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "הופעלה הגרלת קפיצות מנהור +0/1 במנהורים נכנסים"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "הושבתה הגרלת קפיצות מנהור במנהורים נכנסים"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "הופעלה הגרלת קפיצות מנהור +0/1 במנהורים יוצאים"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "הושבתה הגרלת קפיצות מנהור במנהורים יוצאים"
+
+msgid "Enabled a separate destination for each torrent"
+msgstr "הופעל יעד נפרד לכל torrent"
+
+msgid "Disabled a separate destination for each torrent"
+msgstr "הושבת יעד נפרד לכל torrent"
+
+#, java-format
+msgid "Maximum destinations changed to {0}"
+msgstr "מספר היעדים המרבי שונה ל-{0}"
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr "יעדים בלתי מוגבלים שוחזרו (אחד לכל torrent)"
+
+msgid "Enabled randomizing torrent start times"
+msgstr "הופעלה הגרלת זמני ההפעלת ה-torrents"
+
+msgid "Disabled randomizing torrent start times"
+msgstr "הושבתה הגרלת זמני ההפעלת ה-torrents"
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr "טווח השהיית ההפעלה שונה ל-{0} - {1}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "זמן הרענון שונה ל-{0}"
+
+msgid "Refresh disabled"
+msgstr "רענון מושבת"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "גודל העמוד שונה ל-{0}"
+
+msgid "New files will be publicly readable"
+msgstr "קבצים חדשים יהיו ניתנים לקריאה ציבורית"
+
+msgid "New files will not be publicly readable"
+msgstr "קבצים חדשים לא יהיו ניתנים לקריאה ציבורית"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "עצור את כל ה-torrents לפני שינוי תיקיית הנתונים"
+
+msgid "Data directory must be an absolute path"
+msgstr "תיקיית הנתונים חייבת להיות נתיב מוחלט"
+
+msgid "Not a directory"
+msgstr "לא תיקייה"
+
+msgid "Unreadable"
+msgstr "לא ניתן לקרוא"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "תיקיית הנתונים שונתה ל-{0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "שינויים ב-I2CP ובמנהור ייכנסו לתוקף לאחר עצירת כל ה-torrents"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "אפשרויות I2CP שונו ל: {0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "מנתק את יעד ה-I2CP הישן"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "לא ניתן להתחבר עם ההגדרות החדשות, חוזר להגדרות ה-I2CP הישנות"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "לא ניתן להתחבר מחדש עם ההגדרות הישנות!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "התחבר מחדש ביעד ה-I2CP החדש"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "מאזין ה-I2CP הופעל מחדש עבור \"{0}\""
+
+msgid "Enabled autostart"
+msgstr "הופעלה הפעלה אוטומטית"
+
+msgid "Disabled autostart"
+msgstr "הושבתה הפעלה אוטומטית"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "הופעלו מעקבים פתוחים - נדרש להפעיל מחדש את ה-torrent כדי שהשינוי ייכנס לתוקף."
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "הושבטו מעקבים פתוחים - נדרש להפעיל מחדש את ה-torrent כדי שהשינוי ייכנס לתוקף."
+
+msgid "Enabled DHT."
+msgstr "הופעל DHT."
+
+msgid "Disabled DHT."
+msgstr "הושבת DHT."
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "שינוי DHT דורש סגירה ופתיחה מחדש של המנהור"
+
+msgid "Enabled Ratings."
+msgstr "הופעלו דירוגים."
+
+msgid "Disabled Ratings."
+msgstr "הושבטו דירוגים."
+
+msgid "Enabled Comments."
+msgstr "הופעלו תגובות."
+
+msgid "Disabled Comments."
+msgstr "הושבטו תגובות."
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "שם התגובות הוגדר ל-{0}."
+
+msgid "Collapsible panels enabled."
+msgstr "לוחות מתכווצים הופעלו."
+
+msgid "Collapsible panels disabled."
+msgstr "לוחות מתכווצים הושבטו."
+
+msgid "Torrent filter bar enabled."
+msgstr "סרגל סינון ה-torrents הופעל."
+
+msgid "Torrent filter bar disabled."
+msgstr "סרגל סינון ה-torrents הושבט."
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "lightbox הופעל לתמונות ממוזערות."
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "lightbox הושבט לתמונות ממוזערות."
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "מקטעי הוספה ויצירה הופעלו בכל דפי רשימת ה-torrents."
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "מקטעי הוספה ויצירה להצגה רק בעמוד הראשון של דפי רשימת ה-torrents במצב רב-עמודים"
+
+msgid "API key updated."
+msgstr "מפתח ה-API עודכן."
+
+msgid "Preallocate files for new torrents enabled."
+msgstr "הקצאה מוקדמת של קבצים עבור torrents חדשים הופעלה."
+
+msgid "Preallocate files for new torrents disabled."
+msgstr "הקצאה מוקדמת של קבצים עבור torrents חדשים הושבטה."
+
+msgid "Preserve original file names enabled."
+msgstr "שמירת שמות הקבצים המקוריים הופעלה."
+
+msgid "Preserve original file names disabled."
+msgstr "שמירת שמות הקבצים המקוריים הושבטה."
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr "מספר הקבצים המרבי לכל torrent שונה ל-{0}"
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr "מספר קבצים לא תקין לכל torrent: {0}"
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr "תיקיית הכנה זמנית שונתה ל-{0}"
+
+msgid "Temp directory staging disabled."
+msgstr "הכנה בתיקייה הזמנית הושבטה."
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr "תיקיית torrent שונתה ל-{0}"
+
+msgid "Torrent directory reset to data directory."
+msgstr "תיקיית torrent אופסה לתיקיית הנתונים."
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "רשימת המעקבים הפתוחים שונתה - נדרש להפעיל מחדש את ה-torrent כדי שהשינוי ייכנס לתוקף."
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "רשימת המעקבים הפרטית שונתה - משפיעה רק על torrents שנוצרו לאחרונה."
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "לא ניתן לשמור את ההגדרות אל {0}"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "קובץ ה-torrent נמחק: {0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "קובץ ה-torrent הועבר מ-{0} אל {1}"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "שגיאה: לא ניתן להוסיף את ה-torrent: {0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "ה-torrent כבר פועל: {0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "לא ניתן לפתוח את \"{0}\""
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "כבר פועל torrent עם infohash זה: {0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "כבר פועל torrent עם אותו מיקום נתונים: {0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "ה-torrent שב-\"{0}\" אינו תקין"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "שגיאה - אין מספיק זיכרון, לא ניתן ליצור torrent מתוך {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr "שגיאה - לא ניתן ליצור torrent מתוך {0}"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "מאתחל את I2PSnark ופותח מנהורים"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "ה-torrent נוסף והופעל: {0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "ה-torrent נוסף: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "שגיאה - אין מעקבי I2P ב-torrent הפרטי \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "אזהרה - אין מעקבי I2P ב-\"{0}\", ההכרזה תישלח רק למעקבים הפתוחים של I2P ול-DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "אזהרה - אין מעקבי I2P ב-\"{0}\", ומעקבים פתוחים מושבתים, ההכרזה תישלח רק ל-DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "אזהרה - אין מעקבי I2P ב-\"{0}\", וגם DHT ומעקבים פתוחים מושבתים, עליך להפעיל מעקבים פתוחים או DHT לפני הפעלת ה-torrent."
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "מעקבים פתוחים מושבתים ואין לנו peers ב-DHT. אחזור של {0} עלול להיכשל עד שתפעיל torrent אחר, תפעיל מעקבים פתוחים או תפעיל DHT."
+
+#, java-format
+msgid "Adding {0}"
+msgstr "מוסיף {0}"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "הורדה כבר מתבצעת: {0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "העתקת קובץ ה-torrent אל {0} נכשלה"
+
+msgid " - torrent file already exists"
+msgstr " - קובץ ה-torrent כבר קיים"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "יותר מדי קבצים ב-\"{0}\" ({1})!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "קובץ ה-torrent \"{0}\" אינו יכול להסתיים ב-\".torrent\"!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "אין חלקים ב-\"{0}\"!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "יותר מדי חלקים ב-\"{0}\", המגבלה היא {1}!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "החלקים גדולים מדי ב-\"{0}\" ({1}B)!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "המגבלה היא {0}B"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "ה-torrent \"{0}\" אינו מכיל נתונים!"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "torrents גדולים מ-{0}B אינם נתמכים עדיין \"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "שגיאה: לא ניתן להסיר את ה-torrent {0}"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "ה-torrent נעצר: {0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "ה-torrent הוסר: {0}"
+
+#, java-format
+msgid "Starting torrents in {0}&hellip;"
+msgstr "מפעיל torrents ב-{0}&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "מגבלת רוחב פס להורדה היא {0} KB/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "מגבלת רוחב פס להעלאה היא {0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "מתחבר לפורט I2CP במופע I2P שב-{0}"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "מגבלת רוחב פס להעלאה היא {0} KBps עד {1} peers מקבילים."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr "אחסון: {0}GB זמינים כרגע להורדות במחיצת הנתונים המוגדרת"
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "אחסון: {0}MB זמינים כרגע להורדות במחיצת הנתונים המוגדרת"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "אזהרה - רק {0}MB זמינים להורדות במחיצת הנתונים המוגדרת"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr "אחסון זמני: {0}GB זמינים כרגע להורדות במחיצה הזמנית המוגדרת"
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr "אחסון זמני: {0}MB זמינים כרגע להורדות במחיצה הזמנית המוגדרת"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr "אזהרה - רק {0}MB זמינים להורדות במחיצה הזמנית המוגדרת"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "ההורדה הושלמה: {0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "מפעיל torrent: {0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "לא ניתן לטעון את הגדרות מסנן הקבצים ליצירת torrent: "
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "לא ניתן לשמור את הגדרות מסנן הקבצים ליצירת torrent: "
+
+msgid "Torrent not found"
+msgstr "ה-torrent לא נמצא"
+
+msgid "Opening the I2P tunnel"
+msgstr "פותח את מנהור I2P"
+
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr "פותר את חיפוש ה-torrent: {0}"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "פותח את מנהור I2P ומפעיל את כל ה-torrents."
+
+msgid "Connecting to I2P"
+msgstr "מתחבר ל-I2P"
+
+msgid "Connected to I2P at"
+msgstr "מחובר ל-I2P ב-"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "מפעיל את torrent {0}"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "עוצר את כל ה-torrents וסוגר את מנהור I2P."
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "סוגר את מנהור I2P לאחר מתן הודעה למעקבים."
+
+msgid "I2P tunnel closed."
+msgstr "מנהור I2P נסגר."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr "מדלג על מחזור יעדים - {0} הורדה פעילה בתהליך"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr "מדלג על מחזור יעדים - {0} הורדות פעילות בתהליך"
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr "אין torrents בהורדה פעילה - מחזור היעדים מתבצע"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "לא ניתן לבדוק את {0}"
+
+msgid "Torrent already started"
+msgstr "ה-torrent כבר הופעל"
+
+msgid "No storage"
+msgstr "אין אחסון"
+
+msgid "Starting recheck of {}"
+msgstr "מפעיל בדיקה חוזרת של {}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "בדיקה חוזרת של ה-torrent {0} הסתיימה, כעת {1} הושלם"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "בדיקה חוזרת של ה-torrent {0} הסתיימה, ללא שינוי"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "שגיאה בבדיקת ה-torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "תיקיית הנתונים אינה קיימת"
+
+msgid "Cannot create diskspace bar"
+msgstr "לא ניתן ליצור סרגל שטח הדיסק"
+
+msgid "Data partition"
+msgstr "מחיצת נתונים"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "אין מעקבים תקפים עבור {0} - להפעיל מעקבים פתוחים או DHT?"
+
+msgid "Updating"
+msgstr "מעדכן"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "מעדכן מ-{0}"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "מוריד {0}"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "מבקש את קובץ ה-torrent: {0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "אחזור קובץ ה-torrent נכשל: {0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "ה-torrent הורד מ-{0}"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "ה-torrent כבר נמצא בתור: {0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "ה-torrent שב-{0} אינו תקין"
+
+msgid "Configuration"
+msgstr "הגדרות"
+
+msgid "User Interface"
+msgstr "ממשק משתמש"
+
+msgid "Switch to Embedded Mode"
+msgstr "מעבר למצב משובץ"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "מעבר למצב מסך מלא"
+
+msgid "Theme"
+msgstr "ערכת נושא"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "כדי לשנות ערכות נושא באופן ידני, יש להשבת את ערכת הנושא האחידה"
+
+msgid "Universal theming is enabled."
+msgstr "ערכת הנושא האחידה מופעלת."
+
+msgid "Configure"
+msgstr "הגדר"
+
+msgid "Refresh time"
+msgstr "זמן רענון"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "באיזו תדירות מתעדכן מצב ה-torrent בדף הראשי"
+
+msgid "Never"
+msgstr "לעולם"
+
+msgid "Page size"
+msgstr "גודל עמוד"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "מספר מרבי של torrents להצגה בכל עמוד"
+
+msgid "torrents"
+msgstr "torrents"
+
+msgid "Language"
+msgstr "שפה"
+
+msgid "Collapsible panels"
+msgstr "לוחות מתכווצים"
+
+msgid "Your browser does not support this feature."
+msgstr "הדפדפן שלך אינו תומך בתכונה זו."
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "אפשר לכווץ את הלוחות 'הוספת torrent' ו'יצירת torrent', ולכווץ אותם כברירת מחדל במצב שאינו משובץ"
+
+msgid "Torrent filter bar"
+msgstr "סרגל סינון torrents"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "הצג סרגל סינון מעל ה-torrents לתצוגה בחירתית לפי מצב"
+
+msgid "requires javascript"
+msgstr "דורש javascript"
+
+msgid "Enable lightbox"
+msgstr "הפעל lightbox"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "השתמש ב-lightbox להצגת תמונות בעת לחיצה על תמונות ממוזערות"
+
+msgid "Persist Add/Create"
+msgstr "שמור את הוספה/יצירה"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "הצג את מקטעי 'הוספה' ו'יצירה' בכל דפי רשימת ה-torrents במצב רב-עמודים"
+
+msgid "Comments &amp; Ratings"
+msgstr "תגובות &amp; דירוגים"
+
+msgid "Enable Ratings"
+msgstr "הפעל דירוגים"
+
+msgid "Show ratings on torrent pages"
+msgstr "הצג דירוגים בדפי torrent"
+
+msgid "Enable Comments"
+msgstr "הפעל תגובות"
+
+msgid "Show comments on torrent pages"
+msgstr "הצג תגובות בדפי torrent"
+
+msgid "Comment Author"
+msgstr "מחבר התגובה"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "הגדר את שם המחבר עבור התגובות והדירוגים שלך"
+
+msgid "Torrent Options"
+msgstr "אפשרויות torrent"
+
+msgid "Half available bandwidth recommended."
+msgstr "מומלץ להשתמש במחצית רוחב הפס הזמין."
+
+msgid "Bandwidth limit"
+msgstr "מגבלת רוחב פס"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "רוחב פס מרבי המוקצה להורדה"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "רוחב פס מרבי המוקצה להעלאה"
+
+msgid "View or change router bandwidth"
+msgstr "הצג או שנה את רוחב הפס של הנתב"
+
+msgid "Total uploader limit"
+msgstr "מגבלת העלאות כוללת"
+
+msgid "Maximum number of peers to upload to"
+msgstr "מספר מרבי של peers להעלאה אליהם"
+
+msgid "peers"
+msgstr "peers"
+
+msgid "Use open trackers also"
+msgstr "השתמש גם במעקבים פתוחים"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "הכרז על torrents במעקבים פתוחים וכן במעקבים המפורטים בקובץ ה-torrent"
+
+msgid "Enable DHT"
+msgstr "הפעל DHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "השתמש ב-DHT כדי למצוא peers נוספים"
+
+msgid "Auto start torrents"
+msgstr "התחלת torrents אוטומטית"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "התחל torrents אוטומטית בעת הוספתן והפעל אותן מחדש כאשר I2PSnark מתחיל"
+
+msgid "Startup delay"
+msgstr "השהיית הפעלה"
+
+msgid "minutes"
+msgstr "דקות"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr "מה הזמן הקצר ביותר לפני טעינת ה-torrents שמופעלים אוטומטית בעת הפעלת I2PSnark"
+
+msgid "min"
+msgstr "מינ'"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr "מה הזמן הארוך ביותר לפני טעינת ה-torrents שמופעלים אוטומטית בעת הפעלת I2PSnark"
+
+msgid "max"
+msgstr "מקס'"
+
+msgid "Data Storage"
+msgstr "אחסון נתונים"
+
+msgid "Data directory"
+msgstr "תיקיית נתונים"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "תיקייה שבה נשמרים קבצי torrent וקבצים שהורדו/ששותפו"
+
+msgid "Temp directory"
+msgstr "תיקייה זמנית"
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr "תיקייה אופציונלית שבה מוכנות ההורדות לפני העברתן לתיקיית הנתונים בעת השלמתן. השאר ריק כדי להשבת."
+
+msgid "Torrent directory"
+msgstr "תיקיית torrent"
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr "תיקייה אופציונלית לאחסון קבצי .torrent בנפרד מהנתונים שהורדו. השאר ריק כדי לאחסן בתיקיית הנתונים."
+
+msgid "Files readable by all"
+msgstr "קבצים קריאים לכל"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "הגדר הרשאות קבצים כדי לאפשר למשתמשים מקומיים אחרים לגשת לקבצים שהורדו"
+
+msgid "Preallocate files"
+msgstr "הקצאה מראשית של קבצים"
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr "הרחב את קבצי ה-torrent החדשים לגודלם המלא והקצה את המקום בדיסק מיד בעת הפעלת ה-torrent, כדי למנוע מדיסק מלא שיפרע הורדות וכדי להימנע מפיצול כשחלקים מגיעים"
+
+msgid "Preserve file names"
+msgstr "שמור על שמות הקבצים"
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr "שמור על שמות הקבצים המקוריים מה-torrent. כשהאפשרות מושבתת, שמות הקבצים מסוננים כדי להסיר תווים אסורים במערכת הקבצים. כשהאפשרות מופעלת, נעשה שימוש בשמות המקוריים; אם שם קובץ מכיל תווים שאינם נתמכים במערכת הקבצים שלך, הקובץ ייווצר עם שם חלופי בטוח ותוצג אזהרה"
+
+msgid "Max files per torrent"
+msgstr "מקס' קבצים לכל torrent"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "מספר הקבצים המרבי המותר לכל torrent - שים לב שמעקבים עשויים להגדיר גבולות משלהם, ומערכת ההפעלה שלך עשויה להגביל את מספר הקבצים הפתוחים, מה שימנע טעינה של torrents עם קבצים רבים (וגם של torrents שיבואו אחריהם)"
+
+msgid "Tunnel Configuration"
+msgstr "הגדרות מנהור"
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr "יעד ראשי (זהות) להפעלה זו; ה-DHT, המעקב והרשימה השחורה שלו משותפים ליעדים של כל torrent"
+
+msgid "Our destination (identity) for this session"
+msgstr "היעד (הזהות) שלנו להפעלה זו"
+
+msgid "Primary Dest."
+msgstr "יעד ראשי"
+
+msgid "Dest."
+msgstr "יעד"
+
+msgid "Inbound Settings"
+msgstr "הגדרות נכנס"
+
+msgid "Outbound Settings"
+msgstr "הגדרות יוצא"
+
+msgid "Vary Tunnel Length"
+msgstr "שנה את אורך המנהור"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "הוסף 0 או 1 קפיצה נוספת באופן אקראי למנהורים נכנסים"
+
+msgid "Inbound"
+msgstr "נכנס"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "הוסף 0 או 1 קפיצה נוספת באופן אקראי למנהורים יוצאים"
+
+msgid "Outbound"
+msgstr "יוצא"
+
+msgid "Multi-destination"
+msgstr "מולטי-יעד"
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr "השתמש ביעד נפרד לכל torrent, כך שמעקבים ו-DHT לא יוכלו לקשר בין ה-torrents שלך. היעדים הם זמניים ומשתנים בעת הפעלה מחדש."
+
+msgid "Maximum destinations"
+msgstr "מספר יעדים מרבי"
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr "כאשר יותר torrents פועלים ממספר זה, ה-torrents הנוספים חולקים יעדים בקבוצות אקראיות בגודל משתנה, כדי להגביל את השימוש בזיכרון. אפס משמע יעד אחד לכל torrent."
+
+msgid "Random startup delay"
+msgstr "השהיית הפעלה אקראית"
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr "פזור את הפעלות ה-torrents המולטי-יעדיים בהשהיה אקראית כך ש-torrents שמתחילים יחד לא יוכלו להיות מזוהים על ידי מעקבים או על ידי peers של DHT, וכך שבניית המנהורים תתפרס. השבת כדי להפעיל את כל ה-torrents במנה אחת מיד."
+
+msgid "I2CP host"
+msgstr "מחשב מארח I2CP"
+
+msgid "I2CP port"
+msgstr "פורט I2CP"
+
+msgid "I2CP options"
+msgstr "אפשרויות I2CP"
+
+msgid "Browser Integration"
+msgstr "שילוב עם הדפדפן"
+
+msgid "Enable browser API"
+msgstr "הפעל API של הדפדפן"
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr "אפשר להוסיף קישורי magnet ו-URL של torrent ללא ה-nonce של CSRF, מ-loopback או ממחשבי המארח המותרים שלהלן"
+
+msgid "Allowed hosts"
+msgstr "מחשבים מארחים מותרים"
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr "שמות מחשב או כתובות IP המופרדים בפסיקים שמותר להוסיף אליהם torrents ללא nonce; loopback תמיד מותר"
+
+msgid "API key"
+msgstr "מפתח API"
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr "סיסמה אופציונלית לגישה מרוחקת, עוקפת את רשימת המחשבים המותרים"
+
+msgid "Install browser handler"
+msgstr "התקן מטפל דפדפן"
+
+msgid "Update browser handler"
+msgstr "עדכן מטפל דפדפן"
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr "עדכן את תוסף I2PSnark Bridge המותקן לגרסה v{0}"
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr "פתח את תוסף I2PSnark Bridge בדפדפן שלך כדי להוסיף קישורי magnet; התוסף רושם את עצמו בדפדפן, ואין נכתבים קבצים בצד של הנתב"
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "הורד את מתקין ה-PowerShell שרושם קישורי magnet וקבצי .torrent עם הדפדפן שלך; תוסף I2PSnark Bridge דורש דפדפן ממשפחת Firefox"
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "הורד את סקריפט ההתקנה שרושם קישורי magnet וקבצי .torrent עם הדפדפן שלך; תוסף I2PSnark Bridge דורש דפדפן ממשפחת Firefox"
+
+msgid "Download browser handler script"
+msgstr "הורד את סקריפט מטפל הדפדפן"
+
+msgid "Save configuration"
+msgstr "שמור הגדרות"
+
+msgid "Torrent Create File Filtering"
+msgstr "סינון קבצים ביצירת torrent"
+
+msgid "Mark filter for deletion"
+msgstr "סמן מסנן למחיקה"
+
+msgid "Name"
+msgstr "שם"
+
+msgid "Filter Pattern"
+msgstr "דפוס סינון"
+
+msgid "Starts With"
+msgstr "מתחיל ב-"
+
+msgid "Contains"
+msgstr "מכיל"
+
+msgid "Ends With"
+msgstr "מסתיים ב-"
+
+msgid "Enabled by Default"
+msgstr "מופעל כברירת מחדל"
+
+msgid "Delete selected"
+msgstr "מחק נבחרים"
+
+msgid "Save Filter Configuration"
+msgstr "שמור הגדרות הסינון"
+
+msgid "Restore defaults"
+msgstr "שחזר ברירות מחדל"
+
+msgid "Add File Filter"
+msgstr "הוסף מסנן קבצים"
+
+msgid "Add"
+msgstr "הוסף"
+
+msgid "Trackers"
+msgstr "מעקבים"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "בחר מעקבים להסרה מהרשימה המוכרת של I2PSnark"
+
+msgid "Website URL"
+msgstr "URL של האתר"
+
+msgid "Standard"
+msgstr "רגיל"
+
+msgid "Open"
+msgstr "פתוח"
+
+msgid "Private"
+msgstr "פרטי"
+
+msgid "Announce URL"
+msgstr "URL להכרזה"
+
+msgid "Mark tracker for deletion"
+msgstr "סמן מעקב למחיקה"
+
+msgid "Add tracker"
+msgstr "הוסף מעקב"
+
+msgid "Save tracker configuration"
+msgstr "שמור הגדרות מעקב"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "הגדרה זו קובעת את מספר המנהורים המרבי שניתן לפתוח, הנקבע לפי מספר ה-peers המחוברים (השימוש בפועל עשוי להיות קטן יותר)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "שינוי הגדרה זו לפחות מ-3 קפיצות עשוי לשפר את המהירות על חשבון האנונימיות ואינו מומלץ"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr "תוסף I2PSnark Bridge בגרסה v{0} אינו עדכני, עדכן אותו לגרסה v{1} בדף ההגדרות"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "לחץ על הכפתור \"הוסף torrent\" כדי לאחזר את ה-torrent"
+
+msgid "Torrents"
+msgstr "torrents"
+
+msgid "Refresh page"
+msgstr "רענן דף"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "פורום torrents &amp; שיתוף קבצים"
+
+msgid "Forum"
+msgstr "פורום"
+
+msgid "Search torrents"
+msgstr "חפש torrents"
+
+msgid "Clear search"
+msgstr "נקה חיפוש"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "לקוח BitTorrent אנונימי"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "האם אתה בטוח שברצונך למחוק את {0} ואת כל הנתונים שהורדו?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "מוחק את <b>{0}</b> ואת כל הנתונים המשויכים..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "האם אתה בטוח שברצונך למחוק את קובץ ה-torrent {0} ואת המטא-נתונים המשויכים?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "הערה: הנתונים שהורדו לא יימחקו."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "מוחק את {0} ואת המטא-נתונים המשויכים בלבד..."
+
+msgid "clear messages"
+msgstr "נקה הודעות"
+
+msgid "Expand"
+msgstr "הרחב"
+
+msgid "Shrink"
+msgstr "כווץ"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "אזהרה! Javascript מושבת בדפדפן שלך. אם {0} מופעל, כל קלט שהוזן במקטעי הוספת/יצירת torrent יאבד בעת רענון."
+
+msgid "page refresh"
+msgstr "רענון הדף"
+
+msgid "Warning - No I2P"
+msgstr "אזהרה - אין I2P"
+
+msgid "No torrents found."
+msgstr "לא נמצאו torrents."
+
+msgid "No torrents loaded."
+msgstr "לא נטענו torrents."
+
+msgid "Status"
+msgstr "מצב"
+
+msgid "Torrent"
+msgstr "torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "קצב הורדה"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "קצב העלאה"
+
+msgid "Start All"
+msgstr "הפעל הכל"
+
+msgid "Stop All"
+msgstr "עצור הכל"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "עצור את כל ה-torrents ואת מנהור I2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "הפעל את כל ה-torrents ואת מנהור I2P"
+
+msgid "Start all stopped torrents"
+msgstr "הפעל את כל ה-torrents שבעצור"
+
+msgid "Hide Peers"
+msgstr "הסתר peers"
+
+msgid "Show Peers"
+msgstr "הצג peers"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "מיין לפי {0}"
+
+msgid "Up Rate"
+msgstr "קצב העלאה"
+
+msgid "Total size of loaded torrents"
+msgstr "גודל כולם של ה-torrents שנטענו"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "peer אחד מחובר"
+msgstr[1] "{0} חיבורי peer"
+
+msgid "Active downloads"
+msgstr "הורדות פעילות"
+
+msgid "Active uploads"
+msgstr "העלאות פעילות"
+
+msgid "Active Inbound tunnels"
+msgstr "מנהורים נכנסים פעילים"
+
+msgid "Active Outbound tunnels"
+msgstr "מנהורים יוצאים פעילים"
+
+msgid "Estimated download time for all torrents"
+msgstr "זמן הורדה משוער לכל ה-torrents"
+
+msgid "Data downloaded this session"
+msgstr "נתונים שהורדו בהפעלה זו"
+
+msgid "Total download speed"
+msgstr "מהירות הורדה כוללת"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "סך כל הנתונים שהועלו (ל-torrents המפורטים)"
+
+msgid "Total upload speed"
+msgstr "מהירות העלאה כוללת"
+
+msgid "Toggle Debug Panel"
+msgstr "החלף את מקטע הניפוי"
+
+msgid "Debug Mode"
+msgstr "מצב ניפוי"
+
+msgid "Normal Mode"
+msgstr "מצב רגיל"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "torrent אחד"
+msgstr[1] "{0} torrents"
+
+msgid "No DHT Peers"
+msgstr "אין peers של DHT"
+
+msgid "Search"
+msgstr "חפש"
+
+msgid "Show All"
+msgstr "הצג הכל"
+
+msgid "Active"
+msgstr "פעיל"
+
+msgid "Inactive"
+msgstr "לא פעיל"
+
+msgid "Connected"
+msgstr "מחובר"
+
+msgid "Downloading"
+msgstr "בהורדה"
+
+msgid "Seeding"
+msgstr "בזריעה"
+
+msgid "Complete"
+msgstr "הושלם"
+
+msgid "Incomplete"
+msgstr "לא הושלם"
+
+msgid "Stopped"
+msgstr "עצור"
+
+msgid "First"
+msgstr "ראשון"
+
+msgid "First page"
+msgstr "דף ראשון"
+
+msgid "Prev"
+msgstr "הקודם"
+
+msgid "Previous page"
+msgstr "דף קודם"
+
+msgid "Next"
+msgstr "הבא"
+
+msgid "Next page"
+msgstr "דף הבא"
+
+msgid "Last"
+msgstr "אחרון"
+
+msgid "Last page"
+msgstr "דף אחרון"
+
+msgid "Enter URL or select torrent file"
+msgstr "הזן URL או בחר קובץ torrent"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr "שגיאה בהוספת ה-torrent: {0}"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "שגיאה בהעלאת קובץ ה-torrent: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "הורדה ממיקום שאינו בתוך I2P {0} אינה נתמכת"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "שגיאה: info hashes בגרסה 2 אינם נתמכים"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "URL לא תקין: חייב להתחיל ב-\"{0}\" או ב-\"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "ה-magnet נמחק: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "לא ניתן למחוק את קובץ ה-torrent: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "קובץ הנתונים נמחק: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "לא ניתן למחוק את קובץ הנתונים: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "לא ניתן למחוק את התיקייה: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "התיקייה נמחקה: {0}"
+
+msgid "Browser API enabled."
+msgstr "API של הדפדפן מופעל."
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr "פתיחת תוסף I2PSnark Bridge נכשלה: {0}"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " קבצים או תיקיות סוננו מ-\"{0}\" בגלל כללי הסינון."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "הקבצים או התיקיות הבאים סוננו מ-\"{0}\" בגלל כללי הסינון: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "נוצר torrent עבור \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "מעקבים רבים של I2P דורשים לרשום torrents חדשים לפני זריעה - נא לעשות זאת לפני הפעלת \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "שגיאה ביצירת torrent עבור \"{0}\""
+
+msgid "Removed"
+msgstr "הוסר"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "הזן שם מעקב ו-URL תקפים"
+
+msgid "Restored default trackers"
+msgstr "מעקבי ברירת המחדל שוחזרו"
+
+msgid "Enter valid name and filter pattern"
+msgstr "הזן שם תקין ודפוס סינון תקין"
+
+msgid "Restored default torrent create filters"
+msgstr "מסנני יצירת torrent של ברירת המחדל שוחזרו"
+
+msgid "Torrent details"
+msgstr "פרטי ה-torrent"
+
+msgid "Torrent has comments"
+msgstr "ל-torrent יש הערות"
+
+msgid "Open file"
+msgstr "פתח קובץ"
+
+msgid "View files"
+msgstr "הצג קבצים"
+
+msgid "Completed"
+msgstr "הושלם"
+
+msgid "Share ratio"
+msgstr "יחס שיתוף"
+
+msgid "Last activity"
+msgstr "פעילות אחרונה"
+
+msgid "Stop"
+msgstr "עצור"
+
+msgid "Stop torrent"
+msgstr "עצור את ה-torrent"
+
+msgid "Start"
+msgstr "הפעל"
+
+msgid "Start torrent"
+msgstr "הפעל את ה-torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "הסר ומחק את ה-torrent, תוך שמירת הקבצים שהורדו"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "מחק את קובץ ה-.torrent ואת קבצי הנתונים המשויכים"
+
+msgid "Destination"
+msgstr "יעד"
+
+msgid "Checking"
+msgstr "בבדיקה"
+
+msgid "Allocating"
+msgstr "בהקצאה"
+
+msgid "Failed to connect to all configured trackers"
+msgstr "לא ניתן להתחבר לכל המעקבים המוגדרים"
+
+msgid "Starting"
+msgstr "בהפעלה"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "מזריע ל-{0} peer"
+msgstr[1] "מזריע ל-{0} peer"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "מחובר ל-{0} מתוך {1} peer ב-swarm"
+
+msgid "Stalled"
+msgstr "תקוע"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "מזריע ל-{0} peer ב-swarm"
+msgstr[1] "מזריע ל-{0} peer ב-swarm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "מוריד מ-{0} peer"
+msgstr[1] "מוריד מ-{0} peer"
+
+msgid "OK"
+msgstr "תקין"
+
+msgid "No Peers"
+msgstr "אין peer"
+
+msgid "Peer attached to swarm"
+msgstr "peer מקושר ל-swarm"
+
+msgid "Destination (identity) of peer"
+msgstr "יעד (זהות) של peer"
+
+msgid "seconds"
+msgstr "שניות"
+
+msgid "Seed"
+msgstr "זורע"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "לא מעניין (ל-peer אין חלקים שאנו צריכים)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Choked (ה-peer אינו מאפשר לנו לבקש חלקים)"
+
+msgid "Peer is interested but currently idle"
+msgstr "ה-peer מתעניין אך אינו פעיל כרגע"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "לא מעניין (אין לנו חלקים שה-peer צריך)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Choking (איננו מאפלים ל-peer לבקש חלקים)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "פרטים במעקב {0}"
+
+msgid "Info"
+msgstr "מידע"
+
+msgid "Add Torrent"
+msgstr "הוסף torrent"
+
+msgid "From URL"
+msgstr "מ-URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "הזן את כתובת ה-URL להורדת קובץ ה-torrent (I2P בלבד), קישור magnet או info hash"
+
+msgid "Add torrent"
+msgstr "הוסף torrent"
+
+msgid "Torrent file"
+msgstr "קובץ torrent"
+
+msgid "Data dir"
+msgstr "תיקיית נתונים"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "הזן את התיקייה שבה לשמור את הנתונים (ברירת מחדל {0})"
+
+msgid "Create Torrent"
+msgstr "צור torrent"
+
+msgid "Data to seed"
+msgstr "נתונים לזריעה"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "קובץ או תיקייה לזריעה (נתיב מלא או בתוך התיקייה {0})"
+
+msgid "Create torrent"
+msgstr "צור torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "חרג קבצים מתוך ה-torrent אם הם נמצאים בתיקיית ה-torrent"
+
+msgid "Content Filters"
+msgstr "מסנני תוכן"
+
+msgid "Alternates"
+msgstr "חלופות"
+
+msgid "Primary"
+msgstr "עיקרי"
+
+msgid "Tracker Type"
+msgstr "סוג מעקב"
+
+msgid "none"
+msgstr "אין"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "לא ניתן להוסיף magnet: קישורי magnet מגרסה 2 אינם נתמכים"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "URL של magnet לא תקין {0}"
+
+msgid "Files"
+msgstr "קבצים"
+
+msgid "Save priorities"
+msgstr "שמור עדיפויות"
+
+msgid "Comments"
+msgstr "הערות"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "נא לשלוח שוב את הטופס (nonce לא תקין)"
+
+msgid "Unknown command"
+msgstr "פקודה לא ידועה"
+
+msgid "Resource Does Not Exist"
+msgstr "המשאב אינו קיים"
+
+msgid "Resource"
+msgstr "משאב"
+
+msgid "Base"
+msgstr "בסיס"
+
+msgid "Directory"
+msgstr "תיקייה"
+
+msgid "File type"
+msgstr "סוג קובץ"
+
+msgid "Size"
+msgstr "גודל"
+
+msgid "Download Status"
+msgstr "מצב הורדה"
+
+msgid "Remaining"
+msgstr "נותר"
+
+msgid "Download Priority"
+msgstr "עדיפות הורדה"
+
+msgid "up"
+msgstr "למעלה"
+
+msgid "Parent directory"
+msgstr "תיקיית האב"
+
+msgid "Audio Playlist"
+msgstr "רשימת השמעה לאודיו"
+
+msgid "Resource Not found"
+msgstr "המשאב לא נמצא"
+
+msgid "Info hash"
+msgstr "info hash"
+
+msgid "Created"
+msgstr "נוצר"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr "גודל הקבצים שהורדו בפועל: {0}, לא כולל {1} מתוך קבצי המילוי של BEP 47"
+
+msgid "Added"
+msgstr "נוסף"
+
+msgid "Pieces"
+msgstr "חלקים"
+
+msgid "Average download speed for torrent"
+msgstr "מהירות הורדה ממוצעת עבור torrent"
+
+msgid "Download speed"
+msgstr "מהירות הורדה"
+
+msgid "Completion"
+msgstr "השלמה"
+
+msgid "Skipped"
+msgstr "דולג"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "ייעשה שימוש רק במעקבי I2P; מעקבים שאינם של I2P מוצגים למטרות מידע בלבד"
+
+msgid "Tracker"
+msgstr "מעקב"
+
+msgid "Web Seeds"
+msgstr "Web Seeds"
+
+msgid "Refresh page for results"
+msgstr "רענן את הדף לקבלת התוצאות"
+
+msgid "Force Recheck"
+msgstr "אכפה בדיקה חוזרת"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "עצור את ה-torrent כדי לבדוק את תקינות הקבצים"
+
+msgid "Check integrity of the downloaded files"
+msgstr "בדוק את תקינות הקבצים שהורדו"
+
+msgid "Download file at high priority"
+msgstr "הורד את הקובץ בעדיפות גבוהה"
+
+msgid "High"
+msgstr "גבוה"
+
+msgid "Download file at normal priority"
+msgstr "הורד את הקובץ בעדיפות רגילה"
+
+msgid "Normal"
+msgstr "רגיל"
+
+msgid "Do not download this file"
+msgstr "אל תוריד את הקובץ"
+
+msgid "Skip"
+msgstr "דלג"
+
+msgid "complete"
+msgstr "הושלם"
+
+msgid "remaining"
+msgstr "נותר"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "1 כוכב"
+msgstr[1] "{0} כוכבים"
+
+msgid "No rating"
+msgstr "אין דירוג"
+
+msgid "Rate and Comment"
+msgstr "דרג והוסף הערה"
+
+msgid "Rate Torrent"
+msgstr "דרג את ה-torrent"
+
+msgid "Add Comment"
+msgstr "הוסף הערה"
+
+msgid "My Rating"
+msgstr "הדירוג שלי"
+
+msgid "Average Rating"
+msgstr "דירוג ממוצע"
+
+msgid "No community ratings currently available"
+msgstr "אין כרגע דירוגים זמינים מהקהילה"
+
+msgid "Submitted"
+msgstr "נשלח"
+
+msgid "Mark for deletion"
+msgstr "סמן למחיקה"
+
+msgid "Delete Selected"
+msgstr "מחק נבחרים"
+
+msgid "Ratings and Comments"
+msgstr "דירוגים והערות"
+
+msgid "Author name required to rate or comment"
+msgstr "נדרש שם מחבר כדי לדרג או להוסף הערה"
+
+msgid "Your author name for published comments and ratings"
+msgstr "שם המחבר שלך עבור הערות ודירוגים מפורסמים"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "עדיפויות הורדת הקבצים עודכנו עבור torrent "
+
+msgid "Edit Torrent"
+msgstr "ערוך torrent"
+
+msgid "Active Trackers"
+msgstr "מעקבים פעילים"
+
+msgid "Delete"
+msgstr "מחק"
+
+msgid "Add Tracker"
+msgstr "הוסף מעקב"
+
+msgid "Torrent Comment"
+msgstr "הערה ל-torrent"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "יש לעצור את ה-torrent כדי לערוך"
+
+msgid "Save Changes"
+msgstr "שמור שינויים"
+
+msgid "Torrent must be stopped"
+msgstr "יש לעצור את ה-torrent"
+
+msgid "Not found"
+msgstr "לא נמצא"
+
+msgid "File not found in torrent"
+msgstr "הקובץ לא נמצא ב-torrent"
+
+msgid "Unrecognized"
+msgstr "לא מזוהה"
+
+msgid "Preview"
+msgstr "תצוגה מקדימה"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "לא ניתן להוסיף torrent {0} בתוך torrent אחר: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "לא ניתן להוסיף torrent {0} הכולל torrent אחר: {1}"

@@ -1,0 +1,350 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "שם המחשב \"{0}\" מכיל תו אסור {1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "שם המחשב אינו יכול להתחיל ב-\"{0}\""
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "שם המחשב אינו יכול להסתיים ב-\"{0}\""
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "שם המחשב אינו יכול להכיל את \"{0}\""
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "שם המחשב \"{0}\" דורש המרה ל-ASCII אך ספריית ההמרה אינה זמינה ב-JVM זה"
+
+msgid "Source"
+msgstr "מקור"
+
+msgid "Imported from"
+msgstr "יובא מ-"
+
+msgid "Imported from file"
+msgstr "יובא מקובץ"
+
+msgid "Manually added via SusiDNS"
+msgstr "נוסף ידנית דרך SusiDNS"
+
+msgid "Manually added"
+msgstr "נוסף ידנית"
+
+msgid "Added via address helper"
+msgstr "נוסף דרך עוזר הכתובות"
+
+msgid "Via helper"
+msgstr "דרך העוזר"
+
+msgid "Via helper from"
+msgstr "דרך העוזר מ-"
+
+msgid "None"
+msgstr "אין"
+
+msgid "Hidden"
+msgstr "מוסתר"
+
+msgid "Signed"
+msgstr "חתום"
+
+msgid "Key"
+msgstr "מפתח"
+
+#, java-format
+msgid "Type {0}"
+msgstr "סוג {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 ביט"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 ביט"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "חפש אחר <span class=active>"
+msgstr[1] "חפש אחר <span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "הרשימה המסוננת מכילה רשומה אחת."
+msgstr[1] "הרשימה המסוננת מכילה {0} רשומות."
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "תוצאה אחת עבור: <span class=active>"
+msgstr[1] "{0} תוצאות עבור: <span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "הפנקס מכיל רשומה אחת"
+msgstr[1] "הפנקס מכיל {0} רשומות"
+
+msgid "Add"
+msgstr "הוסף"
+
+msgid "Replace"
+msgstr "החלף"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "שם המחשב {0} כבר נמצא בפנקס הכתובות, ללא שינוי."
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "שם המחשב {0} כבר נמצא בפנקס הכתובות עם יעד שונה. לחץ על \"החלף\" כדי לדרוס."
+
+msgid "Unable to resolve Base 32 address"
+msgstr "לא ניתן לפתור כתובת Base 32"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "היעד נוסף עבור {0}."
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "היעד שונה עבור {0}."
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "אזהרה - שם המחשב אינו מסתיים ב-\".i2p\""
+
+msgid "Invalid Base 32 host name."
+msgstr "שם מחשב Base 32 אינו תקין."
+
+msgid "Invalid Base 64 destination."
+msgstr "יעד Base 64 אינו תקין."
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "שם המחשב \"{0}\" אינו תקין."
+
+msgid "Please enter a host name and destination"
+msgstr "נא להזין שם מחשב ויעד"
+
+msgid "Add Alternate"
+msgstr "הוסף חלופה"
+
+msgid "Unsupported"
+msgstr "אינו נתמך"
+
+msgid "Address book saved."
+msgstr "פנקס הכתובות נשמר."
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "שגיאה: לא ניתן לכתוב את קובץ פנקס הכתובות."
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "שליחת הטופס אינה תקינה, כנראה משום השתמשת בכפתור \"חזרה\" או \"טען מחדש\" בדפדפן שלך. נא לשלוח שוב."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "אם הבעיה נמשכת, ודא שהפעלת cookies בדפדפן שלך."
+
+msgid "Save"
+msgstr "שמור"
+
+msgid "Blacklist saved."
+msgstr "רשימת החסימה נשמרה."
+
+msgid "Reload"
+msgstr "טען מחדש"
+
+msgid "Blacklist reloaded from file."
+msgstr "רשימת החסימה נטענה מחדש מקובץ."
+
+msgid "Configuration saved."
+msgstr "ההגדרות נשמרו."
+
+msgid "Configuration reloaded."
+msgstr "ההגדרות נטענו מחדש."
+
+msgid "New domain"
+msgstr "דומיין חדש"
+
+msgid "Subscription log reloaded."
+msgstr "יומן המינויים נטען מחדש."
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} פנקס כתובות במסד הנתונים של {1}"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "שם המחשב {0} אינו נמצא בפנקס הכתובות."
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "הוספת היעד עבור {0} לשירות השמות {1} נכשלה"
+
+msgid "Delete Entry"
+msgstr "מחק רשומה"
+
+msgid "Delete Selected"
+msgstr "מחק נבחרים"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "מחיקת היעד עבור {0} משירות השמות {1} נכשלה"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "היעד {0} נמחק."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "יעד אחד נמחק."
+msgstr[1] "{0} יעדים נמחקו."
+
+msgid "No valid entries selected to delete."
+msgstr "לא נבחרו רשומות תקפות למחיקה."
+
+msgid "Blacklist Selected"
+msgstr "חסום נבחרים"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "יעד אחד נחסם."
+msgstr[1] "{0} יעדים נחסמו."
+
+msgid "No valid entries selected to blacklist."
+msgstr "לא נבחרו רשומות תקפות לחסימה."
+
+msgid "Save Notes"
+msgstr "שמור הערות"
+
+msgid "You must enter a file"
+msgstr "עליך להזין קובץ"
+
+msgid "No entries found in file"
+msgstr "לא נמצאו רשומות בקובץ"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "יובא מהקובץ {0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "נטענה רשומה {0} מהקובץ"
+msgstr[1] "נטענו {0} רשומות מהקובץ"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "דולגה רשומה כפולה {0} מהקובץ"
+msgstr[1] "דולגו {0} רשומות כפולות מהקובץ"
+
+msgid "Import from file failed"
+msgstr "ייבוא מקובץ נכשל"
+
+msgid "Subscriptions saved."
+msgstr "המינויים נשמרו."
+
+msgid "Update"
+msgstr "עדכון"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "מנסה לעדכן את פנקס הכתובות ממקורות המינויים..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "לא ניתן לעדכן את המינויים: פרוקסי HTTP אינו פועל!"
+
+msgid "Subscriptions reloaded."
+msgstr "המינויים נטענו מחדש."
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "אם SusiDNS מוגדר לפרסם את פנקס הכתובות של הנתב, הרשומות יופיעו בפנקס הכתובות המפורסם שלך ויישמרו בקובץ hosts.txt לשיתוף."
+
+msgid "Published Addressbook"
+msgstr "פנקס כתובות מפורסם"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "כדי להגדיר את SusiDNS לדחוף את פנקס הכתובות של הנתב אל פנקס הכתובות המפורסם שלך, הגדר 'should_publish=true' בדף ההגדרות."
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "כל המחשבים המארחים הנגזרים מהמינויים יופיעו בפנקס הכתובות הזה, בנוסף לאלה שתוסיף ידנית כאן או לפנקס הכתובות הראשי שלך."
+
+msgid "Router Addressbook"
+msgstr "פנקס כתובות של הנתב"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "מחשבים מארחים שתוסיף כאן ידנית לא יתפרסמו לעולם. ניתן גם להוסיף כאן כינויים למחשבים מארחים בפנקסי כתובות אחרים."
+
+msgid "Private Addressbook"
+msgstr "פנקס כתובות פרטי"
+
+msgid "Local Records"
+msgstr "רשומות מקומיות"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "יישומי I2P (כולל פרוקסי HTTP) משתמשים במחשבים המארחים שבפנקסי הכתובות המקומיים שלך כדי לפתור שמות מחשב של .i2p."
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "מינויים נוספים ניתן למצוא במקטע השאלות הנפוצות בדף העזרה של הנתב."
+
+msgid "Subscriptions"
+msgstr "מינויים"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "מחשבים מארחים המתקבלים מהמינויים שלך נוספים לפנקס הכתובות של הנתב, ומסונכרנים אוטומטית (כל 12 שעות כברירת מחדל)."
+
+msgid "Configure Subscriptions"
+msgstr "הגדר מינויים"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "אם תוסיף כאן מחשבים מארחים ידנית, הם ייכללו בפנקס הכתובות המפורסם שלך (אם מוגדר)."
+
+msgid "Master Addressbook"
+msgstr "פנקס כתובות ראשי"
+
+msgid "Searchable by"
+msgstr "ניתן לחיפוש לפי"
+
+msgid "I2P applications"
+msgstr "יישומי I2P"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "פנקסי הכתובות הראשי, של הנתב והפרטי משמשים יחד כרשות ה-DNS עבור יישומי I2P."
+
+msgid "Optional,"
+msgstr "אופציונלי,"
+
+msgid "for websites"
+msgstr "לאתרי אינטרנט"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "אם תגדיר את SusiDNS לפרסם את פנקס הכתובות של הנתב, הוא יייצא קובץ hosts.txt המכיל את כל המחשבים המארחים (כברירת מחדש לשורש ה-eepsite שלך)."
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "כתובות שנוספו ידנית לפנקס הכתובות הראשי שלך יתמזגו עם פנקס הכתובות של הנתב."
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "מחשבים מארחים שאתה מקבל מהמינויים שלך יתמזגו עם פנקס הכתובות של הנתב."

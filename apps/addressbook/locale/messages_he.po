@@ -1,0 +1,100 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "שירותים הקשורים למטבעות קריפטוגרפיים"
+
+msgid "Controlled substances marketplaces"
+msgstr "שווקים של חומרים מבוקרים"
+
+msgid "E-book libraries and publishing"
+msgstr "ספריות ספרים אלקטרוניים והוצאה לאור"
+
+msgid "File hosting and storage services"
+msgstr "שירותי אחסון ושמירת קבצים"
+
+msgid "Peer-to-peer file sharing"
+msgstr "שיתוף קבצים peer-to-peer"
+
+msgid "Discussion forums and message boards"
+msgstr "פורומי דיון ולוחות הודעות"
+
+msgid "Image galleries and photo sharing"
+msgstr "גלריות תמונות ושיתוף צילומים"
+
+msgid "Gaming servers and communities"
+msgstr "שרתי משחקים וקהילות"
+
+msgid "Git repositories and code hosting"
+msgstr "מאגרי Git ואחסון קוד"
+
+msgid "Help and support resources"
+msgstr "משאבי עזרה ותמיכה"
+
+msgid "Human rights and civil liberties"
+msgstr "זכויות אדם וחירויות אזרחיות"
+
+msgid "Official I2P infrastructure services"
+msgstr "שירותי תשתית I2P רשמיים"
+
+msgid "News and media outlets"
+msgstr "אתרי חדשות ותקשורת"
+
+msgid "Text/code paste services"
+msgstr "שירותי הדבקת טקסט/קוד"
+
+msgid "Personal websites and blogs"
+msgstr "אתרים אישיים ובלוגים"
+
+msgid "Internet radio and streaming"
+msgstr "רדיו אינטרנט והזרמה"
+
+msgid "Search engines and directories"
+msgstr "מנועי חיפוש ומדריכים"
+
+msgid "Software repositories and downloads"
+msgstr "מאגרי תוכנה והורדות"
+
+msgid "Statistics and analytics"
+msgstr "סטטיסטיקה וניתוח נתונים"
+
+msgid "Utilities and web tools"
+msgstr "כלי עזר וכלי רשת"
+
+msgid "Torrent and content trackers"
+msgstr "מעקבי torrent ותוכן"
+
+msgid "Conspiracy / Religious content"
+msgstr "תוכן קשר־קלוט / דתי"
+
+msgid "Unclassified or pending review"
+msgstr "לא מסווג או ממתין לבדיקה"
+
+msgid "Not yet categorized"
+msgstr "טרם סווג"
+
+msgid "Video streaming and media"
+msgstr "הזרמת וידאו ומולטימדיה"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki ותיעוד שיתופי"
+
+msgid "Work in progress / development"
+msgstr "בתהליך / בפיתוח"

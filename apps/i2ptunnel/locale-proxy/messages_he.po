@@ -1,0 +1,438 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "נראה שזהו יעד שגוי:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper לא יכול לעזור לך עם יעד כזה!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "למעבר ליעד שבפנקס הכתובות, לחץ <a href=\"{0}\">כאן</a>. למעבר ליעד הסותר של addresshelper, לחץ <a href=\"{1}\">כאן</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "יעד עבור {0} בפנקס הכתובות"
+
+msgid "Conflicting address helper destination"
+msgstr "יעד סותר של עוזר הכתובות"
+
+msgid "Corrupt Base32 address"
+msgstr "כתובת Base32 פגומה"
+
+msgid "Destination LeaseSet not found"
+msgstr "LeaseSet של היעד לא נמצא"
+
+msgid "Host"
+msgstr "מחשב מארח"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "יעד"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "המשך אל {0} ללא שמירה"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "ניתן לעיין באתר בלי לשמור אותו בפנקס הכתובות. הכתובת תישמר עד שתפעיל מחדש את נתב ה-I2P שלך."
+
+msgid "Continue without saving"
+msgstr "המשך ללא שמירה"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "שמור {0} בפנקס הכתובות של הנתב והמשך לאתר"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "הכתובת הזו תישמר בפנקס הכתובות של הנתב שלך, שם נשמרות כתובות המבוססות על מינויים."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "אם ברצונך לעקוב אחרי אתרים שהוספת ידנית, הוסף במקום זאת לפנקס הכתובות הראשי או הפרטי."
+
+msgid "Save & continue"
+msgstr "ש&מור והמשך"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "שמור {0} בפנקס הכתובות הראשי והמשך לאתר"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "הכתובת הזו תישמר בפנקס הכתובות הראשי שלך. בחר את האפשרות הזו עבור כתובות שברצונך לשמור נפרד מפנקס הכתובות הראשי של הנתב, אך אינך מתנגד לפרסומן."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "שמור {0} בפנקס הכתובות הפרטי והמשך לאתר"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "הכתובת הזו תישמר בפנקס הכתובות הפרטי שלך, וכך תימנע פרסומה."
+
+msgid "Base32 address requires lookup password"
+msgstr "כתובת Base32 דורשת סיסמת חיפוש"
+
+msgid "Base32 address requires encryption key"
+msgstr "כתובת Base32 דורשת מפתח הצפנה"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "כתובת Base32 דורשת מפתח הצפנה וסיסמת חיפוש"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "כשל בפענוח כתובת Base32, בדוק את מפתח ההצפנה"
+
+msgid "Generate"
+msgstr "צור"
+
+msgid "Encryption key"
+msgstr "מפתח הצפנה"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "עליך להזין מפתח הצפנה PSK שסיפק מפעיל השרת, או ליצור מפתח הצפנה DH ולשלוח אותו למפעיל השרת."
+
+msgid "Ask the server operator for help."
+msgstr "בקש עזרה ממפעיל השרת."
+
+msgid "Enter PSK encryption key"
+msgstr "הזן מפתח הצפנה PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "צור מפתח הצפנה DH חדש"
+
+msgid "Lookup password"
+msgstr "סיסמת חיפוש"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "עליך להזין את הסיסמה שסיפק מפעיל השרת."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "נוסף דרך עוזר הכתובות מתוך {0}"
+
+msgid "Added via address helper"
+msgstr "נוסף דרך עוזר הכתובות"
+
+msgid "Missing lookup password"
+msgstr "חסרה סיסמת חיפוש"
+
+msgid "Missing private key"
+msgstr "חסר מפתח פרטי"
+
+msgid "Invalid private key"
+msgstr "מפתח פרטי לא תקין"
+
+msgid "Your new encryption key"
+msgstr "מפתח ההצפנה החדש שלך"
+
+msgid "Router Console"
+msgstr "מסוף הנתב"
+
+msgid "Addressbook"
+msgstr "פנקס כתובות"
+
+msgid "Configuration"
+msgstr "הגדרות"
+
+msgid "Help"
+msgstr "עזרה"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "העתק את המפתח ושלח אותו למפעיל השרת."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "לאחר שתקבל הרשאה, תוכל להמשיך לאתר."
+
+msgid "Go back and fix the error"
+msgstr "חזור ותקן את השגיאה"
+
+msgid "router"
+msgstr "של הנתב"
+
+msgid "master"
+msgstr "הראשי"
+
+msgid "private"
+msgstr "הפרטי"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "מפנה אל {0}"
+
+msgid "Redirection in progress"
+msgstr "הפניה בתהליך"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} נשמר בפנקס הכתובות {1}, מפנה עכשיו."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "שמירת {0} בפנקס הכתובות {1} נכשלה, מפנה עכשיו."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "לחץ כאן אם אינך מופנה אוטומטית."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "האימות עבור {0} נשמר, מפנה עכשיו."
+
+msgid "Website Unknown"
+msgstr "אתר לא ידוע"
+
+msgid "I2P Router Console"
+msgstr "מסוף הנתב של I2P"
+
+msgid "Website Not Found in Addressbook"
+msgstr "האתר לא נמצא בפנקס הכתובות"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "האתר לא נמצא בפנקס הכתובות של הנתב שלך."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "בדוק את הקישור או חפש כתובת Base 32 או Base 64."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "אם יש בידך כתובת Base 64, {0}הוסף אותה לפנקס הכתובות{1}."
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "אחרת, חפש קישור של Base 32 או קישור של עוזר כתובות, או השתמש בקישור של שירות קפיצה שמופיע למטה."
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "רואים את הדף הזה הרבה? ראו {0}את השאלות הנפוצות{1} לעזרה ב{2}הוספת כמה מינויים{3} לפנקס הכתובות שלך."
+
+msgid "Could not find the following destination:"
+msgstr "לא נמצא היעד הבא:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "אזהרה: פרוטוקול שאינו HTTP"
+
+msgid "The request uses a bad protocol."
+msgstr "הבקשה משתמשת בפרוטוקול שגוי."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "פרוקסי ה-HTTP של I2P תומך בבקשות HTTP ו-HTTPS בלבד."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "פרוטוקולים אחרים, כגון FTP, אינם מותרים."
+
+msgid "Error: Request Denied"
+msgstr "שגיאה: הבקשה נדחתה"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "שגיאה: לא ניתן לגשת למסוף הנתב דרך פרוקסי I2P"
+
+msgid "Your browser is misconfigured."
+msgstr "הדפדפן שלך מגדיר באופן שגוי."
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "אין להשתמש בפרוקסי כדי לגשת למסוף הנתב, ל-localhost או ליעדי LAN מקומיים."
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "עליך למנוע מ-127.0.0.1 (או מהכתובת שבה אתה ניגש למסוף ה-I2P) להיות מנותב דרך פרוקסי ה-http של I2P, בדרך כלל על ידי הוצאת הכתובת ממקטע הגדרות הפרוקסי בדפדפן שלך."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "אזהרה: התנגשות מפתח יעד"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "קישור עוזר הכתובות שבו הלכת מציין מפתח יעד שונה מהרשומה בפנקס הכתובות שלך."
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "ייתכן שמישהו מנסה להתחזות לאתר אחר, או שאנשים נתנו לשני אתרים שמות זהים."
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "פתור את ההתנגשות בכך שתחליט באיזה מפתח לבטוח, ואז התעלם מקישור עוזר הכתובות, או מחק את רשומת המחשב המארח מפנקס הכתובות שלך ולחץ שוב על קישור עוזר הכתובות."
+
+msgid "Connection Reset"
+msgstr "החיבור אופס"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "החיבור לאתר אופס בזמן שהדף נטען."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "ייתכן שהאתר אינו זמין לא זמנית, עמוס מדי, או שחסם את הגישה שלך."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "ייתכן שתרצה {0}לנסות שוב{1}."
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "אם תשאיר את הדף הזה פתוח, הוא ינסה להתחבר לאתר שוב אוטומטית כל {0} שניות לאחר ניסיון חיבור שנכשל."
+
+msgid "Website Unreachable"
+msgstr "האתר אינו נגיש"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "האתר לא היה נגיש, מכיוון שהוא משתמש באפשרויות הצפנה שאינן נתמכות בגרסת ה-I2P או בגרסת Java שלך."
+
+msgid "Could not connect to the following destination:"
+msgstr "לא ניתן להתחבר ליעד הבא:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "האתר לא היה נגיש, מכיוון ש-lease set שלו לא נמצא."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "האתר כנראה אינו פעיל, אך ייתכן שיש גם עומס ברשת."
+
+msgid "The connection to the proxy was reset."
+msgstr "החיבור לפרוקסי אופס."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "ייתכן שהפרוקסי אינו זמין לא זמנית, עמוס מדי, או שחסם את הגישה שלך."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "ייתכן שתרצה {0}לנסות שוב{1}, מכיוון שפעולה זו תבחר מחדש באופן אקראי outproxy ממאגר שהגדרת {2}כאן{3} (אם הגדרת יותר מאחד)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "אם אתה ממשיך להיתקל בבעיות, ייתכן שתרצה לערוך את רשימת ה-outproxy שלך {0}כאן{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "לא ניתן להגיע ל-outproxy"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "ה-outproxy של HTTP לא היה נגיש, מכיוון שהוא משתמש באפשרויות הצפנה שאינן נתמכות בגרסת ה-I2P או בגרסת Java שלך."
+
+msgid "The website was not reachable."
+msgstr "האתר לא היה נגיש."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "האתר אינו מחובר, יש עומס ברשת, או שהנתב שלך עדיין אינו משולב היטב עם peers."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "אזהרה: לא הוגדר outproxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "הבקשה שלך הייתה לאתר מחוץ ל-I2P, אך לא הגדרת outproxy של HTTP."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "נא להגדיר outproxy ב-I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "לא נמצא outproxy"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "ה-outproxy של HTTP לא נמצא."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "הוא אינו מחובר, יש עומס ברשת, או שהנתב שלך עדיין אינו משולב היטב עם peers."
+
+msgid "Information: New Host Name"
+msgstr "מידע: שם מחשב חדש"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "מידע: שם מחשב חדש עם עוזר כתובות"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "קישור עוזר הכתובות שבו הלכת מיועד לשם מחשב חדש שאינו בפנקס הכתובות שלך."
+
+msgid "You may save this host name to your local address book."
+msgstr "ייתכן שתרצה לשמור את שם המחשב הזה בפנקס הכתובות המקומי שלך."
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "אם תשמור אותו בפנקס הכתובות שלך, לא תראה את ההודעה הזו שוב."
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "אם לא תשמור אותו, שם המחשב יישכח לאחר הפעלה מחדש של הנתב."
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "אם אינך מעוניין לבקר במחשב מארח זה, לחץ על הכפתור \"חזרה\" בדפדפן שלך."
+
+msgid "Proxy Authorization Required"
+msgstr "נדרשת הרשאת פרוקסי"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "נדרשת הרשאת פרוקסי HTTP של I2P"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "הפרוקסי הזה מוגדר לדרוש שם משתמש וסיסמה כדי לקבל גישה."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "נא להזין את שם המשתמש והסיסמה שלך, או לבדוק את {0}הגדרות הנתב{1} או את {2}הגדרות I2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "כדי להשבת את ההרשאה, הסר את ההגדרה {0}i2ptunnel.proxy.auth=basic{1}, ואז עצור והפעל מחדש את מנהור הפרוקסי של HTTP."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "ה-outproxy של HTTP לא היה נגיש, מכיוון ש-lease set שלו לא נמצא."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "ה-outproxy כנראה אינו פעיל, אך ייתכן שיש גם עומס ברשת."
+
+msgid "Warning: Request Denied"
+msgstr "אזהרה: הבקשה נדחתה"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "נראה שכתובת זו פגומה. נא לוודא שסיפקת כתובת תקפה!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "אזהרה: עוזר כתובות פגום"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "מפתח העזר שב-URL ({0}i2paddresshelper={1}) אינו ניתן לפתרון."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "נראה שזו נתוני ג'יבריש, או כתובת Base 32 שהוקלדה באופן שגוי."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "בדוק את ה-URL שלך ונסה לתקן את מפתח העזר כך שיהיה שם מחשב תקין של Base 32 או מפתח תקין של Base 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr "אזהרה: הכתובת ברשימת החסימה"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "היעד המבוקש נמצא ברשימת החסימה שלך, והגישה נחסמה."
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "כדי לאפשר גישה לאתר זה, הסר אותו מרשימת החסימה שלך בדף ניהול רשימות החסימה של SusiDNS."
+
+msgid "Warning: Invalid Destination"
+msgstr "אזהרה: יעד לא תקין"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "יעד האתר שצוין אינו תקין, או שלא ניתן להגיע אליו."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "ייתכן שהדבקת מחרוזת Base 64 שגויה או שהקישור שבו אתה עובר פגום."
+
+msgid "The I2P host could also be offline."
+msgstr "ייתכן שגם מחשב המארח של I2P אינו מחובר."
+
+msgid "Warning: Authorization Required"
+msgstr "אזהרה: נדרשת הרשאה"
+
+msgid "Warning: Invalid Request URI"
+msgstr "אזהרה: בקשת URI לא תקינה"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "URI הבקשה אינו תקין, וכנראה שהוא מכיל תווים אסורים."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "אם לחצת על קישור, בדוק בסוף ה-URI אם הדפדפן הוסיף בטעות תווים כלשהם."
+
+msgid "The Base32 address is invalid."
+msgstr "כתובת ה-Base32 אינה תקינה."

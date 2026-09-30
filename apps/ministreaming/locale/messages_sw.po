@@ -1,0 +1,73 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "Muda wa ujumbe umeisha"
+
+msgid "Failed delivery to local destination"
+msgstr "Uwasilishaji kwa lengo la ndani umeshindwa"
+
+msgid "Local router failure"
+msgstr "Hitilafu ya routeri ya ndani"
+
+msgid "Local network failure"
+msgstr "Hitilafu ya mtandao wa ndani"
+
+msgid "Session closed"
+msgstr "Sesi imefungwa"
+
+msgid "Invalid message"
+msgstr "Ujumbe si sahihi"
+
+msgid "Invalid message options"
+msgstr "Vichaguo za ujumbe si sahihi"
+
+msgid "Buffer overflow"
+msgstr "Kujazibu buffer"
+
+msgid "Message expired"
+msgstr "Ujumbe umeisha"
+
+msgid "Local lease set invalid"
+msgstr "Lease set ya ndani si sahihi"
+
+msgid "No local tunnels"
+msgstr "Hakuna tuneli za ndani"
+
+msgid "Unsupported encryption options"
+msgstr "Vichaguo za usimbuzi havijulikani"
+
+msgid "Invalid destination"
+msgstr "Lengo si sahihi"
+
+msgid "Destination lease set expired"
+msgstr "Lease set ya lengo imeisha"
+
+msgid "Destination lease set not found"
+msgstr "Lease set ya lengo haijapatikana"
+
+msgid "Local destination shutdown"
+msgstr "Lengo la ndani limezimiwa"
+
+msgid "Connection was reset"
+msgstr "Muunganisho umeanzishwa upya"
+
+msgid "Failure code"
+msgstr "Msimbo wa hitilafu"

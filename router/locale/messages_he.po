@@ -1,0 +1,163 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "תקין"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: תקין; IPv6: בבדיקה"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: תקין; IPv6: חסום בחומת אש"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: בבדיקה; IPv6: תקין"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: חסום בחומת אש; IPv6: תקין"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: מושבת; IPv6: תקין"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: NAT סימטרי; IPv6: תקין"
+
+msgid "Symmetric NAT"
+msgstr "NAT סימטרי"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: NAT סימטרי; IPv6: בבדיקה"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: חסום בחומת אש; IPv6: בבדיקה"
+
+msgid "Firewalled"
+msgstr "חסום בחומת אש"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: בבדיקה; IPv6: חסום בחומת אש"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: מושבת; IPv6: בבדיקה"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: מושבת; IPv6: חסום בחומת אש"
+
+msgid "Disconnected"
+msgstr "לא מחובר"
+
+msgid "Port Conflict"
+msgstr "התנגשות פורטים"
+
+msgid "Testing"
+msgstr "בבדיקה"
+
+msgid "Starting up"
+msgstr "מתחיל לפעול"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "דחיית כל בקשות המנהורים:<br>"
+
+msgid "Hidden Mode"
+msgstr "מצב מוסתר"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "דחיית בקשות מנהור:<br>"
+
+msgid "High message delay"
+msgstr "השהיית הודעות גבוהה"
+
+msgid "Declining requests: "
+msgstr "דחיית בקשות: "
+
+msgid "Limit reached"
+msgstr "הוגעה למגבלה"
+
+msgid "Participation disabled"
+msgstr "השתתפות מושבתת"
+
+msgid "High system load"
+msgstr "עומס גבוה על המערכת"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "דחיית כל בקשות המנהורים:<br>"
+
+msgid "High number of requests"
+msgstr "מספר גבוה של בקשות"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "דחיית רוב בקשות המנהורים:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "קבלת רוב בקשות המנהורים"
+
+msgid "Accepting tunnel requests"
+msgstr "קבלת בקשות מנהור"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "דחיית בקשות: מגבלת רוחב פס"
+
+msgid "Declining requests"
+msgstr "דחיית בקשות"
+
+msgid "Shutting down"
+msgstr "מכבה"
+
+msgid "Restarting"
+msgstr "מופעל מחדש"
+
+msgid "Declining Tunnel Requests"
+msgstr "דחיית בקשות מנהור"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "השמטת בקשות מנהור: איטי מדי"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "השמטת בקשות מנהור: השהיית משימות גבוהה"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "השמטת בקשות מנהור:<br>עומס גבוה על מעבד"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "השמטת בקשות מנהור: עמוס יתר"
+
+msgid "Declining requests:"
+msgstr "דחיית בקשות:"
+
+msgid "Request overload"
+msgstr "עומס בקשות"
+
+msgid "Connection limit reached"
+msgstr "הוגעה למגבלת חיבורים"
+
+msgid "Transit throttle drop"
+msgstr "השמטה בשל הגבלת תעבורה"
+
+msgid "Transit throttle reject"
+msgstr "דחייה בשל הגבלת תעבורה"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "השמטת בקשות מנהור: עומס גבוה"
+
+msgid "Transit request throttle"
+msgstr "הגבלת בקשות תעבורה"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "השמטת בקשות מנהור: זמן בתור"

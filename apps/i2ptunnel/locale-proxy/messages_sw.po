@@ -1,0 +1,438 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Hii inaonekana kuwa lengo batili:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper haiwezi kukusaidia na lengo kama hilo!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Kutembelea lengo kilichomo katika kitabu chenu cha anwani, bofya <a href=\"{0}\">hapa</a>. Kutembelea lengo la msaidia wa anwani lenye mgongano, bofya <a href=\"{1}\">hapa</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Lengo la {0} katika kitabu cha anwani"
+
+msgid "Conflicting address helper destination"
+msgstr "Lengo la msaidia wa anwani lenye mgongano"
+
+msgid "Corrupt Base32 address"
+msgstr "Anwani ya Base32 imeharibika"
+
+msgid "Destination LeaseSet not found"
+msgstr "LeaseSet ya lengo haijapatikana"
+
+msgid "Host"
+msgstr "Mashine"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Lengo"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Endelea kwenye {0} bila kuhifadhi"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Mnaweza kutembelea tovuti bila kuiweka katika kitabu cha anwani. Anwani itakumbukwa hadi muanzishaji upya wa routeri yenu wa I2P."
+
+msgid "Continue without saving"
+msgstr "Endelea bila kuhifadhi"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Hifadhi {0} katika kitabu cha anwani cha routeri na uendelee kwenye tovuti"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Anwani hii itahifadhiwa katika kitabu chenu cha anwani cha routeri, mahali ambapo anwani zenu zinazotegemea usajili zinahifadhiwa."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Kama unataka kufuatilia tovuti ulizoongeza kwa mkono, ongeza badala yake katika kitabu chenu cha anwani kuu au cha anwani bina."
+
+msgid "Save & continue"
+msgstr "Hifadhi & uendelee"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Hifadhi {0} katika kitabu cha anwani kuu na uendelee kwenye tovuti"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Anwani hii itahifadhiwa katika kitabu chenu cha anwani kuu. Chagua chaguo hili kwa anwani unazotaka kuweka mbali na kitabu kuu cha anwani cha routeri, lakini hukuitiziki kuzichapisha."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Hifadhi {0} katika kitabu cha anwani bina na uendelee kwenye tovuti"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Anwani hii itahifadhiwa katika kitabu chenu cha anwani bina, hii kuhakikisha kwamba haipochapishwa kamwe."
+
+msgid "Base32 address requires lookup password"
+msgstr "Anwani ya Base32 inahitaji nenosiri cha kutatua"
+
+msgid "Base32 address requires encryption key"
+msgstr "Anwani ya Base32 inahitaji ufafanuzi wa usimbuzi"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Anwani ya Base32 inahitaji ufafanuzi wa usimbuzi na nenosiri cha kutatua"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Kushindwa kuchifua anwani ya Base32, angalia ufafanuzi wa usimbuzi"
+
+msgid "Generate"
+msgstr "Tengeneza"
+
+msgid "Encryption key"
+msgstr "Ufafanuzi wa usimbuzi"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Lazima uweke ama ufafanuzi wa usimbuzi wa PSK uliotolewa na mtumiaji wa seva, au utengeneze ufafanuzi wa usimbuzi wa DH na kuutuma kwa mtumiaji wa seva."
+
+msgid "Ask the server operator for help."
+msgstr "Omba msaada kwa mtumiaji wa seva."
+
+msgid "Enter PSK encryption key"
+msgstr "Ingiza ufafanuzi wa usimbuzi wa PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Tengeneza ufafanuzi mpya wa usimbuzi wa DH"
+
+msgid "Lookup password"
+msgstr "Nenosiri cha kutatua"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Lazima uingize nenosiri ulichopewa na mtumiaji wa seva."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Imeongezwa kwa msaidia wa anwani kutoka {0}"
+
+msgid "Added via address helper"
+msgstr "Imeongezwa kwa msaidia wa anwani"
+
+msgid "Missing lookup password"
+msgstr "Nenosiri cha kutatua umekoseka"
+
+msgid "Missing private key"
+msgstr "Ufafanuzi bina umekoseka"
+
+msgid "Invalid private key"
+msgstr "Ufafanuzi bina si sahihi"
+
+msgid "Your new encryption key"
+msgstr "Ufafanuzi wenu mpya wa usimbuzi"
+
+msgid "Router Console"
+msgstr "Konsola ya Routeri"
+
+msgid "Addressbook"
+msgstr "Kitabu cha Anwani"
+
+msgid "Configuration"
+msgstr "Mipangilio"
+
+msgid "Help"
+msgstr "Msaada"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Nakili ufafanuzi na uitume kwa mtumiaji wa seva."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Baada ya kupewa kibali, mnaweza kuendelea kwenye tovuti."
+
+msgid "Go back and fix the error"
+msgstr "Rudi nyuma na rekebisha hitilafu"
+
+msgid "router"
+msgstr "routeri"
+
+msgid "master"
+msgstr "kuu"
+
+msgid "private"
+msgstr "bina"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Unaelekezwa kwenye {0}"
+
+msgid "Redirection in progress"
+msgstr "Inaelekezwa kwa sasa"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} imehifadhiwa kwenye kitabu cha anwani {1}, sasa inaelekezwa."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Imeshindwa kuhifadhi {0} kwenye kitabu cha anwani {1}, sasa inaelekezwa."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Bofya hapa ikiwa hujakuelezwa kiotomatiki."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Uthibitisho wa {0} umehifadhiwa, sasa inaelekezwa."
+
+msgid "Website Unknown"
+msgstr "Tovuti Haijulikani"
+
+msgid "I2P Router Console"
+msgstr "Konsola ya Routeri ya I2P"
+
+msgid "Website Not Found in Addressbook"
+msgstr "Tovuti Haipatikani katika Kitabu cha Anwani"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "Tovuti haijapatikana katika kitabu chenu cha anwani cha routeri."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "Angalia kiungo au tafuta anwani ya Base 32 au Base 64."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "Kama una anwani ya Base 64, {0}ongeza kwenye kitabu chenu cha anwani{1}."
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "Vinginevyo, tafuta kiungo cha Base 32 au cha msaidia wa anwani, au tumia kiungo cha huduma ya kuvuka hapa chini."
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "Unaona ukurasa huu mara kwa mara? Tazama {0}Maswali Yanayoulizwa Mara kwa Mara{1} kwa usaidizi wa {2}kuongeza baadhi ya usajili{3} katika kitabu chenu cha anwani."
+
+msgid "Could not find the following destination:"
+msgstr "Hawezekani kutafuta lengo lifuata:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Onyo: Itaratibu Isiyo ya HTTP"
+
+msgid "The request uses a bad protocol."
+msgstr "Ombi hilo hutumia itaratibu batili."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "Proksi ya HTTP ya I2P inashughuliki maombi ya HTTP na HTTPS pekee."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Itaratibu nyingine kama FTP haziruhusiwi."
+
+msgid "Error: Request Denied"
+msgstr "Hitilafu: Ombi Limekataa"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Hitilafu: Haiwezi Kufikia Konsola ya Routeri kupitia Proksi ya I2P"
+
+msgid "Your browser is misconfigured."
+msgstr "Kivinjari chenu kimepangilwa vibaya."
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Usitumie proksi kufikia konsola ya routeri, localhost, au malengo ya LAN ya ndini."
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Unapaswa kuzuia 127.0.0.1 (au anwani unayofikia konsola ya I2P kwenye) kupewa njia kupitia proksi ya http ya I2P, kwa kawaida kwa kuiondoa anwani katika sehemu ya mipangilio ya proksi ya kivinjari chenu."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "Onyo: Mgongano wa Ufafanuzi wa Lengo"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "Kiungo cha msaidia wa anwani ulichofuata kinabainisha ufafanuzi wa lengo tofauti na ule wa kipengee katika kitabu chenu cha anwani."
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "Mtu mwingine anaweza kujaribu kuigwa kama tovuti nyingine, au watu wamewapa tovuti mbili majina yaleale."
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "Tatua mgongano kwa kuchagua ufafanuzi unaouamini, kisha basi acha kimya kiungo cha msaidia wa anwani, au futa kipengee cha mashine kutoka kitabu chenu cha anwani na bofya kiungo cha msaidia wa anwani tena."
+
+msgid "Connection Reset"
+msgstr "Muunganisho Umeanzishwa Upya"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Muunganisho wa tovuti ulianzishwa upya wakati kurasa lilipakia."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Tovuti inaweza isipatikane kwa muda, kuwa yenye wingi, au imekuwa ikikataa kifurushi chenu."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "Huenda ungependa {0}ujaribu tena{1}."
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Kama ukiacha ukurasa huu wazi, itajaribu kuunganisha kwenye tovuti kiotomatiki kila sekunde {0} baada ya jaribio la kunganisha lililoshindwa."
+
+msgid "Website Unreachable"
+msgstr "Tovuti Haipatikani"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Tovuti haikuweza kufikiliwa, kwa kuwa hutumia vichaguo vya usimbuzi ambavyo havijulikani na toleo lako la I2P au Java."
+
+msgid "Could not connect to the following destination:"
+msgstr "Hawezekani kuunganisha kwenye lengo lifuata:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Tovuti haikuweza kufikiliwa, kwa kuwa LeaseSet yake haijapatikana."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Tovuti labda imeshindwa, lakini pia inaweza kuwa kuna msongamano wa mtandao."
+
+msgid "The connection to the proxy was reset."
+msgstr "Muunganisho wa proksi ulianzishwa upya."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Proksi inaweza isipatikane kwa muda, kuwa yenye wingi, au imekuwa ikikataa kifurushi chenu."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Huenda ungependa {0}ujaribu tena{1} kwa kuwa hii itachagua kwa nasibu outproxy kutoka kwenye kundi ulichoziweka {2}hapa{3} (kama una zaidi ya moja uliosanidiwa)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Kama unaendelea kupata matatizo, huenda ungependa kuhariri orodha yako ya outproxy {0}hapa{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy Haipatikani"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Outproxy ya HTTP haikuweza kufikiliwa, kwa kuwa hutumia vichaguo vya usimbuzi ambavyo havijulikani na toleo lako la I2P au Java."
+
+msgid "The website was not reachable."
+msgstr "Tovuti haikuweza kufikiliwa."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Tovuti iko nje ya mtandao, kuna msongamano wa mtandao, au routeri yenu bado haujaiunganishwa vizuri na peer."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Onyo: Hakuna Outproxy Iliyosanidiwa"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Ombi lako lilikuwa la tovuti nje ya I2P, lakini huna outproxy ya HTTP uliyosanidiwa."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Tafadhali sanidi outproxy ndani ya I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy Haipatikana"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Outproxy ya HTTP haijapatikana."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Iko nje ya mtandao, kuna msongamano wa mtandao, au routeri yenu bado haujaiunganishwa vizuri na peer."
+
+msgid "Information: New Host Name"
+msgstr "Taarifa: Jina Jipya la Mashine"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "Taarifa: Jina Jipya la Mashine kwa Msaidia wa Anwani"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "Kiungo cha msaidia wa anwani ulichofuata ni kwa jina jipya la mashine ambacho hakipo katika kitabu chenu cha anwani."
+
+msgid "You may save this host name to your local address book."
+msgstr "Unaweza kuhifadhi jina hili la mashine katika kitabu chenu cha anwani cha ndini."
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "Kama ukihifadhi katika kitabu chenu cha anwani, hutakuona ujumbe huu tena."
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "Kama hukihifadhi, jina la mashine litasahaulika baada ya kuanzishaji upya kijacho cha routeri."
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "Kama hutaki kuzuru mashine hii, bofya kitufe cha \"nyuma\" kwenye kivinjari chenu."
+
+msgid "Proxy Authorization Required"
+msgstr "Uthibitisho wa Proksi Inahitajika"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Uthibitisho wa Proksi ya HTTP ya I2P Inahitajika"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Proksi hii imepangwa kadai jina la mtumiaji na nenosiri ili kufikia."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Tafadhali ingiza jina lako la mtumiaji na nenosiri, au angalia {0}mipangilio yako ya routeri{1} au {2}mipangilio yako ya I2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Kuzima uthibitisho, ondoa mipangilio {0}i2ptunnel.proxy.auth=basic{1}, kisha sitisha na anzisha upya tuneli ya proksi ya HTTP."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Outproxy ya HTTP haikuweza kufikiliwa, kwa kuwa LeaseSet yake haijapatikana."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Outproxy labda imeshindwa, lakini pia inaweza kuwa kuna msongamano wa mtandao."
+
+msgid "Warning: Request Denied"
+msgstr "Onyo: Ombi Limekataa"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Anwani hii inaonekana kuwa isiyo sahifu. Tafadhali hakikishe kwamba umetoa anwani sahihi!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "Onyo: Msaidia wa Anwani Batili"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Ufafanuzi wa msaidia katika URL ({0}i2paddresshelper={1}) hauwezi kutatuliwa."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Inaonekana kuwa data ya ovyo, au anwani ya Base 32 iliyoandikwa vibaya."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Angalia URL yako kujaribu na kusahihisha ufafanuzi wa msaidia ili iwe jina la mashine halali la Base 32 au ufafanuzi wa Base 64."
+
+msgid "Warning: Address Blacklisted"
+msgstr "Onyo: Anwani Imewekwa Kwenye Orodha Nyeusi"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "Lengo liliombwa lipo kwenye orodha nyeusi yenu na ufikiaji umezuiwa."
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "Kuruhusu ufikiaji wa tovuti hii, ondoa kwenye orodha nyeusi yako katika ukurasa wa kusimamia orodha nyeusi wa SusiDNS."
+
+msgid "Warning: Invalid Destination"
+msgstr "Onyo: Lengo Si Sahihi"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Lengo la tovuti lililotaja halikuwa halali, au halikupatikana."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Huenda umebandika mfuatano wa Base 64 isiyo sahihi au kiungo unachofuata ni batili."
+
+msgid "The I2P host could also be offline."
+msgstr "Mashine ya I2P pia inaweza kuwa nje ya mtandao."
+
+msgid "Warning: Authorization Required"
+msgstr "Onyo: Uthibitisho Inahitajika"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Onyo: URI ya Ombi Si Sahihi"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "URI ya ombi si sahihi, na pengime ina herufi zisizo halali."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Kama ulibofya kiungo, angalia mwisho wa URI kwa herufi zozote ambazo kivinjari kimeziongeza bila kutarajia."
+
+msgid "The Base32 address is invalid."
+msgstr "Anwani ya Base32 si sahihi."

@@ -1,0 +1,1791 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Hii inaonekana kuwa lengo batili:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper haiwezi kukusaidia na lengo kama hilo!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Kutembelea lengo kilichomo katika kitabu chenu cha anwani, bofya <a href=\"{0}\">hapa</a>. Kutembelea lengo la msaidia wa anwani lenye mgongano, bofya <a href=\"{1}\">hapa</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Lengo la {0} katika kitabu cha anwani"
+
+msgid "Conflicting address helper destination"
+msgstr "Lengo la msaidia wa anwani lenye mgongano"
+
+msgid "Corrupt Base32 address"
+msgstr "Anwani ya Base32 imeharibika"
+
+msgid "Destination LeaseSet not found"
+msgstr "LeaseSet ya lengo haijapatikana"
+
+msgid "Host"
+msgstr "Mashine"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Lengo"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Endelea kwenye {0} bila kuhifadhi"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Mnaweza kutembelea tovuti bila kuiweka katika kitabu cha anwani. Anwani itakumbukwa hadi muanzishaji upya wa routeri yenu wa I2P."
+
+msgid "Continue without saving"
+msgstr "Endelea bila kuhifadhi"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Hifadhi {0} katika kitabu cha anwani cha routeri na uendelee kwenye tovuti"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Anwani hii itahifadhiwa katika kitabu chenu cha anwani cha routeri, mahali ambapo anwani zenu zinazotegemea usajili zinahifadhiwa."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Kama unataka kufuatilia tovuti ulizoongeza kwa mkono, ongeza badala yake katika kitabu chenu cha anwani kuu au cha anwani bina."
+
+msgid "Save & continue"
+msgstr "Hifadhi & uendelee"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Hifadhi {0} katika kitabu cha anwani kuu na uendelee kwenye tovuti"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Anwani hii itahifadhiwa katika kitabu chenu cha anwani kuu. Chagua chaguo hili kwa anwani unazotaka kuweka mbali na kitabu kuu cha anwani cha routeri, lakini hukuitiziki kuzichapisha."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Hifadhi {0} katika kitabu cha anwani bina na uendelee kwenye tovuti"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Anwani hii itahifadhiwa katika kitabu chenu cha anwani bina, hii kuhakikisha kwamba haipochapishwa kamwe."
+
+msgid "Base32 address requires lookup password"
+msgstr "Anwani ya Base32 inahitaji nenosiri cha kutatua"
+
+msgid "Base32 address requires encryption key"
+msgstr "Anwani ya Base32 inahitaji ufafanuzi wa usimbuzi"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Anwani ya Base32 inahitaji ufafanuzi wa usimbuzi na nenosiri cha kutatua"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Kushindwa kuchifua anwani ya Base32, angalia ufafanuzi wa usimbuzi"
+
+msgid "Generate"
+msgstr "Tengeneza"
+
+msgid "Encryption key"
+msgstr "Ufafanuzi wa usimbuzi"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Lazima uweke ama ufafanuzi wa usimbuzi wa PSK uliotolewa na mtumiaji wa seva, au utengeneze ufafanuzi wa usimbuzi wa DH na kuutuma kwa mtumiaji wa seva."
+
+msgid "Ask the server operator for help."
+msgstr "Omba msaada kwa mtumiaji wa seva."
+
+msgid "Enter PSK encryption key"
+msgstr "Ingiza ufafanuzi wa usimbuzi wa PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Tengeneza ufafanuzi mpya wa usimbuzi wa DH"
+
+msgid "Lookup password"
+msgstr "Nenosiri cha kutatua"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Lazima uingize nenosiri ulichopewa na mtumiaji wa seva."
+
+msgid "HTTP Outproxy"
+msgstr "Outproxy ya HTTP"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "Bofya kiungo hapa chini kwa msaidia wa anwani kutoka kwa huduma ya kuvuka"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Imeongezwa kwa msaidia wa anwani kutoka {0}"
+
+msgid "Added via address helper"
+msgstr "Imeongezwa kwa msaidia wa anwani"
+
+msgid "Missing lookup password"
+msgstr "Nenosiri cha kutatua umekoseka"
+
+msgid "Missing private key"
+msgstr "Ufafanuzi bina umekoseka"
+
+msgid "Invalid private key"
+msgstr "Ufafanuzi bina si sahihi"
+
+msgid "Your new encryption key"
+msgstr "Ufafanuzi wenu mpya wa usimbuzi"
+
+msgid "Router Console"
+msgstr "Konsola ya Routeri"
+
+msgid "Addressbook"
+msgstr "Kitabu cha Anwani"
+
+msgid "Configuration"
+msgstr "Mipangilio"
+
+msgid "Help"
+msgstr "Msaada"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Nakili ufafanuzi na uitume kwa mtumiaji wa seva."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Baada ya kupewa kibali, mnaweza kuendelea kwenye tovuti."
+
+msgid "Go back and fix the error"
+msgstr "Rudi nyuma na rekebisha hitilafu"
+
+msgid "router"
+msgstr "routeri"
+
+msgid "master"
+msgstr "kuu"
+
+msgid "private"
+msgstr "bina"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Unaelekezwa kwenye {0}"
+
+msgid "Redirection in progress"
+msgstr "Inaelekezwa kwa sasa"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} imehifadhiwa kwenye kitabu cha anwani {1}, sasa inaelekezwa."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Imeshindwa kuhifadhi {0} kwenye kitabu cha anwani {1}, sasa inaelekezwa."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Bofya hapa ikiwa hujakuelezwa kiotomatiki."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Uthibitisho wa {0} umehifadhiwa, sasa inaelekezwa."
+
+msgid "Failed to save configuration"
+msgstr "Imeshindwa kuhifadhi mipangilio"
+
+msgid "Configuration changes saved"
+msgstr "Mabadiliko ya mipangilio yamehifadhiwa"
+
+msgid "Client"
+msgstr "Mteja"
+
+msgid "internal"
+msgstr "ndani"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "tuneli {0} ya kuingia, {0} ya kutoka"
+msgstr[1] "tuneli {0} za kuingia, {0} za kutoka"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "tuneli {0} ya kuingia"
+msgstr[1] "tuneli {0} za kuingia"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "tuneli {0} ya kutoka"
+msgstr[1] "tuneli {0} za kutoka"
+
+msgid "lower bandwidth and reliability"
+msgstr "kasi na uaminifu za chini"
+
+msgid "standard bandwidth and reliability"
+msgstr "kasi na uaminifu za kawaida"
+
+msgid "higher bandwidth and reliability"
+msgstr "kasi na uaminifu za juu"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "Hitilafu - tuneli bado hazijaanzishwa"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Wasilisho wa fomu si sahihi, labda kwa sababu ulitumia kitufe cha 'back' au 'reload' kwenye kivinjari chenu. Tafadhali uwasilishe tena."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Ikiwa tatizo limeendelea, hakikisha kwamba cookies zimewashwa kwenye kivinjari chenu."
+
+msgid "No services configured, cannot restart!"
+msgstr "Hakuna huduma zilizosanidiwa, haiwezi kuanzishwa upya!"
+
+msgid "Stopping tunnel"
+msgstr "Inasitisha tuneli"
+
+msgid "Starting tunnel"
+msgstr "Inaanzisha tuneli"
+
+msgid "Error restarting tunnel"
+msgstr "Hitilafu katika kuanzisha upya tuneli"
+
+msgid "Restarted all running tunnels"
+msgstr "Tuneli zote zinazoendesha zimeanzishwa upya"
+
+msgid "No clients configured, cannot restart!"
+msgstr "Hakuna wateja waliosanidiwa, haiwezi kuanzishwa upya!"
+
+msgid "Restarted all running client tunnels"
+msgstr "Tuneli zote za wateja zinazoendesha zimeanzishwa upya"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Mipangilio yamefunguliwa upya kwa tuneli zote"
+
+msgid "Error: Invalid tunnel"
+msgstr "Hitilafu: Tuneli si sahihi"
+
+msgid "Started tunnel"
+msgstr "Tuneli imeanza"
+
+msgid "Stopped tunnel"
+msgstr "Tuneli imesitishwa"
+
+msgid "Restarting tunnel"
+msgstr "Inaanzisha upya tuneli"
+
+msgid "New Tunnel"
+msgstr "Tuneli Mpya"
+
+msgid "Port not set"
+msgstr "Bandari haijawekwa"
+
+msgid "Invalid port"
+msgstr "Bandari si sahihi"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "Onyo - bandari zinazopungua 1024 hazipendekezwi"
+
+msgid "Warning - duplicate port"
+msgstr "Onyo - bandari marufu"
+
+msgid "Standard client"
+msgstr "Mteja wa kawaida"
+
+msgid "HTTP/HTTPS client"
+msgstr "Mteja wa HTTP/HTTPS"
+
+msgid "IRC client"
+msgstr "Mteja wa IRC"
+
+msgid "Standard server"
+msgstr "Seva ya kawaida"
+
+msgid "HTTP server"
+msgstr "Seva ya HTTP"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "Proksi ya SOCKS 4/4a/5"
+
+msgid "SOCKS IRC proxy"
+msgstr "Proksi ya SOCKS ya IRC"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "Proksi ya CONNECT/SSL/HTTPS"
+
+msgid "IRC server"
+msgstr "Seva ya IRC"
+
+msgid "Streamr client"
+msgstr "Mteja wa Streamr"
+
+msgid "Streamr server"
+msgstr "Seva ya Streamr"
+
+msgid "HTTP bidir"
+msgstr "HTTP bidir"
+
+msgid "Host not set"
+msgstr "Mashine haijawekwa"
+
+msgid "Invalid address"
+msgstr "Anwani si sahihi"
+
+msgid "Tunnel Manager"
+msgstr "Msimamizi wa Tuneli"
+
+msgid "Edit Client Tunnel"
+msgstr "Hariri Tuneli ya Mteja"
+
+msgid "Edit Server Tunnel"
+msgstr "Hariri Tuneli ya Seva"
+
+msgid "Are you sure you want to delete?"
+msgstr "Mna uhakika mnataka kufuta?"
+
+msgid "required"
+msgstr "inahitajika"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "Tuneli na tuneli zote nyingine za wateja zilizoshirikiwa lazima zisitishwe ili kubadilisha mipangilio haya"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "Tuneli lazima isitishwe ili kubadilisha mipangilio haya"
+
+msgid "New Client Configuration"
+msgstr "Mipangilio Mipya ya Mteja"
+
+msgid "Name"
+msgstr "Jina"
+
+msgid "Auto Start Tunnel"
+msgstr "Anza Tuneli Kiotomatiki"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "Jina la tuneli linaloonyeshwa kwenye ukurasa wa nyumbari wa Msimamizi wa Tuneli na sidebar ya konsola ya routeri"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "Washa chaguo hili ili kuhakikisha kwamba huduma hii ipo wakati routeri inapoanza"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "Anza tuneli kiotomatiki wakati routeri inapoanza"
+
+msgid "Description"
+msgstr "Maelezo"
+
+msgid "Shared Client"
+msgstr "Mteja wa Kushiriki"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "Maelezo ya tuneli ya kuonyeshwa kwenye ukurasa wa nyumbari wa Msimamizi wa Tuneli"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "Trafiki kutoka kwa wateja wote wenye kipengele hiki kikiwashwa itapelekwa kupitia seti moja ya tuneli. Hii itafanya kuchambua tuneli na mpinzani kuwa vigumu zaidi, lakini itaunganisha wateja pamoja."
+
+msgid "Share tunnels with other configured clients"
+msgstr "Shiriki tuneli na wateja wengine waliosanidiwa"
+
+msgid "Target"
+msgstr "Lengo"
+
+msgid "Access Point"
+msgstr "Nafsi ya Kufikia"
+
+msgid "Use Outproxy Plugin"
+msgstr "Tumia Kiendeshaji cha Outproxy"
+
+msgid "Enable DCC"
+msgstr "Washa DCC"
+
+msgid "Port"
+msgstr "Bandari"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "Eleza bandari ya ndani ambayo huduma hii inapaswa kupatikana kutoka"
+
+msgid "Hostname or IP address of the target server"
+msgstr "Jina la mashine au anwani ya IP ya seva lengwa"
+
+msgid "Reachable by"
+msgstr "Inapatikana kwa"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "Kiolesura cha ndani (anwani ya ip) ambacho tuneli ya mteja itapatikana kutoka"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "Kama kuna kiendeshaji cha outproxy kilichosakinishwa (kwa mfano Orchid), tumia hiki badala ya outproxy yoyote iliyosanidiwa kufikia tovuti za nje ya I2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "Tumia kiendeshaji badala ya proksi zilizoorodheshwa hapa chini kama zipo"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "Huruhusu mazungumzo ya moja kwa moja na uhamisho wa faili bila kutumia I2P. Note kwamba hilo litatharibi usiri wako na hakupendekezwi."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "Washa itaratibu ya Mteja-kwa-Mteja Moja kwa Moja"
+
+msgid "Outproxies"
+msgstr "Outproxies"
+
+msgid "SSL Outproxies"
+msgstr "Outproxies za SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "Eleza hapa anwani ya .i2p au lengo (b32 au b64) la outproxy."
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "Kwa uchaguzi wa nasibu kutoka kundi, weka koma kati, kwa mfano server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "Aina ya Outproxy"
+
+msgid "Tunnel Destination"
+msgstr "Lengo la Tuneli"
+
+msgid "Use SSL"
+msgstr "Tumia SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "Eleza hapa anwani ya .i2p au lengo (b32 au b64) la tuneli."
+
+msgid "name, name:port, or destination"
+msgstr "jina, jina:bandari, au lengo"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "Kama unafikia huduma kwenye routeri ya I2P iliyoko mbali, huenda ungependa kunganisha kwa SSL ili kuepokea kukamata trafiki. Programu ya mteja inapaswa pia kupangiliwa kutumia SSL."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "Wateja hutumia SSL kunganisha na tuneli"
+
+msgid "Please specify the full b64 destination."
+msgstr "Tafadhali eleza lengo kamili la b64."
+
+msgid "Local destination"
+msgstr "Lengo la ndani"
+
+msgid "Local Base32"
+msgstr "Base32 ya Ndani"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "Soma tu: Lengo la Ndani (kama linajulikana)"
+
+msgid "Stop"
+msgstr "Sitisha"
+
+msgid "Start this Tunnel"
+msgstr "Anza Tuneli Hii"
+
+msgid "Start"
+msgstr "Anza"
+
+msgid "Cancel"
+msgstr "Ghairi"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "Futa tuneli hii (hakiwezi kutenduliwa)"
+
+msgid "Delete"
+msgstr "Futa"
+
+msgid "Save"
+msgstr "Hifadhi"
+
+msgid "Advanced networking options"
+msgstr "Vichaguo za Juu vya Mtandao"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "Note: Mteja hili amesanidiwa kushiriki tuneli, vichaguo hivi vinatumika kwa wateja wote waliosanidiwa kushiriki tuneli."
+
+msgid "Profile"
+msgstr "Wasifu"
+
+msgid "Delay Connect"
+msgstr "Acha Muunganisho"
+
+msgid "Connection Profile"
+msgstr "Wasifu wa Muunganisho"
+
+msgid "interactive connection"
+msgstr "muunganisho wa maingiliano"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "muunganisho wa kundi (vipakuliwa/vtovuti/BT)"
+
+msgid "Delay Connection"
+msgstr "Acha Muunganisho"
+
+msgid "for request/response connections"
+msgstr "kwa muunganisho wa ombi/jibu"
+
+msgid "Router I2CP Address"
+msgstr "Anwani ya I2CP ya Routeri"
+
+msgid "I2CP Hostname or IP"
+msgstr "Jina la Mashine au IP ya I2CP"
+
+msgid "I2CP Port Number"
+msgstr "Namba ya Bandari ya I2CP"
+
+msgid "Delay tunnel open until required"
+msgstr "Acha kufunguliwa kwa tuneli hadi inapohitajika"
+
+msgid "Signature type"
+msgstr "Aina ya saini"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "Hifadhi rasilimali kwa kujenga tuneli pale inapohitajika"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "Usifungue tuneli hadi shughuli ionyweke kwenye bandari"
+
+msgid "This is the default, recommended option"
+msgstr "Hii ni chaguo la default, linalopendekezwa"
+
+msgid "Encryption types"
+msgstr "Aina za usimbuzi"
+
+msgid "Legacy options"
+msgstr "Vichaguo vya Zamani"
+
+msgid "Post Quantum"
+msgstr "Post Quantum"
+
+msgid "Both encryption types"
+msgstr "Aina zote mbili za usimbuzi"
+
+msgid "Tunnel Options"
+msgstr "Vichaguo vya Tuneli"
+
+msgid "Length"
+msgstr "Urefu"
+
+msgid "Count"
+msgstr "Idadi"
+
+msgid "Length of each Tunnel"
+msgstr "Urefu wa kila Tuneli"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "tuneli ya 0 hop (hakuna usiri)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "tuneli ya 1 hop (usiri wa chini)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "tuneli ya 2 hop (usiri wa wastani)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "tuneli ya 3 hop (usiri mkubwa)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "tuneli {0} ya hop"
+msgstr[1] "tuneli {0} za hop"
+
+msgid "Number of Tunnels in Group"
+msgstr "Idadi ya Tuneli Katika Kundi"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "Imezimwa kwa tuneli za 0 hop"
+
+msgid "Variance"
+msgstr "Hitubako"
+
+msgid "Backup Count"
+msgstr "Idadi ya Nakala Rudufu"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "Kiwango cha Uwabindu kwa Urefu wa Tuneli"
+
+msgid "0 hop variance"
+msgstr "hitubako ya 0 hop"
+
+msgid "no randomization, consistent performance"
+msgstr "hakuna uwabindu, utendaji thabiti"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ hitubako ya 0-1 hop"
+
+msgid "medium randomization, lower performance"
+msgstr "uwabindu wa wastani, utendaji wa chini"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ hitubako ya 0-2 hop"
+
+msgid "high randomization, very low performance"
+msgstr "uwabindu mkubwa, utendaji wa chini sana"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- hitubako ya 0-1 hop"
+
+msgid "standard randomization, standard performance"
+msgstr "uwabindu wa kawaida, utendaji wa kawaida"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- hitubako ya 0-2 hop"
+
+msgid "not recommended"
+msgstr "Si limependekezwa"
+
+msgid "hop variance"
+msgstr "hitubako ya hop"
+
+msgid "Number of Reserve Tunnels"
+msgstr "Idadi ya Tuneli za Nakala Rudufu"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} tuneli ya nakala rudufu"
+msgstr[1] "{0} tuneli za nakala rudufu"
+
+msgid "no redundancy, no added resource usage"
+msgstr "hakuna ubaki, hakuna ongezeko la tumizi ya rasilimali"
+
+msgid "low redundancy, low resource usage"
+msgstr "ubaki mdogo, tumizi mdogo ya rasilimali"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "ubaki wa wastani, tumizi wa wastani ya rasilimali"
+
+msgid "high redundancy, high resource usage"
+msgstr "ubaki mkubwa, tumizi mkubwa ya rasilimali"
+
+msgid "Reduce tunnel quantity"
+msgstr "Punguza idadi ya tuneli"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "Punguza idadi ya tuneli wakati hazitumiwi ili kuhifadhi rasilimali lakini weka tuneli wazi (ili kuhakikisha upatikani wa papo hapo)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "Punguza idadi ya tuneli wakati hazitumiwi"
+
+msgid "Idle period"
+msgstr "Kipindi cha Kutotumika"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "Muda wa Kutotumika wa Tuneli Iliyopunguzwa"
+
+msgid "Reduced count"
+msgstr "Idadi iliyopunguzwa"
+
+msgid "Reduced tunnel count"
+msgstr "Idadi ya tuneli iliyopunguzwa"
+
+msgid "Close tunnels when idle"
+msgstr "Funga tuneli wakati hazitumiwi"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "Ili kuhifadhi rasilimali, funga tuneli wakati hazitumikiwi"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "Funga tuneli za mteja baada ya kipindi fulani cha kutotumika"
+
+msgid "Close Tunnel Idle Time"
+msgstr "Muda wa Kutotumika wa Kutofunga Tuneli"
+
+msgid "New Keys on Reopen"
+msgstr "Ufafanuzi Mpya Wakati wa Kufunguliwa Upya"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "Badilisha utambulisho wa tuneli (lengo) pale tuneli zinapofunguliwa upya"
+
+msgid "Enable"
+msgstr "Washa"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "Weka utambulisho wa tuneli (lengo) pale tuneli zinapofunguliwa upya"
+
+msgid "Disable"
+msgstr "Zima"
+
+msgid "Persistent private key"
+msgstr "Ufafanuzi bina wa kudumu"
+
+msgid "Private key file"
+msgstr "Faili ya ufafanuzi bina"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "Kuwasha kipengele hiki kuhakikisha kwamba utambulisho wako wa tuneli (lengo) unabaki usiabadilike, kwa huduma zinazotoa vipengeleo vinavyotegemea lengo k.v. uthibitisho wa mtumiaji wa IRC"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "Tengeneza ufafanuzi ili kuwasha utambulisho wa tuneli ya mteja wa kudumu"
+
+msgid "Path to Private Key File"
+msgstr "Njia hadi Faili ya Ufafanuzi Bina"
+
+msgid "HTTP Filtering"
+msgstr "Uchujaji wa HTTP"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "Wakati ukishwa, mfanyaji wa mtumiaji wa kivinjari chako wa tovuti au mteja wa http hautafakewi, jambo ambalo linaweza kupunguza usiri wako"
+
+msgid "Do not spoof User-Agent header"
+msgstr "Usifake kichwa cha User-Agent"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "Wakati ukishwa, referer (kurasa asilia) ya maombi yako wa tovuti hataichujwe, jambo ambalo linaweza kupunguza usiri wako"
+
+msgid "Do not block Referer header"
+msgstr "Usizue kichwa cha Referer"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "Wakati ukishwa, vichwa vya accept (uendelevu wa mime types) vinavyotangazwa na kivinjari chako wa tovuti havichujwi, jambo ambalo linaweza kupunguza usiri wako"
+
+msgid "Do not block Accept headers"
+msgstr "Usizue vichwa vya Accept"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "Ruhusu SSL kwenye anwani za I2P wakati ukishwa"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "Ruhusu SSL kwenye anwani za I2P"
+
+msgid "Local Authorization"
+msgstr "Uthibitisho wa Ndani"
+
+msgid "Local Credentials"
+msgstr "Sifa za Ndani"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "Washa ili kuhitaji jina la mtumiaji na nenosiri ili kufikia huduma hii ya ndani (kwa mfano ikiwa unahosti kwenye LAN)"
+
+msgid "Require local authorization for this service"
+msgstr "Hitaji uthibitisho wa ndani kwa huduma hii"
+
+msgid "Set username required to access this service"
+msgstr "Weka jina la mtumiaji linalohitajika ili kufikia huduma hii"
+
+msgid "Username"
+msgstr "Jina la mtumiaji"
+
+msgid "Set password required to access this service"
+msgstr "Weka nenosiri linalohitajika ili kufikia huduma hii"
+
+msgid "Password"
+msgstr "Nenosiri"
+
+msgid "Outproxy Authorization"
+msgstr "Uthibitisho wa Outproxy"
+
+msgid "Remote Credentials"
+msgstr "Sifa za Mbali"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "Washa kama outproxy inahitaji jina la mtumiaji na nenosiri ili kufikia"
+
+msgid "Outproxy requires authorization"
+msgstr "Outproxy inahitaji uthibitisho"
+
+msgid "Enter username required by outproxy"
+msgstr "Ingiza jina la mtumiaji linalohitajika na outproxy"
+
+msgid "Enter password required by outproxy"
+msgstr "Ingiza nenosiri linalohitajika na outproxy"
+
+msgid "Jump URL List"
+msgstr "Orodha ya URL za Kuvuka"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "Orodha ya URL za msaidia zinazotoa viungo vya kuvuka pale mashine isipopatikana katika kitabu chako cha anwani"
+
+msgid "Custom options"
+msgstr "Vichaguo Maalum"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "Vichaguo vya Juu vya tuneli, streaming na I2CP"
+
+msgid "New Server Configuration"
+msgstr "Mipangilio Mipya ya Seva"
+
+msgid "Hostname"
+msgstr "Jina la Mashine"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Muda wa kusubiri wa kuanza kwa nasibu (kipo auto-start kimeshwa) ili kujilinda dhidi ya mashambulizi ya korela"
+
+msgid "Startup Delay"
+msgstr "Muda wa Kusubiri wa Kuanza"
+
+msgid "Minimum"
+msgstr "Minimali"
+
+msgid "Minimum startup delay"
+msgstr "Muda wa kusubiri wa kuanza wa chini"
+
+msgid "seconds"
+msgstr "sekunde"
+
+msgid "Maximum"
+msgstr "Kamili"
+
+msgid "Maximum startup delay"
+msgstr "Muda wa kusubiri wa kuanza wa juu"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Ongeza muda wa kusubiri wa nasibu kabla ya kufungwa kwa tuneli, kisha anza mchakato wa kufungwa kwa utaratibu / kuanzishaji upya wa routeri"
+
+msgid "Shutdown Delay"
+msgstr "Muda wa Kusubiri wa Kufungwa"
+
+msgid "Minimum shutdown delay"
+msgstr "Muda wa kusubiri wa kufungwa wa chini"
+
+msgid "Maximum shutdown delay"
+msgstr "Muda wa kusubiri wa kufungwa wa juu"
+
+msgid "Website Hostname"
+msgstr "Jina la Mashine la Tovuti"
+
+msgid "(leave blank for outproxies)"
+msgstr "(acha wazi kwa outproxies)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "Jina la mashine la tovuti k.v. mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "Eleza bandari ambayo seva inaendesha kwenye"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "Kiolesura cha kusikiliza (anwani ya IP) kwa ufikiaji wa mteja (kawaida 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "Ili kuepuka kukanusa trafiki unapounganisha kwa seva iliyo mbali, unaweza kuwasha muunganisho wa SSL. Kumbuka kwamba seva lengwa lazima isanidiwe ili ikubali muunganisho wa SSL."
+
+msgid "Use SSL to connect to target"
+msgstr "Tumia SSL kwa kunganisha kwa lengo"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "Bandari inayohitajika ili kufikia huduma (hii inaweza kuwa tofauti na bandari ambayo huduma inahostiriwa kwenye)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "Tengeneza msimbo wa QR kwa domaini hii"
+
+msgid "Generate QR Code"
+msgstr "Tengeneza Msimbo wa QR"
+
+msgid "Add to Private addressbook"
+msgstr "Ongeza kwenye Kitabu cha Anwani Bina"
+
+msgid "Add to local addressbook"
+msgstr "Ongeza kwenye kitabu cha anwani cha ndani"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "Sajili, futa usajili au badilisha taarifa za jina la mashine"
+
+msgid "Registration Authentication"
+msgstr "Uthibitisho wa Usajili"
+
+msgid "HTTPS configuration"
+msgstr "Mipangilio ya HTTPS"
+
+msgid "SSL Wizard"
+msgstr "Mwongoza wa SSL"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "Note: Ili kuwasha kutengeneza msimbo wa QR au uthibitisho wa usajili, sanidia sehemu ya Jina la Mashine la Tovuti (kwa tovuti) au sehemu ya Jina (kwa kila kitu kingine) hapo juu kwa jina la mashine lililofikishwa na .i2p k.v. mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "Njia kamili hadi faili ya ufafanuzi bina (itafanywa ikiwa haipo)"
+
+msgid "Alternate private key file"
+msgstr "Faili mbadala ya ufafanuzi bina"
+
+msgid "Alternate local destination"
+msgstr "Lengo mbadala la ndani"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "Njia kamili kwa ufafanuzi mpya (utafanywa)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "Soma tu: Lengo Mbadala la Ndani"
+
+msgid "Specify filename or full path for new key"
+msgstr "Eleza jina la faili au njia kamili kwa ufafanuzi mpya"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "Mipangilio hayabadiliki baada ya lengo kutengenezwa"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "Mipangilio ya aina ya saini yanapatikana tu pale tuneli inapotengenezwa kwa mara ya kwanza. Kubadilisha, lazima utengeneze tuneli mpya."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "Chaguo la zamani, lenye ufafanuzi mbadala uliosanidiwa"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Chaguo la zamani (limesitwa), linalotolewa kwa utumiaji wa nyuma"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "Inavyopendekezwa kwa malengo yaliyofichwa na yaliyousimbuziwa"
+
+msgid "Inbound"
+msgstr "Kuingia"
+
+msgid "Outbound"
+msgstr "Kutoka"
+
+msgid "no anonymity"
+msgstr "hakuna usiri"
+
+msgid "low anonymity"
+msgstr "usiri wa chini"
+
+msgid "medium anonymity"
+msgstr "usiri wa wastani"
+
+msgid "high anonymity"
+msgstr "usiri mkubwa"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "Kiwango cha Uwabindu kwa Unene wa Tuneli"
+
+msgid "very high randomization, very low performance"
+msgstr "uwabindu mkubwa sana, utendaji wa chini sana"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ hitubako ya 0-3 hop"
+
+msgid "definitely not recommended"
+msgstr "hakupendekezwi kabisa"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- hitubako ya 0-3 hop"
+
+msgid "backup tunnels"
+msgstr "tuneli za nakala rudufu"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "Punguza tuneli ili kuhifadhi rasilimali"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "Kipindi cha kutotumika kabla ya idadi ya tuneli kupunguzwa"
+
+msgid "minutes"
+msgstr "dakika"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "Idadi ya tuneli za kuweka wazi ili kudumisha upatikani wa huduma"
+
+msgid "Server Access Options"
+msgstr "Vichaguo vya Ufikiaji wa Seva"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "Zuia wateja kufikia huduma hii kupitia inproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "Zuia Ufikiaji kupitia Inproxies"
+
+msgid "Block Accesses containing Referers"
+msgstr "Zuia Maombi Yaliyo na Referer"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "Tumia anwani tofauti za IP kwa kila mteja anayeunganisha (seva za ndini zisizo za SSL pekee)"
+
+msgid "Unique Local Address per Client"
+msgstr "Anwani ya Ndani Unikufu kwa kila Mteja"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "Washa tu ikiwa unahosti huduma hii kwenye routeri nyingi"
+
+msgid "Optimize for Multihoming"
+msgstr "Boresha kwa Multihoming"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "Kataa User-Agents zinazolingana na mfuatano huu (nadra kutoka kwenye inproxies)"
+
+msgid "Block these User-Agents"
+msgstr "Zuia User-Agents hizi"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "zilizotenganishwa kwa koma, k.v. Mozilla,Opera (huzani ukubwa)"
+
+msgid "Encrypt Leaseset"
+msgstr "Simbuza LeaseSet"
+
+msgid "Optional Lookup Password"
+msgstr "Nenosiri cha Kutatua (si lazima)"
+
+msgid "Keyring Manager"
+msgstr "Msimamizi wa Ufafanuzi"
+
+msgid "Allow all clients to connect to this service"
+msgstr "Ruhusu wateja wote kuunganisha kwenye huduma hii"
+
+msgid "Send key to all users."
+msgstr "Tuma ufafanuzi kwa watumiaji wote."
+
+msgid "Encrypted"
+msgstr "Imesimbuziwa"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "Inazuia ugunduzi wa seva na floodfill"
+
+msgid "Blinded"
+msgstr "Imeyofichwa"
+
+msgid "Send password to all users."
+msgstr "Tuma nenosiri kwa watumiaji wote."
+
+msgid "Blinded with lookup password"
+msgstr "Imeyofichwa kwa nenosiri cha kutatua"
+
+msgid "Send key and password to all users."
+msgstr "Tuma ufafanuzi na nenosiri kwa watumiaji wote."
+
+msgid "Encrypted with lookup password"
+msgstr "Imesimbuziwa kwa nenosiri cha kutatua"
+
+msgid "Send individual key to each user."
+msgstr "Tuma ufafanuzi binafsi kwa kila mtumiaji."
+
+msgid "Encrypted with per-user key"
+msgstr "Imesimbuziwa kwa ufafanuzi wa kila mtumiaji"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "Imesimbuziwa kwa nenosiri cha kutatua na ufafanuzi wa kila mtumiaji"
+
+msgid "Enter key from each user."
+msgstr "Ingiza ufafanuzi kutoka kwa kila mtumiaji."
+
+msgid "Encryption Key"
+msgstr "Ufafanuzi wa Usimbuzi"
+
+msgid "Generate New Key"
+msgstr "Tengeneza Ufafanuzi Mpya"
+
+msgid "Encryption key required to access this service"
+msgstr "Ufafanuzi wa usimbuzi uhitajika ili kufikia huduma hii"
+
+msgid "Generate new encryption key"
+msgstr "Tengeneza ufafanuzi mpya wa usimbuzi"
+
+msgid "Tunnel must be stopped first"
+msgstr "Tuneli lazima isitishwe kwanza"
+
+msgid "Client Manager"
+msgstr "Msimamizi wa Wateja"
+
+msgid "Client Name"
+msgstr "Jina la Mteja"
+
+msgid "Client Key"
+msgstr "Ufafanuzi wa Mteja"
+
+msgid "Revoke"
+msgstr "Ghairi"
+
+msgid "Add"
+msgstr "Ongeza"
+
+msgid "Restricted Access List"
+msgstr "Orodha ya Ufikiaji Iliyorogatiwa"
+
+msgid "Activate to enable editing"
+msgstr "Washa ili kuruhusu kuhariri"
+
+msgid "Tunnel Filter"
+msgstr "Kichujaji cha Tuneli"
+
+msgid "Help with defining tunnel filters"
+msgstr "Msaada wa kufafanua vichujaji vya tuneli"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "Zuia wateja waliomoorodheshwa kuwagunganisha kwenye huduma hii"
+
+msgid "Blacklist"
+msgstr "Orodha Nyeusi"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "Ruhusu tu wateja waliomoorodheshwa kuunganisha kwenye huduma hii"
+
+msgid "Whitelist"
+msgstr "Orodha Nyeupe"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "Njia kamili hadi faili inayoshikilia ufafanuzi wa kichujaji"
+
+msgid "Absolute path to filter definition"
+msgstr "Njia kamili hadi ufafanuzi wa kichujaji"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "Eleza malengo ya wateja, kimoja kwa kila mstari"
+
+msgid "Server Throttling"
+msgstr "Kudhibiti Kasi ya Seva"
+
+msgid "Inbound connection limits"
+msgstr "Vikomo vya muunganisho wa kuingia"
+
+msgid "Per Minute"
+msgstr "Kwa Dakika"
+
+msgid "Per Hour"
+msgstr "Kwa Saa"
+
+msgid "Per Day"
+msgstr "Kwa Siku"
+
+msgid "Concurrent"
+msgstr "Zinazoendelea pamoja"
+
+msgid "Per Client"
+msgstr "Kwa Kila Mteja"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "Idadi kamili ya maombi ya kurasa za tovuti kwa dakika kwa mteja mmoja kabla ya ufikiaji wa seva kuzuiwa"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = hakuna kikomo)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "Idadi kamili ya maombi ya kurasa za tovuti kwa saa kwa mteja mmoja kabla ya ufikiaji wa seva kuzuiwa"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "Idadi kamili ya maombi ya kurasa za tovuti kwa siku kwa mteja mmoja kabla ya ufikiaji wa seva kuzuiwa"
+
+msgid "Total"
+msgstr "Jumla"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "Jumla ya maombi ya kurasa za tovuti kwa dakika kabla ya ufikiaji wa seva kuzuiwa"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "Jumla ya maombi ya kurasa za tovuti kwa saa kabla ya ufikiaji wa seva kuzuiwa"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "Jumla ya maombi ya kurasa za tovuti kwa siku kabla ya ufikiaji wa seva kuzuiwa"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "Idadi kamili ya muunganisho wa wateja unaoendelea kwa wakati mmoja"
+
+msgid "POST limits"
+msgstr "Vikomo vya POST"
+
+msgid "Per Period"
+msgstr "Kwa Kila Kipindi"
+
+msgid "Ban Duration"
+msgstr "Muda wa Banzi"
+
+msgid "POST limit period"
+msgstr "Kipindi cha kikomo cha POST"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "Idadi kamili ya maombi ya POST yaliyoruhusiwa kwa mteja mmoja kwa muda uliosanidiwa"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "Mteja akipita idadi kamili ya maombi ya POST kwa kila kipindi kilichotengwa, anza banzi ya dakika hizi"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "Muda wa kufikia idadi kamili ya maombi ya POST kabla ya kuanzishwa banzi"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "Jumla ya maombi ya POST yaliyoruhusiwa kwa muda uliosanidiwa"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "Ikiwa idadi kamili ya maombi ya POST kwa kila kipindi kilichotengwa imepitwa, anza banzi ya ufikiaji kwa jumla ya dakika hizi"
+
+msgid "Custom HTTP Headers"
+msgstr "Vichwa vya HTTP Maalum"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "Note: Vichwa hivi maalum vitawashwa tu kwa faili zinazotolewa ambazo havina kichwa husika kilichowekwa tayari."
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "Weka kichwa cha Allow kuwa 'GET, POST, HEAD' kwa faili za html, xml, json na za maandishi"
+
+msgid "Allow"
+msgstr "Ruhusu"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "Washa vichwa vya Cache-Control (hakuna-cache kwa html, xml, json na maandishi, hazibadiliki kwa kila kitu kingine)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "Weka kichwa cha Referrer-Policy kuwa 'same-origin' kwa faili za html, xml, json na za maandishi"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "Weka kichwa cha X-Content-Type-Options kuwa 'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "Inaanzisha Msimamizi wa Tuneli{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "Tuneli bado hazijaanzishwa; tafadhali jaribu tena baada ya sekunde chache."
+
+msgid "Status Messages"
+msgstr "Ujumbe wa Hali"
+
+msgid "Clear"
+msgstr "Futa"
+
+msgid "Refresh"
+msgstr "Onyesha upya"
+
+msgid "Global Tunnel Control"
+msgstr "Udhibiti wa Tuneli Duniani"
+
+msgid "Tunnel Wizard"
+msgstr "Mwongoza wa Tuneli"
+
+msgid "Stop All"
+msgstr "Sitisha Zote"
+
+msgid "Start All"
+msgstr "Anza Zote"
+
+msgid "Restart all running tunnels"
+msgstr "Anza upya tuneli zote zinazoendesha"
+
+msgid "Restart All"
+msgstr "Anza Upya Zote"
+
+msgid "Restart all running server tunnels"
+msgstr "Anza upya tuneli za seva zote zinazoendesha"
+
+msgid "Restart All Servers"
+msgstr "Anza Upya Seva Zote"
+
+msgid "Restart all running client tunnels"
+msgstr "Anza upya tuneli za mteja zote zinazoendesha"
+
+msgid "Restart All Clients"
+msgstr "Anza Upya Wateja Wote"
+
+msgid "I2P Server Tunnels"
+msgstr "Tuneli za Seva ya I2P"
+
+msgid "Helper"
+msgstr "Msaidia"
+
+msgid "Type"
+msgstr "Aina"
+
+msgid "Points at"
+msgstr "Inaelekea kwenye"
+
+msgid "Preview"
+msgstr "Onyesho la awali"
+
+msgid "Status"
+msgstr "Hali"
+
+msgid "Control"
+msgstr "Udhibiti"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "Hariri Mipangilio ya Tuneli ya Seva ya"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "Jaribu seva ya IRC, ukiruka I2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "Jaribu seva ya HTTPS, ukiruka I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "Jaribu seva ya HTTP, ukiruka I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "Jaribu seva ya HTTP kupitia I2P"
+
+msgid "Base32 Address"
+msgstr "Anwani ya Base32"
+
+msgid "Offline"
+msgstr "Haijaunganishwa"
+
+msgid "No Preview"
+msgstr "Hakuna Onyesho la awali"
+
+msgid "Starting..."
+msgstr "Inaanza..."
+
+msgid "Starting in"
+msgstr "Inaanza baada ya"
+
+msgid "Running"
+msgstr "Inaendesha"
+
+msgid "Hops"
+msgstr "Hops"
+
+msgid "in"
+msgstr "Kuingia"
+
+msgid "out"
+msgstr "Kutoka"
+
+msgid "Stopped"
+msgstr "Imesimamishwa"
+
+msgid "Stop this Tunnel"
+msgstr "Sitisha Tuneli Hii"
+
+msgid "Restart this Tunnel"
+msgstr "Anza Upya Tuneli Hii"
+
+msgid "Restart"
+msgstr "Anza Upya"
+
+msgid "Signature"
+msgstr "Saini"
+
+msgid "Alternate"
+msgstr "Mbadala"
+
+msgid "Alt Destination"
+msgstr "Lengo Mbadala"
+
+msgid "Encryption"
+msgstr "Usimbuzi"
+
+msgid "Supported encryption"
+msgstr "Usimbuzi Unaungwa"
+
+msgid "New server tunnel"
+msgstr "Tuneli mpya ya seva"
+
+msgid "Standard"
+msgstr "Kawaida"
+
+msgid "Create"
+msgstr "Tengeneza"
+
+msgid "I2P Client Tunnels"
+msgstr "Tuneli za Mteja za I2P"
+
+msgid "Interface"
+msgstr "Kiolesura"
+
+msgid "Edit Tunnel Settings for"
+msgstr "Hariri Mipangilio ya Tuneli ya"
+
+msgid "Standby"
+msgstr "Inasubiri"
+
+msgid "Outproxy"
+msgstr "Outproxy"
+
+msgid "internal plugin"
+msgstr "kiendeshaji cha ndani"
+
+msgid "none"
+msgstr "Hakuna"
+
+msgid "New client tunnel"
+msgstr "Tuneli mpya ya mteja"
+
+msgid "Registration Helper"
+msgstr "Msaidia wa Usajili"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "Huduma hii hutumia LeaseSet zilizosimbuziwa. Usajili hakupendekezwi. Uthibitisho wa usajili umezimwa."
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "Tafadhali hakikishe kwamba umechagua, umenakili, na umeweka maudhui yote ya data ya uthibitisho inayofaa kwenye fomu ya tovuti yakuu ya usajili uliyopenda"
+
+msgid "Tunnel name"
+msgstr "Jina la tuneli"
+
+msgid "Website name"
+msgstr "Jina la tovuti"
+
+msgid "Local Destination"
+msgstr "Lengo la Ndani"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "Lengo la ndani halipatikani. Anza tuneli."
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "Ili kuwasha uthibitisho wa usajili, hariri tuneli na weka jina (au jina la tovuti) kuwa jina halali la mashine linaloisha na '.i2p'"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "Ili kuwasha uthibitisho wa usajili, hariri tuneli na weka jina kuwa jina halali la mashine linaloisha na '.i2p'"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "Ufafanuzi wa kusaini wa lengo haupatikani. Anza tuneli."
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "Ufafanuzi wa kusaini wa lengo umeja nje ya mtandao. Tumia zana za CLI kwenye mashine hiyo nje ya mtandao."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "Uthibitisho wa kuongeza mashine {0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "Nakili na uweke hii kwenye tovuti ya usajili"
+
+msgid "Advanced authentication strings"
+msgstr "Mfuatano wa uthibitisho wa juu"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "Uthibitisho wa kuondoa mashine {0}"
+
+msgid "Authentication for changing name"
+msgstr "Uthibitisho wa kubadilisha jina"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "Hii itabadilisha jina kutoka {0} hadi {1}, kwa kutumia lengo ileile"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "Tuneli hii lazima isanidiwe kwa jina jipya la mashine."
+
+msgid "Enter old hostname below."
+msgstr "Ingiza jina la mashine la awali hapa chini."
+
+msgid "Authentication for adding alias"
+msgstr "Uthibitisho wa kuongeza jina lingine"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "Hii itaongeza jina lingine {0} la {1}, kwa kutumia lengo ileile"
+
+msgid "Authentication for changing destination"
+msgstr "Uthibitisho wa kubadilisha lengo"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "Hii itabadilisha lengo la {0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "Tuneli hii lazima isanidiwe kwa lengo jipya."
+
+msgid "Enter old destination below."
+msgstr "Ingiza lengo la awali hapa chini."
+
+msgid "Authentication for adding alternate destination"
+msgstr "Uthibitisho wa kuongeza lengo mbadala"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "Hii itaongeza lengo mbadala kwa {0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "Uthibitisho wa kuongeza subdomaini"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "Hii itaongeza subdomaini {0} ya {1}, yenye lengo tofauti"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "Tuneli hii lazima isanidiwe kwa subdomaini jipya na lengo jipya."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "Ingiza domaini ya kiwango cha juu na lengo hapa chini."
+
+msgid "Return to Tunnel Configuration"
+msgstr "Rudi kwenye Mipangilio ya Tuneli"
+
+msgid "Specify old name and destination"
+msgstr "Weka jina la awali na lengo"
+
+msgid "This is only required for advanced authentication."
+msgstr "Hii inahitajika tu kwa uthibitisho wa juu."
+
+msgid "See above for required items."
+msgstr "Tazama hapa juu kwa vitu vinavyohitajika."
+
+msgid "Old / parent hostname "
+msgstr "Jina la mashine la awali / la mzazi "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "Faili ya ufafanuzi bina ya lengo la awali / mzazi wa subdomaini"
+
+msgid "Generate Authentication"
+msgstr "Tengeneza Uthibitisho"
+
+msgid "SSL Helper"
+msgstr "Msaidia wa SSL"
+
+msgid "Experts only!"
+msgstr "Wa wataalamu tu!"
+
+msgid "Alt Base32"
+msgstr "Base32 Mbadala"
+
+msgid "Incoming I2P Port Routing"
+msgstr "Usambazaji wa Bandari Zinazoingia za I2P"
+
+msgid "Virtual Host"
+msgstr "Mashine Virtuali"
+
+msgid "Via SSL?"
+msgstr "Kupitia SSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "Jaribu seva ya HTTPS kupitia I2P"
+
+msgid "Server"
+msgstr "Seva"
+
+msgid "SSL Activation"
+msgstr "Uanzishaji wa SSL"
+
+msgid "I2P webserver (eepsite)"
+msgstr "Seva ya tovuti ya I2P (eepsite)"
+
+msgid "Disable SSL"
+msgstr "Zima SSL"
+
+msgid "Enable SSL"
+msgstr "Washa SSL"
+
+msgid "New Certificate Password"
+msgstr "Nenosiri Jipya la Cheti"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "Nenosiri (inahitajika ili kusimbuza cheti)"
+
+msgid "Generate new SSL certificate"
+msgstr "Tengeneza cheti mpya cha SSL"
+
+msgid "Generate SSL certificate and enable"
+msgstr "Tengeneza cheti cha SSL na uwashe"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "Haiwezekani kusanidi, hakuna seva ya Jetty iliyopatikana katika {0}mipangilio ya wateja{1} zinayolingana na tuneli hii"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "Msaada wa seva zisizo za Jetty utaongezwa katika tobao lijalo"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "Rudi kwenye Ukurasa wa Nyumbari wa Msimamizi wa Tuneli"
+
+msgid "Return to Tunnel Editor"
+msgstr "Rudi kwenye Mhariri wa Tuneli"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "Msimamizi wa Tuneli wa I2P - Mwongoza wa Kutengeneza Tuneli"
+
+msgid "Server or client tunnel?"
+msgstr "Tuneli ya seva au ya mteja?"
+
+msgid "Tunnel type"
+msgstr "Aina ya tuneli"
+
+msgid "Tunnel name and description"
+msgstr "Jina na maelezo ya tuneli"
+
+msgid "Tunnel destination"
+msgstr "Lengo la tuneli"
+
+msgid "Binding address and port"
+msgstr "Anwani ya kujaza na bandari"
+
+msgid "Tunnel auto-start"
+msgstr "Anza kiotomatiki tuneli"
+
+msgid "Wizard completed"
+msgstr "Mwongoza umekamilika"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "Mwongoza huu utakuongoza kupitia vichaguo mbalimbali vinavyopatikana vya kutengeneza tuneli ndani ya I2P."
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "Jambo la kwanza la kuamua ni kama unataka kutengeneza tuneli ya seva au ya mteja."
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "Kama unahitaji kuunganisha kwa huduma ya mbali, kama seva ya IRC ndani ya I2P au kanzidata ya msimbo, basi utahitaji tuneli ya MTETJA."
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "Kwa upande mwingine, kama unataka kuhosti huduma ili wengine waunganishe naye, utahitaji kutengeneza tuneli ya SEVA."
+
+msgid "Server Tunnel"
+msgstr "Tuneli ya Seva"
+
+msgid "Client Tunnel"
+msgstr "Tuneli ya Mteja"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "Kuna aina mbalimbali za tuneli zinazoziwa kuchagua:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "Tuneli ya msingi ya kuunganisha kwa huduma moja ndani ya I2P."
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "Jaribu hii kama hakuna aina ya tuneli hapa chini inayolingana na mahitaji yako, au kama huna jinsi ya aina ya tuneli inayohitaji."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "Tuneli inayofanya kazi kama proksi ya HTTP kufikia eepsites ndani ya I2P."
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "Weka kivinjari chenu kutumia tuneli hii kama proksi ya http, au weka kiambishi chako cha mazingira \"http_proxy\" kwa programu za mstari wa amri katika GNU/Linux."
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "Tovuti nje ya I2P pia zinaweza kufikiliwa kama proksi ya HTTP ndani ya I2P inajulikana."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "Tuneli ya mteja iliyobadilishwa kwa ajili ya muunganisho wa IRC."
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "Kwa aina hii ya tuneli, mteja wako wa IRC utaweza kuunganisha kwenye mtandao wa IRC ndani ya I2P."
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "Kila mtandao wa IRC ndani ya I2P unaotaka kuunganishwa utahitaji tuneli yake. (Angalia pia, IRC ya SOCKS)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "Tuneli inayotekeleza itaratibu ya SOCKS."
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "Hii inaruhusu muunganisho wote wa TCP na UDP kufanywa kupitia outproxy ya SOCKS ndani ya I2P."
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "Tuneli ya mteja inayotekeleza itaratibu ya SOCKS, iliyobadilishwa kwa ajili ya kuunganisha kwa mitandao ya IRC."
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "Kwa aina hii ya tuneli, mitandao ya IRC ndani ya I2P inaweza kufikiliwa kwa kuandika anwani ya I2P kwenye mteja wako wa IRC, na kusanidi mteja wa IRC kutumia tuneli hii ya SOCKS."
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "Hii inaamaanisha kwamba tuneli moja tu ya I2P inahitajika badala ya tuneli tofauti kwa kila mtandao wa IRC."
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "Mitandao ya IRC nje ya I2P pia inaweza kufikiliwa kama outproxy ya SOCKS ndani ya I2P inajulikana, ingawa inategemea kama outproxy imezuiwa na mtandao wa IRC au haujazuiwa."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "Tuneli ya msingi ya seva ya kuhosti huduma ya kawaida ndani ya I2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "Tuneli ya seva iliyobadilishwa kwa ajili ya muunganisho wa HTTP."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "Tumia aina hii ya tuneli kama unataka kuhosti eepsite."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "Tuneli ya seva iliyobadilishwa kwa kuhosti mitandao ya IRC ndani ya I2P."
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "Kwa kawaida, tuneli tofauti inahitajika kutengenezwa kwa kila seva ya IRC ambayo itapaswa kupatikana ndani ya I2P."
+
+msgid "Select tunnel type"
+msgstr "Chagua aina ya tuneli"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "Chagua jina na maelezo kwa tuneli yako."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "Zinaweza kuwa chochote unavyotaka - zinatumika tu kwa kurahisi kutambua tuneli katika routerconsole."
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "Kama unajua kwa outproxy yoyote ya aina hii ya tuneli (ama ya HTTP au ya SOCKS), jaza hapa chini."
+
+msgid "Separate multiple proxies with commas."
+msgstr "Tenga proksi nyingi kwa koma."
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "Orodha ya malengo ya outproxy za I2P, yaliyotengwa kwa koma (k.m. proxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "Andika lengo la I2P la huduma ambayo tuneli hii ya mteja inapaswa kuunganisha."
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "Hii inaweza kuwa ufafanuzi kamili wa lengo wa Base64, au URL ya I2P kutoka kitabu chenu cha anwani."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "Ingiza anwani ya b64 au .i2p hapa"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "Hii ndiyo IP ambayo huduma yako inafanya kazi, kwa kawaida iko kwenye mashine ileile kwa hivyo 127.0.0.1 imeweka kiotomatiki."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "Hii ndiyo bandari ambayo huduma inapokea muunganisho."
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "Hii ndiyo bandari ambayo tuneli ya mteja itafikiliwa kutoka ndani."
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "Ungependa tuneli hii ifikiliwe vipi? Na mashine hii pekee, mtandao wote wako, au mtandao wa nje?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "Huenda ungependa kuruhusu tu 127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "Routeri ya I2P inaweza kuanza tuneli hii kwa ajili yako kiotomatiki pale routeri inapozishwa."
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "Hii inaweza kuwa na manufaa kwa tuneli zinazotumika mara kwa mara (hasa tuneli za seva), lakini kwa tuneli zinazotumika mara chache tu itamaanisha kwamba routeri ya I2P inatengeneza na kudumisha tuneli zisizohitajika."
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "Mwongoza sasa umekusanya taarifa za kutosha kutengeneza tuneli yako."
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "Unapobofya kitufe cha Hifadhi hapa chini, mwongoza utaandaa tuneli, na kukuleta kurudi kwenye kurasa kuu ya I2PTunnel."
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "Kwa sababu ulichagua kuanza tuneli kiotomatiki pale routeri inapozishwa, huna lazima ufanye chochote kingine."
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "Routeri itaanza tuneli mara tu itakapopoandaa."
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "Kwa sababu ulichagua kusiuanze tuneli kiotomatiki, lazima uianze mwa mkono."
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "Unaweza kufanya hivi kwa kubofya kitufe cha Anza kwenye kurasa kuu inayolingana na tuneli mpya."
+
+msgid "Below is a summary of the options you chose:"
+msgstr "Hapa chini kuna muhtasari wa vichaguo ulivyochagua:"
+
+msgid "Tunnel description"
+msgstr "Maelezo ya tuneli"
+
+msgid "Binding address"
+msgstr "Anwani ya kujaza"
+
+msgid "Tunnel port"
+msgstr "Bandari ya tuneli"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "Pamoja na mipangilio hii ya msingi, kuna chaguo nyingi za juu za sanidi ya tuneli."
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "Mwongoza utaweka thamani za default zinazofaa kwa hivi, lakini unaweza kuona na/au kuhariri kwa kubofya jina la tuneli kwenye kurasa kuu ya I2PTunnel."
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "Ghairi mwongoza na urudi kwenye ukurasa mkuu wa Msimamizi wa Tuneli"
+
+msgid "Return to previous page"
+msgstr "Rudi kwenye kurasa iliyotangulia"
+
+msgid "Previous"
+msgstr "Iliyotangulia"
+
+msgid "Save tunnel configuration"
+msgstr "Hifadhi mipangilio ya tuneli"
+
+msgid "Save Tunnel"
+msgstr "Hifadhi Tuneli"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "Maliza mwongoza na pitia mipangilio ya tuneli"
+
+msgid "Finish"
+msgstr "Maliza"
+
+msgid "Advance to next page"
+msgstr "Endelea hadi ukurasa ujao"
+
+msgid "Next"
+msgstr "Ifuatayo"

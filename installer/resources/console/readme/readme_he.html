@@ -1,0 +1,70 @@
+<div lang="he">
+
+<ul class=links>
+
+<li><b>תחילת העבודה</b><br>
+אם הפעלתם את I2P+ זה עתה, מספר <i>peers פעילים</i> שמוצג בסעיף <i>peers</i> בסרגל הצד אמור להתחיל לגדול במהלך הדקות הקרובות, וכן תראו <i>יעד מקומי</i> בשם <i>Shared Clients</i> רשום תחת הסעיף <i>מנהורי שירות</i>, וייתכן שיופיעו גם לקוחות ושרתים אחרים בהתאם לאופן שבו I2P מוגדר. <i>יעדים מקומיים</i> אלה מספקים חיבורים לשירותים ב<a href="/help/faq#portfaq" title="רשימת פורטים נפוצים" class=consolelink>פורטים</a> שונים ברשת I2P, מה שמאפשר את פעילות BitTorrent, הדוא"ל, פרוקסי האינטרנט ושירותים אחרים. <a href="/netdb" class=consolelink>מסד נתוני הרשת</a> שלכם מציג את כל ה־peers הידועים מקומית ברשת. תוכלו גם לנטר <a href="/peers" class=consolelink>חיבורי peer</a> קיימים, לסקור <a href="/profiles?f=1" class=consolelink>פרופילי ביצועים של peer</a>, ולהציג <a href="/tunnels" class=consolelink>מנהורים</a> פעילים ואת מצבם.</li>
+
+<li><b>שילוב ברשת</b><br>
+בהפעלה הראשונה של I2P+ עשויות לחלוף כמה דקות עד שהמערכת תאתחל אתכם (תשלום אתכם) ברשת ותאתר peer נוספים כדי לייטב את השילוב שלכם, לכן נא להמתין. ברגע שכוכבים ירוקים יופיעו ליד ה<i>יעדים המקומיים</i> שלכם תחת <i>מנהורי שירות</i> בסרגל הצד, תוכלו לעשות עם I2P דברים רבים, ולהלן מוצגת לכם חלק מהם.</li>
+
+<li><b>מצב הרשת</b><br>
+לאחר ש־I2P+ הספיק לבדוק את חיבוריות הרשת שלכם, מחוון "מצב הרשת" בסרגל הצד אמור, במצב אופטימלי, להציג "תקין". אם המצב מציג "מאחורי חומת אש", I2P+ עדיין יפעל, אך ביצועי הרשת לא יהיו מיטביים והיכולת שלכם לתרום רוחב פס לרשת תיפגע. לקבועת ביצועים מיטביים, שקולו לפתוח את <a href="/confignet#udpconfig" class=consolelink>הפורט החיצוני של I2P+</a> בחומת האש שלכם ובנתב שסיפק ספק האינטרנט שלכם. מידע נוסף על הודעות המצב זמין ב<a href="/help/ui#reachabilityhelp" class=consolelink>דף העזרה של ממשק המשתמש</a>.</li>
+
+<li><b>מינויי פנקס כתובות</b><br>
+כדי ש־I2P+ יוכל לפענח שמות מחשבים מסוג .i2p באופן אוטומטי, הוא נשען בעיקר על מינויים לשירותים המספקים תרגום DNS עבור מחשבים מוכרים. אם התקנתם את I2P+ במקום לשדרג מ־I2P, כבר יהיו לכם מוגדרים מספיק <a href="/dns?subscriptions" class=consolelink>מינויי פנקס כתובות</a>; לאחר ההתקנה, <a href="/dns" class=consolelink>פנקס הכתובות</a> שלכם אמור להתמלא בשמות מחשבים של שירותים פעילים ברשת ללא התערבות מצדכם. אם שדרגתם מ־I2P, עיינו ב<a href="/help/faq#addressbooksubs" class=consolelink>מקטע מינויי פנקס הכתובות</a> שב<a href="/help/faq" class=consolelink>שאלות נפוצות</a> לקבלת עזרה בהוספת מינויים נוספים.
+</li>
+
+<li><b>הגדרת הדפדפן</b><br>
+כדי לגלוש באתרים שברשת, עליכם להגדיר את הדפדפן שלכם לשימוש בפרוקסי ברירת המחדל של HTTP המוגדר על פורט 4444, המספק גם <i>outproxy</i> המאפשר גלישה אנונימית באתרי clearnet. <a href="/help/configuration#browserconfig" class=consolelink>מדריך קצר להגדרת Firefox</a> מסופק בדף ההגדרות שבמקטע העזרה, או שאתם יכולים לעיין במקטע שלהלן כדי לקבל קישור למדריך הגדרה למספר דפדפנים. לאחר שהגדרתם את הדפדפן ואת מינויי פנקס הכתובות, <a href="http://notbob.i2p/" target=_blank>notbob.i2p</a> הוא אתר מצוין לגילוי תוכן ברשת.
+</li>
+
+</ul>
+
+<h3>שירותים ב־I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>אינטרנט בלתי נראה &amp; גלישה באינטרנט הציבורי</b><br>
+ב־I2P תוכלו לגשת לאתרים המתארחים ב־I2P ("eepsites") או לגלוש באינטרנט הרגיל באופן אנונימי דרך פרוקסי האינטרנט המובנה של I2P (outproxy). <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>הגדירו את הדפדפן שלכם</a> לשימוש בפרוקסי HTTP שכתובתו <code>127.0.0.1 port 4444</code>, ולאחר מכן גלו לאתר של שירות סודי או לכתובת <code>http://</code> רגילה שאינה מוצפנת. כדי להשבית או לשנות את גישת ה־outproxy לאינטרנט הרגיל, הסירו או שינו את רשומת ה־outproxy עבור <code>false.i2p</code> או <code>purokishi.i2p</code> תחת הסעיף <i>Outproxies</i> ב<a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>דף העריכה</a> של מנהור הלקוח HTTP Proxy ב<a href="/i2ptunnelmgr" class=consolelink>מנהל המנהורים</a>.</li>
+
+<li><b>דוא"ל אנונימי</b><br>
+מערכת הדואר של Postman המבוססת על I2P נגישה הן דרך <a href="/webmail" class=consolelink>לקוח הדואר המובנה של I2P</a> (Susimail) והן דרך כל לקוח דואר סטנדרטי. שער דואר מאפשר קבלת דואר מכתובות אינטרנט רגילות; גם כתובת ה־<code>@mail.i2p</code> שלכם ניתנת ליצירת קשר דרך <code>@i2pmail.org</code>. לקבלת חשבון, בקרו ב<a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
+
+<li><b>העברת קבצים אנונימית</b><br>
+<a href="/torrents" class=consolelink>I2PSnark</a> משולב בתוך I2P ומספק העברות BitTorrent אנונימיות ומוצפנות. לחלופין, קיים <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a> (היורש של Azureus/Vuze), לקוח BitTorrent התומך בהורדת torrents דרך I2P, וכן <a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a>, לקוח BitTorrent הייעודי ל־I2P שנכתב ב־go. שירותים נוספים כוללים אחסון קבצים באמצעות דפדפן, כגון <a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a> ו־<a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>שיחה אנונימית</b><br>
+הפעילו את לקוח ה־IRC שלכם (לדוגמה <a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>) והתחברו אל <a href="irc://127.0.0.1:6668/i2p" class=chatlink>השרת</a> שכתובתו <code>127.0.0.1 port 6668</code>. אין צורך להגדיר פרוקסי בלקוח ה־IRC שלכם; I2P מספק לכם מנהור IRC מקומי (המוגדר בלקוח ה־IRC שלכם כשרת IRC או כמחשב מארח מרוחק). ברגע שתגיעו לשם, <code>#saltr</code> ו־<code>#i2p-dev</code> הם רק כמה מהערוצים הזמינים שתוכלו להצטרף אליהם. קיימת גם אפליקציית מסרים מיידיים רב־פלטפורמית המבוססת על I2P, הזמינה ב<a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>אחסון אתרים אנונימי ומוצפן</b><br>
+I2P מגיע עם שרת אינטרנט לאחסון האתר שלכם עצמכם ברשת I2P: מופע <a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a> שמאזין בכתובת <a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>. לאחר הפעלת <a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>מנהור שרת האינטרנט של I2P</a> המוגדר מראש, האתר שלכם יהיה גלוי (אך לא ניתן לאיתור) עבור אחרים. הוראות להגדרת האתר ולרישום דומיין מסוג .i2p מסופקות ב<a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>מקטע העזרה</a>.</li>
+
+<li id=plugins><b>תוספים עבור I2P</b><br>
+בקרו ב<a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>דף התוספים של zzz</a> לקבלת קישורי הורדה ישירים לכמה תוספים. אם אתם מפתחים, מסופק <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>מסגרת</a> לא תלוית־שפה לכתיבת תוספים משלכם.</li>
+
+</ul>
+
+<h3 id=trouble>מידע למפתחים ולתורמים</h3>
+
+<ul class=links>
+
+<li><b>דיווח על תקלות</b><br>
+כדי לדווח על תקלה, אנא פתחו פנייה ב<a href="https://github.com/I2PPlus/i2pplus/issues" class=sitelink target=_blank rel=noreferrer>github.com/I2PPlus/i2pplus/issues</a>. לדיונים הקשורים לפיתוח, אנא בקרו ב<a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>פורומי המפתחים של zzz</a> או ב<a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>ערוץ המפתחים</a> (#i2p-dev) ברשת ה־IRC של I2P.</li>
+
+<li><b>פיתוח על I2P</b><br>
+אם אתם מפתחים, אתם עשויים לשקול כתיבת <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>יישומי I2P</a> משלכם או שיפור האבטחה של היישום שלכם באמצעות מינוף רשת I2P. שני פרוטוקולי <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a> ו־<a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a> הם <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>מוגדרים מראש</a>, וגם <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>הזרמה בזמן אמת</a> אפשרית. אנו מספקים גם גישה מלאה ל<a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>Java API</a>, וספריות הליבה של I2P מתארחות ב<a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>מאגר Apache Maven</a>. מפתחים יכולים לעיין בקוד המקור ב<a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P) או ב<a href="https://github.com/I2PPlus/i2pplus/" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P+). נדרשים <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>Java SDK</a> ו־<a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a> כדי לבנות מקוד המקור.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>הצטרפו!</b><br>
+I2P מפותח ומתוחזק בעיקר באמצעות השתתפות מתנדבת שאינה ממומנת של חברי הקהילה. מידע נוסף על אופן ההשתתפות זמין ב<a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>דף המתנדבים</a> באתר הרשמי.</li>
+
+<li><b>I2P+</b><br>
+למידע נוסף על I2P+, אנא בקרו ב<a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a> או ב<a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>, או הצטרפו לערוץ <a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a> ברשת ה־IRC של I2P. תיקונים עבור I2P+ מתקבלים בברוכה; אנא שלחו בקשות pull דרך <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
+
+</ul>
+
+</div>

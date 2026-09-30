@@ -1,0 +1,71 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "Anza I2P"
+
+msgid "I2P is starting!"
+msgstr "I2P inaanza!"
+
+msgid "Starting"
+msgstr "Inaanza"
+
+msgid "Launch I2P Browser"
+msgstr "Fungua Kivinjari cha I2P"
+
+msgid "Configure I2P System Tray"
+msgstr "Mipangilio za tray ya mfumo ya I2P"
+
+msgid "Disable system tray"
+msgstr "Zima tray ya mfumo"
+
+msgid "Restart I2P"
+msgstr "Anzisha upya I2P"
+
+msgid "Stop I2P"
+msgstr "Sitisha I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "Anzisha upya I2P papo hapo"
+
+msgid "Stop I2P Immediately"
+msgstr "Sitisha I2P papo hapo"
+
+msgid "Cancel I2P Shutdown"
+msgstr "Ghairi kuzimwa kwa I2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "Kuzimwa baada ya {0}"
+
+msgid "Shutdown imminent"
+msgstr "Kuzimwa karibuni"
+
+msgid "Network"
+msgstr "Mtandao"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: Bofya kulia ili kupata menyu"
+
+msgid "Enable notifications"
+msgstr "Washa arifa"
+
+msgid "Disable notifications"
+msgstr "Zima arifa"

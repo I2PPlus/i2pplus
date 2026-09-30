@@ -1,0 +1,350 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "Jina la mashine \"{0}\" lina kina haramu {1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "Jina la mashine haliwezi kuanza na \"{0}\""
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "Jina la mashine haliwezi kumaliza na \"{0}\""
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "Jina la mashine haliwezi kuwa na \"{0}\""
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "Jina la mashine \"{0}\" linahitaji kubadilishwa kuwa ASCII, lakini maktaba ya kubadilisha hayapatikani katika JVM hii"
+
+msgid "Source"
+msgstr "Chanzo"
+
+msgid "Imported from"
+msgstr "Imeingizwa kutoka"
+
+msgid "Imported from file"
+msgstr "Imeingizwa kutoka faili"
+
+msgid "Manually added via SusiDNS"
+msgstr "Imeongezwa kwa mkono kupitia SusiDNS"
+
+msgid "Manually added"
+msgstr "Imeongezwa kwa mkono"
+
+msgid "Added via address helper"
+msgstr "Imeongezwa kwa msaidia wa anwani"
+
+msgid "Via helper"
+msgstr "Kupitia msaidia"
+
+msgid "Via helper from"
+msgstr "Kupitia msaidia kutoka"
+
+msgid "None"
+msgstr "Hakuna"
+
+msgid "Hidden"
+msgstr "Imefichwa"
+
+msgid "Signed"
+msgstr "Imesainiwa"
+
+msgid "Key"
+msgstr "Ufafanuzi"
+
+#, java-format
+msgid "Type {0}"
+msgstr "Aina {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA ya biti 1024"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal ya biti 2048"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "Tafuta <span class=active>"
+msgstr[1] "Tafuta <span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "Orodha iliyochujwa ina kielimu kimoja."
+msgstr[1] "Orodha iliyochujwa ina vielimu {0}."
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "Matokeo mmoja ya: <span class=active>"
+msgstr[1] "Matokeo {0} ya: <span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "Kitabu kina kielimu kimoja"
+msgstr[1] "Kitabu kina vielimu {0}"
+
+msgid "Add"
+msgstr "Ongeza"
+
+msgid "Replace"
+msgstr "Badilisha"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "Jina la mashine {0} tayari liko katika kitabu cha anwani, hakibadilika."
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "Jina la mashine {0} tayari liko katika kitabu cha anwani lakini lenye lengo tofauti. Bofya \"Badilisha\" ili kuandika upya."
+
+msgid "Unable to resolve Base 32 address"
+msgstr "Imeshindwa kutatua anwani ya Base 32"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "Lengo limeongezwa kwa {0}."
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "Lengo limebadilika kwa {0}."
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "Onyo - jina la mashine halimalizi na \".i2p\""
+
+msgid "Invalid Base 32 host name."
+msgstr "Jina la mashine ya Base 32 si sahihi."
+
+msgid "Invalid Base 64 destination."
+msgstr "Lengo ya Base 64 si sahihi."
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "Jina la mashine \"{0}\" si sahihi."
+
+msgid "Please enter a host name and destination"
+msgstr "Tafadhali weka jina la mashine na lengo"
+
+msgid "Add Alternate"
+msgstr "Ongeza Mbadala"
+
+msgid "Unsupported"
+msgstr "Haijulikani"
+
+msgid "Address book saved."
+msgstr "Kitabu cha anwani kimehifadhiwa."
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "HITILAFU: Imeshindwa kuandika faili ya kitabu cha anwani."
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Wasilisho la fomu si sahihi, huenda kwa sababu umetumia kitufe cha \"nyuma\" au \"onyesha upya\" kwenye kivinjari chenu. Tafadhali utume tena."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Ikiwa tatizo limeendelea, hakikisha kwamba cookies zimewashwa kwenye kivinjari chenu."
+
+msgid "Save"
+msgstr "Hifadhi"
+
+msgid "Blacklist saved."
+msgstr "Orodha nyeusi imehifadhiwa."
+
+msgid "Reload"
+msgstr "Onyesha upya"
+
+msgid "Blacklist reloaded from file."
+msgstr "Orodha nyeusi imeonyeshwa upya kutoka faili."
+
+msgid "Configuration saved."
+msgstr "Mipangilio imehifadhiwa."
+
+msgid "Configuration reloaded."
+msgstr "Mipangilio imeonyeshwa upya."
+
+msgid "New domain"
+msgstr "Domaini mpya"
+
+msgid "Subscription log reloaded."
+msgstr "Kumbukumbu ya usajili imeonyeshwa upya."
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} kitabu cha anwani katika kanzidata ya {1}"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "Jina la mashine {0} halipo katika kitabu cha anwani."
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "Imeshindwa kuongeza Lengo kwa {0} kwa huduma ya majina {1}"
+
+msgid "Delete Entry"
+msgstr "Futa Kielimu"
+
+msgid "Delete Selected"
+msgstr "Futa Zilizochaguliwa"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "Imeshindwa kufuta Lengo kwa {0} kutoka huduma ya majina {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Lengo {0} limeondolewa."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "Lengo moja limeondolewa."
+msgstr[1] "Malengo {0} yameondolewa."
+
+msgid "No valid entries selected to delete."
+msgstr "Hakuna vielimu sahihi vilivyochaguliwa ili kufuta."
+
+msgid "Blacklist Selected"
+msgstr "Orodha nyeusi iliyochaguliwa"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "Lengo moja limewekwa kwenye orodha nyeusi."
+msgstr[1] "Malengo {0} yamewekwa kwenye orodha nyeusi."
+
+msgid "No valid entries selected to blacklist."
+msgstr "Hakuna vielimu sahihi vilivyochaguliwa ili kuingia kwenye orodha nyeusi."
+
+msgid "Save Notes"
+msgstr "Hifadhi Maelezo"
+
+msgid "You must enter a file"
+msgstr "Lazima uweke faili"
+
+msgid "No entries found in file"
+msgstr "Hakuna vielimu vilivyopatikana katika faili"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "Imeingizwa kutoka faili {0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "Kielimu {0} kimepakuliwa kutoka faili"
+msgstr[1] "Vielimu {0} vimepakuliwa kutoka faili"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "Kielimu {0} marubifu kimefukizwa kutoka faili"
+msgstr[1] "Vielimu {0} marubifu vimefukizwa kutoka faili"
+
+msgid "Import from file failed"
+msgstr "Ingizaji kutoka faili umeshindwa"
+
+msgid "Subscriptions saved."
+msgstr "Usajili umehifadhiwa."
+
+msgid "Update"
+msgstr "Sasisha"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "Inajaribu kusasisha kitabu cha anwani kutoka vyanzo vya usajili..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "Haiwezi kusasisha usajili: proksi ya HTTP haifanyi kazi!"
+
+msgid "Subscriptions reloaded."
+msgstr "Usajili umeonyeshwa upya."
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Ikiwa SusiDNS imesanidiwa kuchapisha kitabu chenu cha anwani cha routeri, vielimu vitatokea katika kitabu chenu cha anwani kilichochapishwa na kuhifadhiwa katika faili ya hosts.txt kwa kushiriki."
+
+msgid "Published Addressbook"
+msgstr "Kitabu cha Anwani Kilichochapishwa"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Ili kusanidi SusiDNS kusukuma kitabu chenu cha anwani cha routeri hadi kwenye kitabu chenu cha anwani kilichochapishwa, weka 'should_publish=true' kwenye kurasa ya mipangilio."
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Mashine zote zinazotokana na usajili zitaonekana katika kitabu hiki cha anwani, pamoja na zote unazoongeza hapa kwa mkono au kwenye kitabu chenu cha anwani kuu."
+
+msgid "Router Addressbook"
+msgstr "Kitabu cha Anwani cha Routeri"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Mashine unazoongeza hapa kwa mkono hazitachapishwa kamwe. Unaweza pia kuongeza majina lingine ya mashine katika vitabu vingine vya anwani hapa."
+
+msgid "Private Addressbook"
+msgstr "Kitabu cha Anwani Bina"
+
+msgid "Local Records"
+msgstr "Rekodi za Ndani"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Programu za I2P (pamoja na proksi ya HTTP) zinatumia mashine katika vitabu vyenu vya anwani vya ndani kutatua majina ya mashine ya .i2p."
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "Usajili zaidi zinaweza kupatikana katika sekhsen ya Maswali Yanayoulizwa Mara kwa Mara kwenye kurasa ya msaada ya Routeri."
+
+msgid "Subscriptions"
+msgstr "Usajili"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Mashine zinazopatikana kutoka usajili wenu zinaongezwa katika kitabu chenu cha anwani cha routeri, na zinasawazishwa kwa moja kwa moja (kwa default kila saa 12)."
+
+msgid "Configure Subscriptions"
+msgstr "Sanidi Usajili"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Ikiwa unaongeza mashine hapa kwa mkono, zitaongezwa katika kitabu chenu cha anwani kilichochapishwa (ikiwa imesanidiwa)."
+
+msgid "Master Addressbook"
+msgstr "Kitabu cha Anwani Kuu"
+
+msgid "Searchable by"
+msgstr "Inayotafutika kwa"
+
+msgid "I2P applications"
+msgstr "Programu za I2P"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Vitabu vya anwani kuu, cha routeri na cha bina kwa pamoja vinahudumia kama mamlaka ya DNS kwa programu za I2P."
+
+msgid "Optional,"
+msgstr "Si lazima,"
+
+msgid "for websites"
+msgstr "kwa tovuti"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Ikiwa unasanidi SusiDNS kuchapisha kitabu chenu cha anwani cha routeri, itatoa faili ya hosts.txt yenye mashine zote (kwa default hadi mzizi wa eepsite yenu)."
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Anwani zilizoongezwa kwa mkono katika kitabu chenu cha anwani kuu zitaunganishwa na kitabu chenu cha anwani cha routeri."
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Mashine unayopokea kutoka usajili wenu zitaunganishwa na kitabu chenu cha anwani cha routeri."

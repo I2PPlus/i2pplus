@@ -1,0 +1,154 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "Imeshindwa kupakia wrapper"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME tayari inafanya kazi."
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "Inaendesha $APP_LONG_NAME"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "Inasubiri $APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "ONYO: Huenda $APP_LONG_NAME imeshindwa kuanza."
+
+msgid "Must be root to perform this action."
+msgstr "Lazima uwe root ili kutekeleza hatua hii."
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "Inaanza $APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "Inasitisha $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME hakuwa ikifanya kazi."
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "Imeshindwa kusitisha $APP_LONG_NAME."
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "Inasubiri $APP_LONG_NAME kutoka"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "Imeshindwa kusitisha $APP_LONG_NAME."
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME imesitishwa."
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "Inasitisha $APP_LONG_NAME kwa taratibu"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME hafanyi kazi."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME inafanya kazi: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME inafanya kazi: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "Daemon ya $APP_LONG_NAME tayari imesakinishwa."
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "Inasakinisha daemon ya $APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "Kusakinisha kwa $DIST_OS hakusomekewa bado."
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "Inaondoa daemon ya $APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "Daemon ya $APP_LONG_NAME hujasakinishwa."
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "Kuoondoa kwa $DIST_OS hakusomekewa bado."
+
+msgid "Commands:"
+msgstr "Amri:"
+
+msgid "Launch in the current console."
+msgstr "Anzisha kwenye konsola ya sasa."
+
+msgid "Start in the background as a daemon process."
+msgstr "Anza kazini kama mchakato wa daemon."
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "Sitisha ikiwa inafanya kazi kama daemon au kwenye konsola nyingine."
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "Sitisha kwa taratibu; inaweza kuchukua hadi dakika 11 au zaidi."
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "Anza upya kwa taratibu; inaweza kuchukua hadi dakika 11 au zaidi."
+
+msgid "Stop if running and then start."
+msgstr "Sitisha ikiwa inafanya kazi kisha anza."
+
+msgid "Restart only if already running."
+msgstr "Anza upya tu ikiwa tayari inafanya kazi."
+
+msgid "Query the current status."
+msgstr "Tafuta hali ya sasa."
+
+msgid "Install to start automatically when system boots."
+msgstr "Sakinisha ili kuanza kiotomatiki mfumo unapowasha."
+
+msgid "Uninstall."
+msgstr "Ondoa."
+
+msgid "Request a Java thread dump if running."
+msgstr "omba dumpli ya nyuzi wa Java ikiwa inafanya kazi."
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "Tafadhali hariri i2prouter na weka variable RUN_AS_USER"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "Kuendesha I2P kama mtumiaji root si*zo*pendekezwa."
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "Ili kuendesha kama root hata hivyo, hariri i2prouter na weka ALLOW_ROOT=true."

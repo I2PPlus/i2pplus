@@ -1,0 +1,1791 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "נראה שזהו יעד שגוי:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper לא יכול לעזור לך עם יעד כזה!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "למעבר ליעד שבפנקס הכתובות, לחץ <a href=\"{0}\">כאן</a>. למעבר ליעד הסותר של addresshelper, לחץ <a href=\"{1}\">כאן</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "יעד עבור {0} בפנקס הכתובות"
+
+msgid "Conflicting address helper destination"
+msgstr "יעד סותר של עוזר הכתובות"
+
+msgid "Corrupt Base32 address"
+msgstr "כתובת Base32 פגומה"
+
+msgid "Destination LeaseSet not found"
+msgstr "LeaseSet של היעד לא נמצא"
+
+msgid "Host"
+msgstr "מחשב מארח"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "יעד"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "המשך אל {0} ללא שמירה"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "ניתן לעיין באתר בלי לשמור אותו בפנקס הכתובות. הכתובת תישמר עד שתפעיל מחדש את נתב ה-I2P שלך."
+
+msgid "Continue without saving"
+msgstr "המשך ללא שמירה"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "שמור {0} בפנקס הכתובות של הנתב והמשך לאתר"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "הכתובת הזו תישמר בפנקס הכתובות של הנתב שלך, שם נשמרות כתובות המבוססות על מינויים."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "אם ברצונך לעקוב אחרי אתרים שהוספת ידנית, הוסף במקום זאת לפנקס הכתובות הראשי או הפרטי."
+
+msgid "Save & continue"
+msgstr "ש&מור והמשך"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "שמור {0} בפנקס הכתובות הראשי והמשך לאתר"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "הכתובת הזו תישמר בפנקס הכתובות הראשי שלך. בחר את האפשרות הזו עבור כתובות שברצונך לשמור נפרד מפנקס הכתובות הראשי של הנתב, אך אינך מתנגד לפרסומן."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "שמור {0} בפנקס הכתובות הפרטי והמשך לאתר"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "הכתובת הזו תישמר בפנקס הכתובות הפרטי שלך, וכך תימנע פרסומה."
+
+msgid "Base32 address requires lookup password"
+msgstr "כתובת Base32 דורשת סיסמת חיפוש"
+
+msgid "Base32 address requires encryption key"
+msgstr "כתובת Base32 דורשת מפתח הצפנה"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "כתובת Base32 דורשת מפתח הצפנה וסיסמת חיפוש"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "כשל בפענוח כתובת Base32, בדוק את מפתח ההצפנה"
+
+msgid "Generate"
+msgstr "צור"
+
+msgid "Encryption key"
+msgstr "מפתח הצפנה"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "עליך להזין מפתח הצפנה PSK שסיפק מפעיל השרת, או ליצור מפתח הצפנה DH ולשלוח אותו למפעיל השרת."
+
+msgid "Ask the server operator for help."
+msgstr "בקש עזרה ממפעיל השרת."
+
+msgid "Enter PSK encryption key"
+msgstr "הזן מפתח הצפנה PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "צור מפתח הצפנה DH חדש"
+
+msgid "Lookup password"
+msgstr "סיסמת חיפוש"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "עליך להזין את הסיסמה שסיפק מפעיל השרת."
+
+msgid "HTTP Outproxy"
+msgstr "outproxy של HTTP"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "לחץ על קישור למטה כדי לקבל עוזר כתובות משירות קפיצה"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "נוסף דרך עוזר הכתובות מתוך {0}"
+
+msgid "Added via address helper"
+msgstr "נוסף דרך עוזר הכתובות"
+
+msgid "Missing lookup password"
+msgstr "חסרה סיסמת חיפוש"
+
+msgid "Missing private key"
+msgstr "חסר מפתח פרטי"
+
+msgid "Invalid private key"
+msgstr "מפתח פרטי לא תקין"
+
+msgid "Your new encryption key"
+msgstr "מפתח ההצפנה החדש שלך"
+
+msgid "Router Console"
+msgstr "מסוף הנתב"
+
+msgid "Addressbook"
+msgstr "פנקס כתובות"
+
+msgid "Configuration"
+msgstr "הגדרות"
+
+msgid "Help"
+msgstr "עזרה"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "העתק את המפתח ושלח אותו למפעיל השרת."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "לאחר שתקבל הרשאה, תוכל להמשיך לאתר."
+
+msgid "Go back and fix the error"
+msgstr "חזור ותקן את השגיאה"
+
+msgid "router"
+msgstr "של הנתב"
+
+msgid "master"
+msgstr "הראשי"
+
+msgid "private"
+msgstr "הפרטי"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "מפנה אל {0}"
+
+msgid "Redirection in progress"
+msgstr "הפניה בתהליך"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} נשמר בפנקס הכתובות {1}, מפנה עכשיו."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "שמירת {0} בפנקס הכתובות {1} נכשלה, מפנה עכשיו."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "לחץ כאן אם אינך מופנה אוטומטית."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "האימות עבור {0} נשמר, מפנה עכשיו."
+
+msgid "Failed to save configuration"
+msgstr "שמירת ההגדרות נכשלה"
+
+msgid "Configuration changes saved"
+msgstr "שינויי ההגדרות נשמרו"
+
+msgid "Client"
+msgstr "לקוח"
+
+msgid "internal"
+msgstr "פנימי"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} מנהור נכנס, {0} מנהור יוצא"
+msgstr[1] "{0} מנהור נכנס, {0} מנהור יוצא"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} מנהור נכנס"
+msgstr[1] "{0} מנהור נכנס"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} מנהור יוצא"
+msgstr[1] "{0} מנהור יוצא"
+
+msgid "lower bandwidth and reliability"
+msgstr "רוחב פס נמוך ואמינות נמוכה"
+
+msgid "standard bandwidth and reliability"
+msgstr "רוחב פס רגיל ואמינות רגילה"
+
+msgid "higher bandwidth and reliability"
+msgstr "רוחב פס גבוה ואמינות גבוהה"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "שגיאה - המנהורים טרם אותחלו"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "שליחת הטופס אינה תקינה, כנראה משום השתמשת בלחצן 'חזרה' או 'טעינה מחדש' בדפדפן שלך. נא לשלוח שוב."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "אם הבעיה נמשכת, ודא שהפעלת cookies בדפדפן שלך."
+
+msgid "No services configured, cannot restart!"
+msgstr "לא הוגדרו שירותים, לא ניתן להפעיל מחדש!"
+
+msgid "Stopping tunnel"
+msgstr "עוצר את המנהור"
+
+msgid "Starting tunnel"
+msgstr "מפעיל את המנהור"
+
+msgid "Error restarting tunnel"
+msgstr "שגיאה בהפעלה מחדש של המנהור"
+
+msgid "Restarted all running tunnels"
+msgstr "כל המנהורים הפעילים הופעלו מחדש"
+
+msgid "No clients configured, cannot restart!"
+msgstr "לא הוגדרו לקוחות, לא ניתן להפעיל מחדש!"
+
+msgid "Restarted all running client tunnels"
+msgstr "כל מנהורי הלקוח הפעילים הופעלו מחדש"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "ההגדרות נטענו מחדש עבור כל המנהורים"
+
+msgid "Error: Invalid tunnel"
+msgstr "שגיאה: מנהור לא תקין"
+
+msgid "Started tunnel"
+msgstr "המנהור הופעל"
+
+msgid "Stopped tunnel"
+msgstr "המנהור נעצר"
+
+msgid "Restarting tunnel"
+msgstr "המנהור מופעל מחדש"
+
+msgid "New Tunnel"
+msgstr "מנהור חדש"
+
+msgid "Port not set"
+msgstr "הפורט לא הוגדר"
+
+msgid "Invalid port"
+msgstr "פורט לא תקין"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "אזהרה - פורטים מתחת ל-1024 אינם מומלצים"
+
+msgid "Warning - duplicate port"
+msgstr "אזהרה - פורט כפול"
+
+msgid "Standard client"
+msgstr "לקוח רגיל"
+
+msgid "HTTP/HTTPS client"
+msgstr "לקוח HTTP/HTTPS"
+
+msgid "IRC client"
+msgstr "לקוח IRC"
+
+msgid "Standard server"
+msgstr "שרת רגיל"
+
+msgid "HTTP server"
+msgstr "שרת HTTP"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "פרוקסי SOCKS 4/4a/5"
+
+msgid "SOCKS IRC proxy"
+msgstr "פרוקסי SOCKS ל-IRC"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "פרוקסי CONNECT/SSL/HTTPS"
+
+msgid "IRC server"
+msgstr "שרת IRC"
+
+msgid "Streamr client"
+msgstr "לקוח Streamr"
+
+msgid "Streamr server"
+msgstr "שרת Streamr"
+
+msgid "HTTP bidir"
+msgstr "HTTP דו-כיווני"
+
+msgid "Host not set"
+msgstr "המחשב המארח לא הוגדר"
+
+msgid "Invalid address"
+msgstr "כתובת לא תקינה"
+
+msgid "Tunnel Manager"
+msgstr "מנהל המנהורים"
+
+msgid "Edit Client Tunnel"
+msgstr "עריכת מנהור לקוח"
+
+msgid "Edit Server Tunnel"
+msgstr "עריכת מנהור שרת"
+
+msgid "Are you sure you want to delete?"
+msgstr "האם אתה בטוח שברצונך למחק?"
+
+msgid "required"
+msgstr "נדרש"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "יש לעצור את המנהור ואת כל מנהורי הלקוח המשותפים האחרים כדי לשנות הגדרה זו"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "יש לעצור את המנהור כדי לשנות הגדרה זו"
+
+msgid "New Client Configuration"
+msgstr "הגדרות לקוח חדש"
+
+msgid "Name"
+msgstr "שם"
+
+msgid "Auto Start Tunnel"
+msgstr "הפעלת המנהור אוטומטית"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "שם המנהור שיוצג בדף הבית של מנהל המנהורים ובסרגל הצד של מסוף הנתב"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "הפעל אפשרות זו כדי לוודא שהשירות זה זמין כאשר הנתב מופעל"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "הפעל את המנהור אוטומטית כאשר הנתב מופעל"
+
+msgid "Description"
+msgstr "תיאור"
+
+msgid "Shared Client"
+msgstr "לקוח משותף"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "תיאור המנהור שיוצג בדף הבית של מנהל המנהורים"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "התעבורה של כל הלקוחות שבהם מופעל מאפיין זה תנותב דרך אותו מערך של מנהורים. הדבר יקשה על גורם שלא רצוי לנתח את המנהורים, אך יקשר את הלקוחות זה לזה."
+
+msgid "Share tunnels with other configured clients"
+msgstr "שתף מנהורים עם לקוחות מוגדרים אחרים"
+
+msgid "Target"
+msgstr "יעד"
+
+msgid "Access Point"
+msgstr "נקודת גישה"
+
+msgid "Use Outproxy Plugin"
+msgstr "השתמש בתוסף outproxy"
+
+msgid "Enable DCC"
+msgstr "הפעל DCC"
+
+msgid "Port"
+msgstr "פורט"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "ציין את הפורט המקומי שממנו יהיה ניתן לגשת לשירות זה"
+
+msgid "Hostname or IP address of the target server"
+msgstr "שם המחשב או כתובת ה-IP של שרת היעד"
+
+msgid "Reachable by"
+msgstr "נגיש מ-"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "הממשק המקומי (כתובת ה-IP) שממנו מנהור הלקוח יהיה נגיש"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "אם מותקן תוסף outproxy (לדוגמה Orchid), השתמש בו במקום בכל outproxy מוגדר כדי לגשת לאתרים שמחוץ ל-I2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "השתמש בתוסף במקום בפרוקסיים המפורטים למטה, אם זמין"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "מאפשר צ'אט ישיר והעברות קבצים, תוך עקיפת I2P. שים לב שהדבר יפגע באנונימיות שלך ואינו מומלץ."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "הפעל את פרוטוקול החיבור הישיר בין לקוחות"
+
+msgid "Outproxies"
+msgstr "outproxy-ים"
+
+msgid "SSL Outproxies"
+msgstr "outproxy-ים של SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "ציין כאן את כתובת ה-.i2p או היעד (b32 או b64) של ה-outproxy."
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "לבחירה אקראית ממאגר, הפרד בפסיקים, לדוגמה server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "סוג outproxy"
+
+msgid "Tunnel Destination"
+msgstr "יעד המנהור"
+
+msgid "Use SSL"
+msgstr "השתמש ב-SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "ציין כאן את כתובת ה-.i2p או היעד (b32 או b64) של המנהור."
+
+msgid "name, name:port, or destination"
+msgstr "שם, שם:פורט, או יעד"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "אם אתה ניגש לשירות בנתב I2P מרוחק, ייתכן שתרצה להתחבר עם SSL כדי למנוע יירוט תעבורה. יש להגדיר גם את יישום הלקוח לשימוש ב-SSL."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "הלקוחות משתמשים ב-SSL כדי להתחבר למנהור"
+
+msgid "Please specify the full b64 destination."
+msgstr "נא לציין את היעד המלא ב-b64."
+
+msgid "Local destination"
+msgstr "יעד מקומי"
+
+msgid "Local Base32"
+msgstr "Base32 מקומי"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "קריאה בלבד: יעד מקומי (אם ידוע)"
+
+msgid "Stop"
+msgstr "עצור"
+
+msgid "Start this Tunnel"
+msgstr "הפעל מנהור זה"
+
+msgid "Start"
+msgstr "הפעל"
+
+msgid "Cancel"
+msgstr "ביטל"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "מחק מנהור זה (לא ניתן לבטל)"
+
+msgid "Delete"
+msgstr "מחק"
+
+msgid "Save"
+msgstr "שמור"
+
+msgid "Advanced networking options"
+msgstr "אפשרויות רשת מתקדמות"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "הערה: כאשר לקוח זה מוגדר לשיתוף מנהורים, אפשרויות אלה חלות על כל הלקוחות המוגדרים לשיתוף מנהורים."
+
+msgid "Profile"
+msgstr "פרופיל"
+
+msgid "Delay Connect"
+msgstr "השהה חיבור"
+
+msgid "Connection Profile"
+msgstr "פרופיל חיבור"
+
+msgid "interactive connection"
+msgstr "חיבור אינטראקטיבי"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "חיבור בכמויות (הורדות/אתרים/BT)"
+
+msgid "Delay Connection"
+msgstr "השהיית חיבור"
+
+msgid "for request/response connections"
+msgstr "לחיבורי בקשה/תגובה"
+
+msgid "Router I2CP Address"
+msgstr "כתובת ה-I2CP של הנתב"
+
+msgid "I2CP Hostname or IP"
+msgstr "שם המחשב או ה-IP של I2CP"
+
+msgid "I2CP Port Number"
+msgstr "מספר הפורט של I2CP"
+
+msgid "Delay tunnel open until required"
+msgstr "השהה את פתיחת המנהור עד שתידרש"
+
+msgid "Signature type"
+msgstr "סוג חתימה"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "חסוך במשאבים על ידי יצירת מנהורים רק כאשר הם נדרשים"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "אל תפתח את המנהור עד שתזוהה פעילות בפורט"
+
+msgid "This is the default, recommended option"
+msgstr "זו האפשרות ברירת המחדל, המומלצת"
+
+msgid "Encryption types"
+msgstr "סוגי הצפנה"
+
+msgid "Legacy options"
+msgstr "אפשרויות ישנות"
+
+msgid "Post Quantum"
+msgstr "Post Quantum"
+
+msgid "Both encryption types"
+msgstr "שני סוגי ההצפנה"
+
+msgid "Tunnel Options"
+msgstr "אפשרויות מנהור"
+
+msgid "Length"
+msgstr "אורך"
+
+msgid "Count"
+msgstr "כמות"
+
+msgid "Length of each Tunnel"
+msgstr "אורך כל מנהור"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "מנהור 0 hop (ללא אנונימיות)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "מנהור 1 hop (אנונימיות נמוכה)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "מנהור 2 hop (אנונימיות בינונית)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "מנהור 3 hop (אנונימיות גבוהה)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "מנהור {0} hop"
+msgstr[1] "מנהור {0} hop"
+
+msgid "Number of Tunnels in Group"
+msgstr "מספר המנהורים בקבוצה"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "מושבת עבור מנהורי 0 hop"
+
+msgid "Variance"
+msgstr "וריאציה"
+
+msgid "Backup Count"
+msgstr "מספר גיבויים"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "רמת אקראיות עבור אורך המנהור"
+
+msgid "0 hop variance"
+msgstr "וריאציה של 0 hop"
+
+msgid "no randomization, consistent performance"
+msgstr "ללא אקראיות, ביצועים אחידים"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ וריאציה של 0-1 hop"
+
+msgid "medium randomization, lower performance"
+msgstr "אקראיות בינונית, ביצועים נמוכים יותר"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ וריאציה של 0-2 hop"
+
+msgid "high randomization, very low performance"
+msgstr "אקראיות גבוהה, ביצועים נמוכים מאוד"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- וריאציה של 0-1 hop"
+
+msgid "standard randomization, standard performance"
+msgstr "אקראיות רגילה, ביצועים רגילים"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- וריאציה של 0-2 hop"
+
+msgid "not recommended"
+msgstr "לא מומלץ"
+
+msgid "hop variance"
+msgstr "וריאציה של hop"
+
+msgid "Number of Reserve Tunnels"
+msgstr "מספר גיבויים"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} מנהור גיבוי"
+msgstr[1] "{0} מנהורי גיבוי"
+
+msgid "no redundancy, no added resource usage"
+msgstr "ללא יתירות, ללא צריכת משאבים נוספת"
+
+msgid "low redundancy, low resource usage"
+msgstr "יתירות נמוכה, צריכת משאבים נמוכה"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "יתירות בינונית, צריכת משאבים בינונית"
+
+msgid "high redundancy, high resource usage"
+msgstr "יתירות גבוהה, צריכת משאבים גבוהה"
+
+msgid "Reduce tunnel quantity"
+msgstr "הקטן את כמות המנהורים"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "הקטן את מספר המנהורים במצב של חוסר פעילות כדי לחסוך משאבים, אך השאר את המנהור פתוח (כדי להבטיח זמינות מיידית)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "הקטן את כמות המנהורים במצב של חוסר פעילות"
+
+msgid "Idle period"
+msgstr "תקופת חוסר פעילות"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "זמן חוסר פעילות מופחת למנהור"
+
+msgid "Reduced count"
+msgstr "מספר מופחת"
+
+msgid "Reduced tunnel count"
+msgstr "מספר מנהורים מופחת"
+
+msgid "Close tunnels when idle"
+msgstr "סגור מנהורים במצב של חוסר פעילות"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "כדי לחסוך משאבים, סגור מנהורים שאינם בשימוש"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "סגור מנהורי לקוח לאחר תקופת חוסר פעילות שצוינה"
+
+msgid "Close Tunnel Idle Time"
+msgstr "זמן חוסר פעילות לסגירת המנהור"
+
+msgid "New Keys on Reopen"
+msgstr "מפתחות חדשים בפתיחה מחדש"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "שנה את זהות המנהור (היעד) כאשר המנהורים נפתחים מחדש"
+
+msgid "Enable"
+msgstr "הפעל"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "שמור על זהות המנהור (היעד) כאשר המנהורים נפתחים מחדש"
+
+msgid "Disable"
+msgstr "השבת"
+
+msgid "Persistent private key"
+msgstr "מפתח פרטי קבוע"
+
+msgid "Private key file"
+msgstr "קובץ מפתח פרטי"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "הפעלת מאפיין זה תבטיח שזהות המנהור שלך (היעד) תישאר קבועה, עבור שירותים המציעים מאפיינים המבוססים על היעד, לדוגמה אימות משתמשים ב-IRC"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "צור מפתח כדי להפעיל זהות קבועה למנהור הלקוח"
+
+msgid "Path to Private Key File"
+msgstr "נתיב לקובץ המפתח הפרטי"
+
+msgid "HTTP Filtering"
+msgstr "סינון HTTP"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "כאשר מופעל, סוכן המשתמש של הדפדפן או של לקוח ה-http שלך לא יתעמלם, מה שעלול להפחית את האנונימיות שלך"
+
+msgid "Do not spoof User-Agent header"
+msgstr "אל תחזה את כותרת ה-User-Agent"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "כאשר מופעל, ה-referer (דף המקור) של בקשות הרשת שלך לא יסונן, מה שעלול להפחית את האנונימיות שלך"
+
+msgid "Do not block Referer header"
+msgstr "אל תחסום את כותרת ה-Referer"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "כאשר מופעל, כותרות ה-accept (תמיכה בסוגי MIME) שהדפדפן שלך משדר לא יסוננו, מה שעלול להפחית את האנונימיות שלך"
+
+msgid "Do not block Accept headers"
+msgstr "אל תחסום את כותרות ה-Accept"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "אפשר SSL לכתובות I2P כאשר מופעל"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "אפשר SSL לכתובות I2P"
+
+msgid "Local Authorization"
+msgstr "הרשאה מקומית"
+
+msgid "Local Credentials"
+msgstr "פרטי כניסה מקומיים"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "הפעל כדי לדרוש שם משתמש וסיסמה לגישה לשירות המקומי הזה (לדוגמה אם הוא מתארח ב-LAN)"
+
+msgid "Require local authorization for this service"
+msgstr "דרוש הרשאה מקומית עבור שירות זה"
+
+msgid "Set username required to access this service"
+msgstr "הגדר את שם המשתמש הנדרש לגישה לשירות זה"
+
+msgid "Username"
+msgstr "שם משתמש"
+
+msgid "Set password required to access this service"
+msgstr "הגדר את הסיסמה הנדרשת לגישה לשירות זה"
+
+msgid "Password"
+msgstr "סיסמה"
+
+msgid "Outproxy Authorization"
+msgstr "הרשאת outproxy"
+
+msgid "Remote Credentials"
+msgstr "פרטי כניסה מרוחקים"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "הפעל אם ה-outproxy דורש שם משתמש וסיסמה לגישה"
+
+msgid "Outproxy requires authorization"
+msgstr "ה-outproxy דורש הרשאה"
+
+msgid "Enter username required by outproxy"
+msgstr "הזן את שם המשתמש הנדרש על ידי ה-outproxy"
+
+msgid "Enter password required by outproxy"
+msgstr "הזן את הסיסמה הנדרשת על ידי ה-outproxy"
+
+msgid "Jump URL List"
+msgstr "רשימת URL לקפיצה"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "רשימת כתובות URL עזר המספקות קישורי קפיצה כאשר מחשב מארח אינו נמצא בפנקס הכתובות שלך"
+
+msgid "Custom options"
+msgstr "אפשרויות מותאמות אישית"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "אפשרויות מתקדמות של מנהור, הזרמה ו-I2CP"
+
+msgid "New Server Configuration"
+msgstr "הגדרות שרת חדש"
+
+msgid "Hostname"
+msgstr "שם מחשב"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "השהיית הפעלה אקראית (כאשר ההפעלה האוטומטית מופעלת) כדי להתגן מפני התקפות התאמה"
+
+msgid "Startup Delay"
+msgstr "השהיית הפעלה"
+
+msgid "Minimum"
+msgstr "מזכרי"
+
+msgid "Minimum startup delay"
+msgstr "השהיית הפעלה מזכרית"
+
+msgid "seconds"
+msgstr "שניות"
+
+msgid "Maximum"
+msgstr "מרבי"
+
+msgid "Maximum startup delay"
+msgstr "השהיית הפעלה מרבית"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "הוסף השהייה אקראית לפני כיבוי המנהור, ואז התחל את תהליך הכיבוי/ההפעלה המחדש המסודר של הנתב"
+
+msgid "Shutdown Delay"
+msgstr "השהיית כיבוי"
+
+msgid "Minimum shutdown delay"
+msgstr "השהיית כיבוי מזכרית"
+
+msgid "Maximum shutdown delay"
+msgstr "השהיית כיבוי מרבית"
+
+msgid "Website Hostname"
+msgstr "שם המחשב של האתר"
+
+msgid "(leave blank for outproxies)"
+msgstr "(השאר ריק עבור outproxy)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "שם המחשב של האתר, לדוגמה mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "ציין את הפורט שעליו פועל השרת"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "ממשק האזנה (כתובת IP) לגישת לקוחות (בדרך כלל 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "כדי להימנע מהרחת תעבורה, אם אתה מתחבר לשרת מרוחק, ניתן להפעיל חיבור SSL. שים לב ששרת היעד חייב להיות מוגדר לקבל חיבורי SSL."
+
+msgid "Use SSL to connect to target"
+msgstr "השתמש ב-SSL כדי להתחבר ליעד"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "פורט נדרש לגישה לשירות (זה יכול להיות פורט אחר מהפורט שעליו מתארח השירות)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "צור קוד QR עבור הדומיין הזה"
+
+msgid "Generate QR Code"
+msgstr "צור קוד QR"
+
+msgid "Add to Private addressbook"
+msgstr "הוסף לפנקס הכתובות הפרטי"
+
+msgid "Add to local addressbook"
+msgstr "הוסף לפנקס הכתובות המקומי"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "רשום, הסר רישום או שנה פרטים עבור שם המחשב"
+
+msgid "Registration Authentication"
+msgstr "אימות רישום"
+
+msgid "HTTPS configuration"
+msgstr "הגדרות HTTPS"
+
+msgid "SSL Wizard"
+msgstr "אשף SSL"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "הערה: כדי להפעיל יצירת קוד QR או אימות רישום, הגדר בשדה שם המחשב של האתר (לאתרים) או בשדה Name (לכל השאר) שלמעלה שם מחשב המסתיים ב-.i2p, לדוגמה mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "נתיב מלא לקובץ המפתח הפרטי (ייווצר אם אינו קיים)"
+
+msgid "Alternate private key file"
+msgstr "קובץ מפתח פרטי חלופי"
+
+msgid "Alternate local destination"
+msgstr "יעד מקומי חלופי"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "נתיב מלא למפתח חדש (ייווצר)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "קריאה בלבד: יעד מקומי חלופי"
+
+msgid "Specify filename or full path for new key"
+msgstr "ציין שם קובץ או נתיב מלא למפתח חדש"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "לא ניתן לשנות את ההגדרות לאחר שהיעד נוצר"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "הגדרת סוג החתימה אפשרית רק בעת יצירת המנהור בפעם הראשונה. כדי לשנות, עליך ליצור מנהור חדש."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "אפשרות ישנה, עם מפתח חלופי מוגדר"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "אפשרות ישנה (הוצאה משימוש), הניתנת לתאימות לאחור"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "מומלץ עבור יעדים מעוורים ומוצפנים"
+
+msgid "Inbound"
+msgstr "נכנס"
+
+msgid "Outbound"
+msgstr "יוצא"
+
+msgid "no anonymity"
+msgstr "ללא אנונימיות"
+
+msgid "low anonymity"
+msgstr "אנונימיות נמוכה"
+
+msgid "medium anonymity"
+msgstr "אנונימיות בינונית"
+
+msgid "high anonymity"
+msgstr "אנונימיות גבוהה"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "רמת אקראיות עבור עומק המנהור"
+
+msgid "very high randomization, very low performance"
+msgstr "אקראיות גבוהה מאוד, ביצועים נמוכים מאוד"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ 0-3 קישוטים"
+
+msgid "definitely not recommended"
+msgstr "בהחלט לא מומלץ"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- 0-3 קישוטים"
+
+msgid "backup tunnels"
+msgstr "מנהורי גיבוי"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "הקטן את המנהורים כדי לחסוך משאבים"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "תקופת חוסר פעילות לפני הקטנת מספר המנהורים"
+
+msgid "minutes"
+msgstr "דקות"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "מספר המנהורים שיש להשאר פתוחים כדי לשמור על זמינות השירות"
+
+msgid "Server Access Options"
+msgstr "אפשרויות גישה לשרת"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "מנע מלקוחות לגשת לשירות הזה דרך inproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "חסום גישה דרך inproxy"
+
+msgid "Block Accesses containing Referers"
+msgstr "חסום גישות הכוללות Referer"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "השתמש בכתובות IP ייחודיות לכל לקוח מתחבר (שרתים מקומיים שאינם מבוססי SSL בלבד)"
+
+msgid "Unique Local Address per Client"
+msgstr "כתובת מקומית ייחודית לכל לקוח"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "הפעל רק אם אתה מתארח את השירות הזה במספר נתבים"
+
+msgid "Optimize for Multihoming"
+msgstr "מותאם לריבוי אתרים"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "חסום User-Agents התואמים למחרוזות האלה (כנראה מאתרי inproxy)"
+
+msgid "Block these User-Agents"
+msgstr "חסום את ה-User-Agents האלה"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "מופרדים בפסיקים, לדוגמה Mozilla,Opera (רגיש לאותיות גדולות וקטנות)"
+
+msgid "Encrypt Leaseset"
+msgstr "הצפה את ה-LeaseSet"
+
+msgid "Optional Lookup Password"
+msgstr "סיסמת חיפוש אופציונלית"
+
+msgid "Keyring Manager"
+msgstr "מנהל מפתחות"
+
+msgid "Allow all clients to connect to this service"
+msgstr "אפשר לכל הלקוחות להתחבר לשירות הזה"
+
+msgid "Send key to all users."
+msgstr "שלח מפתח לכל המשתמשים."
+
+msgid "Encrypted"
+msgstr "מוצפן"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "מונע איתור השרת על ידי floodfill"
+
+msgid "Blinded"
+msgstr "מעוור"
+
+msgid "Send password to all users."
+msgstr "שלח סיסמה לכל המשתמשים."
+
+msgid "Blinded with lookup password"
+msgstr "מעוור עם סיסמת חיפוש"
+
+msgid "Send key and password to all users."
+msgstr "שלח מפתח וסיסמה לכל המשתמשים."
+
+msgid "Encrypted with lookup password"
+msgstr "מוצפן עם סיסמת חיפוש"
+
+msgid "Send individual key to each user."
+msgstr "שלח מפתח אישי לכל משתמש."
+
+msgid "Encrypted with per-user key"
+msgstr "מוצפן עם מפתח לכל משתמש"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "מוצפן עם סיסמת חיפוש ומפתח לכל משתמש"
+
+msgid "Enter key from each user."
+msgstr "הזן מפתח מכל משתמש."
+
+msgid "Encryption Key"
+msgstr "מפתח הצפנה"
+
+msgid "Generate New Key"
+msgstr "צור מפתח חדש"
+
+msgid "Encryption key required to access this service"
+msgstr "מפתח הצפנה נדרש לגישה לשירות"
+
+msgid "Generate new encryption key"
+msgstr "צור מפתח הצפנה חדש"
+
+msgid "Tunnel must be stopped first"
+msgstr "יש לעצור תחילה את המנהור"
+
+msgid "Client Manager"
+msgstr "מנהל לקוחות"
+
+msgid "Client Name"
+msgstr "שם לקוח"
+
+msgid "Client Key"
+msgstr "מפתח לקוח"
+
+msgid "Revoke"
+msgstr "בטל"
+
+msgid "Add"
+msgstr "הוסף"
+
+msgid "Restricted Access List"
+msgstr "רשימת גישה מוגבלת"
+
+msgid "Activate to enable editing"
+msgstr "הפעל כדי לאפשר עריכה"
+
+msgid "Tunnel Filter"
+msgstr "מסנן מנהורים"
+
+msgid "Help with defining tunnel filters"
+msgstr "עזרה בהגדרת מסנני מנהורים"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "מנע מלקוחות המפורשים ברשימה להתחבר לשירות הזה"
+
+msgid "Blacklist"
+msgstr "רשימת חסימה"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "אפשר רק ללקוחות המפורשים ברשימה להתחבר לשירות הזה"
+
+msgid "Whitelist"
+msgstr "רשימת היתר"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "נתיב מלא לקובץ המכיל את הגדרת המסנן"
+
+msgid "Absolute path to filter definition"
+msgstr "נתיב מלא להגדרת המסנן"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "ציין יעדי לקוח, 1 בכל שורה"
+
+msgid "Server Throttling"
+msgstr "הגבלת קצב לשרת"
+
+msgid "Inbound connection limits"
+msgstr "מגבלות חיבור נכנס"
+
+msgid "Per Minute"
+msgstr "לדקה"
+
+msgid "Per Hour"
+msgstr "לשעה"
+
+msgid "Per Day"
+msgstr "ליום"
+
+msgid "Concurrent"
+msgstr "מקביליות"
+
+msgid "Per Client"
+msgstr "לכל לקוח"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "מספר מקסימלי של בקשות דף רשת בדקה עבור לקוח ייחודי לפני חסימת הגישה לשרת"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = ללא הגבלה)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "מספר מקסימלי של בקשות דף רשת בשעה עבור לקוח ייחודי לפני חסימת הגישה לשרת"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "מספר מקסימלי של בקשות דף רשת ביום עבור לקוח ייחודי לפני חסימת הגישה לשרת"
+
+msgid "Total"
+msgstr "סה\"כ"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "מספר כולל של בקשות דף רשת בדקה לפני חסימת הגישה לשרת"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "מספר כולל של בקשות דף רשת בשעה לפני חסימת הגישה לשרת"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "מספר כולל של בקשות דף רשת ביום לפני חסימת הגישה לשרת"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "מספר מקסימלי של חיבורי לקוח מקביליים"
+
+msgid "POST limits"
+msgstr "מגבלות POST"
+
+msgid "Per Period"
+msgstr "לתקופה"
+
+msgid "Ban Duration"
+msgstr "משך החסימה"
+
+msgid "POST limit period"
+msgstr "תקופת מגבלת POST"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "מספר מקסימלי של בקשות POST המותרות ללקוח ייחודי לאורך תקופת הזמן שהוגדרה"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "אם לקוח עובר את המספר המקסימלי של בקשות POST לכל תקופה שהוקצבה, אכף חסימה למשך מספר הדקות הזה"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "תקופת הזמן שבה יש להגיע למספר המקסימלי של בקשות POST לפני הפעלת החסימה"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "מספר כולל של בקשות POST המותרות לתקופת הזמן שהוגדרה"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "אם המספר המקסימלי של בקשות POST לכל תקופה שהוקצבה מועבר, אכף חסימת גישה גלובלית למשך מספר הדקות הזה"
+
+msgid "Custom HTTP Headers"
+msgstr "כותרות HTTP מותאמות אישית"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "הערה: כותרות מותאמות אישית אלה יופעלו רק עבור קבצים המוגשים שאין בהם כבר את הכותרת הרלוונטית."
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "הגדר את כותרת Allow ל-'GET, POST, HEAD' עבור קבצי html, xml, json ו-text"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "הפעל כותרות Cache-Control (no-cache עבור html, xml, json ו-text, immutable לכל השאר)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "הגדר את כותרת Referrer-Policy ל-'same-origin' עבור קבצי html, xml, json ו-text"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "הגדר את כותרת X-Content-Type-Options ל-'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "מאתחל את מנהל המנהורים{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "המנהורים טרם אותחלו; נא לנסות שוב בעוד מעט רגעים."
+
+msgid "Status Messages"
+msgstr "הודעות מצב"
+
+msgid "Clear"
+msgstr "נקה"
+
+msgid "Refresh"
+msgstr "רענן"
+
+msgid "Global Tunnel Control"
+msgstr "בקרה גלובלית במנהורים"
+
+msgid "Tunnel Wizard"
+msgstr "אשף מנהורים"
+
+msgid "Stop All"
+msgstr "עצור הכל"
+
+msgid "Start All"
+msgstr "הפעל הכל"
+
+msgid "Restart all running tunnels"
+msgstr "הפעל מחדש את כל המנהורים הפעילים"
+
+msgid "Restart All"
+msgstr "הפעל הכל מחדש"
+
+msgid "Restart all running server tunnels"
+msgstr "הפעל מחדש את כל מנהורי השרת הפעילים"
+
+msgid "Restart All Servers"
+msgstr "הפעל מחדש את כל השרתים"
+
+msgid "Restart all running client tunnels"
+msgstr "הפעל מחדש את כל מנהורי הלקוח הפעילים"
+
+msgid "Restart All Clients"
+msgstr "הפעל מחדש את כל הלקוחות"
+
+msgid "I2P Server Tunnels"
+msgstr "I2P מנהורי שרת"
+
+msgid "Helper"
+msgstr "עוזר"
+
+msgid "Type"
+msgstr "סוג"
+
+msgid "Points at"
+msgstr "מפנה אל"
+
+msgid "Preview"
+msgstr "תצוגה מקדימה"
+
+msgid "Status"
+msgstr "מצב"
+
+msgid "Control"
+msgstr "בקרה"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "ערוך הגדרות מנהור שרת עבור"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "בדוק שרת IRC, עוקף את I2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "בדוק שרת HTTPS, עוקף את I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "בדוק שרת HTTP, עוקף את I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "בדוק שרת HTTP דרך I2P"
+
+msgid "Base32 Address"
+msgstr "כתובת Base32"
+
+msgid "Offline"
+msgstr "לא מחובר"
+
+msgid "No Preview"
+msgstr "אין תצוגה מקדימה"
+
+msgid "Starting..."
+msgstr "מתחיל..."
+
+msgid "Starting in"
+msgstr "מתחיל בעוד"
+
+msgid "Running"
+msgstr "פועל"
+
+msgid "Hops"
+msgstr "קישוטים"
+
+msgid "in"
+msgstr "פנימה"
+
+msgid "out"
+msgstr "החוצה"
+
+msgid "Stopped"
+msgstr "נעצר"
+
+msgid "Stop this Tunnel"
+msgstr "עצור את המנהור הזה"
+
+msgid "Restart this Tunnel"
+msgstr "הפעל מחדש את המנהור הזה"
+
+msgid "Restart"
+msgstr "הפעל מחדש"
+
+msgid "Signature"
+msgstr "חתימה"
+
+msgid "Alternate"
+msgstr "חלופי"
+
+msgid "Alt Destination"
+msgstr "יעד חלופי"
+
+msgid "Encryption"
+msgstr "הצפנה"
+
+msgid "Supported encryption"
+msgstr "הצפנה נתמכת"
+
+msgid "New server tunnel"
+msgstr "מנהור שרת חדש"
+
+msgid "Standard"
+msgstr "רגיל"
+
+msgid "Create"
+msgstr "צור"
+
+msgid "I2P Client Tunnels"
+msgstr "I2P מנהורי לקוח"
+
+msgid "Interface"
+msgstr "ממשק"
+
+msgid "Edit Tunnel Settings for"
+msgstr "ערוך הגדרות מנהור עבור"
+
+msgid "Standby"
+msgstr "בהמתנה"
+
+msgid "Outproxy"
+msgstr "outproxy"
+
+msgid "internal plugin"
+msgstr "תוסף פנימי"
+
+msgid "none"
+msgstr "אין"
+
+msgid "New client tunnel"
+msgstr "מנהור לקוח חדש"
+
+msgid "Registration Helper"
+msgstr "עוזר רישום"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "שירות זה משתמש ב-leasesets מוצפנים. לא מומלץ לבצע רישום. אימות הרישום מושבת."
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "נא לוודא שבחרת, העתקת והדבקת את כל תוכנם של נתוני האימות המתאימים בטופס של אתר הרישום המועדף שלך"
+
+msgid "Tunnel name"
+msgstr "שם המנהור"
+
+msgid "Website name"
+msgstr "שם האתר"
+
+msgid "Local Destination"
+msgstr "יעד מקומי"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "יעד מקומי אינו זמין. הפעל את המנהור."
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "כדי להפעיל אימות רישום, ערוך את המנהור והגדר את השם (או את שם האתר) לשם מחשב תקין המסתיים ב-'.i2p'"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "כדי להפעיל אימות רישום, ערוך את המנהור והגדר את השם לשם מחשב תקין המסתיים ב-'.i2p'"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "מפתח החתימה של היעד אינו זמין. הפעל את המנהור."
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "מפתח החתימה של היעד אינו מחובר. השתמש בכלי CLI במחשב שאינו מחובר."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "אימות להוספת המחשב המארח {0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "העתק והדבק זאת באתר הרישום"
+
+msgid "Advanced authentication strings"
+msgstr "מחרוזות אימות מתקדמות"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "אימות להסרת המחשב המארח {0}"
+
+msgid "Authentication for changing name"
+msgstr "אימות לשינוי השם"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "פעולה זו תשנה את השם מ-{0} ל-{1}, תוך שימוש באותו יעד"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "יש להגדיר את המנהור הזה עם שם המחשב המארח החדש."
+
+msgid "Enter old hostname below."
+msgstr "הזן שם מחשב ישן למטה."
+
+msgid "Authentication for adding alias"
+msgstr "אימות להוספת כינוי"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "פעולה זו תוסיף כינוי {0} עבור {1}, תוך שימוש באותו יעד"
+
+msgid "Authentication for changing destination"
+msgstr "אימות לשינוי היעד"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "פעולה זו תשנה את היעד עבור {0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "יש להגדיר את המנהור הזה עם היעד החדש."
+
+msgid "Enter old destination below."
+msgstr "הזן יעד ישן למטה."
+
+msgid "Authentication for adding alternate destination"
+msgstr "אימות להוספת יעד חלופי"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "פעולה זו תוסיף יעד חלופי עבור {0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "אימות להוספת תת-דומיין"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "פעולה זו תוסיף תת-דומיין {0} של {1}, עם יעד שונה"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "יש להגדיר את המנהור הזה עם תת-הדומיין והיעד החדשים."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "הזן דומיין ברמה גבוהה יותר ויעד למטה."
+
+msgid "Return to Tunnel Configuration"
+msgstr "חזור להגדרות המנהור"
+
+msgid "Specify old name and destination"
+msgstr "ציין שם ויעד ישנים"
+
+msgid "This is only required for advanced authentication."
+msgstr "זה נדרש רק לאימות מתקדם."
+
+msgid "See above for required items."
+msgstr "ראה למעלה את הפריטים הנדרשים."
+
+msgid "Old / parent hostname "
+msgstr "שם מחשב ישן / שם המחשב המארח "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "קובץ מפתח פרטי עבור היעד הישן / תת-הדומיין המארח"
+
+msgid "Generate Authentication"
+msgstr "צור אימות"
+
+msgid "SSL Helper"
+msgstr "עוזר SSL"
+
+msgid "Experts only!"
+msgstr "למומחים בלבד!"
+
+msgid "Alt Base32"
+msgstr "Base32 חלופי"
+
+msgid "Incoming I2P Port Routing"
+msgstr "ניתוב פורטים נכנסים של I2P"
+
+msgid "Virtual Host"
+msgstr "מחשב מארח וירטואלי"
+
+msgid "Via SSL?"
+msgstr "דרך SSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "בדוק שרת HTTPS דרך I2P"
+
+msgid "Server"
+msgstr "שרת"
+
+msgid "SSL Activation"
+msgstr "הפעלת SSL"
+
+msgid "I2P webserver (eepsite)"
+msgstr "שרת אינטרנט של I2P (eepsite)"
+
+msgid "Disable SSL"
+msgstr "השבת SSL"
+
+msgid "Enable SSL"
+msgstr "הפעל SSL"
+
+msgid "New Certificate Password"
+msgstr "סיסמת תעודה חדשה"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "סיסמה (נדרשת להצפנת התעודה)"
+
+msgid "Generate new SSL certificate"
+msgstr "צור תעודת SSL חדשה"
+
+msgid "Generate SSL certificate and enable"
+msgstr "צור תעודת SSL והפעל"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "לא ניתן להגדיר, לא נמצא שרת Jetty בתוך {0}הגדרות הלקוחות{1} שתואם למנהור הזה"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "תמיכה בשרתים שאינם Jetty תתווסף בגרסה עתידית"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "חזור למנהל המנהורים"
+
+msgid "Return to Tunnel Editor"
+msgstr "חזור לעורך המנהורים"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "מנהל המנהורים של I2P - אשף יצירת מנהור"
+
+msgid "Server or client tunnel?"
+msgstr "מנהור שרת או מנהור לקוח?"
+
+msgid "Tunnel type"
+msgstr "סוג המנהור"
+
+msgid "Tunnel name and description"
+msgstr "שם ותיאור המנהור"
+
+msgid "Tunnel destination"
+msgstr "יעד המנהור"
+
+msgid "Binding address and port"
+msgstr "כתובת ופורט מקור"
+
+msgid "Tunnel auto-start"
+msgstr "הפעלה אוטומטית של המנהור"
+
+msgid "Wizard completed"
+msgstr "האשף הושלם"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "האשף הזה יוביל אותך דרך האפשרויות השונות הזמינות ליצירת מנהורים ב-I2P."
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "הדבר הראשון שיש להחליט הוא אם ברצונך ליצור מנהור שרת או מנהור לקוח."
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "אם ברצונך להתחבר לשירות מרוחק, כגון שרת IRC בתוך I2P או מאגר קוד, תדרוש מנהור לקוח."
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "מן הדבר השני, אם ברצונך לאחס שירות שאחרים יוכלו להתחבר אליו, תצטרך ליצור מנהור שרת."
+
+msgid "Server Tunnel"
+msgstr "מנהור שרת"
+
+msgid "Client Tunnel"
+msgstr "מנהור לקוח"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "יש כמה סוגי מנהורים לבחירה:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "מנהור בסיסי להתחברות לשירות יחיד בתוך I2P."
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "נסה זאת אם אף אחד מסוגי המנהורים שלהלן אינו מתאים לדרישות שלך, או אם אינך יודע איזה סוג מנהור אתה צריך."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "מנהור שפועל כפרוקסי HTTP לגישה ל-eepsites בתוך I2P."
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "הגדר את הדפדפן שלך להשתמש במנהור הזה כפרוקסי http, או הגדר את משתנה הסביבה \"http_proxy\" עבור יישומי שורת פקודה ב-GNU/Linux."
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "ניתן גם להגיע לאתרים מחוץ ל-I2P אם ידוע פרוקסי HTTP בתוך I2P."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "מנהור לקוח מותאם אישית לחיבורי IRC."
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "עם סוג מנהור זה, לקוח ה-IRC שלך יוכל להתחבר לרשת IRC בתוך I2P."
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "כל רשת IRC ב-I2P שברצונך להתחבר אליה תדרוש מנהור משלה. (ראו גם SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "מנהור שמממש את פרוטוקול SOCKS."
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "פעולה זו מאפשרת ביצוע חיבורי TCP ו-UDP דרך outproxy מסוג SOCKS בתוך I2P."
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "מנהור לקוח שמממש את פרוטוקול SOCKS, מותאם אישית להתחברות לרשתות IRC."
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "עם סוג מנהור זה, ניתן להגיע לרשתות IRC ב-I2P על ידי הקלדת כתובת ה-I2P בלקוח ה-IRC שלך, והגדרת לקוח ה-IRC להשתמש במנהור ה-SOCKS הזה."
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "משמעות הדבר היא שנדרש מנהור I2P אחד בלבד במקום מנהור נפרד לכל רשת IRC."
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "ניתן גם להגיע לרשתות IRC מחוץ ל-I2P אם ידוע outproxy מסוג SOCKS בתוך I2P, אף שהדבר תלוי בשאלה אם ה-outproxy נחסם על ידי רשת ה-IRC."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "מנהור שרת בסיסי לאחסון שירות כללי בתוך I2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "מנהור שרת מותאם אישית לחיבורי HTTP."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "השתמש בסוג מנהור זה אם ברצונך לאחס eepsite."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "מנהור שרת מותאם אישית לאחסון רשתות IRC בתוך I2P."
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "בדרך כלל, יש ליצור מנהור נפרד לכל שרת IRC שאמור להיות נגיש בתוך I2P."
+
+msgid "Select tunnel type"
+msgstr "בחר את סוג המנהור"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "בחר שם ותיאור עבור המנהור שלך."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "אפשר לבחור כל מה שתרצה - הם נועדים רק להקל על זיהוי המנהור ב-routerconsole."
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "אם אתה מכיר outproxy כלשהו עבור סוג מנהור זה (HTTP או SOCKS), מלא אותם למטה."
+
+msgid "Separate multiple proxies with commas."
+msgstr "הפרד בין פרוקסיים מרובים בפסיקים."
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "רשימת יעדי outproxy של I2P, מופרדת בפסיקים (לדוגמה proxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "הקלד את יעד ה-I2P של השירות שאליו מנהור הלקוח הזה אמור להתחבר."
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "זה יכול להיות מפתח היעד המלא ב-Base64, או כתובת URL של I2P מפנקס הכתובות שלך."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "הזן כאן כתובת b64 או .i2p"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "זו הכתובת IP שעליה פועל השירות שלך, בדרך כלל זו אותה מכונה ולכן 127.0.0.1 מוזן אוטומטית."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "זהו הפורט שעליו השירות מקבל חיבורים."
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "זהו הפורט שממנו נגשים למנהור הלקוח מקומית."
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "כיצד ברצונך שתהיה גישה למנהור הזה? רק מהמכונה הזו, מכל תת-הרשת שלך, או מהאינטרנט החיצוני?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "ברוב המקרים תרצה לאפשר רק ל-127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "נתב ה-I2P יכול להפעיל את המנהור הזה אוטומטית כאשר הנתב מופעל."
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "זה יכול להיות שימושי עבור מנהורים בשימוש תדיר (במיוחד מנהורי שרת), אך עבור מנהורים שמשתמשים בהם רק מדי פעם זה אומר שנתב ה-I2P יוצר ומתחזק מנהורים מיותרים."
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "האשף אסף כעת מספיק מידע כדי ליצור את המנהור שלך."
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "לאחר לחיצה על כפתור שמור שלהלן, האשף יגדיר את המנהור ויחזיר אותך לדף ה-I2PTunnel הראשי."
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "מכיוון שבחרת להפעיל את המנהור אוטומטית כאשר הנתב מופעל, אין לך לעשות דבר נוסף."
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "הנתב יפעיל את המנהור לאחר שהוגדר."
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "מכיוון שבחרת לא להפעיל את המנהור אוטומטית, תצטרך להפעיל אותו ידנית."
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "ניתן לעשות זאת על ידי לחיצה על כפתור הפעל בדף הראשי המתאים למנהור החדש."
+
+msgid "Below is a summary of the options you chose:"
+msgstr "להלן סיכום האפשרויות שבחרת:"
+
+msgid "Tunnel description"
+msgstr "תיאור המנהור"
+
+msgid "Binding address"
+msgstr "כתובת מקור"
+
+msgid "Tunnel port"
+msgstr "פורט המנהור"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "לצד הגדרות בסיסיות אלה, יש מספר אפשרויות מתקדמות להגדרת המנהור."
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "האשף יגדיר ערכי ברירת מחדל סבירים עבור אלה, אך תוכל להציג ו/או לערוך אותם על ידי לחיצה על שם המנהור בדף ה-I2PTunnel הראשי."
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "בטל את האשף וחזור לדף הבית של מנהל המנהורים"
+
+msgid "Return to previous page"
+msgstr "חזור לדף הקודם"
+
+msgid "Previous"
+msgstr "הקודם"
+
+msgid "Save tunnel configuration"
+msgstr "שמור את הגדרות המנהור"
+
+msgid "Save Tunnel"
+msgstr "שמור מנהור"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "סיים את האשף ובדוק את הגדרות המנהור"
+
+msgid "Finish"
+msgstr "סיים"
+
+msgid "Advance to next page"
+msgstr "התקדם לדף הבא"
+
+msgid "Next"
+msgstr "הבא"

@@ -1,0 +1,71 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: he
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: he\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "הפעל I2P"
+
+msgid "I2P is starting!"
+msgstr "I2P בתהליך הפעלה!"
+
+msgid "Starting"
+msgstr "בהפעלה"
+
+msgid "Launch I2P Browser"
+msgstr "פתח את דפדפן I2P"
+
+msgid "Configure I2P System Tray"
+msgstr "הגדר את מגש המערכת של I2P"
+
+msgid "Disable system tray"
+msgstr "השבת את מגש המערכת"
+
+msgid "Restart I2P"
+msgstr "הפעל מחדש I2P"
+
+msgid "Stop I2P"
+msgstr "עצור I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "הפעל מחדש את I2P מיד"
+
+msgid "Stop I2P Immediately"
+msgstr "עצור את I2P מיד"
+
+msgid "Cancel I2P Shutdown"
+msgstr "בטל את כיבוי I2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "כיבוי בעוד {0}"
+
+msgid "Shutdown imminent"
+msgstr "כיבוי מתקרב"
+
+msgid "Network"
+msgstr "רשת"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: לחיצה ימנית לתפריט"
+
+msgid "Enable notifications"
+msgstr "הפעל התראות"
+
+msgid "Disable notifications"
+msgstr "השבת התראות"

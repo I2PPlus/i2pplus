@@ -1,0 +1,262 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: sw
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: sw\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, no-wrap
+msgid "EEPGET"
+msgstr "EEPGET"
+
+#, no-wrap
+msgid "January 26, 2017"
+msgstr "26 Januari 2017"
+
+#, no-wrap
+msgid "I2P"
+msgstr "I2P"
+
+#, no-wrap
+msgid "NAME"
+msgstr "JINA"
+
+msgid "Eepget - I2P downloader"
+msgstr "Eepget - programu ya kupakua I2P"
+
+#, no-wrap
+msgid "SYNOPSIS"
+msgstr "MUHTASAR"
+
+msgid "B<eepget> [I<options>]I<URL>"
+msgstr "B<eepget> [I<options>]I<URL>"
+
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr "MAELEKEZO"
+
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "Pakua faili bila mwingiliano na mtumiaji kupitia HTTP. Hamisho kupitia I2P na mtandao wa kawaida wa Interneti zinawezekana."
+
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "Eepget inaweza kukabiliana na muunganisho wa mtandao wa polepole au usiyotulivu; ikiwa kupakuliwa hakufanikiwa kwa sababu ya hitilafu ya mtandao, eepget ataendelea kujaribu tena hadi faili nzima ipatikane (ikiwa chaguo la -n limewekwa).  Ikiwa seva ya mbali inaiunga mkono, eepget itaagiza seva iendelee na kupakua kutoka pale ilipokizwa."
+
+#, no-wrap
+msgid "OPTIONS"
+msgstr "CHAGUO"
+
+msgid "B<-c>"
+msgstr "B<-c>"
+
+#, no-wrap
+msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
+msgstr "Clearnet. Usitumie proksi. Sawa na B<-p> :0 ."
+
+msgid "B<-e> etag"
+msgstr "B<-e> etag"
+
+#, no-wrap
+msgid "Sets the etag value in the request headers."
+msgstr "Inaweka thamani ya etag katika vichwa vya ombi."
+
+msgid "B<-h> name=value"
+msgstr "B<-h> name=value"
+
+#, no-wrap
+msgid "Adds an arbitrary request header with the given name and value."
+msgstr "Inaongeza kichwa cha ombi lolote lenye jina na thamani zilizotolewa."
+
+msgid "B<-l> lineLen"
+msgstr "B<-l> lineLen"
+
+#, no-wrap
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "Inadhibiti onyeso la maendeleo. B<\\ lineLen > ni urefu wa safu moja ya maendeleo kwa herufi. Thamani ya default ni 40."
+
+msgid "B<-m> markSize"
+msgstr "B<-m> markSize"
+
+#, no-wrap
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "Inadhibiti onyeso la maendeleo. B<\\ markSize > ni idadi ya baiti inayowakilisha herufi moja ya ‘#’. Thamani ya default ni 1024."
+
+msgid "B<-n> retries"
+msgstr "B<-n> retries"
+
+#, no-wrap
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "Weka idadi ya mara za kujaribu tena kupakua ikiwa kupakuliwa hakufanikiwa. Ikiwa chaguo hiki hakijawekwa, eepget hatajaribu tena."
+
+msgid "B<-o> file"
+msgstr "B<-o> file"
+
+#, no-wrap
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
+msgstr "Inaweka faili ya matokeo inayotumika kwa kuandika. Ikiwa chaguo hiki hakijatolewa, jina la faili ya matokeo litatokana na URL."
+
+msgid "B<-p> proxy_host[:port]"
+msgstr "B<-p> proxy_host[:port]"
+
+#, no-wrap
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "Weka seva ya proksi ya I2P (eeproxy) ya kutumia. Ikiwa bandari haijasemewi, eepget itatumia 4444. Ikiwa chaguo hiki hakijawekwa, eepget itatumia 127.0.0.1:4444. Weka B<-c> au B<-p> :0 kuzima eeproxy."
+
+msgid "B<-t> seconds"
+msgstr "B<-t> seconds"
+
+#, no-wrap
+msgid "Sets the inactivity timeout. The default is 60 seconds."
+msgstr "Inaweka muda wa kusubiri wa kutofanya shughuli yoyote. Thamani ya default ni sekunde 60."
+
+msgid "B<-u> username"
+msgstr "B<-u> username"
+
+#, no-wrap
+msgid "Sets the username for proxy authorization, if required."
+msgstr "Inaweka jina la mtumiaji kwa idhini ya proksi, ikiwa inahitajika."
+
+msgid "B<-x> password"
+msgstr "B<-x> password"
+
+#, no-wrap
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "Inaweka nenosiri kwa idhini ya proksi, ikiwa inahitajika. Ikiwa jina la mtumiaji limewekwa bila nenosiri, EepGet litauliza nenosiri."
+
+#, no-wrap
+msgid "EXIT STATUS"
+msgstr "HALI YA KUTOKA"
+
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
+msgstr "B<eepget> inatoka kwa hali ya sifuri baada ya uhamisho uliofanikiwa na hali isiyokuwa sifuri ikiwa kulikuwa na matatizo katika kupakuliwa."
+
+#, no-wrap
+msgid "REPORTING BUGS"
+msgstr "KURIPOTI VIBAYA"
+
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "Tafadhali fungua tikiti kwenye E<.UR https://github.com/I2PPlus/i2pplus/issues> Msafara wa Vibaya wa I2P E<.UE .>"
+
+#, no-wrap
+msgid "SEE ALSO"
+msgstr "ONA LALO"
+
+msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+
+#, no-wrap
+msgid "I2PROUTER"
+msgstr "I2PROUTER"
+
+msgid "i2prouter - start and stop the I2P router"
+msgstr "i2prouter - anza na sitisha routeri ya I2P"
+
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+
+msgid "Control the I2P service."
+msgstr "Dhibiti huduma ya I2P."
+
+#, no-wrap
+msgid "B<console>"
+msgstr "B<console>"
+
+msgid "Runs I2P as a console application under the current user."
+msgstr "Inaendesha I2P kama programu ya konsola chini ya mtumiaji wa sasa."
+
+#, no-wrap
+msgid "B<start>"
+msgstr "B<start>"
+
+msgid "Starts the I2P service."
+msgstr "Inaanza huduma ya I2P."
+
+#, no-wrap
+msgid "B<stop>"
+msgstr "B<stop>"
+
+msgid "Stops the I2P service."
+msgstr "Inasitisha huduma ya I2P."
+
+#, no-wrap
+msgid "B<restart>"
+msgstr "B<restart>"
+
+msgid "Stops the I2P service and then starts it."
+msgstr "Inasitisha huduma ya I2P kisha inaanza."
+
+#, no-wrap
+msgid "B<condrestart>"
+msgstr "B<condrestart>"
+
+msgid "Restart the I2P service only if it is already running."
+msgstr "Anza upya huduma ya I2P tu ikiwa tayari inafanya kazi."
+
+#, no-wrap
+msgid "B<graceful>"
+msgstr "B<graceful>"
+
+msgid "Stop I2P gracefully (may take up to 11 minutes)"
+msgstr "Sitisha I2P kwa taratibu (inaweza kuchukua hadi dakika 11)"
+
+#, no-wrap
+msgid "B<install>"
+msgstr "B<install>"
+
+msgid "Install initscript to start I2P automatically when the system boots."
+msgstr "Sakinisha initscript ili kuanza I2P kiotomatiki mfumo unapowasha."
+
+#, no-wrap
+msgid "B<remove>"
+msgstr "B<remove>"
+
+msgid "Uninstall initscript that was installed with B<install>"
+msgstr "Ondoa initscript iliyosakinishwa kwa B<install>"
+
+#, no-wrap
+msgid "B<status>"
+msgstr "B<status>"
+
+msgid "Prints whether the I2P service is running."
+msgstr "Inaonyesha kama huduma ya I2P inafanya kazi."
+
+#, no-wrap
+msgid "B<dump>"
+msgstr "B<dump>"
+
+msgid "Dumps the current threads into B<wrapper.log>."
+msgstr "Inaandika dumpli ya nyuzi wa sasa kwenye B<wrapper.log>."
+
+msgid "B<i2prouter-nowrapper>(1)"
+msgstr "B<i2prouter-nowrapper>(1)"
+
+#, no-wrap
+msgid "I2PROUTER-NOWRAPPER"
+msgstr "I2PROUTER-NOWRAPPER"
+
+msgid "i2prouter-nowrapper - start the I2P router"
+msgstr "i2prouter-nowrapper - anza routeri ya I2P"
+
+msgid "B<i2prouter-nowrapper>"
+msgstr "B<i2prouter-nowrapper>"
+
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "Anza routeri ya I2P, bila wrapper wa huduma.  Hii inamaanisha kuwa routeri hataanza upya ikiwa itakufa.  Pia, itatumia kumbukumbu ya ukubwa wa default, ambayo inaweza isitoshe kwa I2P."
+
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "Unapaswa kutumia script ya B<i2prouter>(1)  badala yake.  Hakuna chaguo zozote.  Ili kusitisha routeri, tumia kivinjari chako kufikia E<.UR http://localhost:7657/> konsola ya routeri E<.UE .>"
+
+msgid "B<i2prouter>(1)"
+msgstr "B<i2prouter>(1)"
