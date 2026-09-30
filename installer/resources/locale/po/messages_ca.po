@@ -1,0 +1,144 @@
+# I2P
+# Copyright (C) 2012 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "No s’ha pogut carregar el wrapper"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME ja és en execució."
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "Executant $APP_LONG_NAME"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "Esperant $APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "AVÍS: pot ser que $APP_LONG_NAME no s’hagi pogut arrencar."
+
+msgid "Must be root to perform this action."
+msgstr "Heu de ser root per dur a terme aquesta acció."
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "Arrencant $APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "Aturant $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME no era en execució."
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "No s’ha pogut aturar $APP_LONG_NAME."
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "Esperant que $APP_LONG_NAME surti"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "Ha fallat l’aturada de $APP_LONG_NAME."
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME s’ha aturat."
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "Aturant $APP_LONG_NAME de manera suau"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME no és en execució."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME és en execució: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME és en execució: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "El dimoni $APP_LONG_NAME ja està instal·lat."
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "Instal·lant el dimoni $APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "La instal·lació no és compatible amb $DIST_OS en aquest moment"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "Elimenant el dimoni $APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "El dimoni $APP_LONG_NAME no està instal·lat en aquest moment."
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "L’eliminació no és compatible amb $DIST_OS en aquest moment"
+
+msgid "Commands:"
+msgstr "Ordres:"
+
+msgid "Launch in the current console."
+msgstr "Executeu a la consola actual."
+
+msgid "Start in the background as a daemon process."
+msgstr "Arrenqueu en segon pla com a procés dimoni."
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "Atureu si s’està executant com a dimoni o en una altra consola."
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "Atureu de manera suau, pot trigar fins a 11 minuts o més."
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "Reinicieu de manera suau, pot trigar fins a 11 minuts o més."
+
+msgid "Stop if running and then start."
+msgstr "Atureu si s’està executant i, a continuació, arrenqueu-lo."
+
+msgid "Restart only if already running."
+msgstr "Reinicieu només si ja s’està executant."
+
+msgid "Query the current status."
+msgstr "Consulteu l’estat actual."
+
+msgid "Install to start automatically when system boots."
+msgstr "Instal·leu perquè s’arrenqui automàticament en arrencar el sistema."
+
+msgid "Uninstall."
+msgstr "Desinstal·leu."
+
+msgid "Request a Java thread dump if running."
+msgstr "Sol·liciteu una volcada de fils de Java si s’està executant."
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "Editeu i2prouter i definiu la variable RUN_AS_USER"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "Executar I2P com a usuari root *no* està recomanat."
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "Per executar com a root igualment, editeu i2prouter i definiu ALLOW_ROOT=true."

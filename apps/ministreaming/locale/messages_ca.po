@@ -1,0 +1,63 @@
+# I2P
+# Copyright (C) 2014 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "Temps d’espera del missatge"
+
+msgid "Failed delivery to local destination"
+msgstr "Ha fallat el lliurament a la destinació local"
+
+msgid "Local router failure"
+msgstr "Error del router local"
+
+msgid "Local network failure"
+msgstr "Error de la xarxa local"
+
+msgid "Session closed"
+msgstr "Sessió tancada"
+
+msgid "Invalid message"
+msgstr "Missatge no vàlid"
+
+msgid "Invalid message options"
+msgstr "Opcions de missatge no vàlides"
+
+msgid "Buffer overflow"
+msgstr "Desbordament del buffer"
+
+msgid "Message expired"
+msgstr "Missatge caducat"
+
+msgid "Local lease set invalid"
+msgstr "LeaseSet local no vàlid"
+
+msgid "No local tunnels"
+msgstr "No hi ha túnels locals"
+
+msgid "Unsupported encryption options"
+msgstr "Opcions de xifratge no compatibles"
+
+msgid "Invalid destination"
+msgstr "Destinació no vàlida"
+
+msgid "Destination lease set expired"
+msgstr "LeaseSet de la destinació caducat"
+
+msgid "Destination lease set not found"
+msgstr "No s’ha trobat el LeaseSet de la destinació"
+
+msgid "Local destination shutdown"
+msgstr "Aturada de la destinació local"
+
+msgid "Connection was reset"
+msgstr "La connexió s’ha reinicialitzat"
+
+msgid "Failure code"
+msgstr "Codi de fallida"

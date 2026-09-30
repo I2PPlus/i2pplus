@@ -1,0 +1,462 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} missatge nou"
+msgstr[1] "{0} missatges nous"
+
+msgid "Email"
+msgstr "Correu electrònic"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr "No s’ha trobat cap codificador per a la codificació «{0}»."
+
+msgid "Re:"
+msgstr "Resposta:"
+
+msgid "Fwd:"
+msgstr "Reenvia:"
+
+msgid "Drafts"
+msgstr "Esborranys"
+
+msgid "Sent"
+msgstr "Enviats"
+
+msgid "Trash"
+msgstr "Paperera"
+
+msgid "Bulk Mail"
+msgstr "Correu massiu"
+
+msgid "Inbox"
+msgstr "Safata d’entrada"
+
+msgid "View message as HTML"
+msgstr "Mostra el missatge com a HTML"
+
+msgid "View message as plain text"
+msgstr "Mostra el missatge com a text pla"
+
+msgid "unknown"
+msgstr "desconegut"
+
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Per protegir la vostra privacitat, SusiMail està bloquejant Javascript i qualsevol contingut remot inclòs en aquest missatge HTML."
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "Activeu Javascript per obtenir una presentació millorada i funcions addicionals."
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "Imatges de seguiment eliminades del missatge: {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "Imatges bloquejades no mostrades: {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr "No s’admet el joc de caràcters «{0}»."
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "La part ({0}) no es mostra, a causa de {1}"
+
+msgid "Reloading the page may fix the error."
+msgstr "Recarregar la pàgina pot corregir l’error."
+
+msgid "File"
+msgstr "Fitxer"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "Baixa l’adjunt {0}"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "El fitxer s’empaqueta en un fitxer zip per raons de seguretat."
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "Adjunt ({0})."
+
+msgid "Need username for authentication."
+msgstr "Cal un nom d’usuari per a l’autenticació."
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "No inclogueu @mail.i2p al nom d’usuari"
+
+msgid "Need password for authentication."
+msgstr "Cal una contrasenya per a l’autenticació."
+
+msgid "Need hostname for connect."
+msgstr "Cal un nom d’amfitrió per connectar."
+
+msgid "Need port number for pop3 connect."
+msgstr "Cal un número de port per connectar amb POP3."
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "El número de port POP3 no està en el rang 0..65535."
+
+msgid "POP3 port number is invalid."
+msgstr "El número de port POP3 no és vàlid."
+
+msgid "Need port number for smtp connect."
+msgstr "Cal un número de port per connectar amb SMTP."
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "El número de port SMTP no està en el rang 0..65535."
+
+msgid "SMTP port number is invalid."
+msgstr "El número de port SMTP no és vàlid."
+
+msgid "Cannot connect"
+msgstr "No es pot connectar"
+
+msgid "Error connecting to server"
+msgstr "Error en connectar al servidor"
+
+msgid "Draft saved."
+msgstr "Esborrany desat."
+
+msgid "Unable to save mail."
+msgstr "No s’ha pogut desar el correu."
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "El {0} {1} va escriure:"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "Error en llegir el fitxer pujat: {0}"
+
+msgid "begin forwarded mail"
+msgstr "inici del correu reenviat"
+
+msgid "end forwarded mail"
+msgstr "fi del correu reenviat"
+
+msgid "Could not fetch mail body."
+msgstr "No s’ha pogut obtenir el cos del correu."
+
+msgid "Message id not valid."
+msgstr "L’id del missatge no és vàlid."
+
+msgid "Internal error, lost connection."
+msgstr "Error intern, s’ha perdut la connexió."
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "No s’ha trobat cap codificació per a {0}"
+
+msgid "Attachment not found."
+msgstr "No s’ha trobat l’adjunt."
+
+msgid "Message not found."
+msgstr "No s’ha trobat el missatge."
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "S’ha suprimit 1 missatge."
+msgstr[1] "S’han suprimit {0} missatges."
+
+msgid "No messages marked for deletion."
+msgstr "No hi ha missatges marcats per suprimir."
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr "L’amfitrió no ha canviat. Editeu el fitxer de configuració {0} per canviar l’amfitrió."
+
+msgid "Configuration saved"
+msgstr "Configuració desada"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "Nombre de mida de pàgina no vàlid, es restableix el valor per defecte."
+
+msgid "Login"
+msgstr "Iniciar la sessió"
+
+msgid "Loading messages, please wait..."
+msgstr "S’estan carregant els missatges, espereu..."
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "1 missatge"
+msgstr[1] "{0} missatges"
+
+msgid "No messages"
+msgstr "No hi ha missatges"
+
+msgid "Show Message"
+msgstr "Mostra el missatge"
+
+msgid "New Message"
+msgstr "Missatge nou"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+msgid "I2PMail"
+msgstr "I2PMail"
+
+msgid "No new messages"
+msgstr "No hi ha missatges nous"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} és un servei exclusiu d’I2P proporcionat per {1}."
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "Client de correu web {0} &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "S’està comprovant si hi ha missatges nous al servidor"
+
+msgid "Refresh the page for updates"
+msgstr "Actualitzeu la pàgina per veure les actualitzacions"
+
+msgid "Removed tracking image placeholder"
+msgstr "S’ha eliminat el marcador de posició de la imatge de seguiment"
+
+msgid "no subject"
+msgstr "sense assumpte"
+
+msgid "No Drafts folder?"
+msgstr "No hi ha la carpeta d’esborranys?"
+
+msgid "Found no valid sender address."
+msgstr "No s’ha trobat cap adreça de remitent vàlida."
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr "No s’ha trobat cap adreça vàlida a «{0}»."
+
+msgid "No recipients found."
+msgstr "No s’han trobat destinataris."
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "El correu electrònic és massa gran, el màxim és {0}"
+
+msgid "Sending mail."
+msgstr "S’està enviant el correu."
+
+msgid "Error sending mail"
+msgstr "Error en enviar el correu"
+
+msgid "Mail sent."
+msgstr "Correu enviat."
+
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgid "Save as Draft"
+msgstr "Desa com a esborrany"
+
+msgid "Send"
+msgstr "Envia"
+
+msgid "From"
+msgstr "Des de"
+
+msgid "To"
+msgstr "Fins a"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Bcc"
+msgstr "Ccc"
+
+msgid "Subject"
+msgstr "Assumpte"
+
+msgid "Add Attachment"
+msgstr "Afegeix un adjunt"
+
+msgid "Add attachment"
+msgstr "Afegeix un adjunt"
+
+msgid "Attachments"
+msgstr "Adjunts"
+
+msgid "Delete selected attachments"
+msgstr "Suprimeix els adjunts seleccionats"
+
+msgid "I2PMail Login"
+msgstr "Inicia la sessió a I2PMail"
+
+msgid "User"
+msgstr "Usuari"
+
+msgid "Username"
+msgstr "Nom d’usuari"
+
+msgid "Password"
+msgstr "Contrasenya"
+
+msgid "Toggle password visibility"
+msgstr "Alterna la visibilitat de la contrasenya"
+
+msgid "Host"
+msgstr "Amfitrió"
+
+msgid "POP3 Port"
+msgstr "Port POP3"
+
+msgid "SMTP Port"
+msgstr "Port SMTP"
+
+msgid "Read Mail Offline"
+msgstr "Llegeix el correu fora de línia"
+
+msgid "Settings"
+msgstr "Preferències"
+
+msgid "Learn about I2PMail"
+msgstr "Més informació sobre I2PMail"
+
+msgid "Create Account"
+msgstr "Crea un compte"
+
+msgid "New"
+msgstr "Nou"
+
+msgid "Check Mail"
+msgstr "Comprova el correu"
+
+msgid "Refresh Page"
+msgstr "Actualitza la pàgina"
+
+msgid "Change to Folder"
+msgstr "Canvia a la carpeta"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "1 missatge"
+msgstr[1] "{0} missatges"
+
+msgid "Logout"
+msgstr "Tanca la sessió"
+
+msgid "Date"
+msgstr "Data"
+
+msgid "Size"
+msgstr "Mida"
+
+msgid "Mark for deletion"
+msgstr "Marca per suprimir"
+
+msgid "Really delete the marked messages?"
+msgstr "Voleu suprimir de debò els missatges marcats?"
+
+msgid "Yes, really delete them!"
+msgstr "Sí, suprimiu-los de debò!"
+
+msgid "Delete Selected"
+msgstr "Suprimeix la selecció"
+
+msgid "Mark All"
+msgstr "Marca-ho tot"
+
+msgid "Clear All"
+msgstr "Neteja-ho tot"
+
+msgid "Message contains HTML"
+msgstr "El missatge conté HTML"
+
+msgid "Message is new"
+msgstr "El missatge és nou"
+
+msgid "Message is spam"
+msgstr "El missatge és correu basura"
+
+msgid "Message body not downloaded"
+msgstr "El cos del missatge no s’ha baixat"
+
+msgid "First"
+msgstr "Primera"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Next"
+msgstr "Següent"
+
+msgid "Last"
+msgstr "Última"
+
+msgid "Really delete this message?"
+msgstr "Voleu suprimir de debò aquest missatge?"
+
+msgid "Yes, really delete it!"
+msgstr "Sí, suprimiu-lo de debò!"
+
+msgid "Reply"
+msgstr "Resposta"
+
+msgid "Reply All"
+msgstr "Resposta a tots"
+
+msgid "Forward"
+msgstr "Reenvia"
+
+msgid "Save As"
+msgstr "Desa com a"
+
+msgid "Delete"
+msgstr "Suprimeix"
+
+msgid "Back to Folder"
+msgstr "Torna a la carpeta"
+
+msgid "Move to Folder"
+msgstr "Mou a la carpeta"
+
+msgid "View message in new tab"
+msgstr "Mostra el missatge en una pestanya nova"
+
+msgid "Folder Page Size"
+msgstr "Mida de pàgina de la carpeta"
+
+msgid "Set"
+msgstr "Defineix"
+
+msgid "Advanced Configuration"
+msgstr "Configuració avançada"
+
+msgid "Save Configuration"
+msgstr "Desa la configuració"
+
+msgid "No response from server"
+msgstr "No hi ha resposta del servidor"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr "Ha fallat l’inici de sessió al servidor de correu, el nom d’usuari o la contrasenya no són correctes."
+
+msgid "Logout and then login again with the correct username and password."
+msgstr "Tanqueu la sessió i torneu a iniciar-la amb el nom d’usuari i la contrasenya correctes."
+
+msgid "Login failed"
+msgstr "Ha fallat l’inici de sessió"
+
+msgid "Server refused connection"
+msgstr "El servidor ha rebutjat la connexió"
+
+msgid "Mail rejected"
+msgstr "Correu rebutjat"

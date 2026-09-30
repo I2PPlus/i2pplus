@@ -1,0 +1,1781 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Aquesta sembla ser una destinació incorrecta:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper no us pot ajudar amb una destinació com aquesta!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Per visitar la destinació de la vostra llibreta d’adreces, feu clic <a href=\"{0}\">aquí</a>. Per visitar la destinació conflictiva de l’ajudant d’adreces, feu clic <a href=\"{1}\">aquí</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destinació per a {0} a la llibreta d’adreces"
+
+msgid "Conflicting address helper destination"
+msgstr "Destinació conflictiva de l’ajudant d’adreces"
+
+msgid "Corrupt Base32 address"
+msgstr "Adreça Base32 corrupta"
+
+msgid "Destination LeaseSet not found"
+msgstr "No s’ha trobat el LeaseSet de la destinació"
+
+msgid "Host"
+msgstr "Amfitrió"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destinació"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Continueu cap a {0} sense desar"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Podeu navegar fins al lloc web sense desar-lo a la llibreta d’adreces. L’adreça es recordarà fins que reinicialitzeu el vostre router d’I2P."
+
+msgid "Continue without saving"
+msgstr "Continueu sense desar"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "Deseu {0} a la llibreta d’adreces del router i continueu cap al lloc web"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Aquesta adreça es desarà a la llibreta d’adreces del vostre router, on es guarden les adreces basades en subscripcions."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Si voleu fer el seguiment dels llocs web que heu afegit manualment, afegiu-los a la vostra llibreta d’adreces mestra o privada."
+
+msgid "Save & continue"
+msgstr "Deseu i continueu"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Deseu {0} a la llibreta d’adreces mestra i continueu cap al lloc web"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Aquesta adreça es desarà a la vostra llibreta d’adreces mestra. Seleccioneu aquesta opció per a les adreces que voleu mantenir separades de la llibreta d’adreces principal del router, però que no us importa publicar."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Deseu {0} a la llibreta d’adreces privada i continueu cap al lloc web"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Aquesta adreça es desarà a la vostra llibreta d’adreces privada, cosa que garanteix que no es publiqui mai."
+
+msgid "Base32 address requires lookup password"
+msgstr "L’adreça Base32 requereix una contrasenya de cerca"
+
+msgid "Base32 address requires encryption key"
+msgstr "L’adreça Base32 requereix una clau de xifrat"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "L’adreça Base32 requereix una clau de xifrat i una contrasenya de cerca"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Error en el descifratge de l’adreça Base32, comproveu la clau de xifrat"
+
+msgid "Generate"
+msgstr "Genereu"
+
+msgid "Encryption key"
+msgstr "Clau de xifrat"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Heu d’introduir o bé una clau de xifrat PSK proporcionada per l’operador del servidor, o bé generar una clau de xifrat DH i enviar-la a l’operador del servidor."
+
+msgid "Ask the server operator for help."
+msgstr "Demaneu ajuda a l’operador del servidor."
+
+msgid "Enter PSK encryption key"
+msgstr "Introduïu la clau de xifrat PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Genereu una clau de xifrat DH nova"
+
+msgid "Lookup password"
+msgstr "Contrasenya de cerca"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Heu d’introduir la contrasenya proporcionada per l’operador del servidor."
+
+msgid "HTTP Outproxy"
+msgstr "Outproxy HTTP"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "Feu clic en un enllaç a continuació per obtenir un ajudant d’adreces d’un servei de salt"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Afegit mitjançant l’ajudant d’adreces des de {0}"
+
+msgid "Added via address helper"
+msgstr "Afegit mitjançant l’ajudant d’adreces"
+
+msgid "Missing lookup password"
+msgstr "Falta la contrasenya de cerca"
+
+msgid "Missing private key"
+msgstr "Falta la clau privada"
+
+msgid "Invalid private key"
+msgstr "Clau privada no vàlida"
+
+msgid "Your new encryption key"
+msgstr "La vostra nova clau de xifrat"
+
+msgid "Router Console"
+msgstr "Consola del router"
+
+msgid "Addressbook"
+msgstr "Llibreta d’adreces"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Copieu la clau i envieu-la a l’operador del servidor."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Un cop se us hagi concedit el permís, podreu accedir al lloc web."
+
+msgid "Go back and fix the error"
+msgstr "Torneu enrere i corregiu l’error"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "mestra"
+
+msgid "private"
+msgstr "privada"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Redirigint a {0}"
+
+msgid "Redirection in progress"
+msgstr "Redirecció en curs"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Heu desat {0} a la llibreta d’adreces {1}, ara us redirigim."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "No s’ha pogut desar {0} a la llibreta d’adreces {1}, ara us redirigim."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Feu clic aquí si no se us redirigeix automàticament."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Heu desat l’autenticació per a {0}, ara us redirigim."
+
+msgid "Failed to save configuration"
+msgstr "No s’ha pogut desar la configuració"
+
+msgid "Configuration changes saved"
+msgstr "Canvis de configuració desats"
+
+msgid "Client"
+msgstr "Client"
+
+msgid "internal"
+msgstr "intern"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} túnel d’entrada, {0} túnel de sortida"
+msgstr[1] "{0} túnels d’entrada, {0} túnels de sortida"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} túnel d’entrada"
+msgstr[1] "{0} túnels d’entrada"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} túnel de sortida"
+msgstr[1] "{0} túnels de sortida"
+
+msgid "lower bandwidth and reliability"
+msgstr "ample de banda i fiabilitat inferiors"
+
+msgid "standard bandwidth and reliability"
+msgstr "ample de banda i fiabilitat estàndard"
+
+msgid "higher bandwidth and reliability"
+msgstr "ample de banda i fiabilitat superiors"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "Error: els túnells encara no estan inicialitzats"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Enviament de formulari no vàlid, probablement perquè heu fet servir el botó «enrere» o «recarrega» del navegador. Torneu-lo a enviar."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Si el problema persisteix, verifiqueu que teniu les galetes activades al navegador."
+
+msgid "No services configured, cannot restart!"
+msgstr "No hi ha cap servei configurat, no es pot reiniciar!"
+
+msgid "Stopping tunnel"
+msgstr "Aturant el túnel"
+
+msgid "Starting tunnel"
+msgstr "Iniciant el túnel"
+
+msgid "Error restarting tunnel"
+msgstr "Error en reiniciar el túnel"
+
+msgid "Restarted all running tunnels"
+msgstr "S’han reiniciat tots els túnels en execució"
+
+msgid "No clients configured, cannot restart!"
+msgstr "No hi ha cap client configurat, no es pot reiniciar!"
+
+msgid "Restarted all running client tunnels"
+msgstr "S’han reiniciat tots els túnels de client en execució"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Configuració recarregada per a tots els túnels"
+
+msgid "Error: Invalid tunnel"
+msgstr "Error: túnel no vàlid"
+
+msgid "Started tunnel"
+msgstr "Túnel iniciat"
+
+msgid "Stopped tunnel"
+msgstr "Túnel aturat"
+
+msgid "Restarting tunnel"
+msgstr "Reiniciant el túnel"
+
+msgid "New Tunnel"
+msgstr "Túnel nou"
+
+msgid "Port not set"
+msgstr "Port no configurat"
+
+msgid "Invalid port"
+msgstr "Port no vàlid"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "Advertència: no es recomanen ports inferiors a 1024"
+
+msgid "Warning - duplicate port"
+msgstr "Advertència: port duplicat"
+
+msgid "Standard client"
+msgstr "Client estàndard"
+
+msgid "HTTP/HTTPS client"
+msgstr "Client HTTP/HTTPS"
+
+msgid "IRC client"
+msgstr "Client IRC"
+
+msgid "Standard server"
+msgstr "Servidor estàndard"
+
+msgid "HTTP server"
+msgstr "Servidor HTTP"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "Proxy SOCKS 4/4a/5"
+
+msgid "SOCKS IRC proxy"
+msgstr "Proxy SOCKS IRC"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "Proxy CONNECT/SSL/HTTPS"
+
+msgid "IRC server"
+msgstr "Servidor IRC"
+
+msgid "Streamr client"
+msgstr "Client Streamr"
+
+msgid "Streamr server"
+msgstr "Servidor Streamr"
+
+msgid "HTTP bidir"
+msgstr "Bidir HTTP"
+
+msgid "Host not set"
+msgstr "Amfitrió no configurat"
+
+msgid "Invalid address"
+msgstr "Adreça no vàlida"
+
+msgid "Tunnel Manager"
+msgstr "Gestor de túnels"
+
+msgid "Edit Client Tunnel"
+msgstr "Edita el túnel de client"
+
+msgid "Edit Server Tunnel"
+msgstr "Edita el túnel de servidor"
+
+msgid "Are you sure you want to delete?"
+msgstr "Segur que voleu suprimir?"
+
+msgid "required"
+msgstr "obligatori"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "El túnel i tots els altres túnels de client compartits s’han d’aturar per canviar aquesta configuració"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "El túnel s’ha d’aturar per canviar aquesta configuració"
+
+msgid "New Client Configuration"
+msgstr "Nova configuració del client"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Auto Start Tunnel"
+msgstr "Inici automàtic del túnel"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "Nom del túnel que es mostrarà a la pàgina principal del Gestor de túnels i a la barra lateral de la consola del router"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "Activeu aquesta opció per garantir que aquest servei estigui disponible quan s’arrenqui el router"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "Inicia el túnel automàticament quan s’arrenca el router"
+
+msgid "Description"
+msgstr "Descripció"
+
+msgid "Shared Client"
+msgstr "Client compartit"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "Descripció del túnel que es mostrarà a la pàgina principal del Gestor de túnels"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "El tràfic de tots els clients amb aquesta funció activada s’enrutarà pel mateix conjunt de túnels. Això farà que el perfilat dels túnels per part d’un adversari sigui més difícil, però enlligarà els clients entre ells."
+
+msgid "Share tunnels with other configured clients"
+msgstr "Comparteix els túnels amb altres clients configurats"
+
+msgid "Target"
+msgstr "Objectiu"
+
+msgid "Access Point"
+msgstr "Punt d’accés"
+
+msgid "Use Outproxy Plugin"
+msgstr "Utilitza el connector d’outproxy"
+
+msgid "Enable DCC"
+msgstr "Activa DCC"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "Indiqueu el port local des del qual ha de ser accessible aquest servei"
+
+msgid "Hostname or IP address of the target server"
+msgstr "Nom d’amfitrió o adreça IP del servidor objectiu"
+
+msgid "Reachable by"
+msgstr "Accessible des de"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "Interfície local (adreça IP) des de la qual serà accessible el túnel de client"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "Si s’ha instal·lat un connector d’outproxy (p. ex. Orchid), feu-lo servir en lloc de qualsevol outproxy configurat per accedir a llocs web fora d’I2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "Utilitza el connector en lloc dels proxies de sota, si està disponible"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "Activa el xat directe i les transferències de fitxers, evitant I2P. Tingueu en compte que això compromet la vostra anonimat i no es recomana."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "Activa el protocol directe de client a client"
+
+msgid "Outproxies"
+msgstr "Outproxies"
+
+msgid "SSL Outproxies"
+msgstr "Outproxies SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "Indiqueu aquí l’adreça .i2p o la destinació (b32 o b64) de l’outproxy."
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "Per a una selecció aleatòria d’un grup, separeu amb comes, p. ex. server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "Tipus d’outproxy"
+
+msgid "Tunnel Destination"
+msgstr "Destinació del túnel"
+
+msgid "Use SSL"
+msgstr "Utilitza SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "Indiqueu aquí l’adreça .i2p o la destinació (b32 o b64) del túnel."
+
+msgid "name, name:port, or destination"
+msgstr "nom, nom:port o destinació"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "Si accediu a un servei en un router I2P remot, potser voldreu connectar-vos amb SSL per evitar la interceptació del tràfic. També s’hauria de configurar l’aplicació del client per fer servir SSL."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "Els clients utilitzen SSL per connectar-se al túnel"
+
+msgid "Please specify the full b64 destination."
+msgstr "Indiqueu la destinació b64 completa."
+
+msgid "Local destination"
+msgstr "Destinació local"
+
+msgid "Local Base32"
+msgstr "Base32 local"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "Només de lectura: destinació local (si es coneix)"
+
+msgid "Stop"
+msgstr "Atura"
+
+msgid "Start this Tunnel"
+msgstr "Inicia aquest túnel"
+
+msgid "Start"
+msgstr "Inicia"
+
+msgid "Cancel"
+msgstr "Cancel·la"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "Suprimeix aquest túnel (no es pot desfer)"
+
+msgid "Delete"
+msgstr "Suprimeix"
+
+msgid "Save"
+msgstr "Desa"
+
+msgid "Advanced networking options"
+msgstr "Opcions avançades de xarxa"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "Nota: quan aquest client està configurat per compartir túnels, aquestes opcions s’apliquen a tots els clients configurats per compartir túnels."
+
+msgid "Profile"
+msgstr "Perfil"
+
+msgid "Delay Connect"
+msgstr "Retarda la connexió"
+
+msgid "Connection Profile"
+msgstr "Perfil de connexió"
+
+msgid "interactive connection"
+msgstr "connexió interactiva"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "connexió massiva (descàrregues/llocs web/BT)"
+
+msgid "Delay Connection"
+msgstr "Retarda la connexió"
+
+msgid "for request/response connections"
+msgstr "per a les connexions de petició/resposta"
+
+msgid "Router I2CP Address"
+msgstr "Adreça I2CP del router"
+
+msgid "I2CP Hostname or IP"
+msgstr "Nom d’amfitrió o IP d’I2CP"
+
+msgid "I2CP Port Number"
+msgstr "Número de port I2CP"
+
+msgid "Delay tunnel open until required"
+msgstr "Retarda l’obertura del túnel fins que calgui"
+
+msgid "Signature type"
+msgstr "Tipus de signatura"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "Conserva els recursos creant túnells només quan calguin"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "No obris el túnel fins que es detecti activitat al port"
+
+msgid "This is the default, recommended option"
+msgstr "Aquesta és l’opció predeterminada i recomanada"
+
+msgid "Encryption types"
+msgstr "Tipus de xifratge"
+
+msgid "Legacy options"
+msgstr "Opcions heredades"
+
+msgid "Post Quantum"
+msgstr "Postquàntic"
+
+msgid "Both encryption types"
+msgstr "Els dos tipus de xifratge"
+
+msgid "Tunnel Options"
+msgstr "Opcions dels túnels"
+
+msgid "Length"
+msgstr "Longitud"
+
+msgid "Count"
+msgstr "Nombre"
+
+msgid "Length of each Tunnel"
+msgstr "Longitud de cada túnel"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "Túnel de 0 salts (sense anonimat)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "Túnel d’1 salt (anonimat baix)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "Túnel de 2 salts (anonimat mitjà)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "Túnel de 3 salts (anonimat alt)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} salt de túnel"
+msgstr[1] "{0} salts de túnel"
+
+msgid "Number of Tunnels in Group"
+msgstr "Nombre de túnels al grup"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "Desactivat per a túnels de 0 salts"
+
+msgid "Variance"
+msgstr "Variació"
+
+msgid "Backup Count"
+msgstr "Nombre de reserva"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "Nivell d’aleatorització de la longitud del túnel"
+
+msgid "0 hop variance"
+msgstr "Variació de 0 salts"
+
+msgid "no randomization, consistent performance"
+msgstr "sense aleatorització, rendiment constant"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ variació de 0-1 salts"
+
+msgid "medium randomization, lower performance"
+msgstr "aleatorització mitjana, rendiment inferior"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ variació de 0-2 salts"
+
+msgid "high randomization, very low performance"
+msgstr "aleatorització alta, rendiment molt inferior"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- variació de 0-1 salts"
+
+msgid "standard randomization, standard performance"
+msgstr "aleatorització estàndard, rendiment estàndard"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- variació de 0-2 salts"
+
+msgid "not recommended"
+msgstr "no es recomana"
+
+msgid "hop variance"
+msgstr "variació de salts"
+
+msgid "Number of Reserve Tunnels"
+msgstr "Nombre de túnels de reserva"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} túnel de reserva"
+msgstr[1] "{0} túnels de reserva"
+
+msgid "no redundancy, no added resource usage"
+msgstr "sense redundància, sense ús addicional de recursos"
+
+msgid "low redundancy, low resource usage"
+msgstr "redundància baixa, ús de recursos baix"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "redundància mitjana, ús de recursos mitjà"
+
+msgid "high redundancy, high resource usage"
+msgstr "redundància alta, ús de recursos alt"
+
+msgid "Reduce tunnel quantity"
+msgstr "Redueix la quantitat de túnels"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "Redueix el nombre de túnels quan estan inactius per conservar els recursos, però mantén el túnel obert (per garantir la disponibilitat immediata)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "Redueix la quantitat de túnels quan estan inactius"
+
+msgid "Idle period"
+msgstr "Període d’inactivitat"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "Temps d’inactivitat reduït dels túnels"
+
+msgid "Reduced count"
+msgstr "Nombre reduït"
+
+msgid "Reduced tunnel count"
+msgstr "Nombre de túnels reduït"
+
+msgid "Close tunnels when idle"
+msgstr "Tanca els túnels quan estan inactius"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "Per conservar els recursos, tanqueu els túnels quan no s’utilitzin"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "Tanqueu els túnels de client després del període d’inactivitat especificat"
+
+msgid "Close Tunnel Idle Time"
+msgstr "Temps d’inactivitat per tancar els túnels"
+
+msgid "New Keys on Reopen"
+msgstr "Claus noves en reobrir"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "Canvia la identitat del túnel (destinació) quan es tornin a obrir els túnels"
+
+msgid "Enable"
+msgstr "Activa"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "Conserva la identitat del túnel (destinació) quan es tornin a obrir els túnels"
+
+msgid "Disable"
+msgstr "Desactiva"
+
+msgid "Persistent private key"
+msgstr "Clau privada persistent"
+
+msgid "Private key file"
+msgstr "Fitxer de clau privada"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "En activar aquesta funció, la identitat del vostre túnel (destinació) romandrà estàtica, per a serveis que ofereixen funcions basades en la destinació, p. ex. l’autenticació d’usuaris d’IRC"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "Genereu una clau per activar una identitat de túnel de client persistent"
+
+msgid "Path to Private Key File"
+msgstr "Camí al fitxer de clau privada"
+
+msgid "HTTP Filtering"
+msgstr "Filtratge HTTP"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "Quan està activat, l’agent d’usuari del vostre navegador web o client http no se suplantarà, cosa que pot reduir la vostra anonimat"
+
+msgid "Do not spoof User-Agent header"
+msgstr "No suplantis la capçalera User-Agent"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "Quan està activat, el referer (pàgina d’origen) de les vostres peticions web no es filtrarà, cosa que pot reduir la vostra anonimat"
+
+msgid "Do not block Referer header"
+msgstr "No bloquegis la capçalera Referer"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "Quan està activat, les capçaleres accept (suport de tipus mime) difundides pel vostre navegador web no es filtraran, cosa que pot reduir la vostra anonimat"
+
+msgid "Do not block Accept headers"
+msgstr "No bloquegis les capçaleres Accept"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "Permet SSL a les adreces I2P quan està activat"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "Permet SSL a les adreces I2P"
+
+msgid "Local Authorization"
+msgstr "Autorització local"
+
+msgid "Local Credentials"
+msgstr "Credencials locals"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "Activeu per requerir un nom d’usuari i una contrasenya per accedir a aquest servei local (per exemple, si s’allotja en una LAN)"
+
+msgid "Require local authorization for this service"
+msgstr "Requeriu autorització local per a aquest servei"
+
+msgid "Set username required to access this service"
+msgstr "Establiu el nom d’usuari necessari per accedir a aquest servei"
+
+msgid "Username"
+msgstr "Nom d’usuari"
+
+msgid "Set password required to access this service"
+msgstr "Establiu la contrasenya necessària per accedir a aquest servei"
+
+msgid "Password"
+msgstr "Contrasenya"
+
+msgid "Outproxy Authorization"
+msgstr "Autorització de l’outproxy"
+
+msgid "Remote Credentials"
+msgstr "Credencials remotes"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "Activeu si l’outproxy requereix un nom d’usuari i una contrasenya per accedir-hi"
+
+msgid "Outproxy requires authorization"
+msgstr "L’outproxy requereix autorització"
+
+msgid "Enter username required by outproxy"
+msgstr "Introduïu el nom d’usuari requerit per l’outproxy"
+
+msgid "Enter password required by outproxy"
+msgstr "Introduïu la contrasenya requerida per l’outproxy"
+
+msgid "Jump URL List"
+msgstr "Llista d’URL de salt"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "Llista d’URL auxiliars que ofereixen enllaços de salt quan no es troba un amfitrió a la vostra llibreta d’adreces"
+
+msgid "Custom options"
+msgstr "Opcions personalitzades"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "Opcions avançades de túnel, de transmissió i d’I2CP"
+
+msgid "New Server Configuration"
+msgstr "Nova configuració del servidor"
+
+msgid "Hostname"
+msgstr "Nom d’amfitrió"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Retard aleatori d’arrencada (quan l’arrencada automàtica està activada) per protegir-vos d’atacs de correlació"
+
+msgid "Startup Delay"
+msgstr "Retard d’arrencada"
+
+msgid "Minimum"
+msgstr "Mínim"
+
+msgid "Minimum startup delay"
+msgstr "Retard d’arrencada mínim"
+
+msgid "seconds"
+msgstr "segons"
+
+msgid "Maximum"
+msgstr "Màxim"
+
+msgid "Maximum startup delay"
+msgstr "Retard d’arrencada màxim"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Afegiu un retard aleatori abans de tancar el túnel i, a continuació, inicieu el procés d’aturada/reinici suau del router"
+
+msgid "Shutdown Delay"
+msgstr "Retard d’aturada"
+
+msgid "Minimum shutdown delay"
+msgstr "Retard d’aturada mínim"
+
+msgid "Maximum shutdown delay"
+msgstr "Retard d’aturada màxim"
+
+msgid "Website Hostname"
+msgstr "Nom d’amfitrió del lloc web"
+
+msgid "(leave blank for outproxies)"
+msgstr "(deixeu-ho en blanc per als outproxies)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "Nom d’amfitrió del lloc web, p. ex. mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "Indiqueu el port en el qual s’està executant el servidor"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "Interfície d’escolta (adreça IP) per a l’accés dels clients (normalment 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "Per evitar que s’espiï el tràfic en connectar-vos a un servidor remot, podeu activar una connexió SSL. Tingueu en compte que el servidor objectiu ha d’estar configurat per acceptar connexions SSL."
+
+msgid "Use SSL to connect to target"
+msgstr "Utilitzeu SSL per connectar-vos a l’objectiu"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "Port necessari per accedir al servei (aquest pot ser un port diferent del port on s’allotja el servei)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "Genereu un codi QR per a aquest domini"
+
+msgid "Generate QR Code"
+msgstr "Genereu el codi QR"
+
+msgid "Add to Private addressbook"
+msgstr "Afegeix a la llibreta d’adreces privada"
+
+msgid "Add to local addressbook"
+msgstr "Afegeix a la llibreta d’adreces local"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "Registreu, desregistreu o canvieu les dades del nom d’amfitrió"
+
+msgid "Registration Authentication"
+msgstr "Autenticació del registre"
+
+msgid "HTTPS configuration"
+msgstr "Configuració HTTPS"
+
+msgid "SSL Wizard"
+msgstr "Assistent SSL"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "Nota: per activar la generació de codis QR o l’autenticació del registre, configureu a dalt el camp Nom d’amfitrió del lloc web (per a llocs web) o el camp Nom (per a tot altre) amb un nom d’amfitrió amb el sufix .i2p, p. ex. mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "Camí absolut al fitxer de clau privada (es crearà si no existeix)"
+
+msgid "Alternate private key file"
+msgstr "Fitxer de clau privada alternatiu"
+
+msgid "Alternate local destination"
+msgstr "Destinació local alternativa"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "Camí absolut per a la clau nova (es crearà)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "Només de lectura: destinació local alternativa"
+
+msgid "Specify filename or full path for new key"
+msgstr "Indiqueu el nom del fitxer o el camí complet per a la clau nova"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "La configuració no es pot canviar un cop creada la destinació"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "La configuració del tipus de signatura només és possible quan es crea el túnel per primera vegada. Per canviar-la, heu de crear un túnel nou."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "Opció heretada, amb la clau alternativa configurada"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Opció heretada (obsoleta), proporcionada per compatibilitat cap enrere"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "Recomanada per a destinacions obfuscades i xifrades"
+
+msgid "Inbound"
+msgstr "Entrada"
+
+msgid "Outbound"
+msgstr "Sortida"
+
+msgid "no anonymity"
+msgstr "sense anonimat"
+
+msgid "low anonymity"
+msgstr "anonimat baix"
+
+msgid "medium anonymity"
+msgstr "anonimat mitjà"
+
+msgid "high anonymity"
+msgstr "anonimat alt"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "Nivell d’aleatorització de la profunditat del túnel"
+
+msgid "very high randomization, very low performance"
+msgstr "aleatorització molt alta, rendiment molt inferior"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ variació de 0-3 salts"
+
+msgid "definitely not recommended"
+msgstr "no es recomana de cap manera"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- variació de 0-3 salts"
+
+msgid "backup tunnels"
+msgstr "túnels de reserva"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "Redueix els túnels per conservar els recursos"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "Període d’inactivitat abans que es redueixi el nombre de túnels"
+
+msgid "minutes"
+msgstr "minuts"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "Nombre de túnels que cal mantenir oberts per garantir la disponibilitat del servei"
+
+msgid "Server Access Options"
+msgstr "Opcions d’accés al servidor"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "Eviteu que els clients accedeixin a aquest servei mitjançant un inproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "Bloqueja l’accés mitjançant inproxies"
+
+msgid "Block Accesses containing Referers"
+msgstr "Bloqueja els accessos que contenen referers"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "Utilitzeu adreces IP úniques per a cada client que connecta (només servidors locals no SSL)"
+
+msgid "Unique Local Address per Client"
+msgstr "Adreça local única per client"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "Activeu-ho només si allotgeu aquest servei en diversos routers"
+
+msgid "Optimize for Multihoming"
+msgstr "Optimitza per al Multihoming"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "Denega els User-Agents que coincideixin amb aquestes cadenes (probablement d’inproxies)"
+
+msgid "Block these User-Agents"
+msgstr "Bloqueja aquests User-Agents"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "separades per comes, p. ex. Mozilla,Opera (distingueix majúscules de minúscules)"
+
+msgid "Encrypt Leaseset"
+msgstr "Xifra el Leaseset"
+
+msgid "Optional Lookup Password"
+msgstr "Contrasenya de cerca opcional"
+
+msgid "Keyring Manager"
+msgstr "Gestor de claus"
+
+msgid "Allow all clients to connect to this service"
+msgstr "Permet que tots els clients connectin a aquest servei"
+
+msgid "Send key to all users."
+msgstr "Envia la clau a tots els usuaris."
+
+msgid "Encrypted"
+msgstr "Xifrat"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "Evita que els floodfills descobreixin el servidor"
+
+msgid "Blinded"
+msgstr "Obfuscat"
+
+msgid "Send password to all users."
+msgstr "Envia la contrasenya a tots els usuaris."
+
+msgid "Blinded with lookup password"
+msgstr "Obfuscat amb contrasenya de cerca"
+
+msgid "Send key and password to all users."
+msgstr "Envia la clau i la contrasenya a tots els usuaris."
+
+msgid "Encrypted with lookup password"
+msgstr "Xifrat amb contrasenya de cerca"
+
+msgid "Send individual key to each user."
+msgstr "Envia una clau individual a cada usuari."
+
+msgid "Encrypted with per-user key"
+msgstr "Xifrat amb clau per usuari"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "Xifrat amb contrasenya de cerca i clau per usuari"
+
+msgid "Enter key from each user."
+msgstr "Introduïu la clau de cada usuari."
+
+msgid "Encryption Key"
+msgstr "Clau de xifrat"
+
+msgid "Generate New Key"
+msgstr "Genereu una clau nova"
+
+msgid "Encryption key required to access this service"
+msgstr "Clau de xifrat necessària per accedir a aquest servei"
+
+msgid "Generate new encryption key"
+msgstr "Genereu una clau de xifrat nova"
+
+msgid "Tunnel must be stopped first"
+msgstr "Primer s’ha d’aturar el túnel"
+
+msgid "Client Manager"
+msgstr "Gestor de clients"
+
+msgid "Client Name"
+msgstr "Nom del client"
+
+msgid "Client Key"
+msgstr "Clau del client"
+
+msgid "Revoke"
+msgstr "Revoca"
+
+msgid "Add"
+msgstr "Afegir"
+
+msgid "Restricted Access List"
+msgstr "Llista d’accés restringit"
+
+msgid "Activate to enable editing"
+msgstr "Activeu-lo per permetre l’edició"
+
+msgid "Tunnel Filter"
+msgstr "Filtre de túnels"
+
+msgid "Help with defining tunnel filters"
+msgstr "Ajuda per definir els filtres de túnels"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "Eviteu que els clients de la llista connectin a aquest servei"
+
+msgid "Blacklist"
+msgstr "Llista negra"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "Permeteu només als clients de la llista connectar-se a aquest servei"
+
+msgid "Whitelist"
+msgstr "Llista blanca"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "Camí absolut al fitxer que conté la definició del filtre"
+
+msgid "Absolute path to filter definition"
+msgstr "Camí absolut a la definició del filtre"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "Indiqueu les destinacions dels clients, 1 per l·ínia"
+
+msgid "Server Throttling"
+msgstr "Limitació del servidor"
+
+msgid "Inbound connection limits"
+msgstr "Límits de connexions d’entrada"
+
+msgid "Per Minute"
+msgstr "Per minut"
+
+msgid "Per Hour"
+msgstr "Per hora"
+
+msgid "Per Day"
+msgstr "Per dia"
+
+msgid "Concurrent"
+msgstr "Simultànies"
+
+msgid "Per Client"
+msgstr "Per client"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "Nombre màxim de peticions de pàgines web per minut per a un client únic abans que l’accés al servidor quedi bloquejat"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = sense límit)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "Nombre màxim de peticions de pàgines web per hora per a un client únic abans que l’accés al servidor quedi bloquejat"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "Nombre màxim de peticions de pàgines web per dia per a un client únic abans que l’accés al servidor quedi bloquejat"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "Nombre total de peticions de pàgines web per minut abans que l’accés al servidor quedi bloquejat"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "Nombre total de peticions de pàgines web per hora abans que l’accés al servidor quedi bloquejat"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "Nombre total de peticions de pàgines web per dia abans que l’accés al servidor quedi bloquejat"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "Nombre màxim de connexions de client simultànies"
+
+msgid "POST limits"
+msgstr "Límits POST"
+
+msgid "Per Period"
+msgstr "Per període"
+
+msgid "Ban Duration"
+msgstr "Durada del bloqueig"
+
+msgid "POST limit period"
+msgstr "Període límit de POST"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "Nombre màxim de peticions POST permeses per a un client únic durant l’interval de temps configurat"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "Si un client supera el nombre màxim de peticions POST per període assignat, apliqueu un bloqueig durant aquest nombre de minuts"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "Interval de temps per assolir el nombre màxim de peticions POST abans que es dispari un bloqueig"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "Nombre total de peticions POST permeses durant l’interval de temps configurat"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "Si se supera el nombre màxim de peticions POST per període assignat, apliqueu un bloqueig d’accés global durant aquest nombre de minuts"
+
+msgid "Custom HTTP Headers"
+msgstr "Capçaleres HTTP personalitzades"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "Nota: aquestes capçaleres personalitzades només s’activaran per als fitxers servits que no tinguin la capçalera corresponent ja definida."
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "Establiu la capçalera Allow a «GET, POST, HEAD» per als fitxers html, xml, json i de text"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "Activa les capçaleres Cache-Control (no-cache per a html, xml, json i text, immutable per a tot allò)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "Establiu la capçalera Referrer-Policy a «same-origin» per als fitxers html, xml, json i de text"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "Establiu la capçalera X-Content-Type-Options a «nosniff»"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "Inicialitzant el Gestor de túnels{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "Els túnels encara no estan inicialitzats; torneu-ho a provar d’aquí a uns moments."
+
+msgid "Status Messages"
+msgstr "Missatges d’estat"
+
+msgid "Clear"
+msgstr "Neteja"
+
+msgid "Refresh"
+msgstr "Actualitza"
+
+msgid "Global Tunnel Control"
+msgstr "Control global dels túnels"
+
+msgid "Tunnel Wizard"
+msgstr "Assistent de túnels"
+
+msgid "Stop All"
+msgstr "Atura tots"
+
+msgid "Start All"
+msgstr "Inicia tots"
+
+msgid "Restart all running tunnels"
+msgstr "Reinicia tots els túnels en marxa"
+
+msgid "Restart All"
+msgstr "Reinicia tots"
+
+msgid "Restart all running server tunnels"
+msgstr "Reinicia tots els túnels de servidor en marxa"
+
+msgid "Restart All Servers"
+msgstr "Reinicia tots els servidors"
+
+msgid "Restart all running client tunnels"
+msgstr "Reinicia tots els túnels de client en marxa"
+
+msgid "Restart All Clients"
+msgstr "Reinicia tots els clients"
+
+msgid "I2P Server Tunnels"
+msgstr "Túnels de servidor d’I2P"
+
+msgid "Helper"
+msgstr "Ajudant"
+
+msgid "Type"
+msgstr "Tipus"
+
+msgid "Points at"
+msgstr "Apunta a"
+
+msgid "Preview"
+msgstr "Vista prèvia"
+
+msgid "Status"
+msgstr "Estat"
+
+msgid "Control"
+msgstr "Control"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "Edita la configuració del túnel de servidor per a"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "Prova el servidor IRC evitant I2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "Prova el servidor HTTPS evitant I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "Prova el servidor HTTP evitant I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "Prova el servidor HTTP a través d’I2P"
+
+msgid "Base32 Address"
+msgstr "Adreça Base32"
+
+msgid "Offline"
+msgstr "Fora de línia"
+
+msgid "No Preview"
+msgstr "Sense vista prèvia"
+
+msgid "Starting..."
+msgstr "Iniciant..."
+
+msgid "Starting in"
+msgstr "Iniciant d’aquí a"
+
+msgid "Running"
+msgstr "En marxa"
+
+msgid "Hops"
+msgstr "Salts"
+
+msgid "in"
+msgstr "entrada"
+
+msgid "out"
+msgstr "sortida"
+
+msgid "Stopped"
+msgstr "Aturat"
+
+msgid "Stop this Tunnel"
+msgstr "Atura aquest túnel"
+
+msgid "Restart this Tunnel"
+msgstr "Reinicia aquest túnel"
+
+msgid "Restart"
+msgstr "Reinicia"
+
+msgid "Signature"
+msgstr "Signatura"
+
+msgid "Alternate"
+msgstr "Alternatiu"
+
+msgid "Alt Destination"
+msgstr "Destinació alternativa"
+
+msgid "Encryption"
+msgstr "Xifratge"
+
+msgid "Supported encryption"
+msgstr "Xifratge compatible"
+
+msgid "New server tunnel"
+msgstr "Túnel de servidor nou"
+
+msgid "Standard"
+msgstr "Estàndard"
+
+msgid "Create"
+msgstr "Crea"
+
+msgid "I2P Client Tunnels"
+msgstr "Túnels de client d’I2P"
+
+msgid "Interface"
+msgstr "Interfície"
+
+msgid "Edit Tunnel Settings for"
+msgstr "Edita la configuració del túnel per a"
+
+msgid "Standby"
+msgstr "En espera"
+
+msgid "Outproxy"
+msgstr "Outproxy"
+
+msgid "internal plugin"
+msgstr "connector intern"
+
+msgid "none"
+msgstr "cap"
+
+msgid "New client tunnel"
+msgstr "Túnel de client nou"
+
+msgid "Registration Helper"
+msgstr "Ajudant de registre"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "Aquest servei utilitza leasesets xifrats. No es recomana el registre. L’autenticació del registre està desactivada."
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "Assegureu-vos de seleccionar, copiar i enganxar tot el contingut de les dades d’autenticació apropiades al formulari del vostre lloc de registre preferit"
+
+msgid "Tunnel name"
+msgstr "Nom del túnel"
+
+msgid "Website name"
+msgstr "Nom del lloc web"
+
+msgid "Local Destination"
+msgstr "Destinació local"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "La destinació local no està disponible. Inicieu el túnel."
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "Per activar la verificació del registre, editeu el túnel i definiu el nom (o el nom del lloc web) com un nom d’amfitrió vàlid que acabi en ‘.i2p’"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "Per activar la verificació del registre, editeu el túnel i definiu el nom com un nom d’amfitrió vàlid que acabi en ‘.i2p’"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "La clau de signatura de la destinació no està disponible. Inicieu el túnel."
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "La clau de signatura de la destinació està fora de línia. Utilitzeu les eines de la línia d’ordres a la màquina fora de línia."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "Autenticació per afegir l’amfitrió {0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "Copieu i enganxeu-ho al lloc de registre"
+
+msgid "Advanced authentication strings"
+msgstr "Cadenes d’autenticació avançada"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "Autenticació per suprimir l’amfitrió {0}"
+
+msgid "Authentication for changing name"
+msgstr "Autenticació per canviar el nom"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "Això canviarà el nom de {0} a {1}, utilitzant la mateixa destinació"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "Aquest túnel s’ha de configurar amb el nom d’amfitrió nou."
+
+msgid "Enter old hostname below."
+msgstr "Introduïu a sota el nom d’amfitrió anterior."
+
+msgid "Authentication for adding alias"
+msgstr "Autenticació per afegir un àlies"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "Això afegirà un àlies {0} per a {1}, utilitzant la mateixa destinació"
+
+msgid "Authentication for changing destination"
+msgstr "Autenticació per canviar la destinació"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "Això canviarà la destinació per a {0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "Aquest túnel s’ha de configurar amb la nova destinació."
+
+msgid "Enter old destination below."
+msgstr "Introduïu a sota la destinació anterior."
+
+msgid "Authentication for adding alternate destination"
+msgstr "Autenticació per afegir una destinació alternativa"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "Això afegirà una destinació alternativa per a {0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "Autenticació per afegir un subdomini"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "Això afegirà un subdomini {0} de {1}, amb una destinació diferent"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "Aquest túnel s’ha de configurar amb el nou subdomini i la nova destinació."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "Introduïu a sota el domini de nivell superior i la destinació."
+
+msgid "Return to Tunnel Configuration"
+msgstr "Torna a la configuració del túnel"
+
+msgid "Specify old name and destination"
+msgstr "Indiqueu el nom i la destinació anteriors"
+
+msgid "This is only required for advanced authentication."
+msgstr "Això només és necessari per a l’autenticació avançada."
+
+msgid "See above for required items."
+msgstr "Consulteu més amunt els elements necessaris."
+
+msgid "Old / parent hostname "
+msgstr "Nom d’amfitrió anterior / pare "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "Fitxer de clau privada per a la destinació anterior / el pare del subdomini"
+
+msgid "Generate Authentication"
+msgstr "Genereu l’autenticació"
+
+msgid "SSL Helper"
+msgstr "Ajudant SSL"
+
+msgid "Experts only!"
+msgstr "Només per a experts!"
+
+msgid "Alt Base32"
+msgstr "Base32 alternatiu"
+
+msgid "Incoming I2P Port Routing"
+msgstr "Encaminament de ports entrants d’I2P"
+
+msgid "Virtual Host"
+msgstr "Amfitrió virtual"
+
+msgid "Via SSL?"
+msgstr "A través de SSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "Prova el servidor HTTPS a través d’I2P"
+
+msgid "Server"
+msgstr "Servidor"
+
+msgid "SSL Activation"
+msgstr "Activació de SSL"
+
+msgid "I2P webserver (eepsite)"
+msgstr "Servidor web d’I2P (eepsite)"
+
+msgid "Disable SSL"
+msgstr "Desactiva SSL"
+
+msgid "Enable SSL"
+msgstr "Activa SSL"
+
+msgid "New Certificate Password"
+msgstr "Nova contrasenya del certificat"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "Contrasenya (necessària per xifrar el certificat)"
+
+msgid "Generate new SSL certificate"
+msgstr "Genereu un certificat SSL nou"
+
+msgid "Generate SSL certificate and enable"
+msgstr "Genereu un certificat SSL i activeu-lo"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "No es pot configurar, no s’ha trobat cap servidor Jetty a les {0}configuracions de client{1} que coincideixi amb aquest túnel"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "La compatibilitat amb els servidors que no són Jetty s’afegirà en una versió futura"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "Torna a l’índex del Gestor de túnels"
+
+msgid "Return to Tunnel Editor"
+msgstr "Torna a l’editor de túnels"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "Gestor de túnels d’I2P - Assistent de creació de túnels"
+
+msgid "Server or client tunnel?"
+msgstr "Túnel de servidor o de client?"
+
+msgid "Tunnel type"
+msgstr "Tipus de túnel"
+
+msgid "Tunnel name and description"
+msgstr "Nom i descripció del túnel"
+
+msgid "Tunnel destination"
+msgstr "Destinació del túnel"
+
+msgid "Binding address and port"
+msgstr "Adreça i port de vinculació"
+
+msgid "Tunnel auto-start"
+msgstr "Inici automàtic del túnel"
+
+msgid "Wizard completed"
+msgstr "Assistent completat"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "Aquest assistent us farà passar per les diverses opcions disponibles per crear túnels a I2P."
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "La primera cosa que heu de decidir és si voleu crear un túnel de servidor o de client."
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "Si necessiteu connectar-vos a un servei remot, com ara un servidor IRC dins d’I2P o un repositori de codi, necessitareu un túnel CLIENT."
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "D’altra banda, si voleu allotjar un servei perquè altres s’hi connectin, haureu de crear un túnel SERVER."
+
+msgid "Server Tunnel"
+msgstr "Túnel de servidor"
+
+msgid "Client Tunnel"
+msgstr "Túnel de client"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "Hi ha diversos tipus de túnels per triar:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "Túnel bàsic per connectar-se a un únic servei dins d’I2P."
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "Proveu aquesta opció si cap dels tipus de túnel següents no s’ajusta a les vostres necessitats, o si no sabeu quin tipus de túnel necessiteu."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "Túnel que actua com a proxy HTTP per accedir als eepsites dins d’I2P."
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "Configureu el vostre navegador per utilitzar aquest túnel com a proxy http, o definiu la variable d’entorn \"http_proxy\" per a les aplicacions de línia d’ordres a GNU/Linux."
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "També es poden assolir llocs web fora d’I2P si es coneix un proxy HTTP dins d’I2P."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "Túnel de client personalitzat específicament per a les connexions IRC."
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "Amb aquest tipus de túnel, el vostre client IRC podrà connectar-se a una xarxa IRC dins d’I2P."
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "Cada xarxa IRC d’I2P a la que vulgueu connectar-vos requerirà el seu propi túnel. (Vegeu també, SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "Un túnel que implementa el protocol SOCKS."
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "Això permet fer connexions TCP i UDP a través d’un outproxy SOCKS dins d’I2P."
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "Un túnel de client que implementa el protocol SOCKS, personalitzat per connectar-se a xarxes IRC."
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "Amb aquest tipus de túnel, es poden assolir les xarxes IRC d’I2P escrivint l’adreça I2P al vostre client IRC i configurant el client IRC per utilitzar aquest túnel SOCKS."
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "Això vol dir que només cal un únic túnel d’I2P en comptes d’un túnel separat per xarxa IRC."
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "També es poden assolir les xarxes IRC fora d’I2P si es coneix un outproxy SOCKS dins d’I2P, tot i que depèn de si la xarxa IRC ha bloquejat l’outproxy o no."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "Un túnel de servidor bàsic per allotjar un servei genèric dins d’I2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "Un túnel de servidor personalitzat per a les connexions HTTP."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "Utilitzeu aquest tipus de túnel si voleu allotjar un eepsite."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "Un túnel de servidor personalitzat per allotjar xarxes IRC dins d’I2P."
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "Normalment, cal crear un túnel separat per a cada servidor IRC que ha de ser accessible dins d’I2P."
+
+msgid "Select tunnel type"
+msgstr "Selecciona el tipus de túnel"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "Trieu un nom i una descripció per al vostre túnel."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "Aquests poden ser el que vulgueu - només serveixen per facilitar la identificació del túnel a la consola del router."
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "Si sabeu d’algun outproxy per a aquest tipus de túnel (HTTP o SOCKS), empleneu-los a sota."
+
+msgid "Separate multiple proxies with commas."
+msgstr "Separeu els various proxies amb comes."
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "Llista de destinacions d’outproxy d’I2P, separades amb comes (p. ex. proxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "Escriviu la destinació I2P del servei al qual s’ha de connectar aquest túnel de client."
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "Aquesta pot ser la clau de destinació Base64 completa o una URL d’I2P de la vostra llibreta d’adreces."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "Introduïu aquí una adreça b64 o .i2p"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "Aquesta és la IP on s’executa el vostre servei; normalment és la mateixa màquina, de manera que 127.0.0.1 s’omple automàticament."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "Aquest és el port en què el servei accepta connexions."
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "Aquest és el port des del qual s’accedirà localment al túnel de client."
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "Com voleu que s’accedeixi a aquest túnel? Només des d’aquesta màquina, des de tota la vostra subxarxa o des d’Internet extern?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "Probablement vulgueu permetre només 127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "El router I2P pot iniciar automàticament aquest túnel per a vosaltres quan s’arrenqui el router."
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "Això pot ser útil per als túnels d’ús freqüent (sobretot els túnels de servidor), però per als túnels que només s’utilitzen de tant en tant significaria que el router I2P crea i manté túnels innecessaris."
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "L’assistent ja ha recollit prou informació per crear el vostre túnel."
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "Quan feu clic al botó Desa de sota, l’assistent configurarà el túnel i us portarà de retorn a la pàgina principal d’I2PTunnel."
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "Perquè heu triat d’iniciar el túnel automàticament quan s’arrenqui el router, no heu de fer res més."
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "El router iniciarà el túnel un cop hagi estat configurat."
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "Perquè heu triat de no iniciar el túnel automàticament, haureu d’iniciar-lo manualment."
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "Podeu fer-ho fent clic al botó Inicia de la pàgina principal, que correspon al túnel nou."
+
+msgid "Below is a summary of the options you chose:"
+msgstr "A sota hi ha un resum de les opcions que heu triat:"
+
+msgid "Tunnel description"
+msgstr "Descripció del túnel"
+
+msgid "Binding address"
+msgstr "Adreça de vinculació"
+
+msgid "Tunnel port"
+msgstr "Port del túnel"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "A més d’aquestes opcions bàsiques, hi ha una sèrie d’opcions avançades per a la configuració dels túnels."
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "L’assistent hi establirà uns valors predeterminats raonablement sensats, però podeu veure i/o editar-los fent clic al nom del túnel a la pàgina principal d’I2PTunnel."
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "Cancel·la l’assistent i torna a la pàgina d’inici del Gestor de túnels"
+
+msgid "Return to previous page"
+msgstr "Torna a la pàgina anterior"
+
+msgid "Previous"
+msgstr "Anterior"
+
+msgid "Save tunnel configuration"
+msgstr "Desa la configuració del túnel"
+
+msgid "Save Tunnel"
+msgstr "Desa el túnel"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "Finalitza l’assistent i revisa la configuració del túnel"
+
+msgid "Finish"
+msgstr "Finalitza"
+
+msgid "Advance to next page"
+msgstr "Avança a la pàgina següent"
+
+msgid "Next"
+msgstr "Següent"

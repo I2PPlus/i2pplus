@@ -1,0 +1,90 @@
+# I2P+
+# Copyright (C) 2026 I2P+
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Serveis relacionats amb criptomonedes"
+
+msgid "Controlled substances marketplaces"
+msgstr "Mercats de substàncies controlades"
+
+msgid "E-book libraries and publishing"
+msgstr "Biblioteques de llibres electrònics i edició"
+
+msgid "File hosting and storage services"
+msgstr "Serveis d’allotjament i emmagatzematge de fitxers"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Compartició de fitxers peer-to-peer"
+
+msgid "Discussion forums and message boards"
+msgstr "Fòrums de discussió i taulers de missatges"
+
+msgid "Image galleries and photo sharing"
+msgstr "Galeries d’imatges i compartició de fotos"
+
+msgid "Gaming servers and communities"
+msgstr "Servidors de jocs i comunitats"
+
+msgid "Git repositories and code hosting"
+msgstr "Repositoris Git i allotjament de codi"
+
+msgid "Help and support resources"
+msgstr "Recursos d’ajuda i suport"
+
+msgid "Human rights and civil liberties"
+msgstr "Drets humans i llibertats civils"
+
+msgid "Official I2P infrastructure services"
+msgstr "Serveis oficials d’infraestructura d’I2P"
+
+msgid "News and media outlets"
+msgstr "Notícies i mitjans de comunicació"
+
+msgid "Text/code paste services"
+msgstr "Serveis de pegat de text/codi"
+
+msgid "Personal websites and blogs"
+msgstr "Llocs web personals i blogs"
+
+msgid "Internet radio and streaming"
+msgstr "Ràdio per internet i streaming"
+
+msgid "Search engines and directories"
+msgstr "Motors de cerca i directoris"
+
+msgid "Software repositories and downloads"
+msgstr "Repositoris de programari i descàrregues"
+
+msgid "Statistics and analytics"
+msgstr "Estadístiques i anàlisis"
+
+msgid "Utilities and web tools"
+msgstr "Utilitats i eines web"
+
+msgid "Torrent and content trackers"
+msgstr "Rastrejadors de torrent i contingut"
+
+msgid "Conspiracy / Religious content"
+msgstr "Contingut conspiratiu / religiós"
+
+msgid "Unclassified or pending review"
+msgstr "Sense classificar o pendent de revisió"
+
+msgid "Not yet categorized"
+msgstr "Encara no categoritzat"
+
+msgid "Video streaming and media"
+msgstr "Streaming de vídeo i mitjans"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki i documentació col·laborativa"
+
+msgid "Work in progress / development"
+msgstr "Treball en curs / desenvolupament"

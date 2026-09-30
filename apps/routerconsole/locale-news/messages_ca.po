@@ -1,0 +1,78 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "I2P+ installation complete!"
+msgstr "Instal·lació d’I2P+ completada!"
+
+msgid "Welcome to I2P+!"
+msgstr "Benvingut a I2P+!"
+
+#, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
+msgstr ""
+"Si us plau, {0}tingueu paciència{1} mentre I2P+ arrenca i busca peers."
+
+#, java-format
+msgid ""
+"While you are waiting, please {0}adjust your bandwidth settings{1} on the "
+"{2}configuration page{3}."
+msgstr ""
+"Mentre espera, si us plau {0}ajusti la configuració del seu ample de "
+"banda{1} a la {2}pàgina de configuració{3}."
+
+#, java-format
+msgid ""
+"You can also run the bandwidth test via the {0}Setup Wizard{1} to help with "
+"determining your bandwidth, and a guide for new users and additional "
+"documentation including an FAQ is available in the {2}help section{1}."
+msgstr ""
+"També podeu executar la prova d’ample de banda des del {0}Assistent de "
+"configuració{1} per ajudar a determinar el vostre ample de banda, i trobareu"
+" una guia per a usuaris nous i documentació addicional, incloent-hi les "
+"preguntes freqüents, a la {2}secció d’ajuda{1}."
+
+#, java-format
+msgid ""
+"You may also wish to enable I2P+ updates on {0}the update configuration "
+"page{1}."
+msgstr ""
+"Si us plau, també podeu activar les actualitzacions d’I2P+ a {0}la pàgina de"
+" configuració de les actualitzacions{1}."
+
+msgid ""
+"Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr ""
+"També podeu configurar el navegador per utilitzar el proxy d’I2P i arribar "
+"als eepsites."
+
+msgid ""
+"Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your "
+"browser settings."
+msgstr ""
+"Només heu d’introduir 127.0.0.1 (o localhost) port 4444 com a|http proxy a "
+"la configuració del navegador."
+
+msgid "Do not use SOCKS for this."
+msgstr "No feu servir SOCKS per a això."
+
+#, java-format
+msgid ""
+"More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr ""
+"Podeu trobar més informació a la {0}pàgina de configuració del proxy del "
+"navegador d’I2P{1}."
+
+#, java-format
+msgid ""
+"Point your IRC client to {0}localhost:6668{1} and say hi to us on "
+"{2}#saltR{3}."
+msgstr ""
+"Indiqueu al client IRC {0}localhost:6668{1} i saludeu-nos al canal "
+"{2}#saltR{3}."

@@ -1,0 +1,155 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "Correcte"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: Correcte; IPv6: En proves"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: Correcte; IPv6: Protegït per un tallafoc"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: En proves; IPv6: Correcte"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: Protegït per un tallafoc; IPv6: Correcte"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: Desactivat; IPv6: Correcte"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: NAT simètric; IPv6: Correcte"
+
+msgid "Symmetric NAT"
+msgstr "NAT simètric"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: NAT simètric; IPv6: En proves"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: Protegït per un tallafoc; IPv6: En proves"
+
+msgid "Firewalled"
+msgstr "Protegït per un tallafoc"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: En proves; IPv6: Protegït per un tallafoc"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: Desactivat; IPv6: En proves"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: Desactivat; IPv6: Protegït per un tallafoc"
+
+msgid "Disconnected"
+msgstr "Desconnectat"
+
+msgid "Port Conflict"
+msgstr "Conflicte de ports"
+
+msgid "Testing"
+msgstr "En proves"
+
+msgid "Starting up"
+msgstr "S’està iniciant"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "S’estan rebutjant totes les sol·licituds de túnels:<br>"
+
+msgid "Hidden Mode"
+msgstr "Mode ocult"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "S’estan rebutjant les sol·licituds de túnels:<br>"
+
+msgid "High message delay"
+msgstr "Retard elevat dels missatges"
+
+msgid "Declining requests: "
+msgstr "S’estan rebutjant les sol·licituds: "
+
+msgid "Limit reached"
+msgstr "Límit assolit"
+
+msgid "Participation disabled"
+msgstr "Participació desactivada"
+
+msgid "High system load"
+msgstr "Càrrega alta del sistema"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "S’estan rebutjant totes les sol·licituds de túnels:<br>"
+
+msgid "High number of requests"
+msgstr "Nombre elevat de sol·licituds"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "S’estan rebutjant la majoria de les sol·licituds de túnels:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "S’accepten la majoria de les sol·licituds de túnels"
+
+msgid "Accepting tunnel requests"
+msgstr "S’accepten les sol·licituds de túnels"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "S’estan rebutjant les sol·licituds: Límit d’ample de banda"
+
+msgid "Declining requests"
+msgstr "S’estan rebutjant les sol·licituds"
+
+msgid "Shutting down"
+msgstr "S’està aturant"
+
+msgid "Restarting"
+msgstr "S’està reiniciant"
+
+msgid "Declining Tunnel Requests"
+msgstr "S’estan rebutjant les sol·licituds de túnels"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "S’estan descartant les sol·licituds de túnels: massa lent"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr ""
+"S’estan descartant les sol·licituds de túnels: retard elevat de les feines"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr ""
+"S’estan descartant les sol·licituds de túnels:<br>Càrrega alta de la CPU"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "S’estan descartant les sol·licituds de túnels: sobrecàrrega"
+
+msgid "Declining requests:"
+msgstr "S’estan rebutjant les sol·licituds:"
+
+msgid "Request overload"
+msgstr "Sobrecàrrega de sol·licituds"
+
+msgid "Connection limit reached"
+msgstr "Límit de connexions assolit"
+
+msgid "Transit throttle drop"
+msgstr "Descart per limitació de trànsit"
+
+msgid "Transit throttle reject"
+msgstr "Rebutjament per limitació de trànsit"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "S’estan descartant les sol·licituds de túnels: càrrega alta"
+
+msgid "Transit request throttle"
+msgstr "Limitació de les sol·licituds de trànsit"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "S’estan descartant les sol·licituds de túnels: temps de cua"

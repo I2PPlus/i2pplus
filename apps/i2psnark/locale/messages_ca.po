@@ -1,0 +1,1913 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Magnet"
+msgstr "Imant"
+
+msgid "Unable to connect to I2P"
+msgstr "No s’ha pogut connectar a I2P"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "Error en connectar a I2P - comproveu les opcions d’I2CP!"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "Configurant I2PSnark amb opcions d’I2CP"
+
+msgid "No write permissions for data directory"
+msgstr "No hi ha permisos d’escriptura per al directori de dades"
+
+msgid "Data directory cannot be created"
+msgstr "No s’ha pogut crear el directori de dades"
+
+msgid "No write permissions for temp directory"
+msgstr "No hi ha permisos d’escriptura per al directori temporal"
+
+msgid "Temp directory cannot be created"
+msgstr "No s’ha pogut crear el directori temporal"
+
+msgid "No write permissions for torrent directory"
+msgstr "No hi ha permisos d’escriptura per al directori de torrents"
+
+msgid "Torrent directory cannot be created"
+msgstr "No s’ha pogut crear el directori de torrents"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "El límit total de pujadors ha canviat a {0}"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "El límit mínim de pujadors és {0}"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "El límit d’ample de banda de pujada ha canviat a {0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "El límit mínim d’ample de banda de pujada és {0}KBps"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "La velocitat màxima de baixada ha canviat a {0}KB/s"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "El límit de velocitat de baixada és {0}KB/s"
+
+msgid ""
+"Note: You may need to stop and restart your torrents or restart I2PSnark in "
+"order to effect this change."
+msgstr ""
+"Nota: potser haureu d’aturar i reiniciar els torrents o de reiniciar "
+"I2PSnark perquè aquest canvi tingui efecte."
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr ""
+"S’ha activat l’aleatorització de +0/1 salt de túnel als túnels d’entrada"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr ""
+"S’ha desactivat l’aleatorització dels salts de túnel als túnels d’entrada"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr ""
+"S’ha activat l’aleatorització de +0/1 salt de túnel als túnels de sortida"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr ""
+"S’ha desactivat l’aleatorització dels salts de túnel als túnels de sortida"
+
+msgid "Enabled a separate destination for each torrent"
+msgstr "S’ha activat una destinació separada per a cada torrent"
+
+msgid "Disabled a separate destination for each torrent"
+msgstr "S’ha desactivat una destinació separada per a cada torrent"
+
+#, java-format
+msgid "Maximum destinations changed to {0}"
+msgstr "El nombre màxim de destinacions ha canviat a {0}"
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr "S’han restablert les destinacions il·limitades (una per torrent)"
+
+msgid "Enabled randomizing torrent start times"
+msgstr "S’ha activat l’aleatorització dels horaris d’inici dels torrents"
+
+msgid "Disabled randomizing torrent start times"
+msgstr "S’ha desactivat l’aleatorització dels horaris d’inici dels torrents"
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr "L’interval de retard d’inici ha canviat a {0} - {1}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "L’intervalle d’actualització ha canviat a {0}"
+
+msgid "Refresh disabled"
+msgstr "Actualització desactivada"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "La mida de la pàgina ha canviat a {0}"
+
+msgid "New files will be publicly readable"
+msgstr "Els fitxers nous seran llegibles públicament"
+
+msgid "New files will not be publicly readable"
+msgstr "Els fitxers nous no seran llegibles públicament"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "Atureu tots els torrents abans de canviar el directori de dades"
+
+msgid "Data directory must be an absolute path"
+msgstr "El directori de dades ha de ser un camí absolut"
+
+msgid "Not a directory"
+msgstr "No és un directori"
+
+msgid "Unreadable"
+msgstr "Il·legible"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "El directori de dades ha canviat a {0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr ""
+"Els canvis d’I2CP i de túnel tindran efecte després d’aturar tots els "
+"torrents"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "Les opcions d’I2CP han canviat a: {0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "Desconnectant l’antiga destinació I2CP"
+
+msgid ""
+"Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr ""
+"No s’ha pogut connectar amb les opcions noves, tot tornant a les opcions "
+"d’I2CP antigues"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "No s’ha pogut reconnectar amb les opcions antigues!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "S’ha reconnectat a la nova destinació I2CP"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "El receptor d’I2CP s’ha reiniciat per a \"{0}\""
+
+msgid "Enabled autostart"
+msgstr "S’ha activat l’inici automàtic"
+
+msgid "Disabled autostart"
+msgstr "S’ha desactivat l’inici automàtic"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr ""
+"S’han activat els rastrejadors oberts - cal reiniciar el torrent perquè "
+"tingui efecte."
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr ""
+"S’han desactivat els rastrejadors oberts - cal reiniciar el torrent perquè "
+"tingui efecte."
+
+msgid "Enabled DHT."
+msgstr "S’ha activat la DHT."
+
+msgid "Disabled DHT."
+msgstr "S’ha desactivat la DHT."
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "El canvi de la DHT requereix tancar el túnel i tornar-lo a obrir"
+
+msgid "Enabled Ratings."
+msgstr "S’han activat les valoracions."
+
+msgid "Disabled Ratings."
+msgstr "S’han desactivat les valoracions."
+
+msgid "Enabled Comments."
+msgstr "S’han activat els comentaris."
+
+msgid "Disabled Comments."
+msgstr "S’han desactivat els comentaris."
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "El nom dels comentaris s’ha establert a {0}."
+
+msgid "Collapsible panels enabled."
+msgstr "S’han activat els panells plegables."
+
+msgid "Collapsible panels disabled."
+msgstr "S’han desactivat els panells plegables."
+
+msgid "Torrent filter bar enabled."
+msgstr "S’ha activat la barra de filtre de torrents."
+
+msgid "Torrent filter bar disabled."
+msgstr "S’ha desactivat la barra de filtre de torrents."
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "S’ha activat la lightbox per a les miniatures d’imatges."
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "S’ha desactivat la lightbox per a les miniatures d’imatges."
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr ""
+"S’han activat les seccions Afegir i Crear a totes les pàgines de llista de "
+"torrents."
+
+msgid ""
+"Add and Create sections to display only on first page of multipage torrent "
+"listing pages."
+msgstr ""
+"Seccions Afegir i Crear per mostrar només a la primera pàgina de les pàgines"
+" de llista de torrents multipàgina."
+
+msgid "API key updated."
+msgstr "Clau API actualitzada."
+
+msgid "Preallocate files for new torrents enabled."
+msgstr "S’ha activat la preassignació de fitxers per als torrents nous."
+
+msgid "Preallocate files for new torrents disabled."
+msgstr "S’ha desactivat la preassignació de fitxers per als torrents nous."
+
+msgid "Preserve original file names enabled."
+msgstr "S’ha activat la conservació dels noms originals dels fitxers."
+
+msgid "Preserve original file names disabled."
+msgstr "S’ha desactivat la conservació dels noms originals dels fitxers."
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr "El nombre màxim de fitxers per torrent ha canviat a {0}"
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr "Nombre màxim de fitxers per torrent no vàlid: {0}"
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr "El directori temporal de preparació ha canviat a {0}"
+
+msgid "Temp directory staging disabled."
+msgstr "S’ha desactivat la preparació al directori temporal."
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr "El directori de torrents ha canviat a {0}"
+
+msgid "Torrent directory reset to data directory."
+msgstr "El directori de torrents s’ha restablert al directori de dades."
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr ""
+"La llista de rastrejadors oberts ha canviat - cal reiniciar el torrent "
+"perquè tingui efecte."
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr ""
+"La llista de rastrejadors privats ha canviat - només afecta els torrents "
+"creats de nou."
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "No s’ha pogut desar la configuració a {0}"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "S’ha suprimit el fitxer torrent: {0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "El fitxer torrent s’ha mogut de {0} a {1}"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "Error: no s’ha pogut afegir el torrent: {0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "El torrent ja és en marxa: {0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "No es pot obrir \"{0}\""
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "Ja hi ha en marxa un torrent amb aquest hash d’informació: {0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "Ja hi ha en marxa un torrent amb la mateixa ubicació de dades: {0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "El torrent a \"{0}\" no és vàlid"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "ERROR - memòria insuficient, no es pot crear el torrent des de {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr "ERROR - no es pot crear el torrent des de {0}"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "Inicialitzant I2PSnark i obrint túnels"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "Torrent afegit i iniciat: {0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "Torrent afegit: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ERROR - no hi ha rastrejadors I2P al torrent privat \"{0}\""
+
+#, java-format
+msgid ""
+"Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and"
+" DHT only."
+msgstr ""
+"Advertiment - no hi ha rastrejadors I2P a \"{0}\", l’anunci només es farà "
+"als rastrejadors oberts d’I2P i a la DHT."
+
+#, java-format
+msgid ""
+"Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will "
+"announce to DHT only."
+msgstr ""
+"Advertiment - no hi ha rastrejadors I2P a \"{0}\" i els rastrejadors oberts "
+"estan desactivats, l’anunci només es farà a la DHT."
+
+#, java-format
+msgid ""
+"Warning - No I2P trackers in \"{0}\", and DHT and open trackers are "
+"disabled, you should enable open trackers or DHT before starting the "
+"torrent."
+msgstr ""
+"Advertiment - no hi ha rastrejadors I2P a \"{0}\", i la DHT i els "
+"rastrejadors oberts estan desactivats, hauríeu d’activar els rastrejadors "
+"oberts o la DHT abans d’iniciar el torrent."
+
+#, java-format
+msgid ""
+"Open trackers are disabled and we have no DHT peers. Fetch of {0} may not "
+"succeed until you start another torrent, enable open trackers, or enable "
+"DHT."
+msgstr ""
+"Els rastrejadors oberts estan desactivats i no tenim peers DHT. L’obtenció "
+"de {0} pot no tenir èxit fins que inicieu un altre torrent, activeu els "
+"rastrejadors oberts o activeu la DHT."
+
+#, java-format
+msgid "Adding {0}"
+msgstr "Afegint {0}"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "La baixada ja és en marxa: {0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "No s’ha pogut copiar el fitxer torrent a {0}"
+
+msgid " - torrent file already exists"
+msgstr " - el fitxer torrent ja existeix"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "Massos fitxers a \"{0}\" ({1})!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "El fitxer torrent \"{0}\" no pot acabar en \".torrent\"!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "No hi ha peces a \"{0}\"!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "Masses peces a \"{0}\", el límit és {1}!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "Les peces són massa grans a \"{0}\" ({1}B)!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "El límit és {0}B"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "El torrent \"{0}\" no té dades!"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "Els torrents més grans que {0}B encara no són compatibles \"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "Error: no s’ha pogut suprimir el torrent {0}"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "Torrent aturat: {0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "Torrent suprimit: {0}"
+
+#, java-format
+msgid "Starting torrents in {0}&hellip;"
+msgstr "Iniciant els torrents a {0}&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "El límit d’ample de banda de baixada és {0} KB/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "El límit d’ample de banda de pujada és {0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "S’està connectant al port I2CP de la instància I2P a {0}"
+
+#, java-format
+msgid ""
+"Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr ""
+"El límit d’ample de banda de pujada és de {0} KBps fins a un màxim de {1} "
+"peers simultanis."
+
+#, java-format
+msgid ""
+"Storage: {0}GB currently available for downloads on configured data "
+"partition"
+msgstr ""
+"Emmagatzematge: {0}GB disponibles actualment per a baixades a la partició de"
+" dades configurada"
+
+#, java-format
+msgid ""
+"Storage: {0}MB currently available for downloads on configured data "
+"partition"
+msgstr ""
+"Emmagatzematge: {0}MB disponibles actualment per a baixades a la partició de"
+" dades configurada"
+
+#, java-format
+msgid ""
+"Warning - Only {0}MB available for downloads on configured data partition"
+msgstr ""
+"Advertiment - només hi ha {0}MB disponibles per a baixades a la partició de "
+"dades configurada"
+
+#, java-format
+msgid ""
+"Temp storage: {0}GB currently available for downloads on configured temp "
+"partition"
+msgstr ""
+"Emmagatzematge temporal: {0}GB disponibles actualment per a baixades a la "
+"partició temporal configurada"
+
+#, java-format
+msgid ""
+"Temp storage: {0}MB currently available for downloads on configured temp "
+"partition"
+msgstr ""
+"Emmagatzematge temporal: {0}MB disponibles actualment per a baixades a la "
+"partició temporal configurada"
+
+#, java-format
+msgid ""
+"Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr ""
+"Advertiment - només hi ha {0}MB disponibles per a baixades a la partició "
+"temporal configurada"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "Baixada finalitzada: {0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "Iniciant el torrent: {0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr ""
+"No s’ha pogut carregar la configuració del filtre de fitxers de creació de "
+"torrents: "
+
+msgid "Unable to save torrent create file filter config: "
+msgstr ""
+"No s’ha pogut desar la configuració del filtre de fitxers de creació de "
+"torrents: "
+
+msgid "Torrent not found"
+msgstr "Torrent no trobat"
+
+msgid "Opening the I2P tunnel"
+msgstr "S’està obrint el túnel I2P"
+
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr "S’està resolent la cerca del torrent: {0}"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "S’està obrint el túnel I2P i iniciant tots els torrents."
+
+msgid "Connecting to I2P"
+msgstr "S’està connectant a I2P"
+
+msgid "Connected to I2P at"
+msgstr "Connectat a I2P a"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Iniciant el torrent {0}"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "Aturant tots els torrents i tancant el túnel I2P."
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "Tancant el túnel I2P després d’avisar els rastrejadors."
+
+msgid "I2P tunnel closed."
+msgstr "Túnel I2P tancat."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr "S’està ometent el cicle de destinacions - {0} baixada activa en curs"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr ""
+"S’està ometent el cicle de destinacions - {0} baixades actives en curs"
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr "No hi ha torrents baixant activament - roting les destinacions"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "No es pot comprovar {0}"
+
+msgid "Torrent already started"
+msgstr "Torrent ja iniciat"
+
+msgid "No storage"
+msgstr "Sense emmagatzematge"
+
+msgid "Starting recheck of {}"
+msgstr "Iniciant la reverificació de {}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "S’ha acabat la reverificació del torrent {0}, ara {1} complet"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "S’ha acabat la reverificació del torrent {0}, sense canvis"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "Error en comprovar el torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "El directori de dades no existeix"
+
+msgid "Cannot create diskspace bar"
+msgstr "No es pot crear la barra d’espai en disc"
+
+msgid "Data partition"
+msgstr "Partició de dades"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr ""
+"No hi ha rastrejadors vàlids per a {0} - voleu activar els rastrejadors "
+"oberts o la DHT?"
+
+msgid "Updating"
+msgstr "S’està actualitzant"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "Actualitzant des de {0}"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "Baixant {0}"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "Demanant el fitxer torrent: {0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "No s’ha pogut recuperar el fitxer torrent: {0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "Torrent baixat des de {0}"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "El torrent ja és a la cua: {0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "El torrent a {0} no era vàlid"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+msgid "User Interface"
+msgstr "Interfície d’usuari"
+
+msgid "Switch to Embedded Mode"
+msgstr "Canvieu al mode integrat"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "Canvieu al mode de pantalla completa"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "Per canviar els temes manualment, desactiveu el tema universal"
+
+msgid "Universal theming is enabled."
+msgstr "El tema universal està activat."
+
+msgid "Configure"
+msgstr "Configura"
+
+msgid "Refresh time"
+msgstr "Intervalle d’actualització"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr ""
+"Amb quina frequência s’actualitza l’estat del torrent a la pàgina principal"
+
+msgid "Never"
+msgstr "Mai"
+
+msgid "Page size"
+msgstr "Mida de la pàgina"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "Nombre màxim de torrents que cal mostrar per pàgina"
+
+msgid "torrents"
+msgstr "torrents"
+
+msgid "Language"
+msgstr "Idioma"
+
+msgid "Collapsible panels"
+msgstr "Panells plegables"
+
+msgid "Your browser does not support this feature."
+msgstr "El vostre navegador no admet aquesta funció."
+
+msgid ""
+"Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and "
+"collapse by default in non-embedded mode"
+msgstr ""
+"Permet que els panells «Afegir torrent» i «Crear torrent» es puguin plegar i"
+" que estiguin plegats per defecte en mode no integrat"
+
+msgid "Torrent filter bar"
+msgstr "Barra de filtre de torrents"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr ""
+"Mostra la barra de filtre a sobre dels torrents per mostrar-los "
+"selectivament segons l’estat"
+
+msgid "requires javascript"
+msgstr "requereix javascript"
+
+msgid "Enable lightbox"
+msgstr "Activa la lightbox"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr ""
+"Utilitza una lightbox per mostrar imatges quan es faci clic a les miniatures"
+
+msgid "Persist Add/Create"
+msgstr "Mantenir Afegir/Crear"
+
+msgid ""
+"Display the 'Add' and 'Create' sections on all torrent listing pages when in"
+" multipage mode"
+msgstr ""
+"Mostra les seccions «Afegir» i «Crear» a totes les pàgines de llista de "
+"torrents en mode multipàgina"
+
+msgid "Comments &amp; Ratings"
+msgstr "Comentaris &amp; valoracions"
+
+msgid "Enable Ratings"
+msgstr "Activa les valoracions"
+
+msgid "Show ratings on torrent pages"
+msgstr "Mostra les valoracions a les pàgines de torrents"
+
+msgid "Enable Comments"
+msgstr "Activa els comentaris"
+
+msgid "Show comments on torrent pages"
+msgstr "Mostra els comentaris a les pàgines de torrents"
+
+msgid "Comment Author"
+msgstr "Autor del comentari"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "Establiu el nom d’autor per als vostres comentaris i valoracions"
+
+msgid "Torrent Options"
+msgstr "Opcions del torrent"
+
+msgid "Half available bandwidth recommended."
+msgstr "Es recomana la meitat de l’ample de banda disponible."
+
+msgid "Bandwidth limit"
+msgstr "Límit d’ample de banda"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "Ample de banda màxima assignada per a la baixada"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "Ample de banda màxima assignada per a la pujada"
+
+msgid "View or change router bandwidth"
+msgstr "Mostreu o canvieu l’ample de banda del router"
+
+msgid "Total uploader limit"
+msgstr "Límit total de pujadors"
+
+msgid "Maximum number of peers to upload to"
+msgstr "Nombre màxim de peers als quals pujar"
+
+msgid "peers"
+msgstr "peers"
+
+msgid "Use open trackers also"
+msgstr "Utilitzeu també els rastrejadors oberts"
+
+msgid ""
+"Announce torrents to open trackers as well as trackers listed in the torrent"
+" file"
+msgstr ""
+"Anuncieu els torrents als rastrejadors oberts i també als rastrejadors "
+"indicats al fitxer del torrent"
+
+msgid "Enable DHT"
+msgstr "Activeu la DHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "Utilitzeu la DHT per trobar més peers"
+
+msgid "Auto start torrents"
+msgstr "Inici automàtic dels torrents"
+
+msgid ""
+"Automatically start torrents when added and restart torrents when I2PSnark "
+"starts"
+msgstr ""
+"Inicieu els torrents automàticament en afegir-los i reinicialitzeu-los quan "
+"s’iniciï I2PSnark"
+
+msgid "Startup delay"
+msgstr "Retard d’arrencada"
+
+msgid "minutes"
+msgstr "minuts"
+
+msgid ""
+"How long before auto-started torrents are loaded when I2PSnark starts, at "
+"the earliest"
+msgstr ""
+"Quant de temps abans es carreguen els torrents iniciats automàticament quan "
+"s’inicia I2PSnark, com a mínim"
+
+msgid "min"
+msgstr "mín"
+
+msgid ""
+"How long before auto-started torrents are loaded when I2PSnark starts, at "
+"the latest"
+msgstr ""
+"Quant de temps abans es carreguen els torrents iniciats automàticament quan "
+"s’inicia I2PSnark, com a màxim"
+
+msgid "max"
+msgstr "màx"
+
+msgid "Data Storage"
+msgstr "Emmagatzematge de dades"
+
+msgid "Data directory"
+msgstr "Directori de dades"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr ""
+"Directori on s’emmagatzemen els torrents i els fitxers baixats o compartits"
+
+msgid "Temp directory"
+msgstr "Directori temporal"
+
+msgid ""
+"Optional directory where downloads are staged before being moved into the "
+"data directory on completion. Leave empty to disable."
+msgstr ""
+"Directori opcional on es preparen les baixades abans de moure-les al "
+"directori de dades en completar-se. Deixeu-lo buit per desactivar-lo."
+
+msgid "Torrent directory"
+msgstr "Directori de torrents"
+
+msgid ""
+"Optional directory to store .torrent files separately from downloaded data. "
+"Leave empty to store in the data directory."
+msgstr ""
+"Directori opcional per emmagatzemar els fitxers .torrent per separat de les "
+"dades baixades. Deixeu-lo buit per emmagatzemar-los al directori de dades."
+
+msgid "Files readable by all"
+msgstr "Fitxers llegibles per tots"
+
+msgid ""
+"Set file permissions to allow other local users to access the downloaded "
+"files"
+msgstr ""
+"Establiu els permisos dels fitxers per permetre que altres usuaris locals "
+"accedeixin als fitxers baixats"
+
+msgid "Preallocate files"
+msgstr "Preallocació dels fitxers"
+
+msgid ""
+"Extend new torrent files to their full size and allocate the space on disk "
+"immediately when the torrent starts, to prevent a full disk from "
+"interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr ""
+"Esteneu els fitxers de torrent nous fins a la seva mida completa i reserveu "
+"l’espai al disc immediatament quan s’iniciï el torrent, per evitar que un "
+"disc ple interrompi les baixades i per evitar la fragmentació a mesura que "
+"arriben les peces"
+
+msgid "Preserve file names"
+msgstr "Conserva els noms dels fitxers"
+
+msgid ""
+"Preserve original file names from the torrent. When disabled, filenames are "
+"filtered to remove illegal filesystem characters. When enabled, original "
+"filenames are used; if a filename contains characters not supported by your "
+"filesystem, the file will be created with a safe fallback name and a warning"
+" will be shown"
+msgstr ""
+"Conserva els noms de fitxer originals del torrent. Quan està desactivat, els"
+" noms de fitxer es filtren per eliminar els caràcters no permesos pel "
+"sistema de fitxers. Quan està activat, s’utilitzen els noms originals; si un"
+" nom de fitxer conté caràcters no compatibles amb el vostre sistema de "
+"fitxers, el fitxer es crearà amb un nom alternatiu segur i es mostrarà un "
+"avís"
+
+msgid "Max files per torrent"
+msgstr "Màx. de fitxers per torrent"
+
+msgid ""
+"Maximum number of files permitted per torrent - note that trackers may set "
+"their own limits, and your OS may limit the number of open files, preventing"
+" torrents with many files (and subsequent torrents) from loading"
+msgstr ""
+"Nombre màxim de fitxers permesos per torrent - tingueu en compte que els "
+"rastrejadors poden establir els seus propis límits i que el vostre sistema "
+"operatiu pot limitar el nombre de fitxers oberts, cosa que impedeix que es "
+"carreguin torrents amb molts fitxers (i els torrents següents)"
+
+msgid "Tunnel Configuration"
+msgstr "Configuració del túnel"
+
+msgid ""
+"Primary destination (identity) for this session; its DHT, tracker, and "
+"blacklist are shared with the per-torrent destinations"
+msgstr ""
+"Destinació principal (identitat) per a aquesta sessió; la seva DHT, el seu "
+"rastrejador i la seva llista negra es comparteixen amb les destinacions per "
+"torrent"
+
+msgid "Our destination (identity) for this session"
+msgstr "La nostra destinació (identitat) per a aquesta sessió"
+
+msgid "Primary Dest."
+msgstr "Dest. principal"
+
+msgid "Dest."
+msgstr "Dest."
+
+msgid "Inbound Settings"
+msgstr "Configuració d’entrada"
+
+msgid "Outbound Settings"
+msgstr "Configuració de sortida"
+
+msgid "Vary Tunnel Length"
+msgstr "Varieu la longitud dels túnels"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Afegiu 0 o 1 salt addicional a l’atzar als túnels d’entrada"
+
+msgid "Inbound"
+msgstr "Entrada"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Afegiu 0 o 1 salt addicional a l’atzar als túnels de sortida"
+
+msgid "Outbound"
+msgstr "Sortida"
+
+msgid "Multi-destination"
+msgstr "Multi-destinació"
+
+msgid ""
+"Use a separate destination for each torrent, so that trackers and the DHT "
+"cannot link your torrents to each other. Destinations are temporary and "
+"change on restart."
+msgstr ""
+"Utilitzeu una destinació separada per a cada torrent, de manera que els "
+"rastrejadors i la DHT no puguin enllaçar els vostres torrents entre ells. "
+"Les destinacions són temporals i canvien en reiniciar."
+
+msgid "Maximum destinations"
+msgstr "Nombre màxim de destinacions"
+
+msgid ""
+"When more torrents run than this maximum, the extra torrents share "
+"destinations in randomized, variable-size groups, to limit memory use. Zero "
+"means one destination per torrent."
+msgstr ""
+"Quan s’executin més torrents que aquest màxim, els torrents addicionals "
+"comparteixen destinacions en grups aleatoris de mida variable, per limitar "
+"l’ús de memòria. Zero vol dir una destinació per torrent."
+
+msgid "Random startup delay"
+msgstr "Retard aleatori d’arrencada"
+
+msgid ""
+"Stagger multi-dest torrent starts with a random delay so that torrents which"
+" start together cannot be correlated by trackers or DHT peers, and tunnel "
+"builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr ""
+"Escaloneu els inicis dels torrents multi-destinació amb un retard aleatori "
+"perquè els torrents que s’inicien junts no puguin ser correlacionats pels "
+"rastrejadors ni pels peers de la DHT i perquè les construccions de túnels "
+"quedin repartides. Desactiveu-ho per iniciar immediatament tots els torrents"
+" d’un lot."
+
+msgid "I2CP host"
+msgstr "Amfitrió I2CP"
+
+msgid "I2CP port"
+msgstr "Port I2CP"
+
+msgid "I2CP options"
+msgstr "Opcions d’I2CP"
+
+msgid "Browser Integration"
+msgstr "Integració amb el navegador"
+
+msgid "Enable browser API"
+msgstr "Activeu l’API del navegador"
+
+msgid ""
+"Allow magnet links and torrent URLs to be added without the CSRF nonce, from"
+" loopback or the allowed hosts below"
+msgstr ""
+"Permeteu que s’afegeixin enllaços mimant i URL de torrents sense el nonce "
+"CSRF, des del loopback o des dels amfitrions permesos de sota"
+
+msgid "Allowed hosts"
+msgstr "Amfitrions permesos"
+
+msgid ""
+"Comma-separated hostnames or IPs allowed to add torrents without a nonce; "
+"loopback is always allowed"
+msgstr ""
+"Noms d’amfitrió o adreces IP separats per comes als quals es permet afegir "
+"torrents sense nonce; el loopback sempre està permès"
+
+msgid "API key"
+msgstr "Clau API"
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr ""
+"Contrasenya opcional per a l’accés remot, evita la llista d’amfitrions "
+"permesos"
+
+msgid "Install browser handler"
+msgstr "Instal·la el controlador del navegador"
+
+msgid "Update browser handler"
+msgstr "Actualitza el controlador del navegador"
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr "Actualitza l’extensió I2PSnark Bridge instal·lada a v{0}"
+
+msgid ""
+"Open the I2PSnark Bridge extension in your browser to add magnet links; the "
+"extension registers itself with the browser, no router-side files are "
+"written"
+msgstr ""
+"Obreu l’extensió I2PSnark Bridge al vostre navegador per afegir enllaços "
+"mimant; l’extensió s’autoregistra al navegador i no s’escriu cap fitxer al "
+"costat del router"
+
+msgid ""
+"Download the PowerShell installer that registers magnet links and .torrent "
+"files with your browser; the I2PSnark Bridge extension requires a Firefox-"
+"family browser"
+msgstr ""
+"Descarregueu l’instal·lador de PowerShell que registra els enllaços mimant i"
+" els fitxers .torrent al vostre navegador; l’extensió I2PSnark Bridge "
+"requereix un navegador de la família Firefox"
+
+msgid ""
+"Download the installer script that registers magnet links and .torrent files"
+" with your browser; the I2PSnark Bridge extension requires a Firefox-family "
+"browser"
+msgstr ""
+"Descarregueu el script d’instal·lació que registra els enllaços mimant i els"
+" fitxers .torrent al vostre navegador; l’extensió I2PSnark Bridge requereix "
+"un navegador de la família Firefox"
+
+msgid "Download browser handler script"
+msgstr "Descarrega el script del controlador del navegador"
+
+msgid "Save configuration"
+msgstr "Desa la configuració"
+
+msgid "Torrent Create File Filtering"
+msgstr "Filtratge de fitxers en la creació de torrents"
+
+msgid "Mark filter for deletion"
+msgstr "Marca el filtre per suprimir"
+
+msgid "Name"
+msgstr "Nom"
+
+msgid "Filter Pattern"
+msgstr "Patró de filtre"
+
+msgid "Starts With"
+msgstr "Comença per"
+
+msgid "Contains"
+msgstr "Conté"
+
+msgid "Ends With"
+msgstr "Acaba per"
+
+msgid "Enabled by Default"
+msgstr "Activat per defecte"
+
+msgid "Delete selected"
+msgstr "Suprimeix la selecció"
+
+msgid "Save Filter Configuration"
+msgstr "Desa la configuració del filtre"
+
+msgid "Restore defaults"
+msgstr "Restableix els valors per defecte"
+
+msgid "Add File Filter"
+msgstr "Afegeix un filtre de fitxer"
+
+msgid "Add"
+msgstr "Afegir"
+
+msgid "Trackers"
+msgstr "Rastrejadors"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr ""
+"Seleccioneu els rastrejadors per suprimir de la llista de coneguts "
+"d’I2PSnark"
+
+msgid "Website URL"
+msgstr "URL del lloc web"
+
+msgid "Standard"
+msgstr "Estàndard"
+
+msgid "Open"
+msgstr "Obert"
+
+msgid "Private"
+msgstr "Privat"
+
+msgid "Announce URL"
+msgstr "URL d’anunci"
+
+msgid "Mark tracker for deletion"
+msgstr "Marca el rastrejador per suprimir"
+
+msgid "Add tracker"
+msgstr "Afegeix un rastrejador"
+
+msgid "Save tracker configuration"
+msgstr "Desa la configuració del rastrejador"
+
+msgid ""
+"This configures the maximum number of tunnels to open, determined by the "
+"number of connected peers (actual usage may be less)"
+msgstr ""
+"Això configura el nombre màxim de túnells que s’obren, determinat pel nombre"
+" de peers connectats (l’ús real pot ser inferior)"
+
+msgid ""
+"Changing this setting to less than 3 hops may improve speed at the expense "
+"of anonymity and is not recommended"
+msgstr ""
+"Canviar aquest paràmetre a menys de 3 salts pot millorar la velocitat a "
+"costa de l’anonimat i no es recomana"
+
+#, java-format
+msgid ""
+"I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config "
+"page"
+msgstr ""
+"L’extensió I2PSnark Bridge v{0} està obsoleta, actualitzeu-la a v{1} a la "
+"pàgina de configuració"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "Feu clic al botó «Afegir torrent» per obtenir el torrent"
+
+msgid "Torrents"
+msgstr "Torrents"
+
+msgid "Refresh page"
+msgstr "Actualitza la pàgina"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Fòrum de torrents &amp; compartició de fitxers"
+
+msgid "Forum"
+msgstr "Fòrum"
+
+msgid "Search torrents"
+msgstr "Cercar torrents"
+
+msgid "Clear search"
+msgstr "Neteja la cerca"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Client BitTorrent anònim"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Segur que voleu suprimir {0} i totes les dades baixades?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "S’està suprimint <b>{0}</b> i totes les dades associades..."
+
+#, java-format
+msgid ""
+"Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr ""
+"Segur que voleu suprimir el fitxer torrent {0} i les metadades associades?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Nota: Les dades baixades no se suprimiran."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "S’està suprimint {0} i només les metadades associades..."
+
+msgid "clear messages"
+msgstr "neteja els missatges"
+
+msgid "Expand"
+msgstr "Expandeix"
+
+msgid "Shrink"
+msgstr "Redueix"
+
+#, java-format
+msgid ""
+"Warning! Javascript is disabled in your browser. If {0} is enabled, you will"
+" lose any input in the add/create torrent sections when a refresh occurs."
+msgstr ""
+"Avís! El Javascript està desactivat al vostre navegador. Si {0} està "
+"activat, perdreu qualsevol entrada a les seccions d’afegir o crear torrents "
+"quan es prodüeixi una actualització."
+
+msgid "page refresh"
+msgstr "actualització de la pàgina"
+
+msgid "Warning - No I2P"
+msgstr "Avís - Sense I2P"
+
+msgid "No torrents found."
+msgstr "No s’han trobat torrents."
+
+msgid "No torrents loaded."
+msgstr "No hi ha torrents carregats."
+
+msgid "Status"
+msgstr "Estat"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "Taxa de recepció"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "Taxa de transmissió"
+
+msgid "Start All"
+msgstr "Inicia tots"
+
+msgid "Stop All"
+msgstr "Atura tots"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Atura tots els torrents i el túnel d’I2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Inicia tots els torrents i el túnel d’I2P"
+
+msgid "Start all stopped torrents"
+msgstr "Inicia tots els torrents aturats"
+
+msgid "Hide Peers"
+msgstr "Amaga els peers"
+
+msgid "Show Peers"
+msgstr "Mostra els peers"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Ordena per {0}"
+
+msgid "Up Rate"
+msgstr "Taxa de pujada"
+
+msgid "Total size of loaded torrents"
+msgstr "Mida total dels torrents carregats"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 peer connectat"
+msgstr[1] "{0} connexions amb peers"
+
+msgid "Active downloads"
+msgstr "Baixades actives"
+
+msgid "Active uploads"
+msgstr "Pujades actives"
+
+msgid "Active Inbound tunnels"
+msgstr "Túnels d’entrada actius"
+
+msgid "Active Outbound tunnels"
+msgstr "Túnels de sortida actius"
+
+msgid "Estimated download time for all torrents"
+msgstr "Temps de baixada estimat per a tots els torrents"
+
+msgid "Data downloaded this session"
+msgstr "Dades baixades aquesta sessió"
+
+msgid "Total download speed"
+msgstr "Velocitat total de baixada"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Dades totals pujades (per als torrents de la llista)"
+
+msgid "Total upload speed"
+msgstr "Velocitat total de pujada"
+
+msgid "Toggle Debug Panel"
+msgstr "Alterna el panell de depuració"
+
+msgid "Debug Mode"
+msgstr "Mode de depuració"
+
+msgid "Normal Mode"
+msgstr "Mode normal"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrents"
+
+msgid "No DHT Peers"
+msgstr "No hi ha peers DHT"
+
+msgid "Search"
+msgstr "Cercar"
+
+msgid "Show All"
+msgstr "Mostra tot"
+
+msgid "Active"
+msgstr "Actiu"
+
+msgid "Inactive"
+msgstr "Inactiu"
+
+msgid "Connected"
+msgstr "Connectat"
+
+msgid "Downloading"
+msgstr "Baixant"
+
+msgid "Seeding"
+msgstr "Sembrant"
+
+msgid "Complete"
+msgstr "Complet"
+
+msgid "Incomplete"
+msgstr "Incomplet"
+
+msgid "Stopped"
+msgstr "Aturat"
+
+msgid "First"
+msgstr "Primera"
+
+msgid "First page"
+msgstr "Primera pàgina"
+
+msgid "Prev"
+msgstr "Anter."
+
+msgid "Previous page"
+msgstr "Pàgina anterior"
+
+msgid "Next"
+msgstr "Següent"
+
+msgid "Next page"
+msgstr "Pàgina següent"
+
+msgid "Last"
+msgstr "Última"
+
+msgid "Last page"
+msgstr "Última pàgina"
+
+msgid "Enter URL or select torrent file"
+msgstr "Introduïu l’URL o seleccioneu el fitxer torrent"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr "Error en afegir el torrent: {0}"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Error en pujar el fitxer torrent: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "No s’admet la baixada des d’una ubicació diferent d’I2P {0}"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Error: no s’admeten els hash d’informació de versió 2"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "URL no vàlida: ha de començar per «{0}» o «{1}»"
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Mimant suprimit: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "No s’ha pogut suprimir el fitxer torrent: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "S’ha suprimit el fitxer de dades: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "No s’ha pogut suprimir el fitxer de dades: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "No s’ha pogut suprimir el directori: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "S’ha suprimit el directori: {0}"
+
+msgid "Browser API enabled."
+msgstr "API del navegador activada."
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr "No s’ha pogut obrir l’extensió I2PSnark Bridge: {0}"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr ""
+" fitxers o carpetes s’han exclòs de «{0}» per les regles de filtratge."
+
+#, java-format
+msgid ""
+"The following files or folders were excluded from \"{0}\" due to filter "
+"rules: "
+msgstr ""
+"Els fitxers o carpetes següents s’han exclòs de «{0}» per les regles de "
+"filtratge: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Torrent creat per a «{0}»"
+
+#, java-format
+msgid ""
+"Many I2P trackers require you to register new torrents before seeding - "
+"please do so before starting \"{0}\""
+msgstr ""
+"Molts rastrejadors d’I2P us obliguen a registrar els torrents nous abans de "
+"sembrar-los - feu-ho abans d’iniciar «{0}»"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Error en crear un torrent per a «{0}»"
+
+msgid "Removed"
+msgstr "Eliminat"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Introduïu un nom de rastrejador i URL vàlides"
+
+msgid "Restored default trackers"
+msgstr "Rastrejadors per defecte restablits"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Introduïu un nom i un patró de filtre vàlids"
+
+msgid "Restored default torrent create filters"
+msgstr "S’han restablit els filtres de creació de torrents per defecte"
+
+msgid "Torrent details"
+msgstr "Detalls del torrent"
+
+msgid "Torrent has comments"
+msgstr "El torrent té comentaris"
+
+msgid "Open file"
+msgstr "Obre el fitxer"
+
+msgid "View files"
+msgstr "Mostra els fitxers"
+
+msgid "Completed"
+msgstr "Completat"
+
+msgid "Share ratio"
+msgstr "Proporció compartida"
+
+msgid "Last activity"
+msgstr "Darrera activitat"
+
+msgid "Stop"
+msgstr "Atura"
+
+msgid "Stop torrent"
+msgstr "Atura el torrent"
+
+msgid "Start"
+msgstr "Inicia"
+
+msgid "Start torrent"
+msgstr "Inicia el torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Elimina i suprimeix el torrent, conservant els fitxers baixats"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Suprimeix el fitxer .torrent i els fitxers de dades associats"
+
+msgid "Destination"
+msgstr "Destinació"
+
+msgid "Checking"
+msgstr "Comprovació"
+
+msgid "Allocating"
+msgstr "Assignant"
+
+msgid "Failed to connect to all configured trackers"
+msgstr "No s’ha pogut connectar a tots els rastrejadors configurats"
+
+msgid "Starting"
+msgstr "Iniciant"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Sembrant a {0} peer"
+msgstr[1] "Sembrant a {0} peers"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Connectat a {0} de {1} peers a el swarm"
+
+msgid "Stalled"
+msgstr "Estancat"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Sembrant a {0} peer a el swarm"
+msgstr[1] "Sembrant a {0} peers a el swarm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Baixant des de {0} peer"
+msgstr[1] "Baixant des de {0} peers"
+
+msgid "OK"
+msgstr "Correcte"
+
+msgid "No Peers"
+msgstr "Cap peer"
+
+msgid "Peer attached to swarm"
+msgstr "Peer connectat a el swarm"
+
+msgid "Destination (identity) of peer"
+msgstr "Destinació (identitat) del peer"
+
+msgid "seconds"
+msgstr "segons"
+
+msgid "Seed"
+msgstr "Sembrador"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Sense interès (El peer no té les peces que necessitem)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Estrangulat (El peer no ens permet sol·licitar peces)"
+
+msgid "Peer is interested but currently idle"
+msgstr "El peer està interessat però actualment és inactiu"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Sense interès (No tenim les peces que el peer necessita)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Estrangulació (No permetem que el peer sol·liciti peces)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Detalls al rastrejador {0}"
+
+msgid "Info"
+msgstr "Info"
+
+msgid "Add Torrent"
+msgstr "Afegir torrent"
+
+msgid "From URL"
+msgstr "Des de l’URL"
+
+msgid ""
+"Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr ""
+"Introduïu l’URL de descàrrega del fitxer torrent (només I2P), l’enllaç imant"
+" o l’infohash"
+
+msgid "Add torrent"
+msgstr "Afegir torrent"
+
+msgid "Torrent file"
+msgstr "Fitxer torrent"
+
+msgid "Data dir"
+msgstr "Dir. de dades"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Introduïu el directori on desar les dades (per defecte {0})"
+
+msgid "Create Torrent"
+msgstr "Crear torrent"
+
+msgid "Data to seed"
+msgstr "Dades per sembrar"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr ""
+"Fitxer o directori per sembrar (camí complet o dins del directori {0} )"
+
+msgid "Create torrent"
+msgstr "Crear torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr ""
+"Exclou fitxers del torrent si es troben dins de la carpeta del torrent"
+
+msgid "Content Filters"
+msgstr "Filtres de contingut"
+
+msgid "Alternates"
+msgstr "Alternatius"
+
+msgid "Primary"
+msgstr "Principal"
+
+msgid "Tracker Type"
+msgstr "Tipus de rastrejador"
+
+msgid "none"
+msgstr "cap"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr ""
+"No es pot afegir l’imant: els enllaços imant de versió 2 no són compatibles"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "URL d’imant no vàlida {0}"
+
+msgid "Files"
+msgstr "Fitxers"
+
+msgid "Save priorities"
+msgstr "Desa les prioritats"
+
+msgid "Comments"
+msgstr "Comentaris"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "Si us plau, torneu a enviar el formulari (nonce incorrecte)"
+
+msgid "Unknown command"
+msgstr "Ordre desconeguda"
+
+msgid "Resource Does Not Exist"
+msgstr "El recurs no existeix"
+
+msgid "Resource"
+msgstr "Recurs"
+
+msgid "Base"
+msgstr "Base"
+
+msgid "Directory"
+msgstr "Directori"
+
+msgid "File type"
+msgstr "Tipus de fitxer"
+
+msgid "Size"
+msgstr "Mida"
+
+msgid "Download Status"
+msgstr "Estat de la descàrrega"
+
+msgid "Remaining"
+msgstr "Restant"
+
+msgid "Download Priority"
+msgstr "Prioritat de descàrrega"
+
+msgid "up"
+msgstr "amunt"
+
+msgid "Parent directory"
+msgstr "Directori superior"
+
+msgid "Audio Playlist"
+msgstr "Llista de reproducció d’àudio"
+
+msgid "Resource Not found"
+msgstr "Recurs no trobat"
+
+msgid "Info hash"
+msgstr "Infohash"
+
+msgid "Created"
+msgstr "Creat"
+
+#, java-format
+msgid ""
+"Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding "
+"files"
+msgstr ""
+"Mida dels fitxers realment baixats: {0}, sense comptar {1} de fitxers de "
+"farcit de BEP 47"
+
+msgid "Added"
+msgstr "Afegit"
+
+msgid "Pieces"
+msgstr "Peces"
+
+msgid "Average download speed for torrent"
+msgstr "Velocitat mitjana de descàrrega del torrent"
+
+msgid "Download speed"
+msgstr "Velocitat de descàrrega"
+
+msgid "Completion"
+msgstr "Completació"
+
+msgid "Skipped"
+msgstr "Omitit"
+
+msgid ""
+"Only I2P trackers will be used; non-I2P trackers are displayed for "
+"informational purposes only"
+msgstr ""
+"Només s’utilitzaran els rastrejadors d’I2P; els rastrejadors que no són "
+"d’I2P només es mostren amb finalitat informativa"
+
+msgid "Tracker"
+msgstr "Rastrejador"
+
+msgid "Web Seeds"
+msgstr "Web seeds"
+
+msgid "Refresh page for results"
+msgstr "Actualitza la pàgia per veure els resultats"
+
+msgid "Force Recheck"
+msgstr "Força la reverificació"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "Atura el torrent per comprovar la integritat dels fitxers"
+
+msgid "Check integrity of the downloaded files"
+msgstr "Comprova la integritat dels fitxers baixats"
+
+msgid "Download file at high priority"
+msgstr "Baixa el fitxer amb prioritat alta"
+
+msgid "High"
+msgstr "Alta"
+
+msgid "Download file at normal priority"
+msgstr "Baixa el fitxer amb prioritat normal"
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Do not download this file"
+msgstr "No baixeu aquest fitxer"
+
+msgid "Skip"
+msgstr "Omet"
+
+msgid "complete"
+msgstr "complet"
+
+msgid "remaining"
+msgstr "restant"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "1 estrella"
+msgstr[1] "{0} estrelles"
+
+msgid "No rating"
+msgstr "Cap valoració"
+
+msgid "Rate and Comment"
+msgstr "Valorar i comentar"
+
+msgid "Rate Torrent"
+msgstr "Valorar el torrent"
+
+msgid "Add Comment"
+msgstr "Afegir comentari"
+
+msgid "My Rating"
+msgstr "La meva valoració"
+
+msgid "Average Rating"
+msgstr "Valoració mitjana"
+
+msgid "No community ratings currently available"
+msgstr "Actualment no hi ha valoracions de la comunitat disponibles"
+
+msgid "Submitted"
+msgstr "Enviat"
+
+msgid "Mark for deletion"
+msgstr "Marca per suprimir"
+
+msgid "Delete Selected"
+msgstr "Suprimeix la selecció"
+
+msgid "Ratings and Comments"
+msgstr "Valoracions i comentaris"
+
+msgid "Author name required to rate or comment"
+msgstr "Cal el nom d’autor per valorar o comentar"
+
+msgid "Your author name for published comments and ratings"
+msgstr "El vostre nom d’autor per als comentaris i les valoracions publicats"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "Prioritats de descàrrega de fitxers actualitzades per al torrent "
+
+msgid "Edit Torrent"
+msgstr "Edita el torrent"
+
+msgid "Active Trackers"
+msgstr "Rastrejadors actius"
+
+msgid "Delete"
+msgstr "Suprimeix"
+
+msgid "Add Tracker"
+msgstr "Afegir rastrejador"
+
+msgid "Torrent Comment"
+msgstr "Comentari del torrent"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "El torrent s’ha d’aturar per poder-lo editar"
+
+msgid "Save Changes"
+msgstr "Desa els canvis"
+
+msgid "Torrent must be stopped"
+msgstr "El torrent s’ha d’aturar"
+
+msgid "Not found"
+msgstr "No s’ha trobat"
+
+msgid "File not found in torrent"
+msgstr "No s’ha trobat el fitxer al torrent"
+
+msgid "Unrecognized"
+msgstr "No reconegut"
+
+msgid "Preview"
+msgstr "Vista prèvia"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "No es pot afegir el torrent {0} dins d’un altre torrent: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "No es pot afegir el torrent {0} que inclou un altre torrent: {1}"

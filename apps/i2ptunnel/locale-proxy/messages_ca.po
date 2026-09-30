@@ -1,0 +1,610 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Aquesta sembla ser una destinació incorrecta:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper no us pot ajudar amb una destinació com aquesta!"
+
+#, java-format
+msgid ""
+"To visit the destination in your addressbook, click <a "
+"href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, "
+"click <a href=\"{1}\">here</a>."
+msgstr ""
+"Per visitar la destinació de la vostra llibreta d’adreces, feu clic <a "
+"href=\"{0}\">aquí</a>. Per visitar la destinació conflictiva de l’ajudant "
+"d’adreces, feu clic <a href=\"{1}\">aquí</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destinació per a {0} a la llibreta d’adreces"
+
+msgid "Conflicting address helper destination"
+msgstr "Destinació conflictiva de l’ajudant d’adreces"
+
+msgid "Corrupt Base32 address"
+msgstr "Adreça Base32 corrupta"
+
+msgid "Destination LeaseSet not found"
+msgstr "No s’ha trobat el LeaseSet de la destinació"
+
+msgid "Host"
+msgstr "Amfitrió"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destinació"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Continueu cap a {0} sense desar"
+
+msgid ""
+"You can browse to the site without saving it to the addressbook. The address"
+" will be remembered until you restart your I2P router."
+msgstr ""
+"Podeu navegar fins al lloc web sense desar-lo a la llibreta d’adreces. "
+"L’adreça es recordarà fins que reinicialitzeu el vostre router d’I2P."
+
+msgid "Continue without saving"
+msgstr "Continueu sense desar"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr ""
+"Deseu {0} a la llibreta d’adreces del router i continueu cap al lloc web"
+
+msgid ""
+"This address will be saved to your Router addressbook where your "
+"subscription-based addresses are stored."
+msgstr ""
+"Aquesta adreça es desarà a la llibreta d’adreces del vostre router, on es "
+"guarden les adreces basades en subscripcions."
+
+msgid ""
+"If you want to keep track of sites you have added manually, add to your "
+"Master or Private addressbook instead."
+msgstr ""
+"Si voleu fer el seguiment dels llocs web que heu afegit manualment, afegiu-"
+"los a la vostra llibreta d’adreces mestra o privada."
+
+msgid "Save & continue"
+msgstr "Deseu i continueu"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "Deseu {0} a la llibreta d’adreces mestra i continueu cap al lloc web"
+
+msgid ""
+"This address will be saved to your Master addressbook. Select this option "
+"for addresses you wish to keep separate from the main router address book, "
+"but don't mind publishing."
+msgstr ""
+"Aquesta adreça es desarà a la vostra llibreta d’adreces mestra. Seleccioneu "
+"aquesta opció per a les adreces que voleu mantenir separades de la llibreta "
+"d’adreces principal del router, però que no us importa publicar."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "Deseu {0} a la llibreta d’adreces privada i continueu cap al lloc web"
+
+msgid ""
+"This address will be saved to your Private addressbook, ensuring it is never"
+" published."
+msgstr ""
+"Aquesta adreça es desarà a la vostra llibreta d’adreces privada, cosa que "
+"garanteix que no es publiqui mai."
+
+msgid "Base32 address requires lookup password"
+msgstr "L’adreça Base32 requereix una contrasenya de cerca"
+
+msgid "Base32 address requires encryption key"
+msgstr "L’adreça Base32 requereix una clau de xifrat"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr ""
+"L’adreça Base32 requereix una clau de xifrat i una contrasenya de cerca"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr ""
+"Error en el descifratge de l’adreça Base32, comproveu la clau de xifrat"
+
+msgid "Generate"
+msgstr "Genereu"
+
+msgid "Encryption key"
+msgstr "Clau de xifrat"
+
+msgid ""
+"You must either enter a PSK encryption key provided by the server operator, "
+"or generate a DH encryption key and send that to the server operator."
+msgstr ""
+"Heu d’introduir o bé una clau de xifrat PSK proporcionada per l’operador del"
+" servidor, o bé generar una clau de xifrat DH i enviar-la a l’operador del "
+"servidor."
+
+msgid "Ask the server operator for help."
+msgstr "Demaneu ajuda a l’operador del servidor."
+
+msgid "Enter PSK encryption key"
+msgstr "Introduïu la clau de xifrat PSK"
+
+msgid "Generate new DH encryption key"
+msgstr "Genereu una clau de xifrat DH nova"
+
+msgid "Lookup password"
+msgstr "Contrasenya de cerca"
+
+msgid "You must enter the password provided by the server operator."
+msgstr ""
+"Heu d’introduir la contrasenya proporcionada per l’operador del servidor."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Afegit mitjançant l’ajudant d’adreces des de {0}"
+
+msgid "Added via address helper"
+msgstr "Afegit mitjançant l’ajudant d’adreces"
+
+msgid "Missing lookup password"
+msgstr "Falta la contrasenya de cerca"
+
+msgid "Missing private key"
+msgstr "Falta la clau privada"
+
+msgid "Invalid private key"
+msgstr "Clau privada no vàlida"
+
+msgid "Your new encryption key"
+msgstr "La vostra nova clau de xifrat"
+
+msgid "Router Console"
+msgstr "Consola del router"
+
+msgid "Addressbook"
+msgstr "Llibreta d’adreces"
+
+msgid "Configuration"
+msgstr "Configuració"
+
+msgid "Help"
+msgstr "Ajuda"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Copieu la clau i envieu-la a l’operador del servidor."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Un cop se us hagi concedit el permís, podreu accedir al lloc web."
+
+msgid "Go back and fix the error"
+msgstr "Torneu enrere i corregiu l’error"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "mestra"
+
+msgid "private"
+msgstr "privada"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Redirigint a {0}"
+
+msgid "Redirection in progress"
+msgstr "Redirecció en curs"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Heu desat {0} a la llibreta d’adreces {1}, ara us redirigim."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr ""
+"No s’ha pogut desar {0} a la llibreta d’adreces {1}, ara us redirigim."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "Feu clic aquí si no se us redirigeix automàticament."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Heu desat l’autenticació per a {0}, ara us redirigim."
+
+msgid "Website Unknown"
+msgstr "Lloc web desconegut"
+
+msgid "I2P Router Console"
+msgstr "Consola del Router d’I2P"
+
+msgid "Website Not Found in Addressbook"
+msgstr "Lloc web no trobat a la llibreta d’adreces"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "No s’ha trobat el lloc web a la llibreta d’adreces del vostre router."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "Comproveu l’enllaç o trobeu una adreça Base 32 o Base 64."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr ""
+"Si teniu l’adreça Base 64, {0}afegiu-la a la vostra llibreta d’adreces{1}."
+
+msgid ""
+"Otherwise, find a Base 32 or address helper link, or use a jump service link"
+" below."
+msgstr ""
+"Altrament, trobeu un enllaç Base 32 o de l’ajudant d’adreces, o utilitzeu un"
+" enllaç de servei de salt a sota."
+
+#, java-format
+msgid ""
+"Seeing this page often? See {0}the FAQ{1} for help in {2}adding some "
+"subscriptions{3} to your addressbook."
+msgstr ""
+"Sovint veieu aquesta pàgina? Consulteu {0}les preguntes freqüents{1} per "
+"obtenir ajuda per {2}afegir subscripcions{3} a la vostra llibreta d’adreces."
+
+msgid "Could not find the following destination:"
+msgstr "No s’ha pogut trobar la destinació següent:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Advertiment: Protocol no HTTP"
+
+msgid "The request uses a bad protocol."
+msgstr "La petició utilitza un protocol incorrecte."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "El proxy HTTP d’I2P només admet peticions HTTP i HTTPS."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Altres protocols com ara FTP no estan permesos."
+
+msgid "Error: Request Denied"
+msgstr "Error: Petició denegada"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr ""
+"Error: No es pot accedir a la consola del router mitjançant el proxy d’I2P"
+
+msgid "Your browser is misconfigured."
+msgstr "El vostre navegador està mal configurat."
+
+msgid ""
+"Do not use the proxy to access the router console, localhost, or local LAN "
+"destinations."
+msgstr ""
+"No utilitzeu el proxy per accedir a la consola del router, a localhost ni a "
+"les destinacions LAN locals."
+
+msgid ""
+"You need to prevent 127.0.0.1 (or the address you're accessing the I2P "
+"console on) from being routed via I2P's http proxy, usually by excluding the"
+" address in your browser's proxy configuration section."
+msgstr ""
+"Heu d’evitar que 127.0.0.1 (o l’adreça des de la qual accediu a la consola "
+"d’I2P) s’encamini pel proxy http d’I2P, normalment excloent l’adreça a la "
+"secció de configuració del proxy del vostre navegador."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "Advertiment: Conflicte de clau de destinació"
+
+msgid ""
+"The address helper link you followed specifies a different destination key "
+"than the entry in your address book."
+msgstr ""
+"L’enllaç de l’ajudant d’adreces que heu seguit especifica una clau de "
+"destinació diferent de la de l’entrada a la vostra llibreta d’adreces."
+
+msgid ""
+"Someone could be trying to impersonate another website, or people have given"
+" two websites identical names."
+msgstr ""
+"Algú podria estar intentant suplantar un altre lloc web, o bé persones han "
+"donat noms idèntics a dos llocs web."
+
+msgid ""
+"Resolve the conflict by deciding which key you trust, and then either ignore"
+" the address helper link, or delete the host entry from your address book "
+"and click the address helper link again."
+msgstr ""
+"Resoleu el conflicte decidint en quina clau confieu i, a continuació, o bé "
+"ignoreu l’enllaç de l’ajudant d’adreces, o bé suprimiu l’entrada de "
+"l’amfitrió de la vostra llibreta d’adreces i feu clic de nou a l’enllaç de "
+"l’ajudant d’adreces."
+
+msgid "Connection Reset"
+msgstr "Reinicialització de la connexió"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr ""
+"La connexió al lloc web es va reinicialitzar mentre es carregava la pàgina."
+
+msgid ""
+"The website could be temporarily unavailable, too busy, or it has blocked "
+"your access."
+msgstr ""
+"El lloc web podria no estar disponible temporalment, estar massa ocupat o "
+"haver bloquejat el vostre accés."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "És possible que vulgueu {0}reintentar{1}."
+
+#, java-format
+msgid ""
+"If you leave this page open, it will automatically retry connecting to the "
+"website every {0} seconds after a failed connection attempt."
+msgstr ""
+"Si deixeu aquesta pàgina oberta, intentarà connectar-se automàticament al "
+"lloc web cada {0} segons després d’un intent de connexió fallit."
+
+msgid "Website Unreachable"
+msgstr "Lloc web inaccessible"
+
+msgid ""
+"The website was not reachable, because it uses encryption options that are "
+"not supported by your I2P or Java version."
+msgstr ""
+"No es va poder accedir al lloc web perquè utilitza opcions de xifratge que "
+"no són compatibles amb la vostra versió d’I2P o de Java."
+
+msgid "Could not connect to the following destination:"
+msgstr "No s’ha pogut connectar a la destinació següent:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr ""
+"No es va poder accedir al lloc web perquè no s’ha trobat el seu LeaseSet."
+
+msgid ""
+"The website is probably down, but there could also be network congestion."
+msgstr ""
+"El lloc web probablement està caigut, però també hi podria haver congestió a"
+" la xarxa."
+
+msgid "The connection to the proxy was reset."
+msgstr "La connexió al proxy es va reinicialitzar."
+
+msgid ""
+"The proxy could be temporarily unavailable, too busy, or it has blocked your"
+" access."
+msgstr ""
+"El proxy podria no estar disponible temporalment, estar massa ocupat o haver"
+" bloquejat el vostre accés."
+
+#, java-format
+msgid ""
+"You may want to {0}retry{1} as this will randomly reselect an outproxy from "
+"the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr ""
+"És possible que vulgueu {0}reintentar{1}, ja que això seleccionarà a l’atzar"
+" un outproxy del grup que heu definit {2}aquí{3} (si en teniu més d’un de "
+"configurat)."
+
+#, java-format
+msgid ""
+"If you continue to have trouble you may want to edit your outproxy list "
+"{0}here{1}."
+msgstr ""
+"Si continueu tenint problemes, és possible que vulgueu editar la vostra "
+"llista d’outproxies {0}aquí{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Outproxy inaccessible"
+
+msgid ""
+"The HTTP outproxy was not reachable, because it uses encryption options that"
+" are not supported by your I2P or Java version."
+msgstr ""
+"No es va poder accedir a l’outproxy HTTP perquè utilitza opcions de xifratge"
+" que no són compatibles amb la vostra versió d’I2P o de Java."
+
+msgid "The website was not reachable."
+msgstr "No es va poder accedir al lloc web."
+
+msgid ""
+"The website is offline, there is network congestion, or your router is not "
+"yet well-integrated with peers."
+msgstr ""
+"El lloc web està fora de línia, hi ha congestió a la xarxa o bé el vostre "
+"router encara no està ben integrat amb els peers."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Advertiment: No s’ha configurat cap outproxy"
+
+msgid ""
+"Your request was for a site outside of I2P, but you have no HTTP outproxy "
+"configured."
+msgstr ""
+"La vostra petició era per a un lloc web fora d’I2P, però no teniu cap "
+"outproxy HTTP configurat."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Configureu un outproxy a I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Outproxy no trobat"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "No s’ha trobat l’outproxy HTTP."
+
+msgid ""
+"It is offline, there is network congestion, or your router is not yet well-"
+"integrated with peers."
+msgstr ""
+"Està fora de línia, hi ha congestió a la xarxa o bé el vostre router encara "
+"no està ben integrat amb els peers."
+
+msgid "Information: New Host Name"
+msgstr "Informació: Nom d’amfitrió nou"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "Informació: Nom d’amfitrió nou amb ajudant d’adreces"
+
+msgid ""
+"The address helper link you followed is for a new host name that is not in "
+"your address book."
+msgstr ""
+"L’enllaç de l’ajudant d’adreces que heu seguit correspon a un nom d’amfitrió"
+" nou que no és a la vostra llibreta d’adreces."
+
+msgid "You may save this host name to your local address book."
+msgstr ""
+"Podeu desar aquest nom d’amfitrió a la vostra llibreta d’adreces local."
+
+msgid ""
+"If you save it to your address book, you will not see this message again."
+msgstr ""
+"Si el deseu a la vostra llibreta d’adreces, no veureu més aquest missatge."
+
+msgid ""
+"If you do not save it, the host name will be forgotten after the next router"
+" restart."
+msgstr ""
+"Si no el deseu, el nom d’amfitrió s’oblidarà després del proper reinici del "
+"router."
+
+msgid ""
+"If you do not wish to visit this host, click the \"back\" button on your "
+"browser."
+msgstr ""
+"Si no voleu visitar aquest amfitrió, feu clic al botó \"back\" del vostre "
+"navegador."
+
+msgid "Proxy Authorization Required"
+msgstr "Es requereix autorització per al proxy"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Es requereix autorització per al proxy HTTP d’I2P"
+
+msgid ""
+"This proxy is configured to require a username and password for access."
+msgstr ""
+"Aquest proxy està configurat per requerir un nom d’usuari i una contrasenya "
+"per accedir-hi."
+
+#, java-format
+msgid ""
+"Please enter your username and password, or check your {0}router "
+"configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr ""
+"Introduïu el vostre nom d’usuari i la vostra contrasenya, o comproveu la "
+"vostra {0}configuració del router{1} o la {2}configuració d’I2PTunnel{3}."
+
+#, java-format
+msgid ""
+"To disable authorization, remove the configuration "
+"{0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy "
+"tunnel."
+msgstr ""
+"Per desactivar l’autorització, suprimiu la configuració "
+"{0}i2ptunnel.proxy.auth=basic{1} i, a continuació, atureu i reinicialitzeu "
+"el túnel del proxy HTTP."
+
+msgid ""
+"The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr ""
+"No es va poder accedir a l’outproxy HTTP perquè no s’ha trobat el seu "
+"LeaseSet."
+
+msgid ""
+"The outproxy is probably down, but there could also be network congestion."
+msgstr ""
+"L’outproxy probablement està caigut, però també hi podria haver congestió a "
+"la xarxa."
+
+msgid "Warning: Request Denied"
+msgstr "Advertiment: Petició denegada"
+
+msgid ""
+"This address appears to be malformed. Please verify you have supplied a "
+"valid address!"
+msgstr ""
+"Aquesta adreça sembla estar malformada. Verifiqueu que heu proporcionat una "
+"adreça vàlida!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "Advertiment: Ajudant d’adreces incorrecte"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr ""
+"La clau auxiliar a l’URL ({0}i2paddresshelper={1}) no es pot resoldre."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Sembla ser dades sense sentit, o una adreça Base 32 mal escrita."
+
+msgid ""
+"Check your URL to try and fix the helper key to be a valid Base 32 hostname "
+"or Base 64 key."
+msgstr ""
+"Comproveu l’URL per intentar corregir la clau auxiliar perquè sigui un nom "
+"d’amfitrió Base 32 o una clau Base 64 vàlida."
+
+msgid "Warning: Address Blacklisted"
+msgstr "Advertiment: Adreça a la llista negra"
+
+msgid ""
+"The requested destination is in your blacklist and access has been blocked."
+msgstr ""
+"La destinació sol·licitada és a la vostra llista negra i l’accés ha quedat "
+"bloquejat."
+
+msgid ""
+"To allow access to this site, remove it from your blacklist on the SusiDNS "
+"blacklist management page."
+msgstr ""
+"Per permetre l’accés a aquest lloc web, suprimiu-lo de la vostra llista "
+"negra a la pàgina de gestió de llistes negres de SusiDNS."
+
+msgid "Warning: Invalid Destination"
+msgstr "Advertiment: Destinació no vàlida"
+
+msgid ""
+"The website destination specified was not valid, or was otherwise "
+"unreachable."
+msgstr ""
+"La destinació del lloc web indicada no era vàlida o, altrament, era "
+"inaccessible."
+
+msgid ""
+"Perhaps you pasted in the wrong Base 64 string or the link you are following"
+" is bad."
+msgstr ""
+"És possible que hagueu enganxat la cadena Base 64 equivocada o que l’enllaç "
+"que esteu seguint sigui incorrecte."
+
+msgid "The I2P host could also be offline."
+msgstr "L’amfitrió d’I2P també podria estar fora de línia."
+
+msgid "Warning: Authorization Required"
+msgstr "Advertiment: Es requereix autorització"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Advertiment: URI de la petició no vàlida"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr ""
+"L’URI de la petició no és vàlid i probablement conté caràcters il·legals."
+
+msgid ""
+"If you clicked a link, check the end of the URI for any characters the "
+"browser has mistakenly added on."
+msgstr ""
+"Si heu fet clic a un enllaç, comproveu el final de l’URI per veure si el "
+"navegador hi ha afegit caràcters per error."
+
+msgid "The Base32 address is invalid."
+msgstr "L’adreça Base32 no és vàlida."

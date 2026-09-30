@@ -1,0 +1,340 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "El nom d’amfitrió «{0}» conté el caràcter no permès {1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "El nom d’amfitrió no pot començar per «{0}»"
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "El nom d’amfitrió no pot acabar en «{0}»"
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "El nom d’amfitrió no pot contenir «{0}»"
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "El nom d’amfitrió «{0}» requereix una conversió a ASCII, però la biblioteca de conversió no està disponible en aquesta JVM"
+
+msgid "Source"
+msgstr "Origen"
+
+msgid "Imported from"
+msgstr "Importat des de"
+
+msgid "Imported from file"
+msgstr "Importat des del fitxer"
+
+msgid "Manually added via SusiDNS"
+msgstr "Afegit manualment mitjançant SusiDNS"
+
+msgid "Manually added"
+msgstr "Afegit manualment"
+
+msgid "Added via address helper"
+msgstr "Afegit mitjançant l’ajudant d’adreces"
+
+msgid "Via helper"
+msgstr "Via l’ajudant"
+
+msgid "Via helper from"
+msgstr "Via l’ajudant des de"
+
+msgid "None"
+msgstr "Cap"
+
+msgid "Hidden"
+msgstr "Amagat"
+
+msgid "Signed"
+msgstr "Signat"
+
+msgid "Key"
+msgstr "Clau"
+
+#, java-format
+msgid "Type {0}"
+msgstr "Tipus {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 bits"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bits"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "Cerqueu <span class=active>"
+msgstr[1] "Cerqueu <span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "La llista filtrada conté 1 entrada."
+msgstr[1] "La llista filtrada conté {0} entrades."
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "Un resultat per a: <span class=active>"
+msgstr[1] "{0} resultats per a: <span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "La llibreta d’adreces conté 1 entrada"
+msgstr[1] "La llibreta d’adreces conté {0} entrades"
+
+msgid "Add"
+msgstr "Afegir"
+
+msgid "Replace"
+msgstr "Substitueix"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "El nom d’amfitrió {0} ja és a la llibreta d’adreces, sense canvis."
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "El nom d’amfitrió {0} ja és a la llibreta d’adreces amb una adreça de destinació diferent. Feu clic a «Substitueix» per sobreescriure’l."
+
+msgid "Unable to resolve Base 32 address"
+msgstr "No s’ha pogut resoldre l’adreça Base 32"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "S’ha afegit l’adreça de destinació per a {0}."
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "S’ha canviat l’adreça de destinació per a {0}."
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "Advertiment - el nom d’amfitrió no acaba en «.i2p»"
+
+msgid "Invalid Base 32 host name."
+msgstr "El nom d’amfitrió Base 32 no és vàlid."
+
+msgid "Invalid Base 64 destination."
+msgstr "L’adreça de destinació Base 64 no és vàlida."
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "El nom d’amfitrió «{0}» no és vàlid."
+
+msgid "Please enter a host name and destination"
+msgstr "Introduïu un nom d’amfitrió i una adreça de destinació"
+
+msgid "Add Alternate"
+msgstr "Afegir un alternatiu"
+
+msgid "Unsupported"
+msgstr "No compatible"
+
+msgid "Address book saved."
+msgstr "Llibreta d’adreces desada."
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "ERROR: No s’ha pogut escriure el fitxer de la llibreta d’adreces."
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Enviament de formulari no vàlid, probablement perquè heu fet servir el botó «enrere» o «recarrega» del navegador. Torneu-lo a enviar."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Si el problema persisteix, verifiqueu que teniu les galetes activades al navegador."
+
+msgid "Save"
+msgstr "Desa"
+
+msgid "Blacklist saved."
+msgstr "Llista negra desada."
+
+msgid "Reload"
+msgstr "Recarrega"
+
+msgid "Blacklist reloaded from file."
+msgstr "Llista negra tornada a carregar des del fitxer."
+
+msgid "Configuration saved."
+msgstr "Configuració desada."
+
+msgid "Configuration reloaded."
+msgstr "Configuració tornada a carregar."
+
+msgid "New domain"
+msgstr "Domini nou"
+
+msgid "Subscription log reloaded."
+msgstr "Registre de subscripcions tornat a carregar."
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} llibreta d’adreces a la base de dades {1}"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "El nom d’amfitrió {0} no és a la llibreta d’adreces."
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "No s’ha pogut afegir l’adreça de destinació per a {0} al servei de noms {1}"
+
+msgid "Delete Entry"
+msgstr "Suprimeix l’entrada"
+
+msgid "Delete Selected"
+msgstr "Suprimeix la selecció"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "No s’ha pogut suprimir l’adreça de destinació per a {0} del servei de noms {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Adreça de destinació {0} suprimida."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "S’ha suprimit 1 adreça de destinació."
+msgstr[1] "S’han suprimit {0} adreces de destinació."
+
+msgid "No valid entries selected to delete."
+msgstr "No s’ha seleccionat cap entrada vàlida per suprimir."
+
+msgid "Blacklist Selected"
+msgstr "Llista negra seleccionada"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "S’ha afegit 1 adreça de destinació a la llista negra."
+msgstr[1] "S’han afegit {0} adreces de destinació a la llista negra."
+
+msgid "No valid entries selected to blacklist."
+msgstr "No s’ha seleccionat cap entrada vàlida per afegir a la llista negra."
+
+msgid "Save Notes"
+msgstr "Desa les notes"
+
+msgid "You must enter a file"
+msgstr "Heu d’introduir un fitxer"
+
+msgid "No entries found in file"
+msgstr "No s’ha trobat cap entrada al fitxer"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "Importat des del fitxer {0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "S’ha carregat {0} entrada del fitxer"
+msgstr[1] "S’han carregat {0} entrades del fitxer"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "S’ha omès {0} entrada duplicada del fitxer"
+msgstr[1] "S’han omès {0} entrades duplicades del fitxer"
+
+msgid "Import from file failed"
+msgstr "Ha fallat la importació des del fitxer"
+
+msgid "Subscriptions saved."
+msgstr "Subscripcions desades."
+
+msgid "Update"
+msgstr "Actualitza"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "S’està intentant actualitzar la llibreta d’adreces des de les fonts de subscripció..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "No es poden actualitzar les subscripcions: el proxy HTTP no està actiu!"
+
+msgid "Subscriptions reloaded."
+msgstr "Subscripcions tornades a carregar."
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Si SusiDNS està configurat per publicar la vostra llibreta d’adreces del router, les entrades apareixeran a la vostra llibreta d’adreces publicada i es desaran en un fitxer hosts.txt per compartir-lo."
+
+msgid "Published Addressbook"
+msgstr "Llibreta d’adreces publicada"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Per configurar SusiDNS perquè envii la vostra llibreta d’adreces del router a la vostra llibreta d’adreces publicada, definiu «should_publish=true» a la pàgina de configuració."
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Tots els amfitrionis derivats de les subscripcions apareixeran en aquesta llibreta d’adreces, a més dels que hi afegiu manualment aquí o a la vostra llibreta d’adreces mestra."
+
+msgid "Router Addressbook"
+msgstr "Llibreta d’adreces del router"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Els amfitrionis que afegiu manualment aquí mai no es publicaran. També hi podeu afegir àlies d’amfitrionis d’altres llibretes d’adreces."
+
+msgid "Private Addressbook"
+msgstr "Llibreta d’adreces privada"
+
+msgid "Local Records"
+msgstr "Registres locals"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Les aplicacions I2P (inclosa el proxy HTTP) utilitzen els amfitrionis de les vostres llibretes d’adreces locals per resoldre els noms d’amfitrió .i2p."
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "Podeu trobar subscripcions addicionals a la secció PMF de la pàgina d’ajuda del router."
+
+msgid "Subscriptions"
+msgstr "Subscripcions"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Els amfitrionis procedents de les vostres subscripcions s’afegeixen a la vostra llibreta d’adreces del router i se sincronitzen automàticament (per defecte, cada 12 hores)."
+
+msgid "Configure Subscriptions"
+msgstr "Configureu les subscripcions"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Si hi afegiu amfitrionis manualment, s’inclouran a la vostra llibreta d’adreces publicada (si està configurada)."
+
+msgid "Master Addressbook"
+msgstr "Llibreta d’adreces mestra"
+
+msgid "Searchable by"
+msgstr "Es pot cercar per"
+
+msgid "I2P applications"
+msgstr "Aplicacions I2P"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Les llibretes d’adreces mestra, del router i privada serveixen conjuntament com a autoritat DNS per a les aplicacions I2P."
+
+msgid "Optional,"
+msgstr "Opcional,"
+
+msgid "for websites"
+msgstr "per a llocs web"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Si configureu SusiDNS per publicar la vostra llibreta d’adreces del router, exportarà un fitxer hosts.txt amb tots els amfitrionis (per defecte, a l’arrel del vostre eepsite)."
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Les adreces afegides manualment a la vostra llibreta d’adreces mestra es fusionaran amb la vostra llibreta d’adreces del router."
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Els amfitrionis que rebeu de les vostres subscripcions es fusionaran amb la vostra llibreta d’adreces del router."

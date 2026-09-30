@@ -1,0 +1,61 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: ca\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "Inicia I2P"
+
+msgid "I2P is starting!"
+msgstr "I2P s’està iniciant!"
+
+msgid "Starting"
+msgstr "Iniciant"
+
+msgid "Launch I2P Browser"
+msgstr "Obre el navegador d’I2P"
+
+msgid "Configure I2P System Tray"
+msgstr "Configureu la safata del sistema d’I2P"
+
+msgid "Disable system tray"
+msgstr "Desactiveu la safata del sistema"
+
+msgid "Restart I2P"
+msgstr "Reinicia I2P"
+
+msgid "Stop I2P"
+msgstr "Atura I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "Reinicia I2P immediatament"
+
+msgid "Stop I2P Immediately"
+msgstr "Atura I2P immediatament"
+
+msgid "Cancel I2P Shutdown"
+msgstr "Cancel·la l’aturada d’I2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "Aturada en {0}"
+
+msgid "Shutdown imminent"
+msgstr "Aturada imminent"
+
+msgid "Network"
+msgstr "Xarxa"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: Feu clic dret per obtenir el menú"
+
+msgid "Enable notifications"
+msgstr "Activeu les notificacions"
+
+msgid "Disable notifications"
+msgstr "Desactiveu les notificacions"
