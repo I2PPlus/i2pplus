@@ -55,6 +55,7 @@
     langToCountry.put("fi", "fi");
     langToCountry.put("fr", "fr");
     langToCountry.put("el", "gr");
+    langToCountry.put("he", "il");
     langToCountry.put("hi", "in");
     langToCountry.put("hu", "hu");
     langToCountry.put("in", "id");
@@ -70,6 +71,7 @@
     langToCountry.put("ru", "ru");
     langToCountry.put("sl", "sk");
     langToCountry.put("sv", "se");
+    langToCountry.put("sw", "tz");
     langToCountry.put("bo", "xt");
     langToCountry.put("tr", "tr");
     langToCountry.put("vi", "vn");
@@ -103,6 +105,7 @@
 <a href="#" data-param="lang" data-value="fi" title="Finnish"><img src="/flags.jsp?c=fi" alt=""></a>
 <a href="#" data-param="lang" data-value="fr" title="Francais"><img src="/flags.jsp?c=fr" alt=""></a>
 <a href="#" data-param="lang" data-value="el" title="Greek"><img src="/flags.jsp?c=gr" alt=""></a>
+<a href="#" data-param="lang" data-value="he" title="Hebrew"><img src="/flags.jsp?c=il" alt=""></a>
 <a href="#" data-param="lang" data-value="hi" title="Hindi"><img src="/flags.jsp?c=in" alt=""></a>
 <a href="#" data-param="lang" data-value="hu" title="Hungarian"><img src="/flags.jsp?c=hu" alt=""></a>
 <a href="#" data-param="lang" data-value="in" title="Indonesian"><img src="/flags.jsp?c=id" alt=""></a>
@@ -118,6 +121,7 @@
 <a href="#" data-param="lang" data-value="ru" title="Russian"><img src="/flags.jsp?c=ru" alt=""></a>
 <a href="#" data-param="lang" data-value="sl" title="Slovencina"><img src="/flags.jsp?c=sk" alt=""></a>
 <a href="#" data-param="lang" data-value="sv" title="Svenska"><img src="/flags.jsp?c=se" alt=""></a>
+<a href="#" data-param="lang" data-value="sw" title="Kiswahili"><img src="/flags.jsp?c=tz" alt=""></a>
 <a href="#" data-param="lang" data-value="bo" title="Tibetan"><img src="/flags.jsp?c=xt" alt=""></a>
 <a href="#" data-param="lang" data-value="tr" title="Turkce"><img src="/flags.jsp?c=tr" alt=""></a>
 <a href="#" data-param="lang" data-value="uk" title="Ukrainian"><img src="/flags.jsp?c=ua" alt=""></a>

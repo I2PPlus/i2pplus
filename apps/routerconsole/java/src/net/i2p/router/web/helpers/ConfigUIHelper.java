@@ -190,6 +190,7 @@ public class ConfigUIHelper extends HelperBase {
         { "fi", "fi", "Finnish Suomi", null },
         { "fr", "fr", "Français", null },
         { "el", "gr", "Greek Ελληνικά", null },
+        { "he", "il", "Hebrew עברית", null },
         { "hi", "in", "Hindi", null },
         { "hu", "hu", "Hungarian Magyar", null },
         { "in", "id", "Indonesian", null },
@@ -205,6 +206,7 @@ public class ConfigUIHelper extends HelperBase {
         { "ru", "ru", "Russian Русский", null },
         { "sl", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
+        { "sw", "tz", "Swahili Kiswahili", null },
         { "bo", "xt", "Tibetan", null }, // position by name, not iso code
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukraine Українська", null },
@@ -212,7 +214,6 @@ public class ConfigUIHelper extends HelperBase {
         { "xx", "a1", "Untagged strings", null },
         //{ "es_AR", "ar", "Español" ,"Argentina" },
         //{ "gl", "lang_gl", "Galego", null },
-        //{ "iw", "il", "Hebrew עברית", null },
         //{ "ku", "ku", "Kurdî", null },
         //{ "mg", "mg", "Malagasy", null },
         //{ "pt_BR", "br", "Português", "Brazil" },

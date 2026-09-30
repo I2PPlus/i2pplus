@@ -55,6 +55,7 @@ public class ConfigUIHelper {
         {"fi", "fi", "Finnish Suomi", null},
         {"fr", "fr", "Français", null},
         {"el", "gr", "Greek Ελληνικά", null},
+        {"he", "il", "Hebrew עברית", null},
         {"hi", "in", "Hindi", null},
         {"hu", "hu", "Hungarian Magyar", null},
         {"in", "id", "Indonesian", null},
@@ -70,6 +71,7 @@ public class ConfigUIHelper {
         {"ru", "ru", "Russian Русский", null},
         {"sl", "sk", "Slovenčina", null},
         {"sv", "se", "Svenska", null},
+        {"sw", "tz", "Swahili Kiswahili", null},
         {"bo", "xt", "Tibetan", null}, // position by name, not iso code
         {"tr", "tr", "Türkçe", null},
         {"uk", "ua", "Ukrainian Українська", null},
