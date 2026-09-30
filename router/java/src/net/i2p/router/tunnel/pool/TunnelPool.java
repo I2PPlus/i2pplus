@@ -491,6 +491,17 @@ public class TunnelPool {
      * the new LeaseSet while the gateway still routes instead of racing
      * tunnel death. */
     private static final long LEASE_SAFETY_MARGIN = 60L * 1000;
+    /**
+     *  Hard ceiling on {@link #getTunnelLifetime}: the standard 10m lifetime plus
+     *  the 1m grace period other routers afford. The published lease is capped
+     *  separately at {@link #getLeaseMaxDuration} (10m), so the tunnel runs one
+     *  grace period past the lease it advertises — which is what keeps the
+     *  advertised value on the standard 10m. Exceeding 11m buys no overlap: the
+     *  lease cap binds first, so a longer tunnel is simply paid for during a
+     *  window no LeaseSet covers.
+     *  @since 0.9.71+
+     */
+    static final long MAX_TUNNEL_LIFETIME_MS = 11L * 60 * 1000;
     /** Tunnels must have at least this much remaining life to be published:
      * the lease ends {@link #LEASE_SAFETY_MARGIN} before the tunnel expires
      * and the lease end is floored 60s out, so a tunnel closer to death than
@@ -530,15 +541,31 @@ public class TunnelPool {
 
     /**
      *  Tunnel lifetime from config or default (11 minutes).
-     *  Longer than stock so a pool holds overlapping tunnel generations,
-     *  giving the LeaseSet re-mint more leases to choose from at any moment.
-     *  Tunable via i2p.tunnel.lifetime (default: 660000).
+     *
+     *  <p>The tunnel outlives its own published lease by
+     *  {@link #LEASE_SAFETY_MARGIN} (60s).  That difference is the grace
+     *  period, and it is what makes the advertised value land on the I2P
+     *  standard: the lease end is
+     *  {@code min(tunnel expiry, now + leaseMaxDuration) - 60s}, so with an 11m
+     *  tunnel and the 10m {@link #getLeaseMaxDuration} cap the cap binds and
+     *  peers see ~10m.  Shortening the tunnel below the cap would drag the
+     *  advertised lease down with it — a 10m tunnel advertises only 9m — so the
+     *  tunnel is deliberately held one grace period above the lease cap.
+     *
+     *  <p>Hard-capped at 11m: other routers afford a 1m grace period beyond the
+     *  standard 10m lifetime and no more, so a longer tunnel would be paid for
+     *  during a window no LeaseSet covers and would outlive what peers will
+     *  tolerate caching.
+     *
+     *  <p>Tunable via i2p.tunnel.lifetime (default: 660000, capped at 660000).
      *
      *  @param ctx the router context
-     *  @return the tunnel lifetime in milliseconds
+     *  @return the tunnel lifetime in milliseconds, never above 11 minutes
+     *  @since 0.9.71+
      */
     public static int getTunnelLifetime(RouterContext ctx) {
-        return ctx.getProperty("i2p.tunnel.lifetime", 11 * 60 * 1000);
+        return (int) Math.min(MAX_TUNNEL_LIFETIME_MS,
+                               ctx.getProperty("i2p.tunnel.lifetime", (int) MAX_TUNNEL_LIFETIME_MS));
     }
 
     /**
@@ -4254,6 +4281,35 @@ public class TunnelPool {
 
 
     /**
+     *  Compute the end date advertised for a lease, given the tunnel's own
+     *  expiration.  Pure so the lifetime/grace relationship is testable without
+     *  a live tunnel: the lease must end before the gateway stops routing, and
+     *  must never be advertised beyond the configured maximum.
+     *
+     *  <p>The three steps are, in order: subtract {@link #LEASE_SAFETY_MARGIN}
+     *  so peers re-fetch while the gateway still routes; clamp to
+     *  {@code now + maxLeaseMs} so nobody caches us for the full lifetime; and
+     *  clamp up to {@code now + 60s} so a nearly-dead tunnel still yields a
+     *  usable lease rather than one already expired.  That last floor is what
+     *  a thin pool hits, and it is why leases were observed living ~89s: the
+     *  pool had no fresher tunnel to offer, not because the lifetime was wrong.
+     *
+     *  @param tunnelExpiration when the tunnel stops routing, ms
+     *  @param now current time in ms
+     *  @param maxLeaseMs maximum advertised lease duration from now, ms
+     *  @return the lease end date, always greater than {@code now}
+     *  @since 0.9.71+
+     */
+    static long computeLeaseEndDate(long tunnelExpiration, long now, long maxLeaseMs) {
+        long end = tunnelExpiration - LEASE_SAFETY_MARGIN;
+        long maxEnd = now + maxLeaseMs;
+        if (end > maxEnd) {end = maxEnd;}
+        long minEnd = now + 60L * 1000;
+        if (end < minEnd) {end = minEnd;}
+        return end;
+    }
+
+    /**
      * Build a Lease from a single tunnel's gateway.  The lease ends
      * {@link #LEASE_SAFETY_MARGIN} before the tunnel expires so peers
      * re-fetch while the gateway still routes.
@@ -4274,18 +4330,10 @@ public class TunnelPool {
         if (cfg instanceof TunnelCreatorConfig) {
             expiration = Math.min(expiration, ((TunnelCreatorConfig) cfg).getConfig(0).getExpiration());
         }
-        // End the lease before the tunnel dies: the gateway keeps routing for
-        // the margin, giving peers time to fetch the successor LeaseSet.
-        expiration -= LEASE_SAFETY_MARGIN;
-        // Cap lease end so peers re-fetch sooner than the full tunnel lifetime.
-        // The gateway still processes messages for the full lifetime; only the
-        // cached LeaseSet on the requesting side expires earlier.
-        long maxLease = getLeaseMaxDuration(_context);
-        long maxEnd = _context.clock().now() + maxLease;
-        if (expiration > maxEnd)
-            expiration = maxEnd;
-        long minExpiry = _context.clock().now() + 60L * 1000;
-        if (expiration < minExpiry) {expiration = minExpiry;}
+        // End the lease before the tunnel dies, cap it, and floor it so a
+        // nearly-dead tunnel still publishes something usable.  See
+        // computeLeaseEndDate for why each step exists.
+        expiration = computeLeaseEndDate(expiration, _context.clock().now(), getLeaseMaxDuration(_context));
         lease.setEndDate(expiration);
         lease.setTunnelId(inId);
         lease.setGateway(gw);
