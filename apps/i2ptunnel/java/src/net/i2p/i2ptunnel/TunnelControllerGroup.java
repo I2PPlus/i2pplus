@@ -2155,6 +2155,37 @@ public class TunnelControllerGroup implements ClientApp {
         return c;
     }
 
+    /**
+     *  Grow one server's handler pool to match the load it is actually seeing.
+     *
+     *  <p>Called from the accept loop before the admission gate, because that is
+     *  the only place queue depth is visible at the moment it matters.
+     *  {@link #rebalanceServerExecutors()} runs on pool registration and on
+     *  Tuner parameter changes, not on load, so a pool registered while idle
+     *  would otherwise stay at its idle size forever. The first version of
+     *  demand sizing had exactly that: pools created at one thread, refusing
+     *  connections with an almost-empty queue, because nothing ever asked them
+     *  to grow.
+     *
+     *  <p>Grows only. Shrinking here would thrash the limit on every lull and
+     *  buy nothing — {@code allowCoreThreadTimeOut(true)} means a generous
+     *  limit costs no threads while a pool is quiet, since its workers are
+     *  reclaimed after the keepalive either way.
+     *
+     *  @param server the accepting server tunnel
+     *  @since 0.9.71+
+     */
+    void growServerExecutorForLoad(I2PTunnelServer server) {
+        if (server == null) {return;}
+        ServerHandler h = _serverHandlers.get(server);
+        if (h == null) {return;}
+        ThreadPoolExecutor ex = h.executor;
+        if (ex == null || ex.isShutdown()) {return;}
+        int cap = h.override >= SERVER_HANDLER_FLOOR ? h.override : serverThreadsPerTunnel;
+        int want = serverThreadsForDemand(ex.getQueue().size(), ex.getActiveCount(), cap);
+        if (want > ex.getMaximumPoolSize()) {resizeServerExecutor(ex, want);}
+    }
+
     /** Trigger a full handler-pool rebalance after a global or per-tunnel cap change. */
     private void rebalanceAll() {
         synchronized (_serverExecutorLock) {

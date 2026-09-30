@@ -984,6 +984,13 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 // busy and the backlog cannot drain within the budget, or near
                 // hard capacity — never while a handler thread is free.
                 if (serverExec != null) {
+                    // Size to the load seen so far before judging it. Pools are
+                    // sized from demand, but that sizing only ran on pool
+                    // registration, so a pool opened while quiet would still be
+                    // at its idle size here and reject with a nearly empty
+                    // queue. Growing first means the gate judges saturation
+                    // rather than a stale limit.
+                    if (tcg != null) {tcg.growServerExecutorForLoad(this);}
                     int qDepth = serverExec.getQueue().size();
                     int qCap = qDepth + serverExec.getQueue().remainingCapacity();
                     int active = serverExec.getActiveCount();
