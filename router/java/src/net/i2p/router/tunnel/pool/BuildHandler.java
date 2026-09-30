@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
@@ -1549,6 +1550,7 @@ public class BuildHandler implements Runnable {
                        + "] after " + (recvDelay >= 1 ? recvDelay + "ms" : "") + " with response [#" + response
                        + "] from " + (from != null ? "[" + fromPeer + "]" : "tunnel") + req);
         }
+        countNextHopOutcome(NEXT_HOP_REPLIED);
         int records = state.msg.getRecordCount();
         int ourSlot = -1;
         for (int j = 0; j < records; j++) {
@@ -1900,7 +1902,127 @@ public class BuildHandler implements Runnable {
             if (log.shouldDebug()) {
                 log.debug("Timeout (" + (getNextHopLookupTimeout(getContext()) / 1000) + "s) contacting next hop" + _cfg);
             }
+            countNextHopOutcome(NEXT_HOP_TIMEOUT);
         }
+
+        /**
+         *  Record a successful reply to an inbound build request we handled.
+         *  Pairs with {@link #countNextHopOutcome} so the hop-contact failure
+         *  rate is visible without grepping DEBUG.
+         *  @since 0.9.71+
+         */
+        void countReplied() { countNextHopOutcome(NEXT_HOP_REPLIED); }
+    }
+
+    /**
+     *  Outcome of one next-hop contact, for the rate-limited WARN summary.
+     *  @since 0.9.71+
+     */
+    static final int NEXT_HOP_REPLIED = 0;
+    /** Next hop did not answer within the hop-contact window. @since 0.9.71+ */
+    static final int NEXT_HOP_TIMEOUT = 1;
+    /** We declined the inbound build request. @since 0.9.71+ */
+    static final int NEXT_HOP_DROPPED = 2;
+    private static final int NEXT_HOP_OUTCOMES = 3;
+
+    /**
+     *  How often the next-hop summary may be logged, ms. The individual events
+     *  fire hundreds of times a minute at this rate, so they stay at DEBUG and
+     *  only the rolled-up ratio is worth a WARN.
+     *  @since 0.9.71+
+     */
+    static final long NEXT_HOP_SUMMARY_INTERVAL_MS = 5 * 60 * 1000;
+
+    private static final AtomicLong[] _nextHopOutcomes = new AtomicLong[NEXT_HOP_OUTCOMES];
+    private static final AtomicLong _nextHopSummaryLog = new AtomicLong();
+
+    static {
+        for (int i = 0; i < NEXT_HOP_OUTCOMES; i++) {
+            _nextHopOutcomes[i] = new AtomicLong();
+        }
+    }
+
+    /**
+     *  Count one next-hop outcome and, at most once per
+     *  {@link #NEXT_HOP_SUMMARY_INTERVAL_MS}, log the ratio at WARN.
+     *
+     *  <p>This exists because the failure was invisible: 42% of handled inbound
+     *  builds hit the hop-contact timeout, but the only record was one DEBUG
+     *  line per event, so an eepsite silently stopped serving and nothing at
+     *  WARN reflected it.  The rate is the diagnostic signal, not any single
+     *  event — one slow peer is noise, a sustained third of builds unanswered is
+     *  a reachability problem.
+     *
+     *  @param outcome one of {@link #NEXT_HOP_REPLIED}, {@link #NEXT_HOP_TIMEOUT},
+     *  {@link #NEXT_HOP_DROPPED}
+     *  @param log the log to write to, may be null
+     *  @param now current time in ms
+     *  @return true if a summary was logged
+     *  @since 0.9.71+
+     */
+    static boolean countNextHopOutcome(int outcome, Log log, long now) {
+        if (outcome < 0 || outcome >= NEXT_HOP_OUTCOMES) {return false;}
+        _nextHopOutcomes[outcome].incrementAndGet();
+        if (log == null || !log.shouldWarn()) {return false;}
+        long last = _nextHopSummaryLog.get();
+        if (now - last < NEXT_HOP_SUMMARY_INTERVAL_MS) {return false;}
+        if (!_nextHopSummaryLog.compareAndSet(last, now)) {return false;}
+        log.warn(nextHopSummaryText(snapshotNextHopOutcomes(), now - last));
+        return true;
+    }
+
+    /**
+     *  Count an outcome with no summary logging, for the hot per-event path.
+     *  @param outcome one of the NEXT_HOP_* constants
+     *  @since 0.9.71+
+     */
+    static void countNextHopOutcome(int outcome) {
+        if (outcome < 0 || outcome >= NEXT_HOP_OUTCOMES) {return;}
+        _nextHopOutcomes[outcome].incrementAndGet();
+    }
+
+    /**
+     *  Current next-hop outcome counts.
+     *  @return [replied, timedOut, dropped]
+     *  @since 0.9.71+
+     */
+    static long[] snapshotNextHopOutcomes() {
+        return new long[] {
+            _nextHopOutcomes[NEXT_HOP_REPLIED].get(),
+            _nextHopOutcomes[NEXT_HOP_TIMEOUT].get(),
+            _nextHopOutcomes[NEXT_HOP_DROPPED].get()
+        };
+    }
+
+    /**
+     *  Reset the counters, for tests.
+     *  @since 0.9.71+
+     */
+    static void resetNextHopOutcomes() {
+        for (AtomicLong c : _nextHopOutcomes) {c.set(0);}
+        _nextHopSummaryLog.set(0);
+    }
+
+    /**
+     *  Format the next-hop summary line.  Pure so the wording and the division
+     *  are testable without a live router, and so the denominator is explicit:
+     *  the timeout percentage is of handled requests, not of all outcomes.
+     *
+     *  @param counts [replied, timedOut, dropped]
+     *  @param windowMs window the counts cover
+     *  @return a single-line WARN summary
+     *  @since 0.9.71+
+     */
+    static String nextHopSummaryText(long[] counts, long windowMs) {
+        long replied = counts[0];
+        long timedOut = counts[1];
+        long dropped = counts[2];
+        long handled = replied + timedOut;
+        int pct = handled > 0 ? (int) Math.round((double) timedOut * 100d / handled) : 0;
+        return "Next-hop contact: " + handled + " handled in " + (windowMs / 1000) + "s, " +
+               replied + " replied, " + timedOut + " timed out (" + pct + "%), " +
+               dropped + " dropped" +
+               (pct >= 20 ? " -- high unanswered rate, suspect unreachable/firewalled peers" : "");
     }
 
     /**
