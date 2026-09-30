@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.DataHelper;
@@ -1319,7 +1320,7 @@ public class TestJob extends JobImpl {
      * a delayed callback from an earlier retest can never complete, release,
      * or clear state belonging to a newer round.
      */
-    private volatile RoundToken _round;
+    private final AtomicReference<RoundToken> _round = new AtomicReference<>();
 
     /**
      * The last pending message registered for this instance's round, kept so a
@@ -2655,7 +2656,7 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     boolean claimRound(RoundToken token) {
-        return claimRoundCompletion(_round, token);
+        return claimRoundCompletion(_round.get(), token);
     }
 
     /**
@@ -2771,6 +2772,36 @@ public class TestJob extends JobImpl {
     }
 
     /**
+     *  Arm {@code next} as the active round and return the permits held by the
+     *  round it supersedes.
+     *
+     *  <p>This closes a permit leak. Every release path — the reply handler,
+     *  the timeout handler, {@link #abandonRound}, and
+     *  {@link #cancelForReset} — reaches the permits only after
+     *  {@link #claimRound}, which requires the token to still be the active
+     *  round. So a round that is still holding permits when a new round arms
+     *  becomes unreachable: nothing can ever claim it, and its permits are
+     *  never returned. The gauge then drifts upward by one per occurrence until
+     *  it sits at {@code maxConcurrent}, at which point every subsequent test
+     *  is refused with {@link InFlightRefusal#GLOBAL_CAP} and no test dispatches
+     *  at all while tunnel builds continue normally.
+     *
+     *  <p>Swapping and releasing together makes the accounting correct by
+     *  construction rather than by auditing each caller. The release is a no-op
+     *  when the prior round already returned its own permit (a CAS on the
+     *  token's held flag guards it), so this is safe on every path, including
+     *  the common one where the prior round completed normally.
+     *
+     *  @param state the context's batch state
+     *  @param active the active-round slot for this job
+     *  @param next the round to arm
+     *  @since 0.9.71+
+     */
+    static void armRound(BatchState state, AtomicReference<RoundToken> active, RoundToken next) {
+        releaseTokenPermits(state, active.getAndSet(next));
+    }
+
+    /**
      *  Reserve in-flight permits and arm the round, reporting which gate
      *  refused it so the caller can log a specific reason.  Split from
      *  {@link #reserveInFlight} because the two gates bind for different
@@ -2785,14 +2816,17 @@ public class TestJob extends JobImpl {
     InFlightRefusal reserveInFlightForToken(RoundToken token) {
         final RouterContext ctx = getContext();
         final int budget = token.poolId != null ? poolInFlightBudget(ctx, _pool) : -1;
-        InFlightRefusal refusal = reserveInFlightWithReason(batchState(ctx), getMaxConcurrentTests(ctx),
+        BatchState state = batchState(ctx);
+        InFlightRefusal refusal = reserveInFlightWithReason(state, getMaxConcurrentTests(ctx),
                 token.poolId, budget, token);
         if (refusal != InFlightRefusal.NONE) {
             return refusal;
         }
         // Arm only now that the permits are held: a refused round leaves the
         // previous round (or none) active, so its callbacks are inert.
-        _round = token;
+        // The superseded round's permits are returned here, because arming
+        // overwrites the only reference the release paths can reach.
+        armRound(state, _round, token);
         return InFlightRefusal.NONE;
     }
 
@@ -4422,7 +4456,7 @@ public class TestJob extends JobImpl {
             // Stop as soon as this round is done or superseded: a selector for
             // an earlier retest must not keep the registry holding a message
             // the instance has already moved past.
-            return !_token.completed.get() && _token == _round
+            return !_token.completed.get() && _token == _round.get()
                     && getContext().clock().now() < _token.expiration;
         }
 
@@ -4574,7 +4608,7 @@ public class TestJob extends JobImpl {
             _pendingMessage = null;
             getContext().messageRegistry().unregisterPending(sent);
         }
-        RoundToken token = _round;
+        RoundToken token = _round.get();
         if (claimRound(token)) {
             // No callback will run for this round now, so drop its tags here
             // instead of waiting for a timeout that will be a no-op.
