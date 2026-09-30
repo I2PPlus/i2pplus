@@ -1034,14 +1034,24 @@ public class BuildExecutor implements Runnable {
      *
      *  <p>An expire is counted as a single outcome, but each one silently also
      *  costs a test round and a test partner, so the reason a peer looked
-     *  selectable and then never answered is the signal worth having. Reported
-     *  per hop so a 0-hop build and a 3-hop build stay distinguishable.
+     *  selectable and then never answered is the signal worth having.
      *
-     *  <p>The three reachability fields are deliberately separate because they
-     *  imply different fixes. A peer already known unreachable is a selection
-     *  filter that did not fire. A peer never established and silent is a draw
-     *  that reached past the activity window. A peer that is established and
-     *  still silent accepts a connection and then ignores build requests, which
+     *  <p>Each hop is labelled with its role, and the hop where the local router
+     *  legitimately belongs is identified as ours rather than reported as a
+     *  peer. A router is one end of every tunnel it builds —
+     *  {@code ClientPeerSelector.finalizeSelection} inserts us as the gateway —
+     *  so naming our own identity here is expected and says nothing about
+     *  failure. Emitting it as an ordinary peer previously read as evidence of
+     *  self-selection when it was only the gateway slot. The gateway index
+     *  depends on direction: inbound puts us at the last hop, outbound at the
+     *  first. An appearance at any <em>other</em> index is the thing worth
+     *  noticing, and is labelled as unexpected.
+     *
+     *  <p>The three reachability fields are separate because they imply
+     *  different fixes. A peer already known unreachable is a selection filter
+     *  that did not fire. A peer never established and silent is a draw that
+     *  reached past the activity window. A peer that is established and still
+     *  silent accepts a connection and then ignores build requests, which
      *  neither recency nor reachability filtering will address.
      *
      *  <p>{@code wasUnreachable} and {@code isConnecting} are declared on
@@ -1056,14 +1066,31 @@ public class BuildExecutor implements Runnable {
         CommSystemFacade commSystem = _context.commSystem();
         long now = _context.clock().now();
         int length = cfg.getLength();
-        StringBuilder buf = new StringBuilder(160);
-        buf.append("Build expired unanswered after ");
-        buf.append(length).append(length == 1 ? " hop" : " hops");
+        Hash us = _context.routerHash();
+        int gatewayHop = gatewayHopIndex(cfg, length);
+        String destination = cfg.getDestinationNickname();
+        StringBuilder buf = new StringBuilder(192);
+        buf.append("Build expired unanswered: ");
+        buf.append(cfg.isInbound() ? "inbound" : "outbound");
+        buf.append(", destination=").append(destination != null ? destination : "exploratory");
+        buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
         for (int hop = 0; hop < length; hop++) {
             Hash peer = cfg.getPeer(hop);
-            buf.append("; hop ").append(hop).append(' ');
+            buf.append("; hop ").append(hop);
+            if (hop == gatewayHop) {
+                buf.append(" (gateway)");
+            }
+            buf.append(' ');
             if (peer == null) {
                 buf.append("was never assigned");
+                continue;
+            }
+            if (us != null && us.equals(peer)) {
+                // We are meant to be the gateway of our own tunnel. Say so
+                // plainly rather than describing ourselves as a silent,
+                // never-heard-from peer, which is a true statement about the
+                // wrong thing and reads as a fault.
+                buf.append(hop == gatewayHop ? "this router (expected)" : "this router (UNEXPECTED)");
                 continue;
             }
             PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
@@ -1080,6 +1107,28 @@ public class BuildExecutor implements Runnable {
             }
         }
         _log.debug(buf.toString());
+    }
+
+    /**
+     *  Config index at which the local router sits as this tunnel's gateway.
+     *
+     *  <p>{@code TunnelPool.createConfig} reverses the selected peer list into
+     *  the config, so config index 0 is the last selected peer.
+     *  {@code ClientPeerSelector.finalizeSelection} inserts the local router at
+     *  the front for inbound tunnels and at the end for outbound, which puts
+     *  us at the highest config index inbound and at index 0 outbound.
+     *  {@code ExploratoryPeerSelector} never selects us at all, so for an
+     *  exploratory build no index is ours; the returned index is still used
+     *  only for labelling and any match is reported as unexpected.
+     *
+     *  @param cfg the build's config
+     *  @param length the hop count
+     *  @return the config index expected to hold the local router
+     *  @since 0.9.71+
+     */
+    private static int gatewayHopIndex(TunnelCreatorConfig cfg, int length) {
+        if (length <= 0) {return -1;}
+        return cfg.isInbound() ? length - 1 : 0;
     }
 
     /**
