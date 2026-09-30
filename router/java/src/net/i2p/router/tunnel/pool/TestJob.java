@@ -3536,7 +3536,7 @@ public class TestJob extends JobImpl {
         _cfg.clearExpeditedTest();
 
         if (_log.shouldDebug()) {
-            _log.debug("Tunnel Test [#" + _testId + "] succeeded in " + ms + "ms → " + _cfg + " (Success rate: " +
+            _log.debug("Tunnel Test [#" + _testId + "] succeeded in " + ms + "ms \n* " + _cfg + " (Success rate: " +
                        String.format("%.1f%%", getSuccessRate() * 100) + ")");
         }
 
