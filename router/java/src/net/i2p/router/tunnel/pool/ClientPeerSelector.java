@@ -1049,6 +1049,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
      * Approach 3: Property toggle allows runtime disabling.
      * Approach 4: Recently connected peers don't need pre-connect again.
      * <p>
+     * The timeout is read through {@link BuildRequestor#getRequestTimeout} so it
+     * reflects the budget the builder actually runs with, including runtime
+     * tuning.  Reading {@code ctx.getProperty} here instead saw neither the tuned
+     * value nor a configured one: with the property unset its own default equalled
+     * the threshold, so the comparison was always true and first-hop pre-connect
+     * never ran on a default install.
+     * <p>
      * Pure decision — no side effects.
      *
      * @param ctx the router context
@@ -1063,8 +1070,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
         // build message survives the ~8.5s handshake without
         // needing preConnectTo.  The 15s default requestTimeout
         // is the minimum needed for handshake + propagation + reply.
-        long requestTimeout = ctx.getProperty("i2p.tunnel.build.requestTimeout", 15 * 1000L);
-        if (requestTimeout >= PRECONNECT_TIMEOUT_THRESHOLD_MS) return false;
+        //
+        // Read the tuned value, not the property: BuildExecutor moves
+        // requestTimeout at runtime through BuildRequestor.setRequestTimeout(),
+        // and reading ctx.getProperty() here saw neither the tuned value nor a
+        // configured one.  With the property unset that default equalled the
+        // threshold, so the >= below was always true and first-hop pre-connect
+        // never ran at all.
+        long requestTimeout = BuildRequestor.getRequestTimeout(ctx);
+        // Strictly greater: a timeout exactly at the threshold is documented as
+        // the minimum that still needs the handshake to be warmed out of the way.
+        if (requestTimeout > PRECONNECT_TIMEOUT_THRESHOLD_MS) return false;
         // Approach 4: recently connected peers don't need pre-connect
         if (wasRecentlyConnected(ctx, peer)) return false;
         // Still need pre-connect: timeout is too short and
