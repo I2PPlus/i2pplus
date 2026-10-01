@@ -1,0 +1,91 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0,number,####} ms"
+msgid_plural "{0,number,####} ms"
+msgstr[0] "{0,number,####} ms"
+msgstr[1] "{0,number,####} ms"
+
+#, java-format
+msgid "{0} sec"
+msgid_plural "{0} sec"
+msgstr[0] "{0}วินาที"
+msgstr[1] "{0}วินาที"
+
+#, java-format
+msgid "{0} min"
+msgid_plural "{0} min"
+msgstr[0] "{0}นาที"
+msgstr[1] "{0}นาที"
+
+#, java-format
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0}ชั่วโมง"
+msgstr[1] "{0}ชั่วโมง"
+
+#, java-format
+msgid "{0} day"
+msgid_plural "{0} days"
+msgstr[0] "{0}วัน"
+msgstr[1] "{0}วัน"
+
+#, java-format
+msgid "{0} year"
+msgid_plural "{0} years"
+msgstr[0] "{0}ปี"
+msgstr[1] "{0}ปี"
+
+msgid "n/a"
+msgstr "ไม่มีข้อมูล"
+
+#, java-format
+msgid "{0,number,####} ns"
+msgid_plural "{0,number,###} ns"
+msgstr[0] "{0,number,####} ns"
+msgstr[1] "{0,number,###} ns"
+
+#, java-format
+msgid "{0,number,####} μs"
+msgid_plural "{0,number,###} μs"
+msgstr[0] "{0,number,####} μs"
+msgstr[1] "{0,number,###} μs"
+
+msgid "CRIT"
+msgstr "วิกฤต"
+
+msgid "DEBUG"
+msgstr "ดีบัก"
+
+msgid "ERROR"
+msgstr "ข้อผิดพลาด"
+
+msgid "INFO"
+msgstr "ข้อมูล"
+
+msgid "WARN"
+msgstr "คำเตือน"
+
+#, java-format
+msgid "{0} similar message omitted"
+msgid_plural "{0} similar messages omitted"
+msgstr[0] "ข้ามข้อความที่คล้ายกัน{0}รายการ"
+msgstr[1] "ข้ามข้อความที่คล้ายกัน{0}รายการ"

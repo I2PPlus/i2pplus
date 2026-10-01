@@ -1,0 +1,58 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "I2P+ installation complete!"
+msgstr "د I2P+ نصب بشپړ شو!"
+
+msgid "Welcome to I2P+!"
+msgstr "I2P+ ته ښه راغلاست!"
+
+#, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
+msgstr "مهربانی وکړئ {0}صبر وکړئ{1} په دې وخت کې چې I2P+ پیلېږی او peerونه موموی۔"
+
+#, java-format
+msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgstr "د انتظار په مهال، مهربانی وکړئ {0}خپلې د باندویډټ ترتیبات سم کړئ{1} په {2}د ترتیباتو مخ{3} کې۔"
+
+#, java-format
+msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
+msgstr "کولای شئ د باندویډټ ازموونه له {0}ټاکل ویزارډ{1} لارې هم پرانیستئ ترڅو د خپلې د باندویډټ د معلومولو لپاره مرسته وکړئ، او د نویو کاروونکو لپاره یو لارښود او نور مستند، په ګړه FAQ، په {2}د مرستې برخه{1} کې شته۔"
+
+#, java-format
+msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgstr "کولای شئ همداڅه د I2P+ نوې کول په {0}د نویو کولو د ترتیباتو مخ{1} کې فعال کړئ۔"
+
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr "همداڅه کولای شئ خپل براوزر د I2P پروکسی د کارولو لپاره ترتیب کړئ ترڅو eepsite ته لاسرسی ولرئ۔"
+
+msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
+msgstr "یوازې په خپلو د براوزر ترتیباتو کې د http پروکسی په توګه 127.0.0.1 (یا localhost) پورټ 4444 ولیکئ۔"
+
+msgid "Do not use SOCKS for this."
+msgstr "د دې لپاره SOCKS مه کاروئ۔"
+
+#, java-format
+msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr "نور معلومات په {0}د I2P د براوزر پروکسی د ټاکلو پاڼه{1} کې موندل کېدای شی۔"
+
+#, java-format
+msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
+msgstr "خپل IRC کلآینټ {0}localhost:6668{1} ته وښیئ او په {2}#saltR{3} کې موږ ته سلام ووایاست۔"

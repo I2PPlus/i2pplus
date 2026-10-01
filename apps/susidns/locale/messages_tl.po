@@ -1,0 +1,692 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "Ang hostname na \"{0}\" ay may ipinagawalang karakter na {1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "Hindi maaaring magsimula ang hostname sa \"{0}\""
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "Hindi maaaring magtapos ang hostname sa \"{0}\""
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "Hindi maaaring magkaroon ang hostname ng \"{0}\""
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "Ang hostname na \"{0}\" ay nangangailangan ng conversion sa ASCII ngunit hindi available ang conversion library sa JVM na ito"
+
+msgid "Source"
+msgstr "Pinagmulan"
+
+msgid "Imported from"
+msgstr "Na-import mula sa"
+
+msgid "Imported from file"
+msgstr "Na-import mula sa file"
+
+msgid "Manually added via SusiDNS"
+msgstr "Manu-manong idinagdag gamit ang SusiDNS"
+
+msgid "Manually added"
+msgstr "Manu-manong idinagdag"
+
+msgid "Added via address helper"
+msgstr "Naidagdag gamit ang address helper"
+
+msgid "Via helper"
+msgstr "Gamit ang helper"
+
+msgid "Via helper from"
+msgstr "Gamit ang helper mula sa"
+
+msgid "None"
+msgstr "Wala"
+
+msgid "Hidden"
+msgstr "Nakatago"
+
+msgid "Signed"
+msgstr "Nilagdaan"
+
+msgid "Key"
+msgstr "Key"
+
+#, java-format
+msgid "Type {0}"
+msgstr "Uri {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 bit"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "Maghanap ng <span class=active>"
+msgstr[1] "Maghanap ng <span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "Naglalaman ang naka-filter na listahan ng 1 entry."
+msgstr[1] "Naglalaman ang naka-filter na listahan ng {0} entry."
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "Isang resulta para sa: <span class=active>"
+msgstr[1] "{0} na resulta para sa: <span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "Naglalaman ang address book ng 1 entry"
+msgstr[1] "Naglalaman ang address book ng {0} entry"
+
+msgid "Add"
+msgstr "Magdagdag"
+
+msgid "Replace"
+msgstr "Palitan"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "Nasa address book na ang hostname na {0}, hindi nagbago."
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "Nasa address book na ang hostname na {0} ngunit may ibang destination. I-click ang \"Palitan\" para i-overwrite."
+
+msgid "Unable to resolve Base 32 address"
+msgstr "Hindi ma-resolve ang Base 32 na address"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "Naidagdag ang destination para sa {0}."
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "Napalitan ang destination para sa {0}."
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "Babala - hindi nagtatapos sa \".i2p\" ang hostname"
+
+msgid "Invalid Base 32 host name."
+msgstr "Hindi wasto ang Base 32 na hostname."
+
+msgid "Invalid Base 64 destination."
+msgstr "Hindi wasto ang Base 64 na destination."
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "Hindi wasto ang hostname na \"{0}\"."
+
+msgid "Please enter a host name and destination"
+msgstr "Pakilala ang hostname at destination"
+
+msgid "Add Alternate"
+msgstr "Magdagdag ng Alternatibo"
+
+msgid "Unsupported"
+msgstr "Hindi suportado"
+
+msgid "Address book saved."
+msgstr "Naka-save ang address book."
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "ERROR: Hindi naisulat ang addressbook file."
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "Hindi wasto ang pagsusumite ng form, malamang dahil ginamit mo ang \"back\" o \"reload\" button sa iyong browser. Pakisumite muli."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Kung magpapatuloy ang problema, tiyaking naka-enable ang cookies sa iyong browser."
+
+msgid "Save"
+msgstr "I-save"
+
+msgid "Blacklist saved."
+msgstr "Naka-save ang Blacklist."
+
+msgid "Reload"
+msgstr "I-reload"
+
+msgid "Blacklist reloaded from file."
+msgstr "Na-reload ang Blacklist mula sa file."
+
+msgid "Configuration saved."
+msgstr "Naka-save ang Configuration."
+
+msgid "Configuration reloaded."
+msgstr "Na-reload ang Configuration."
+
+msgid "New domain"
+msgstr "Bagong domain"
+
+msgid "Subscription log reloaded."
+msgstr "Na-reload ang log ng Subscription."
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} address book sa {1} database"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "Wala sa address book ang hostname na {0}."
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "Nabigong idagdag ang Destination para sa {0} sa naming service na {1}"
+
+msgid "Delete Entry"
+msgstr "Burahin ang Entry"
+
+msgid "Delete Selected"
+msgstr "Burahin ang Napili"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "Nabigong burahin ang Destination para sa {0} mula sa naming service na {1}"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "Nabura ang destination na {0}."
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 destination ang nabura."
+msgstr[1] "{0} destination ang nabura."
+
+msgid "No valid entries selected to delete."
+msgstr "Walang wastong entry na napili para burahin."
+
+msgid "Blacklist Selected"
+msgstr "Blacklist ang Napili"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "1 destination ang na-blacklist."
+msgstr[1] "{0} destination ang na-blacklist."
+
+msgid "No valid entries selected to blacklist."
+msgstr "Walang wastong entry na napili para i-blacklist."
+
+msgid "Save Notes"
+msgstr "I-save ang Mga Tala"
+
+msgid "You must enter a file"
+msgstr "Kailangan ang isang file"
+
+msgid "No entries found in file"
+msgstr "Walang entry na natagpuan sa file"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "Na-import mula sa file na {0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "Na-load ang {0} entry mula sa file"
+msgstr[1] "Na-load ang {0} entry mula sa file"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "Inilaktaw ang {0} duplicate na entry mula sa file"
+msgstr[1] "Inilaktaw ang {0} na duplicate na entry mula sa file"
+
+msgid "Import from file failed"
+msgstr "Nabigong mag-import mula sa file"
+
+msgid "Subscriptions saved."
+msgstr "Naka-save ang mga Subscription."
+
+msgid "Update"
+msgstr "I-update"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "Sinusubukang i-update ang addressbook mula sa mga subscription source..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "Hindi ma-update ang mga subscription: hindi tumatakbo ang HTTP proxy!"
+
+msgid "Subscriptions reloaded."
+msgstr "Na-reload ang mga Subscription."
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "Kung naka-configure ang SusiDNS upang i-publish ang iyong Router address book, lalabas ang mga entry sa iyong Published address book at maili-save sa isang hosts.txt file para sa pagbabahagi."
+
+msgid "Published Addressbook"
+msgstr "Published na Addressbook"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "Para i-configure ang SusiDNS na mag-push ng iyong Router address book sa iyong Published address book, itakda ang 'should_publish=true' sa pahina ng configuration."
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "Lalabas sa address book na ito ang lahat ng host na mula sa mga subscription, sa karagdagan sa mga idinagdag mo dito o sa iyong Master address book."
+
+msgid "Router Addressbook"
+msgstr "Router na Addressbook"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "Hindi kailanman ii-publish ang mga host na idinagdag mo dito. Maaari mo ring magdagdag ng alias para sa mga host sa iba pang address book dito."
+
+msgid "Private Addressbook"
+msgstr "Pribadong Addressbook"
+
+msgid "Local Records"
+msgstr "Mga Lokal na Tala"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "Ginagamit ng mga aplikasyon ng I2P (kasama ang HTTP proxy) ang mga host sa iyong lokal na address book upang i-resolve ang mga .i2p hostname."
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "May makikita pang subscription sa FAQ section ng pahina ng tulong ng Router."
+
+msgid "Subscriptions"
+msgstr "Subscription"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "Idinadagdag sa iyong Router address book ang mga host na mula sa iyong subscription, at awtomatikong naka-sync ang mga ito (sa default, tuwing 12 oras)."
+
+msgid "Configure Subscriptions"
+msgstr "I-configure ang Mga Subscription"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "Kung idinagdag mo nang manu-mano ang mga host dito, maili-sasama ang mga ito sa iyong Published address book (kung naka-configure)."
+
+msgid "Master Addressbook"
+msgstr "Master na Addressbook"
+
+msgid "Searchable by"
+msgstr "Masahan sa pamamagitan ng"
+
+msgid "I2P applications"
+msgstr "Mga aplikasyon ng I2P"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "Pinagsasalubungan ng Master, Router, at Pribadong address book ang tungkulin sa DNS para sa mga aplikasyon ng I2P."
+
+msgid "Optional,"
+msgstr "Opsyonal,"
+
+msgid "for websites"
+msgstr "para sa mga website"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "Kung naka-configure ang SusiDNS upang i-publish ang iyong Router address book, mag-e-export ito ng isang hosts.txt file na naglalaman ng lahat ng host (sa default, sa root ng iyong eepsite)."
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "Magkakaisa ang mga address na manu-manong idinagdag sa iyong Master address book at ang iyong Router address book."
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "Magkakaisa ang mga host na natatanggap mo mula sa iyong subscription at ang iyong Router address book."
+
+msgid "Import"
+msgstr "Import"
+
+msgid "address book"
+msgstr "address book"
+
+msgid "Router"
+msgstr "Router"
+
+msgid "Master"
+msgstr "Master"
+
+msgid "Private"
+msgstr "Pribado"
+
+msgid "Published"
+msgstr "Nai-publish"
+
+msgid "Blacklist"
+msgstr "Blacklist"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Help"
+msgstr "Tulong"
+
+msgid "Book"
+msgstr "Book"
+
+msgid "No entries"
+msgstr "Walang entry"
+
+msgid "Add new destination"
+msgstr "Magdagdag ng bagong destination"
+
+msgid "Import from hosts.txt file"
+msgstr "Mag-import mula sa hosts.txt file"
+
+msgid "other"
+msgstr "iba"
+
+msgid "Export in hosts.txt format"
+msgstr "I-export sa hosts.txt format"
+
+msgid "Export results in hosts.txt format"
+msgstr "I-export ang resulta sa hosts.txt format"
+
+msgid "Export book in hosts.txt format"
+msgstr "I-export ang book sa hosts.txt format"
+
+msgid "Search"
+msgstr "Maghanap"
+
+msgid "latest"
+msgstr "pinakabagong"
+
+msgid "Alive"
+msgstr "Buhay"
+
+msgid "Dead"
+msgstr "Buhay na wala"
+
+msgid "all"
+msgstr "Lahat"
+
+msgid "Info"
+msgstr "Impormasyon"
+
+msgid "Type"
+msgstr "Uri"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Encryption"
+msgstr "Encryption"
+
+msgid "Link (b32)"
+msgstr "Link (b32)"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Added"
+msgstr "Naidagdag"
+
+msgid "Status"
+msgstr "Katayuan"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "Piliin ang mga host para burahin mula sa addressbook"
+
+msgid "More information on this entry"
+msgstr "Higit pang impormasyon tungkol sa entry na ito"
+
+msgid "unknown"
+msgstr "Hindi alam"
+
+msgid "Base 32 address"
+msgstr "Base 32 na address"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "Helper link upang ibahagi ang host address na may opsyon na idagdag sa addressbook"
+
+msgid "Mark for deletion"
+msgstr "Markahan para burahin"
+
+msgid "Cancel"
+msgstr "Kanselahin"
+
+msgid "This book currently contains no entries."
+msgstr "Walang entry ang book na ito sa ngayon."
+
+msgid "e.g. newdomain.i2p"
+msgstr "hal. bagongdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 o B32"
+
+msgid "Full destination or b32 address"
+msgstr "Buong destination o b32 address"
+
+msgid "Select file"
+msgstr "Pumili ng file"
+
+msgid "blacklist"
+msgstr "blacklist"
+
+msgid "Blacklist Management"
+msgstr "Pamamahala ng Blacklist"
+
+msgid "File location"
+msgstr "Lokasyon ng file"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "Pakilala ang mga address ng I2P na ilagay sa blacklist (isang isa bawat linya)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "Ang blacklist file ay naglalaman ng listahan ng mga I2P hostname na dapat hadlangan mula sa paggamit sa pamamagitan ng HTTP proxy, at ilalabas sa ipinapakitang address book."
+
+msgid "configuration"
+msgstr "configuration"
+
+msgid "HostChecker is already running a scan"
+msgstr "Nagtatakbo na ang HostChecker para sa isang scan"
+
+msgid "Run HostChecker"
+msgstr "Patakbuhin ang HostChecker"
+
+msgid "Hints"
+msgstr "Mga pahinu"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "Ang mga path ng file at directory dito ay kaugnay ng working directory ng addressbook, na karaniwang ~/.i2p/addressbook/ (Linux) o %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "Kung gusto mong manu-manong magdagdag ng linya sa isang addressbook, idagdag ang mga ito sa pribado o master na addressbook."
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "Ang router addressbook at ang published addressbook ay ina-update ng aplikasyon ng addressbook."
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "Kapag i-publish mo ang iyong addressbook, lalabas doon ang LAHAT ng destination mula sa master at router addressbook."
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "Gamitin ang pribadong addressbook para sa pribadong destination, hindi ito iipublish."
+
+msgid "Options"
+msgstr "Mga Opsyon"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "File na naglalaman ng listahan ng mga subscription URL (hindi kailangang baguhin)"
+
+msgid "Update interval in hours"
+msgstr "Interbal ng update sa oras"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "Ang iyong pampublikong hosts.txt file (pumili ng path sa loob ng document root ng iyong webserver)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "Ang iyong hosts.txt (huwag baguhin)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "Ang iyong personal na addressbook, iipublish ang mga host na ito"
+
+msgid "Your private addressbook, it is never published"
+msgstr "Ang iyong pribadong addressbook, kailanman ito ay hindi iipublish"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "Port para sa iyong eepProxy (hindi kailangang baguhin)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "Hostname para sa iyong eepProxy (hindi kailangang baguhin)"
+
+msgid "Whether to update the published addressbook"
+msgstr "Kung i-update ang published addressbook"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "File na naglalaman ng etags header mula sa mga subscription URL na kinuha (hindi kailangang baguhin)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "File na naglalaman ng modification timestamp para sa bawat subscription URL na kinuha (hindi kailangang baguhin)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "File para i-log ang aktibidad (palitan ng /dev/null kung gusto mo)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "Pangalan ng override theme na gagamitin (ang console-selected theme ang default)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "Interbal (sa oras) para sa pagpapatakbo ng host checker (4 oras ang default)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "Pinakamalaking sabay-sabay na ping kapag nagpapatakbo ng host checker (16 ang Default, 160 ang max)"
+
+msgid "delete hosts"
+msgstr "burahin ang mga host"
+
+msgid "addressbook"
+msgstr "addressbook"
+
+msgid "Details"
+msgstr "Detalye"
+
+msgid "Address Helper"
+msgstr "Address Helper"
+
+msgid "link"
+msgstr "link"
+
+msgid "Encoded Name"
+msgstr "Encoded na Pangalan"
+
+msgid "Base 32 Address"
+msgstr "Base 32 na Address"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 na Hash"
+
+msgid "Public Key"
+msgstr "Public Key"
+
+msgid "Signing Key"
+msgstr "Signing Key"
+
+msgid "Certificate"
+msgstr "Sertipiko"
+
+msgid "Validated"
+msgstr "Naberipika"
+
+msgid "no"
+msgstr "hindi"
+
+msgid "yes"
+msgstr "oo"
+
+msgid "Added Date"
+msgstr "Petsang Naidagdag"
+
+msgid "Last Modified"
+msgstr "Huling binago"
+
+msgid "Notes"
+msgstr "Mga Tala"
+
+msgid "Add notes about domain"
+msgstr "Magdagdag ng tala tungkol sa domain"
+
+msgid "Visual Identification for"
+msgstr "Visual na Pagkakakilanlan para sa"
+
+msgid "Create your own identification images"
+msgstr "Gumawa ng sarili mong image ng pagkakakilanlan"
+
+msgid "Launch Image Generator"
+msgstr "Buksan ang Image Generator"
+
+msgid "Introduction"
+msgstr "Panimula"
+
+msgid "What is the addressbook?"
+msgstr "Ano ang addressbook?"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "Ang aplikasyon ng addressbook ay bahagi ng iyong pagkakabit ng I2P."
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "Regular na ini-update nito ang iyong hosts.txt file mula sa mga ipinamamahagiagang source o \"subscription\"."
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "Madaling mag-subscribe sa mga karagdagang site, idagdag mo lang ang mga ito sa iyong <a href=\"subscriptions\">subscriptions</a> file."
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "Para sa higit pang impormasyon tungkol sa naming sa I2P, tingnan ang <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>ang overview</a>."
+
+msgid "How does the addressbook application work?"
+msgstr "Paano gumagana ang aplikasyon ng addressbook?"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "Regular na ini-polling ng aplikasyon ng addressbook ang iyong subscription at pinagsasama ang kanilang nilalaman sa iyong \"router\" address book."
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "Pagkatapos, pinagsasama rin nito ang iyong \"master\" address book sa router address book."
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "Kung naka-configure, isinusulat na ng router address book sa \"published\" address book, na magiging pampublikong available kung may eepsite ka."
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "Ginagamit din ng router ang pribadong address book, na hindi pinagsasama o iipublish."
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "Maaari mong i-access ang mga host sa pribadong address book ngunit kailanman hindi ipinamahagi sa iba ang kanilang address."
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "Maaaring gamitin din ang pribadong address book para sa mga alias ng host sa iyong iba pang address book."
+
+msgid "subscription log"
+msgstr "log ng subscription"
+
+msgid "Subscription Log"
+msgstr "Log ng Subscription"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "Pinakabagong (walang kasamang masamang domain)"
+
+msgid "subscriptions"
+msgstr "mga subscription"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "Ang subscription file ay naglalaman ng listahan ng i2p URL."
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "Regular na sinusuri ng aplikasyon ng addressbook ang listahang ito para sa bagong eepsite."
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "Ang mga URL na iyon ay tumutukoy sa mga nai-publish na hosts.txt file."
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "Tingnan ang FAQ para sa listahan ng subscription URL."

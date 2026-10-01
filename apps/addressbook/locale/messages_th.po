@@ -1,0 +1,100 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "บริการที่เกี่ยวข้องกับcryptocurrency"
+
+msgid "Controlled substances marketplaces"
+msgstr "ตลาดสำหรับสารควบคุม"
+
+msgid "E-book libraries and publishing"
+msgstr "ห้องสมุดE-bookและการตีพิมพ์"
+
+msgid "File hosting and storage services"
+msgstr "บริการโฮสต์และจัดเก็บไฟล์"
+
+msgid "Peer-to-peer file sharing"
+msgstr "การแบ่งปันไฟล์แบบpeer-to-peer"
+
+msgid "Discussion forums and message boards"
+msgstr "ฟอรัมสนทนาและบอร์ดข้อความ"
+
+msgid "Image galleries and photo sharing"
+msgstr "แกลเลอรีรูปภาพและการแบ่งปันรูปภาพ"
+
+msgid "Gaming servers and communities"
+msgstr "เซิร์ฟเวอร์เกมและชุมชน"
+
+msgid "Git repositories and code hosting"
+msgstr "ที่เก็บGitและการโฮสต์โค้ด"
+
+msgid "Help and support resources"
+msgstr "แหล่งข้อมูลช่วยเหลือและสนับสนุน"
+
+msgid "Human rights and civil liberties"
+msgstr "สิทธิมนุษยชนและเสรีภาพของพลเมือง"
+
+msgid "Official I2P infrastructure services"
+msgstr "บริการโครงสร้างพื้นฐานอย่างเป็นทางการของI2P"
+
+msgid "News and media outlets"
+msgstr "สำนักข่าวและสถานีสื่อ"
+
+msgid "Text/code paste services"
+msgstr "บริการวางข้อความและโค้ด"
+
+msgid "Personal websites and blogs"
+msgstr "เว็บไซต์ส่วนตัวและบล็อก"
+
+msgid "Internet radio and streaming"
+msgstr "วิทยุอินเทอร์เน็ตและสตรีมมิ่ง"
+
+msgid "Search engines and directories"
+msgstr "เครื่องมือค้นหาและไดเรกทอรี"
+
+msgid "Software repositories and downloads"
+msgstr "ที่เก็บซอฟต์แวร์และดาวน์โหลด"
+
+msgid "Statistics and analytics"
+msgstr "สถิติและการวิเคราะห์"
+
+msgid "Utilities and web tools"
+msgstr "ยูทิลิตี้และเครื่องมือบนเว็บ"
+
+msgid "Torrent and content trackers"
+msgstr "trackerของtorrentและเนื้อหา"
+
+msgid "Conspiracy / Religious content"
+msgstr "เนื้อหาทฤษฎีลับ/ศาสนา"
+
+msgid "Unclassified or pending review"
+msgstr "ยังไม่จัดหมวดหรือรอการตรวจทาน"
+
+msgid "Not yet categorized"
+msgstr "ยังไม่ได้จัดหมวดหมู่"
+
+msgid "Video streaming and media"
+msgstr "สตรีมมิ่งวิดีโอและสื่อ"
+
+msgid "Wiki and collaborative documentation"
+msgstr "วิกิและเอกสารประกอบการทำงานร่วมกัน"
+
+msgid "Work in progress / development"
+msgstr "อยู่ระหว่างดำเนินการ/การพัฒนา"

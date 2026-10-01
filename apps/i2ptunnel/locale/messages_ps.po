@@ -1,0 +1,1791 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "دا ښکاری چې دا بد تاریب دی:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper نه شی په داسې تاریب کې ستا سره مرسته وکړی!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "په خپل پتې کتاب کې د تاریب ته د لاسرسی لپاره <a href=\"{0}\">دلته</a> کلیک کړئ۔ د addresshelper د شخړونکې تاریب ته د لاسرسی لپاره <a href=\"{1}\">دلته</a> کلیک کړئ۔"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "د {0} تاریب په پتې کتاب کې"
+
+msgid "Conflicting address helper destination"
+msgstr "د addresshelper شخړونکی تاریب"
+
+msgid "Corrupt Base32 address"
+msgstr "خراب Base32 پته"
+
+msgid "Destination LeaseSet not found"
+msgstr "د تاریب LeaseSet ونه موندل شو"
+
+msgid "Host"
+msgstr "کوربه"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "تاریب"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "{0} ته پرته له ساتلو دوام ورکړئ"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "کولای شئ چې پته په پتې کتاب کې نه ساتئ او په سایټ کې ګرځ وکړئ۔ پته به تر هغه چې ستا I2P راوټر بیا پیل کړئ په یاد نیول کېږی۔"
+
+msgid "Continue without saving"
+msgstr "پرته له ساتلو دوام ورکړئ"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "{0} د راوټر پتې کتاب ته وساته او په ویب سایټ ته دوام ورکړه"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "دا پته به ستا د راوټر پتې کتاب ته وساتل شی چې ستا د سابسکریپشن پر بنسټ پتې پکې کېږی۔"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "که غواړئ د هغو سایټونو څېږونه وساتئ چې په لاس کې مو اضافه کړی، پرڅای یې خپل ماسټر یا خصوصی پتې کتاب ته اضافه کړئ۔"
+
+msgid "Save & continue"
+msgstr "وساته & دوام ورکړه"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "{0} د ماسټر پتې کتاب ته وساته او په ویب سایټ ته دوام ورکړه"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "دا پته به ستا د ماسټر پتې کتاب ته وساتل شی۔ دا انتخاب غوره کړئ د هغو پتو لپاره چې غواړئ له اصلی راوټر پتې کتاب څخه جلا وی، خو د دوی خپورولو په اړه ستونزه نشته۔"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "{0} د خصوصی پتې کتاب ته وساته او په ویب سایټ ته دوام ورکړه"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "دا پته به ستا خصوصی پتې کتاب ته وساتل شی، چې یقینی شی چې هیڅکله به نه خپور شی۔"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32 پته ته د لټون پټ نښه اړتیا ده۔"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32 پته ته د کریپټ کلیمه اړتیا ده۔"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32 پته ته د کریپټ کلیمه او د لټون پټ نښه اړتیا ده۔"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "د Base32 پتې د کوږلو ناکامی، د کریپټ کلیمه وګورئ"
+
+msgid "Generate"
+msgstr "جنریت کړئ"
+
+msgid "Encryption key"
+msgstr "د کریپټ کلیمه"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "باید یا د سرور د پرمخوونکی لخماړه ورکړه شوې PSK د کریپټ کلیمه داخل کړئ، یا د DH د کریپټ کلیمه جنریت کړئ او هغه د سرور د پرمخوونکی ته ولېږئ۔"
+
+msgid "Ask the server operator for help."
+msgstr "له سرور د پرمخوونکی مرسته وطلبئ۔"
+
+msgid "Enter PSK encryption key"
+msgstr "د PSK د کریپټ کلیمه داخل کړئ"
+
+msgid "Generate new DH encryption key"
+msgstr "نوې د DH د کریپټ کلیمه جنریت کړئ"
+
+msgid "Lookup password"
+msgstr "د لټون پټ نښه"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "باید د سرور د پرمخوونکی لخماړه ورکړه شوې پټ نښه داخل کړئ۔"
+
+msgid "HTTP Outproxy"
+msgstr "HTTP outproxy"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "د یوې ګام د خدمت له یوې addresshelper د لنک پرته ښکته کلیک کړئ"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "له {0} څخه د addresshelper په مرسته زیات شوی"
+
+msgid "Added via address helper"
+msgstr "د addresshelper په مرسته زیات شوی"
+
+msgid "Missing lookup password"
+msgstr "د لټون پټ نښه پاتې شوې نشته"
+
+msgid "Missing private key"
+msgstr "د خصوصی کلیمې پاتې شوې نشته"
+
+msgid "Invalid private key"
+msgstr "ناڅرګنده خصوصی کلیمه"
+
+msgid "Your new encryption key"
+msgstr "ستا نوې د کریپټ کلیمه"
+
+msgid "Router Console"
+msgstr "د راوټر کنسول"
+
+msgid "Addressbook"
+msgstr "پتې کتاب"
+
+msgid "Configuration"
+msgstr "ترتیبات"
+
+msgid "Help"
+msgstr "مرسته"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "کلیمه کاپی کړئ او د سرور د پرمخوونکی ته یې ولېږئ۔"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "وروسته له دې چې اجازه ورکړه شی، کولای شئ په ویب پاڼه ته لاړ شئ۔"
+
+msgid "Go back and fix the error"
+msgstr "شاته وګرځئ او تېروتنه سمه کړئ"
+
+msgid "router"
+msgstr "راوټر"
+
+msgid "master"
+msgstr "ماسټر"
+
+msgid "private"
+msgstr "خصوصی"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "{0} ته لارښودونه کېږی"
+
+msgid "Redirection in progress"
+msgstr "لارښودونه روان دی"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "{0} د {1} پتې کتاب ته وساتل شو، اوس لارښودونه کېږی۔"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "{0} د {1} پتې کتاب ته د ساتلو ناکامی، اوس لارښودونه کېږی۔"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "که په خپله لارښودونه نه کېږئ، دلته کلیک کړئ۔"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "د {0} تصدیق وساتل شو، اوس لارښودونه کېږی۔"
+
+msgid "Failed to save configuration"
+msgstr "د ترتیباتو د ساتلو ناکامی"
+
+msgid "Configuration changes saved"
+msgstr "د ترتیباتو بدلونونه وساتل شول"
+
+msgid "Client"
+msgstr "کلآینټ"
+
+msgid "internal"
+msgstr "دننی"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} راتلونکی، {0} لنډی ټونل"
+msgstr[1] "{0} راتلونکی، {0} لنډی ټونلونه"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} راتلونکی ټونل"
+msgstr[1] "{0} راتلونکی ټونلونه"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} لنډی ټونل"
+msgstr[1] "{0} لنډی ټونلونه"
+
+msgid "lower bandwidth and reliability"
+msgstr "ټیټ باندویډټ او اعتبار"
+
+msgid "standard bandwidth and reliability"
+msgstr "عادی باندویډټ او اعتبار"
+
+msgid "higher bandwidth and reliability"
+msgstr "لوړ باندویډټ او اعتبار"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "تېروتنه - ټونلونه تر اوس نه دی جوړ شوی"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "ناڅرګنده د فورمه لیکنه، احتمالا ځکه چې په خپل براوزر کې د 'back' یا 'reload' تڼۍ یې کارولې۔ مهربانی وکړئ بیا یې ولیکئ۔"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "که ستونزه دوام وکړی، وګورئ چې په براوزر کې مو cookies فعالېدی۔"
+
+msgid "No services configured, cannot restart!"
+msgstr "نه دی هیڅ سروسونه ترتیب شوی، نه شئ کولای بیا پیل وکړئ!"
+
+msgid "Stopping tunnel"
+msgstr "ټونل درېدل"
+
+msgid "Starting tunnel"
+msgstr "ټونل جوړول"
+
+msgid "Error restarting tunnel"
+msgstr "د ټونل بیا پیل کولو کې تېروتنه"
+
+msgid "Restarted all running tunnels"
+msgstr "ټول چلېږونکی ټونلونه بیا پیل شول"
+
+msgid "No clients configured, cannot restart!"
+msgstr "نه دی هیڅ کلآینټونه ترتیب شوی، نه شئ کولای بیا پیل وکړئ!"
+
+msgid "Restarted all running client tunnels"
+msgstr "ټول چلېږونکی کلآینټ ټونلونه بیا پیل شول"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "د ټولو ټونلونو لپاره ترتیبات بیا بار شول"
+
+msgid "Error: Invalid tunnel"
+msgstr "تېروتنه: ناڅرګند ټونل"
+
+msgid "Started tunnel"
+msgstr "ټونل پیل شو"
+
+msgid "Stopped tunnel"
+msgstr "ټونل درېد"
+
+msgid "Restarting tunnel"
+msgstr "ټونل بیا پیل"
+
+msgid "New Tunnel"
+msgstr "نوی ټونل"
+
+msgid "Port not set"
+msgstr "پورټ نه دی ټاکل شوی"
+
+msgid "Invalid port"
+msgstr "ناڅرګند پورټ"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "خبرداری - له 1024 څخه ټیټ پورټونه نه دی سپارښه شوی"
+
+msgid "Warning - duplicate port"
+msgstr "خبرداری - تکراری پورټ"
+
+msgid "Standard client"
+msgstr "عادی کلآینټ"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS کلآینټ"
+
+msgid "IRC client"
+msgstr "IRC کلآینټ"
+
+msgid "Standard server"
+msgstr "عادی سرور"
+
+msgid "HTTP server"
+msgstr "HTTP سرور"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "د SOCKS 4/4a/5 پروکسی"
+
+msgid "SOCKS IRC proxy"
+msgstr "د SOCKS IRC پروکسی"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "د CONNECT/SSL/HTTPS پروکسی"
+
+msgid "IRC server"
+msgstr "IRC سرور"
+
+msgid "Streamr client"
+msgstr "Streamr کلآینټ"
+
+msgid "Streamr server"
+msgstr "Streamr سرور"
+
+msgid "HTTP bidir"
+msgstr "HTTP دوطرفه"
+
+msgid "Host not set"
+msgstr "کوربه نه دی ټاکل شوی"
+
+msgid "Invalid address"
+msgstr "ناڅرګنده پته"
+
+msgid "Tunnel Manager"
+msgstr "د ټونل مدیر"
+
+msgid "Edit Client Tunnel"
+msgstr "د کلآینټ ټونل سمولګ"
+
+msgid "Edit Server Tunnel"
+msgstr "د سرور ټونل سمولګ"
+
+msgid "Are you sure you want to delete?"
+msgstr "ډاړکه ړنګول غواړئ؟"
+
+msgid "required"
+msgstr "اړینه"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "د دې ترتیباتو د بدلون لپاره ټونل او نور ټول شریک کلآینټ ټونلونه باید درېدلی وی"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "د دې ترتیباتو د بدلون لپاره ټونل باید درېدلی وی"
+
+msgid "New Client Configuration"
+msgstr "د کلآینټ نوې ترتیبات"
+
+msgid "Name"
+msgstr "نوم"
+
+msgid "Auto Start Tunnel"
+msgstr "د ټونل اتوماتیک پیل"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "د هغه ټونل نوم چې په ټونل مدیر کې، د راوټر کنسول د سایډ بار کې ښکاره شی"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "دا اختیار فعال کړئ ترڅو یقینی شئ چې دا سروس به د راوټر په پیل کې شته وی"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "د راوټر په پیل کې ټونل په خپله توګه پیل کړه"
+
+msgid "Description"
+msgstr "تشریح"
+
+msgid "Shared Client"
+msgstr "شریک کلآینټ"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "د هغه ټونل تشریح چې په ټونل مدیر کې ښکاره شی"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "د هغه ټولو کلآینټونو ترافیک چې دا بڼه یې فعاله وی، د یوې ټولګې د ټونلونو په ډیټا کې لارښودونه کېږی۔ دا به د دښمن لخوا د ټونلونو د شناخت لپاره ستونزه زیات کړه، خو کلآینټونه به سره یوځای کړی۔"
+
+msgid "Share tunnels with other configured clients"
+msgstr "ټونلونه له نورو ترتیب شوی کلآینټونو سره شریک کړئ"
+
+msgid "Target"
+msgstr "هدف"
+
+msgid "Access Point"
+msgstr "د لاسرسی نقطه"
+
+msgid "Use Outproxy Plugin"
+msgstr "د outproxy پلاګین وکاروئ"
+
+msgid "Enable DCC"
+msgstr "DCC فعال کړئ"
+
+msgid "Port"
+msgstr "پورټ"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "هغه محلی پورټ مشخص کړئ چې دا سروس باید څخه یې لاسرسی وی"
+
+msgid "Hostname or IP address of the target server"
+msgstr "د هدف سرور هاست نیم یا IP پته"
+
+msgid "Reachable by"
+msgstr "لاسرسی تر"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "هغه محلی انټرفیس (ip پته) چې څخه یې د کلآینټ ټونل لاسرسی وی"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "که د outproxy پلاګین نصب شوی وی (د بیلګې مثال، Orchid)، دا به د I2P د بهرې ویب پاڼو ته د لاسرسی لپاره له نورو ترتیب شویو outproxyونو څخه ګټه وکړی"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "که شته، د لاندې پتې شویو پروکسیانو پرڅای پلاګین وکاروئ"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "مستقیمې خبرو او فایل لېږلو فعالوی، I2P څخه تېر شوی۔ یادونه چې دا ستا ناڅرګندتیا به خراب کړی او سپارښه نه ده۔"
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "د کلآینټ له کلآینټ پروټوکول فعال کړئ"
+
+msgid "Outproxies"
+msgstr "outproxyونه"
+
+msgid "SSL Outproxies"
+msgstr "د SSL outproxyونه"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "دلته د outproxy د .i2p پته یا تاریب (b32 یا b64) مشخص کړئ۔"
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "د ټولګې له یوې تصادفی انتخاب لپاره په کومو سره جلا کړئ، د بیلګې مثال server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "د outproxy ډول"
+
+msgid "Tunnel Destination"
+msgstr "د ټونل تاریب"
+
+msgid "Use SSL"
+msgstr "SSL وکاروئ"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "دلته د ټونل د .i2p پته یا تاریب (b32 یا b64) مشخص کړئ۔"
+
+msgid "name, name:port, or destination"
+msgstr "نوم، name:port، یا تاریب"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "که ته د یوې لرونکۍ I2P راوټر په یوې خدمت کې لاسرسی لرې، ممکن غواړئ د ترافیک د نیوولو له څخه د څنګلو لپاره SSL وکاروئ۔ باید دی کلآینټ اپلیکیشن هم د SSL د کارولو لپاره تنظیم شوی وی۔"
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "کلآینټونه د ټونل ته د وصل کولو لپاره SSL کاروی"
+
+msgid "Please specify the full b64 destination."
+msgstr "مهربانی وکړئ بشپړ b64 تاریب مشخص کړئ۔"
+
+msgid "Local destination"
+msgstr "محلی تاریب"
+
+msgid "Local Base32"
+msgstr "محلی Base32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "د لوستلو لپاره: محلی تاریب (که پوهېږې)"
+
+msgid "Stop"
+msgstr "درولئ"
+
+msgid "Start this Tunnel"
+msgstr "دا ټونل پیل کړئ"
+
+msgid "Start"
+msgstr "پیل کړئ"
+
+msgid "Cancel"
+msgstr "لغو کړئ"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "دا ټونل ړنګوه (نه شئ کولای بیا یې رامنځته کړئ)"
+
+msgid "Delete"
+msgstr "ړنګوه"
+
+msgid "Save"
+msgstr "وساته"
+
+msgid "Advanced networking options"
+msgstr "پیشرفته نټورک انتخابونه"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "یادونه: کله چې دا کلآینټ د ټونلونو د شریکولو لپاره تنظیم شوی وی، دا اختیارات په ټولو هغو کلآینټونو باندې تطبیق کېږی چې د ټونلونو د شریکولو لپاره تنظیم شوی دی۔"
+
+msgid "Profile"
+msgstr "پروفایل"
+
+msgid "Delay Connect"
+msgstr "د وصل کولو ځنډ"
+
+msgid "Connection Profile"
+msgstr "د اتصال پروفایل"
+
+msgid "interactive connection"
+msgstr "متقابله اتصال"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "جرګ اتصال (ښکته راوړونه/ویب پاڼې/BT)"
+
+msgid "Delay Connection"
+msgstr "د اتصال ځنډ"
+
+msgid "for request/response connections"
+msgstr "د غوښتنو/ځوابونو اتصالونو لپاره"
+
+msgid "Router I2CP Address"
+msgstr "د راوټر I2CP پته"
+
+msgid "I2CP Hostname or IP"
+msgstr "د I2CP هاست نیم یا IP"
+
+msgid "I2CP Port Number"
+msgstr "د I2CP پورټ شمېره"
+
+msgid "Delay tunnel open until required"
+msgstr "تر اړتیا پورې د ټونل د پرانیستلو مهال ځنډ وکړئ"
+
+msgid "Signature type"
+msgstr "د نښې ډول"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "سرتیا وساتئ په دې سره چې ټونلونه یوازې کله جوړ کېږی کله چې اړتیا وی"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "ترڅو په پورټ کې فعالیت ونه موندل شی، ټونل مه پرانیږئ"
+
+msgid "This is the default, recommended option"
+msgstr "دا ابدی، سپارښه شوی انتخاب دی"
+
+msgid "Encryption types"
+msgstr "د کریپټ ډولونه"
+
+msgid "Legacy options"
+msgstr "کهنې انتخابونه"
+
+msgid "Post Quantum"
+msgstr "پوسټ کوانټم"
+
+msgid "Both encryption types"
+msgstr "دواړه د کریپټ ډولونه"
+
+msgid "Tunnel Options"
+msgstr "د ټونل انتخابونه"
+
+msgid "Length"
+msgstr "اوږدوالی"
+
+msgid "Count"
+msgstr "شمار"
+
+msgid "Length of each Tunnel"
+msgstr "د هر ټونل اوږدوالی"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "0 هاپه ټونل (بې ناڅرګندتیا)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "1 هاپه ټونل (ټیټه ناڅرګندتیا)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "2 هاپه ټونل (منځنۍ ناڅرګندتیا)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "3 هاپه ټونل (لوړه ناڅرګندتیا)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} هاپه ټونل"
+msgstr[1] "{0} هاپه ټونلونه"
+
+msgid "Number of Tunnels in Group"
+msgstr "د ټولګې د ټونلونو شمېره"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "د 0 هاپو ټونلونو لپاره غیر فعال دی"
+
+msgid "Variance"
+msgstr "توپیر"
+
+msgid "Backup Count"
+msgstr "د بیکپ شمېر"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "د ټونل د اوږدوالۍ د تصادف کولو کچه"
+
+msgid "0 hop variance"
+msgstr "د 0 هاپو توپیر"
+
+msgid "no randomization, consistent performance"
+msgstr "نه تصادف کول، ثابت وړتیا"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ 0-1 هاپه توپیر"
+
+msgid "medium randomization, lower performance"
+msgstr "منځنی تصادف کول، ټیټه وړتیا"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ 0-2 هاپه توپیر"
+
+msgid "high randomization, very low performance"
+msgstr "لوړ تصادف کول، ډیره ټیټه وړتیا"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- 0-1 هاپه توپیر"
+
+msgid "standard randomization, standard performance"
+msgstr "عادی تصادف کول، عادی وړتیا"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- 0-2 هاپه توپیر"
+
+msgid "not recommended"
+msgstr "سپارښه نه ده"
+
+msgid "hop variance"
+msgstr "د هاپو توپیر"
+
+msgid "Number of Reserve Tunnels"
+msgstr "د بیکپ ټونلونو شمېره"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} بیکپ ټونل"
+msgstr[1] "{0} بیکپ ټونلونه"
+
+msgid "no redundancy, no added resource usage"
+msgstr "نه زیاتوالی، نه د سرتیاوو زیات کارول"
+
+msgid "low redundancy, low resource usage"
+msgstr "ټیټ زیاتوالی، ټیټ د سرتیاوو کارول"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "منځنی زیاتوالی، منځنۍ د سرتیاوو کارول"
+
+msgid "high redundancy, high resource usage"
+msgstr "لوړ زیاتوالی، لوړ د سرتیاوو کارول"
+
+msgid "Reduce tunnel quantity"
+msgstr "د ټونلونو شمېر کم کړئ"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "د سرتیاوو د ساتلو لپاره کله چې بې کاره وی د ټونلونو شمېر کم کړئ، خو ټونل پرانیسته وساته (ترڅو سمدستی شته وی)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "کله چې بې کاره وی د ټونلونو شمېر کم کړئ"
+
+msgid "Idle period"
+msgstr "د بې کارې مهال"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "د کمېدو ټونل د بې کارې وخت"
+
+msgid "Reduced count"
+msgstr "کم شوی شمېر"
+
+msgid "Reduced tunnel count"
+msgstr "کم شوی د ټونلونو شمېر"
+
+msgid "Close tunnels when idle"
+msgstr "کله چې بې کاره وی ټونلونه بند کړئ"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "د سرتیاوو د ساتلو لپاره، کله چې نه کارول کېږی ټونلونه بند کړئ"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "د کلآینټ ټونلونه د ټاکل شوی بې کارې مهال وروسته بند کړئ"
+
+msgid "Close Tunnel Idle Time"
+msgstr "د ټونل د بندولو بې کارې وخت"
+
+msgid "New Keys on Reopen"
+msgstr "د بیا پرانیستو پر مهال نوې کلیمې"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "د ټونلونو بیا پرانیستل کې د ټونل پېژندنه (تاریب) بدل کړئ"
+
+msgid "Enable"
+msgstr "فعال کړئ"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "د ټونلونو بیا پرانیستل کې د ټونل پېژندنه (تاریب) وساته"
+
+msgid "Disable"
+msgstr "غیر فعال کړئ"
+
+msgid "Persistent private key"
+msgstr "دوامداره خصوصی کلیمه"
+
+msgid "Private key file"
+msgstr "د خصوصی کلیمې فایل"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "دا بڼه فعاله کړئ ترڅو ستا د ټونل پېژندنه (تاریب) ثابت پاتې شی، د هغو خدمتونو لپاره چې پر تاریب بنسټ وړتیاوې رامنځته کوی، د بیلګې مثال، د IRC کاروونکی تصدیق"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "وړتیا ورکړه چې د کلآینټ ټونل پېژندنه دوامداره وی، کلیمه جنریت کړئ"
+
+msgid "Path to Private Key File"
+msgstr "د خصوصی کلیمې فایل ته لاره"
+
+msgid "HTTP Filtering"
+msgstr "د HTTP فلټر کول"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "کله چې فعال وی، ستا د براوزر یا http کلآینټ user agent به جعل نه شی، چې ستا ناڅرګندتیا کمېدلی شی"
+
+msgid "Do not spoof User-Agent header"
+msgstr "د User-Agent سر مه جعل کړئ"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "کله چې فعال وی، ستا د ویب غوښتنو referer (پیدا کوونکې پاڼه) به فلټر نه شی، چې ستا ناڅرګندتیا کمېدلی شی"
+
+msgid "Do not block Referer header"
+msgstr "د Referer سر مه بلاک کړئ"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "کله چې فعال وی، ستا لخوا د براوزر خپر شوی accept سرونه (د mime ډولونو ملاتړ) به فلټر نه شی، چې ستا ناڅرګندتیا کمېدلی شی"
+
+msgid "Do not block Accept headers"
+msgstr "د Accept سرونو مه بلاک کړئ"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "کله چې فعال وی، د I2P پتو ته SSL اجازه"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "د I2P پتو ته SSL اجازه"
+
+msgid "Local Authorization"
+msgstr "محلی اجازه"
+
+msgid "Local Credentials"
+msgstr "محلی تصدیق معلومات"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "فعاله کړئ ترڅو د دې محلی سروس ته د لاسرسی لپاره کاروونکی نوم او پټ نښه اړین وی (د بیلګې مثال، کله چې په LAN کې یې کوروی)"
+
+msgid "Require local authorization for this service"
+msgstr "د دې سروس لپاره محلی اجازه اړینه کړئ"
+
+msgid "Set username required to access this service"
+msgstr "د دې سروس لپاره اړینه کاروونکی نوم ټاکئ"
+
+msgid "Username"
+msgstr "کاروونکی نوم"
+
+msgid "Set password required to access this service"
+msgstr "د دې سروس لپاره اړینه پټ نښه ټاکئ"
+
+msgid "Password"
+msgstr "پټ نښه"
+
+msgid "Outproxy Authorization"
+msgstr "د outproxy اجازه"
+
+msgid "Remote Credentials"
+msgstr "لرونکۍ تصدیق معلومات"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "فعاله کړئ که outproxy د لاسرسی لپاره کاروونکی نوم او پټ نښه غواړی"
+
+msgid "Outproxy requires authorization"
+msgstr "outproxy اجازه اړتیا لری"
+
+msgid "Enter username required by outproxy"
+msgstr "د outproxy لخماړه اړینه کاروونکی نوم ولیکئ"
+
+msgid "Enter password required by outproxy"
+msgstr "د outproxy لخماړه اړینه پټ نښه ولیکئ"
+
+msgid "Jump URL List"
+msgstr "د ګام URL لست"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "د هغو مرستندویو URL لست چې کله چې ستا په پتې کتاب کې کوربه ونه موندل شی ګام لنکې ورکوی"
+
+msgid "Custom options"
+msgstr "ځانګړې انتخابونه"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "پیشرفته د ټونل، سټریم، او I2CP انتخابونه"
+
+msgid "New Server Configuration"
+msgstr "د سرور نوې ترتیبات"
+
+msgid "Hostname"
+msgstr "هاست نیم"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "په تصادفی توګه د پیل ځنډ (کله چې اتوماتیک پیل فعال وی) ترڅو له اړیکویی حملو څخه وساتل شو"
+
+msgid "Startup Delay"
+msgstr "د پیل ځنډ"
+
+msgid "Minimum"
+msgstr "تر ټولو ټیټ"
+
+msgid "Minimum startup delay"
+msgstr "د پیل تر ټولو ټیټ ځنډ"
+
+msgid "seconds"
+msgstr "ثانیې"
+
+msgid "Maximum"
+msgstr "تر ټولو لوړ"
+
+msgid "Maximum startup delay"
+msgstr "د پیل تر ټولو لوړ ځنډ"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "مخکې له د ټونل له بندولو څخه تصادفی ځنډ اضافه کړئ، بیا د راوټر د بندولو / بیا پیل کولو پروسه په مهربانه پیل کړئ"
+
+msgid "Shutdown Delay"
+msgstr "د بندولو ځنډ"
+
+msgid "Minimum shutdown delay"
+msgstr "د بندولو تر ټولو ټیټ ځنډ"
+
+msgid "Maximum shutdown delay"
+msgstr "د بندولو تر ټولو لوړ ځنډ"
+
+msgid "Website Hostname"
+msgstr "د ویب پاڼې هاست نیم"
+
+msgid "(leave blank for outproxies)"
+msgstr "(د outproxyونو لپاره خالی پرېږدئ)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "د ویب پاڼې هاست نیم د بیلګې مثال mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "هغه پورټ مشخص کړئ چې سرور پرې چلېږی"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "د کلآینټ د لاسرسی لپاره اورېدونکی انټرفیس (IP پته) (معمولاً 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "ترڅو کله چې لرونکی سرور ته وصل کېږئ د ترافیک له غځېږلو څخه ځین کړئ، کولای شئ SSL اتصال فعال کړئ۔ یادونه چې هدف سرور باید د SSL اتصالونو د منلو لپاره تنظیم شوی وی۔"
+
+msgid "Use SSL to connect to target"
+msgstr "د هدف ته د وصل کولو لپاره SSL وکاروئ"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "د خدمت د لاسرسی لپاره اړینه پورټ (دا ممکن له هغه پورټ څخه توپیر ولری چې خدمت پرې کورل کېږی)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "د دې ډومین لپاره QR Code جنریت کړئ"
+
+msgid "Generate QR Code"
+msgstr "QR Code جنریت کړئ"
+
+msgid "Add to Private addressbook"
+msgstr "د خصوصی پتې کتاب ته اضافه کړئ"
+
+msgid "Add to local addressbook"
+msgstr "د محلی پتې کتاب ته اضافه کړئ"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "د هاست نیم راجستر کول، راجستر لرې کول، یا جزئیات بدلول"
+
+msgid "Registration Authentication"
+msgstr "د راجسترولو تصدیق"
+
+msgid "HTTPS configuration"
+msgstr "د HTTPS ترتیبات"
+
+msgid "SSL Wizard"
+msgstr "د SSL ویزارډ"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "یادونه: ترڅو د QR code جنریت کړنه یا د راجسترولو تصدیق فعاله کړئ، پورته د Website Hostname ډګر (د ویب پاڼو لپاره) یا د Name ډګر (د نورو لپاره) د .i2p په پای کې د یوې هاست نیم سره تنظیم کړئ، د بیلګې مثال mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "د خصوصی کلیمې فایل ته بشپړ لاره (که شته نه وی به جوړ شی)"
+
+msgid "Alternate private key file"
+msgstr "د بدیلې خصوصی کلیمې فایل"
+
+msgid "Alternate local destination"
+msgstr "بدیل محلی تاریب"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "د نوې کلیمې بشپړ لاره (به جوړ شی)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "د لوستلو لپاره: بدیل محلی تاریب"
+
+msgid "Specify filename or full path for new key"
+msgstr "د نوې کلیمې د فایل نوم یا بشپړ لاره مشخص کړئ"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "تر تاریب جوړولو وروسته ترتیبات نه شئ کولای بدل کړئ"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "د نښې د ډول ترتیب کول یوازې هغه وخت ممکن چې لومړۍ ځل ټونل جوړ شی۔ د بدلون لپاره باید نوی ټونل جوړ کړئ۔"
+
+msgid "Legacy option, with alternate key configured"
+msgstr "کهنه انتخاب، د بدیلې کلیمې له تنظیم سره"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "کهنه انتخاب (غیر فعاله شوی)، د شاتو د ساتلې لپاره ورکړل شوی"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "د کوروی شوی او کوږ شوی تاریبونو لپاره سپارښه دی"
+
+msgid "Inbound"
+msgstr "راتلونکی"
+
+msgid "Outbound"
+msgstr "لنډی"
+
+msgid "no anonymity"
+msgstr "بې ناڅرګندتیا"
+
+msgid "low anonymity"
+msgstr "ټیټه ناڅرګندتیا"
+
+msgid "medium anonymity"
+msgstr "منځنۍ ناڅرګندتیا"
+
+msgid "high anonymity"
+msgstr "لوړه ناڅرګندتیا"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "د ټونل د ژورتیا د تصادف کولو کچه"
+
+msgid "very high randomization, very low performance"
+msgstr "ډیر لوړ تصادف کول، ډیره ټیټه وړتیا"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ 0-3 هاپه توپیر"
+
+msgid "definitely not recommended"
+msgstr "په ډاړه نه سپارښه ده"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- 0-3 هاپه توپیر"
+
+msgid "backup tunnels"
+msgstr "بیکپ ټونلونه"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "د سرتیاوو د ساتلو لپاره ټونلونه کم کړئ"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "د ټونل د شمېر د کمېدو مخکې له بې کارې مهال"
+
+msgid "minutes"
+msgstr "دقیقې"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "د خدمت د شتون د ساتلو لپاره د هغه ټونلونو شمېر چې پرانیسته پرېږدل کېږی"
+
+msgid "Server Access Options"
+msgstr "د سرور د لاسرسی انتخابونه"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "کلآینټونه دې خدمت ته له inproxy لارې د لاسرسی څخه وساته"
+
+msgid "Block Access via Inproxies"
+msgstr "د Inproxy له لارو لاسرسی بلاک کړئ"
+
+msgid "Block Accesses containing Referers"
+msgstr "د Referer په برخه کې لاسرسۍ بلاک کړئ"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "د هر وصل کوونکی کلآینټ لپاره بېکاره IP پتې وکاروئ (یوازې محلی غیر SSL سرورونه)"
+
+msgid "Unique Local Address per Client"
+msgstr "پر هر کلآینټ بېکاره محلی پته"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "یوازې هغه وخت فعال کړئ که دا خدمت په څو راوټرونو کې یې کورې"
+
+msgid "Optimize for Multihoming"
+msgstr "د څو راوټرونو کورولو لپاره غوره کړئ"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "د دې متنونو سره سمونکی User-Agents رد کړئ (احتمالا له inproxyونو څخه)"
+
+msgid "Block these User-Agents"
+msgstr "دا User-Agents بلاک کړئ"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "په کومو سره جلا، د بیلګې مثال Mozilla,Opera (حساس ډول)"
+
+msgid "Encrypt Leaseset"
+msgstr "LeaseSet کریپټ کړئ"
+
+msgid "Optional Lookup Password"
+msgstr "د لټون اختیاری پټ نښه"
+
+msgid "Keyring Manager"
+msgstr "د کلیمو ټولګې مدیر"
+
+msgid "Allow all clients to connect to this service"
+msgstr "ټولو کلآینټونو ته اجازه ورکړئ چې دې خدمت ته وصل شی"
+
+msgid "Send key to all users."
+msgstr "کلیمه ټولو کاروونکو ته ولېږئ۔"
+
+msgid "Encrypted"
+msgstr "کوږ شوی"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "د floodfill لخوا د سرونو کشف مخنیوی"
+
+msgid "Blinded"
+msgstr "بېنا"
+
+msgid "Send password to all users."
+msgstr "پټ نښه ټولو کاروونکو ته ولېږئ۔"
+
+msgid "Blinded with lookup password"
+msgstr "په لټون پټ نښه سره بېنا شوی"
+
+msgid "Send key and password to all users."
+msgstr "کلیمه او پټ نښه ټولو کاروونکو ته ولېږئ۔"
+
+msgid "Encrypted with lookup password"
+msgstr "په لټون پټ نښه سره کوږ شوی"
+
+msgid "Send individual key to each user."
+msgstr "انفرادی کلیمه هر کاروونکی ته ولېږئ۔"
+
+msgid "Encrypted with per-user key"
+msgstr "په هر کاروونکی د کلیمې سره کوږ شوی"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "په لټون پټ نښه او په هر کاروونکی د کلیمې سره کوږ شوی"
+
+msgid "Enter key from each user."
+msgstr "له هر کاروونکی څخه کلیمه داخل کړئ۔"
+
+msgid "Encryption Key"
+msgstr "د کریپټ کلیمه"
+
+msgid "Generate New Key"
+msgstr "نوې کلیمه جنریت کړئ"
+
+msgid "Encryption key required to access this service"
+msgstr "د دې سروس د لاسرسی لپاره د کریپټ کلیمه اړینه ده"
+
+msgid "Generate new encryption key"
+msgstr "نوې د کریپټ کلیمه جنریت کړئ"
+
+msgid "Tunnel must be stopped first"
+msgstr "لومړی باید ټونل درېدلی وی"
+
+msgid "Client Manager"
+msgstr "د کلآینټ مدیر"
+
+msgid "Client Name"
+msgstr "د کلآینټ نوم"
+
+msgid "Client Key"
+msgstr "د کلآینټ کلیمه"
+
+msgid "Revoke"
+msgstr "لغوه کړئ"
+
+msgid "Add"
+msgstr "اضافه کړئ"
+
+msgid "Restricted Access List"
+msgstr "د محدودو لاسرسیو لست"
+
+msgid "Activate to enable editing"
+msgstr "فعال کړئ ترڅو سمولګ سموندی شی"
+
+msgid "Tunnel Filter"
+msgstr "ټونل فلټر"
+
+msgid "Help with defining tunnel filters"
+msgstr "په ټونل فلټرونو د تعریف کولو کې مرسته"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "په لست کې شوی کلآینټونه دې خدمت ته له وصل کولو څخه وساته"
+
+msgid "Blacklist"
+msgstr "بلاک لیست"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "یوازې په لست کې شوی کلآینټونو ته اجازه ورکړه چې دې خدمت ته وصل شی"
+
+msgid "Whitelist"
+msgstr "وایټ لیست"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "د فلټر د تعریف پرهیږونکی فایل ته بشپړ لاره"
+
+msgid "Absolute path to filter definition"
+msgstr "د فلټر د تعریف ته بشپړ لاره"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "د کلآینټونو تاریبونه مشخص کړئ، په هره کرښه 1"
+
+msgid "Server Throttling"
+msgstr "د سرور ورو کول"
+
+msgid "Inbound connection limits"
+msgstr "د راتلونکې اتصالونو حدونه"
+
+msgid "Per Minute"
+msgstr "په دقیقه کې"
+
+msgid "Per Hour"
+msgstr "په ساعت کې"
+
+msgid "Per Day"
+msgstr "په ورځ کې"
+
+msgid "Concurrent"
+msgstr "همځمه"
+
+msgid "Per Client"
+msgstr "پر کلآینټ"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "تر هغه چې د سرور ته لاسرسی بلاک شی، د یوې بېکاره کلآینټ لپاره په دقیقه کې د ویب پاڼو غوښتنو تر ټولو لوړ شمېر"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = بې پای)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "تر هغه چې د سرور ته لاسرسی بلاک شی، د یوې بېکاره کلآینټ لپاره په ساعت کې د ویب پاڼو غوښتنو تر ټولو لوړ شمېر"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "تر هغه چې د سرور ته لاسرسی بلاک شی، د یوې بېکاره کلآینټ لپاره په ورځ کې د ویب پاڼو غوښتنو تر ټولو لوړ شمېر"
+
+msgid "Total"
+msgstr "ټول"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "تر هغه چې د سرور ته لاسرسی بلاک شی، په دقیقه کې د ویب پاڼو غوښتنو بشپړ شمېر"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "تر هغه چې د سرور ته لاسرسی بلاک شی، په ساعت کې د ویب پاڼو غوښتنو بشپړ شمېر"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "تر هغه چې د سرور ته لاسرسی بلاک شی، په ورځ کې د ویب پاڼو غوښتنو بشپړ شمېر"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "د همځمه کلآینټ اتصالونو تر ټولو لوړ شمېر"
+
+msgid "POST limits"
+msgstr "د POST حدونه"
+
+msgid "Per Period"
+msgstr "په دوره کې"
+
+msgid "Ban Duration"
+msgstr "د بندولو مدت"
+
+msgid "POST limit period"
+msgstr "د POST حد دوره"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "د ترتیب شوی مدت په کې د یوې بېکاره کلآینټ لپاره د اجازه شوی post غوښتنو تر ټولو لوړ شمېر"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "که یو کلآینټ په ټاکل شوې دوره کې د post غوښتنو تر ټولو لوړ شمېر څخه تېر شی، د دې شمېرې دقیقو لپاره بند پیاده کړه"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "هغه مدت چې د post غوښتنو تر ټولو لوړ شمېر ته ورسېږی او بند پیاده شی"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "د ترتیب شوی مدت په کې د اجازه شوی post غوښتنو بشپړ شمېر"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "که په ټاکل شوې دوره کې د post غوښتنو تر ټولو لوړ شمېر څخه تېر شی، د دې شمېرې دقیقو لپاره ټولیز د لاسرسی بند پیاده کړه"
+
+msgid "Custom HTTP Headers"
+msgstr "ځانګړې HTTP هېډرونه"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "یادونه: دا ځانګړې هېډرونه یوازې د هغو فایلونو لپاره فعالیږی چې یې اړتیا هېډر تر اوس نه دی ټاکل شوی۔"
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "د html، xml، json او text فایلونو لپاره «Allow» هېډر ته 'GET, POST, HEAD' ټاکئ"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "د Cache-Control هېډرونو فعالول (د html، xml، json او text لپاره no-cache، د نورو لپاره immutable)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "د html، xml، json او text فایلونو لپاره «Referrer-Policy» هېډر ته 'same-origin' ټاکئ"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "د «X-Content-Type-Options» هېډر ته 'nosniff' ټاکئ"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "د ټونل مدیر پیل کېږی{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "ټونلونه تر اوس نه دی جوړ شوی؛ مهربانی وکړئ په څو شېبې کې بیا هڅه وکړئ۔"
+
+msgid "Status Messages"
+msgstr "د حالت پیغامونه"
+
+msgid "Clear"
+msgstr "پاک کړئ"
+
+msgid "Refresh"
+msgstr "تازه کړئ"
+
+msgid "Global Tunnel Control"
+msgstr "د ټونلونو ټولیز کنټرول"
+
+msgid "Tunnel Wizard"
+msgstr "د ټونل ویزارډ"
+
+msgid "Stop All"
+msgstr "ټول درولئ"
+
+msgid "Start All"
+msgstr "ټول پیل کړئ"
+
+msgid "Restart all running tunnels"
+msgstr "ټول چلېږونکی ټونلونه بیا پیل کړئ"
+
+msgid "Restart All"
+msgstr "ټول بیا پیل کړئ"
+
+msgid "Restart all running server tunnels"
+msgstr "ټول چلېږونکی سرور ټونلونه بیا پیل کړئ"
+
+msgid "Restart All Servers"
+msgstr "ټول سرورونه بیا پیل کړئ"
+
+msgid "Restart all running client tunnels"
+msgstr "ټول چلېږونکی کلآینټ ټونلونه بیا پیل کړئ"
+
+msgid "Restart All Clients"
+msgstr "ټول کلآینټونه بیا پیل کړئ"
+
+msgid "I2P Server Tunnels"
+msgstr "د I2P سرور ټونلونه"
+
+msgid "Helper"
+msgstr "مرستندوی"
+
+msgid "Type"
+msgstr "ډول"
+
+msgid "Points at"
+msgstr "اشاره"
+
+msgid "Preview"
+msgstr "پیشنا"
+
+msgid "Status"
+msgstr "حالت"
+
+msgid "Control"
+msgstr "کنټرول"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "د سرور ټونل ترتیبات سمولګ د"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "IRC سرور ازموینه کړئ، I2P څخه تېر شوی"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "HTTPS سرور ازموینه کړئ، I2P څخه تېر شوی"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "HTTP سرور ازموینه کړئ، I2P څخه تېر شوی"
+
+msgid "Test HTTP server through I2P"
+msgstr "HTTP سرور له I2P له لارې ازموینه کړئ"
+
+msgid "Base32 Address"
+msgstr "Base32 پته"
+
+msgid "Offline"
+msgstr "آفلاین"
+
+msgid "No Preview"
+msgstr "پیشنا نشته"
+
+msgid "Starting..."
+msgstr "پیل کېږی..."
+
+msgid "Starting in"
+msgstr "پیل کېږی په"
+
+msgid "Running"
+msgstr "چلېږی"
+
+msgid "Hops"
+msgstr "هاپونه"
+
+msgid "in"
+msgstr "کې"
+
+msgid "out"
+msgstr "باندې"
+
+msgid "Stopped"
+msgstr "درېدلی"
+
+msgid "Stop this Tunnel"
+msgstr "دا ټونل درولئ"
+
+msgid "Restart this Tunnel"
+msgstr "دا ټونل بیا پیل کړئ"
+
+msgid "Restart"
+msgstr "بیا پیل کړئ"
+
+msgid "Signature"
+msgstr "نښه"
+
+msgid "Alternate"
+msgstr "بدیل"
+
+msgid "Alt Destination"
+msgstr "بدیل تاریب"
+
+msgid "Encryption"
+msgstr "کریپټ"
+
+msgid "Supported encryption"
+msgstr "د ملاتړ کریپټ"
+
+msgid "New server tunnel"
+msgstr "نوی سرور ټونل"
+
+msgid "Standard"
+msgstr "عادی"
+
+msgid "Create"
+msgstr "جوړ کړئ"
+
+msgid "I2P Client Tunnels"
+msgstr "د I2P کلآینټ ټونلونه"
+
+msgid "Interface"
+msgstr "انټرفیس"
+
+msgid "Edit Tunnel Settings for"
+msgstr "د ټونل ترتیبات سمولګ د"
+
+msgid "Standby"
+msgstr "په تمه"
+
+msgid "Outproxy"
+msgstr "outproxy"
+
+msgid "internal plugin"
+msgstr "دننی پلاګین"
+
+msgid "none"
+msgstr "هیڅ"
+
+msgid "New client tunnel"
+msgstr "نوی کلآینټ ټونل"
+
+msgid "Registration Helper"
+msgstr "د راجسترولو مرستندوی"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "دا خدمت کوږ شوی leasesets کاروی۔ راجسترول سپارښه نه دی۔ د راجسترولو تصدیق غیر فعاله ده۔"
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "مهربانی وکړئ ډاړه ترلاسه کړئ چې د خپل غواړی راجستر سایټ په فورمه کې د مناسبې تصدیق د ټولو مضمونو غوره کړئ، کاپی یې کړئ او پیسټ یې کړئ"
+
+msgid "Tunnel name"
+msgstr "د ټونل نوم"
+
+msgid "Website name"
+msgstr "د ویب پاڼې نوم"
+
+msgid "Local Destination"
+msgstr "محلی تاریب"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "محلی تاریب شته نه ده۔ ټونل پیل کړئ۔"
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "ترڅو د راجسترولو تصدیق فعاله کړئ، ټونل سمولګ کړئ او نوم (یا د ویب پاڼې نوم) د '.i2p' په پای کې یووړ څخه هاست نیم ته ټاکئ"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "ترڅو د راجسترولو تصدیق فعاله کړئ، ټونل سمولګ کړئ او نوم د '.i2p' په پای کې یووړ څخه هاست نیم ته ټاکئ"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "د تاریب د نښې کلیمه شته نه ده۔ ټونل پیل کړئ۔"
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "د تاریب د نښې کلیمه آفلاین ده۔ په آفلاین ماشین کې CLI وسایل وکاروئ۔"
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "د {0} کوربه د زیاتولو تصدیق"
+
+msgid "Copy and paste this to the registration site"
+msgstr "دا کاپی کړئ او په راجستر سایټ کې پیسټ یې کړئ"
+
+msgid "Advanced authentication strings"
+msgstr "پیشرفته تصدیق متنونه"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "د {0} کوربه د لرې کولو تصدیق"
+
+msgid "Authentication for changing name"
+msgstr "د نوم د بدلونو تصدیق"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "دا به نوم له {0} څخه {1} ته بدل کړی، د همدې تاریب په کارولو سره"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "دا ټونل باید د نوې هاست نیم سره تنظیم شی۔"
+
+msgid "Enter old hostname below."
+msgstr "لاندې کهنه هاست نیم ولیکئ۔"
+
+msgid "Authentication for adding alias"
+msgstr "د بدیل نوم د زیاتولو تصدیق"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "دا به د {1} لپاره بدیل نوم {0} اضافه کړی، د همدې تاریب په کارولو سره"
+
+msgid "Authentication for changing destination"
+msgstr "د تاریب د بدلونو تصدیق"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "دا به د {0} تاریب بدل کړی"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "دا ټونل باید د نوی تاریب سره تنظیم شی۔"
+
+msgid "Enter old destination below."
+msgstr "لاندې کهنه تاریب ولیکئ۔"
+
+msgid "Authentication for adding alternate destination"
+msgstr "د بدیلې تاریب د زیاتولو تصدیق"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "دا به د {0} لپاره بدیله تاریب اضافه کړی"
+
+msgid "Authentication for adding subdomain"
+msgstr "د فرعی ډومین د زیاتولو تصدیق"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "دا به د {1} یو فرعی ډومین {0} اضافه کړی، د توپیر شوی تاریب سره"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "دا ټونل باید د نوې فرعی ډومین او نوی تاریب سره تنظیم شی۔"
+
+msgid "Enter higher-level domain and destination below."
+msgstr "لاندې لوړې کچې ډومین او تاریب ولیکئ۔"
+
+msgid "Return to Tunnel Configuration"
+msgstr "د ټونل ترتیباتو ته بیا ګرځئ"
+
+msgid "Specify old name and destination"
+msgstr "کهنه نوم او تاریب مشخص کړئ"
+
+msgid "This is only required for advanced authentication."
+msgstr "دا یوازې د پیشرفته تصدیق لپاره اړینه ده۔"
+
+msgid "See above for required items."
+msgstr "د اړینو توکو لپاره پورته وګورئ۔"
+
+msgid "Old / parent hostname "
+msgstr "کهن / والد هاست نیم "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "د کهنې تاریب / د فرعی ډومین والد لپاره د خصوصی کلیمې فایل"
+
+msgid "Generate Authentication"
+msgstr "تصدیق جنریت کړئ"
+
+msgid "SSL Helper"
+msgstr "د SSL مرستندوی"
+
+msgid "Experts only!"
+msgstr "یوازې د متخصصانو لپاره!"
+
+msgid "Alt Base32"
+msgstr "بدیل Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "د راتلونکۍ I2P پورټ لارښودونه"
+
+msgid "Virtual Host"
+msgstr "مجازی کوربه"
+
+msgid "Via SSL?"
+msgstr "له SSL لارې؟"
+
+msgid "Test HTTPS server through I2P"
+msgstr "HTTPS سرور له I2P له لارې ازموینه کړئ"
+
+msgid "Server"
+msgstr "سرور"
+
+msgid "SSL Activation"
+msgstr "د SSL فعالول"
+
+msgid "I2P webserver (eepsite)"
+msgstr "د I2P ویب سرور (eepsite)"
+
+msgid "Disable SSL"
+msgstr "SSL غیر فعال کړئ"
+
+msgid "Enable SSL"
+msgstr "SSL فعال کړئ"
+
+msgid "New Certificate Password"
+msgstr "نوې د پاګلیکت پټ نښه"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "پټ نښه (د پاګلیکت د کوږلو لپاره اړینه)"
+
+msgid "Generate new SSL certificate"
+msgstr "نوی SSL پاګلیکت جنریت کړئ"
+
+msgid "Generate SSL certificate and enable"
+msgstr "SSL پاګلیکت جنریت کړئ او فعال یې کړئ"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "ترتیب نه شئ کولای، د {0}client configurations{1} کې هیڅ Jetty سرور ونه موندل شو چې دا ټونل سره سمون لری"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "د Jetty پرته د سرورونو ملاتړ به په راتلونکی خپرول کې اضافه شی"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "د ټونل مدیر په لړ کې بیا ګرځئ"
+
+msgid "Return to Tunnel Editor"
+msgstr "د ټونل سمونکی ته بیا ګرځئ"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "د I2P ټونل مدیر - د ټونل د جوړولو ویزارډ"
+
+msgid "Server or client tunnel?"
+msgstr "سرور یا کلآینټ ټونل؟"
+
+msgid "Tunnel type"
+msgstr "د ټونل ډول"
+
+msgid "Tunnel name and description"
+msgstr "د ټونل نوم او تشریح"
+
+msgid "Tunnel destination"
+msgstr "د ټونل تاریب"
+
+msgid "Binding address and port"
+msgstr "د تړلو پتې او پورټ"
+
+msgid "Tunnel auto-start"
+msgstr "د ټونل اتوماتیک پیل"
+
+msgid "Wizard completed"
+msgstr "ویزارډ بشپړ شو"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "دا ویزارډ به تاسو د هغو بېلابېلو انتخابونو له لارې لارښود وکړی چې د I2P کې د ټونلونو د جوړولو لپاره شته۔"
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "لومړی څه باید پرېکړه شی دا ده چې غواړئ سرور یا کلآینټ ټونل جوړ کړئ۔"
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "که اړتیا لرئ چې لرونکۍ خدمت ته وصل شئ، لکه په I2P کې IRC سرور یا کوډ ریپازیتوری، نو تاسو به CLIENT ټونل ته اړتیا ولرئ۔"
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "بله خوا، که غواړئ د نورو د وصل کولو لپاره یو خدمت کور کړئ، باید SERVER ټونل جوړ کړئ۔"
+
+msgid "Server Tunnel"
+msgstr "سرور ټونل"
+
+msgid "Client Tunnel"
+msgstr "کلآینټ ټونل"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "څو ډولونه ټونلونه شته چې غوره کړئ:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "بنسټیز ټونل د I2P دننه د یوې خدمت ته د وصل کولو لپاره۔"
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "دا هڅه وکړئ که لاندې هیڅ یو د ټونلونو ډول ستا اړتیاوو سره نه سمون لری، یا نه پوهېږئ چې کوم ډول ټونل ته اړتیا لرئ۔"
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "هغه ټونل چې د I2P دننه د eepsiteونو ته د لاسرسی لپاره د HTTP پروکسی په توګه کار کوی۔"
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "خپل براوزر دودیږئ چې دا ټونل د http پروکسی په توګه وکاروئ، یا په GNU/Linux کې د کمانډ لاین اپلیکیشنونو لپاره خپل \"http_proxy\" چیرېمنیټ تنظیم کړئ۔"
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "که په I2P کې یو HTTP پروکسی پېژندل شوی وی، د I2P د بهرې ویب پاڼې هم لاسرسی کېږی۔"
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "د IRC اتصالونو لپاره ځانګړې کلآینټ ټونل۔"
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "په دې ټونل ډول سره، ستا IRC کلآینټ به کولای شی په I2P کې یو IRC نټورک ته وصل شی۔"
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "هر هغه IRC نټورک چې غواړئ په I2P کې یې ته وصل شئ، به خپل ټونل ته اړتیا ولری۔ (هم په ګړه، SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "هغه ټونل چې د SOCKS پروټوکول پیاده کوی۔"
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "دا اجازه ورکوی چې د I2P دننه یو SOCKS outproxy له لارې د TCP او UDP دواړو اتصالونه جوړ شی۔"
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "د SOCKS پروټوکول پیاده کوونکی کلآینټ ټونل، چې د IRC نټورکونو ته د وصل کولو لپاره ځانګړی شوی دی۔"
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "په دې ټونل ډول سره، په I2P کې IRC نټورکونه د لارې کېدای دی په خپل IRC کلآینټ کې د I2P پته ټاکئ، او IRC کلآینټ دا SOCKS ټونل د کارولو لپاره تنظیم کړئ۔"
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "دا مانا لری چې پر هر IRC نټورک یو بیل ټونل پرڅای یوازې یو I2P ټونل اړین دی۔"
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "که په I2P کې یو SOCKS outproxy پېژندل شوی وی، د I2P د بهرې IRC نټورکونه هم لاسرسی کېږی، خو دا پورته شته چې آیا IRC نټورک د outproxy بلاک کړی یا نه۔"
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "یو بنسټیز سرور ټونل د I2P دننه د یوې عامې خدمت د کورولو لپاره۔"
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "هغه سرور ټونل چې د HTTP اتصالونو لپاره ځانګړی شوی دی۔"
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "دا ټونل ډول وکاروئ که غواړئ یو eepsite کور کړئ۔"
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "یو ځانګړی سرور ټونل د I2P دننه د IRC نټورکونو د کورولو لپاره۔"
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "معمولاً، د هر IRC سرور لپاره چې غواړی د I2P په دننه یې لاسرسی وی، باید یو جلا ټونل جوړ شی۔"
+
+msgid "Select tunnel type"
+msgstr "د ټونل ډول غوره کړئ"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "د خپل ټونل لپاره یو نوم او تشریح غوره کړئ۔"
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "دا کولای شئ هر څه وی چې غواړئ - دا یوازې دا دی چې ټونل په د راوټر کنسول کې اسانه پېژندل شی۔"
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "که د دې ډول ټونل لپاره د هر ډول outproxyونو پوهېږئ (HTTP یا SOCKS)، پایې ته یې ولیکئ۔"
+
+msgid "Separate multiple proxies with commas."
+msgstr "څو پروکسیان په کومو سره جلا کړئ۔"
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "د I2P outproxy تاریبو لسته، په کومو سره جلا شوې (لکه proxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "د هغه سروس د I2P تاریب ولیکئ چې دا کلآینټ ټونل باید ورته وصل شی۔"
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "دا کېدای شی د بشپړ Base64 تاریب کلیمه وی، یا ستا له پتې کتاب څخه یو I2P URL۔"
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "دلته یو b64 یا .i2p پته ولیکئ"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "دا هغه IP دی چې ستا سروس پرې چلېږی، دا معمولاً په ورته ماشین کې کېږی، نو 127.0.0.1 په خپله ټاکل شوی دی۔"
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "دا هغه پورټ دی چې سروس پرې اتصالات منی۔"
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "دا هغه پورټ دی چې د کلآینټ ټونل ورته په محل کې له لارې کتل کېږی۔"
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "غواړئ دا ټونل څنګه لاسرسی ولری؟ یوازې دې ماشین، ستا ټوله سبلټنیټ، یا بهرنی انټرنیټ؟"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "تر ټولو ډېر به غواړئ یوازې 127.0.0.1 ته اجازه ورکړی۔"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "I2P راوټر کولای شی دا ټونل ستا لپاره په اتوماتیک توګه پیل کړی، کله چې راوټر پیل شی۔"
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "دا د ډېرو وخت کارول شویو ټونلونو لپاره ګټوره وی (په ځانګړه توګه د سرور ټونلونو)، خو د هغو ټونلونو لپاره چې یوازې په څه دوره کې کارول کېږی به دا مانا ولری چې I2P راوټر ناڅاپی ټونلونه جوړوی او په لاس کې یې ساتی۔"
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "ویزارډ اوس کافی معلومات راټول کړې دی ترڅو ستا ټونل جوړ کړی۔"
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "پایې «وساته» تڼۍ کلیک کولو وروسته، ویزارډ به ټونل ترتیم کړی او ستا ته به د I2PTunnel اصلی پاڼې ته بېرته ستندرئ۔"
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "ځکه چې دا غوره شوی چې ټونل په اتوماتیک توګه پیل شی کله چې راوټر پیل شی، نور کوم څه کولو ته اړتیا نشته۔"
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "راوټر به ټونل پیل کړی هغه مهال چې یې ترتیم شی۔"
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "ځکه چې دا غوره نه شو چې ټونل په اتوماتیک توګه پیل شی، باید په لاس یې پیل کړئ۔"
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "دا کولای شئ په اصلی پاڼه کې د پیل په تڼۍ کلیک کړئ، چېرته چې نوی ټونل دی۔"
+
+msgid "Below is a summary of the options you chose:"
+msgstr "پایې د هغو اختیاراتو خلاصه ده چې غوره کړې:"
+
+msgid "Tunnel description"
+msgstr "د ټونل تشریح"
+
+msgid "Binding address"
+msgstr "د تړلو پته"
+
+msgid "Tunnel port"
+msgstr "د ټونل پورټ"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "د دې بنسټیز ترتیباتو ترڅنګ، د ټونل د ترتیباتو لپاره ډېر پیشرفته اختیارات شته۔"
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "ویزارډ به دې لپاره د ابدۍ پیژندل شوی ارزښتونه ټاکی، خو کولای شئ دا وګورئ و/یا سمونګئ، په I2PTunnel اصلی پاڼه کې د ټونل د نوم کلیک کولو سره۔"
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "ویزارډ لغو کړئ او د ټونل مدیر اصلی پاڼې ته بېرته ستندرئ"
+
+msgid "Return to previous page"
+msgstr "پخوانۍ مخ ته بېرته ستندرئ"
+
+msgid "Previous"
+msgstr "پخوانی"
+
+msgid "Save tunnel configuration"
+msgstr "د ټونل ترتیبات وساته"
+
+msgid "Save Tunnel"
+msgstr "ټونل وساته"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "ویزارډ بشپړ کړئ او د ټونل ترتیبات وګورئ"
+
+msgid "Finish"
+msgstr "بشپړ کړئ"
+
+msgid "Advance to next page"
+msgstr "راتلونکې مخ ته مخکې لاړ شئ"
+
+msgid "Next"
+msgstr "راتلونکی"

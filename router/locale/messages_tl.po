@@ -1,0 +1,163 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: OK; IPv6: Sinusubukan"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: OK; IPv6: Nasa Firewall"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: Sinusubukan; IPv6: OK"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: Nasa Firewall; IPv6: OK"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: Naka-disable; IPv6: OK"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: Symmetric NAT; IPv6: OK"
+
+msgid "Symmetric NAT"
+msgstr "Symmetric NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: Symmetric NAT; IPv6: Sinusubukan"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: Nasa Firewall; IPv6: Sinusubukan"
+
+msgid "Firewalled"
+msgstr "Nasa Firewall"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: Sinusubukan; IPv6: Nasa Firewall"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: Naka-disable; IPv6: Sinusubukan"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: Naka-disable; IPv6: Nasa Firewall"
+
+msgid "Disconnected"
+msgstr "Naka-disconnect"
+
+msgid "Port Conflict"
+msgstr "Salungatan sa Port"
+
+msgid "Testing"
+msgstr "Sinusubukan"
+
+msgid "Starting up"
+msgstr "Nagsisimula"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "Itinatanggihan ang lahat ng kahilingang tunnel:<br>"
+
+msgid "Hidden Mode"
+msgstr "Hidden Mode"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "Itinatanggihan ang Mga Kahilingang Tunnel:<br>"
+
+msgid "High message delay"
+msgstr "Mataas na pagkaantala ng mensahe"
+
+msgid "Declining requests: "
+msgstr "Itinatanggihan ang mga kahilingan: "
+
+msgid "Limit reached"
+msgstr "Umabot sa limit"
+
+msgid "Participation disabled"
+msgstr "Naka-disable ang pakikilahok"
+
+msgid "High system load"
+msgstr "Mataas na load ng sistema"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "Itinatol ang lahat ng kahilingang tunnel:<br>"
+
+msgid "High number of requests"
+msgstr "Mataas na bilang ng kahilingan"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "Itinatol ang halos lahat ng kahilingang tunnel:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "Tinatanggap ang halos lahat ng kahilingang tunnel"
+
+msgid "Accepting tunnel requests"
+msgstr "Tinatanggap ang kahilingang tunnel"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "Itinatanggihan ang mga kahilingan: Bandwidth limit"
+
+msgid "Declining requests"
+msgstr "Itinatanggihan ang mga kahilingan"
+
+msgid "Shutting down"
+msgstr "Nagsasara"
+
+msgid "Restarting"
+msgstr "Ini-restart"
+
+msgid "Declining Tunnel Requests"
+msgstr "Itinatanggihan ang Mga Kahilingang Tunnel"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "Pagtatapon ng Mga Kahilingang Tunnel: Masyadong mabagal"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "Pagtatapon ng Mga Kahilingang Tunnel: Mataas na lag ng Job"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "Pagtatapon ng Mga Kahilingang Tunnel:<br>Mataas na load ng CPU"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "Pagtatapon ng Mga Kahilingang Tunnel: Overloaded"
+
+msgid "Declining requests:"
+msgstr "Itinatanggihan ang mga kahilingan:"
+
+msgid "Request overload"
+msgstr "Overload ng kahilingan"
+
+msgid "Connection limit reached"
+msgstr "Umabot sa limit ng koneksyon"
+
+msgid "Transit throttle drop"
+msgstr "Pagtatapon ng transit throttle"
+
+msgid "Transit throttle reject"
+msgstr "Pagtatol ng transit throttle"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "Pagtatapon ng Mga Kahilingang Tunnel: Mataas na load"
+
+msgid "Transit request throttle"
+msgstr "Throttle ng kahilingang transit"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "Pagtatapon ng Mga Kahilingang Tunnel: Oras sa queue"

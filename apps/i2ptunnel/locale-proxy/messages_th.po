@@ -1,0 +1,438 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "ดูเหมือนว่าจะเป็นปลายทางที่ไม่ถูกต้อง:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelperไม่สามารถช่วยคุณกับปลายทางแบบนั้นได้!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "หากต้องการเปิดปลายทางในสมุดที่อยู่ของคุณให้คลิก<a href=\"{0}\">ที่นี่</a>.หากต้องการเปิดปลายทางที่ขัดแย้งกันของaddresshelperให้คลิก<a href=\"{1}\">ที่นี่</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "ปลายทางของ{0}ในสมุดที่อยู่"
+
+msgid "Conflicting address helper destination"
+msgstr "ปลายทางของaddresshelperที่ขัดแย้งกัน"
+
+msgid "Corrupt Base32 address"
+msgstr "ที่อยู่Base32เสียหาย"
+
+msgid "Destination LeaseSet not found"
+msgstr "ไม่พบLeaseSetของปลายทาง"
+
+msgid "Host"
+msgstr "โฮสต์"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "ปลายทาง"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "ดำเนินการต่อไปยัง{0}โดยไม่บันทึก"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "คุณสามารถเลือกดูเว็บไซต์ได้โดยไม่ต้องบันทึกลงในสมุดที่อยู่ที่อยู่จะถูกจดจำไว้จนกว่าคุณจะเริ่มเราเตอร์I2Pใหม่."
+
+msgid "Continue without saving"
+msgstr "ดำเนินการต่อโดยไม่บันทึก"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "บันทึก{0}ลงในสมุดที่อยู่เราเตอร์และดำเนินการต่อไปยังเว็บไซต์"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "ที่อยู่นี้จะถูกบันทึกลงในสมุดที่อยู่เราเตอร์ของคุณซึ่งเก็บที่อยู่ที่มาจากการติดตาม."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "หากต้องการติดตามเว็บไซต์ที่คุณเพิ่มด้วยตนเองให้เพิ่มลงในสมุดที่อยู่หลักหรือสมุดที่อยู่ส่วนตัวแทน."
+
+msgid "Save & continue"
+msgstr "บันทึก&ดำเนินการต่อ"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "บันทึก{0}ลงในสมุดที่อยู่หลักและดำเนินการต่อไปยังเว็บไซต์"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "ที่อยู่นี้จะถูกบันทึกลงในสมุดที่อยู่หลักของคุณเลือกตัวเลือกนี้สำหรับที่อยู่ที่คุณต้องการเก็บแยกจากสมุดที่อยู่เราเตอร์หลักแต่ไม่เป็นไรที่จะเผยแพร่."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "บันทึก{0}ลงในสมุดที่อยู่ส่วนตัวและดำเนินการต่อไปยังเว็บไซต์"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "ที่อยู่นี้จะถูกบันทึกลงในสมุดที่อยู่ส่วนตัวของคุณเพื่อให้แน่ใจว่าจะไม่ถูกเผยแพร่."
+
+msgid "Base32 address requires lookup password"
+msgstr "ที่อยู่Base32ต้องการรหัสผ่านการค้นหา"
+
+msgid "Base32 address requires encryption key"
+msgstr "ที่อยู่Base32ต้องการกุญแจการเข้ารหัส"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "ที่อยู่Base32ต้องการกุญแจการเข้ารหัสและรหัสผ่านการค้นหา"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "ถอดรหัสที่อยู่Base32ล้มเหลวโปรดตรวจสอบกุญแจการเข้ารหัส"
+
+msgid "Generate"
+msgstr "สร้าง"
+
+msgid "Encryption key"
+msgstr "กุญแจการเข้ารหัส"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "คุณต้องป้อนกุญแจการเข้ารหัสPSKที่ผู้ดำเนินการเซิร์ฟเวอร์ให้หรือสร้างกุญแจการเข้ารหัสDHแล้วส่งไปยังผู้ดำเนินการเซิร์ฟเวอร์."
+
+msgid "Ask the server operator for help."
+msgstr "ขอความช่วยเหลือจากผู้ดำเนินการเซิร์ฟเวอร์."
+
+msgid "Enter PSK encryption key"
+msgstr "ป้อนกุญแจการเข้ารหัสPSK"
+
+msgid "Generate new DH encryption key"
+msgstr "สร้างกุญแจการเข้ารหัสDHใหม่"
+
+msgid "Lookup password"
+msgstr "รหัสผ่านการค้นหา"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "คุณต้องป้อนรหัสผ่านที่ผู้ดำเนินการเซิร์ฟเวอร์ให้."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "เพิ่มผ่านaddresshelperจาก{0}"
+
+msgid "Added via address helper"
+msgstr "เพิ่มผ่านaddresshelper"
+
+msgid "Missing lookup password"
+msgstr "ไม่มีรหัสผ่านการค้นหา"
+
+msgid "Missing private key"
+msgstr "ไม่มีกุญแจส่วนตัว"
+
+msgid "Invalid private key"
+msgstr "กุญแจส่วนตัวไม่ถูกต้อง"
+
+msgid "Your new encryption key"
+msgstr "กุญแจการเข้ารหัสใหม่ของคุณ"
+
+msgid "Router Console"
+msgstr "คอนโซลเราเตอร์"
+
+msgid "Addressbook"
+msgstr "สมุดที่อยู่"
+
+msgid "Configuration"
+msgstr "การกำหนดค่า"
+
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "คัดลอกกุญแจแล้วส่งไปยังผู้ดำเนินการเซิร์ฟเวอร์."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "หลังจากได้รับอนุญาตคุณสามารถดำเนินการต่อไปยังเว็บไซต์ได้."
+
+msgid "Go back and fix the error"
+msgstr "ย้อนกลับไปแก้ไขข้อผิดพลาด"
+
+msgid "router"
+msgstr "เราเตอร์"
+
+msgid "master"
+msgstr "หลัก"
+
+msgid "private"
+msgstr "ส่วนตัว"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "กำลังเปลี่ยนเส้นทางไปยัง{0}"
+
+msgid "Redirection in progress"
+msgstr "กำลังเปลี่ยนเส้นทาง"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "บันทึก{0}ลงในสมุดที่อยู่{1}แล้วกำลังเปลี่ยนเส้นทาง."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "ไม่สามารถบันทึก{0}ลงในสมุดที่อยู่{1}ได้กำลังเปลี่ยนเส้นทาง."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "คลิกที่นี่หากคุณไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "บันทึกการยืนยันตัวตนสำหรับ{0}แล้วกำลังเปลี่ยนเส้นทาง."
+
+msgid "Website Unknown"
+msgstr "เว็บไซต์ที่ไม่ทราบ"
+
+msgid "I2P Router Console"
+msgstr "คอนโซลเราเตอร์I2P"
+
+msgid "Website Not Found in Addressbook"
+msgstr "ไม่พบเว็บไซต์ในสมุดที่อยู่"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "ไม่พบเว็บไซต์ในสมุดที่อยู่ของเราเตอร์ของคุณ."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "ตรวจสอบลิงก์หรือค้นหาที่อยู่Base 32หรือBase 64."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "หากคุณมีที่อยู่Base 64ให้{0}เพิ่มลงในสมุดที่อยู่{1}."
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "มิฉะนั้นให้ค้นหาที่อยู่Base 32หรือลิงก์addresshelperหรือใช้ลิงก์บริการjumpด้านล่าง."
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "เห็นหน้านี้บ่อยไหมดู{0}คำถามที่พบบ่อย{1}เพื่อดูวิธี{2}เพิ่มการติดตามบางรายการ{3}ลงในสมุดที่อยู่ของคุณ."
+
+msgid "Could not find the following destination:"
+msgstr "ไม่พบปลายทางต่อไปนี้:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "คำเตือน:โปรโตคอลที่ไม่ใช่HTTP"
+
+msgid "The request uses a bad protocol."
+msgstr "คำขอใช้โปรโตคอลที่ไม่ถูกต้อง."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "proxyHTTPของI2PรองรับเฉพาะคำขอHTTPและHTTPS."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "ไม่อนุญาตโปรโตคอลอื่นเช่นFTP."
+
+msgid "Error: Request Denied"
+msgstr "ข้อผิดพลาด:ปฏิเสธคำขอ"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "ข้อผิดพลาด:ไม่สามารถเข้าถึงคอนโซลเราเตอร์ผ่านproxyของI2Pได้"
+
+msgid "Your browser is misconfigured."
+msgstr "เบราว์เซอร์ของคุณมีการกำหนดค่าไม่ถูกต้อง."
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "อย่าใช้proxyเพื่อเข้าถึงคอนโซลเราเตอร์, localhostหรือปลายทางLANในเครื่อง."
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "คุณต้องป้องกันไม่ให้127.0.0.1(หรือที่อยู่ที่คุณใช้เข้าถึงคอนโซลI2P)ถูกกำหนดเส้นทางผ่านproxyhttpของI2Pโดยปกติคือการยกเว้นที่อยู่ในส่วนการกำหนดค่าproxyของเบราว์เซอร์."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "คำเตือน:กุญแจปลายทางขัดแย้งกัน"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "ลิงก์addresshelperที่คุณติดตามระบุกุญแจปลายทางที่ต่างจากรายการในสมุดที่อยู่ของคุณ."
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "อาจมีผู้กำลังพยายามปลอมตัวเป็นเว็บไซต์อื่นหรือมีผู้ให้ชื่อเว็บไซต์สองแห่งเหมือนกัน."
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "แก้ไขข้อขัดแย้งโดยการตัดสินใจว่าจะเชื่อถือกุญแจใดจากนั้นจะเพิกเฉยต่อลิงก์addresshelperหรือลบรายการโฮสต์ออกจากสมุดที่อยู่ของคุณแล้วคลิกลิงก์addresshelperอีกครั้ง."
+
+msgid "Connection Reset"
+msgstr "การเชื่อมต่อถูกรีเซ็ต"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "การเชื่อมต่อไปยังเว็บไซต์ถูกรีเซ็ตขณะกำลังโหลดหน้า."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "เว็บไซต์อาจไม่พร้อมใช้งานชั่วคราวมีผู้ใช้หนาแน่นเกินไปหรือบล็อกการเข้าถึงของคุณ."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "คุณอาจต้องการ{0}ลองใหม่{1}."
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "หากคุณเปิดหน้านี้ค้างไว้ระบบจะลองเชื่อมต่อไปยังเว็บไซต์อีกครั้งโดยอัตโนมัติทุก{0}วินาทีหลังจากความพยายามเชื่อมต่อล้มเหลว."
+
+msgid "Website Unreachable"
+msgstr "เว็บไซต์เข้าถึงไม่ได้"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "เข้าถึงเว็บไซต์ไม่ได้เนื่องจากเว็บไซต์ใช้ตัวเลือกการเข้ารหัสที่ไม่ได้รับการสนับสนุนจากI2Pหรือเวอร์ชันJavaของคุณ."
+
+msgid "Could not connect to the following destination:"
+msgstr "ไม่สามารถเชื่อมต่อกับปลายทางต่อไปนี้:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "เข้าถึงเว็บไซต์ไม่ได้เนื่องจากไม่พบLeaseSetของเว็บไซต์."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "เว็บไซต์อาจล่มแต่อาจเกิดการแออัดของเครือข่ายขึ้นได้ด้วย."
+
+msgid "The connection to the proxy was reset."
+msgstr "การเชื่อมต่อไปยังproxyถูกรีเซ็ต."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "proxyอาจไม่พร้อมใช้งานชั่วคราวมีผู้ใช้หนาแน่นเกินไปหรือบล็อกการเข้าถึงของคุณ."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "คุณอาจต้องการ{0}ลองใหม่{1}เนื่องจากจะสุ่มเลือกoutproxyใหม่จากกลุ่มที่คุณกำหนดไว้{2}ที่นี่{3}(หากคุณกำหนดไว้มากกว่าหนึ่งรายการ)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "หากคุณยังพบปัญหาอยู่คุณอาจต้องการแก้ไขรายการoutproxyของคุณ{0}ที่นี่{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "เข้าถึงoutproxyไม่ได้"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "เข้าถึงoutproxyHTTPไม่ได้เนื่องจากใช้ตัวเลือกการเข้ารหัสที่ไม่ได้รับการสนับสนุนจากI2Pหรือเวอร์ชันJavaของคุณ."
+
+msgid "The website was not reachable."
+msgstr "เข้าถึงเว็บไซต์ไม่ได้."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "เว็บไซต์ออฟไลน์มีการแออัดของเครือข่ายหรือเราเตอร์ของคุณยังไม่เชื่อมโยงกับpeerได้ดี."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "คำเตือน:ไม่ได้กำหนดค่าoutproxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "คำขอของคุณเป็นเว็บไซต์ภายนอกI2Pแต่คุณไม่ได้กำหนดค่าoutproxyHTTP."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "โปรดกำหนดค่าoutproxyในI2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "ไม่พบoutproxy"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "ไม่พบoutproxyHTTP."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "ออฟไลน์มีการแออัดของเครือข่ายหรือเราเตอร์ของคุณยังไม่เชื่อมโยงกับpeerได้ดี."
+
+msgid "Information: New Host Name"
+msgstr "ข้อมูล:ชื่อโฮสต์ใหม่"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "ข้อมูล:ชื่อโฮสต์ใหม่พร้อมaddresshelper"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "ลิงก์addresshelperที่คุณติดตามเป็นของชื่อโฮสต์ใหม่ที่ไม่อยู่ในสมุดที่อยู่ของคุณ."
+
+msgid "You may save this host name to your local address book."
+msgstr "คุณสามารถบันทึกชื่อโฮสต์นี้ลงในสมุดที่อยู่ในเครื่องของคุณได้."
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "หากคุณบันทึกลงในสมุดที่อยู่ของคุณคุณจะไม่เห็นข้อความนี้อีก."
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "หากคุณไม่บันทึกชื่อโฮสต์นี้จะถูกลืมหลังจากเราเตอร์เริ่มใหม่ครั้งถัดไป."
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "หากคุณไม่ต้องการเปิดโฮสต์นี้ให้คลิกปุ่ม\"back\"ในเบราว์เซอร์ของคุณ."
+
+msgid "Proxy Authorization Required"
+msgstr "proxyต้องการการยืนยันตัวตน"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "proxyHTTPของI2Pต้องการการยืนยันตัวตน"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "proxyนี้ถูกกำหนดค่าให้ต้องมีชื่อผู้ใช้และรหัสผ่านเพื่อเข้าถึง."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "โปรดป้อนชื่อผู้ใช้และรหัสผ่านของคุณหรือตรวจสอบ{0}การกำหนดค่าเราเตอร์{1}หรือ{2}การกำหนดค่าI2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "หากต้องการปิดใช้งานการยืนยันตัวตนให้นำการกำหนดค่า{0}i2ptunnel.proxy.auth=basic{1}ออกจากนั้นหยุดและเริ่มอุโมงคมproxyHTTPใหม่."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "เข้าถึงoutproxyHTTPไม่ได้เนื่องจากไม่พบLeaseSet."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "outproxyอาจล่มแต่อาจเกิดการแออัดของเครือข่ายขึ้นได้ด้วย."
+
+msgid "Warning: Request Denied"
+msgstr "คำเตือน:ปฏิเสธคำขอ"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "ที่อยู่นี้ดูเหมือนจะมีรูปแบบไม่ถูกต้องโปรดตรวจสอบว่าคุณได้ป้อนที่อยู่ที่ถูกต้อง!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "คำเตือน:addresshelperไม่ถูกต้อง"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "ไม่สามารถค้นหากุญแจhelperในURL({0}i2paddresshelper={1})ได้"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "ดูเหมือนจะเป็นข้อมูลขยะหรือที่อยู่Base 32ที่พิมพ์ผิด."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "ตรวจสอบURLของคุณแล้วลองแก้ไขกุญแจhelperให้เป็นชื่อโฮสต์Base 32หรือกุญแจBase 64ที่ถูกต้อง."
+
+msgid "Warning: Address Blacklisted"
+msgstr "คำเตือน:ที่อยู่อยู่ในบัญชีดำ"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "ปลายทางที่ร้องขออยู่ในบัญชีดำของคุณและการเข้าถึงถูกบล็อก."
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "หากต้องการอนุญาตให้เข้าถึงเว็บไซต์นี้ให้นำออกจากบัญชีดำของคุณในหน้าจัดการบัญชีดำของSusiDNS."
+
+msgid "Warning: Invalid Destination"
+msgstr "คำเตือน:ปลายทางไม่ถูกต้อง"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "ปลายทางเว็บไซต์ที่ระบุไม่ถูกต้องหรือเข้าถึงไม่ได้."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "อาจเป็นเพราะคุณวางสตริงBase 64ผิดหรือลิงก์ที่คุณติดตามไม่ถูกต้อง."
+
+msgid "The I2P host could also be offline."
+msgstr "โฮสต์I2Pอาจออฟไลน์เช่นกัน."
+
+msgid "Warning: Authorization Required"
+msgstr "คำเตือน:ต้องการการยืนยันตัวตน"
+
+msgid "Warning: Invalid Request URI"
+msgstr "คำเตือน:URIของคำขอไม่ถูกต้อง"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "URIของคำขอไม่ถูกต้องและอาจมีอักขระที่ไม่อนุญาต."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "หากคุณคลิกลิงก์ให้ตรวจสอบท้ายURIว่ามีอักขระใดที่เบราว์เซอร์เพิ่มเข้ามาโดยไม่ตั้งใจหรือไม่."
+
+msgid "The Base32 address is invalid."
+msgstr "ที่อยู่Base32ไม่ถูกต้อง."

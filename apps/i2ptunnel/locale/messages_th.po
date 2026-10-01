@@ -1,0 +1,1791 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "ดูเหมือนว่าจะเป็นปลายทางที่ไม่ถูกต้อง:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelperไม่สามารถช่วยคุณกับปลายทางแบบนั้นได้!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "หากต้องการเปิดปลายทางในสมุดที่อยู่ของคุณให้คลิก<a href=\"{0}\">ที่นี่</a>.หากต้องการเปิดปลายทางที่ขัดแย้งกันของaddresshelperให้คลิก<a href=\"{1}\">ที่นี่</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "ปลายทางของ{0}ในสมุดที่อยู่"
+
+msgid "Conflicting address helper destination"
+msgstr "ปลายทางของaddresshelperที่ขัดแย้งกัน"
+
+msgid "Corrupt Base32 address"
+msgstr "ที่อยู่Base32เสียหาย"
+
+msgid "Destination LeaseSet not found"
+msgstr "ไม่พบLeaseSetของปลายทาง"
+
+msgid "Host"
+msgstr "โฮสต์"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "ปลายทาง"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "ดำเนินการต่อไปยัง{0}โดยไม่บันทึก"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "คุณสามารถเลือกดูเว็บไซต์ได้โดยไม่ต้องบันทึกลงในสมุดที่อยู่ที่อยู่จะถูกจดจำไว้จนกว่าคุณจะเริ่มเราเตอร์I2Pใหม่."
+
+msgid "Continue without saving"
+msgstr "ดำเนินการต่อโดยไม่บันทึก"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "บันทึก{0}ลงในสมุดที่อยู่เราเตอร์และดำเนินการต่อไปยังเว็บไซต์"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "ที่อยู่นี้จะถูกบันทึกลงในสมุดที่อยู่เราเตอร์ของคุณซึ่งเก็บที่อยู่ที่มาจากการติดตาม."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "หากต้องการติดตามเว็บไซต์ที่คุณเพิ่มด้วยตนเองให้เพิ่มลงในสมุดที่อยู่หลักหรือสมุดที่อยู่ส่วนตัวแทน."
+
+msgid "Save & continue"
+msgstr "บันทึก&ดำเนินการต่อ"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "บันทึก{0}ลงในสมุดที่อยู่หลักและดำเนินการต่อไปยังเว็บไซต์"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "ที่อยู่นี้จะถูกบันทึกลงในสมุดที่อยู่หลักของคุณเลือกตัวเลือกนี้สำหรับที่อยู่ที่คุณต้องการเก็บแยกจากสมุดที่อยู่เราเตอร์หลักแต่ไม่เป็นไรที่จะเผยแพร่."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "บันทึก{0}ลงในสมุดที่อยู่ส่วนตัวและดำเนินการต่อไปยังเว็บไซต์"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "ที่อยู่นี้จะถูกบันทึกลงในสมุดที่อยู่ส่วนตัวของคุณเพื่อให้แน่ใจว่าจะไม่ถูกเผยแพร่."
+
+msgid "Base32 address requires lookup password"
+msgstr "ที่อยู่Base32ต้องการรหัสผ่านการค้นหา"
+
+msgid "Base32 address requires encryption key"
+msgstr "ที่อยู่Base32ต้องการกุญแจการเข้ารหัส"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "ที่อยู่Base32ต้องการกุญแจการเข้ารหัสและรหัสผ่านการค้นหา"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "ถอดรหัสที่อยู่Base32ล้มเหลวโปรดตรวจสอบกุญแจการเข้ารหัส"
+
+msgid "Generate"
+msgstr "สร้าง"
+
+msgid "Encryption key"
+msgstr "กุญแจการเข้ารหัส"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "คุณต้องป้อนกุญแจการเข้ารหัสPSKที่ผู้ดำเนินการเซิร์ฟเวอร์ให้หรือสร้างกุญแจการเข้ารหัสDHแล้วส่งไปยังผู้ดำเนินการเซิร์ฟเวอร์."
+
+msgid "Ask the server operator for help."
+msgstr "ขอความช่วยเหลือจากผู้ดำเนินการเซิร์ฟเวอร์."
+
+msgid "Enter PSK encryption key"
+msgstr "ป้อนกุญแจการเข้ารหัสPSK"
+
+msgid "Generate new DH encryption key"
+msgstr "สร้างกุญแจการเข้ารหัสDHใหม่"
+
+msgid "Lookup password"
+msgstr "รหัสผ่านการค้นหา"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "คุณต้องป้อนรหัสผ่านที่ผู้ดำเนินการเซิร์ฟเวอร์ให้."
+
+msgid "HTTP Outproxy"
+msgstr "outproxyHTTP"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "คลิกลิงก์ด้านล่างเพื่อใช้addresshelperจากบริการjump"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "เพิ่มผ่านaddresshelperจาก{0}"
+
+msgid "Added via address helper"
+msgstr "เพิ่มผ่านaddresshelper"
+
+msgid "Missing lookup password"
+msgstr "ไม่มีรหัสผ่านการค้นหา"
+
+msgid "Missing private key"
+msgstr "ไม่มีกุญแจส่วนตัว"
+
+msgid "Invalid private key"
+msgstr "กุญแจส่วนตัวไม่ถูกต้อง"
+
+msgid "Your new encryption key"
+msgstr "กุญแจการเข้ารหัสใหม่ของคุณ"
+
+msgid "Router Console"
+msgstr "คอนโซลเราเตอร์"
+
+msgid "Addressbook"
+msgstr "สมุดที่อยู่"
+
+msgid "Configuration"
+msgstr "การกำหนดค่า"
+
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "คัดลอกกุญแจแล้วส่งไปยังผู้ดำเนินการเซิร์ฟเวอร์."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "หลังจากได้รับอนุญาตคุณสามารถดำเนินการต่อไปยังเว็บไซต์ได้."
+
+msgid "Go back and fix the error"
+msgstr "ย้อนกลับไปแก้ไขข้อผิดพลาด"
+
+msgid "router"
+msgstr "เราเตอร์"
+
+msgid "master"
+msgstr "หลัก"
+
+msgid "private"
+msgstr "ส่วนตัว"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "กำลังเปลี่ยนเส้นทางไปยัง{0}"
+
+msgid "Redirection in progress"
+msgstr "กำลังเปลี่ยนเส้นทาง"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "บันทึก{0}ลงในสมุดที่อยู่{1}แล้วกำลังเปลี่ยนเส้นทาง."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "ไม่สามารถบันทึก{0}ลงในสมุดที่อยู่{1}ได้กำลังเปลี่ยนเส้นทาง."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "คลิกที่นี่หากคุณไม่ถูกเปลี่ยนเส้นทางโดยอัตโนมัติ."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "บันทึกการยืนยันตัวตนสำหรับ{0}แล้วกำลังเปลี่ยนเส้นทาง."
+
+msgid "Failed to save configuration"
+msgstr "ไม่สามารถบันทึกการกำหนดค่าได้"
+
+msgid "Configuration changes saved"
+msgstr "บันทึกการเปลี่ยนแปลงการกำหนดค่าแล้ว"
+
+msgid "Client"
+msgstr "ไคลเอนต์"
+
+msgid "internal"
+msgstr "ภายใน"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "อุโมงคมขาเข้า{0},อุโมงคมขาออก{0}"
+msgstr[1] "อุโมงคมขาเข้า{0},อุโมงคมขาออก{0}"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "อุโมงคมขาเข้า{0}"
+msgstr[1] "อุโมงคมขาเข้า{0}"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "อุโมงคมขาออก{0}"
+msgstr[1] "อุโมงคมขาออก{0}"
+
+msgid "lower bandwidth and reliability"
+msgstr "แบนด์วิดท์และความเสถียรต่ำ"
+
+msgid "standard bandwidth and reliability"
+msgstr "แบนด์วิดท์และความเสถียรมาตรฐาน"
+
+msgid "higher bandwidth and reliability"
+msgstr "แบนด์วิดท์และความเสถียรสูง"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "ข้อผิดพลาด-ยังไม่ได้เริ่มต้นอุโมงคม"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "การส่งแบบฟอร์มไม่ถูกต้องอาจเป็นเพราะคุณใช้ปุ่ม'back'หรือ'reload'ในเบราว์เซอร์โปรดส่งอีกครั้ง."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "หากปัญหายังคงอยู่โปรดตรวจสอบว่าเบราว์เซอร์ของคุณเปิดใช้งานคุกกี้อยู่."
+
+msgid "No services configured, cannot restart!"
+msgstr "ไม่มีบริการที่กำหนดค่าไว้ไม่สามารถเริ่มใหม่ได้!"
+
+msgid "Stopping tunnel"
+msgstr "กำลังหยุดอุโมงคม"
+
+msgid "Starting tunnel"
+msgstr "กำลังเริ่มอุโมงคม"
+
+msgid "Error restarting tunnel"
+msgstr "ข้อผิดพลาดขณะเริ่มอุโมงคมใหม่"
+
+msgid "Restarted all running tunnels"
+msgstr "เริ่มอุโมงคมที่กำลังทำงานทั้งหมดใหม่แล้ว"
+
+msgid "No clients configured, cannot restart!"
+msgstr "ไม่มีไคลเอนต์ที่กำหนดค่าไว้ไม่สามารถเริ่มใหม่ได้!"
+
+msgid "Restarted all running client tunnels"
+msgstr "เริ่มอุโมงคมไคลเอนต์ที่กำลังทำงานทั้งหมดใหม่แล้ว"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "โหลดการกำหนดค่าใหม่สำหรับอุโมงคมทั้งหมด"
+
+msgid "Error: Invalid tunnel"
+msgstr "ข้อผิดพลาด:อุโมงคมไม่ถูกต้อง"
+
+msgid "Started tunnel"
+msgstr "เริ่มอุโมงคมแล้ว"
+
+msgid "Stopped tunnel"
+msgstr "หยุดอุโมงคมแล้ว"
+
+msgid "Restarting tunnel"
+msgstr "กำลังเริ่มอุโมงคมใหม่"
+
+msgid "New Tunnel"
+msgstr "อุโมงคมใหม่"
+
+msgid "Port not set"
+msgstr "ไม่ได้ตั้งค่าพอร์ต"
+
+msgid "Invalid port"
+msgstr "พอร์ตไม่ถูกต้อง"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "คำเตือน-ไม่แนะนำพอร์ตที่น้อยกว่า1024"
+
+msgid "Warning - duplicate port"
+msgstr "คำเตือน-พอร์ตซ้ำ"
+
+msgid "Standard client"
+msgstr "ไคลเอนต์มาตรฐาน"
+
+msgid "HTTP/HTTPS client"
+msgstr "ไคลเอนต์HTTP/HTTPS"
+
+msgid "IRC client"
+msgstr "ไคลเอนต์IRC"
+
+msgid "Standard server"
+msgstr "เซิร์ฟเวอร์มาตรฐาน"
+
+msgid "HTTP server"
+msgstr "เซิร์ฟเวอร์HTTP"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "proxySOCKS4/4a/5"
+
+msgid "SOCKS IRC proxy"
+msgstr "proxySOCKSสำหรับIRC"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "proxyCONNECT/SSL/HTTPS"
+
+msgid "IRC server"
+msgstr "เซิร์ฟเวอร์IRC"
+
+msgid "Streamr client"
+msgstr "ไคลเอนต์Streamr"
+
+msgid "Streamr server"
+msgstr "เซิร์ฟเวอร์Streamr"
+
+msgid "HTTP bidir"
+msgstr "HTTPสองทาง"
+
+msgid "Host not set"
+msgstr "ไม่ได้ตั้งค่าโฮสต์"
+
+msgid "Invalid address"
+msgstr "ที่อยู่ไม่ถูกต้อง"
+
+msgid "Tunnel Manager"
+msgstr "ตัวจัดการอุโมงคม"
+
+msgid "Edit Client Tunnel"
+msgstr "แก้ไขอุโมงคมไคลเอนต์"
+
+msgid "Edit Server Tunnel"
+msgstr "แก้ไขอุโมงคมเซิร์ฟเวอร์"
+
+msgid "Are you sure you want to delete?"
+msgstr "แน่ใจหรือไม่ว่าต้องการลบ"
+
+msgid "required"
+msgstr "จำเป็น"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "ต้องหยุดอุโมงคมและอุโมงคมไคลเอนต์ที่แบ่งปันอื่นทั้งหมดก่อนจึงจะเปลี่ยนการกำหนดค่านี้ได้"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "ต้องหยุดอุโมงคมก่อนจึงจะเปลี่ยนการกำหนดค่านี้ได้"
+
+msgid "New Client Configuration"
+msgstr "การกำหนดค่าไคลเอนต์ใหม่"
+
+msgid "Name"
+msgstr "ชื่อ"
+
+msgid "Auto Start Tunnel"
+msgstr "เริ่มอุโมงคมอัตโนมัติ"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "ชื่อของอุโมงคมที่จะแสดงบนหน้าแรกของตัวจัดการอุโมงคมและแถบด้านข้างของคอนโซลเราเตอร์"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "เปิดใช้งานตัวเลือกนี้เพื่อให้แน่ใจว่าบริการนี้พร้อมใช้งานเมื่อเราเตอร์เริ่มทำงาน"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "เริ่มอุโมงคมอัตโนมัติเมื่อเราเตอร์เริ่มทำงาน"
+
+msgid "Description"
+msgstr "คำอธิบาย"
+
+msgid "Shared Client"
+msgstr "ไคลเอนต์ที่แบ่งปัน"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "คำอธิบายของอุโมงคมที่จะแสดงบนหน้าแรกของตัวจัดการอุโมงคม"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "ทราฟฟิกจากไคลเอนต์ทุกตัวที่เปิดใช้งานคุณสมบัตินี้จะถูกส่งผ่านชุดอุโมงคมเดียวกันซึ่งจะทำให้การวิเคราะห์อุโมงคมโดยผู้โจมตีทำได้ยากขึ้นแต่จะเชื่อมโยงไคลเอนต์เข้าด้วยกัน."
+
+msgid "Share tunnels with other configured clients"
+msgstr "แบ่งปันอุโมงคมกับไคลเอนต์อื่นที่กำหนดค่าไว้"
+
+msgid "Target"
+msgstr "เป้าหมาย"
+
+msgid "Access Point"
+msgstr "จุดการเข้าถึง"
+
+msgid "Use Outproxy Plugin"
+msgstr "ใช้ปลั๊กอินoutproxy"
+
+msgid "Enable DCC"
+msgstr "เปิดใช้งานDCC"
+
+msgid "Port"
+msgstr "พอร์ต"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "ระบุพอร์ตในเครื่องที่บริการนี้ควรเข้าถึงได้จาก"
+
+msgid "Hostname or IP address of the target server"
+msgstr "ชื่อโฮสต์หรือที่อยู่IPของเซิร์ฟเวอร์เป้าหมาย"
+
+msgid "Reachable by"
+msgstr "เข้าถึงได้จาก"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "อินเทอร์เฟซในเครื่อง(ที่อยู่IP)ที่อุโมงคมไคลเอนต์จะเข้าถึงได้จาก"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "หากมีการติดตั้งปลั๊กอินoutproxy(เช่นOrchid)ให้ใช้สิ่งนี้แทนoutproxyที่กำหนดค่าไว้เพื่อเข้าถึงเว็บไซต์นอกI2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "ใช้ปลั๊กอินแทนproxyที่แสดงด้านล่างหากมีให้ใช้"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "เปิดใช้งานแชตและการถ่ายโอนไฟล์โดยตรงโดยข้ามI2Pโปรดทราบว่าการกระทำนี้จะลดความไม่ระบุตัวตนของคุณและไม่แนะนำ."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "เปิดใช้งานโปรโตคอลไคลเอนต์ถึงไคลเอนต์โดยตรง"
+
+msgid "Outproxies"
+msgstr "outproxy"
+
+msgid "SSL Outproxies"
+msgstr "outproxySSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "ระบุที่อยู่.i2pหรือปลายทาง(b32หรือb64)ของoutproxyที่นี่."
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "สำหรับการสุ่มเลือกจากกลุ่มให้คั่นด้วยเครื่องหมายจุลภาคเช่นserver1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "ประเภทoutproxy"
+
+msgid "Tunnel Destination"
+msgstr "ปลายทางอุโมงคม"
+
+msgid "Use SSL"
+msgstr "ใช้SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "ระบุที่อยู่.i2pหรือปลายทาง(b32หรือb64)ของอุโมงคมที่นี่."
+
+msgid "name, name:port, or destination"
+msgstr "ชื่อ,name:port,หรือปลายทาง"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "หากคุณกำลังเข้าถึงบริการบนเราเตอร์I2Pระยะไกลคุณอาจต้องการเชื่อมต่อด้วยSSLเพื่อหลีกเลี่ยงการดักสอดทราฟฟิกแอปพลิเคชันไคลเอนต์ควรถูกกำหนดค่าให้ใช้SSLด้วยเช่นกัน."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "ไคลเอนต์ใช้SSLเพื่อเชื่อมต่อไปยังอุโมงคม"
+
+msgid "Please specify the full b64 destination."
+msgstr "โปรดระบุปลายทางb64แบบเต็ม."
+
+msgid "Local destination"
+msgstr "ปลายทางในเครื่อง"
+
+msgid "Local Base32"
+msgstr "Base32ในเครื่อง"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "อ่านอย่างเดียว:ปลายทางในเครื่อง(ถ้าทราบ)"
+
+msgid "Stop"
+msgstr "หยุด"
+
+msgid "Start this Tunnel"
+msgstr "เริ่มอุโมงคมนี้"
+
+msgid "Start"
+msgstr "เริ่ม"
+
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "ลบอุโมงคมนี้(ไม่สามารถย้อนกลับได้)"
+
+msgid "Delete"
+msgstr "ลบ"
+
+msgid "Save"
+msgstr "บันทึก"
+
+msgid "Advanced networking options"
+msgstr "ตัวเลือกเครือข่ายขั้นสูง"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "หมายเหตุ:เมื่อไคลเอนต์นี้ถูกกำหนดค่าให้แบ่งปันอุโมงคมตัวเลือกเหล่านี้จะมีผลกับไคลเอนต์ทุกตัวที่กำหนดค่าให้แบ่งปันอุโมงคม."
+
+msgid "Profile"
+msgstr "โปรไฟล์"
+
+msgid "Delay Connect"
+msgstr "หน่วงการเชื่อมต่อ"
+
+msgid "Connection Profile"
+msgstr "โปรไฟล์การเชื่อมต่อ"
+
+msgid "interactive connection"
+msgstr "การเชื่อมต่อแบบโต้ตอบ"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "การเชื่อมต่อแบบปริมาณมาก(ดาวน์โหลด/เว็บไซต์/BT)"
+
+msgid "Delay Connection"
+msgstr "หน่วงการเชื่อมต่อ"
+
+msgid "for request/response connections"
+msgstr "สำหรับการเชื่อมต่อแบบคำขอ/การตอบสนอง"
+
+msgid "Router I2CP Address"
+msgstr "ที่อยู่I2CPของเราเตอร์"
+
+msgid "I2CP Hostname or IP"
+msgstr "ชื่อโฮสต์หรือIPของI2CP"
+
+msgid "I2CP Port Number"
+msgstr "หมายเลขพอร์ตI2CP"
+
+msgid "Delay tunnel open until required"
+msgstr "หน่วงการเปิดอุโมงคมจนกว่าจำเป็น"
+
+msgid "Signature type"
+msgstr "ประเภทลายเซ็น"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "ประหยัดทรัพยากรโดยสร้างอุโมงคมเฉพาะเมื่อจำเป็น"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "ไม่เปิดอุโมงคมจนกว่าจะตรวจพบกิจกรรมบนพอร์ต"
+
+msgid "This is the default, recommended option"
+msgstr "นี่คือค่าเริ่มต้นที่แนะนำ"
+
+msgid "Encryption types"
+msgstr "ประเภทการเข้ารหัส"
+
+msgid "Legacy options"
+msgstr "ตัวเลือกรุ่นเก่า"
+
+msgid "Post Quantum"
+msgstr "Post Quantum"
+
+msgid "Both encryption types"
+msgstr "การเข้ารหัสทั้งสองประเภท"
+
+msgid "Tunnel Options"
+msgstr "ตัวเลือกอุโมงคม"
+
+msgid "Length"
+msgstr "ความยาว"
+
+msgid "Count"
+msgstr "จำนวน"
+
+msgid "Length of each Tunnel"
+msgstr "ความยาวของอุโมงคมแต่ละอุโมงคม"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "อุโมงคม0hop(ไม่มีความไม่ระบุตัวตน)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "อุโมงคม1hop(ความไม่ระบุตัวตนต่ำ)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "อุโมงคม2hop(ความไม่ระบุตัวตนระดับกลาง)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "อุโมงคม3hop(ความไม่ระบุตัวตนสูง)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "อุโมงคม{0}hop"
+msgstr[1] "อุโมงคม{0}hop"
+
+msgid "Number of Tunnels in Group"
+msgstr "จำนวนอุโมงคมในกลุ่ม"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "ปิดใช้งานสำหรับอุโมงคม0hop"
+
+msgid "Variance"
+msgstr "ความแปรปรวน"
+
+msgid "Backup Count"
+msgstr "จำนวนสำรอง"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "ระดับการสุ่มสำหรับความยาวอุโมงคม"
+
+msgid "0 hop variance"
+msgstr "ความแปรปรวน0hop"
+
+msgid "no randomization, consistent performance"
+msgstr "ไม่สุ่มประสิทธิภาพสม่ำเสมอ"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ความแปรปรวน0-1hop"
+
+msgid "medium randomization, lower performance"
+msgstr "สุ่มระดับกลางประสิทธิภาพต่ำลง"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ความแปรปรวน0-2hop"
+
+msgid "high randomization, very low performance"
+msgstr "สุ่มสูงประสิทธิภาพต่ำมาก"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/-ความแปรปรวน0-1hop"
+
+msgid "standard randomization, standard performance"
+msgstr "สุ่มมาตรฐานประสิทธิภาพมาตรฐาน"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/-ความแปรปรวน0-2hop"
+
+msgid "not recommended"
+msgstr "ไม่แนะนำ"
+
+msgid "hop variance"
+msgstr "ความแปรปรวนhop"
+
+msgid "Number of Reserve Tunnels"
+msgstr "จำนวนอุโมงคมสำรอง"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "อุโมงคมสำรอง{0}"
+msgstr[1] "อุโมงคมสำรอง{0}"
+
+msgid "no redundancy, no added resource usage"
+msgstr "ไม่มีสำรองไม่ใช้ทรัพยากรเพิ่ม"
+
+msgid "low redundancy, low resource usage"
+msgstr "สำรองต่ำใช้ทรัพยากรน้อย"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "สำรองระดับกลางใช้ทรัพยากรระดับกลาง"
+
+msgid "high redundancy, high resource usage"
+msgstr "สำรองสูงใช้ทรัพยากรมาก"
+
+msgid "Reduce tunnel quantity"
+msgstr "ลดจำนวนอุโมงคม"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "ลดจำนวนอุโมงคมเมื่อไม่มีกิจกรรมเพื่อประหยัดทรัพยากรแต่ยังคงอุโมงคมเปิดอยู่(เพื่อให้พร้อมใช้งานทันที)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "ลดจำนวนอุโมงคมเมื่อไม่มีกิจกรรม"
+
+msgid "Idle period"
+msgstr "ระยะเวลาว่าง"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "เวลาว่างของอุโมงคมที่ลดจำนวน"
+
+msgid "Reduced count"
+msgstr "จำนวนที่ลดลง"
+
+msgid "Reduced tunnel count"
+msgstr "จำนวนอุโมงคมที่ลดลง"
+
+msgid "Close tunnels when idle"
+msgstr "ปิดอุโมงคมเมื่อไม่มีกิจกรรม"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "เพื่อประหยัดทรัพยากรให้ปิดอุโมงคมเมื่อไม่ได้ใช้งาน"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "ปิดอุโมงคมไคลเอนต์หลังจากระยะเวลาว่างที่ระบุ"
+
+msgid "Close Tunnel Idle Time"
+msgstr "เวลาว่างก่อนปิดอุโมงคม"
+
+msgid "New Keys on Reopen"
+msgstr "กุญแจใหม่เมื่อเปิดอีกครั้ง"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "เปลี่ยนตัวตนของอุโมงคม(ปลายทาง)เมื่ออุโมงคมเปิดอีกครั้ง"
+
+msgid "Enable"
+msgstr "เปิดใช้งาน"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "คงตัวตนของอุโมงคม(ปลายทาง)เมื่ออุโมงคมเปิดอีกครั้ง"
+
+msgid "Disable"
+msgstr "ปิดใช้งาน"
+
+msgid "Persistent private key"
+msgstr "กุญแจส่วนตัวถาวร"
+
+msgid "Private key file"
+msgstr "ไฟล์กุญแจส่วนตัว"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "การเปิดใช้งานคุณสมบัตินี้จะทำให้ตัวตนของอุโมงคม(ปลายทาง)ของคุณคงที่สำหรับบริการที่มีคุณสมบัติอิงปลายทางเช่นการยืนยันตัวตนผู้ใช้IRC"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "สร้างกุญแจเพื่อเปิดใช้งานตัวตนอุโมงคมไคลเอนต์แบบถาวร"
+
+msgid "Path to Private Key File"
+msgstr "พาธไปยังไฟล์กุญแจส่วนตัว"
+
+msgid "HTTP Filtering"
+msgstr "การกรองHTTP"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "เมื่อเปิดใช้งานuser agentของเบราว์เซอร์หรือไคลเอนต์httpของคุณจะไม่ถูกปลอมแปลงซึ่งอาจลดความไม่ระบุตัวตนของคุณ"
+
+msgid "Do not spoof User-Agent header"
+msgstr "ไม่ปลอมแปลงส่วนหัวUser-Agent"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "เมื่อเปิดใช้งานreferer(หน้าต้นทาง)ของคำขอเว็บของคุณจะไม่ถูกกรองซึ่งอาจลดความไม่ระบุตัวตนของคุณ"
+
+msgid "Do not block Referer header"
+msgstr "ไม่บล็อกส่วนหัวReferer"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "เมื่อเปิดใช้งานส่วนหัวaccept(การรองรับชนิดmime)ที่เบราว์เซอร์ของคุณประกาศจะไม่ถูกกรองซึ่งอาจลดความไม่ระบุตัวตนของคุณ"
+
+msgid "Do not block Accept headers"
+msgstr "ไม่บล็อกส่วนหัวAccept"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "อนุญาตSSLไปยังที่อยู่I2Pเมื่อเปิดใช้งาน"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "อนุญาตSSLไปยังที่อยู่I2P"
+
+msgid "Local Authorization"
+msgstr "การยืนยันตัวตนในเครื่อง"
+
+msgid "Local Credentials"
+msgstr "ข้อมูลรับรองในเครื่อง"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "เปิดใช้งานเพื่อกำหนดให้ต้องมีชื่อผู้ใช้และรหัสผ่านเพื่อเข้าถึงบริการในเครื่องนี้(เช่นเมื่อโฮสต์บนLAN)"
+
+msgid "Require local authorization for this service"
+msgstr "กำหนดให้ต้องยืนยันตัวตนในเครื่องสำหรับบริการนี้"
+
+msgid "Set username required to access this service"
+msgstr "กำหนดชื่อผู้ใช้ที่จำเป็นสำหรับการเข้าถึงบริการนี้"
+
+msgid "Username"
+msgstr "ชื่อผู้ใช้"
+
+msgid "Set password required to access this service"
+msgstr "กำหนดรหัสผ่านที่จำเป็นสำหรับการเข้าถึงบริการนี้"
+
+msgid "Password"
+msgstr "รหัสผ่าน"
+
+msgid "Outproxy Authorization"
+msgstr "การยืนยันตัวตนoutproxy"
+
+msgid "Remote Credentials"
+msgstr "ข้อมูลรับรองระยะไกล"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "เปิดใช้งานหากoutproxyต้องการชื่อผู้ใช้และรหัสผ่านเพื่อเข้าถึง"
+
+msgid "Outproxy requires authorization"
+msgstr "outproxyต้องการการยืนยันตัวตน"
+
+msgid "Enter username required by outproxy"
+msgstr "ป้อนชื่อผู้ใช้ที่outproxyกำหนด"
+
+msgid "Enter password required by outproxy"
+msgstr "ป้อนรหัสผ่านที่outproxyกำหนด"
+
+msgid "Jump URL List"
+msgstr "รายการURLของบริการjump"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "รายการURLของตัวช่วยที่ให้ลิงก์jumpเมื่อไม่พบโฮสต์ในสมุดที่อยู่ของคุณ"
+
+msgid "Custom options"
+msgstr "ตัวเลือกกำหนดเอง"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "ตัวเลือกอุโมงคมสตรีมมิ่งและI2CPขั้นสูง"
+
+msgid "New Server Configuration"
+msgstr "การกำหนดค่าเซิร์ฟเวอร์ใหม่"
+
+msgid "Hostname"
+msgstr "ชื่อโฮสต์"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "ความหน่วงการเริ่มแบบสุ่ม(เมื่อเปิดใช้งานเริ่มอัตโนมัติ)เพื่อป้องกันการโจมตีแบบเชื่อมโยง"
+
+msgid "Startup Delay"
+msgstr "ความหน่วงการเริ่ม"
+
+msgid "Minimum"
+msgstr "ขั้นต่ำ"
+
+msgid "Minimum startup delay"
+msgstr "ความหน่วงการเริ่มขั้นต่ำ"
+
+msgid "seconds"
+msgstr "วินาที"
+
+msgid "Maximum"
+msgstr "สูงสุด"
+
+msgid "Maximum startup delay"
+msgstr "ความหน่วงการเริ่มสูงสุด"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "เพิ่มความหน่วงแบบสุ่มก่อนปิดอุโมงคมจากนั้นเริ่มกระบวนการปิดเครื่อง/เริ่มใหม่ของเราเตอร์แบบปิดอย่างมีสภาพ"
+
+msgid "Shutdown Delay"
+msgstr "ความหน่วงก่อนปิดเครื่อง"
+
+msgid "Minimum shutdown delay"
+msgstr "ความหน่วงก่อนปิดเครื่องขั้นต่ำ"
+
+msgid "Maximum shutdown delay"
+msgstr "ความหน่วงก่อนปิดเครื่องสูงสุด"
+
+msgid "Website Hostname"
+msgstr "ชื่อโฮสต์เว็บไซต์"
+
+msgid "(leave blank for outproxies)"
+msgstr "(เว้นว่างไว้สำหรับoutproxy)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "ชื่อโฮสต์เว็บไซต์เช่นmysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "ระบุพอร์ตที่เซิร์ฟเวอร์ทำงานอยู่"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "อินเทอร์เฟซฟัง(ที่อยู่IP)สำหรับการเข้าถึงจากไคลเอนต์(โดยปกติคือ127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "เพื่อหลีกเลี่ยงการดักสอดทราฟฟิกเมื่อเชื่อมต่อไปยังเซิร์ฟเวอร์ระยะไกลคุณสามารถเปิดใช้งานการเชื่อมต่อSSLได้โปรดทราบว่าเซิร์ฟเวอร์เป้าหมายต้องถูกกำหนดค่าให้ยอมรับการเชื่อมต่อSSL."
+
+msgid "Use SSL to connect to target"
+msgstr "ใช้SSLเพื่อเชื่อมต่อไปยังเป้าหมาย"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "พอร์ตที่จำเป็นสำหรับการเข้าถึงบริการ(อาจเป็นพอร์ตที่ต่างจากพอร์ตที่บริการถูกโฮสต์อยู่)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "สร้างคิวอาร์โค้ดสำหรับโดเมนนี้"
+
+msgid "Generate QR Code"
+msgstr "สร้างคิวอาร์โค้ด"
+
+msgid "Add to Private addressbook"
+msgstr "เพิ่มลงในสมุดที่อยู่ส่วนตัว"
+
+msgid "Add to local addressbook"
+msgstr "เพิ่มลงในสมุดที่อยู่ในเครื่อง"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "ลงทะเบียนยกเลิกทะเบียนหรือเปลี่ยนรายละเอียดสำหรับชื่อโฮสต์"
+
+msgid "Registration Authentication"
+msgstr "การยืนยันตัวตนการลงทะเบียน"
+
+msgid "HTTPS configuration"
+msgstr "การกำหนดค่าHTTPS"
+
+msgid "SSL Wizard"
+msgstr "ตัวช่วยSSL"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "หมายเหตุ:หากต้องการเปิดใช้งานการสร้างคิวอาร์โค้ดหรือการยืนยันตัวตนการลงทะเบียนให้กำหนดค่าฟิลด์ชื่อโฮสต์เว็บไซต์(สำหรับเว็บไซต์)หรือฟิลด์ชื่อ(สำหรับสิ่งอื่น)ด้านบนด้วยชื่อโฮสต์ที่ลงท้ายด้วย.i2pเช่นmynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "พาธแบบสมบูรณ์ไปยังไฟล์กุญแจส่วนตัว(จะถูกสร้างขึ้นหากไม่มีอยู่)"
+
+msgid "Alternate private key file"
+msgstr "ไฟล์กุญแจส่วนตัวสำรอง"
+
+msgid "Alternate local destination"
+msgstr "ปลายทางในเครื่องสำรอง"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "พาธแบบสมบูรณ์สำหรับกุญแจใหม่(จะถูกสร้างขึ้น)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "อ่านอย่างเดียว:ปลายทางในเครื่องสำรอง"
+
+msgid "Specify filename or full path for new key"
+msgstr "ระบุชื่อไฟล์หรือพาธแบบเต็มสำหรับกุญแจใหม่"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "ไม่สามารถเปลี่ยนการกำหนดค่าหลังจากสร้างปลายทางแล้วได้"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "สามารถกำหนดค่าประเภทลายเซ็นได้เฉพาะเมื่อสร้างอุโมงคมครั้งแรกหากต้องการเปลี่ยนคุณต้องสร้างอุโมงคมใหม่."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "ตัวเลือกรุ่นเก่าโดยกำหนดค่ากุญแจสำรอง"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "ตัวเลือกรุ่นเก่า(เลิกใช้แล้ว)จัดทำไว้เพื่อความเข้ากันได้ย้อนหลัง"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "แนะนำสำหรับปลายทางแบบblindedและเข้ารหัส"
+
+msgid "Inbound"
+msgstr "ขาเข้า"
+
+msgid "Outbound"
+msgstr "ขาออก"
+
+msgid "no anonymity"
+msgstr "ไม่มีความไม่ระบุตัวตน"
+
+msgid "low anonymity"
+msgstr "ความไม่ระบุตัวตนต่ำ"
+
+msgid "medium anonymity"
+msgstr "ความไม่ระบุตัวตนระดับกลาง"
+
+msgid "high anonymity"
+msgstr "ความไม่ระบุตัวตนสูง"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "ระดับการสุ่มสำหรับความลึกของอุโมงคม"
+
+msgid "very high randomization, very low performance"
+msgstr "สุ่มสูงมากประสิทธิภาพต่ำมาก"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ความแปรปรวน0-3hop"
+
+msgid "definitely not recommended"
+msgstr "ไม่แนะนำอย่างแน่นอน"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/-ความแปรปรวน0-3hop"
+
+msgid "backup tunnels"
+msgstr "อุโมงคมสำรอง"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "ลดอุโมงคมเพื่อประหยัดทรัพยากร"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "ระยะเวลาที่ไม่มีกิจกรรมก่อนที่จำนวนอุโมงคมจะลดลง"
+
+msgid "minutes"
+msgstr "นาที"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "จำนวนอุโมงคมที่จะคงเปิดไว้เพื่อรักษาความพร้อมใช้งานของบริการ"
+
+msgid "Server Access Options"
+msgstr "ตัวเลือกการเข้าถึงเซิร์ฟเวอร์"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "ป้องกันไม่ให้ไคลเอนต์เข้าถึงบริการนี้ผ่านinproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "บล็อกการเข้าถึงผ่านinproxy"
+
+msgid "Block Accesses containing Referers"
+msgstr "บล็อกการเข้าถึงที่มีReferer"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "ใช้ที่อยู่IPที่ไม่ซ้ำสำหรับไคลเอนต์แต่ละรายที่เชื่อมต่อ(เฉพาะเซิร์ฟเวอร์ในเครื่องที่ไม่ใช้SSL)"
+
+msgid "Unique Local Address per Client"
+msgstr "ที่อยู่ในเครื่องที่ไม่ซ้ำต่อหนึ่งไคลเอนต์"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "เปิดใช้งานเฉพาะเมื่อคุณโฮสต์บริการนี้บนเราเตอร์หลายเครื่อง"
+
+msgid "Optimize for Multihoming"
+msgstr "ปรับให้เหมาะกับการใช้หลายโฮสต์"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "ปฏิเสธUser-Agentที่ตรงกับสตริงเหล่านี้(อาจมาจากinproxy)"
+
+msgid "Block these User-Agents"
+msgstr "บล็อกUser-Agentเหล่านี้"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "คั่นด้วยเครื่องหมายจุลภาคเช่นMozilla,Opera(ตรงตามตัวพิมพ์ใหญ่เล็ก)"
+
+msgid "Encrypt Leaseset"
+msgstr "เข้ารหัสLeaseSet"
+
+msgid "Optional Lookup Password"
+msgstr "รหัสผ่านการค้นหาแบบไม่บังคับ"
+
+msgid "Keyring Manager"
+msgstr "ตัวจัดการชุดกุญแจ"
+
+msgid "Allow all clients to connect to this service"
+msgstr "อนุญาตให้ไคลเอนต์ทั้งหมดเชื่อมต่อบริการนี้ได้"
+
+msgid "Send key to all users."
+msgstr "ส่งกุญแจให้ผู้ใช้ทั้งหมด."
+
+msgid "Encrypted"
+msgstr "เข้ารหัสแล้ว"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "ป้องกันไม่ให้floodfillค้นพบเซิร์ฟเวอร์"
+
+msgid "Blinded"
+msgstr "Blinded"
+
+msgid "Send password to all users."
+msgstr "ส่งรหัสผ่านให้ผู้ใช้ทั้งหมด."
+
+msgid "Blinded with lookup password"
+msgstr "blindedพร้อมรหัสผ่านการค้นหา"
+
+msgid "Send key and password to all users."
+msgstr "ส่งกุญแจและรหัสผ่านให้ผู้ใช้ทั้งหมด."
+
+msgid "Encrypted with lookup password"
+msgstr "เข้ารหัสพร้อมรหัสผ่านการค้นหา"
+
+msgid "Send individual key to each user."
+msgstr "ส่งกุญแจรายบุคคลให้ผู้ใช้แต่ละราย."
+
+msgid "Encrypted with per-user key"
+msgstr "เข้ารหัสด้วยกุญแจรายผู้ใช้"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "เข้ารหัสด้วยรหัสผ่านการค้นหาและกุญแจรายผู้ใช้"
+
+msgid "Enter key from each user."
+msgstr "ป้อนกุญแจจากผู้ใช้แต่ละราย."
+
+msgid "Encryption Key"
+msgstr "กุญแจการเข้ารหัส"
+
+msgid "Generate New Key"
+msgstr "สร้างกุญแจใหม่"
+
+msgid "Encryption key required to access this service"
+msgstr "ต้องการกุญแจการเข้ารหัสเพื่อเข้าถึงบริการนี้"
+
+msgid "Generate new encryption key"
+msgstr "สร้างกุญแจการเข้ารหัสใหม่"
+
+msgid "Tunnel must be stopped first"
+msgstr "ต้องหยุดอุโมงคมก่อน"
+
+msgid "Client Manager"
+msgstr "ตัวจัดการไคลเอนต์"
+
+msgid "Client Name"
+msgstr "ชื่อไคลเอนต์"
+
+msgid "Client Key"
+msgstr "กุญแจไคลเอนต์"
+
+msgid "Revoke"
+msgstr "เพิกถอน"
+
+msgid "Add"
+msgstr "เพิ่ม"
+
+msgid "Restricted Access List"
+msgstr "รายการการเข้าถึงที่จำกัด"
+
+msgid "Activate to enable editing"
+msgstr "เปิดใช้งานเพื่อให้แก้ไขได้"
+
+msgid "Tunnel Filter"
+msgstr "ตัวกรองอุโมงคม"
+
+msgid "Help with defining tunnel filters"
+msgstr "ช่วยเหลือในการกำหนดตัวกรองอุโมงคม"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "ป้องกันไม่ให้ไคลเอนต์ในรายการเชื่อมต่อบริการนี้ได้"
+
+msgid "Blacklist"
+msgstr "บัญชีดำ"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "อนุญาตเฉพาะไคลเอนต์ในรายการให้เชื่อมต่อบริการนี้ได้"
+
+msgid "Whitelist"
+msgstr "บัญชีขาว"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "พาธแบบสมบูรณ์ไปยังไฟล์ที่มีคำนิยามตัวกรอง"
+
+msgid "Absolute path to filter definition"
+msgstr "พาธแบบสมบูรณ์ไปยังคำนิยามตัวกรอง"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "ระบุปลายทางของไคลเอนต์1รายการต่อบรรทัด"
+
+msgid "Server Throttling"
+msgstr "การจำกัดอัตราของเซิร์ฟเวอร์"
+
+msgid "Inbound connection limits"
+msgstr "ขีดจำกัดการเชื่อมต่อขาเข้า"
+
+msgid "Per Minute"
+msgstr "ต่อนาที"
+
+msgid "Per Hour"
+msgstr "ต่อชั่วโมง"
+
+msgid "Per Day"
+msgstr "ต่อวัน"
+
+msgid "Concurrent"
+msgstr "พร้อมกัน"
+
+msgid "Per Client"
+msgstr "ต่อไคลเอนต์"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "จำนวนคำขอหน้าเว็บสูงสุดต่อนาทีสำหรับไคลเอนต์แต่ละตัวก่อนที่การเข้าถึงเซิร์ฟเวอร์จะถูกบล็อก"
+
+msgid "(0 = unlimited)"
+msgstr "(0=ไม่จำกัด)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "จำนวนคำขอหน้าเว็บสูงสุดต่อชั่วโมงสำหรับไคลเอนต์แต่ละตัวก่อนที่การเข้าถึงเซิร์ฟเวอร์จะถูกบล็อก"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "จำนวนคำขอหน้าเว็บสูงสุดต่อวันสำหรับไคลเอนต์แต่ละตัวก่อนที่การเข้าถึงเซิร์ฟเวอร์จะถูกบล็อก"
+
+msgid "Total"
+msgstr "รวม"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "จำนวนคำขอหน้าเว็บรวมต่อนาทีก่อนที่การเข้าถึงเซิร์ฟเวอร์จะถูกบล็อก"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "จำนวนคำขอหน้าเว็บรวมต่อชั่วโมงก่อนที่การเข้าถึงเซิร์ฟเวอร์จะถูกบล็อก"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "จำนวนคำขอหน้าเว็บรวมต่อวันก่อนที่การเข้าถึงเซิร์ฟเวอร์จะถูกบล็อก"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "จำนวนการเชื่อมต่อไคลเอนต์พร้อมกันสูงสุด"
+
+msgid "POST limits"
+msgstr "ขีดจำกัดPOST"
+
+msgid "Per Period"
+msgstr "ต่อช่วงเวลา"
+
+msgid "Ban Duration"
+msgstr "ระยะเวลาการแบน"
+
+msgid "POST limit period"
+msgstr "ช่วงเวลาขีดจำกัดPOST"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "จำนวนคำขอPOSTสูงสุดที่อนุญาตสำหรับไคลเอนต์แต่ละตัวในช่วงเวลาที่กำหนดค่าไว้"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "หากไคลเอนต์เกินจำนวนคำขอPOSTสูงสุดต่อช่วงเวลาที่กำหนดให้บังคับแบนเป็นจำนวนนาทีนี้"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "ระยะเวลาที่จำนวนคำขอPOSTสูงสุดจะถึงเกณฑ์ก่อนที่จะมีการแบน"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "จำนวนคำขอPOSTรวมที่อนุญาตในช่วงเวลาที่กำหนดค่าไว้"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "หากเกินจำนวนคำขอPOSTสูงสุดต่อช่วงเวลาที่กำหนดให้บังคับแบนการเข้าถึงทั้งหมดเป็นจำนวนนาทีนี้"
+
+msgid "Custom HTTP Headers"
+msgstr "ส่วนหัวHTTPแบบกำหนดเอง"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "หมายเหตุ:ส่วนหัวที่กำหนดเองเหล่านี้จะเปิดใช้งานเฉพาะไฟล์ที่ให้บริการซึ่งยังไม่ได้ตั้งค่าส่วนหัวที่เกี่ยวข้องไว้."
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "ตั้งค่าส่วนหัวAllowเป็น'GET, POST, HEAD'สำหรับไฟล์html, xml, jsonและtext"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "เปิดใช้งานส่วนหัวCache-Control(no-cacheสำหรับhtml, xml, jsonและtextimmutableสำหรับส่วนอื่นทั้งหมด)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "ตั้งค่าส่วนหัวReferrer-Policyเป็น'same-origin'สำหรับไฟล์html, xml, jsonและtext"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "ตั้งค่าส่วนหัวX-Content-Type-Optionsเป็น'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "กำลังเริ่มต้นตัวจัดการอุโมงคม{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "ยังไม่ได้เริ่มต้นอุโมงคมโปรดลองใหม่อีกครั้งในอีกไม่กี่วินาที."
+
+msgid "Status Messages"
+msgstr "ข้อความสถานะ"
+
+msgid "Clear"
+msgstr "ล้าง"
+
+msgid "Refresh"
+msgstr "รีเฟรช"
+
+msgid "Global Tunnel Control"
+msgstr "การควบคุมอุโมงคมทั้งหมด"
+
+msgid "Tunnel Wizard"
+msgstr "ตัวช่วยอุโมงคม"
+
+msgid "Stop All"
+msgstr "หยุดทั้งหมด"
+
+msgid "Start All"
+msgstr "เริ่มทั้งหมด"
+
+msgid "Restart all running tunnels"
+msgstr "เริ่มอุโมงคมที่กำลังทำงานทั้งหมดใหม่"
+
+msgid "Restart All"
+msgstr "เริ่มใหม่ทั้งหมด"
+
+msgid "Restart all running server tunnels"
+msgstr "เริ่มอุโมงคมเซิร์ฟเวอร์ที่กำลังทำงานทั้งหมดใหม่"
+
+msgid "Restart All Servers"
+msgstr "เริ่มเซิร์ฟเวอร์ใหม่ทั้งหมด"
+
+msgid "Restart all running client tunnels"
+msgstr "เริ่มอุโมงคมไคลเอนต์ที่กำลังทำงานทั้งหมดใหม่"
+
+msgid "Restart All Clients"
+msgstr "เริ่มไคลเอนต์ใหม่ทั้งหมด"
+
+msgid "I2P Server Tunnels"
+msgstr "อุโมงคมเซิร์ฟเวอร์I2P"
+
+msgid "Helper"
+msgstr "ตัวช่วย"
+
+msgid "Type"
+msgstr "ประเภท"
+
+msgid "Points at"
+msgstr "ชี้ไปยัง"
+
+msgid "Preview"
+msgstr "ดูตัวอย่าง"
+
+msgid "Status"
+msgstr "สถานะ"
+
+msgid "Control"
+msgstr "ควบคุม"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "แก้ไขการตั้งค่าอุโมงคมเซิร์ฟเวอร์สำหรับ"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "ทดสอบเซิร์ฟเวอร์IRCโดยข้ามI2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "ทดสอบเซิร์ฟเวอร์HTTPSโดยข้ามI2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "ทดสอบเซิร์ฟเวอร์HTTPโดยข้ามI2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "ทดสอบเซิร์ฟเวอร์HTTPผ่านI2P"
+
+msgid "Base32 Address"
+msgstr "ที่อยู่Base32"
+
+msgid "Offline"
+msgstr "ออฟไลน์"
+
+msgid "No Preview"
+msgstr "ไม่มีตัวอย่าง"
+
+msgid "Starting..."
+msgstr "กำลังเริ่ม..."
+
+msgid "Starting in"
+msgstr "กำลังเริ่มในอีก"
+
+msgid "Running"
+msgstr "กำลังทำงาน"
+
+msgid "Hops"
+msgstr "จำนวนhop"
+
+msgid "in"
+msgstr "เข้า"
+
+msgid "out"
+msgstr "ออก"
+
+msgid "Stopped"
+msgstr "หยุดแล้ว"
+
+msgid "Stop this Tunnel"
+msgstr "หยุดอุโมงคมนี้"
+
+msgid "Restart this Tunnel"
+msgstr "เริ่มอุโมงคมนี้ใหม่"
+
+msgid "Restart"
+msgstr "เริ่มใหม่"
+
+msgid "Signature"
+msgstr "ลายเซ็น"
+
+msgid "Alternate"
+msgstr "สำรอง"
+
+msgid "Alt Destination"
+msgstr "ปลายทางสำรอง"
+
+msgid "Encryption"
+msgstr "การเข้ารหัส"
+
+msgid "Supported encryption"
+msgstr "การเข้ารหัสที่รองรับ"
+
+msgid "New server tunnel"
+msgstr "อุโมงคมเซิร์ฟเวอร์ใหม่"
+
+msgid "Standard"
+msgstr "มาตรฐาน"
+
+msgid "Create"
+msgstr "สร้าง"
+
+msgid "I2P Client Tunnels"
+msgstr "อุโมงคมไคลเอนต์I2P"
+
+msgid "Interface"
+msgstr "อินเทอร์เฟซ"
+
+msgid "Edit Tunnel Settings for"
+msgstr "แก้ไขการตั้งค่าอุโมงคมสำหรับ"
+
+msgid "Standby"
+msgstr "สำรองพร้อม"
+
+msgid "Outproxy"
+msgstr "outproxy"
+
+msgid "internal plugin"
+msgstr "ปลั๊กอินภายใน"
+
+msgid "none"
+msgstr "ไม่มี"
+
+msgid "New client tunnel"
+msgstr "อุโมงคมไคลเอนต์ใหม่"
+
+msgid "Registration Helper"
+msgstr "ตัวช่วยการลงทะเบียน"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "บริการนี้ใช้LeaseSetที่เข้ารหัสไม่แนะนำให้ลงทะเบียนการยืนยันตัวตนการลงทะเบียนถูกปิดใช้งาน."
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "โปรดตรวจสอบว่าคุณได้เลือกคัดลอกและวางเนื้อหาทั้งหมดของข้อมูลการยืนยันตัวตนที่เหมาะสมลงในแบบฟอร์มของเว็บไซต์ลงทะเบียนที่คุณชื่นชอบ"
+
+msgid "Tunnel name"
+msgstr "ชื่ออุโมงคม"
+
+msgid "Website name"
+msgstr "ชื่อเว็บไซต์"
+
+msgid "Local Destination"
+msgstr "ปลายทางในเครื่อง"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "ปลายทางในเครื่องไม่พร้อมใช้งานโปรดเริ่มอุโมงคม."
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "หากต้องการเปิดใช้งานการตรวจสอบการลงทะเบียนให้แก้ไขอุโมงคมและตั้งชื่อ(หรือชื่อเว็บไซต์)เป็นชื่อโฮสต์ที่ถูกต้องซึ่งลงท้ายด้วย'.i2p'"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "หากต้องการเปิดใช้งานการตรวจสอบการลงทะเบียนให้แก้ไขอุโมงคมและตั้งชื่อเป็นชื่อโฮสต์ที่ถูกต้องซึ่งลงท้ายด้วย'.i2p'"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "กุญแจลงนามของปลายทางไม่พร้อมใช้งานโปรดเริ่มอุโมงคม."
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "กุญแจลงนามของปลายทางอยู่ออฟไลน์โปรดใช้เครื่องมือบรรทัดคำสั่งบนเครื่องที่อยู่ออฟไลน์."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "การยืนยันตัวตนสำหรับการเพิ่มโฮสต์{0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "คัดลอกและวางสิ่งนี้ไปยังเว็บไซต์ลงทะเบียน"
+
+msgid "Advanced authentication strings"
+msgstr "สตริงการยืนยันตัวตนขั้นสูง"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "การยืนยันตัวตนสำหรับการนำออกโฮสต์{0}"
+
+msgid "Authentication for changing name"
+msgstr "การยืนยันตัวตนสำหรับการเปลี่ยนชื่อ"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "การดำเนินการนี้จะเปลี่ยนชื่อจาก{0}เป็น{1}โดยใช้ปลายทางเดียวกัน"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "อุโมงคมนี้ต้องถูกกำหนดค่าด้วยชื่อโฮสต์ใหม่."
+
+msgid "Enter old hostname below."
+msgstr "ป้อนชื่อโฮสต์เดิมด้านล่าง."
+
+msgid "Authentication for adding alias"
+msgstr "การยืนยันตัวตนสำหรับการเพิ่มชื่ออ้างอิง"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "การดำเนินการนี้จะเพิ่มชื่ออ้างอิง{0}สำหรับ{1}โดยใช้ปลายทางเดียวกัน"
+
+msgid "Authentication for changing destination"
+msgstr "การยืนยันตัวตนสำหรับการเปลี่ยนปลายทาง"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "การดำเนินการนี้จะเปลี่ยนปลายทางสำหรับ{0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "อุโมงคมนี้ต้องถูกกำหนดค่าด้วยปลายทางใหม่."
+
+msgid "Enter old destination below."
+msgstr "ป้อนปลายทางเดิมด้านล่าง."
+
+msgid "Authentication for adding alternate destination"
+msgstr "การยืนยันตัวตนสำหรับการเพิ่มปลายทางสำรอง"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "การดำเนินการนี้จะเพิ่มปลายทางสำรองสำหรับ{0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "การยืนยันตัวตนสำหรับการเพิ่มซับโดเมน"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "การดำเนินการนี้จะเพิ่มซับโดเมน{0}ของ{1}โดยใช้ปลายทางที่ต่างออกไป"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "อุโมงคมนี้ต้องถูกกำหนดค่าด้วยซับโดเมนและปลายทางใหม่."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "ป้อนโดเมนระดับสูงและปลายทางด้านล่าง."
+
+msgid "Return to Tunnel Configuration"
+msgstr "กลับไปยังการกำหนดค่าอุโมงคม"
+
+msgid "Specify old name and destination"
+msgstr "ระบุชื่อและปลายทางเดิม"
+
+msgid "This is only required for advanced authentication."
+msgstr "สิ่งนี้จำเป็นเฉพาะการยืนยันตัวตนขั้นสูงเท่านั้น."
+
+msgid "See above for required items."
+msgstr "ดูรายการที่จำเป็นด้านบน."
+
+msgid "Old / parent hostname "
+msgstr "ชื่อโฮสต์เดิม/โฮสต์แม่"
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "ไฟล์กุญแจส่วนตัวสำหรับปลายทางเดิม/โฮสต์แม่ของซับโดเมน"
+
+msgid "Generate Authentication"
+msgstr "สร้างการยืนยันตัวตน"
+
+msgid "SSL Helper"
+msgstr "ตัวช่วยSSL"
+
+msgid "Experts only!"
+msgstr "สำหรับผู้เชี่ยวชาญเท่านั้น!"
+
+msgid "Alt Base32"
+msgstr "Base32สำรอง"
+
+msgid "Incoming I2P Port Routing"
+msgstr "การกำหนดเส้นทางพอร์ตI2Pขาเข้า"
+
+msgid "Virtual Host"
+msgstr "โฮสต์เสมือน"
+
+msgid "Via SSL?"
+msgstr "ผ่านSSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "ทดสอบเซิร์ฟเวอร์HTTPSผ่านI2P"
+
+msgid "Server"
+msgstr "เซิร์ฟเวอร์"
+
+msgid "SSL Activation"
+msgstr "การเปิดใช้งานSSL"
+
+msgid "I2P webserver (eepsite)"
+msgstr "เว็บเซิร์ฟเวอร์I2P(eepsite)"
+
+msgid "Disable SSL"
+msgstr "ปิดใช้งานSSL"
+
+msgid "Enable SSL"
+msgstr "เปิดใช้งานSSL"
+
+msgid "New Certificate Password"
+msgstr "รหัสผ่านใบรับรองใหม่"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "รหัสผ่าน(จำเป็นสำหรับการเข้ารหัสใบรับรอง)"
+
+msgid "Generate new SSL certificate"
+msgstr "สร้างใบรับรองSSLใหม่"
+
+msgid "Generate SSL certificate and enable"
+msgstr "สร้างใบรับรองSSLและเปิดใช้งาน"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "ไม่สามารถกำหนดค่าได้ไม่พบเซิร์ฟเวอร์Jettyใน{0}การกำหนดค่าไคลเอนต์{1}ที่ตรงกับอุโมงคมนี้"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "การรองรับเซิร์ฟเวอร์ที่ไม่ใช่Jettyจะเพิ่มในรุ่นในอนาคต"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "กลับไปยังดัชนีตัวจัดการอุโมงคม"
+
+msgid "Return to Tunnel Editor"
+msgstr "กลับไปยังตัวแก้ไขอุโมงคม"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "ตัวจัดการอุโมงคมI2P-ตัวช่วยสร้างอุโมงคม"
+
+msgid "Server or client tunnel?"
+msgstr "อุโมงคมเซิร์ฟเวอร์หรืออุโมงคมไคลเอนต์?"
+
+msgid "Tunnel type"
+msgstr "ประเภทอุโมงคม"
+
+msgid "Tunnel name and description"
+msgstr "ชื่อและคำอธิบายของอุโมงคม"
+
+msgid "Tunnel destination"
+msgstr "ปลายทางของอุโมงคม"
+
+msgid "Binding address and port"
+msgstr "ที่อยู่และพอร์ตที่ผูกไว้"
+
+msgid "Tunnel auto-start"
+msgstr "เริ่มอุโมงคมอัตโนมัติ"
+
+msgid "Wizard completed"
+msgstr "ตัวช่วยทำงานเสร็จแล้ว"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "ตัวช่วยนี้จะพาคุณผ่านตัวเลือกหลากหลายที่มีสำหรับการสร้างอุโมงคมในI2P."
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "สิ่งแรกที่ต้องตัดสินคือคุณต้องการสร้างอุโมงคมเซิร์ฟเวอร์หรืออุโมงคมไคลเอนต์."
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "หากคุณต้องการเชื่อมต่อไปยังบริการระยะไกลเช่นเซิร์ฟเวอร์IRCภายในI2Pหรือที่เก็บโค้ดคุณจะต้องใช้อุโมงคมCLIENT."
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "ในทางกลับกันหากคุณต้องการโฮสต์บริการเพื่อให้ผู้อื่นเชื่อมต่อคุณจะต้องสร้างอุโมงคมSERVER."
+
+msgid "Server Tunnel"
+msgstr "อุโมงคมบริการ"
+
+msgid "Client Tunnel"
+msgstr "อุโมงคมไคลเอนต์"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "มีอุโมงคมหลายประเภทให้เลือก:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "อุโมงคมพื้นฐานสำหรับเชื่อมต่อไปยังบริการเดียวภายในI2P."
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "ลองใช้ตัวนี้หากไม่มีประเภทอุโมงคมด้านล่างที่ตรงกับความต้องการของคุณหรือคุณไม่รู้ว่าต้องการอุโมงคมประเภทใด."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "อุโมงคมที่ทำหน้าที่เป็นproxyHTTPเพื่อเข้าถึงeepsiteภายในI2P."
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "ตั้งค่าเบราว์เซอร์ของคุณให้ใช้อุโมงคมนี้เป็นproxyhttpหรือตั้งค่าตัวแปรสภาพแวดล้อม\"http_proxy\"สำหรับแอปพลิเคชันบรรทัดคำสั่งในGNU/Linux."
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "เว็บไซต์นอกI2Pก็สามารถเข้าถึงได้หากทราบproxyHTTPภายในI2P."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "อุโมงคมไคลเอนต์ที่ปรับแต่งสำหรับการเชื่อมต่อIRC."
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "ด้วยประเภทอุโมงคมนี้ไคลเอนต์IRCของคุณจะสามารถเชื่อมต่อไปยังเครือข่ายIRCภายในI2Pได้."
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "เครือข่ายIRCแต่ละแห่งในI2Pที่คุณต้องการเชื่อมต่อจะต้องใช้อุโมงคมของตัวเอง(ดูเพิ่มเติมSOCKSIRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "อุโมงคมที่ใช้โปรโตคอลSOCKS."
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "สิ่งนี้เปิดใช้งานการเชื่อมต่อทั้งTCPและUDPผ่านoutproxySOCKSภายในI2P."
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "อุโมงคมไคลเอนต์ที่ใช้โปรโตคอลSOCKSและปรับแต่งสำหรับการเชื่อมต่อเครือข่ายIRC."
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "ด้วยประเภทอุโมงคมนี้สามารถเข้าถึงเครือข่ายIRCในI2Pได้โดยพิมพ์ที่อยู่I2Pลงในไคลเอนต์IRCและกำหนดค่าไคลเอนต์IRCให้ใช้อุโมงคมSOCKSนี้."
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "หมายความว่าต้องใช้อุโมงคมI2Pเพียงอุโมงคมเดียวแทนที่จะมีอุโมงคมแยกสำหรับแต่ละเครือข่ายIRC."
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "เครือข่ายIRCนอกI2Pก็สามารถเข้าถึงได้หากทราบoutproxySOCKSภายในI2Pแต่ขึ้นอยู่กับว่าเครือข่ายIRCได้บล็อกoutproxyหรือไม่."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "อุโมงคมเซิร์ฟเวอร์พื้นฐานสำหรับโฮสต์บริการทั่วไปภายในI2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "อุโมงคมเซิร์ฟเวอร์ที่ปรับแต่งสำหรับการเชื่อมต่อHTTP."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "ใช้ประเภทอุโมงคมนี้หากคุณต้องการโฮสต์eepsite."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "อุโมงคมเซิร์ฟเวอร์ที่ปรับแต่งสำหรับโฮสต์เครือข่ายIRCภายในI2P."
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "โดยปกติจะต้องสร้างอุโมงคมแยกสำหรับเซิร์ฟเวอร์IRCแต่ละเครื่องที่ต้องการให้เข้าถึงได้ภายในI2P."
+
+msgid "Select tunnel type"
+msgstr "เลือกประเภทอุโมงคม"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "เลือกชื่อและคำอธิบายสำหรับอุโมงคมของคุณ."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "สิ่งเหล่านี้เป็นอะไรก็ได้ที่คุณต้องการ-มีไว้เพื่อช่วยระบุอุโมงคมในrouterconsoleได้ง่ายขึ้น."
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "หากคุณทราบoutproxyของอุโมงคมประเภทนี้(ไม่ว่าจะเป็นHTTPหรือSOCKS)ให้กรอกไว้ด้านล่าง"
+
+msgid "Separate multiple proxies with commas."
+msgstr "คั่นproxyหลายรายการด้วยเครื่องหมายจุลภาค."
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "รายการปลายทางoutproxyของI2Pคั่นด้วยเครื่องหมายจุลภาค(เช่นproxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "ป้อนปลายทางI2Pของบริการที่อุโมงคมไคลเอนต์นี้ควรเชื่อมต่อไปหา"
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "นี่อาจเป็นกุญแจปลายทางBase64แบบเต็มหรือURLของI2Pจากสมุดที่อยู่ของคุณ."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "ป้อนที่อยู่b64หรือ.i2pที่นี่"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "นี่คือIPที่บริการของคุณทำงานอยู่ซึ่งปกติจะอยู่ในเครื่องเดียวกันดังนั้น127.0.0.1จะถูกกรอกให้อัตโนมัติ."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "นี่คือพอร์ตที่บริการยอมรับการเชื่อมต่อ"
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "นี่คือพอร์ตที่จะเข้าถึงอุโมงคมไคลเอนต์จากในเครื่อง"
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "คุณต้องการให้เข้าถึงอุโมงคมนี้อย่างไรเฉพาะเครื่องนี้,subnetทั้งหมดของคุณ,หรืออินเทอร์เน็ตภายนอก?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "คุณมีแนวโน้มที่จะอนุญาตเพียง127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "เราเตอร์I2Pสามารถเริ่มอุโมงคมนี้ให้คุณโดยอัตโนมัติเมื่อเราเตอร์เริ่มทำงาน"
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "สิ่งนี้มีประโยชน์สำหรับอุโมงคมที่ใช้บ่อย(โดยเฉพาะอุโมงคมบริการ)แต่สำหรับอุโมงคมที่ใช้เป็นครั้งคราวหมายความว่าเราเตอร์I2Pจะสร้างและดูแลอุโมงคมที่ไม่จำเป็น"
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "ตัวช่วยได้เก็บข้อมูลมากพอแล้วในการสร้างอุโมงคมของคุณ"
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "เมื่อคลิกปุ่มบันทึกด้านล่างตัวช่วยจะตั้งค่าอุโมงคมและพาคุณกลับไปยังหน้าI2PTunnelหลัก"
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "เนื่องจากคุณเลือกให้เริ่มอุโมงคมอัตโนมัติเมื่อเราเตอร์เริ่มทำงานคุณจึงไม่ต้องทำอะไรเพิ่มเติม"
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "เราเตอร์จะเริ่มอุโมงคมหลังจากตั้งค่าเรียบร้อยแล้ว"
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "เนื่องจากคุณเลือกไม่ให้เริ่มอุโมงคมอัตโนมัติคุณจึงต้องเริ่มด้วยตนเอง"
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "คุณสามารถทำได้โดยคลิกปุ่มเริ่มบนหน้าหลักซึ่งตรงกับอุโมงคมใหม่"
+
+msgid "Below is a summary of the options you chose:"
+msgstr "ด้านล่างคือสรุปตัวเลือกที่คุณเลือก:"
+
+msgid "Tunnel description"
+msgstr "คำอธิบายอุโมงคม"
+
+msgid "Binding address"
+msgstr "ที่อยู่bind"
+
+msgid "Tunnel port"
+msgstr "พอร์ตอุโมงคม"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "นอกจากการตั้งค่าพื้นฐานเหล่านี้แล้วยังมีตัวเลือกขั้นสูงจำนวนหนึ่งสำหรับการกำหนดค่าอุโมงคม"
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "ตัวช่วยจะตั้งค่าค่าเริ่มต้นที่สมเหตุสมผลสำหรับสิ่งเหล่านี้แต่คุณสามารถดูและ/หรือแก้ไขได้โดยคลิกชื่ออุโมงคมในหน้าI2PTunnelหลัก"
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "ยกเลิกตัวช่วยและกลับไปยังหน้าแรกของตัวจัดการอุโมงคม"
+
+msgid "Return to previous page"
+msgstr "กลับไปยังหน้าก่อนหน้า"
+
+msgid "Previous"
+msgstr "ก่อนหน้า"
+
+msgid "Save tunnel configuration"
+msgstr "บันทึกการกำหนดค่าอุโมงคม"
+
+msgid "Save Tunnel"
+msgstr "บันทึกอุโมงคม"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "จบตัวช่วยและตรวจสอบการตั้งค่าอุโมงคม"
+
+msgid "Finish"
+msgstr "จบ"
+
+msgid "Advance to next page"
+msgstr "ไปยังหน้าถัดไป"
+
+msgid "Next"
+msgstr "ถัดไป"

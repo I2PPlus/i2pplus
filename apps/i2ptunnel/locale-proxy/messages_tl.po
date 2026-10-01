@@ -1,0 +1,438 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Mukhang ito ay masamang destination:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "Hindi ka matutulungan ng i2paddresshelper sa ganoong destination!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Para bisitahin ang destination sa iyong addressbook, i-click <a href=\"{0}\">here</a>. Para bisitahin ang addresshelper destination na may salungatan, i-click <a href=\"{1}\">here</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destination para sa {0} sa addressbook"
+
+msgid "Conflicting address helper destination"
+msgstr "Address helper destination na may salungatan"
+
+msgid "Corrupt Base32 address"
+msgstr "Sira na Base32 address"
+
+msgid "Destination LeaseSet not found"
+msgstr "Hindi nahanap ang LeaseSet ng destination"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destination"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Magpatuloy sa {0} nang hindi nagse-save"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Maaari mong pumunta sa site nang hindi ito ini-save sa addressbook. Naaalala ang address hanggang i-restart mo ang iyong I2P router."
+
+msgid "Continue without saving"
+msgstr "Magpatuloy nang hindi nagse-save"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "I-save ang {0} sa router address book at magpatuloy sa website"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Masisave ang address na ito sa iyong Router addressbook kung saan iniimbak ang iyong mga address na batay sa subscription."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Kung gusto mong subaybayan ang mga site na idinagdag mo nang manu-mano, idagdag sa iyong Master o Private addressbook sa halip."
+
+msgid "Save & continue"
+msgstr "I-save & magpatuloy"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "I-save ang {0} sa master addressbook at magpatuloy sa website"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Masisave ang address na ito sa iyong Master addressbook. Piliin ang opsiyong ito para sa mga address na gusto mong panatilihing hiwalay sa pangunahing router address book, ngunit ayaw mong ipublish."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "I-save ang {0} sa private addressbook at magpatuloy sa website"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Masisave ang address na ito sa iyong Private addressbook, upang tiyaking hindi ito ipinapublish."
+
+msgid "Base32 address requires lookup password"
+msgstr "Kailangan ng lookup password ang Base32 address"
+
+msgid "Base32 address requires encryption key"
+msgstr "Kailangan ng encryption key ang Base32 address"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Kailangan ng encryption key at lookup password ang Base32 address"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Nabigo ang pag-decrypt ng Base32 address, suriin ang encryption key"
+
+msgid "Generate"
+msgstr "Gumawa"
+
+msgid "Encryption key"
+msgstr "Encryption key"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Kailangan mong ilagay ang PSK encryption key na ibinigay ng operator ng server, o gumawa ng DH encryption key at ipadala iyon sa operator ng server."
+
+msgid "Ask the server operator for help."
+msgstr "Humingi ng tulong sa operator ng server."
+
+msgid "Enter PSK encryption key"
+msgstr "Maglagay ng PSK encryption key"
+
+msgid "Generate new DH encryption key"
+msgstr "Gumawa ng bagong DH encryption key"
+
+msgid "Lookup password"
+msgstr "Lookup password"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Kailangan mong ilagay ang password na ibinigay ng operator ng server."
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Naidagdag gamit ang address helper mula sa {0}"
+
+msgid "Added via address helper"
+msgstr "Naidagdag gamit ang address helper"
+
+msgid "Missing lookup password"
+msgstr "Walang lookup password"
+
+msgid "Missing private key"
+msgstr "Walang private key"
+
+msgid "Invalid private key"
+msgstr "Hindi wasto ang private key"
+
+msgid "Your new encryption key"
+msgstr "Ang iyong bagong encryption key"
+
+msgid "Router Console"
+msgstr "Router Console"
+
+msgid "Addressbook"
+msgstr "Addressbook"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Help"
+msgstr "Tulong"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Kopyahin ang key at ipadala ito sa operator ng server."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Pagkatapos mong bigyan ng pahintulot, maaari kang magpatuloy sa website."
+
+msgid "Go back and fix the error"
+msgstr "Bumalik at ayusin ang error"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "private"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Ii-redirect sa {0}"
+
+msgid "Redirection in progress"
+msgstr "Isinasagawa ang redirection"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Naisave ang {0} sa {1} addressbook, ina-redirect na ngayon."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Nabigong i-save ang {0} sa {1} addressbook, ina-redirect na ngayon."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "I-click ang dito kung hindi ka awtomatikong na-redirect."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Naisave ang authentication para sa {0}, ina-redirect na ngayon."
+
+msgid "Website Unknown"
+msgstr "Hindi Alam ang Website"
+
+msgid "I2P Router Console"
+msgstr "I2P Router Console"
+
+msgid "Website Not Found in Addressbook"
+msgstr "Hindi Nakita ang Website sa Addressbook"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "Hindi nakita ang website sa addressbook ng iyong router."
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "Suriin ang link o maghanap ng Base 32 o Base 64 na address."
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "Kung mayroon kang Base 64 na address, {0}idagdag ito sa iyong addressbook{1}."
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "Kung wala, maghanap ng Base 32 o address helper link, o gumamit ng jump service link sa ibaba."
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "Madalitang makikita ang pahinang ito? Tingnan ang {0}FAQ{1} para sa tulong sa {2}pagdagdag ng ilang subscription{3} sa iyong addressbook."
+
+msgid "Could not find the following destination:"
+msgstr "Hindi mahanap ang mga sumusunod na destination:"
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "Babala: Hindi-HTTP na Protocol"
+
+msgid "The request uses a bad protocol."
+msgstr "Maling protocol ang ginagamit ng kahilingan."
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "Ang I2P HTTP Proxy ay sinusuportahan lamang ang kahilingang HTTP at HTTPS."
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "Hindi pinapayagan ang iba pang protocol tulad ng FTP."
+
+msgid "Error: Request Denied"
+msgstr "Error: Tinanggihan ang Kahilingan"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "Error: Hindi Ma-access ang Router Console sa pamamagitan ng I2P Proxy"
+
+msgid "Your browser is misconfigured."
+msgstr "Malinaw na mali ang konpigurasyon ng iyong browser."
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "Huwag gamitin ang proxy para ma-access ang router console, localhost, o lokal na LAN destination."
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "Kailangan mong pigilan ang 127.0.0.1 (o ang address na ini-a-access mo sa console ng I2P) na dumaan sa http proxy ng I2P, karaniwang sa pamamagitan ng pag-exclude ng address sa Configuration section ng proxy ng iyong browser."
+
+msgid "Warning: Destination Key Conflict"
+msgstr "Babala: Salungatan sa Key ng Destination"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "Ang address helper link na sinundan mo ay nagtatakda ng ibang destination key kaysa sa entry sa iyong address book."
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "Maaaring sinusubukan ng isang tao na magpanggap bilang ibang website, o may mga taong nagbigay ng magkaparehong pangalan sa dalawang website."
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "Lutasin ang salungatan sa pamamagitan ng pagpapasya kung aling key ang pinagkakatiwalaan mo, at pagkatapos ay huwag pansinin ang address helper link, o burahin ang entry ng host mula sa iyong address book at i-click muli ang address helper link."
+
+msgid "Connection Reset"
+msgstr "Na-reset ang Koneksyon"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "Na-reset ang koneksyon sa website habang naglo-load ang pahina."
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Maaaring pansamantalang hindi available ang website, sobrang abala, o pinablock nito ang iyong access."
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "Maaaring gusto mong {0}subukan ulit{1}."
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "Kung iiwan mong bukas ang pahinang ito, awtomatikong susubukan nitong mag-connect muli sa website tuwing {0} segundo pagkatapos ng isang nabigong pagsubok sa koneksyon."
+
+msgid "Website Unreachable"
+msgstr "Hindi Maabot ang Website"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Hindi maabot ang website, dahil gumagamit ito ng mga opsiyon sa encryption na hindi sinusuportahan ng iyong bersyon ng I2P o Java."
+
+msgid "Could not connect to the following destination:"
+msgstr "Hindi makakonekta sa mga sumusunod na destination:"
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "Hindi maabot ang website, dahil hindi nahanap ang lease set nito."
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "Malamang naka-offline ang website, ngunit maaaring mayroon ding congestion sa network."
+
+msgid "The connection to the proxy was reset."
+msgstr "Na-reset ang koneksyon sa proxy."
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "Maaaring pansamantalang hindi available ang proxy, sobrang abala, o pinablock nito ang iyong access."
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "Maaaring gusto mong {0}subukan ulit{1} dahil magpapasiliw ito ng outproxy mula sa pool na itinakda mo {2}dito{3} (kung may higit sa isa kang naka-configure)."
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "Kung patuloy pa rin ang problema, maaaring gusto mong i-edit ang iyong listahan ng outproxy {0}dito{1}."
+
+msgid "Outproxy Unreachable"
+msgstr "Hindi Maabot ang Outproxy"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "Hindi maabot ang HTTP outproxy, dahil gumagamit ito ng mga opsiyon sa encryption na hindi sinusuportahan ng iyong bersyon ng I2P o Java."
+
+msgid "The website was not reachable."
+msgstr "Hindi maabot ang website."
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Naka-offline ang website, may congestion sa network, o hindi pa lubos na naka-integrate ang iyong router sa mga peer."
+
+msgid "Warning: No Outproxy Configured"
+msgstr "Babala: Walang Naka-configure na Outproxy"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "Ang iyong kahilingan ay para sa isang site sa labas ng I2P, ngunit walang naka-configure kang HTTP outproxy."
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "Pakikonfigura ang outproxy sa I2PTunnel."
+
+msgid "Outproxy Not Found"
+msgstr "Hindi Nahanap ang Outproxy"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "Hindi nahanap ang HTTP Outproxy."
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "Naka-offline ito, may congestion sa network, o hindi pa lubos na naka-integrate ang iyong router sa mga peer."
+
+msgid "Information: New Host Name"
+msgstr "Impormasyon: Bagong Host Name"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "Impormasyon: Bagong Host Name na may Address Helper"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "Ang address helper link na sinundan mo ay para sa isang bagong host name na wala sa iyong address book."
+
+msgid "You may save this host name to your local address book."
+msgstr "Maaari mong i-save ang host name na ito sa iyong lokal na address book."
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "Kung i-save mo ito sa iyong address book, hindi mo na makikita ang mensaheng ito."
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "Kung hindi mo ito i-save, macalim ang host name pagkatapos ng susunod na restart ng router."
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "Kung ayaw mong bisitahin ang host na ito, i-click ang \"back\" button sa iyong browser."
+
+msgid "Proxy Authorization Required"
+msgstr "Kailangan ng Authorization ang Proxy"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "Kailangan ng Authorization ang I2P HTTP Proxy"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "Naka-configure ang proxy na ito na kailangan ng username at password para sa access."
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "Mangyaring ilagay ang iyong username at password, o suriin ang iyong {0}Configuration ng router{1} o {2}Configuration ng I2PTunnel{3}."
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "Upang i-disable ang authorization, alisin ang Configuration {0}i2ptunnel.proxy.auth=basic{1}, pagkatapos ay ihinto at i-restart ang HTTP Proxy tunnel."
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "Hindi maabot ang HTTP outproxy, dahil hindi nahanap ang lease set nito."
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "Malamang naka-down ang outproxy, ngunit maaaring mayroon ding congestion sa network."
+
+msgid "Warning: Request Denied"
+msgstr "Babala: Tinanggihan ang Kahilingan"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "Mukhang mali ang pagkakaayos ng address na ito. Mangyaring tiyakin na wastong address ang ibinigay mo!"
+
+msgid "Warning: Bad Address Helper"
+msgstr "Babala: Masamang Address Helper"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "Hindi naresolba ang helper key sa URL ({0}i2paddresshelper={1})."
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "Mukhang basang datos ito, o maling na-type na Base 32 address."
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "Suriin ang iyong URL upang subukang ayusin ang helper key bilang wastong Base 32 hostname o Base 64 key."
+
+msgid "Warning: Address Blacklisted"
+msgstr "Babala: Nasa Blacklist ang Address"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "Nasa iyong Blacklist ang hiniling na destination at na-block ang access."
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "Upang payagan ang access sa site na ito, alisin ito mula sa iyong Blacklist sa blacklist management page ng SusiDNS."
+
+msgid "Warning: Invalid Destination"
+msgstr "Babala: Hindi Wastong Destination"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "Hindi wastong website destination ang tinukoy, o hindi maabot sa ibang paraan."
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "Maaaring mali ang Base 64 na string na ni-paste mo, o masama ang link na sinusundan mo."
+
+msgid "The I2P host could also be offline."
+msgstr "Maaaring naka-offline din ang host ng I2P."
+
+msgid "Warning: Authorization Required"
+msgstr "Babala: Kailangan ang Authorization"
+
+msgid "Warning: Invalid Request URI"
+msgstr "Babala: Hindi Wastong URI ng Kahilingan"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "Hindi wastong URI ng kahilingan, at malamang may mga ilawag na karakter ito."
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "Kung may link kang i-click, suriin ang dulo ng URI para sa anumang karakter na aksidenteng idinagdag ng browser."
+
+msgid "The Base32 address is invalid."
+msgstr "Hindi wastong ang Base32 address."

@@ -1,0 +1,70 @@
+<div lang="th">
+
+<ul class=links>
+
+<li><b>เริ่มต้นใช้งาน</b><br>
+หากคุณเพิ่งเริ่มI2P+จำนวน<i>peerที่ใช้งานอยู่</i>ที่แสดงในส่วน<i>peer</i>บนแถบด้านข้างควรเริ่มเพิ่มขึ้นในไม่กี่นาทีข้างหน้าและคุณจะเห็น<i>ปลายทางในเครื่อง</i>ชื่อ<i>ไคลเอนต์ที่แบ่งปัน</i>แสดงอยู่ในส่วน<i>อุโมงคมบริการ</i>และอาจมีไคลเอนต์และเซิร์ฟเวอร์อื่นขึ้นอยู่กับวิธีกำหนดค่าI2P<i>ปลายทางในเครื่องเหล่านี้</i>ให้การเชื่อมต่อไปยังบริการบน<a href="/help/faq#portfaq" title="Lista de puertos comúnmente utilizados" class=consolelink>พอร์ต</a>หลากหลายในเครือข่ายI2Pช่วยให้BitTorrentอีเมลproxyเว็บและบริการอื่นทำงานได้<a href="/netdb" class=consolelink>ฐานข้อมูลเครือข่าย</a>ของคุณจะแสดงpeerทั้งหมดที่เครื่องของคุณรู้จักในเครือข่ายคุณยังตรวจสอบการเชื่อมต่อของ<a href="/peers" class=consolelink>peer</a>ที่มีอยู่และตรวจสอบ<a href="/profiles?f=1" class=consolelink>โปรไฟล์ประสิทธิภาพของpeer</a>และดู<a href="/tunnels" class=consolelink>อุโมงคม</a>ที่ใช้งานอยู่พร้อมสถานะได้</li>
+
+<li><b>การเข้าร่วมเครือข่าย</b><br>
+ครั้งแรกที่คุณเริ่มI2P+อาจใช้เวลาสองสามนาทีในการเข้าร่วมเครือข่ายและค้นหาpeerเพิ่มเติมเพื่อให้การเข้าร่วมดีที่สุดดังนั้นโปรดอดทนเมื่อดาวสีเขียวปรากฏขึ้นข้าง<i>ปลายทางในเครื่อง</i>ของคุณในส่วน<i>อุโมงคมบริการ</i>บนแถบด้านข้างก็จะมีหลายอย่างที่คุณทำได้กับI2Pและต่อไปนี้คือบางข้อ</li>
+
+<li><b>สถานะเครือข่าย</b><br>
+เมื่อI2P+มีเวลาทดสอบการเชื่อมต่อเครือข่ายของคุณแล้วตัวบ่งชี้สถานะเครือข่ายบนแถบด้านข้างในอุดมคติควรระบุ"ปกติ"หากสถานะระบุ"ติดไฟร์วอลล์"I2P+จะยังทำงานต่อแม้ประสิทธิภาพของเครือข่ายจะไม่ดีที่สุดและความสามารถในการบริจาคแบนด์วิดท์ให้เครือข่ายจะถูกจำกัดหากต้องการประสิทธิภาพที่ดีที่สุดให้พิจารณาเปิด<a href="/confignet#udpconfig" class=consolelink>พอร์ตภายนอกI2P+</a>ของคุณในไฟร์วอลล์และในเราเตอร์ที่ISPจัดให้มีข้อมูลเพิ่มเติมเกี่ยวกับข้อความสถานะอยู่ใน<a href="/help/ui#reachabilityhelp" class=consolelink>หน้าความช่วยเหลือของส่วนติดต่อผู้ใช้</a>.</li>
+
+<li><b>การติดตามสมุดที่อยู่</b><br>
+เพื่อให้I2P+สามารถแปลงชื่อโฮสต์.i2pโดยอัตโนมัติต้องพึ่งพาการติดตามบริการที่ให้การแปลงDNSสำหรับโฮสต์ที่รู้จักเป็นหลักหากคุณติดตั้งI2P+แทนที่จะอัปเดตจากI2Pคุณจะมี<a href="/dns?subscriptions" class=consolelink>การติดตามสมุดที่อยู่</a>ที่กำหนดค่าไว้เพียงพอแล้วหลังการติดตั้ง<a href="/dns" class=consolelink>สมุดที่อยู่</a>ของคุณควรเต็มไปด้วยชื่อโฮสต์ของบริการที่ใช้งานอยู่ในเครือข่ายโดยอัตโนมัติหากคุณอัปเดตจากI2Pให้ดูส่วน<a href="/help/faq#addressbooksubs" class=consolelink>การติดตามสมุดที่อยู่</a>ใน<a href="/help/faq" class=consolelink>คำถามที่พบบ่อย</a>เพื่อขอความช่วยเหลือในการเพิ่มการติดตามเพิ่มเติม
+</li>
+
+<li><b>การตั้งค่าเบราว์เซอร์</b><br>
+เพื่อเลือกดูเว็บไซต์บนเครือข่ายคุณต้องตั้งค่าเบราว์เซอร์ให้ใช้proxyHTTPค่าเริ่มต้นที่กำหนดไว้บนพอร์ต4444ซึ่งยังให้<i>outproxy</i>ที่อนุญาตให้เลือกดูเว็บไซต์บนclearnetแบบไม่ระบุตัวตนได้มี<a href="/help/configuration#browserconfig" class=consolelink>คู่มือย่อสำหรับตั้งค่าFirefox</a>ที่หน้าการตั้งค่าในส่วนความช่วยเหลือหรือดูส่วนถัดไปเพื่อรับลิงก์ไปยังคู่มือการตั้งค่าสำหรับเบราว์เซอร์หลายตัวเมื่อคุณตั้งค่าเบราว์เซอร์และการติดตามสมุดที่อยู่แล้ว<a href="http://notbob.i2p/" target=_blank>notbob.i2p</a>เป็นเว็บไซต์ที่ดีมากสำหรับค้นพบเนื้อหาในเครือข่าย
+</li>
+
+</ul>
+
+<h3>บริการบนI2P</h3>
+
+<ul class="links twocol">
+
+<li><b>การเลือกดูอินเทอร์เน็ตแบบมองไม่เห็นและสาธารณะ</b><br>
+บนI2Pคุณเข้าถึงเว็บไซต์ที่โฮสต์บนI2Pได้("eepsite")หรือเลือกดูเว็บปกติแบบไม่ระบุตัวตนผ่านproxyเว็บ(outproxy)ที่มาพร้อมI2P<a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>ตั้งค่าเบราว์เซอร์ของคุณ</a>ให้ใช้proxyHTTPที่<code>127.0.0.1พอร์ต4444</code>จากนั้นเลือกดูไปยังเว็บไซต์บริการซ่อนตัวหรือที่อยู่ปกติที่ไม่ได้เข้ารหัสด้วย<code>http://</code>หากต้องการปิดใช้งานหรือเปลี่ยนการเข้าถึงoutproxyของอินเทอร์เน็ตปกติให้ลบหรือแก้ไขรายการoutproxyสำหรับ<code>false.i2p</code>หรือ<code>purokishi.i2p</code>ในส่วน<i>outproxy</i>ใน<a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>หน้าแก้ไข</a>ของอุโมงคมไคลเอนต์proxyHTTPใน<a href="/i2ptunnelmgr" class=consolelink>ตัวจัดการอุโมงคม</a>.</li>
+
+<li><b>อีเมลแบบไม่ระบุตัวตน</b><br>
+ระบบอีเมลบนI2PของPostmanเข้าถึงได้ผ่าน<a href="/webmail" class=consolelink>ไคลเอนต์อีเมลในตัวของI2P</a>(Susimail)หรือไคลเอนต์อีเมลมาตรฐานใดก็ได้เกตเวย์อีเมลช่วยให้รับอีเมลจากที่อยู่อินเทอร์เน็ตปกติได้ที่อยู่<code>@mail.i2p</code>ของคุณก็ติดต่อผ่าน<code>@i2pmail.org</code>ได้หากต้องการบัญชีให้ไปที่<a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
+
+<li><b>การถ่ายโอนไฟล์แบบไม่ระบุตัวตน</b><br>
+<a href="/torrents" class=consolelink>I2PSnark</a>ถูกรวมอยู่ในI2Pและนำเสนอการถ่ายโอนBitTorrentแบบไม่ระบุตัวตนและเข้ารหัสทางเลือกอื่นคือ<a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a>(ต่อยอดจากAzureus/Vuze)ซึ่งเป็นไคลเอนต์BitTorrentที่รองรับtorrentผ่านI2Pและ<a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a>ซึ่งเป็นไคลเอนต์BitTorrentเฉพาะI2Pที่เขียนด้วยGoบริการเพิ่มเติมรวมถึงการโฮสต์ไฟล์บนเบราว์เซอร์เช่น<a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a>และ<a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>แชทแบบไม่ระบุตัวตน</b><br>
+เปิดไคลเอนต์IRCของคุณ(ตัวอย่างเช่น<a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>)แล้วเชื่อมต่อไปยัง<a href="irc://127.0.0.1:6668/i2p" class=chatlink>เซิร์ฟเวอร์</a>ที่<code>127.0.0.1พอร์ต6668</code>คุณไม่จำเป็นต้องตั้งค่าproxyในไคลเอนต์IRCเพราะI2Pให้อุโมงคมIRCในเครื่องแก่คุณ(ตั้งค่าในไคลเอนต์IRCเป็นเซิร์ฟเวอร์IRCหรือโฮสต์ระยะไกล)เมื่อเข้าไปแล้ว<code>#saltr</code>และ<code>#i2p-dev</code>เป็นเพียงบางช่องทางที่คุณสามารถเข้าร่วมได้ยังมีแอปแชททันทีข้ามแพลตฟอร์มที่ใช้I2Pซึ่งมีอยู่ที่<a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>โฮสต์เว็บแบบไม่ระบุตัวตนและเข้ารหัส</b><br>
+I2Pมาพร้อมเว็บเซิร์ฟเวอร์สำหรับโฮสต์เว็บไซต์ของคุณเองบนเครือข่ายI2P:อินสแตนซ์ของ<a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a>ที่ฟังอยู่ที่<a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>หลังจากเริ่มอุโมงคมของ<a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>เว็บเซิร์ฟเวอร์I2Pที่ตั้งค่าไว้ล่วงหน้า</a>เว็บไซต์ของคุณจะมองเห็นได้(แต่ค้นพบไม่ได้)โดยผู้อื่นคำแนะนำในการตั้งค่าเว็บไซต์และจดทะเบียนโดเมน.i2pอยู่ใน<a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>ส่วนความช่วยเหลือ</a>.</li>
+
+<li id=plugins><b>ปลั๊กอินสำหรับI2P</b><br>
+ไปที่หน้า<a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>ปลั๊กอินของzzz</a>เพื่อดาวน์โหลดปลั๊กอินได้หลายตัวโดยตรงหากคุณเป็นผู้พัฒนาจะมี<a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>เฟรมเวิร์ก</a>ที่ไม่ขึ้นกับภาษาสำหรับเขียนปลั๊กอินของคุณเอง.</li>
+
+</ul>
+
+<h3 id=trouble>ข้อมูลสำหรับผู้พัฒนาและผู้ร่วมพัฒนา</h3>
+
+<ul class=links>
+
+<li><b>รายงานข้อผิดพลาด</b><br>
+หากต้องการรายงานข้อผิดพลาดโปรดเปิดticketที่<a href="https://github.com/I2PPlus/i2pplus/issues" class=sitelink target=_blank rel=noreferrer>github.com/I2PPlus/i2pplus/issues</a>หากต้องการพูดคุยเกี่ยวข้องกับผู้พัฒนาโปรดไปที่<a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>ฟอรัมผู้พัฒนาของzzz</a>หรือ<a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>ช่องทางผู้พัฒนา</a>(#i2p-dev)บนเครือข่ายIRCของI2P.</li>
+
+<li><b>การพัฒนาบนI2P</b><br>
+หากคุณเป็นผู้พัฒนาคุณอาจพิจารณาเขียน<a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>แอปพลิเคชันI2P</a>ของคุณเองหรือปรับปรุงความปลอดภัยของแอปพลิเคชันโดยใช้ประโยชน์จากเครือข่ายI2Pทั้งโปรโตคอล<a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a>และ<a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a>ได้รับการ<a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>จัดเตรียมไว้</a>และสามารถทำ<a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>การส่งข้อมูลแบบเรียลไทม์</a>ได้เรายังให้การเข้าถึง<a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>APIของJava</a>ได้อย่างเต็มที่และไลบรารีหลักของI2Pถูกโฮสต์ไว้ใน<a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>ที่เก็บApache Maven</a>ผู้พัฒนาสามารถเลือกดูซอร์สโค้ดได้ที่<a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a>(I2P)หรือ<a href="https://github.com/I2PPlus/i2pplus/" class="sitelink external" target=_blank rel=noreferrer>Github</a>(I2P+)และตรวจสอบสถานะปัจจุบันของบิลด์ผ่านแพลตฟอร์มการบูรณาการต่อเนื่อง<a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Travis</a>(I2P)หรือผ่าน<a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>(I2P+)ต้องมี<a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>Java SDK</a>และ<a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a>เพื่อบิลด์จากซอร์สโค้ด.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>เข้าร่วม!</b><br>
+I2Pได้รับการพัฒนาและดูแลโดยหลักจากการมีส่วนร่วมอย่างอาสาสมัครและไม่ได้รับเงินทุนของสมาชิกในชุมชนข้อมูลเพิ่มเติมเกี่ยวกับวิธีเข้าร่วมอยู่ใน<a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>หน้าอาสาสมัคร</a>บนเว็บไซต์ทางการ.</li>
+
+<li><b>I2P+</b><br>
+หากต้องการข้อมูลเพิ่มเติมเกี่ยวกับI2P+โปรดไปที่<a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a>หรือ<a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>หรือเข้าร่วมช่องทาง<a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a>บนเครือข่ายIRCของI2Pการแก้ไขสำหรับI2P+ได้รับการต้อนรับโปรดส่งคำขอดึงผ่าน<a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
+
+</ul>
+
+</div>

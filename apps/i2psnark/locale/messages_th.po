@@ -1,0 +1,1681 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Magnet"
+msgstr "Magnet"
+
+msgid "Unable to connect to I2P"
+msgstr "ไม่สามารถเชื่อมต่อกับI2Pได้"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "ข้อผิดพลาดขณะเชื่อมต่อกับI2P-ตรวจสอบการตั้งค่าI2CP!"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "กำลังกำหนดค่าI2PSnarkด้วยตัวเลือกI2CP"
+
+msgid "No write permissions for data directory"
+msgstr "ไดเรกทอรีข้อมูลไม่มีสิทธิ์เขียน"
+
+msgid "Data directory cannot be created"
+msgstr "ไม่สามารถสร้างไดเรกทอรีข้อมูลได้"
+
+msgid "No write permissions for temp directory"
+msgstr "ไดเรกทอรีชั่วคราวไม่มีสิทธิ์เขียน"
+
+msgid "Temp directory cannot be created"
+msgstr "ไม่สามารถสร้างไดเรกทอรีชั่วคราวได้"
+
+msgid "No write permissions for torrent directory"
+msgstr "ไดเรกทอรีtorrentไม่มีสิทธิ์เขียน"
+
+msgid "Torrent directory cannot be created"
+msgstr "ไม่สามารถสร้างไดเรกทอรีtorrentได้"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "เปลี่ยนขีดจำกัดผู้อัปโหลดทั้งหมดเป็น{0}"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "ขีดจำกัดผู้อัปโหลดขั้นต่ำคือ{0}"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "เปลี่ยนขีดจำกัดBWขาขึ้นเป็น{0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "ขีดจำกัดแบนด์วิดท์ขาขึ้นขั้นต่ำคือ{0}KBps"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "เปลี่ยนความเร็วดาวน์โหลดสูงสุดเป็น{0}KB/s"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "ขีดจำกัดความเร็วดาวน์โหลดคือ{0}KB/s"
+
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr "หมายเหตุ:อาจต้องหยุดและเริ่มtorrentใหม่หรือเริ่มI2PSnarkใหม่เพื่อให้การเปลี่ยนแปลงนี้มีผล"
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "เปิดใช้งานการสุ่มจำนวนhopของอุโมงคม+0/1บนอุโมงคมขาเข้า"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "ปิดใช้งานการสุ่มจำนวนhopของอุโมงคมบนอุโมงคมขาเข้า"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "เปิดใช้งานการสุ่มจำนวนhopของอุโมงคม+0/1บนอุโมงคมขาออก"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "ปิดใช้งานการสุ่มจำนวนhopของอุโมงคมบนอุโมงคมขาออก"
+
+msgid "Enabled a separate destination for each torrent"
+msgstr "เปิดใช้งานปลายทางแยกสำหรับแต่ละtorrent"
+
+msgid "Disabled a separate destination for each torrent"
+msgstr "ปิดใช้งานปลายทางแยกสำหรับแต่ละtorrent"
+
+#, java-format
+msgid "Maximum destinations changed to {0}"
+msgstr "เปลี่ยนจำนวนปลายทางสูงสุดเป็น{0}"
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr "กลับสู่ปลายทางไม่จำกัด(หนึ่งปลายทางต่อหนึ่งtorrent)"
+
+msgid "Enabled randomizing torrent start times"
+msgstr "เปิดใช้งานการสุ่มเวลาเริ่มtorrent"
+
+msgid "Disabled randomizing torrent start times"
+msgstr "ปิดใช้งานการสุ่มเวลาเริ่มtorrent"
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr "เปลี่ยนช่วงหน่วงเวลาเริ่มเป็น{0} - {1}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "เปลี่ยนเวลารีเฟรชเป็น{0}"
+
+msgid "Refresh disabled"
+msgstr "ปิดใช้งานการรีเฟรช"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "เปลี่ยนขนาดหน้าเป็น{0}"
+
+msgid "New files will be publicly readable"
+msgstr "ไฟล์ใหม่จะอ่านได้โดยสาธารณะ"
+
+msgid "New files will not be publicly readable"
+msgstr "ไฟล์ใหม่จะไม่อ่านได้โดยสาธารณะ"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "หยุดtorrentทั้งหมดก่อนเปลี่ยนไดเรกทอรีข้อมูล"
+
+msgid "Data directory must be an absolute path"
+msgstr "ไดเรกทอรีข้อมูลต้องเป็นพาธแบบเต็ม"
+
+msgid "Not a directory"
+msgstr "ไม่ใช่ไดเรกทอรี"
+
+msgid "Unreadable"
+msgstr "อ่านไม่ได้"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "เปลี่ยนไดเรกทอรีข้อมูลเป็น{0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "การเปลี่ยนแปลงI2CPและอุโมงคมจะมีผลหลังหยุดtorrentทั้งหมด"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "เปลี่ยนตัวเลือกI2CPเป็น:{0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "กำลังตัดการเชื่อมต่อปลายทางI2CPเดิม"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "ไม่สามารถเชื่อมต่อด้วยการตั้งค่าใหม่ได้กำลังย้อนกลับไปใช้การตั้งค่าI2CPเดิม"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "ไม่สามารถเชื่อมต่อใหม่ด้วยการตั้งค่าเดิมได้!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "เชื่อมต่อใหม่บนปลายทางI2CPใหม่แล้ว"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "เริ่มฟังI2CPใหม่สำหรับ\"{0}\""
+
+msgid "Enabled autostart"
+msgstr "เปิดใช้งานการเริ่มอัตโนมัติ"
+
+msgid "Disabled autostart"
+msgstr "ปิดใช้งานการเริ่มอัตโนมัติ"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "เปิดใช้งานtrackerเปิด-ต้องเริ่มtorrentใหม่เพื่อให้มีผล"
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "ปิดใช้งานtrackerเปิด-ต้องเริ่มtorrentใหม่เพื่อให้มีผล"
+
+msgid "Enabled DHT."
+msgstr "เปิดใช้งานDHTแล้ว"
+
+msgid "Disabled DHT."
+msgstr "ปิดใช้งานDHTแล้ว"
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "การเปลี่ยนแปลงDHTต้องปิดและเปิดอุโมงคมใหม่"
+
+msgid "Enabled Ratings."
+msgstr "เปิดใช้งานการให้คะแนนแล้ว"
+
+msgid "Disabled Ratings."
+msgstr "ปิดใช้งานการให้คะแนนแล้ว"
+
+msgid "Enabled Comments."
+msgstr "เปิดใช้งานความคิดเห็นแล้ว"
+
+msgid "Disabled Comments."
+msgstr "ปิดใช้งานความคิดเห็นแล้ว"
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "ตั้งชื่อความคิดเห็นเป็น{0}"
+
+msgid "Collapsible panels enabled."
+msgstr "เปิดใช้งานแผงแบบยุบได้แล้ว"
+
+msgid "Collapsible panels disabled."
+msgstr "ปิดใช้งานแผงแบบยุบได้แล้ว"
+
+msgid "Torrent filter bar enabled."
+msgstr "เปิดใช้งานแถบกรองtorrentแล้ว"
+
+msgid "Torrent filter bar disabled."
+msgstr "ปิดใช้งานแถบกรองtorrentแล้ว"
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "เปิดใช้งานlightboxสำหรับภาพขนาดย่อแล้ว"
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "ปิดใช้งานlightboxสำหรับภาพขนาดย่อแล้ว"
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "เปิดใช้งานส่วนAddและCreateบนหน้ารายการtorrentทั้งหมดแล้ว"
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "แสดงส่วนAddและCreateเฉพาะหน้าแรกของหน้ารายการtorrentแบบหลายหน้า"
+
+msgid "API key updated."
+msgstr "อัปเดตคีย์APIแล้ว"
+
+msgid "Preallocate files for new torrents enabled."
+msgstr "เปิดใช้งานการจองพื้นที่ไฟล์สำหรับtorrentใหม่แล้ว"
+
+msgid "Preallocate files for new torrents disabled."
+msgstr "ปิดใช้งานการจองพื้นที่ไฟล์สำหรับtorrentใหม่แล้ว"
+
+msgid "Preserve original file names enabled."
+msgstr "เปิดใช้งานการคงชื่อไฟล์เดิมแล้ว"
+
+msgid "Preserve original file names disabled."
+msgstr "ปิดใช้งานการคงชื่อไฟล์เดิมแล้ว"
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr "เปลี่ยนจำนวนไฟล์สูงสุดต่อtorrentเป็น{0}"
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr "จำนวนไฟล์สูงสุดต่อtorrentไม่ถูกต้อง:{0}"
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr "เปลี่ยนไดเรกทอรีชั่วคราวสำหรับการจัดเตรียมเป็น{0}"
+
+msgid "Temp directory staging disabled."
+msgstr "ปิดใช้งานการจัดเตรียมในไดเรกทอรีชั่วคราวแล้ว"
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr "เปลี่ยนไดเรกทอรีtorrentเป็น{0}"
+
+msgid "Torrent directory reset to data directory."
+msgstr "รีเซ็ตไดเรกทอรีtorrentเป็นไดเรกทอรีข้อมูลแล้ว"
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "เปลี่ยนรายการtrackerเปิดแล้ว-ต้องเริ่มtorrentใหม่เพื่อให้มีผล"
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "เปลี่ยนรายการtrackerส่วนตัวแล้ว-มีผลกับtorrentที่สร้างใหม่เท่านั้น"
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "ไม่สามารถบันทึกการกำหนดค่าไปยัง{0}ได้"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "ลบไฟล์torrentแล้ว:{0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "ย้ายไฟล์torrentจาก{0}ไปยัง{1}"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "ข้อผิดพลาด:ไม่สามารถเพิ่มtorrentได้:{0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "torrentกำลังทำงานอยู่แล้ว:{0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "ไม่สามารถเปิด\"{0}\"ได้"
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "torrentที่มีinfohashนี้กำลังทำงานอยู่แล้ว:{0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "torrentที่มีตำแหน่งข้อมูลเดียวกันกำลังทำงานอยู่แล้ว:{0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "torrentใน\"{0}\"ไม่ถูกต้อง"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "ข้อผิดพลาด-หน่วยความจำไม่พอไม่สามารถสร้างtorrentจาก{0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr "ข้อผิดพลาด-ไม่สามารถสร้างtorrentจาก{0}"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "กำลังเริ่มต้นI2PSnarkและเปิดอุโมงคม"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "เพิ่มและเริ่มtorrentแล้ว:{0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "เพิ่มtorrentแล้ว:{0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ข้อผิดพลาด-ไม่มีtrackerI2Pในtorrentส่วนตัว\"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "คำเตือน-ไม่มีtrackerI2Pใน\"{0}\"จะประกาศไปยังtrackerเปิดของI2PและDHTเท่านั้น"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "คำเตือน-ไม่มีtrackerI2Pใน\"{0}\"และtrackerเปิดถูกปิดใช้งานจะประกาศไปยังDHTเท่านั้น"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "คำเตือน-ไม่มีtrackerI2Pใน\"{0}\"และDHTกับtrackerเปิดถูกปิดใช้งานควรเปิดใช้งานtrackerเปิดหรือDHTก่อนเริ่มtorrent"
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "trackerเปิดถูกปิดใช้งานและไม่มีpeerDHTการดึง{0}อาจไม่สำเร็จจนกว่าจะเริ่มtorrentอื่นหรือเปิดใช้งานtrackerเปิดหรือDHT"
+
+#, java-format
+msgid "Adding {0}"
+msgstr "กำลังเพิ่ม{0}"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "การดาวน์โหลดกำลังทำงานอยู่แล้ว:{0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "คัดลอกไฟล์torrentไปยัง{0}ไม่สำเร็จ"
+
+msgid " - torrent file already exists"
+msgstr "-มีไฟล์torrentอยู่แล้ว"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "มีไฟล์มากเกินไปใน\"{0}\"({1})!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "ไฟล์torrent\"{0}\"ต้องไม่ลงท้ายด้วย\".torrent\"!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "ไม่มีชิ้นใน\"{0}\"!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "มีชิ้นมากเกินไปใน\"{0}\"ขีดจำกัดคือ{1}!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "ชิ้นมีขนาดใหญ่เกินไปใน\"{0}\"({1}B)!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "ขีดจำกัดคือ{0}B"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "torrent\"{0}\"ไม่มีข้อมูล!"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "ยังไม่รองรับtorrentที่ใหญ่กว่า{0}B\"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "ข้อผิดพลาด:ไม่สามารถนำtorrent{0}ออกได้"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "หยุดtorrentแล้ว:{0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "นำtorrentออกแล้ว:{0}"
+
+#, java-format
+msgid "Starting torrents in {0}&hellip;"
+msgstr "กำลังเริ่มtorrentใน{0}&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "ขีดจำกัดแบนด์วิดท์ขาลงคือ{0} KB/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "ขีดจำกัดแบนด์วิดท์ขาขึ้นคือ{0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "กำลังเชื่อมต่อพอร์ตI2CPบนอินสแตนซ์I2Pที่{0}"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "ขีดจำกัดแบนด์วิดท์อัปโหลดคือ{0} KBpsโดยมีpeerพร้อมกันสูงสุด{1}peer"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr "พื้นที่เก็บข้อมูล:มี{0}GBว่างสำหรับดาวน์โหลดบนพาร์ติชันข้อมูลที่กำหนดค่าไว้"
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "พื้นที่เก็บข้อมูล:มี{0}MBว่างสำหรับดาวน์โหลดบนพาร์ติชันข้อมูลที่กำหนดค่าไว้"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "คำเตือน-มีพื้นที่ว่างเพียง{0}MBสำหรับดาวน์โหลดบนพาร์ติชันข้อมูลที่กำหนดค่าไว้"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr "พื้นที่เก็บข้อมูลชั่วคราว:มี{0}GBว่างสำหรับดาวน์โหลดบนพาร์ติชันชั่วคราวที่กำหนดค่าไว้"
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr "พื้นที่เก็บข้อมูลชั่วคราว:มี{0}MBว่างสำหรับดาวน์โหลดบนพาร์ติชันชั่วคราวที่กำหนดค่าไว้"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr "คำเตือน-มีพื้นที่ว่างเพียง{0}MBสำหรับดาวน์โหลดบนพาร์ติชันชั่วคราวที่กำหนดค่าไว้"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "ดาวน์โหลดเสร็จแล้ว:{0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "กำลังเริ่มtorrent:{0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "ไม่สามารถโหลดการกำหนดค่าตัวกรองไฟล์สำหรับสร้างtorrentได้:"
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "ไม่สามารถบันทึกการกำหนดค่าตัวกรองไฟล์สำหรับสร้างtorrentได้:"
+
+msgid "Torrent not found"
+msgstr "ไม่พบtorrent"
+
+msgid "Opening the I2P tunnel"
+msgstr "กำลังเปิดอุโมงคมI2P"
+
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr "กำลังค้นหาtorrent:{0}"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "กำลังเปิดอุโมงคมI2Pและเริ่มtorrentทั้งหมด"
+
+msgid "Connecting to I2P"
+msgstr "กำลังเชื่อมต่อกับI2P"
+
+msgid "Connected to I2P at"
+msgstr "เชื่อมต่อกับI2Pที่"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "กำลังเริ่มtorrent{0}"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "กำลังหยุดtorrentทั้งหมดและปิดอุโมงคมI2P"
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "กำลังแจ้งtrackerแล้วปิดอุโมงคมI2P"
+
+msgid "I2P tunnel closed."
+msgstr "ปิดอุโมงคมI2Pแล้ว"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr "ข้ามการเปลี่ยนปลายทาง-มีการดาวน์โหลดที่กำลังทำงาน{0}รายการ"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr "ข้ามการเปลี่ยนปลายทาง-มีการดาวน์โหลดที่กำลังทำงาน{0}รายการ"
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr "ไม่มีtorrentที่กำลังดาวน์โหลด-กำลังเปลี่ยนปลายทาง"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "ไม่สามารถตรวจสอบ{0}ได้"
+
+msgid "Torrent already started"
+msgstr "เริ่มtorrentแล้ว"
+
+msgid "No storage"
+msgstr "ไม่มีพื้นที่เก็บข้อมูล"
+
+msgid "Starting recheck of {}"
+msgstr "เริ่มตรวจสอบซ้ำของ{}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "ตรวจสอบซ้ำtorrent{0}เสร็จแล้วปัจจุบันเสร็จ{1}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "ตรวจสอบซ้ำtorrent{0}เสร็จแล้วไม่เปลี่ยนแปลง"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "ข้อผิดพลาดขณะตรวจสอบtorrent{0}"
+
+msgid "Data directory does not exist"
+msgstr "ไดเรกทอรีข้อมูลไม่มีอยู่"
+
+msgid "Cannot create diskspace bar"
+msgstr "ไม่สามารถสร้างแถบพื้นที่ดิสก์ได้"
+
+msgid "Data partition"
+msgstr "พาร์ติชันข้อมูล"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "ไม่มีtrackerที่ถูกต้องสำหรับ{0}-เปิดใช้งานtrackerเปิดหรือDHTหรือไม่"
+
+msgid "Updating"
+msgstr "กำลังอัปเดต"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "กำลังอัปเดตจาก{0}"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "กำลังดาวน์โหลด{0}"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "กำลังขอไฟล์torrent:{0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "ดึงไฟล์torrentไม่สำเร็จ:{0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "ดาวน์โหลดtorrentจาก{0}"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "torrentอยู่ในคิวแล้ว:{0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "torrentที่{0}ไม่ถูกต้อง"
+
+msgid "Configuration"
+msgstr "การกำหนดค่า"
+
+msgid "User Interface"
+msgstr "ส่วนติดต่อผู้ใช้"
+
+msgid "Switch to Embedded Mode"
+msgstr "เปลี่ยนเป็นโหมดฝัง"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "เปลี่ยนเป็นโหมดเต็มหน้าจอ"
+
+msgid "Theme"
+msgstr "ธีม"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "หากต้องการเปลี่ยนธีมด้วยตนเองให้ปิดใช้งานธีมสากล"
+
+msgid "Universal theming is enabled."
+msgstr "เปิดใช้งานธีมสากลแล้ว"
+
+msgid "Configure"
+msgstr "กำหนดค่า"
+
+msgid "Refresh time"
+msgstr "เวลารีเฟรช"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "ความถี่ในการอัปเดตสถานะtorrentบนหน้าหลัก"
+
+msgid "Never"
+msgstr "ไม่เคย"
+
+msgid "Page size"
+msgstr "ขนาดหน้า"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "จำนวนtorrentสูงสุดที่แสดงต่อหนึ่งหน้า"
+
+msgid "torrents"
+msgstr "torrent"
+
+msgid "Language"
+msgstr "ภาษา"
+
+msgid "Collapsible panels"
+msgstr "แผงแบบยุบได้"
+
+msgid "Your browser does not support this feature."
+msgstr "เบราว์เซอร์ไม่รองรับความสามารถนี้"
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "อนุญาตให้ยุบแผง'เพิ่มtorrent'และ'สร้างtorrent'ได้และยุบโดยค่าเริ่มต้นในโหมดที่ไม่ฝัง"
+
+msgid "Torrent filter bar"
+msgstr "แถบกรองtorrent"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "แสดงแถบกรองเหนือtorrentเพื่อเลือกแสดงตามสถานะ"
+
+msgid "requires javascript"
+msgstr "ต้องใช้javascript"
+
+msgid "Enable lightbox"
+msgstr "เปิดใช้งานlightbox"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "ใช้lightboxเพื่อแสดงภาพเมื่อคลิกภาพขนาดย่อ"
+
+msgid "Persist Add/Create"
+msgstr "คงส่วนเพิ่ม/สร้างไว้"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "แสดงส่วน'เพิ่ม'และ'สร้าง'บนหน้ารายการtorrentทั้งหมดเมื่ออยู่ในโหมดหลายหน้า"
+
+msgid "Comments &amp; Ratings"
+msgstr "ความคิดเห็น&amp;การให้คะแนน"
+
+msgid "Enable Ratings"
+msgstr "เปิดใช้งานการให้คะแนน"
+
+msgid "Show ratings on torrent pages"
+msgstr "แสดงคะแนนบนหน้าtorrent"
+
+msgid "Enable Comments"
+msgstr "เปิดใช้งานความคิดเห็น"
+
+msgid "Show comments on torrent pages"
+msgstr "แสดงความคิดเห็นบนหน้าtorrent"
+
+msgid "Comment Author"
+msgstr "ผู้เขียนความคิดเห็น"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "ตั้งชื่อผู้เขียนสำหรับความคิดเห็นและคะแนน"
+
+msgid "Torrent Options"
+msgstr "ตัวเลือกtorrent"
+
+msgid "Half available bandwidth recommended."
+msgstr "แนะนำครึ่งหนึ่งของแบนด์วิดท์ที่ใช้ได้"
+
+msgid "Bandwidth limit"
+msgstr "จำกัดแบนด์วิดท์"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "แบนด์วิดท์สูงสุดที่จัดสรรสำหรับการดาวน์โหลด"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "แบนด์วิดท์สูงสุดที่จัดสรรสำหรับการอัปโหลด"
+
+msgid "View or change router bandwidth"
+msgstr "ดูหรือเปลี่ยนแบนด์วิดท์ของเราเตอร์"
+
+msgid "Total uploader limit"
+msgstr "ขีดจำกัดผู้อัปโหลดทั้งหมด"
+
+msgid "Maximum number of peers to upload to"
+msgstr "จำนวนpeerสูงสุดที่จะอัปโหลดให้"
+
+msgid "peers"
+msgstr "peer"
+
+msgid "Use open trackers also"
+msgstr "ใช้trackerเปิดด้วย"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "ประกาศtorrentไปยังtrackerเปิดรวมถึงtrackerที่ระบุในไฟล์torrent"
+
+msgid "Enable DHT"
+msgstr "เปิดใช้งานDHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "ใช้DHTเพื่อค้นหาpeerเพิ่มเติม"
+
+msgid "Auto start torrents"
+msgstr "เริ่มtorrentอัตโนมัติ"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "เริ่มtorrentอัตโนมัติเมื่อเพิ่มและเริ่มtorrentใหม่เมื่อI2PSnarkเริ่มทำงาน"
+
+msgid "Startup delay"
+msgstr "หน่วงเวลาเริ่ม"
+
+msgid "minutes"
+msgstr "นาที"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr "ระยะเวลาก่อนโหลดtorrentที่เริ่มอัตโนมัติเมื่อI2PSnarkเริ่มทำงานเร็วที่สุด"
+
+msgid "min"
+msgstr "ต่ำสุด"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr "ระยะเวลาก่อนโหลดtorrentที่เริ่มอัตโนมัติเมื่อI2PSnarkเริ่มทำงานช้าที่สุด"
+
+msgid "max"
+msgstr "สูงสุด"
+
+msgid "Data Storage"
+msgstr "พื้นที่เก็บข้อมูล"
+
+msgid "Data directory"
+msgstr "ไดเรกทอรีข้อมูล"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "ไดเรกทอรีที่เก็บtorrentและไฟล์ที่ดาวน์โหลดหรือแบ่งปัน"
+
+msgid "Temp directory"
+msgstr "ไดเรกทอรีชั่วคราว"
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr "ไดเรกทอรีที่ไม่บังคับซึ่งใช้จัดเตรียมการดาวน์โหลดก่อนย้ายเข้าไดเรกทอรีข้อมูลเมื่อเสร็จสิ้นเว้นว่างไว้เพื่อปิดใช้งาน"
+
+msgid "Torrent directory"
+msgstr "ไดเรกทอรีtorrent"
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr "ไดเรกทอรีที่ไม่บังคับสำหรับเก็บไฟล์.torrentแยกจากข้อมูลที่ดาวน์โหลดเว้นว่างไว้เพื่อเก็บในไดเรกทอรีข้อมูล"
+
+msgid "Files readable by all"
+msgstr "ไฟล์อ่านได้โดยทุกคน"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "ตั้งสิทธิ์ไฟล์เพื่ออนุญาตให้ผู้ใช้ในเครื่องอื่นเข้าถึงไฟล์ที่ดาวน์โหลดได้"
+
+msgid "Preallocate files"
+msgstr "จองพื้นที่ไฟล์ล่วงหน้า"
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr "ขยายไฟล์torrentใหม่ให้เต็มขนาดและจองพื้นที่ดิสก์ทันทีเมื่อtorrentเริ่มเพื่อป้องกันดิสก์เต็มจนขัดจังหวะการดาวน์โหลดและหลีกเลี่ยงการกระจายของชิ้นข้อมูล"
+
+msgid "Preserve file names"
+msgstr "คงชื่อไฟล์"
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr "คงชื่อไฟล์เดิมจากtorrentเมื่อปิดใช้งานชื่อไฟล์จะถูกกรองเพื่อตัดอักขระที่ระบบไฟล์ไม่อนุญาตเมื่อเปิดใช้งานจะใช้ชื่อไฟล์เดิมหากชื่อไฟล์มีอักขระที่ระบบไฟล์ไม่รองรับไฟล์จะถูกสร้างด้วยชื่อสำรองที่ปลอดภัยและจะแสดงคำเตือน"
+
+msgid "Max files per torrent"
+msgstr "จำนวนไฟล์สูงสุดต่อtorrent"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "จำนวนไฟล์สูงสุดที่อนุญาตต่อtorrent-ทราบว่าtrackerอาจกำหนดขีดจำกัดของตนเองและOSอาจจำกัดจำนวนไฟล์ที่เปิดได้ทำให้torrentที่มีไฟล์มาก(และtorrentที่ตามมา)โหลดไม่ได้"
+
+msgid "Tunnel Configuration"
+msgstr "การกำหนดค่าอุโมงคม"
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr "ปลายทางหลัก(ตัวตน)สำหรับเซสชันนี้DHT,trackerและรายชื่อที่บล็อกจะใช้ร่วมกับปลายทางรายtorrent"
+
+msgid "Our destination (identity) for this session"
+msgstr "ปลายทาง(ตัวตน)ของเราสำหรับเซสชันนี้"
+
+msgid "Primary Dest."
+msgstr "ปลายทางหลัก"
+
+msgid "Dest."
+msgstr "ปลายทาง"
+
+msgid "Inbound Settings"
+msgstr "การตั้งค่าขาเข้า"
+
+msgid "Outbound Settings"
+msgstr "การตั้งค่าขาออก"
+
+msgid "Vary Tunnel Length"
+msgstr "เปลี่ยนความยาวอุโมงคม"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "เพิ่ม0หรือ1hopเพิ่มเติมแบบสุ่มในอุโมงคมขาเข้า"
+
+msgid "Inbound"
+msgstr "ขาเข้า"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "เพิ่ม0หรือ1hopเพิ่มเติมแบบสุ่มในอุโมงคมขาออก"
+
+msgid "Outbound"
+msgstr "ขาออก"
+
+msgid "Multi-destination"
+msgstr "หลายปลายทาง"
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr "ใช้ปลายทางแยกสำหรับแต่ละtorrentเพื่อไม่ให้trackerและDHTเชื่อมโยงtorrentของคุณเข้าด้วยกันปลายทางเป็นชั่วคราวและจะเปลี่ยนเมื่อเริ่มใหม่"
+
+msgid "Maximum destinations"
+msgstr "จำนวนปลายทางสูงสุด"
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr "เมื่อจำนวนtorrentที่ทำงานมากกว่าค่าสูงสุดนี้torrentส่วนเกินจะใช้ปลายทางร่วมกันเป็นกลุ่มแบบสุ่มที่ขนาดแตกต่างกันเพื่อจำกัดการใช้หน่วยความจำศูนย์หมายถึงหนึ่งปลายทางต่อหนึ่งtorrent"
+
+msgid "Random startup delay"
+msgstr "หน่วงเวลาเริ่มแบบสุ่ม"
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr "เหลื่อมเวลาเริ่มtorrentแบบหลายปลายทางด้วยหน่วงเวลาแบบสุ่มเพื่อไม่ให้trackerหรือpeerDHTเชื่อมโยงtorrentที่เริ่มพร้อมกันและกระจายการสร้างอุโมงคมปิดใช้งานเพื่อเริ่มtorrentทั้งหมดเป็นชุดทันที"
+
+msgid "I2CP host"
+msgstr "โฮสต์I2CP"
+
+msgid "I2CP port"
+msgstr "พอร์ตI2CP"
+
+msgid "I2CP options"
+msgstr "ตัวเลือกI2CP"
+
+msgid "Browser Integration"
+msgstr "การผสานรวมเบราว์เซอร์"
+
+msgid "Enable browser API"
+msgstr "เปิดใช้งานAPIของเบราว์เซอร์"
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr "อนุญาตให้เพิ่มลิงก์magnetและURLของtorrentโดยไม่ต้องใช้nonceของCSRFจากloopbackหรือโฮสต์ที่อนุญาตด้านล่าง"
+
+msgid "Allowed hosts"
+msgstr "โฮสต์ที่อนุญาต"
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr "ชื่อโฮสต์หรือIPที่คั่นด้วยเครื่องหมายจุลภาคซึ่งอนุญาตให้เพิ่มtorrentโดยไม่ต้องใช้nonceโดยloopbackได้รับอนุญาตเสมอ"
+
+msgid "API key"
+msgstr "คีย์API"
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr "รหัสผ่านที่ไม่บังคับสำหรับการเข้าถึงระยะไกลและข้ามรายการโฮสต์ที่อนุญาต"
+
+msgid "Install browser handler"
+msgstr "ติดตั้งตัวจัดการเบราว์เซอร์"
+
+msgid "Update browser handler"
+msgstr "อัปเดตตัวจัดการเบราว์เซอร์"
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr "อัปเดตส่วนขยายI2PSnark Bridgeที่ติดตั้งอยู่เป็นv{0}"
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr "เปิดส่วนขยายI2PSnark Bridgeในเบราว์เซอร์เพื่อเพิ่มลิงก์magnetส่วนขยายจะลงทะเบียนตัวเองกับเบราว์เซอร์และไม่มีการเขียนไฟล์ฝั่งเราเตอร์"
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "ดาวน์โหลดตัวติดตั้งPowerShellที่ลงทะเบียนลิงก์magnetและไฟล์.torrentกับเบราว์เซอร์ของคุณส่วนขยายI2PSnark Bridgeต้องใช้เบราว์เซอร์ตระกูลFirefox"
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "ดาวน์โหลดสคริปต์ตัวติดตั้งที่ลงทะเบียนลิงก์magnetและไฟล์.torrentกับเบราว์เซอร์ของคุณส่วนขยายI2PSnark Bridgeต้องใช้เบราว์เซอร์ตระกูลFirefox"
+
+msgid "Download browser handler script"
+msgstr "ดาวน์โหลดสคริปต์ตัวจัดการเบราว์เซอร์"
+
+msgid "Save configuration"
+msgstr "บันทึกการกำหนดค่า"
+
+msgid "Torrent Create File Filtering"
+msgstr "การกรองไฟล์สำหรับสร้างtorrent"
+
+msgid "Mark filter for deletion"
+msgstr "ทำเครื่องหมายตัวกรองเพื่อลบ"
+
+msgid "Name"
+msgstr "ชื่อ"
+
+msgid "Filter Pattern"
+msgstr "รูปแบบตัวกรอง"
+
+msgid "Starts With"
+msgstr "ขึ้นต้นด้วย"
+
+msgid "Contains"
+msgstr "มี"
+
+msgid "Ends With"
+msgstr "ลงท้ายด้วย"
+
+msgid "Enabled by Default"
+msgstr "เปิดใช้งานโดยค่าเริ่มต้น"
+
+msgid "Delete selected"
+msgstr "ลบรายการที่เลือก"
+
+msgid "Save Filter Configuration"
+msgstr "บันทึกการกำหนดค่าตัวกรอง"
+
+msgid "Restore defaults"
+msgstr "กู้คืนค่าเริ่มต้น"
+
+msgid "Add File Filter"
+msgstr "เพิ่มตัวกรองไฟล์"
+
+msgid "Add"
+msgstr "เพิ่ม"
+
+msgid "Trackers"
+msgstr "tracker"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "เลือกtrackerที่จะนำออกจากรายการที่I2PSnarkรู้จัก"
+
+msgid "Website URL"
+msgstr "URLของเว็บไซต์"
+
+msgid "Standard"
+msgstr "มาตรฐาน"
+
+msgid "Open"
+msgstr "เปิด"
+
+msgid "Private"
+msgstr "ส่วนตัว"
+
+msgid "Announce URL"
+msgstr "URLสำหรับประกาศ"
+
+msgid "Mark tracker for deletion"
+msgstr "ทำเครื่องหมายtrackerเพื่อลบ"
+
+msgid "Add tracker"
+msgstr "เพิ่มtracker"
+
+msgid "Save tracker configuration"
+msgstr "บันทึกการกำหนดค่าtracker"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "การกำหนดค่านี้กำหนดจำนวนอุโมงคมสูงสุดที่จะเปิดโดยขึ้นอยู่กับจำนวนpeerที่เชื่อมต่อ(การใช้งานจริงอาจน้อยกว่า)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "การเปลี่ยนการตั้งค่านี้เป็นน้อยกว่า3hopอาจเพิ่มความเร็วได้แต่ลดความนิรนามและไม่แนะนำ"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr "ส่วนขยายI2PSnark Bridge v{0}ล้าสมัยแล้วอัปเดตเป็นv{1}บนหน้ากำหนดค่า"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "คลิกปุ่ม\"เพิ่มtorrent\"เพื่อดึงtorrent"
+
+msgid "Torrents"
+msgstr "torrent"
+
+msgid "Refresh page"
+msgstr "รีเฟรชหน้า"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "ฟอรัมtorrent&amp;การแชร์ไฟล์"
+
+msgid "Forum"
+msgstr "ฟอรัม"
+
+msgid "Search torrents"
+msgstr "ค้นหาtorrent"
+
+msgid "Clear search"
+msgstr "ล้างการค้นหา"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "ไคลเอนต์BitTorrentแบบไม่ระบุตัวตน"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "แน่ใจหรือไม่ว่าต้องการลบ{0}และข้อมูลที่ดาวน์โหลดทั้งหมด"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "กำลังลบ<b>{0}</b>และข้อมูลที่เกี่ยวข้องทั้งหมด..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "แน่ใจหรือไม่ว่าต้องการลบไฟล์torrent{0}และเมทาดาท่าที่เกี่ยวข้อง"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "หมายเหตุ:ข้อมูลที่ดาวน์โหลดจะไม่ถูกลบ"
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "กำลังลบเฉพาะ{0}และเมทาดาท่าที่เกี่ยวข้อง..."
+
+msgid "clear messages"
+msgstr "ล้างข้อความ"
+
+msgid "Expand"
+msgstr "ขยาย"
+
+msgid "Shrink"
+msgstr "ย่อ"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "คำเตือน!เบราว์เซอร์ปิดใช้งานjavascriptหากเปิดใช้งาน{0}ข้อมูลที่ป้อนในส่วนเพิ่ม/สร้างtorrentจะหายไปเมื่อมีการรีเฟรช"
+
+msgid "page refresh"
+msgstr "การรีเฟรชหน้า"
+
+msgid "Warning - No I2P"
+msgstr "คำเตือน-ไม่มีI2P"
+
+msgid "No torrents found."
+msgstr "ไม่พบtorrent"
+
+msgid "No torrents loaded."
+msgstr "ไม่มีtorrentที่โหลด"
+
+msgid "Status"
+msgstr "สถานะ"
+
+msgid "Torrent"
+msgstr "torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "อัตราRX"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "อัตราTX"
+
+msgid "Start All"
+msgstr "เริ่มทั้งหมด"
+
+msgid "Stop All"
+msgstr "หยุดทั้งหมด"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "หยุดtorrentทั้งหมดและอุโมงคมI2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "เริ่มtorrentทั้งหมดและอุโมงคมI2P"
+
+msgid "Start all stopped torrents"
+msgstr "เริ่มtorrentที่หยุดทั้งหมด"
+
+msgid "Hide Peers"
+msgstr "ซ่อนpeer"
+
+msgid "Show Peers"
+msgstr "แสดงpeer"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "จัดเรียงตาม{0}"
+
+msgid "Up Rate"
+msgstr "อัตราขาขึ้น"
+
+msgid "Total size of loaded torrents"
+msgstr "ขนาดรวมของtorrentที่โหลด"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1การเชื่อมต่อpeer"
+msgstr[1] "{0}การเชื่อมต่อpeer"
+
+msgid "Active downloads"
+msgstr "การดาวน์โหลดที่ใช้งานอยู่"
+
+msgid "Active uploads"
+msgstr "การอัปโหลดที่ใช้งานอยู่"
+
+msgid "Active Inbound tunnels"
+msgstr "อุโมงคมขาเข้าที่ใช้งานอยู่"
+
+msgid "Active Outbound tunnels"
+msgstr "อุโมงคมขาออกที่ใช้งานอยู่"
+
+msgid "Estimated download time for all torrents"
+msgstr "เวลาดาวน์โหลดโดยประมาณสำหรับtorrentทั้งหมด"
+
+msgid "Data downloaded this session"
+msgstr "ข้อมูลที่ดาวน์โหลดในเซสชันนี้"
+
+msgid "Total download speed"
+msgstr "ความเร็วดาวน์โหลดรวม"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "ข้อมูลที่อัปโหลดทั้งหมด(สำหรับtorrentในรายการ)"
+
+msgid "Total upload speed"
+msgstr "ความเร็วอัปโหลดรวม"
+
+msgid "Toggle Debug Panel"
+msgstr "สลับแผงดีบัก"
+
+msgid "Debug Mode"
+msgstr "โหมดดีบัก"
+
+msgid "Normal Mode"
+msgstr "โหมดปกติ"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1torrent"
+msgstr[1] "{0}torrent"
+
+msgid "No DHT Peers"
+msgstr "ไม่มีpeerDHT"
+
+msgid "Search"
+msgstr "ค้นหา"
+
+msgid "Show All"
+msgstr "แสดงทั้งหมด"
+
+msgid "Active"
+msgstr "ใช้งานอยู่"
+
+msgid "Inactive"
+msgstr "ไม่ได้ใช้งาน"
+
+msgid "Connected"
+msgstr "เชื่อมต่อแล้ว"
+
+msgid "Downloading"
+msgstr "กำลังดาวน์โหลด"
+
+msgid "Seeding"
+msgstr "กำลังseeding"
+
+msgid "Complete"
+msgstr "เสร็จสมบูรณ์"
+
+msgid "Incomplete"
+msgstr "ยังไม่เสร็จ"
+
+msgid "Stopped"
+msgstr "หยุดแล้ว"
+
+msgid "First"
+msgstr "แรก"
+
+msgid "First page"
+msgstr "หน้าแรก"
+
+msgid "Prev"
+msgstr "ก่อนหน้า"
+
+msgid "Previous page"
+msgstr "หน้าก่อนหน้า"
+
+msgid "Next"
+msgstr "ถัดไป"
+
+msgid "Next page"
+msgstr "หน้าถัดไป"
+
+msgid "Last"
+msgstr "สุดท้าย"
+
+msgid "Last page"
+msgstr "หน้าสุดท้าย"
+
+msgid "Enter URL or select torrent file"
+msgstr "ป้อนURLหรือเลือกไฟล์torrent"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr "ข้อผิดพลาดขณะเพิ่มtorrent:{0}"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "ข้อผิดพลาดขณะอัปโหลดไฟล์torrent:{0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "ไม่รองรับการดาวน์โหลดจากตำแหน่งที่ไม่ใช่I2P{0}"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "ข้อผิดพลาด:ไม่รองรับinfohashเวอร์ชัน2"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "URLไม่ถูกต้อง:ต้องขึ้นต้นด้วย\"{0}\"หรือ\"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "ลบmagnetแล้ว:{0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "ไม่สามารถลบไฟล์torrentได้:{0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "ลบไฟล์ข้อมูลแล้ว:{0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "ไม่สามารถลบไฟล์ข้อมูลได้:{0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "ไม่สามารถลบไดเรกทอรีได้:{0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "ลบไดเรกทอรีแล้ว:{0}"
+
+msgid "Browser API enabled."
+msgstr "เปิดใช้งานAPIของเบราว์เซอร์แล้ว"
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr "เปิดส่วนขยายI2PSnark Bridgeไม่สำเร็จ:{0}"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr "ไฟล์หรือโฟลเดอร์ถูกตัดออกจาก\"{0}\"ตามกฎตัวกรอง"
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "ไฟล์หรือโฟลเดอร์ต่อไปนี้ถูกตัดออกจาก\"{0}\"ตามกฎตัวกรอง:"
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "สร้างtorrentสำหรับ\"{0}\"แล้ว"
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "trackerI2Pจำนวนมากต้องให้ลงทะเบียนtorrentใหม่ก่อนseeding-โปรดทำก่อนเริ่ม\"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "ข้อผิดพลาดขณะสร้างtorrentสำหรับ\"{0}\""
+
+msgid "Removed"
+msgstr "นำออก"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "ป้อนชื่อtrackerและURLที่ถูกต้อง"
+
+msgid "Restored default trackers"
+msgstr "กู้คืนtrackerค่าเริ่มต้นแล้ว"
+
+msgid "Enter valid name and filter pattern"
+msgstr "ป้อนชื่อและรูปแบบตัวกรองที่ถูกต้อง"
+
+msgid "Restored default torrent create filters"
+msgstr "กู้คืนตัวกรองสร้างtorrentค่าเริ่มต้นแล้ว"
+
+msgid "Torrent details"
+msgstr "รายละเอียดtorrent"
+
+msgid "Torrent has comments"
+msgstr "torrentมีความคิดเห็น"
+
+msgid "Open file"
+msgstr "เปิดไฟล์"
+
+msgid "View files"
+msgstr "ดูไฟล์"
+
+msgid "Completed"
+msgstr "เสร็จสมบูรณ์"
+
+msgid "Share ratio"
+msgstr "อัตราส่วนการแบ่งปัน"
+
+msgid "Last activity"
+msgstr "กิจกรรมล่าสุด"
+
+msgid "Stop"
+msgstr "หยุด"
+
+msgid "Stop torrent"
+msgstr "หยุดtorrent"
+
+msgid "Start"
+msgstr "เริ่ม"
+
+msgid "Start torrent"
+msgstr "เริ่มtorrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "นำtorrentออกและลบโดยเก็บไฟล์ที่ดาวน์โหลดไว้"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "ลบไฟล์.torrentและไฟล์ข้อมูลที่เกี่ยวข้อง"
+
+msgid "Destination"
+msgstr "ปลายทาง"
+
+msgid "Checking"
+msgstr "กำลังตรวจสอบ"
+
+msgid "Allocating"
+msgstr "กำลังจองพื้นที่"
+
+msgid "Failed to connect to all configured trackers"
+msgstr "เชื่อมต่อtrackerที่กำหนดค่าไว้ทั้งหมดไม่สำเร็จ"
+
+msgid "Starting"
+msgstr "กำลังเริ่ม"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "กำลังseedingให้peer{0}ราย"
+msgstr[1] "กำลังseedingให้peer{0}ราย"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "เชื่อมต่อกับpeer{0}จาก{1}ในswarm"
+
+msgid "Stalled"
+msgstr "ค้าง"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "กำลังseedingให้peer{0}รายในswarm"
+msgstr[1] "กำลังseedingให้peer{0}รายในswarm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "กำลังดาวน์โหลดจากpeer{0}ราย"
+msgstr[1] "กำลังดาวน์โหลดจากpeer{0}ราย"
+
+msgid "OK"
+msgstr "ปกติ"
+
+msgid "No Peers"
+msgstr "ไม่มีpeer"
+
+msgid "Peer attached to swarm"
+msgstr "peerที่เชื่อมต่อกับswarm"
+
+msgid "Destination (identity) of peer"
+msgstr "ปลายทาง(ตัวตน)ของpeer"
+
+msgid "seconds"
+msgstr "วินาที"
+
+msgid "Seed"
+msgstr "seed"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "ไม่น่าสนใจ(peerไม่มีชิ้นที่เราต้องการ)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "ถูกchoke(peerไม่อนุญาตให้เราขอชิ้น)"
+
+msgid "Peer is interested but currently idle"
+msgstr "peerสนใจแต่ยังว่าง"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "ไม่สนใจ(เราไม่มีชิ้นที่peerต้องการ)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "กำลังchoke(เราไม่อนุญาตให้peerขอชิ้น)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "รายละเอียดที่tracker{0}"
+
+msgid "Info"
+msgstr "ข้อมูล"
+
+msgid "Add Torrent"
+msgstr "เพิ่มtorrent"
+
+msgid "From URL"
+msgstr "จากURL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "ป้อนURLดาวน์โหลดไฟล์torrent(เฉพาะI2P)ลิงก์magnetหรือinfohash"
+
+msgid "Add torrent"
+msgstr "เพิ่มtorrent"
+
+msgid "Torrent file"
+msgstr "ไฟล์torrent"
+
+msgid "Data dir"
+msgstr "ไดเรกทอรีข้อมูล"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "ป้อนไดเรกทอรีที่จะบันทึกข้อมูล(ค่าเริ่มต้น{0})"
+
+msgid "Create Torrent"
+msgstr "สร้างtorrent"
+
+msgid "Data to seed"
+msgstr "ข้อมูลที่จะseed"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "ไฟล์หรือไดเรกทอรีที่จะseed(พาธแบบเต็มหรือภายในไดเรกทอรี{0})"
+
+msgid "Create torrent"
+msgstr "สร้างtorrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "ตัดไฟล์ออกจากtorrentหากอยู่ในโฟลเดอร์torrent"
+
+msgid "Content Filters"
+msgstr "ตัวกรองเนื้อหา"
+
+msgid "Alternates"
+msgstr "ทางเลือก"
+
+msgid "Primary"
+msgstr "หลัก"
+
+msgid "Tracker Type"
+msgstr "ประเภทtracker"
+
+msgid "none"
+msgstr "ไม่มี"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "ไม่สามารถเพิ่มmagnetได้ไม่รองรับลิงก์magnetเวอร์ชัน2"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "URLของmagnetไม่ถูกต้อง{0}"
+
+msgid "Files"
+msgstr "ไฟล์"
+
+msgid "Save priorities"
+msgstr "บันทึกลำดับความสำคัญ"
+
+msgid "Comments"
+msgstr "ความคิดเห็น"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "โปรดส่งแบบฟอร์มอีกครั้ง(nonceไม่ถูกต้อง)"
+
+msgid "Unknown command"
+msgstr "ไม่รู้จักคำสั่ง"
+
+msgid "Resource Does Not Exist"
+msgstr "ไม่มีทรัพยากรนี้"
+
+msgid "Resource"
+msgstr "ทรัพยากร"
+
+msgid "Base"
+msgstr "ฐาน"
+
+msgid "Directory"
+msgstr "ไดเรกทอรี"
+
+msgid "File type"
+msgstr "ประเภทไฟล์"
+
+msgid "Size"
+msgstr "ขนาด"
+
+msgid "Download Status"
+msgstr "สถานะการดาวน์โหลด"
+
+msgid "Remaining"
+msgstr "ที่เหลือ"
+
+msgid "Download Priority"
+msgstr "ลำดับความสำคัญการดาวน์โหลด"
+
+msgid "up"
+msgstr "ขึ้น"
+
+msgid "Parent directory"
+msgstr "ไดเรกทอรีหลัก"
+
+msgid "Audio Playlist"
+msgstr "รายการเพลง"
+
+msgid "Resource Not found"
+msgstr "ไม่พบทรัพยากร"
+
+msgid "Info hash"
+msgstr "infohash"
+
+msgid "Created"
+msgstr "สร้างเมื่อ"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr "ขนาดไฟล์ที่ดาวน์โหลดจริง:{0}ไม่รวมไฟล์เติมจำนวน{1}(BEP 47)"
+
+msgid "Added"
+msgstr "เพิ่มเมื่อ"
+
+msgid "Pieces"
+msgstr "ชิ้น"
+
+msgid "Average download speed for torrent"
+msgstr "ความเร็วดาวน์โหลดเฉลี่ยของtorrent"
+
+msgid "Download speed"
+msgstr "ความเร็วดาวน์โหลด"
+
+msgid "Completion"
+msgstr "ความสมบูรณ์"
+
+msgid "Skipped"
+msgstr "ข้าม"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "จะใช้เฉพาะtrackerI2Pส่วนtrackerที่ไม่ใช่I2Pจะแสดงเพื่อข้อมูลเท่านั้น"
+
+msgid "Tracker"
+msgstr "tracker"
+
+msgid "Web Seeds"
+msgstr "Web seed"
+
+msgid "Refresh page for results"
+msgstr "รีเฟรชหน้าเพื่อดูผลลัพธ์"
+
+msgid "Force Recheck"
+msgstr "บังคับตรวจสอบซ้ำ"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "หยุดtorrentเพื่อตรวจสอบความสมบูรณ์ของไฟล์"
+
+msgid "Check integrity of the downloaded files"
+msgstr "ตรวจสอบความสมบูรณ์ของไฟล์ที่ดาวน์โหลด"
+
+msgid "Download file at high priority"
+msgstr "ดาวน์โหลดไฟล์ด้วยลำดับความสำคัญสูง"
+
+msgid "High"
+msgstr "สูง"
+
+msgid "Download file at normal priority"
+msgstr "ดาวน์โหลดไฟล์ด้วยลำดับความสำคัญปกติ"
+
+msgid "Normal"
+msgstr "ปกติ"
+
+msgid "Do not download this file"
+msgstr "ไม่ดาวน์โหลดไฟล์นี้"
+
+msgid "Skip"
+msgstr "ข้าม"
+
+msgid "complete"
+msgstr "เสร็จสมบูรณ์"
+
+msgid "remaining"
+msgstr "ที่เหลือ"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "1ดาว"
+msgstr[1] "{0}ดาว"
+
+msgid "No rating"
+msgstr "ไม่มีคะแนน"
+
+msgid "Rate and Comment"
+msgstr "ให้คะแนนและแสดงความคิดเห็น"
+
+msgid "Rate Torrent"
+msgstr "ให้คะแนนtorrent"
+
+msgid "Add Comment"
+msgstr "เพิ่มความคิดเห็น"
+
+msgid "My Rating"
+msgstr "คะแนนของผู้ใช้"
+
+msgid "Average Rating"
+msgstr "คะแนนเฉลี่ย"
+
+msgid "No community ratings currently available"
+msgstr "ยังไม่มีคะแนนจากชุมชน"
+
+msgid "Submitted"
+msgstr "ส่งแล้ว"
+
+msgid "Mark for deletion"
+msgstr "ทำเครื่องหมายเพื่อลบ"
+
+msgid "Delete Selected"
+msgstr "ลบที่เลือก"
+
+msgid "Ratings and Comments"
+msgstr "คะแนนและความคิดเห็น"
+
+msgid "Author name required to rate or comment"
+msgstr "ต้องมีชื่อผู้เขียนเพื่อให้คะแนนหรือแสดงความคิดเห็น"
+
+msgid "Your author name for published comments and ratings"
+msgstr "ชื่อผู้เขียนสำหรับความคิดเห็นและคะแนนที่เผยแพร่"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "อัปเดตลำดับความสำคัญการดาวน์โหลดไฟล์สำหรับtorrentแล้ว"
+
+msgid "Edit Torrent"
+msgstr "แก้ไขtorrent"
+
+msgid "Active Trackers"
+msgstr "trackerที่ใช้งานอยู่"
+
+msgid "Delete"
+msgstr "ลบ"
+
+msgid "Add Tracker"
+msgstr "เพิ่มtracker"
+
+msgid "Torrent Comment"
+msgstr "ความคิดเห็นของtorrent"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "ต้องหยุดtorrentเพื่อแก้ไข"
+
+msgid "Save Changes"
+msgstr "บันทึกการเปลี่ยนแปลง"
+
+msgid "Torrent must be stopped"
+msgstr "ต้องหยุดtorrent"
+
+msgid "Not found"
+msgstr "ไม่พบ"
+
+msgid "File not found in torrent"
+msgstr "ไม่พบไฟล์ในtorrent"
+
+msgid "Unrecognized"
+msgstr "ไม่รู้จัก"
+
+msgid "Preview"
+msgstr "ดูตัวอย่าง"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "ไม่สามารถเพิ่มtorrent{0}ภายในอีกtorrentหนึ่งได้:{1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "ไม่สามารถเพิ่มtorrent{0}ที่รวมอีกtorrentหนึ่งอยู่ได้:{1}"

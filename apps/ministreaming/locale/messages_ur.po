@@ -1,0 +1,73 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "پیغام کا ٹائم آؤٹ"
+
+msgid "Failed delivery to local destination"
+msgstr "مقامی مقصد کو ترسیل ناکام"
+
+msgid "Local router failure"
+msgstr "مقامی روٹر ناکامی"
+
+msgid "Local network failure"
+msgstr "مقامی نیٹ ورک ناکامی"
+
+msgid "Session closed"
+msgstr "سیشن بند ہو گیا"
+
+msgid "Invalid message"
+msgstr "ناقابلِ قبول پیغام"
+
+msgid "Invalid message options"
+msgstr "ناقابلِ قبول پیغام آپشنز"
+
+msgid "Buffer overflow"
+msgstr "بفر اوور فلو"
+
+msgid "Message expired"
+msgstr "پیغام کی میعاد ختم"
+
+msgid "Local lease set invalid"
+msgstr "مقامی LeaseSet ناقابلِ قبول"
+
+msgid "No local tunnels"
+msgstr "کوئی مقامی ٹنل نہیں"
+
+msgid "Unsupported encryption options"
+msgstr "غیر معمول خفیہ کاری آپشنز"
+
+msgid "Invalid destination"
+msgstr "ناقابلِ قبول مقصد"
+
+msgid "Destination lease set expired"
+msgstr "مقصد کا LeaseSet کی میعاد ختم"
+
+msgid "Destination lease set not found"
+msgstr "مقصد کا LeaseSet نہیں ملا"
+
+msgid "Local destination shutdown"
+msgstr "مقامی مقصد بند ہو گیا"
+
+msgid "Connection was reset"
+msgstr "کنکشن دوبارہ ترتیب ہو گئی"
+
+msgid "Failure code"
+msgstr "ناکامی کوڈ"

@@ -1,0 +1,70 @@
+<div lang="tl">
+
+<ul class=links>
+
+<li><b>Pagsisimula</b><br>
+Kung pinagsimula mo lang ang I2P+, dapat magsimulang lumago ang bilang ng <i>Aktibong Peer</i> na ipinapakita sa <i>Peer</i> na bahagi sa sidebar, at makikita mo rin ang <i>Local Destination</i> na tinatawag na <i>Shared Clients</i> na nakalista sa <i>Service Tunnel</i> na bahagi, at posibleng iba pang client at server depende sa pagkakaayos ng I2P. Ang mga <i>Local Destination</i> na ito ay nagbibigay ng koneksyon sa mga serbisyo sa iba't ibang <a href="/help/faq#portfaq" title="Lista de puertos comúnmente utilizados" class=consolelink>port</a> sa network ng I2P, na nagbibigay-daan sa BitTorrent, email, web proxy, at iba pang serbisyo na gumagana. Ang iyong <a href="/netdb" class=consolelink>Network Database</a> ay nagpapakita ng lahat ng peer na kilala lokal sa network. Maaari mo ring bantayan ang umiiral na <a href="/peers" class=consolelink>koneksyon ng peer</a>, suriin ang <a href="/profiles?f=1" class=consolelink>profile ng performance ng peer</a>, at tingnan ang aktibong <a href="/tunnels" class=consolelink>tunnel</a> at ang kanilang katayuan.</li>
+
+<li><b>Pagsasama sa Network</b><br>
+Sa unang pagpapaganad ng I2P+, maaaring tumagal ng ilang minuto bago ka masimulan (magkasama) sa network at makahanap ng karagdagang peer upang ma-optimize ang pagsasama mo, kaya magpakinta lamang. Kapag mayroon nang berdeng bituin sa tabi ng iyong <i>Local Destination</i> sa <i>Service Tunnel</i> na bahagi ng sidebar, may iba't ibang bagay na magagawa mo sa I2P, at ilan sa mga ito ang ipinapakita namin sa ibaba.</li>
+
+<li><b>Katayuan ng Network</b><br>
+Kapag nabigyan na ng panahon ang I2P+ na subukan ang iyong konektibidad sa network, dapat ideklara ng indicator ng Network Status sa sidebar na "OK". Kung ang katayuan ay "Firewalled", gagana pa rin ang I2P+ bagaman hindi magiging pinakamainam ang performance ng network, at maaapektuhan ang iyong kakayahang magbigay ng bandwidth sa network. Para sa pinakamainam na performance, isaalang-alang ang pagbubukas ng iyong <a href="/confignet#udpconfig" class=consolelink>external I2P+ port</a> sa iyong firewall at sa router na ibinigay ng iyong ISP. May higit pang impormasyon tungkol sa mga mensahe ng katayuan sa <a href="/help/ui#reachabilityhelp" class=consolelink>pahina ng tulong para sa User Interface</a>.</li>
+
+<li><b>Subscription ng Address Book</b><br>
+Para awtomatikong ma-resolve ng I2P+ ang mga .i2p hostname, umaasa ito lalo sa mga subscription sa mga serbisyo na nagbibigay ng DNS translation para sa mga kilalang host. Kung nag-install ka ng I2P+ sa halip na mag-upgrade mula sa I2P, mayroon ka nang sapat na <a href="/dns?subscriptions" class=consolelink>subscription ng address book</a> na naka-configure; pagkatapos ng installation, dapat mapuno ang iyong <a href="/dns" class=consolelink>address book</a> ng hostname para sa mga aktibong serbisyo sa network nang walang tulong ng sinuman. Kung nag-upgrade ka mula sa I2P, tingnan ang <a href="/help/faq#addressbooksubs" class=consolelink>bahagi ng subscription ng address book</a> sa <a href="/help/faq" class=consolelink>FAQ</a> para sa tulong sa pagdaragdag ng karagdagang subscription.
+</li>
+
+<li><b>Pag-aayos ng Browser</b><br>
+Upang mag-browse ng website sa network, kailangan mong i-configure ang iyong browser na gumamit ng default na HTTP proxy na naka-configure sa port 4444, na nagbibigay din ng <i>outproxy</i> na nagpapahintulot sa anonymous na pag-browse ng clearnet site. May <a href="/help/configuration#browserconfig" class=consolelink>mini-guide sa pag-aayos ng Firefox</a> sa Configuration page sa bahagi ng tulong, o tingnan ang bahagi sa ibaba para sa link sa gabay na multi-browser. Kapag n-configure mo na ang iyong browser at subscription ng address book, ang <a href="http://notbob.i2p/" target=_blank>notbob.i2p</a> ay isang magandang site para makita ang nilalaman sa network.
+</li>
+
+</ul>
+
+<h3>Mga Serbisyo sa I2P</h3>
+
+<ul class="links twocol">
+
+<li><b>Palabas na Internet at Pambublikong Pag-browse ng Web</b><br>
+Sa I2P, maaari mong i-access ang mga website na naka-host sa I2P ("eepsite") o mag-browse ng normal na web nang anonymous sa pamamagitan ng built-in na web proxy (outproxy) ng I2P. <a href="https://geti2p.net/en/about/browser-config" class="sitelink external" target=_blank rel=noreferrer>I-configure ang iyong browser</a> upang gumamit ng HTTP proxy sa <code>127.0.0.1 port 4444</code>, pagkatapos ay mag-browse sa website ng nakatagong serbisyo o sa normal na hindi naka-encrypt na <code>http://</code> na address. Upang i-disable o baguhin ang outproxy access sa normal na internet, alisin o baguhin ang outproxy entry para sa <code>false.i2p</code> o <code>purokishi.i2p</code> sa <i>Outproxies</i> na bahagi sa <a href="/i2ptunnel/edit?tunnel=0" target=_blank rel=noreferrer class=consolelink>pahina ng edit</a> ng HTTP Proxy client tunnel sa <a href="/i2ptunnelmgr" class=consolelink>Tunnel Manager</a>.</li>
+
+<li><b>Anonymous na Email</b><br>
+Ang mail system ng Postman na nakabatay sa I2P ay maaaring i-access alinman sa pamamagitan ng <a href="/webmail" class=consolelink>built-in na mail client ng I2P</a> (SusiMail) o kahit anong karaniwang mail client. May mail gateway na nagpapahintulot na matanggap ang email mula sa normal na internet address; maaari ding makausap ang iyong <code>@mail.i2p</code> address sa pamamagitan ng <code>@i2pmail.org</code>. Para sa account, bisitahin ang <a href="http://hq.postman.i2p/" class=sitelink target=_blank rel=noreferrer>hq.postman.i2p</a>.</li>
+
+<li><b>Anonymous na Paglipat ng File</b><br>
+Ang <a href="/torrents" class=consolelink>I2PSnark</a> ay naka-integrate sa I2P, at nagbibigay ng anonymous at naka-encrypt na BitTorrent transfer. Alternatibo, may <a href="https://wiki.biglybt.com/w/I2P" class="sitelink external" target=_blank rel=noreferrer>BiglyBT</a> (ang kapalit ng Azureus/Vuze), isang BitTorrent client na sumusuporta sa torrent sa I2P, at <a href="https://github.com/majestrate/XD" class="sitelink external" target=_blank rel=noreferrer>XD</a>, isang BitTorrent client para lamang sa I2P na nakasulat sa go. Kasama sa karagdagang serbisyo ang browser-based na file hosting tulad ng <a href="http://cake.i2p/" class=sitelink target=_blank rel=noreferrer>cake.i2p</a> at <a href="http://fs.i2p/" class=sitelink target=_blank rel=noreferrer>fs.i2p</a>.</li>
+
+<li><b>Anonymous na Chat</b><br>
+Simulan ang iyong IRC client (halimbawa, <a href="https://hexchat.github.io/" class="sitelink external" target=_blank rel=noreferrer>HexChat</a>) at kumonekta sa <a href="irc://127.0.0.1:6668/i2p" class=chatlink>server</a> sa <code>127.0.0.1 port 6668</code>. Hindi mo kailangang mag-configure ng proxy sa iyong IRC client; nagbibigay ang I2P sa iyo ng lokal na IRC tunnel (na naka-configure sa iyong IRC client bilang IRC server o remote host). Kapag nandoon ka na, ang <code>#saltr</code> at <code>#i2p-dev</code> ay ilan lamang sa mga available na channel na maaari mong salihan. Mayroon ding cross-platform na instant messenger application na nakabatay sa I2P, na available sa <a href="https://vituperative.github.io/i2pchat/" class="sitelink external" target=_blank rel=noreferrer>Github</a>.</li>
+
+<li><b>Anonymous at Naka-encrypt na Web Hosting</b><br>
+May kasamang webserver ang I2P para i-host ang iyong sariling website sa network ng I2P: isang <a href="https://www.eclipse.org/jetty/" class="sitelink external" target=_blank rel=noreferrer>Jetty</a> instance na nakikinig sa <a href="http://127.0.0.1:7658/" class=consolelink target=_blank rel=noreferrer>http://127.0.0.1:7658/</a>. Pagkatapos simulan ang naka-configure nang <a href="/i2ptunnelmgr" class=consolelink target=_blank rel=noreferrer>I2P Webserver Tunnel</a>, makikita ng iba ang iyong site (bagaman hindi matatagpuan). Nasa <a href="http://127.0.0.1:7658/help/webhosting" class=consolelink>bahagi ng tulong</a> ang mga tagubilin sa pag-aayos ng iyong site at pagpaparehistro ng .i2p domain.</li>
+
+<li id=plugins><b>Mga Plugin para sa I2P</b><br>
+Bisitahin ang <a href="http://stats.i2p/i2p/plugins/" class=sitelink target=_blank rel=noreferrer>plugins page ng zzz</a> para sa mga link upang direktang mag-download ng ilang plugin. Kung developer ka, may <a href="http://i2p-projekt.i2p/plugins.html" class=sitelink target=_blank rel=noreferrer>framework</a> na hindi nakatali sa isang wika para sa paggawa ng sarili mong plugin.</li>
+
+</ul>
+
+<h3 id=trouble>Impormasyon para sa Mga Developer at Kontributor</h3>
+
+<ul class=links>
+
+<li><b>Pag-uulat ng Mga Bug</b><br>
+Upang mag-ulat ng bug, mangyaring mag-file ng ticket sa <a href="https://github.com/I2PPlus/i2pplus/issues" class=sitelink target=_blank rel=noreferrer>github.com/I2PPlus/i2pplus/issues</a>. Para sa mga usapang may kinalaman sa developer, mangyaring bisitahin ang <a href="http://zzz.i2p/" class=sitelink target=_blank rel=noreferrer>developer forum ng zzz</a> o ang <a href="irc://127.0.0.1:6668/i2p-dev" class=chatlink>developer channel</a> (#i2p-dev) sa IRC network ng I2P.</li>
+
+<li><b>Pag-unlad sa I2P</b><br>
+Kung developer ka, maaaring isaalang-alang ang pagsulat ng sarili mong <a href="http://i2p-projekt.i2p/applications.html" class=sitelink target=_blank rel=noreferrer>I2P application</a> o pagbutas ng seguridad ng iyong application sa pamamagitan ng network ng I2P. Ang <a href="https://wikipedia.org/wiki/User_Datagram_Protocol" class="sitelink external" target=_blank rel=noreferrer>UDP</a> at <a href="https://wikipedia.org/wiki/Transmission_Control_Protocol" class="sitelink external" target=_blank rel=noreferrer>TCP</a> na protocol ay <a href="http://i2p-projekt.i2p/techintro.html#op.transport" class=sitelink target=_blank rel=noreferrer>naka-provision</a>, at posible din ang <a href="http://i2p-projekt.i2p/streaming.html" class=sitelink target=_blank rel=noreferrer>streaming sa totoong panahon</a>. Nagbibigay din kami ng buong access sa <a href="http://javadoc.skank.i2p/" class=sitelink target=_blank rel=noreferrer>Java API</a>, at naka-host ang mga pangunahing library ng I2P sa <a href="https://mvnrepository.com/artifact/net.i2p" class="sitelink external" target=_blank rel=noreferrer>Apache Maven repository</a>. Maaaring tingnan ng mga developer ang source sa <a href="https://github.com/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P) o sa <a href="https://github.com/I2PPlus/i2pplus/" class="sitelink external" target=_blank rel=noreferrer>Github</a> (I2P+), at bantayan ang kasalukuyang katayuan ng build sa pamamagitan ng platforma ng tuluy-tuloy na integrasyon <a href="https://travis-ci.org/i2p/i2p.i2p" class="sitelink external" target=_blank rel=noreferrer>Travis</a> (I2P) o sa pamamagitan ng <a href="https://gitlab.com/i2pplus/I2P.Plus/pipelines" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a> (I2P+). Kailangan ang <a href="https://wikipedia.org/wiki/Java_SDK" class="sitelink external" target=_blank rel=noreferrer>Java SDK</a> at <a href="http://ant.apache.org/" class="sitelink external" target=_blank rel=noreferrer>Apache Ant</a> upang mag-build mula sa source.</li>
+
+</ul>
+
+<ul class="links twocol">
+
+<li><b>Makilahok!</b><br>
+Ang I2P ay binubuo at pinananatili sa halos buong bahagi sa pamamagitan ng boluntaryong pakikilahok ng mga miyembro ng komunidad na walang pinansinang pondo. May higit pang impormasyon tungkol sa kung paano ka makakilahok sa <a href="http://i2p-projekt.i2p/getinvolved.html" class=sitelink target=_blank rel=noreferrer>volunteers page</a> sa opisyal na website.</li>
+
+<li><b>I2P+</b><br>
+Para sa higit pang impormasyon tungkol sa I2P+, mangyaring bisitahin ang <a href="http://skank.i2p/" class=sitelink target=_blank rel=noreferrer>skank.i2p</a> o ang <a href="https://i2pplus.github.io/" class="sitelink external" target=_blank rel=noreferrer>i2pplus.github.io</a>, o sumali sa channel na <a href="irc://127.0.0.1:6668/saltR" class=chatlink>#saltR</a> sa IRC network ng I2P. Maligayang tumanggap ng mga patch para sa I2P+; mangyaring isumite ang mga pull request sa pamamagitan ng <a href="https://gitlab.com/i2pplus/I2P.Plus/" class="sitelink external" target=_blank rel=noreferrer>Gitlab</a>.</li>
+
+</ul>
+
+</div>

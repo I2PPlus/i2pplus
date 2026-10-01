@@ -1,0 +1,1681 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Magnet"
+msgstr "magnet"
+
+msgid "Unable to connect to I2P"
+msgstr "I2P ته نه شی وصل کړی"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "د I2P سره د وصل تېروتنه - خپل I2CP ترتیبات وګورئ!"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "د I2CP انتخابونو سره I2PSnark ترتیب کړئ"
+
+msgid "No write permissions for data directory"
+msgstr "د ډیټا دېریکټرۍ لپاره د لیکلو اجازه نشته"
+
+msgid "Data directory cannot be created"
+msgstr "ډیټا دېریکټری نه شو جوړولی"
+
+msgid "No write permissions for temp directory"
+msgstr "د موقت دېریکټرۍ لپاره د لیکلو اجازه نشته"
+
+msgid "Temp directory cannot be created"
+msgstr "موقت دېریکټری نه شو جوړولی"
+
+msgid "No write permissions for torrent directory"
+msgstr "د torrent دېریکټرۍ لپاره د لیکلو اجازه نشته"
+
+msgid "Torrent directory cannot be created"
+msgstr "د torrent دېریکټری نه شو جوړولی"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "د ټولو پورته لېږونکو حد بدلون شو {0}"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "د پورته لېږونکو لږ تر لږه حد {0} دی"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "د پورته لېږلو د باندویډټ حد بدلون شو {0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "د پورته لېږلو د باندویډټ لږ تر لږه حد {0}KBps دی"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "د ښکته راوړلو تر ټولو لوړ سرعت بدلون شو {0}KB/s"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "د ښکته راوړلو د سرعت حد {0}KB/s دی"
+
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr "یادونه: دا بدلون ښکته کېدی شی چې خپل torrents درولئ او بیا پیل کړئ، یا I2PSnark بیا پیل کړئ۔"
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "په راتلونکو ټونلونو کې د +0/1 د ټونل د هاپونو تصادفی کول فعال شو۔"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "په راتلونکو ټونلونو کې د ټونل د هاپونو تصادفی کول غیر فعال شو۔"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "په لنډیو ټونلونو کې د +0/1 د ټونل د هاپونو تصادفی کول فعال شو۔"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "په لنډیو ټونلونو کې د ټونل د هاپونو تصادفی کول غیر فعال شو۔"
+
+msgid "Enabled a separate destination for each torrent"
+msgstr "د هر torrent لپاره جلا تاریب فعال شو۔"
+
+msgid "Disabled a separate destination for each torrent"
+msgstr "د هر torrent لپاره جلا تاریب غیر فعال شو۔"
+
+#, java-format
+msgid "Maximum destinations changed to {0}"
+msgstr "تر ټولو لوړ تاریبونه بدلون شو۔ {0}"
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr "نا محدود تاریبونه بیا رامنځته شو۔ (هر torrent ته یو)"
+
+msgid "Enabled randomizing torrent start times"
+msgstr "د torrent د پیل وختونو تصادفی کول فعال شو۔"
+
+msgid "Disabled randomizing torrent start times"
+msgstr "د torrent د پیل وختونو تصادفی کول غیر فعال شو۔"
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr "د پیل د ځنډ د رنګه بدلون شو {0} - {1}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "د نوې کولو وخت بدلون شو {0}"
+
+msgid "Refresh disabled"
+msgstr "نوې کول غیر فعال شو۔"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "د مخې اندازه بدلون شوه {0}"
+
+msgid "New files will be publicly readable"
+msgstr "نوی فایلونه به عامه ولوستل شی"
+
+msgid "New files will not be publicly readable"
+msgstr "نوی فایلونه به عامه نه شی لوستل شی"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "د ډیټا دېریکټرۍ د بدلون مخکې ټول torrents درولئ"
+
+msgid "Data directory must be an absolute path"
+msgstr "ډیټا دېریکټری باید بشپړ لاره وی"
+
+msgid "Not a directory"
+msgstr "دېریکټری نه دی"
+
+msgid "Unreadable"
+msgstr "نالوستلی"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "ډیټا دېریکټری بدلون شو {0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "د I2CP او ټونل بدلونونه به له ټولو torrents درولو وروسته پلی شی۔"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "د I2CP انتخابونه بدلون شو۔ {0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "زاړه I2CP تاریب له وصل څخه غایې کېږی"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "په نویو ترتیباتو سره نه شو وصل، زاړو I2CP ترتیباتو ته بېرته ګرځی۔"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "په زاړو ترتیباتو سره بیا وصل ونه شوای!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "په نوی I2CP تاریب بیا وصل شو۔"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "I2CP اورېدونکی د \"{0}\" لپاره بیا پیل شو۔"
+
+msgid "Enabled autostart"
+msgstr "اتوماتیک پیل فعال شو۔"
+
+msgid "Disabled autostart"
+msgstr "اتوماتیک پیل غیر فعال شو۔"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "پوښې ټریکرونه فعال شو۔ - د پلی کېدو لپاره باید torrent بیا پیل شی۔"
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "پوښې ټریکرونه غیر فعال شو۔ - د پلی کېدو لپاره باید torrent بیا پیل شی۔"
+
+msgid "Enabled DHT."
+msgstr "DHT فعال شو۔"
+
+msgid "Disabled DHT."
+msgstr "DHT غیر فعال شو۔"
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "د DHT بدلون د ټونل د بندولو او بیا پرانیستو ته اړتیا لری"
+
+msgid "Enabled Ratings."
+msgstr "درجې فعالې شو۔"
+
+msgid "Disabled Ratings."
+msgstr "درجې غیر فعالې شو۔"
+
+msgid "Enabled Comments."
+msgstr "تبصرې فعالې شو۔"
+
+msgid "Disabled Comments."
+msgstr "تبصرې غیر فعالې شو۔"
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "د تبصرو نوم {0} ته وټاکل شو۔"
+
+msgid "Collapsible panels enabled."
+msgstr "غېږېدوونکی پینلونه فعال شو۔"
+
+msgid "Collapsible panels disabled."
+msgstr "غېږېدوونکی پینلونه غیر فعال شو۔"
+
+msgid "Torrent filter bar enabled."
+msgstr "د torrent فلټر بار فعال شو۔"
+
+msgid "Torrent filter bar disabled."
+msgstr "د torrent فلټر بار غیر فعال شو۔"
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "د انځورونو لپاره لایټ باکس فعال شو۔"
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "د انځورونو لپاره لایټ باکس غیر فعال شو۔"
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "«Add» او «Create» برخې په ټولو torrent لستونو مخونو کې فعالې شو۔"
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "«Add» او «Create» برخې باید په څویزو مخونو torrent لستونو کې یوازې لومړی مخ کې ښکاره شی۔"
+
+msgid "API key updated."
+msgstr "API کلیمه نوې شوه۔"
+
+msgid "Preallocate files for new torrents enabled."
+msgstr "د نویو torrents د فایلونو پیشکتنه فعال شوه۔"
+
+msgid "Preallocate files for new torrents disabled."
+msgstr "د نویو torrents د فایلونو پیشکتنه غیر فعال شوه۔"
+
+msgid "Preserve original file names enabled."
+msgstr "د اصلی فایل نومونو ساتل فعال شو۔"
+
+msgid "Preserve original file names disabled."
+msgstr "د اصلی فایل نومونو ساتل غیر فعال شو۔"
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr "د هر torrent لپاره تر ټولو لوړ فایلونه بدلون شو۔ {0}"
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr "د هر torrent لپاره تر ټولو لوړ فایلونه ناسمه ده: {0}"
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr "د تیارۍ پوښ موقت دېریکټری بدلون شو {0}"
+
+msgid "Temp directory staging disabled."
+msgstr "د تیارۍ پوښ موقت دېریکټری غیر فعال شو۔"
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr "د torrent دېریکټری بدلون شو {0}"
+
+msgid "Torrent directory reset to data directory."
+msgstr "د torrent دېریکټری ډیټا دېریکټرۍ ته بیا رامنځته شوه۔"
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "د پوښو ټریکرونو لست بدلون شو - د پلی کېدو لپاره باید torrent بیا پیل شی۔"
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "د خصوصی ټریکرونو لست بدلون شو - یوازې نویو جوړ شویو torrents باندې اثر لری۔"
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "ترتیبات نه شول ذخیره کړی {0}"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "د torrent فایل ړنګل شو: {0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "د torrent فایل د {0} څخه {1} ته وځوړه شو"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "تېروتنه: torrent نه شو اضافه کړی: {0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "torrent یوازې روان دی: {0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "\"{0}\" نه شی پرانیستل"
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "د دې infohash سره torrent یوازې روان دی: {0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "په همدې ډیټا ځای کې torrent یوازې روان دی: {0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "په \"{0}\" کې torrent ناسم دی"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "تېروتنه - د میمورۍ کمښت، له {0} څخه torrent نه شو جوړولی"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr "تېروتنه - له {0} څخه torrent نه شو جوړولی"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "I2PSnark پیژندنه کېږی او ټونلونه پرانیستل کېږی"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "torrent اضافه او پیل شو: {0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "torrent اضافه شو: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "تېروتنه - په خصوصی torrent \"{0}\" کې I2P ټریکرونه نشته"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "خبرداری - په \"{0}\" کې I2P ټریکرونه نشته، به یوازې I2P پوښو ټریکرونو او DHT ته اعلان کړی۔"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "خبرداری - په \"{0}\" کې I2P ټریکرونه نشته او پوښې ټریکرونه غیر فعال دی، به یوازې DHT ته اعلان کړی۔"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "خبرداری - په \"{0}\" کې I2P ټریکرونه نشته او DHT او پوښې ټریکرونه غیر فعال دی، باید مخکې له torrent د پیل څخه پوښې ټریکرونه یا DHT فعال کړئ۔"
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "پوښې ټریکرونه غیر فعال دی او مو DHT peerونه نه لرو۔ د {0} راوړل به ونه شې کېږی ترڅو بل torrent پیل کړئ، پوښې ټریکرونه فعال کړئ، یا DHT فعال کړئ۔"
+
+#, java-format
+msgid "Adding {0}"
+msgstr "{0} زیاتول کېږی"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "ښکته راوړل یوازې روان دی: {0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "د torrent فایل کاپی کول {0} ته ناکام شو"
+
+msgid " - torrent file already exists"
+msgstr " - torrent فایل یوازې شته"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "\"{0}\" ({1}) کې ډېر فایلونه دی!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "د torrent فایل \"{0}\" نه شی په \".torrent\" کې پای ته ورسېږی!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "په \"{0}\" کې پېټۍ نشته!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "په \"{0}\" کې ډېرې پېټۍ دی، حد {1} دی!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "په \"{0}\" ({1}B) کې پېټۍ ډېرې لوړې دی!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "حد {0}B دی"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "torrent \"{0}\" ډیټا نه لری!"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "له {0}B څخه لوړ torrents لا ملاتړ نه کېږی \"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "تېروتنه: torrent {0} نه شو لیرې کړی"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "torrent درول شو: {0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "torrent لیرې شو: {0}"
+
+#, java-format
+msgid "Starting torrents in {0}&hellip;"
+msgstr "په {0} کې torrents پیل کېږی&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "د ښکته راوړلو د باندویډټ حد {0} KB/s دی"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "د پورته لېږلو د باندویډټ حد {0} KB/s دی"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "د I2P له هغه instance سره چې په {0} کې دی، I2CP پورټ ته وصل کېږی۔"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "د پورته لېږلو د باندویډټ حد {0} KBps دی، تر {1} موازیو peerونو پورې۔"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr "ذخیره: په تنظیم شوی ډیټا پارتیشن کې د ښکته راوړلو لپاره اوس {0}GB شته"
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "ذخیره: په تنظیم شوی ډیټا پارتیشن کې د ښکته راوړلو لپاره اوس {0}MB شته"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "خبرداری - په تنظیم شوی ډیټا پارتیشن کې د ښکته راوړلو لپاره یوازې {0}MB شته"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr "موقت ذخیره: په تنظیم شوی موقت پارتیشن کې د ښکته راوړلو لپاره اوس {0}GB شته"
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr "موقت ذخیره: په تنظیم شوی موقت پارتیشن کې د ښکته راوړلو لپاره اوس {0}MB شته"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr "خبرداری - په تنظیم شوی موقت پارتیشن کې د ښکته راوړلو لپاره یوازې {0}MB شته"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "ښکته راوړل بشپړ شو: {0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "torrent پیل کېږی: {0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "د torrent جوړولو د فایل فلټر ترتیبات نه شول بار کړی: "
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "د torrent جوړولو د فایل فلټر ترتیبات نه شول ذخیره کړی: "
+
+msgid "Torrent not found"
+msgstr "torrent ونه موندل شو"
+
+msgid "Opening the I2P tunnel"
+msgstr "د I2P ټونل پرانیستل کېږی"
+
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr "د torrent لټون حل کېږی: {0}"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "د I2P ټونل پرانیستل کېږی او ټول torrents پیل کېږی۔"
+
+msgid "Connecting to I2P"
+msgstr "د I2P سره وصل کېږی۔"
+
+msgid "Connected to I2P at"
+msgstr "د I2P سره ووصل په"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "torrent {0} پیل کېږی۔"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "ټول torrents درول کېږی او د I2P ټونل بندېږی۔"
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "د ټریکرونو خبرداری وروسته د I2P ټونل بندېږی۔"
+
+msgid "I2P tunnel closed."
+msgstr "د I2P ټونل بند شو۔"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr "د تاریب ځنډ تګاو کېږی - {0} فعال ښکته راوړل روان دی"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr "د تاریب ځنډ تګاو کېږی - {0} فعال ښکته راوړل روان دی۔"
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr "فعاله ښکته راوړونکی torrents نشته - تاریبونه بدلېږی۔"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "{0} نه شی کتنه کړی"
+
+msgid "Torrent already started"
+msgstr "torrent یوازې پیل شوی دی"
+
+msgid "No storage"
+msgstr "ذخیره نشته"
+
+msgid "Starting recheck of {}"
+msgstr "د بیا کتنې پیل {}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "د torrent {0} بیا کتنه بشپړه شوه، اوس {1} بشپړ دی"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "د torrent {0} بیا کتنه بشپړه شوه، بدلون نشته"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "د torrent {0} د کتنې په مهال کې تېروتنه"
+
+msgid "Data directory does not exist"
+msgstr "ډیټا دېریکټری شته نه دی"
+
+msgid "Cannot create diskspace bar"
+msgstr "د ډسک د ځای شریط نه شی جوړولی"
+
+msgid "Data partition"
+msgstr "ډیټا پارتیشن"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "د {0} لپاره معتبر ټریکرونه نشته - پوښې ټریکرونه یا DHT فعال کړئ؟"
+
+msgid "Updating"
+msgstr "نوې کوی"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "له {0} څخه نوې کوی"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "{0} ښکته راوړل کېږی۔"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "د torrent فایل غوښتنه: {0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "د torrent فایل راوړل ناکام شو: {0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "torrent له {0} څخه ښکته راوړل شو۔"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "torrent یوازې په صف کې دی: {0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "په {0} کې torrent ناسم و"
+
+msgid "Configuration"
+msgstr "ترتیبات"
+
+msgid "User Interface"
+msgstr "کاروونکی پرتله"
+
+msgid "Switch to Embedded Mode"
+msgstr "په پیوستل شوی حالت کې بدلېږئ"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "په ټوله سکرین حالت کې بدلېږئ"
+
+msgid "Theme"
+msgstr "ټیم"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "د ټیمونو په لاس کې بدلون لپاره، عام ټیم غیر فعال کړئ"
+
+msgid "Universal theming is enabled."
+msgstr "عام ټیم فعال دی۔"
+
+msgid "Configure"
+msgstr "ترتیب کړئ"
+
+msgid "Refresh time"
+msgstr "د نوې کولو وخت"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "په اصلی مخ کې د torrent حالت څومره ځله نوې کېږی۔"
+
+msgid "Never"
+msgstr "هریڅکله نه"
+
+msgid "Page size"
+msgstr "د مخې اندازه"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "په هر مخ کې د ښودلو تر ټولو لوړ شمېر torrents"
+
+msgid "torrents"
+msgstr "torrents"
+
+msgid "Language"
+msgstr "ژبه"
+
+msgid "Collapsible panels"
+msgstr "غېږېدوونکی پینلونه"
+
+msgid "Your browser does not support this feature."
+msgstr "ستا براوزر دا ځانګړتیا ملاتړ نه کوی۔"
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "د 'Add Torrent' او 'Create Torrent' پینلونو ته اجازه ورکړئ چې غېږېدوونکی شی، او په غیر پیوستل شوی حالت کې په ابدۍ توګه غېږېدلی وی۔"
+
+msgid "Torrent filter bar"
+msgstr "د torrent فلټر بار"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "د torrents په سر کې فلټر بار ښیئ ترڅو د حالت له مخې په ګزینه توګه ښکاره شی۔"
+
+msgid "requires javascript"
+msgstr "javascript ته اړتیا لری"
+
+msgid "Enable lightbox"
+msgstr "لایټ باکس فعال کړئ"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "لایټ باکس وکاروئ ترڅو د بنګارو په کلیک کې انځورونه ښکاره شی۔"
+
+msgid "Persist Add/Create"
+msgstr "«Add»/«Create» ساتئ"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "په څویز حالت کې 'Add' او 'Create' برخې په ټولو torrent لستونو مخونو کې ښیئ۔"
+
+msgid "Comments &amp; Ratings"
+msgstr "تبصرې &amp; درجې"
+
+msgid "Enable Ratings"
+msgstr "درجې فعال کړئ"
+
+msgid "Show ratings on torrent pages"
+msgstr "په torrent مخونو کې درجې ښیئ"
+
+msgid "Enable Comments"
+msgstr "تبصرې فعال کړئ"
+
+msgid "Show comments on torrent pages"
+msgstr "په torrent مخونو کې تبصرې ښیئ"
+
+msgid "Comment Author"
+msgstr "د تبصرې لیکوال"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "د خپلو تبصرو او درجو لپاره د لیکوال نوم وټاکئ"
+
+msgid "Torrent Options"
+msgstr "د torrent انتخابونه"
+
+msgid "Half available bandwidth recommended."
+msgstr "سپارښه شوې ده چې د شته باندویډټ نیمایی وکاروئ۔"
+
+msgid "Bandwidth limit"
+msgstr "د باندویډټ حد"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "د ښکته راوړلو لپاره ویشل شوی تر ټولو لوړ باندویډټ"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "د پورته لېږلو لپاره ویشل شوی تر ټولو لوړ باندویډټ"
+
+msgid "View or change router bandwidth"
+msgstr "د راوټر باندویډټ وښیئ یا بدلېږئ"
+
+msgid "Total uploader limit"
+msgstr "د ټولو پورته لېږونکو حد"
+
+msgid "Maximum number of peers to upload to"
+msgstr "د پورته لېږلو تر ټولو لوړ شمېر peerونه"
+
+msgid "peers"
+msgstr "peerونه"
+
+msgid "Use open trackers also"
+msgstr "پوښې ټریکرونه هم وکاروئ"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "torrents پوښې ټریکرونو ته اعلان کړئ، همدا ډول د torrent فایل په لیست کې شته ټریکرونو ته هم۔"
+
+msgid "Enable DHT"
+msgstr "DHT فعال کړئ"
+
+msgid "Use DHT to find additional peers"
+msgstr "DHT وکاروئ ترڅو نور peerونه پیدا کړئ"
+
+msgid "Auto start torrents"
+msgstr "د torrents اتوماتیک پیل"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "کله چې torrents زیات کېږی اتوماتیک پیل کړئ او کله چې I2PSnark پیل کېږی بیا پیل کړئ"
+
+msgid "Startup delay"
+msgstr "د پیل ځنډ"
+
+msgid "minutes"
+msgstr "دقیقې"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr "څومره وخت مخکې چې په I2PSnark پیل کې اتوماتیک پیل شوی torrents بار شی، لږ تر لږه؟"
+
+msgid "min"
+msgstr "لږ تر لږه"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr "څومره وخت مخکې چې په I2PSnark پیل کې اتوماتیک پیل شوی torrents بار شی، تر ټولو وروسته؟"
+
+msgid "max"
+msgstr "تر ټولو وروسته"
+
+msgid "Data Storage"
+msgstr "د ډیټا ذخیره"
+
+msgid "Data directory"
+msgstr "ډیټا دېریکټری"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "هغه دېریکټری چې torrents او ښکته راوړل شوی/شریک فایلونه پکې ذخیره کېږی۔"
+
+msgid "Temp directory"
+msgstr "موقت دېریکټری"
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr "اختیاری دېریکټری چې پکې ښکته راوړل د بشپړېدو مخکې په تیارۍ پوښ کې کېږی او بیا د ډیټا دېریکټرۍ ته غېږی۔ د غیر فعالولو لپاره خالی پرېږده۔"
+
+msgid "Torrent directory"
+msgstr "د torrent دېریکټری"
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr "اختیاری دېریکټری چې .torrent فایلونه له ښکته راوړل شوی ډیټا څخه جلا ذخیره کړی۔ د ډیټا دېریکټرۍ کې د ذخیرولو لپاره خالی پرېږده۔"
+
+msgid "Files readable by all"
+msgstr "ټولو لخوان لوستلی وړ فایلونه"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "د فایلونو اجازې وټاکئ ترڅو نوره محلی کاروونکی وړتیا ولری چې ښکته راوړل شوی فایلونو ته لاسرسی ولری"
+
+msgid "Preallocate files"
+msgstr "د فایلونو پیشکتنه"
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr "نوی torrent فایلونه په بشپړه اندازې اوږدول کړئ او د torrent د پیل په مهال سمدستی په ډسک کې ځای وټاکئ، ترڅو بشپړ ډسک ښکته راوړل ونه خوقفوی او د پېټۍ په راتګ ټاکی ډېر نه شی۔"
+
+msgid "Preserve file names"
+msgstr "د فایل نومونو ساتل"
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr "له torrent څخه د اصلی فایل نومونو ساتل۔ کله چې غیر فعال وی، نومونه فلټر کېږی ترڅو ناولنې فایل سیسټم تورې لرې کړی۔ کله چې فعال وی، اصلی نومونه کارول کېږی؛ که یو نوم کې هغه تورې وی چې ستا فایل سیسټم ملاتړ نه کوی، نو فایل به په یو خوندی بدیل نوم جوړ شی او خبرداری به ښکاره شی۔"
+
+msgid "Max files per torrent"
+msgstr "د هر torrent لپاره تر ټولو لوړ فایلونه"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "په هر torrent کې اجازه شوی تر ټولو لوړ شمېر فایلونه - په یاد وسوئ چې ټریکرونه خپل حدونه کومکی شی، او ستا OS به د خلاصو فایلونو شمېر محدود کړی، چې د ډېرو فایلونو سره torrents (او وروسته torrents) ونه شی بار کړی۔"
+
+msgid "Tunnel Configuration"
+msgstr "د ټونل ترتیبات"
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr "د دې پېژندنې لپاره لومړی تاریب (پېژندنه)؛ د DHT، ټریکر او بلاک لیست یې د هر torrent له تاریبونو سره شریک دی۔"
+
+msgid "Our destination (identity) for this session"
+msgstr "د دې پېژندنې لپاره زموږ تاریب (پېژندنه)"
+
+msgid "Primary Dest."
+msgstr "لومړی تاریب"
+
+msgid "Dest."
+msgstr "تاریب"
+
+msgid "Inbound Settings"
+msgstr "د راتلونکو ترتیبات"
+
+msgid "Outbound Settings"
+msgstr "د لنډیو ترتیبات"
+
+msgid "Vary Tunnel Length"
+msgstr "د ټونل د اوږدوالۍ توغیر"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "په راتلونکو ټونلونو ته په تصادفی توګه 0 یا 1 نور هاپه زیاته کړئ"
+
+msgid "Inbound"
+msgstr "راتلونکی"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "په لنډیو ټونلونو ته په تصادفی توګه 0 یا 1 نور هاپه زیاته کړئ"
+
+msgid "Outbound"
+msgstr "لنډی"
+
+msgid "Multi-destination"
+msgstr "څویز تاریب"
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr "د هر torrent لپاره جلا تاریب وکاروئ، نو ټریکرونه او DHT به نه شی ستاسو torrents سره کېدایی۔ تاریبونه موقتی دی او په بیا پیل کې بدلېږی۔"
+
+msgid "Maximum destinations"
+msgstr "تر ټولو لوړ تاریبونه"
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr "کله چې د دې تر ټولو لوړ حد څخه ډېر torrents روان وی، نور torrents په تصادفی، بدلون کېدونکیو ډلو کې تاریبونه شریکوی، ترڅو د میمورۍ کارول محدود شی۔ صفر یعنی د هر torrent لپاره یو تاریب۔"
+
+msgid "Random startup delay"
+msgstr "تصادفی د پیل ځنډ"
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr "د څویزو تاریبو torrents پیل په تصادفی ځنډ سره خنګ کړئ، نو هغه torrents چې یوځای پیل کېږی نه شی په ټریکرونو یا DHT peerونو لخوا اړوندول کېږی او د ټونل جوړول ویشل کېږی۔ د ټولو torrents د ګټې په توګه سمدستی پیل لپاره غیر فعال کړئ۔"
+
+msgid "I2CP host"
+msgstr "د I2CP کوربه"
+
+msgid "I2CP port"
+msgstr "د I2CP پورټ"
+
+msgid "I2CP options"
+msgstr "د I2CP انتخابونه"
+
+msgid "Browser Integration"
+msgstr "د براوزر یکجوالی"
+
+msgid "Enable browser API"
+msgstr "د براوزر API فعال کړئ"
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr "اجازه ورکړئ چې magnet لنکونه او torrent URLونه په CSRF nonce پرته، له loopback یا لاندې مجازو کوربو څخه اضافه شی۔"
+
+msgid "Allowed hosts"
+msgstr "مجاز کوربه"
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr "په کوما سره جلا شوی هاست نیمونه یا IPونه چې د nonce پرته torrents اضافه کړی اجازه لری؛ loopback تل مجاز دی۔"
+
+msgid "API key"
+msgstr "API کلیمه"
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr "د لرې کېدو لاسرسی لپاره اختیاری پټ نښه، د کوربو د اجازې لست څخه تګری۔"
+
+msgid "Install browser handler"
+msgstr "د براوزر مدیر نصب کړئ"
+
+msgid "Update browser handler"
+msgstr "د براوزر مدیر نوې کړئ"
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr "پرانیستل شوی I2PSnark Bridge زیاتوالی په v{0} ته نوې کړئ"
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr "په خپل براوزر کې I2PSnark Bridge زیاتوالی پرانیستئ ترڅو magnet لنکونه ورکړئ؛ زیاتوالی پخپله خپله په براوزر کې ثبتوی، د راوټر په خوا هیڅ فایل نه لیکل کېږی۔"
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "هغه PowerShell نصب کوونکی ښکته راوړئ چې magnet لنکونه او .torrent فایلونه ستاسو په براوزر کې ثبتوی؛ د I2PSnark Bridge زیاتوالی ته د Firefox ډل په براوزر اړتیا ده۔"
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "هغه نصب کوونکی سکریپت ښکته راوړئ چې magnet لنکونه او .torrent فایلونه ستاسو په براوزر کې ثبتوی؛ د I2PSnark Bridge زیاتوالی ته د Firefox ډل په براوزر اړتیا ده۔"
+
+msgid "Download browser handler script"
+msgstr "د براوزر د مدیر سکریپت ښکته راوړئ"
+
+msgid "Save configuration"
+msgstr "ترتیبات وساته"
+
+msgid "Torrent Create File Filtering"
+msgstr "د torrent جوړولو د فایل فلټر"
+
+msgid "Mark filter for deletion"
+msgstr "د فلټر د ړنګولو لپاره نښه وکړئ"
+
+msgid "Name"
+msgstr "نوم"
+
+msgid "Filter Pattern"
+msgstr "د فلټر پیټرن"
+
+msgid "Starts With"
+msgstr "پیل کوی سره"
+
+msgid "Contains"
+msgstr "پکې شته"
+
+msgid "Ends With"
+msgstr "پای ته ورسېږی سره"
+
+msgid "Enabled by Default"
+msgstr "په ابدۍ توګه فعال"
+
+msgid "Delete selected"
+msgstr "غوره ړنګوه"
+
+msgid "Save Filter Configuration"
+msgstr "د فلټر ترتیبات وساته"
+
+msgid "Restore defaults"
+msgstr "ابدۍ بېا رامنځته کړئ"
+
+msgid "Add File Filter"
+msgstr "د فایل فلټر اضافه کړئ"
+
+msgid "Add"
+msgstr "اضافه کړئ"
+
+msgid "Trackers"
+msgstr "ټریکرونه"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "د I2PSnark د پېژندل شوی لست څخه د لیرې کولو لپاره ټریکرونه غوره کړئ"
+
+msgid "Website URL"
+msgstr "د ویب سایټ URL"
+
+msgid "Standard"
+msgstr "عادی"
+
+msgid "Open"
+msgstr "پوښ"
+
+msgid "Private"
+msgstr "خصوصی"
+
+msgid "Announce URL"
+msgstr "د اعلان URL"
+
+msgid "Mark tracker for deletion"
+msgstr "د ټریکر د ړنګولو لپاره نښه وکړئ"
+
+msgid "Add tracker"
+msgstr "ټریکر اضافه کړئ"
+
+msgid "Save tracker configuration"
+msgstr "د ټریکر ترتیبات وساته"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "دا د پرانیستلو تر ټولو لوړ شمېر ټونلونه وټاکی، چې د وصل شوی peerونو شمېر له مخې ټاکل کېږی (بیا ځینې خو په یې کې کارول کمتر شی)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "دا ترتیب په له 3 څخه لږ هاپو ته بدلون کول سرعت ښېږی خو د ناڅرګندی په قیمت یې سپارښه نه ده"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr "د I2PSnark Bridge زیاتوالی v{0} کهن دی، په ترتیباتو مخ کې v{1} ته یې نوې کړئ"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "د torrent راوړلو لپاره «Add torrent» تڼۍ ته کلیک وکړئ"
+
+msgid "Torrents"
+msgstr "torrentونه"
+
+msgid "Refresh page"
+msgstr "مخ نوې کړئ"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "د torrent &amp; فایل شریکولو فورم"
+
+msgid "Forum"
+msgstr "فورم"
+
+msgid "Search torrents"
+msgstr "torrents لټون"
+
+msgid "Clear search"
+msgstr "لټون پاک کړئ"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "ناڅرګند BitTorrent کلآینټ"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "ایا {0} او ټول ښکته راوړل شوی ډیټا ړنګول غواړئ؟"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "<b>{0}</b> او ټول په اړه تړې ډیټا ړنګل کېږی..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "ایا غواړئ چې torrent فایل {0} او په اړه تړې میټاډیټا ړنګ کړئ؟"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "یادونه: ښکته راوړل شوی ډیټا به نه ړنګل شی۔"
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "{0} او یوازې په اړه تړې میټاډیټا ړنګل کېږی..."
+
+msgid "clear messages"
+msgstr "پیامونه پاک کړئ"
+
+msgid "Expand"
+msgstr "غړ کړئ"
+
+msgid "Shrink"
+msgstr "کوچنی کړئ"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "خبرداری! ستا په براوزر کې Javascript غیر فعال دی۔ که {0} فعالی وی، نو د نوې کولو په مهال به د add/create torrent برخو کې ټول داخلونه له لاسه ورکړې۔"
+
+msgid "page refresh"
+msgstr "د مخ نوې کول"
+
+msgid "Warning - No I2P"
+msgstr "خبرداری - I2P نشته"
+
+msgid "No torrents found."
+msgstr "هیڅ torrent ونه موندل شو۔"
+
+msgid "No torrents loaded."
+msgstr "هیڅ torrent نه دی بار شوی۔"
+
+msgid "Status"
+msgstr "حالت"
+
+msgid "Torrent"
+msgstr "torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "د RX سرعت"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "د TX سرعت"
+
+msgid "Start All"
+msgstr "ټول پیل کړئ"
+
+msgid "Stop All"
+msgstr "ټول درولئ"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "ټول torrents او د I2P ټونل درولئ"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "ټول torrents او د I2P ټونل پیل کړئ"
+
+msgid "Start all stopped torrents"
+msgstr "ټول درېدلی torrents پیل کړئ"
+
+msgid "Hide Peers"
+msgstr "پټه peerونه"
+
+msgid "Show Peers"
+msgstr "ښیه peerونه"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "د {0} له مخه ترتیب"
+
+msgid "Up Rate"
+msgstr "د پورته لېږلو سرعت"
+
+msgid "Total size of loaded torrents"
+msgstr "د بار شویو torrents بشپړ اندازه"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 وصل شوی peer"
+msgstr[1] "{0} د peerونو وصلونه"
+
+msgid "Active downloads"
+msgstr "فعالې ښکته راوړنې"
+
+msgid "Active uploads"
+msgstr "فعال پورته لېږلې"
+
+msgid "Active Inbound tunnels"
+msgstr "فعالې راتلونکې ټونلونه"
+
+msgid "Active Outbound tunnels"
+msgstr "فعالې لنډیې ټونلونه"
+
+msgid "Estimated download time for all torrents"
+msgstr "د ټولو torrents لپاره اټکل شوی د ښکته راوړلو وخت"
+
+msgid "Data downloaded this session"
+msgstr "په دې پېژندنې کې ښکته راوړل شوی ډیټا"
+
+msgid "Total download speed"
+msgstr "د ټولو ښکته راوړلو بشپړ سرعت"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "ټول پورته لېږل شوی ډیټا (د لست شویو torrents لپاره)"
+
+msgid "Total upload speed"
+msgstr "د ټولو پورته لېږلو بشپړ سرعت"
+
+msgid "Toggle Debug Panel"
+msgstr "د ډیباګ پینل بدلول"
+
+msgid "Debug Mode"
+msgstr "ډیباګ حالت"
+
+msgid "Normal Mode"
+msgstr "عادی حالت"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrentونه"
+
+msgid "No DHT Peers"
+msgstr "هیڅ DHT peerونه نشته"
+
+msgid "Search"
+msgstr "لټون"
+
+msgid "Show All"
+msgstr "ټول ښیئ"
+
+msgid "Active"
+msgstr "فعال"
+
+msgid "Inactive"
+msgstr "غیر فعال"
+
+msgid "Connected"
+msgstr "وصل"
+
+msgid "Downloading"
+msgstr "ښکته راوړل"
+
+msgid "Seeding"
+msgstr "سیډ کول"
+
+msgid "Complete"
+msgstr "بشپړ"
+
+msgid "Incomplete"
+msgstr "نا بشپړ"
+
+msgid "Stopped"
+msgstr "درېدلی"
+
+msgid "First"
+msgstr "لومړی"
+
+msgid "First page"
+msgstr "لومړی مخ"
+
+msgid "Prev"
+msgstr "پخوانی"
+
+msgid "Previous page"
+msgstr "پخوانی مخ"
+
+msgid "Next"
+msgstr "راتلونکی"
+
+msgid "Next page"
+msgstr "راتلونکی مخ"
+
+msgid "Last"
+msgstr "وروستی"
+
+msgid "Last page"
+msgstr "وروستی مخ"
+
+msgid "Enter URL or select torrent file"
+msgstr "URL ولیکئ یا torrent فایل غوره کړئ"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr "د torrent د زیاتولو تېروتنه: {0}"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "د torrent فایل د پورته لېږلو تېروتنه: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "د غیر I2P ځای {0} څخه ښکته راوړل ملاتړ نه کېږی"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "تېروتنه: د نسخې 2 infohashونه ملاتړ نه کېږی"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "ناسم URL: باید د \"{0}\" یا \"{1}\" له پیل وکړی"
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "magnet ړنګل شو: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "torrent فایل نه شو ړنګلی: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "د ډیټا فایل ړنګل شو: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "د ډیټا فایل نه شو ړنګلی: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "دېریکټری نه شو ړنګلی: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "دېریکټری ړنګل شو: {0}"
+
+msgid "Browser API enabled."
+msgstr "د براوزر API فعال شو۔"
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr "د I2PSnark Bridge زیاتوالی پرانیستل ناکام شو: {0}"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " فایلونه یا پوښونه د فلټر قواعدو له امله له \"{0}\" څخه بېشته شول۔"
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "دا کرښې فایلونه یا پوښونه د فلټر قواعدو له امله له \"{0}\" څخه بېشته شوی: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "د \"{0}\" لپاره torrent جوړ شو۔"
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "ډېری I2P ټریکرونه له تاسو غواړی چې مخکې له سیډ کولو نوې torrents ثبت کړئ - مهربانی وکړئ د \"{0}\" پیل مخکې یې وکړئ۔"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "د \"{0}\" لپاره torrent جوړولو تېروتنه"
+
+msgid "Removed"
+msgstr "لیرې شوی"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "معتبر ټریکر نوم او URLونه ولیکئ"
+
+msgid "Restored default trackers"
+msgstr "ابدی ټریکرونه بیا رامنځته شول۔"
+
+msgid "Enter valid name and filter pattern"
+msgstr "معتبر نوم او د فلټر پیټرن ولیکئ"
+
+msgid "Restored default torrent create filters"
+msgstr "د torrent جوړولو ابدۍ فلټرونه بیا رامنځته شو۔"
+
+msgid "Torrent details"
+msgstr "د torrent جزئیات"
+
+msgid "Torrent has comments"
+msgstr "torrent تبصرې لری"
+
+msgid "Open file"
+msgstr "فایل پرانیست"
+
+msgid "View files"
+msgstr "فایلونه وښیئ"
+
+msgid "Completed"
+msgstr "بشپړ شوی"
+
+msgid "Share ratio"
+msgstr "د ونډې نسبت"
+
+msgid "Last activity"
+msgstr "وروستی فعالیت"
+
+msgid "Stop"
+msgstr "درولئ"
+
+msgid "Stop torrent"
+msgstr "torrent درولئ"
+
+msgid "Start"
+msgstr "پیل کړئ"
+
+msgid "Start torrent"
+msgstr "torrent پیل کړئ"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "torrent لیرې کړئ او ړنګ کړئ، ښکته راوړل شوی فایلونه وساتئ"
+
+msgid "Delete .torrent file and associated data files"
+msgstr ".torrent فایل او په اړه تړې د ډیټا فایلونه ړنګ کړئ"
+
+msgid "Destination"
+msgstr "تاریب"
+
+msgid "Checking"
+msgstr "کتنه کېږی۔"
+
+msgid "Allocating"
+msgstr "ویشل کېږی۔"
+
+msgid "Failed to connect to all configured trackers"
+msgstr "په ټولو تنظیم شویو ټریکرونو سره وصل ناکام شو"
+
+msgid "Starting"
+msgstr "پیل کېږی۔"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "په {0} peer ته سیډ کېږی۔"
+msgstr[1] "په {0} peerونو ته سیډ کېږی۔"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "په سوام کې له {1} peerونو څخه {0} ته وصل شوی۔"
+
+msgid "Stalled"
+msgstr "ځنډ کې"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "په سوام کې د {0} peer ته سیډ کېږی۔"
+msgstr[1] "په سوام کې د {0} peerونو ته سیډ کېږی۔"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "له {0} peer څخه ښکته راوړل کېږی۔"
+msgstr[1] "له {0} peerونو څخه ښکته راوړل کېږی۔"
+
+msgid "OK"
+msgstr "سمه"
+
+msgid "No Peers"
+msgstr "peerونه نشته"
+
+msgid "Peer attached to swarm"
+msgstr "peer په سوام کې وصل دی"
+
+msgid "Destination (identity) of peer"
+msgstr "د peer تاریب (پېژندنه)"
+
+msgid "seconds"
+msgstr "ثانیې"
+
+msgid "Seed"
+msgstr "سیډ"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "ناتهاره (هغه peer هیڅ پېټۍ نه لری چې مو اړتیا یې ده)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "خفه شوی (هغه peer موږ ته اجازه نه ورکوی چې پېټۍ وغوښتل شو)"
+
+msgid "Peer is interested but currently idle"
+msgstr "peer علاقه لری خو اوس بېکاره دی"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "بې علاقه (موږ هغه پېټۍ نه لرو چې peer اړتیا یې ده)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "خفه کوی (موږ peer ته اجازه نه ورکوو چې پېټۍ وغوښتل کړی)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "د {0} ټریکر په اړه جزئیات"
+
+msgid "Info"
+msgstr "معلومات"
+
+msgid "Add Torrent"
+msgstr "torrent اضافه کړئ"
+
+msgid "From URL"
+msgstr "له URL څخه"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "د torrent فایل د ښکته راوړلو URL (یوازې I2P)، magnet لنک، یا info hash ولیکئ"
+
+msgid "Add torrent"
+msgstr "torrent اضافه کړئ"
+
+msgid "Torrent file"
+msgstr "د torrent فایل"
+
+msgid "Data dir"
+msgstr "د ډیټا دېریکټری"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "هغه دېریکټری ولیکئ چې ډیټا پکې وساتئ (ابدی {0})"
+
+msgid "Create Torrent"
+msgstr "torrent جوړ کړئ"
+
+msgid "Data to seed"
+msgstr "د سیډولو ډیټا"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "هغه فایل یا دېریکټری چې د سیډولو لپاره (بشپړ لاره یا د {0} دېریکټرۍ دننه )"
+
+msgid "Create torrent"
+msgstr "torrent جوړ کړئ"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "که فایلونه په torrent پوښ کې ناست وی، له torrent څخه بېشته یې کړئ"
+
+msgid "Content Filters"
+msgstr "د منځپانګې فلټرونه"
+
+msgid "Alternates"
+msgstr "بدیلې"
+
+msgid "Primary"
+msgstr "لومړی"
+
+msgid "Tracker Type"
+msgstr "د ټریکر ډول"
+
+msgid "none"
+msgstr "هیڅ"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "magnet نه شی اضافه کړی: د نسخې 2 magnet لنکونه ملاتړ نه کېږی"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "ناسم magnet URL {0}"
+
+msgid "Files"
+msgstr "فایلونه"
+
+msgid "Save priorities"
+msgstr "اولویتونه وساته"
+
+msgid "Comments"
+msgstr "تبصرې"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "مهربانی وکړئ د فورمې لیکنه بیا وکړئ (ناسم nonce)"
+
+msgid "Unknown command"
+msgstr "ناڅرګنده امر"
+
+msgid "Resource Does Not Exist"
+msgstr "رسورس شته نه دی"
+
+msgid "Resource"
+msgstr "رسورس"
+
+msgid "Base"
+msgstr "اساس"
+
+msgid "Directory"
+msgstr "دېریکټری"
+
+msgid "File type"
+msgstr "د فایل ډول"
+
+msgid "Size"
+msgstr "اندازه"
+
+msgid "Download Status"
+msgstr "د ښکته راوړلو حالت"
+
+msgid "Remaining"
+msgstr "پاتې"
+
+msgid "Download Priority"
+msgstr "د ښکته راوړلو اولویت"
+
+msgid "up"
+msgstr "پورته"
+
+msgid "Parent directory"
+msgstr "مورنۍ دېریکټرۍ"
+
+msgid "Audio Playlist"
+msgstr "غږیز پلې لسټ"
+
+msgid "Resource Not found"
+msgstr "رسورس ونه موندل شو"
+
+msgid "Info hash"
+msgstr "infohash"
+
+msgid "Created"
+msgstr "پیدا شوی"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr "د فایلونو واقعی ښکته راوړل شوی اندازه: {0}، له {1} BEP 47 د پوښ فایلونو پرته"
+
+msgid "Added"
+msgstr "زیات شوی"
+
+msgid "Pieces"
+msgstr "پېټۍ"
+
+msgid "Average download speed for torrent"
+msgstr "د torrent د ښکته راوړلو اوسط سرعت"
+
+msgid "Download speed"
+msgstr "د ښکته راوړلو سرعت"
+
+msgid "Completion"
+msgstr "بشپړول"
+
+msgid "Skipped"
+msgstr "پاتې شوی"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "یوازې I2P ټریکرونه به کارول شی؛ غیر I2P ټریکرونه یوازې د معلوماتو لپاره ښیی کېږی۔"
+
+msgid "Tracker"
+msgstr "ټریکر"
+
+msgid "Web Seeds"
+msgstr "ویب سیډونه"
+
+msgid "Refresh page for results"
+msgstr "د پایلونو لپاره مخ نوې کړئ"
+
+msgid "Force Recheck"
+msgstr "جبری بیا کتنه"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "د فایلونو د بشپړتیا د کتنې لپاره torrent درولئ"
+
+msgid "Check integrity of the downloaded files"
+msgstr "د ښکته راوړل شویو فایلونو بشپړتیا وګورئ"
+
+msgid "Download file at high priority"
+msgstr "د فایل ښکته راوړل په لوړه اولویت"
+
+msgid "High"
+msgstr "لوړ"
+
+msgid "Download file at normal priority"
+msgstr "د فایل ښکته راوړل په عادی اولویت"
+
+msgid "Normal"
+msgstr "عادی"
+
+msgid "Do not download this file"
+msgstr "دا فایل مه ښکته راوړئ"
+
+msgid "Skip"
+msgstr "پاتې کړئ"
+
+msgid "complete"
+msgstr "بشپړ"
+
+msgid "remaining"
+msgstr "پاتې"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "1 ستوری"
+msgstr[1] "{0} ستوری"
+
+msgid "No rating"
+msgstr "درجه نشته"
+
+msgid "Rate and Comment"
+msgstr "درجه ورکړئ او تبصره وکړئ"
+
+msgid "Rate Torrent"
+msgstr "torrent ته درجه ورکړئ"
+
+msgid "Add Comment"
+msgstr "تبصره اضافه کړئ"
+
+msgid "My Rating"
+msgstr "زما درجه"
+
+msgid "Average Rating"
+msgstr "اوسط درجه"
+
+msgid "No community ratings currently available"
+msgstr "د ټولنې درجې اوس شته نه دی۔"
+
+msgid "Submitted"
+msgstr "وېشل شوی"
+
+msgid "Mark for deletion"
+msgstr "د ړنګولو لپاره نښه وکړئ"
+
+msgid "Delete Selected"
+msgstr "غوره ړنګوه"
+
+msgid "Ratings and Comments"
+msgstr "درجې او تبصرې"
+
+msgid "Author name required to rate or comment"
+msgstr "د درجه ورکولو یا تبصرې لپاره د لیکوال نوم اړین دی۔"
+
+msgid "Your author name for published comments and ratings"
+msgstr "ستا د لیکوال نوم د خپرو شویو تبصرو او درجو لپاره۔"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "د torrent د فایلونو د ښکته راوړلو اولویتونه نوې شول "
+
+msgid "Edit Torrent"
+msgstr "د torrent سمون"
+
+msgid "Active Trackers"
+msgstr "فعال ټریکرونه"
+
+msgid "Delete"
+msgstr "ړنګوه"
+
+msgid "Add Tracker"
+msgstr "ټریکر اضافه کړئ"
+
+msgid "Torrent Comment"
+msgstr "د torrent تبصره"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "سمون لپاره باید torrent درېدلی وی۔"
+
+msgid "Save Changes"
+msgstr "بدلونونه وساته"
+
+msgid "Torrent must be stopped"
+msgstr "torrent باید درېدلی وی۔"
+
+msgid "Not found"
+msgstr "نشته"
+
+msgid "File not found in torrent"
+msgstr "په torrent کې فایل ونه موندل شو۔"
+
+msgid "Unrecognized"
+msgstr "ناڅرګند"
+
+msgid "Preview"
+msgstr "پیشنا"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "د نورو torrent دنخو نه شی دا torrent {0} اضافه کړی: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "د نورو torrent په شاملولو سره نه شی دا torrent {0} اضافه کړی: {1}"

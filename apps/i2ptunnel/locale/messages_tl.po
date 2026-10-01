@@ -1,0 +1,1791 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "Mukhang ito ay masamang destination:"
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "Hindi ka matutulungan ng i2paddresshelper sa ganoong destination!"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "Para bisitahin ang destination sa iyong addressbook, i-click <a href=\"{0}\">here</a>. Para bisitahin ang addresshelper destination na may salungatan, i-click <a href=\"{1}\">here</a>."
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "Destination para sa {0} sa addressbook"
+
+msgid "Conflicting address helper destination"
+msgstr "Address helper destination na may salungatan"
+
+msgid "Corrupt Base32 address"
+msgstr "Sira na Base32 address"
+
+msgid "Destination LeaseSet not found"
+msgstr "Hindi nahanap ang LeaseSet ng destination"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "Destination"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "Magpatuloy sa {0} nang hindi nagse-save"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "Maaari mong pumunta sa site nang hindi ito ini-save sa addressbook. Naaalala ang address hanggang i-restart mo ang iyong I2P router."
+
+msgid "Continue without saving"
+msgstr "Magpatuloy nang hindi nagse-save"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "I-save ang {0} sa router address book at magpatuloy sa website"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "Masisave ang address na ito sa iyong Router addressbook kung saan iniimbak ang iyong mga address na batay sa subscription."
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "Kung gusto mong subaybayan ang mga site na idinagdag mo nang manu-mano, idagdag sa iyong Master o Private addressbook sa halip."
+
+msgid "Save & continue"
+msgstr "I-save & magpatuloy"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "I-save ang {0} sa master addressbook at magpatuloy sa website"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "Masisave ang address na ito sa iyong Master addressbook. Piliin ang opsiyong ito para sa mga address na gusto mong panatilihing hiwalay sa pangunahing router address book, ngunit ayaw mong ipublish."
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "I-save ang {0} sa private addressbook at magpatuloy sa website"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "Masisave ang address na ito sa iyong Private addressbook, upang tiyaking hindi ito ipinapublish."
+
+msgid "Base32 address requires lookup password"
+msgstr "Kailangan ng lookup password ang Base32 address"
+
+msgid "Base32 address requires encryption key"
+msgstr "Kailangan ng encryption key ang Base32 address"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Kailangan ng encryption key at lookup password ang Base32 address"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Nabigo ang pag-decrypt ng Base32 address, suriin ang encryption key"
+
+msgid "Generate"
+msgstr "Gumawa"
+
+msgid "Encryption key"
+msgstr "Encryption key"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "Kailangan mong ilagay ang PSK encryption key na ibinigay ng operator ng server, o gumawa ng DH encryption key at ipadala iyon sa operator ng server."
+
+msgid "Ask the server operator for help."
+msgstr "Humingi ng tulong sa operator ng server."
+
+msgid "Enter PSK encryption key"
+msgstr "Maglagay ng PSK encryption key"
+
+msgid "Generate new DH encryption key"
+msgstr "Gumawa ng bagong DH encryption key"
+
+msgid "Lookup password"
+msgstr "Lookup password"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "Kailangan mong ilagay ang password na ibinigay ng operator ng server."
+
+msgid "HTTP Outproxy"
+msgstr "HTTP Outproxy"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "I-click ang isang link sa ibaba para sa address helper mula sa jump service"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "Naidagdag gamit ang address helper mula sa {0}"
+
+msgid "Added via address helper"
+msgstr "Naidagdag gamit ang address helper"
+
+msgid "Missing lookup password"
+msgstr "Walang lookup password"
+
+msgid "Missing private key"
+msgstr "Walang private key"
+
+msgid "Invalid private key"
+msgstr "Hindi wasto ang private key"
+
+msgid "Your new encryption key"
+msgstr "Ang iyong bagong encryption key"
+
+msgid "Router Console"
+msgstr "Router Console"
+
+msgid "Addressbook"
+msgstr "Addressbook"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "Help"
+msgstr "Tulong"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "Kopyahin ang key at ipadala ito sa operator ng server."
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "Pagkatapos mong bigyan ng pahintulot, maaari kang magpatuloy sa website."
+
+msgid "Go back and fix the error"
+msgstr "Bumalik at ayusin ang error"
+
+msgid "router"
+msgstr "router"
+
+msgid "master"
+msgstr "master"
+
+msgid "private"
+msgstr "private"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "Ii-redirect sa {0}"
+
+msgid "Redirection in progress"
+msgstr "Isinasagawa ang redirection"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "Naisave ang {0} sa {1} addressbook, ina-redirect na ngayon."
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "Nabigong i-save ang {0} sa {1} addressbook, ina-redirect na ngayon."
+
+msgid "Click here if you are not redirected automatically."
+msgstr "I-click ang dito kung hindi ka awtomatikong na-redirect."
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "Naisave ang authentication para sa {0}, ina-redirect na ngayon."
+
+msgid "Failed to save configuration"
+msgstr "Nabigong i-save ang configuration"
+
+msgid "Configuration changes saved"
+msgstr "Naisave ang mga pagbabago sa configuration"
+
+msgid "Client"
+msgstr "Client"
+
+msgid "internal"
+msgstr "internal"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} inbound, {0} outbound tunnel"
+msgstr[1] "mga {0} inbound, {0} outbound tunnel"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} inbound tunnel"
+msgstr[1] "mga {0} inbound tunnel"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} outbound tunnel"
+msgstr[1] "mga {0} outbound tunnel"
+
+msgid "lower bandwidth and reliability"
+msgstr "mas mababang bandwidth at reliability"
+
+msgid "standard bandwidth and reliability"
+msgstr "standard na bandwidth at reliability"
+
+msgid "higher bandwidth and reliability"
+msgstr "mataas na bandwidth at reliability"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "Error - hindi pa naiinitialize ang mga tunnel"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "Hindi wasto ang isinumiteng form, malamang dahil ginamit mo ang button na 'back' o 'reload' sa iyong browser. Mangyaring isumite muli."
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "Kung magpapatuloy ang problema, tiyaking naka-enable ang cookies sa iyong browser."
+
+msgid "No services configured, cannot restart!"
+msgstr "Walang naka-configure na serbisyo, hindi maaaring mag-restart!"
+
+msgid "Stopping tunnel"
+msgstr "Inihinto ang tunnel"
+
+msgid "Starting tunnel"
+msgstr "Sinisimulan ang tunnel"
+
+msgid "Error restarting tunnel"
+msgstr "Error sa pag-restart ng tunnel"
+
+msgid "Restarted all running tunnels"
+msgstr "Na-restart ang lahat ng tumatakbong tunnel"
+
+msgid "No clients configured, cannot restart!"
+msgstr "Walang naka-configure na client, hindi maaaring mag-restart!"
+
+msgid "Restarted all running client tunnels"
+msgstr "Na-restart ang lahat ng tumatakbong client tunnel"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Na-reload ang configuration para sa lahat ng tunnel"
+
+msgid "Error: Invalid tunnel"
+msgstr "Error: Hindi wastong tunnel"
+
+msgid "Started tunnel"
+msgstr "Nagsimula ang tunnel"
+
+msgid "Stopped tunnel"
+msgstr "Nakahinto ang tunnel"
+
+msgid "Restarting tunnel"
+msgstr "Inir-restart ang tunnel"
+
+msgid "New Tunnel"
+msgstr "Bagong Tunnel"
+
+msgid "Port not set"
+msgstr "Hindi nakatakda ang port"
+
+msgid "Invalid port"
+msgstr "Hindi wasto ang port"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "Babala - hindi inirerekomenda ang port na mas mababa sa 1024"
+
+msgid "Warning - duplicate port"
+msgstr "Babala - duplicate na port"
+
+msgid "Standard client"
+msgstr "Standard na client"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS client"
+
+msgid "IRC client"
+msgstr "IRC client"
+
+msgid "Standard server"
+msgstr "Standard na server"
+
+msgid "HTTP server"
+msgstr "HTTP server"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "SOCKS 4/4a/5 proxy"
+
+msgid "SOCKS IRC proxy"
+msgstr "SOCKS IRC proxy"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS proxy"
+
+msgid "IRC server"
+msgstr "IRC server"
+
+msgid "Streamr client"
+msgstr "Streamr client"
+
+msgid "Streamr server"
+msgstr "Streamr server"
+
+msgid "HTTP bidir"
+msgstr "HTTP bidir"
+
+msgid "Host not set"
+msgstr "Hindi nakatakda ang host"
+
+msgid "Invalid address"
+msgstr "Hindi wasto ang address"
+
+msgid "Tunnel Manager"
+msgstr "Tunnel Manager"
+
+msgid "Edit Client Tunnel"
+msgstr "I-edit ang Client Tunnel"
+
+msgid "Edit Server Tunnel"
+msgstr "I-edit ang Server Tunnel"
+
+msgid "Are you sure you want to delete?"
+msgstr "Sigurado ka bang gusto mong burahin?"
+
+msgid "required"
+msgstr "kailangan"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "Kailangang ihinto ang tunnel at lahat ng iba pang shared na client tunnel upang baguhin ang configuration na ito"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "Kailangang ihinto ang tunnel upang baguhin ang configuration na ito"
+
+msgid "New Client Configuration"
+msgstr "Bagong Client Configuration"
+
+msgid "Name"
+msgstr "Pangalan"
+
+msgid "Auto Start Tunnel"
+msgstr "Awtomatikong Simulan ang Tunnel"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "Pangalan ng tunnel na ipapakita sa home page ng Tunnel Manager at sa sidebar ng router console"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "I-enable ang opsiyong ito upang matiyak na available ang serbisyong ito kapag nagsimula ang router"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "Awtomatikong simulan ang tunnel kapag nagsimula ang router"
+
+msgid "Description"
+msgstr "Paglarawan"
+
+msgid "Shared Client"
+msgstr "Shared na Client"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "Paglarawan ng tunnel na ipapakita sa home page ng Tunnel Manager"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "Ang traffic mula sa lahat ng client na may naka-enableng feature na ito ay maitatagda sa iisang set ng tunnel. Mas mahirap itong gawin ng isang adversary sa pag-profile ng mga tunnel, ngunit magkokonekta ang mga client."
+
+msgid "Share tunnels with other configured clients"
+msgstr "Ibahagi ang mga tunnel sa iba pang naka-configure na client"
+
+msgid "Target"
+msgstr "Target"
+
+msgid "Access Point"
+msgstr "Access Point"
+
+msgid "Use Outproxy Plugin"
+msgstr "Gumamit ng Outproxy Plugin"
+
+msgid "Enable DCC"
+msgstr "I-enable ang DCC"
+
+msgid "Port"
+msgstr "Port"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "Tukoyin ang local port na dapat ma-access mula dito ang serbisyong ito"
+
+msgid "Hostname or IP address of the target server"
+msgstr "Hostname o IP address ng target server"
+
+msgid "Reachable by"
+msgstr "Maabot mula sa"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "Lokal na interface (ip address) na maaabot ng client tunnel"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "Kung naka-install ang outproxy plugin (halimbawa Orchid), gamitin ito sa halip na anumang naka-configure na outproxy para ma-access ang mga website sa labas ng I2P"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "Gumamit ng plugin sa halip na mga proxy na nakalista sa ibaba kung available"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "Pinapagana nito ang direktang chat at file transfer, na lumalampas sa I2P. Tandaan na compromises nito ang iyong anonymity at hindi ito inirerekomenda."
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "I-enable ang Direct Client-to-Client na protocol"
+
+msgid "Outproxies"
+msgstr "Mga Outproxy"
+
+msgid "SSL Outproxies"
+msgstr "Mga SSL na Outproxy"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "Tukoyin dito ang .i2p address o destination (b32 o b64) ng outproxy."
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "Para sa random na pagpili mula sa pool, maghiwalay sa pamamagitan ng kuwit halimbawa server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "Uri ng Outproxy"
+
+msgid "Tunnel Destination"
+msgstr "Tunnel Destination"
+
+msgid "Use SSL"
+msgstr "Gumamit ng SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "Tukoyin dito ang .i2p address o destination (b32 o b64) ng tunnel."
+
+msgid "name, name:port, or destination"
+msgstr "pangalan, name:port, o destination"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "Kung ini-access mo ang isang serbisyo sa remote na I2P router, maaaring gusto mong mag-connect gamit ang SSL upang maiwasan ang traffic interception. Dapat ring naka-configure ang client application para gumamit ng SSL."
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "Gumagamit ng SSL ang mga client para mag-connect sa tunnel"
+
+msgid "Please specify the full b64 destination."
+msgstr "Mangyaring tukoyin ang buong b64 destination."
+
+msgid "Local destination"
+msgstr "local destination"
+
+msgid "Local Base32"
+msgstr "local Base32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "Read Only: local destination (kung alam)"
+
+msgid "Stop"
+msgstr "Ihinto"
+
+msgid "Start this Tunnel"
+msgstr "Simulan ang Tunnel na Ito"
+
+msgid "Start"
+msgstr "Simulan"
+
+msgid "Cancel"
+msgstr "Kanselahin"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "Burahin ang tunnel na ito (hindi maaaring bawiin)"
+
+msgid "Delete"
+msgstr "Burahin"
+
+msgid "Save"
+msgstr "I-save"
+
+msgid "Advanced networking options"
+msgstr "Advanced na mga opsyon sa network"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "Tandaan: Kapag naka-configure ang client na ito upang magbahagi ng tunnel, nalalapat ang mga opsiyong ito sa lahat ng client na naka-configure upang magbahagi ng tunnel."
+
+msgid "Profile"
+msgstr "Profile"
+
+msgid "Delay Connect"
+msgstr "I-delay ang Connect"
+
+msgid "Connection Profile"
+msgstr "Profile ng Koneksyon"
+
+msgid "interactive connection"
+msgstr "interactive na koneksyon"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "bulk na koneksyon (downloads/websites/BT)"
+
+msgid "Delay Connection"
+msgstr "I-delay ang Koneksyon"
+
+msgid "for request/response connections"
+msgstr "para sa request/response na koneksyon"
+
+msgid "Router I2CP Address"
+msgstr "I2CP Address ng Router"
+
+msgid "I2CP Hostname or IP"
+msgstr "Hostname o IP ng I2CP"
+
+msgid "I2CP Port Number"
+msgstr "Numero ng I2CP Port"
+
+msgid "Delay tunnel open until required"
+msgstr "I-delay ang pagbukas ng tunnel hanggang kailangan"
+
+msgid "Signature type"
+msgstr "uri ng signature"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "Magtipid ng resources sa pamamagitan ng paggawa ng tunnel lamang kung kailangan"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "Huwag buksan ang tunnel hanggang may aktibidad na matukoy sa port"
+
+msgid "This is the default, recommended option"
+msgstr "Ito ang default, inirerekomendang opsiyon"
+
+msgid "Encryption types"
+msgstr "Mga uri ng encryption"
+
+msgid "Legacy options"
+msgstr "Mga legacy na opsiyon"
+
+msgid "Post Quantum"
+msgstr "Post Quantum"
+
+msgid "Both encryption types"
+msgstr "Parehong uri ng encryption"
+
+msgid "Tunnel Options"
+msgstr "Mga Opsyon ng Tunnel"
+
+msgid "Length"
+msgstr "Haba"
+
+msgid "Count"
+msgstr "Bilang"
+
+msgid "Length of each Tunnel"
+msgstr "Haba ng bawat Tunnel"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "0 hop na tunnel (walang anonymity)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "1 hop na tunnel (mababang anonymity)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "2 hop na tunnel (katamtamang anonymity)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "3 hop na tunnel (mataas na anonymity)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} hop na tunnel"
+msgstr[1] "mga {0} hop na tunnel"
+
+msgid "Number of Tunnels in Group"
+msgstr "Bilang ng Tunnel sa Grupo"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "Naka-disable para sa 0 hop na tunnel"
+
+msgid "Variance"
+msgstr "Varyansya"
+
+msgid "Backup Count"
+msgstr "Bilang ng Backup"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "Antas ng Randomization para sa Haba ng Tunnel"
+
+msgid "0 hop variance"
+msgstr "0 hop na varyansya"
+
+msgid "no randomization, consistent performance"
+msgstr "walang randomization, tuluy-tuloy na performance"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ 0-1 na varyansya ng hop"
+
+msgid "medium randomization, lower performance"
+msgstr "katamtamang randomization, mas mababang performance"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ 0-2 na varyansya ng hop"
+
+msgid "high randomization, very low performance"
+msgstr "mataas na randomization, napakababang performance"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- 0-1 na varyansya ng hop"
+
+msgid "standard randomization, standard performance"
+msgstr "standard na randomization, standard na performance"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- 0-2 na varyansya ng hop"
+
+msgid "not recommended"
+msgstr "hindi inirerekomenda"
+
+msgid "hop variance"
+msgstr "varyansya ng hop"
+
+msgid "Number of Reserve Tunnels"
+msgstr "Bilang ng Reserve na Tunnel"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} backup na tunnel"
+msgstr[1] "mga {0} backup na tunnel"
+
+msgid "no redundancy, no added resource usage"
+msgstr "walang redundancy, walang karagdagang paggamit ng resources"
+
+msgid "low redundancy, low resource usage"
+msgstr "mababang redundancy, mababang paggamit ng resources"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "katamtamang redundancy, katamtamang paggamit ng resources"
+
+msgid "high redundancy, high resource usage"
+msgstr "mataas na redundancy, mataas na paggamit ng resources"
+
+msgid "Reduce tunnel quantity"
+msgstr "Bawasan ang bilang ng tunnel"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "Bawasan ang bilang ng tunnel kapag walang aktibidad upang magtipid ng resources ngunit panatilihing bukas ang tunnel (upang matiyak na agad na available)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "Bawasan ang bilang ng tunnel kapag walang aktibidad"
+
+msgid "Idle period"
+msgstr "Panahon ng kawalan ng aktibidad"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "Tagal ng kawalan ng aktibidad ng binanay na tunnel"
+
+msgid "Reduced count"
+msgstr "Binanay na bilang"
+
+msgid "Reduced tunnel count"
+msgstr "Binanay na bilang ng tunnel"
+
+msgid "Close tunnels when idle"
+msgstr "Isara ang mga tunnel kapag walang aktibidad"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "Upang magtipid ng resources, isara ang mga tunnel kapag hindi ginagamit"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "Isara ang client tunnel pagkatapos ng nakatalagang panahon ng kawalan ng aktibidad"
+
+msgid "Close Tunnel Idle Time"
+msgstr "Tagal ng kawalan ng aktibidad bago isara ang tunnel"
+
+msgid "New Keys on Reopen"
+msgstr "Bagong Key sa Pagbukas Muli"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "Palitan ang pagkakakilanlan ng tunnel (destination) kapag binuksang muli ang mga tunnel"
+
+msgid "Enable"
+msgstr "I-enable"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "Panatilihin ang pagkakakilanlan ng tunnel (destination) kapag binuksang muli ang mga tunnel"
+
+msgid "Disable"
+msgstr "I-disable"
+
+msgid "Persistent private key"
+msgstr "Persistent na private key"
+
+msgid "Private key file"
+msgstr "file ng private key"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "Sa pagpapagana ng feature na ito, tiyaking mananatiling static ang pagkakakilanlan ng iyong tunnel (destination), para sa mga serbisyo na nag-aalok ng feature batay sa destination halimbawa ang authentication ng user ng IRC"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "Gumawa ng key upang paganain ang persistent na pagkakakilanlan ng client tunnel"
+
+msgid "Path to Private Key File"
+msgstr "Path sa file ng private key"
+
+msgid "HTTP Filtering"
+msgstr "HTTP Filtering"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "Kapag naka-enable, hindi na lalabas naspoof ang user agent ng iyong web browser o http client, na posibleng mabawasan ang iyong anonymity"
+
+msgid "Do not spoof User-Agent header"
+msgstr "Huwag i-spoof ang User-Agent header"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "Kapag naka-enable, hindi na lalafi't i-filter ang referer (pinanggalingang pahina) ng iyong mga web request, na posibleng mabawasan ang iyong anonymity"
+
+msgid "Do not block Referer header"
+msgstr "Huwag i-block ang Referer header"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "Kapag naka-enable, hindi na lalafi't i-filter ang mga accept header (suporta ng mime type) na ipinapakita ng iyong web browser, na posibleng mabawasan ang iyong anonymity"
+
+msgid "Do not block Accept headers"
+msgstr "Huwag i-block ang mga Accept header"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "Payagan ang SSL sa I2P address kapag naka-enable"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "Payagan ang SSL sa I2P address"
+
+msgid "Local Authorization"
+msgstr "Lokal na Authorization"
+
+msgid "Local Credentials"
+msgstr "Lokal na Credential"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "I-enable upang kailanganin ang username at password para ma-access ang lokal na serbisyong ito (halimbawa kung naka-host sa LAN)"
+
+msgid "Require local authorization for this service"
+msgstr "Kailangan ang lokal na authorization para sa serbisyong ito"
+
+msgid "Set username required to access this service"
+msgstr "Itakda ang username na kailangan para ma-access ang serbisyong ito"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Set password required to access this service"
+msgstr "Itakda ang password na kailangan upang ma-access ang serbisyong ito"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Outproxy Authorization"
+msgstr "Authorization ng Outproxy"
+
+msgid "Remote Credentials"
+msgstr "Remote na Credential"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "I-enable kung kailangan ng outproxy ang username at password para ma-access"
+
+msgid "Outproxy requires authorization"
+msgstr "Kailangan ng authorization ang outproxy"
+
+msgid "Enter username required by outproxy"
+msgstr "Maglagay ng username na kailangan ng outproxy"
+
+msgid "Enter password required by outproxy"
+msgstr "Maglagay ng password na kailangan ng outproxy"
+
+msgid "Jump URL List"
+msgstr "Listahan ng Jump URL"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "Listahan ng helper URL na nagbibigay ng jump link kapag hindi nakita ang isang host sa iyong addressbook"
+
+msgid "Custom options"
+msgstr "Pasadyang mga opsiyon"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "Advanced na mga opsiyon sa tunnel, streaming, at I2CP"
+
+msgid "New Server Configuration"
+msgstr "Bagong Server Configuration"
+
+msgid "Hostname"
+msgstr "Hostname"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "Random na startup delay (kapag naka-enable ang auto-start) upang harapin ang mga correlation attack"
+
+msgid "Startup Delay"
+msgstr "Startup Delay"
+
+msgid "Minimum"
+msgstr "Pinakababa"
+
+msgid "Minimum startup delay"
+msgstr "Pinakababang startup delay"
+
+msgid "seconds"
+msgstr "segundo"
+
+msgid "Maximum"
+msgstr "Pinakamax"
+
+msgid "Maximum startup delay"
+msgstr "Pinakamax na startup delay"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "Magdagdag ng random na delay bago isara ang tunnel, pagkatapos ay simulan ang proseso ng graceful na shutdown / restart ng router"
+
+msgid "Shutdown Delay"
+msgstr "Shutdown Delay"
+
+msgid "Minimum shutdown delay"
+msgstr "Pinakababang shutdown delay"
+
+msgid "Maximum shutdown delay"
+msgstr "Pinakamax na shutdown delay"
+
+msgid "Website Hostname"
+msgstr "Hostname ng Website"
+
+msgid "(leave blank for outproxies)"
+msgstr "(iwanang blangko para sa outproxy)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "Hostname ng Website halimbawa mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "Tukoyin ang port kung saan tumatakbo ang server"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "Interface na pinakinig (IP address) para sa access ng client (karaniwang 127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "Upang maiwasan ang traffic sniffing kapag mag-connect sa remote na server, maaari mong paganain ang SSL connection. Tandaan na dapat naka-configure ang target server para tumanggap ng SSL connection."
+
+msgid "Use SSL to connect to target"
+msgstr "Gumamit ng SSL para mag-connect sa target"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "Port na kailangan para ma-access ang serbisyo (ibang port ito sa port kung saan naka-host ang serbisyo)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "Gumawa ng QR Code para sa domain na ito"
+
+msgid "Generate QR Code"
+msgstr "Gumawa ng QR Code"
+
+msgid "Add to Private addressbook"
+msgstr "Idagdag sa Private addressbook"
+
+msgid "Add to local addressbook"
+msgstr "Idagdag sa local addressbook"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "Magparehistro, mag-unregister, o palitan ang mga detalye ng hostname"
+
+msgid "Registration Authentication"
+msgstr "Authentication ng Pagpaparehistro"
+
+msgid "HTTPS configuration"
+msgstr "HTTPS na configuration"
+
+msgid "SSL Wizard"
+msgstr "SSL Wizard"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "Tandaan: Upang paganain ang paggawa ng QR code o ang authentication ng pagpaparehistro, i-configure ang patlang na Website Hostname (para sa mga website) o ang patlang na Name (sa lahat ng iba) sa itaas gamit ang hostname na nagtatapos sa .i2p halimbawa mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "Absolute na path sa Private Key File (gagawin kung wala pa)"
+
+msgid "Alternate private key file"
+msgstr "Alternatibong file ng private key"
+
+msgid "Alternate local destination"
+msgstr "Alternatibong lokal na destination"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "Absolute na path para sa bagong key (gagawin)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "Read Only: Alternatibong Lokal na Destination"
+
+msgid "Specify filename or full path for new key"
+msgstr "Tukoyin ang filename o buong path para sa bagong key"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "Hindi na maaaring baguhin ang configuration kapag nagawa na ang destination"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "Ang configuration ng uri ng signature ay posible lamang kapag unang ginawa ang tunnel. Para baguhin, kailangan mong gumawa ng bagong tunnel."
+
+msgid "Legacy option, with alternate key configured"
+msgstr "Legacy na opsiyon, na may nakatakdang alternatibong key"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Legacy na opsiyon (deprecated), na ibinigay para sa backward compatibility"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "Inirerekomenda para sa blinded at encrypted na destination"
+
+msgid "Inbound"
+msgstr "Inbound"
+
+msgid "Outbound"
+msgstr "Outbound"
+
+msgid "no anonymity"
+msgstr "walang anonymity"
+
+msgid "low anonymity"
+msgstr "mababang anonymity"
+
+msgid "medium anonymity"
+msgstr "katamtamang anonymity"
+
+msgid "high anonymity"
+msgstr "mataas na anonymity"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "Antas ng Randomization para sa Lalim ng Tunnel"
+
+msgid "very high randomization, very low performance"
+msgstr "napakataas na randomization, napakababang performance"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ 0-3 na varyansya ng hop"
+
+msgid "definitely not recommended"
+msgstr "titiyak na hindi inirerekomenda"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- 0-3 na varyansya ng hop"
+
+msgid "backup tunnels"
+msgstr "mga backup na tunnel"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "Bawasan ang mga tunnel upang magtipid ng resources"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "Tagal ng kawalan ng aktibidad bago bawasan ang bilang ng tunnel"
+
+msgid "minutes"
+msgstr "minuto"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "Bilang ng tunnel na pananatilihing bukas upang mapanatili ang availability ng serbisyo"
+
+msgid "Server Access Options"
+msgstr "Mga Opsyon sa Access ng Server"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "Pigilan ang mga client na ma-access ang serbisyong ito sa pamamagitan ng inproxy"
+
+msgid "Block Access via Inproxies"
+msgstr "I-block ang Access sa pamamagitan ng mga Inproxy"
+
+msgid "Block Accesses containing Referers"
+msgstr "I-block ang mga Access na may kahit anong Referer"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "Gumamit ng natatanging IP address para sa bawat client na nagkokonekta (lokal na server na walang SSL lamang)"
+
+msgid "Unique Local Address per Client"
+msgstr "Natatanging Lokal na Address kada Client"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "I-enable lamang kung naka-host ang serbisyong ito sa maraming router"
+
+msgid "Optimize for Multihoming"
+msgstr "I-optimize para sa Multihoming"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "Tanggihan ang mga User-Agent na tumutugma sa mga string na ito (posibleng mula sa mga inproxy)"
+
+msgid "Block these User-Agents"
+msgstr "I-block ang mga User-Agent na ito"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "comma separated, halimbawa Mozilla,Opera (case-sensitive)"
+
+msgid "Encrypt Leaseset"
+msgstr "I-encrypt ang Leaseset"
+
+msgid "Optional Lookup Password"
+msgstr "Opsyonal na Lookup Password"
+
+msgid "Keyring Manager"
+msgstr "Keyring Manager"
+
+msgid "Allow all clients to connect to this service"
+msgstr "Payagan ang lahat ng client na mag-connect sa serbisyong ito"
+
+msgid "Send key to all users."
+msgstr "Ipadala ang key sa lahat ng user."
+
+msgid "Encrypted"
+msgstr "Encrypted"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "Pinipigilan ng mga floodfill ang pagkatuklas ng server"
+
+msgid "Blinded"
+msgstr "Blinded"
+
+msgid "Send password to all users."
+msgstr "Ipadala ang password sa lahat ng user."
+
+msgid "Blinded with lookup password"
+msgstr "Blinded na may lookup password"
+
+msgid "Send key and password to all users."
+msgstr "Ipadala ang key at password sa lahat ng user."
+
+msgid "Encrypted with lookup password"
+msgstr "Encrypted na may lookup password"
+
+msgid "Send individual key to each user."
+msgstr "Ipadala ang indibidwal na key sa bawat user."
+
+msgid "Encrypted with per-user key"
+msgstr "Encrypted na may key kada user"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "Encrypted na may lookup password at key kada user"
+
+msgid "Enter key from each user."
+msgstr "Maglagay ng key mula sa bawat user."
+
+msgid "Encryption Key"
+msgstr "Encryption Key"
+
+msgid "Generate New Key"
+msgstr "Gumawa ng Bagong Key"
+
+msgid "Encryption key required to access this service"
+msgstr "Kailangan ang encryption key para ma-access ang serbisyong ito"
+
+msgid "Generate new encryption key"
+msgstr "Gumawa ng bagong encryption key"
+
+msgid "Tunnel must be stopped first"
+msgstr "Kailangan munang ihinto ang tunnel"
+
+msgid "Client Manager"
+msgstr "Client Manager"
+
+msgid "Client Name"
+msgstr "Pangalan ng Client"
+
+msgid "Client Key"
+msgstr "Key ng Client"
+
+msgid "Revoke"
+msgstr "Bawiin"
+
+msgid "Add"
+msgstr "Magdagdag"
+
+msgid "Restricted Access List"
+msgstr "Listahan ng Paghihigpit sa Access"
+
+msgid "Activate to enable editing"
+msgstr "Aktib para maging posibleng mag-edit"
+
+msgid "Tunnel Filter"
+msgstr "Tunnel Filter"
+
+msgid "Help with defining tunnel filters"
+msgstr "Tulong sa pagtukoy ng mga tunnel filter"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "Pigilan ang mga nakalistang client na mag-connect sa serbisyong ito"
+
+msgid "Blacklist"
+msgstr "Blacklist"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "Payagan lamang ang mga nakalistang client na mag-connect sa serbisyong ito"
+
+msgid "Whitelist"
+msgstr "Whitelist"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "Absolute na path sa file na naglalaman ng kahulugan ng filter"
+
+msgid "Absolute path to filter definition"
+msgstr "Absolute na path sa kahulugan ng filter"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "Tukoyin ang mga client destination, 1 kada linya"
+
+msgid "Server Throttling"
+msgstr "Throttle ng Server"
+
+msgid "Inbound connection limits"
+msgstr "Mga limit ng inbound na koneksyon"
+
+msgid "Per Minute"
+msgstr "Kada Minuto"
+
+msgid "Per Hour"
+msgstr "Kada Oras"
+
+msgid "Per Day"
+msgstr "Kada Araw"
+
+msgid "Concurrent"
+msgstr "Kasabay"
+
+msgid "Per Client"
+msgstr "Kada Client"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "Max na bilang ng web page request kada minuto para sa natatanging client bago ma-block ang access sa server"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = walang limitasyon)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "Max na bilang ng web page request kada oras para sa natatanging client bago ma-block ang access sa server"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "Max na bilang ng web page request kada araw para sa natatanging client bago ma-block ang access sa server"
+
+msgid "Total"
+msgstr "Kabuuan"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "Kabuuang bilang ng web page request kada minuto bago ma-block ang access sa server"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "Kabuuang bilang ng web page request kada oras bago ma-block ang access sa server"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "Kabuuang bilang ng web page request kada araw bago ma-block ang access sa server"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "Max na bilang ng kasabay na koneksyon ng client"
+
+msgid "POST limits"
+msgstr "Mga limit ng POST"
+
+msgid "Per Period"
+msgstr "Kada Panahon"
+
+msgid "Ban Duration"
+msgstr "Tagal ng Ban"
+
+msgid "POST limit period"
+msgstr "Panahon ng limit ng POST"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "Max na bilang ng post request na pinapayagan para sa natatanging client para sa nakatakdang timespan"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "Kung lampas sa max na bilang ng post request kada naitakdang panahon ang isang client, ipatupad ang ban sa loob ng ganitong bilang ng minuto"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "Tagal ng panahon para maabot ang max na bilang ng post request bago ma-trigger ang ban"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "Kabuuang bilang ng post request na pinapayagan para sa nakatakdang timespan"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "Kung lampas sa max na bilang ng post request kada naitakdang panahon, ipatupad ang pandaigdigang ban sa access sa loob ng ganitong bilang ng minuto"
+
+msgid "Custom HTTP Headers"
+msgstr "Pasadyang HTTP na Header"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "Tandaan: Papagana lamang ang mga pasadyang header na ito para sa mga iniihain na file na walang nakatakdang kaugnay na header."
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "Itakda ang Allow header sa 'GET, POST, HEAD' para sa html, xml, json, at text file"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "I-enable ang Cache-Control header (no-cache para sa html, xml, json, at text, immutable para sa lahat ng iba)"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "Itakda ang Referrer-Policy header sa 'same-origin' para sa html, xml, json, at text file"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "Itakda ang X-Content-Type-Options header sa 'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "Sinisimulan ang Tunnel Manager{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "Hindi pa naiinitialize ang mga tunnel; pakisubukan muli sa ilang sandali."
+
+msgid "Status Messages"
+msgstr "Mga Mensahe ng Katayuan"
+
+msgid "Clear"
+msgstr "I-clear"
+
+msgid "Refresh"
+msgstr "I-refresh"
+
+msgid "Global Tunnel Control"
+msgstr "Pandaigdigang Kontrol ng Tunnel"
+
+msgid "Tunnel Wizard"
+msgstr "Tunnel Wizard"
+
+msgid "Stop All"
+msgstr "Ihinto Lahat"
+
+msgid "Start All"
+msgstr "Simulan Lahat"
+
+msgid "Restart all running tunnels"
+msgstr "I-restart ang lahat ng tumatakbong tunnel"
+
+msgid "Restart All"
+msgstr "I-restart Lahat"
+
+msgid "Restart all running server tunnels"
+msgstr "I-restart ang lahat ng tumatakbong server tunnel"
+
+msgid "Restart All Servers"
+msgstr "I-restart ang Lahat ng Server"
+
+msgid "Restart all running client tunnels"
+msgstr "I-restart ang lahat ng tumatakbong client tunnel"
+
+msgid "Restart All Clients"
+msgstr "I-restart ang Lahat ng Client"
+
+msgid "I2P Server Tunnels"
+msgstr "Mga Server Tunnel ng I2P"
+
+msgid "Helper"
+msgstr "Helper"
+
+msgid "Type"
+msgstr "Uri"
+
+msgid "Points at"
+msgstr "Tuturo sa"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Status"
+msgstr "Katayuan"
+
+msgid "Control"
+msgstr "Kontrol"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "I-edit ang mga Setting ng Server Tunnel para sa"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "Subukan ang IRC server, lumalampas sa I2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "Subukan ang HTTPS server, lumalampas sa I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "Subukan ang HTTP server, lumalampas sa I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "Subukan ang HTTP server sa pamamagitan ng I2P"
+
+msgid "Base32 Address"
+msgstr "Base32 Address"
+
+msgid "Offline"
+msgstr "Offline"
+
+msgid "No Preview"
+msgstr "Walang Preview"
+
+msgid "Starting..."
+msgstr "Sinisimulan..."
+
+msgid "Starting in"
+msgstr "Sinisimulan sa"
+
+msgid "Running"
+msgstr "Tumatakbo"
+
+msgid "Hops"
+msgstr "Mga Hop"
+
+msgid "in"
+msgstr "in"
+
+msgid "out"
+msgstr "out"
+
+msgid "Stopped"
+msgstr "Nakahinto"
+
+msgid "Stop this Tunnel"
+msgstr "Ihinto ang Tunnel na Ito"
+
+msgid "Restart this Tunnel"
+msgstr "I-restart ang Tunnel na Ito"
+
+msgid "Restart"
+msgstr "I-restart"
+
+msgid "Signature"
+msgstr "Signature"
+
+msgid "Alternate"
+msgstr "Alternatibo"
+
+msgid "Alt Destination"
+msgstr "Alt na Destination"
+
+msgid "Encryption"
+msgstr "Encryption"
+
+msgid "Supported encryption"
+msgstr "Supported na encryption"
+
+msgid "New server tunnel"
+msgstr "Bagong server tunnel"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Create"
+msgstr "Gumawa"
+
+msgid "I2P Client Tunnels"
+msgstr "Mga Client Tunnel ng I2P"
+
+msgid "Interface"
+msgstr "Interface"
+
+msgid "Edit Tunnel Settings for"
+msgstr "I-edit ang mga Setting ng Tunnel para sa"
+
+msgid "Standby"
+msgstr "Naka-standby"
+
+msgid "Outproxy"
+msgstr "Outproxy"
+
+msgid "internal plugin"
+msgstr "internal na plugin"
+
+msgid "none"
+msgstr "wala"
+
+msgid "New client tunnel"
+msgstr "Bagong client tunnel"
+
+msgid "Registration Helper"
+msgstr "Registration Helper"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "Gumagamit ng encrypted na leaseset ang serbisyong ito. Hindi inirerekomenda ang pagpaparehistro. Naka-disable ang authentication ng pagpaparehistro."
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "Tiyaking piliin, kopyahin, at i-paste ang buong laman ng angkop na authentication data sa form ng iyong paboritong registration site"
+
+msgid "Tunnel name"
+msgstr "Pangalan ng tunnel"
+
+msgid "Website name"
+msgstr "Pangalan ng website"
+
+msgid "Local Destination"
+msgstr "Lokal na Destination"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "Hindi available ang lokal na destination. Simulan ang tunnel."
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "Upang paganain ang beripikasyon ng pagpaparehistro, i-edit ang tunnel at itakda ang pangalan (o pangalan ng website) sa wastong hostname na nagtatapos sa '.i2p'"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "Upang paganain ang beripikasyon ng pagpaparehistro, i-edit ang tunnel at itakda ang pangalan sa wastong hostname na nagtatapos sa '.i2p'"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "Hindi available ang signing key ng destination. Simulan ang tunnel."
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "Offline ang signing key ng destination. Gamitin ang mga CLI tool sa naka-offline na makina."
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "Authentication para sa pagdaragdag ng host {0}"
+
+msgid "Copy and paste this to the registration site"
+msgstr "Kopyahin at i-paste ito sa registration site"
+
+msgid "Advanced authentication strings"
+msgstr "Advanced na mga authentication string"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "Authentication para sa pag-aalis ng host {0}"
+
+msgid "Authentication for changing name"
+msgstr "Authentication para sa pagpapalit ng pangalan"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "Ipapalit nito ang pangalan mula {0} patungong {1}, gamit ang parehong destination"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "Dapat naka-configure ang tunnel na ito na may bagong hostname."
+
+msgid "Enter old hostname below."
+msgstr "Maglagay ng lumang hostname sa ibaba."
+
+msgid "Authentication for adding alias"
+msgstr "Authentication para sa pagdaragdag ng alias"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "Magdaragdag ito ng alias na {0} para sa {1}, gamit ang parehong destination"
+
+msgid "Authentication for changing destination"
+msgstr "Authentication para sa pagpapalit ng destination"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "Ipapalit nito ang destination para sa {0}"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "Dapat naka-configure ang tunnel na ito na may bagong destination."
+
+msgid "Enter old destination below."
+msgstr "Maglagay ng lumang destination sa ibaba."
+
+msgid "Authentication for adding alternate destination"
+msgstr "Authentication para sa pagdaragdag ng alternatibong destination"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "Magdaragdag ito ng alternatibong destination para sa {0}"
+
+msgid "Authentication for adding subdomain"
+msgstr "Authentication para sa pagdaragdag ng subdomain"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "Magdaragdag ito ng subdomain na {0} ng {1}, na may ibang destination"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "Dapat naka-configure ang tunnel na ito na may bagong subdomain at destination."
+
+msgid "Enter higher-level domain and destination below."
+msgstr "Maglagay ng mas mataas na antas na domain at destination sa ibaba."
+
+msgid "Return to Tunnel Configuration"
+msgstr "Bumalik sa Configuration ng Tunnel"
+
+msgid "Specify old name and destination"
+msgstr "Tukoyin ang lumang pangalan at destination"
+
+msgid "This is only required for advanced authentication."
+msgstr "Ito ay kailangan lamang para sa advanced na authentication."
+
+msgid "See above for required items."
+msgstr "Tingnan ang itaas para sa mga kailangang bagay."
+
+msgid "Old / parent hostname "
+msgstr "Lumang / parent na hostname "
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "File ng private key para sa lumang destination / parent ng sub-domain"
+
+msgid "Generate Authentication"
+msgstr "Gumawa ng Authentication"
+
+msgid "SSL Helper"
+msgstr "SSL Helper"
+
+msgid "Experts only!"
+msgstr "Para sa dalubhasa lamang!"
+
+msgid "Alt Base32"
+msgstr "Alt na Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "Routing ng Papasok na I2P Port"
+
+msgid "Virtual Host"
+msgstr "Virtual na Host"
+
+msgid "Via SSL?"
+msgstr "Sa pamamagitan ng SSL?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "Subukan ang HTTPS server sa pamamagitan ng I2P"
+
+msgid "Server"
+msgstr "Server"
+
+msgid "SSL Activation"
+msgstr "Pag-activate ng SSL"
+
+msgid "I2P webserver (eepsite)"
+msgstr "I2P webserver (eepsite)"
+
+msgid "Disable SSL"
+msgstr "I-disable ang SSL"
+
+msgid "Enable SSL"
+msgstr "I-enable ang SSL"
+
+msgid "New Certificate Password"
+msgstr "Bagong Password ng Sertipiko"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "Password (kailangan para i-encrypt ang sertipiko)"
+
+msgid "Generate new SSL certificate"
+msgstr "Gumawa ng bagong SSL na sertipiko"
+
+msgid "Generate SSL certificate and enable"
+msgstr "Gumawa at i-enable ang SSL na sertipiko"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "Hindi maaaring i-configure, walang nahanap na Jetty server sa {0}client configurations{1} na tumutugma sa tunnel na ito"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "Idaragdag sa hinuling release ang suporta para sa server na hindi Jetty"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "Bumalik sa Index ng Tunnel Manager"
+
+msgid "Return to Tunnel Editor"
+msgstr "Bumalik sa Editor ng Tunnel"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "Tunnel Manager ng I2P - Tunnel Creation Wizard"
+
+msgid "Server or client tunnel?"
+msgstr "Server o client tunnel?"
+
+msgid "Tunnel type"
+msgstr "Uri ng tunnel"
+
+msgid "Tunnel name and description"
+msgstr "Pangalan at paglarawan ng tunnel"
+
+msgid "Tunnel destination"
+msgstr "Destination ng tunnel"
+
+msgid "Binding address and port"
+msgstr "Binding address at port"
+
+msgid "Tunnel auto-start"
+msgstr "Auto-start ng tunnel"
+
+msgid "Wizard completed"
+msgstr "Tapos na ang wizard"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "Iaakda ka ng wizard na ito sa iba't ibang opsiyong available para sa paggawa ng tunnel sa I2P."
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "Una mong pasyahan kung gusto mong gumawa ng server o client tunnel."
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "Kung kailangan mong mag-connect sa remote na serbisyo, tulad ng IRC server sa loob ng I2P o code repository, kakailanganin mo ng CLIENT tunnel."
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "Sa kabilang dako, kung gusto mong mag-host ng serbisyo para sa iba, kailangan mong gumawa ng SERVER tunnel."
+
+msgid "Server Tunnel"
+msgstr "Server Tunnel"
+
+msgid "Client Tunnel"
+msgstr "Client Tunnel"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "May ilang uri ng tunnel na maaaring piliin:"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "Basic na tunnel para sa pag-connect sa isang serbisyo sa loob ng I2P."
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "Subukan ito kung walang uri ng tunnel sa ibaba ang tugma sa iyong pangangailangan, o kung hindi mo alam kung anong uri ng tunnel ang kailangan mo."
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "Tunnel na nagiging HTTP proxy para maabot ang mga eepsite sa loob ng I2P."
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "Itakda ang iyong browser na gamitin ang tunnel na ito bilang http proxy, o itakda ang iyong \"http_proxy\" environment variable para sa mga command-line na aplikasyon sa GNU/Linux."
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "Maaaring maabot din ang mga website sa labas ng I2P kung may kilalang HTTP proxy sa loob ng I2P."
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "Pasadyang client tunnel para sa mga koneksyong IRC."
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "Sa uri ng tunnel na ito, makakakonekta ang iyong IRC client sa isang IRC network sa loob ng I2P."
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "Kailangan ng sariling tunnel ang bawat IRC network sa I2P na gusto mong ikonekta. (Tingnan din ang SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "Isang tunnel na nag-iimplement ng SOCKS protocol."
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "Ipinapagana nito ang TCP at UDP na koneksyon sa pamamagitan ng SOCKS outproxy sa loob ng I2P."
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "Client tunnel na nag-iimplement ng SOCKS protocol, na pasadyang ginawa para sa pag-connect sa mga IRC network."
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "Sa uri ng tunnel na ito, maaaring maabot ang mga IRC network sa I2P sa pamamagitan ng pagta ng I2P address sa iyong IRC client at ang pag-configure ng IRC client na gamitin ang SOCKS tunnel na ito."
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "Ibig sabihin, isang I2P tunnel lang ang kailangan sa halip na sariling tunnel kada IRC network."
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "Maaaring maabot din ang mga IRC network sa labas ng I2P kung may kilalang SOCKS outproxy sa loob ng I2P, bagaman nakadepende ito sa na-block ba o hindi ng IRC network ang outproxy."
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "Basic na server tunnel para sa pag-host ng pangkalahatang serbisyo sa loob ng I2P."
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "Server tunnel na pasadyang ginawa para sa mga koneksyong HTTP."
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "Gumamit ng uri ng tunnel na ito kung gusto mong mag-host ng eepsite."
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "Pasadyang server tunnel para sa pag-host ng mga IRC network sa loob ng I2P."
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "Karaniwan, kailangang gumawa ng sariling tunnel para sa bawat IRC server na magiging naa-access sa loob ng I2P."
+
+msgid "Select tunnel type"
+msgstr "Piliin ang uri ng tunnel"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "Pumili ng pangalan at paglarawan para sa iyong tunnel."
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "Maaari itong anumang gusto mo - para lang itong mas madaling matukoy ang tunnel sa routerconsole."
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "Kung may alam kang outproxy para sa uri ng tunnel na ito (HTTP o SOCKS), punan ang mga ito sa ibaba."
+
+msgid "Separate multiple proxies with commas."
+msgstr "Maghiwalay ng maraming proxy gamit ang mga kuwit."
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "Listahan ng mga destination ng I2P outproxy, pinaghihiwalay ng kuwit (halimbawa proxy1.i2p,proxy2.i2p)"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "Maglagay ng I2P destination ng serbisyo na dapat ikonekta ng client tunnel na ito."
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "Maaaring ito ang buong Base64 destination key, o isang I2P URL mula sa iyong address book."
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "Maglagay ng b64 o .i2p address dito"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "Ito ang IP na tumatakbo ang iyong serbisyo, karaniwang nasa parehong machine kaya awtomatikong napupunan ng 127.0.0.1."
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "Ito ang port kung saan tinatanggap ng serbisyo ang koneksyon."
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "Ito ang port kung saan maa-access nang lokal ang client tunnel."
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "Paano mo gustong ma-access ang tunnel na ito? Sa machine lang na ito, sa buong subnet mo, o sa internet sa labas?"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "Malamang gusto mong payagan lamang ang 127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "Maaaring awtomatikong simulan ng I2P router ang tunnel na ito para sa iyo kapag nagsimula ang router."
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "Maaaring maging kapaki-pakinabang ito para sa mga madalas na ginagamit na tunnel (lalo na sa server tunnel), ngunit para sa mga tunnel na ginagamit lamang paminsan-minsan, magiging dahilan ito upang gumawa at magpanatili ang I2P router ng mga hindi kailangang tunnel."
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "Nakapagtipon na ang wizard ng sapat na impormasyon upang gumawa ng iyong tunnel."
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "Kapag i-click mo ang button na Save sa ibaba, ia-set up ng wizard ang tunnel at babalikan ka sa pangunahing I2PTunnel page."
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "Dahil pinili mong awtomatikong simulan ang tunnel kapag nagsimula ang router, hindi mo na kailangang gumawa ng iba pa."
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "Sisimulan ng router ang tunnel kapag naitatag na ito."
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "Dahil pinili mong hindi awtomatikong simulan ang tunnel, kailangan mo itong simulan nang manu-mano."
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "Maaari mong gawin ito sa pamamagitan ng pag-click sa button na Start sa pangunahing pahina na tumutugma sa bagong tunnel."
+
+msgid "Below is a summary of the options you chose:"
+msgstr "Nasa ibaba ang buod ng mga opsiyong pinili mo:"
+
+msgid "Tunnel description"
+msgstr "Paglarawan ng tunnel"
+
+msgid "Binding address"
+msgstr "Binding address"
+
+msgid "Tunnel port"
+msgstr "Port ng tunnel"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "Kasama ng mga pangunahing setting na ito, may ilang advanced na opsiyon para sa configuration ng tunnel."
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "Itakda ng wizard ang mga katamtamang default na halaga para sa mga ito, ngunit maaari mong tingnan at/o i-edit ang mga ito sa pamamagitan ng pag-click sa pangalan ng tunnel sa pangunahing I2PTunnel page."
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "Kanselahin ang wizard at bumalik sa home page ng Tunnel Manager"
+
+msgid "Return to previous page"
+msgstr "Bumalik sa nakaraang pahina"
+
+msgid "Previous"
+msgstr "Nakaraang"
+
+msgid "Save tunnel configuration"
+msgstr "I-save ang configuration ng tunnel"
+
+msgid "Save Tunnel"
+msgstr "I-save ang Tunnel"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "Tapusin ang Wizard at suriin ang mga setting ng tunnel"
+
+msgid "Finish"
+msgstr "Tapusin"
+
+msgid "Advance to next page"
+msgstr "Lumipat sa susunod na pahina"
+
+msgid "Next"
+msgstr "Susunod"

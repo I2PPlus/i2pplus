@@ -1,0 +1,100 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "د کریپټو کړنو سره اړوند سروسونه"
+
+msgid "Controlled substances marketplaces"
+msgstr "د کنټرول شویو موادو بازارونه"
+
+msgid "E-book libraries and publishing"
+msgstr "د الیکترونیکی کتابونو کتابتونونه او خپرول"
+
+msgid "File hosting and storage services"
+msgstr "د فایلونو د کوربه کولو او ذخیرې سروسونه"
+
+msgid "Peer-to-peer file sharing"
+msgstr "د peer له peer څخه د فایلونو شریکول"
+
+msgid "Discussion forums and message boards"
+msgstr "د بحث پورمونه او پیغام تختې"
+
+msgid "Image galleries and photo sharing"
+msgstr "د انځورونو ګالرۍ او د انځورونو شریکول"
+
+msgid "Gaming servers and communities"
+msgstr "د لوبو سرورونه او ټولنه"
+
+msgid "Git repositories and code hosting"
+msgstr "د Git ریپازیټریاوې او د کوډ کوربه کول"
+
+msgid "Help and support resources"
+msgstr "د مرستې او ملاتړ سرچینې"
+
+msgid "Human rights and civil liberties"
+msgstr "د انسانی حقوقو او مدنی آزادیاوې"
+
+msgid "Official I2P infrastructure services"
+msgstr "د I2P رسمی زېربناسټیز سروسونه"
+
+msgid "News and media outlets"
+msgstr "خبرې او د رسنیو وتانې"
+
+msgid "Text/code paste services"
+msgstr "د متن/کوډ پیست سروسونه"
+
+msgid "Personal websites and blogs"
+msgstr "شخصی ویب پاڼې او بلاګونه"
+
+msgid "Internet radio and streaming"
+msgstr "د انټرنیټ رادیو او سټریمینګ"
+
+msgid "Search engines and directories"
+msgstr "د لټونو انجنونه او دېریکټرۍ"
+
+msgid "Software repositories and downloads"
+msgstr "د سافټویر ریپازیټریاوې او ښکته راوړنې"
+
+msgid "Statistics and analytics"
+msgstr "شمېرې او تحلیل"
+
+msgid "Utilities and web tools"
+msgstr "اوړتیاوې او د ویب وسایط"
+
+msgid "Torrent and content trackers"
+msgstr "د torrent او محتوا ټریکرونه"
+
+msgid "Conspiracy / Religious content"
+msgstr "د توطیفې / مذهبی محتوا"
+
+msgid "Unclassified or pending review"
+msgstr "طبقه بندی نه شوی یا د کتنې په انتظار"
+
+msgid "Not yet categorized"
+msgstr "هنوز طبقه بندی نه شوی"
+
+msgid "Video streaming and media"
+msgstr "د ویډیو سټریمینګ او رسنیا"
+
+msgid "Wiki and collaborative documentation"
+msgstr "ویکی او د ملګریو مستند کول"
+
+msgid "Work in progress / development"
+msgstr "په کار کې / پراختیا"

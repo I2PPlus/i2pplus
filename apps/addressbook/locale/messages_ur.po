@@ -1,0 +1,100 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "کرپٹو کرنسی سے متعلق سروسیں"
+
+msgid "Controlled substances marketplaces"
+msgstr "کنٹرول شدہ مادوں کی مارکیٹیں"
+
+msgid "E-book libraries and publishing"
+msgstr "الیکٹرانک کتابوں کی لائبریریاں اور اشاعت"
+
+msgid "File hosting and storage services"
+msgstr "فائل ہوسٹنگ اور اسٹوریج سروسیں"
+
+msgid "Peer-to-peer file sharing"
+msgstr "peer-to-peer فائل شیئرنگ"
+
+msgid "Discussion forums and message boards"
+msgstr "ڈسکشن فورم اور میسج بورڈز"
+
+msgid "Image galleries and photo sharing"
+msgstr "تصویری گیلریاں اور فوٹو شیئرنگ"
+
+msgid "Gaming servers and communities"
+msgstr "گیمنگ سرورز اور کمیونٹیز"
+
+msgid "Git repositories and code hosting"
+msgstr "گٹ ریپازٹریز اور کوڈ ہوسٹنگ"
+
+msgid "Help and support resources"
+msgstr "مدد اور معاونت کے ذرائع"
+
+msgid "Human rights and civil liberties"
+msgstr "انسانی حقوق اور شہری آزادیاں"
+
+msgid "Official I2P infrastructure services"
+msgstr "سرکاری I2P انفراسٹرکچر سروسیں"
+
+msgid "News and media outlets"
+msgstr "خبریں اور میڈیا آؤٹ لیٹس"
+
+msgid "Text/code paste services"
+msgstr "ٹیکسٹ/کوڈ پیسٹ سروسیں"
+
+msgid "Personal websites and blogs"
+msgstr "ذاتی ویب سائٹس اور بلاگز"
+
+msgid "Internet radio and streaming"
+msgstr "انٹرنیٹ ریڈیو اور اسٹریمنگ"
+
+msgid "Search engines and directories"
+msgstr "تلاش انجن اور ڈائریکٹریز"
+
+msgid "Software repositories and downloads"
+msgstr "سافٹ ویئر ریپازٹریز اور ڈاؤن لوڈز"
+
+msgid "Statistics and analytics"
+msgstr "شماریات اور تجزیات"
+
+msgid "Utilities and web tools"
+msgstr "یوٹلٹیز اور ویب ٹولز"
+
+msgid "Torrent and content trackers"
+msgstr "torrent اور مواد کے ٹریکرز"
+
+msgid "Conspiracy / Religious content"
+msgstr "سازشی / مذہبی مواد"
+
+msgid "Unclassified or pending review"
+msgstr "غیر درجہ بند یا جائزے کا انتظار"
+
+msgid "Not yet categorized"
+msgstr "ابھی درجہ بند نہیں"
+
+msgid "Video streaming and media"
+msgstr "ویڈیو اسٹریمنگ اور میڈیا"
+
+msgid "Wiki and collaborative documentation"
+msgstr "ویکی اور تعاونی دستاویزات"
+
+msgid "Work in progress / development"
+msgstr "جاری کا کام / ترقی"

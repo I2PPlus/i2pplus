@@ -1,0 +1,154 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "د wrapper بارولو ناکامی"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME له پېژندل شوی چلېږی۔"
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME چلېږی"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "د $APP_LONG_NAME انتظار کېږی"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "خبرداری: ممکن وی چې $APP_LONG_NAME نه شوی پیل۔"
+
+msgid "Must be root to perform this action."
+msgstr "د دې کار له ترسره کولو لپاره باید root یاست۔"
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME پیلېږی"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME درېږی"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME نه وی چلېدلی۔"
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "نه شوه کولای $APP_LONG_NAME درول۔"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "د $APP_LONG_NAME د وتلو انتظار کېږی"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "د $APP_LONG_NAME درول ناکام شو۔"
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME ودرېد۔"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "$APP_LONG_NAME په مهربانۍ سره درېږی"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME نه چلېږی۔"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME چلېږی: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME چلېږی: PID:$pid، Wrapper:$STATUS، Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "د $APP_LONG_NAME daemon مخکې نصب شوی دی۔"
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "د $APP_LONG_NAME daemon نصب کېږی"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "نصب تر اوسه د $DIST_OS لپاره ملاتړ نه کېږی"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "د $APP_LONG_NAME daemon لیرې کېږی"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "د $APP_LONG_NAME daemon تر اوسه نصب نه دی۔"
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "لیرې کول تر اوسه د $DIST_OS لپاره ملاتړ نه کېږی"
+
+msgid "Commands:"
+msgstr "فرمانونه:"
+
+msgid "Launch in the current console."
+msgstr "په اوسنی کنسول کې پرانیستل۔"
+
+msgid "Start in the background as a daemon process."
+msgstr "په شاتو کې د یوې daemon پروسې په توګه پیل۔"
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "که په توګه د daemon یا په بل کنسول کې چلېږی، درول یې کړئ۔"
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "په مهربانۍ سره درول، ممکن تر 11 دقیقو یا ډېر ګرځی وخت ونیسی۔"
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "په مهربانۍ سره بیا پیل، ممکن تر 11 دقیقو یا ډېر ګرځی وخت ونیسی۔"
+
+msgid "Stop if running and then start."
+msgstr "که چلېږی درول یې کړئ او بیا پیل یې کړئ۔"
+
+msgid "Restart only if already running."
+msgstr "بیا پیل یوازې که مخکې له پیله چلېږی۔"
+
+msgid "Query the current status."
+msgstr "د اوسنې حالت پوښتنه۔"
+
+msgid "Install to start automatically when system boots."
+msgstr "نصب، ترڅو سیسټم د پیل پر مهال په اتوماتیک توګه پیل شی۔"
+
+msgid "Uninstall."
+msgstr "نصب لیرې کړئ۔"
+
+msgid "Request a Java thread dump if running."
+msgstr "که چلېږی، د Java د تارونو ډامپ وغواړئ۔"
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "مهربانی وکړئ i2prouter سم کړئ او متغیر RUN_AS_USER وټاکئ"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "د I2P د root کاروونکی په توګه اجرا کول *سپارښه نه دی*۔"
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "تر هغه هم د root په توګه د اجرا لپاره، i2prouter سم کړئ او ALLOW_ROOT=true وټاکئ۔"

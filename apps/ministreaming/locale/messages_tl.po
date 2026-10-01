@@ -1,0 +1,73 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "Timeout ng mensahe"
+
+msgid "Failed delivery to local destination"
+msgstr "Nabigong ihatid sa lokal na destination"
+
+msgid "Local router failure"
+msgstr "Pagkabigo ng lokal na router"
+
+msgid "Local network failure"
+msgstr "Pagkabigo ng lokal na network"
+
+msgid "Session closed"
+msgstr "Nakasara ang session"
+
+msgid "Invalid message"
+msgstr "Hindi wastong mensahe"
+
+msgid "Invalid message options"
+msgstr "Hindi wastong mga opsiyon ng mensahe"
+
+msgid "Buffer overflow"
+msgstr "Nag-overflow ang buffer"
+
+msgid "Message expired"
+msgstr "Nakal-expire ang mensahe"
+
+msgid "Local lease set invalid"
+msgstr "Hindi wastong lokal na lease set"
+
+msgid "No local tunnels"
+msgstr "Walang lokal na tunnel"
+
+msgid "Unsupported encryption options"
+msgstr "Hindi suportadong mga opsiyon ng encryption"
+
+msgid "Invalid destination"
+msgstr "Hindi wastong destination"
+
+msgid "Destination lease set expired"
+msgstr "Nakal-expire ang lease set ng destination"
+
+msgid "Destination lease set not found"
+msgstr "Hindi nahanap ang lease set ng destination"
+
+msgid "Local destination shutdown"
+msgstr "Naka-shutdown ang lokal na destination"
+
+msgid "Connection was reset"
+msgstr "Na-reset ang koneksyon"
+
+msgid "Failure code"
+msgstr "Code ng pagkabigo"

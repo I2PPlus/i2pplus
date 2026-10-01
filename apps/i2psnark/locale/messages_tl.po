@@ -1,0 +1,1681 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Magnet"
+msgstr "Magnet"
+
+msgid "Unable to connect to I2P"
+msgstr "Hindi makakonekta sa I2P"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "Error sa pagkonekta sa I2P - suriin ang iyong I2CP settings!"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "Ina-configure ang I2PSnark gamit ang mga opsyon ng I2CP"
+
+msgid "No write permissions for data directory"
+msgstr "Walang pahintulot sa pagsulat para sa data directory"
+
+msgid "Data directory cannot be created"
+msgstr "Hindi maaaring gawin ang data directory"
+
+msgid "No write permissions for temp directory"
+msgstr "Walang pahintulot sa pagsulat para sa temp directory"
+
+msgid "Temp directory cannot be created"
+msgstr "Hindi maaaring gawin ang temp directory"
+
+msgid "No write permissions for torrent directory"
+msgstr "Walang pahintulot sa pagsulat para sa torrent directory"
+
+msgid "Torrent directory cannot be created"
+msgstr "Hindi maaaring gawin ang torrent directory"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "Nagbago ang limit ng kabuuang uploader sa {0}"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "{0} ang minimum na limit ng uploader"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "Nagbago ang limit ng BW sa pag-upload sa {0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "{0}KBps ang minimum na limit ng up bandwidth"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "Nagbago ang maximum na bilis ng download sa {0}KB/s"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "{0}KB/s ang limit ng bilis ng download"
+
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr "Paalala: Kailangan mong ihinto at i-restart ang iyong mga torrent o i-restart ang I2PSnark upang magkabisa ang pagbabagong ito."
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "Naka-enable ang +0/1 na pagkakapareho ng tunnel hop sa mga Inbound tunnel"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "Naka-disable ang pagkakapareho ng tunnel hop sa mga Inbound tunnel"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "Naka-enable ang +0/1 na pagkakapareho ng tunnel hop sa mga Outbound tunnel"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "Naka-disable ang pagkakapareho ng tunnel hop sa mga Outbound tunnel"
+
+msgid "Enabled a separate destination for each torrent"
+msgstr "Naka-enable ang hiwalay na destination para sa bawat torrent"
+
+msgid "Disabled a separate destination for each torrent"
+msgstr "Naka-disable ang hiwalay na destination para sa bawat torrent"
+
+#, java-format
+msgid "Maximum destinations changed to {0}"
+msgstr "Nagbago ang maximum na destination sa {0}"
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr "Naibalik ang hindi limitadong destination (isa bawat torrent)"
+
+msgid "Enabled randomizing torrent start times"
+msgstr "Naka-enable ang pagkakapili ng hindi pantay na oras ng pagsisimula ng torrent"
+
+msgid "Disabled randomizing torrent start times"
+msgstr "Naka-disable ang pagkakapili ng hindi pantay na oras ng pagsisimula ng torrent"
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr "Nagbago ang saklaw ng pagkaantala ng pagsisimula sa {0} - {1}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "Nagbago ang oras ng pag-refresh sa {0}"
+
+msgid "Refresh disabled"
+msgstr "Naka-disable ang refresh"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "Nagbago ang laki ng pahina sa {0}"
+
+msgid "New files will be publicly readable"
+msgstr "Pampublikong mababasa ang mga bagong file"
+
+msgid "New files will not be publicly readable"
+msgstr "Hindi pampublikong mababasa ang mga bagong file"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "Ihinto ang lahat ng torrent bago baguhin ang data directory"
+
+msgid "Data directory must be an absolute path"
+msgstr "Kailangan ng absolute na path ang data directory"
+
+msgid "Not a directory"
+msgstr "Hindi isang directory"
+
+msgid "Unreadable"
+msgstr "Hindi mababasa"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "Nagbago ang data directory sa {0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "Magkakabisa ang mga pagbabago sa I2CP at tunnel kapag ihininto ang lahat ng torrent"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "Nagbago ang mga opsyon ng I2CP sa: {0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "Ini-disconnect ang lumang I2CP destination"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "Hindi makakonekta gamit ang bagong settings, bumabalik sa luma na I2CP settings"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "Hindi makarekonekta gamit ang luma na settings!"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "Nakarekonekta sa bagong I2CP destination"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "Na-restart ang I2CP listener para sa \"{0}\""
+
+msgid "Enabled autostart"
+msgstr "Naka-enable ang autostart"
+
+msgid "Disabled autostart"
+msgstr "Naka-disable ang autostart"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "Naka-enable ang open tracker - kailangang i-restart ang torrent upang magkabisa."
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "Naka-disable ang open tracker - kailangang i-restart ang torrent upang magkabisa."
+
+msgid "Enabled DHT."
+msgstr "Naka-enable ang DHT."
+
+msgid "Disabled DHT."
+msgstr "Naka-disable ang DHT."
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "Kailangan ng shutdown at muling pagbukas ng tunnel ang pagbabago ng DHT"
+
+msgid "Enabled Ratings."
+msgstr "Naka-enable ang Ratings."
+
+msgid "Disabled Ratings."
+msgstr "Naka-disable ang Ratings."
+
+msgid "Enabled Comments."
+msgstr "Naka-enable ang Comments."
+
+msgid "Disabled Comments."
+msgstr "Naka-disable ang Comments."
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "Itinatag ang pangalan ng Comments sa {0}."
+
+msgid "Collapsible panels enabled."
+msgstr "Naka-enable ang mga collapsible panel."
+
+msgid "Collapsible panels disabled."
+msgstr "Naka-disable ang mga collapsible panel."
+
+msgid "Torrent filter bar enabled."
+msgstr "Naka-enable ang filter bar ng torrent."
+
+msgid "Torrent filter bar disabled."
+msgstr "Naka-disable ang filter bar ng torrent."
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "Naka-enable ang lightbox para sa thumbnail ng image."
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "Naka-disable ang lightbox para sa thumbnail ng image."
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "Naka-enable ang mga bahaging Add at Create sa lahat ng pahina ng listahan ng torrent."
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "Ang mga bahaging Add at Create ay ipapakita lamang sa unang pahina ng mga listahan ng torrent na maraming pahina."
+
+msgid "API key updated."
+msgstr "Na-update ang API key."
+
+msgid "Preallocate files for new torrents enabled."
+msgstr "Naka-enable ang preallocate ng file para sa mga bagong torrent."
+
+msgid "Preallocate files for new torrents disabled."
+msgstr "Naka-disable ang preallocate ng file para sa mga bagong torrent."
+
+msgid "Preserve original file names enabled."
+msgstr "Naka-enable ang pag-preserve ng orihinal na pangalan ng file."
+
+msgid "Preserve original file names disabled."
+msgstr "Naka-disable ang pag-preserve ng orihinal na pangalan ng file."
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr "Nagbago ang maximum na file bawat torrent sa {0}"
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr "Hindi wasto ang maximum na file bawat torrent: {0}"
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr "Nagbago ang temp directory para sa staging sa {0}"
+
+msgid "Temp directory staging disabled."
+msgstr "Naka-disable ang temp directory staging."
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr "Nagbago ang torrent directory sa {0}"
+
+msgid "Torrent directory reset to data directory."
+msgstr "Naibalik ang torrent directory sa data directory."
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "Nagbago ang listahan ng Open Tracker - kailangang i-restart ang torrent upang magkabisa."
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "Nagbago ang listahan ng Private tracker - nakaaapekto lang sa mga bagong torrent."
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "Hindi mai-save ang config sa {0}"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "Nabura ang torrent file: {0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "Inilipat ang torrent file mula sa {0} patungong sa {1}"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "Error: Hindi maidagdag ang torrent: {0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "Tumatakbo na ang torrent: {0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "Hindi mabuksan ang \"{0}\""
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "Tumatakbo na ang torrent na may parehong info hash: {0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "Tumatakbo na ang torrent na may parehong lokasyon ng data: {0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "Hindi wasto ang torrent sa \"{0}\""
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "ERROR - Wala nang memory, hindi makagawa ng torrent mula sa {0}"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr "ERROR - hindi makagawa ng torrent mula sa {0}"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "Sinisimulan ang I2PSnark at binubuksan ang mga tunnel"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "Naidagdag at sinimulan ang torrent: {0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "Naidagdag ang torrent: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ERROR - Walang I2P tracker sa pribadong torrent na \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Babala - Walang I2P tracker sa \"{0}\", mag-a-announce lang sa open tracker ng I2P at sa DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Babala - Walang I2P tracker sa \"{0}\", at naka-disable ang open tracker, mag-a-announce lang sa DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Babala - Walang I2P tracker sa \"{0}\", at naka-disable ang DHT at ang open tracker, dapat mong i-enable ang open tracker o ang DHT bago simulan ang torrent."
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "Naka-disable ang open tracker at walang peer sa DHT tayo. Maaaring hindi matagumpay ang pag-fetch ng {0} hangga't hindi mo sisimulan ang isa pang torrent, o i-e-enable ang open tracker, o ang DHT."
+
+#, java-format
+msgid "Adding {0}"
+msgstr "Sinusupihan ang {0}"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "Tumatakbo na ang download: {0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "Nabigong kopyahin ang torrent file sa {0}"
+
+msgid " - torrent file already exists"
+msgstr " - may torrent file na"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "Masyadong maraming file sa \"{0}\" ({1})!"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "Hindi maaaring magtapos sa \".torrent\" ang torrent file na \"{0}\"!"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "Walang piraso sa \"{0}\"!"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "Masyadong maraming piraso sa \"{0}\", {1} ang limit!"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "Masyadong malaki ang mga piraso sa \"{0}\" ({1}B)!"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "{0}B ang limit"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "Walang data ang torrent na \"{0}\"!"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "Hindi pa suportado ang mga torrent na mas malaki sa {0}B \"{1}\"!"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "Error: Hindi maaaring alisin ang torrent {0}"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "Nanahinto ang torrent: {0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "Naalis ang torrent: {0}"
+
+#, java-format
+msgid "Starting torrents in {0}&hellip;"
+msgstr "Sinisimulan ang mga torrent sa {0}&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "{0} KB/s ang limit ng down bandwidth"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "{0} KB/s ang limit ng up bandwidth"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "Kumokonekta sa I2CP port ng I2P instance sa {0}"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "{0} KBps ang limit ng upload bandwidth sa pinakamalaking {1} sabay-sabay na peer."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr "Storage: {0}GB ang kasalukuyang available para sa download sa naka-configure na data partition"
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "Storage: {0}MB ang kasalukuyang available para sa download sa naka-configure na data partition"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "Babala - {0}MB lang ang available para sa download sa naka-configure na data partition"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr "Temp storage: {0}GB ang kasalukuyang available para sa download sa naka-configure na temp partition"
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr "Temp storage: {0}MB ang kasalukuyang available para sa download sa naka-configure na temp partition"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr "Babala - {0}MB lang ang available para sa download sa naka-configure na temp partition"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "Tapos na ang download: {0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "Sinisimulan ang torrent: {0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "Hindi mai-load ang config ng file filter ng torrent create: "
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "Hindi mai-save ang config ng file filter ng torrent create: "
+
+msgid "Torrent not found"
+msgstr "Hindi natagpuan ang torrent"
+
+msgid "Opening the I2P tunnel"
+msgstr "Binubuksan ang tunnel ng I2P"
+
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr "Ina-resolve ang paghahanap ng torrent: {0}"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "Binubuksan ang tunnel ng I2P at sinisimulan ang lahat ng torrent."
+
+msgid "Connecting to I2P"
+msgstr "Kumokonekta sa I2P"
+
+msgid "Connected to I2P at"
+msgstr "Nakakonekta sa I2P sa"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "Sinisimulan ang torrent {0}"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "Inihihinto ang lahat ng torrent at isinasara ang tunnel ng I2P."
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "Isinasara ang tunnel ng I2P pagkatapos abisoan ang mga tracker."
+
+msgid "I2P tunnel closed."
+msgstr "Nakasara ang tunnel ng I2P."
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr "Inilaktaw ang pag-ikot ng destination - {0} aktibong download ang isinasagawa"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr "Inilaktaw ang pag-ikot ng destination - {0} aktibong download ang isinasagawa"
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr "Walang aktibong nagda-download na torrent - iniikot ang mga destination"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "Hindi masusuri ang {0}"
+
+msgid "Torrent already started"
+msgstr "Sinimulan na ang torrent"
+
+msgid "No storage"
+msgstr "Walang storage"
+
+msgid "Starting recheck of {}"
+msgstr "Sinisimulan ang muling pagsusuri ng {}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "Tapos na ang muling pagsusuri ng torrent {0}, {1} na kumpleto ngayon"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "Tapos na ang muling pagsusuri ng torrent {0}, hindi nagbago"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "Error sa pagsusuri ng torrent {0}"
+
+msgid "Data directory does not exist"
+msgstr "Wala ang data directory"
+
+msgid "Cannot create diskspace bar"
+msgstr "Hindi maaaring gawin ang diskspace bar"
+
+msgid "Data partition"
+msgstr "Data partition"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "Walang wastong tracker para sa {0} - i-enable ang opentrackers o ang DHT?"
+
+msgid "Updating"
+msgstr "Ina-update"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "Ina-update mula sa {0}"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "Nagda-download ng {0}"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "Humihiling ng torrent file: {0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "Nabigong makuha ang torrent file: {0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "Na-download ang torrent mula sa {0}"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "Nasa queue na ang torrent: {0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "Hindi wasto ang torrent sa {0}"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "User Interface"
+msgstr "User Interface"
+
+msgid "Switch to Embedded Mode"
+msgstr "Lumipat sa Embedded Mode"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "Lumipat sa Fullscreen Mode"
+
+msgid "Theme"
+msgstr "Theme"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "Para manually na magpalit ng theme, i-disable ang universal theming"
+
+msgid "Universal theming is enabled."
+msgstr "Naka-enable ang universal theming."
+
+msgid "Configure"
+msgstr "I-configure"
+
+msgid "Refresh time"
+msgstr "Oras ng refresh"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "Gaano kadalas ina-update ang katayuan ng torrent sa pangunahing pahina"
+
+msgid "Never"
+msgstr "Kailanman"
+
+msgid "Page size"
+msgstr "Laki ng pahina"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "Pinakamalaking bilang ng torrent na ipapakita bawat pahina"
+
+msgid "torrents"
+msgstr "torrent"
+
+msgid "Language"
+msgstr "Wika"
+
+msgid "Collapsible panels"
+msgstr "Mga collapsible na panel"
+
+msgid "Your browser does not support this feature."
+msgstr "Hindi suportado ng iyong browser ang feature na ito."
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "Payagan ang mga panel na 'Add Torrent' at 'Create Torrent' na bumagsak, at bumagsak sa default sa mode na hindi embedded"
+
+msgid "Torrent filter bar"
+msgstr "Filter bar ng torrent"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "Ipakita ang filter bar sa ibabaw ng mga torrent para sa piniling pagpapakita batay sa katayuan"
+
+msgid "requires javascript"
+msgstr "kailangan ng javascript"
+
+msgid "Enable lightbox"
+msgstr "I-enable ang lightbox"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "Gumamit ng lightbox upang ipakita ang mga image kapag kinliclick ang thumbnail"
+
+msgid "Persist Add/Create"
+msgstr "Itinatago ang Add/Create"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "Ipakita ang mga bahaging 'Add' at 'Create' sa lahat ng pahina ng listahan ng torrent kapag nasa multipage mode"
+
+msgid "Comments &amp; Ratings"
+msgstr "Mga Comment &amp; Rating"
+
+msgid "Enable Ratings"
+msgstr "I-enable ang Ratings"
+
+msgid "Show ratings on torrent pages"
+msgstr "Ipakita ang rating sa mga pahina ng torrent"
+
+msgid "Enable Comments"
+msgstr "I-enable ang Comments"
+
+msgid "Show comments on torrent pages"
+msgstr "Ipakita ang mga comment sa mga pahina ng torrent"
+
+msgid "Comment Author"
+msgstr "May-akda ng Comment"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "Itakda ang pangalan ng may-akda para sa iyong mga comment at rating"
+
+msgid "Torrent Options"
+msgstr "Mga Opsyon ng Torrent"
+
+msgid "Half available bandwidth recommended."
+msgstr "Rekomendado ang kalahating available na bandwidth."
+
+msgid "Bandwidth limit"
+msgstr "Bandwidth limit"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "Pinakamalaking bandwidth na inilalaan para sa download"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "Pinakamalaking bandwidth na inilalaan para sa upload"
+
+msgid "View or change router bandwidth"
+msgstr "Tingnan o baguhin ang bandwidth ng router"
+
+msgid "Total uploader limit"
+msgstr "Kabuuang limit ng uploader"
+
+msgid "Maximum number of peers to upload to"
+msgstr "Pinakamalaking bilang ng peer na ma-u-upload"
+
+msgid "peers"
+msgstr "peer"
+
+msgid "Use open trackers also"
+msgstr "Gamitin din ang open tracker"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "I-announce ang mga torrent sa open tracker at sa mga tracker na nakalista sa torrent file"
+
+msgid "Enable DHT"
+msgstr "I-enable ang DHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "Gumamit ng DHT upang makahanap ng karagdagang peer"
+
+msgid "Auto start torrents"
+msgstr "Auto start ng mga torrent"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "Awtomatikong sisimulan ang mga torrent kapag idinagdag, at i-restart kapag nagsimula ang I2PSnark"
+
+msgid "Startup delay"
+msgstr "Pagkaantala ng pagsisimula"
+
+msgid "minutes"
+msgstr "minuto"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr "Gaano katagal bago ma-load ang mga awtomatikong sinimulang torrent kapag nagsimula ang I2PSnark, sa pinakamaaga"
+
+msgid "min"
+msgstr "min"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr "Gaano katagal bago ma-load ang mga awtomatikong sinimulang torrent kapag nagsimula ang I2PSnark, sa pinakahuli"
+
+msgid "max"
+msgstr "max"
+
+msgid "Data Storage"
+msgstr "Data Storage"
+
+msgid "Data directory"
+msgstr "Data directory"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "Directory kung saan iniimbak ang mga torrent at na-download na file"
+
+msgid "Temp directory"
+msgstr "Temp directory"
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr "Opsyonal na directory kung saan ini-stage ang mga download bago ilipat sa data directory kapag tapos na"
+
+msgid "Torrent directory"
+msgstr "Torrent directory"
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr "Opsyonal na directory upang itago ang mga .torrent file nang hiwalay sa na-download na data. Iwanang buo upang itago sa data directory."
+
+msgid "Files readable by all"
+msgstr "Mababasa ng lahat ang mga file"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "Itakda ang pahintulot ng file upang pabutasan ang iba pang lokal na user na ma-access ang mga na-download na file"
+
+msgid "Preallocate files"
+msgstr "Preallocate ng mga file"
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr "Palakihin ang mga bagong torrent file sa buong laki nila at agad na ilagay ang espasyo sa disk kapag nagsimula ang torrent, upang maiwasan ang punong disk na makapag-interrupt sa download at maiwasan ang fragmentation habang dumating ang mga piraso"
+
+msgid "Preserve file names"
+msgstr "I-preserve ang mga pangalan ng file"
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr "I-preserve ang orihinal na mga pangalan ng file mula sa torrent. Kapag naka-disable, ang mga filename ay sasalain upang alisin ang mga ipinagawalang karakter ng filesystem. Kapag naka-enable, ang mga orihinal na filename ang gagamitin; kung may filename na may karakter na hindi suportado ng iyong filesystem, gagawa ang file ng ligtas na fallback na pangalan at magpapakita ng babala"
+
+msgid "Max files per torrent"
+msgstr "Max na file bawat torrent"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "Pinakamalaking bilang ng file na pinapayagan bawat torrent - tandaan na maaaring magtakda ang mga tracker ng sarili nilang limit, at maaaring limitan ng iyong OS ang bilang ng bukas na file, na pumipigil sa pag-load ng torrent na maraming file (at mga susunod na torrent)"
+
+msgid "Tunnel Configuration"
+msgstr "Configuration ng Tunnel"
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr "Primary destination (identity) para sa session na ito; ibinabahagi ang DHT, tracker, at blacklist nito sa mga destination bawat torrent"
+
+msgid "Our destination (identity) for this session"
+msgstr "Ang aming destination (identity) para sa session na ito"
+
+msgid "Primary Dest."
+msgstr "Primary na Dest."
+
+msgid "Dest."
+msgstr "Dest."
+
+msgid "Inbound Settings"
+msgstr "Mga Inbound na Setting"
+
+msgid "Outbound Settings"
+msgstr "Mga Outbound na Setting"
+
+msgid "Vary Tunnel Length"
+msgstr "Nag-iiba ng Haba ng Tunnel"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "Magdagdag ng 0 o 1 karagdagang hop nang random sa mga Inbound tunnel"
+
+msgid "Inbound"
+msgstr "Inbound"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "Magdagdag ng 0 o 1 karagdagang hop nang random sa mga Outbound tunnel"
+
+msgid "Outbound"
+msgstr "Outbound"
+
+msgid "Multi-destination"
+msgstr "Multi-destination"
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr "Gumamit ng hiwalay na destination para sa bawat torrent, upang hindi mai-link ng mga tracker at ng DHT ang iyong mga torrent sa isa't isa. Pansamantala ang mga destination at nagbabago kapag nag-restart."
+
+msgid "Maximum destinations"
+msgstr "Maximum na destination"
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr "Kapag mas maraming torrent ang tumatakbo kaysa sa maximum na ito, magbabahagi ang mga karagdagang torrent ng mga destination sa mga pangkat na random at mayiba-ibang laki, upang limitin ang paggamit ng memory. Ang zero ay isa bawat torrent."
+
+msgid "Random startup delay"
+msgstr "Random na pagkaantala ng pagsisimula"
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr "I-stage ang pagsisimula ng multi-dest na torrent na may random na pagkaantala upang hindi maiugnay ng mga tracker o peer sa DHT ang mga torrent na sabay na nagsisimula, at mai-spread out ang paggawa ng tunnel. I-disable upang agad na magsimula sa isang batch ang lahat ng torrent."
+
+msgid "I2CP host"
+msgstr "I2CP host"
+
+msgid "I2CP port"
+msgstr "I2CP port"
+
+msgid "I2CP options"
+msgstr "Mga opsyon ng I2CP"
+
+msgid "Browser Integration"
+msgstr "Browser Integration"
+
+msgid "Enable browser API"
+msgstr "I-enable ang browser API"
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr "Payagan ang mga magnet link at torrent URL na maidagdag nang walang CSRF nonce, mula sa loopback o sa mga pinapayagang host sa ibaba"
+
+msgid "Allowed hosts"
+msgstr "Mga pinapayagang host"
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr "Comma-separated na hostname o IP na pinapayagang magdagdag ng torrent nang walang nonce; palaging pinapayagan ang loopback"
+
+msgid "API key"
+msgstr "API key"
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr "Opsyonal na password para sa remote access, lumalaktaw sa allow list ng host"
+
+msgid "Install browser handler"
+msgstr "I-install ang browser handler"
+
+msgid "Update browser handler"
+msgstr "I-update ang browser handler"
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr "I-update ang naka-install na I2PSnark Bridge extension sa v{0}"
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr "Buksan ang I2PSnark Bridge extension sa iyong browser upang magdagdag ng magnet link; naka-sign up mismo ang extension sa browser, walang isinusulat na router-side na file"
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "I-download ang PowerShell installer na nagre-register ng magnet link at .torrent file sa iyong browser; nangangailangan ng Firefox-family na browser ang I2PSnark Bridge extension"
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "I-download ang installer script na nagre-register ng magnet link at .torrent file sa iyong browser; nangangailangan ng Firefox-family na browser ang I2PSnark Bridge extension"
+
+msgid "Download browser handler script"
+msgstr "I-download ang browser handler script"
+
+msgid "Save configuration"
+msgstr "I-save ang configuration"
+
+msgid "Torrent Create File Filtering"
+msgstr "Torrent Create File Filtering"
+
+msgid "Mark filter for deletion"
+msgstr "Markahan ang filter para burahin"
+
+msgid "Name"
+msgstr "Pangalan"
+
+msgid "Filter Pattern"
+msgstr "Pattern ng Filter"
+
+msgid "Starts With"
+msgstr "Nagsisimula ng"
+
+msgid "Contains"
+msgstr "Naglalaman ng"
+
+msgid "Ends With"
+msgstr "Nagtatapos ng"
+
+msgid "Enabled by Default"
+msgstr "Naka-enable sa Default"
+
+msgid "Delete selected"
+msgstr "Burahin ang napili"
+
+msgid "Save Filter Configuration"
+msgstr "I-save ang Configuration ng Filter"
+
+msgid "Restore defaults"
+msgstr "Ibalik ang mga default"
+
+msgid "Add File Filter"
+msgstr "Magdagdag ng File Filter"
+
+msgid "Add"
+msgstr "Magdagdag"
+
+msgid "Trackers"
+msgstr "Mga Tracker"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "Pumili ng tracker para alisin sa nakatalang listahan ng I2PSnark"
+
+msgid "Website URL"
+msgstr "URL ng Website"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Private"
+msgstr "Pribado"
+
+msgid "Announce URL"
+msgstr "URL ng Announce"
+
+msgid "Mark tracker for deletion"
+msgstr "Markahan ang tracker para burahin"
+
+msgid "Add tracker"
+msgstr "Magdagdag ng tracker"
+
+msgid "Save tracker configuration"
+msgstr "I-save ang configuration ng tracker"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "Ito ang nagco-configure ng maximum na bilang ng tunnel na bubuksan, na tinatukoy ng bilang ng nakakonektang peer (mas mababa ang aktuwal na paggamit)"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "Ang pagpapalit ng setting na ito sa wala pang 3 hop ay maaaring mapabuti ang bilis sa presyo ng pagkakamatay, at hindi ito inirerekomenda"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr "Napapanahon na ang I2PSnark Bridge extension v{0}, i-update sa v{1} sa pahina ng config"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "I-click ang \"Add torrent\" button upang kumuha ng torrent"
+
+msgid "Torrents"
+msgstr "Mga Torrent"
+
+msgid "Refresh page"
+msgstr "I-refresh ang pahina"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "Forum ng torrent &amp; filesharing"
+
+msgid "Forum"
+msgstr "Forum"
+
+msgid "Search torrents"
+msgstr "Maghanap ng torrent"
+
+msgid "Clear search"
+msgstr "Burahin ang paghahanap"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "Anonymous na BitTorrent Client"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "Sigurado ka bang gusto mong burahin ang {0} at lahat ng na-download na data?"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "Binubura ang <b>{0}</b> at lahat ng kaugnay na data..."
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "Sigurado ka bang gusto mong burahin ang torrent file na {0} at kaugnay na metadata?"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "Paalala: Hindi mabubura ang na-download na data."
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "Binubura lang ang {0} at kaugnay na metadata..."
+
+msgid "clear messages"
+msgstr "burahin ang mga mensahe"
+
+msgid "Expand"
+msgstr "Palawakin"
+
+msgid "Shrink"
+msgstr "Paliitin"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "Babala! Nakakdisable ang Javascript sa iyong browser. Kung naka-enable ang {0}, mawawala ang anumang input mo sa mga bahaging add/create ng torrent kapag may refresh."
+
+msgid "page refresh"
+msgstr "refresh ng pahina"
+
+msgid "Warning - No I2P"
+msgstr "Babala - Walang I2P"
+
+msgid "No torrents found."
+msgstr "Walang nahanap na torrent."
+
+msgid "No torrents loaded."
+msgstr "Walang na-load na torrent."
+
+msgid "Status"
+msgstr "Katayuan"
+
+msgid "Torrent"
+msgstr "Torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "RX Rate"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "TX Rate"
+
+msgid "Start All"
+msgstr "Simulan Lahat"
+
+msgid "Stop All"
+msgstr "Ihinto Lahat"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "Ihinto ang lahat ng torrent at ang tunnel ng I2P"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "Simulan ang lahat ng torrent at ang tunnel ng I2P"
+
+msgid "Start all stopped torrents"
+msgstr "Simulan ang lahat ng nakahintong torrent"
+
+msgid "Hide Peers"
+msgstr "Itago ang Mga Peer"
+
+msgid "Show Peers"
+msgstr "Ipakita ang Mga Peer"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "Ayusin ayon sa {0}"
+
+msgid "Up Rate"
+msgstr "Up Rate"
+
+msgid "Total size of loaded torrents"
+msgstr "Kabuuang laki ng na-load na torrent"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "1 nakakonektang peer"
+msgstr[1] "{0} peer connection"
+
+msgid "Active downloads"
+msgstr "Aktibong download"
+
+msgid "Active uploads"
+msgstr "Aktibong upload"
+
+msgid "Active Inbound tunnels"
+msgstr "Aktibong Inbound na tunnel"
+
+msgid "Active Outbound tunnels"
+msgstr "Aktibong Outbound na tunnel"
+
+msgid "Estimated download time for all torrents"
+msgstr "Tinatantyang oras ng download para sa lahat ng torrent"
+
+msgid "Data downloaded this session"
+msgstr "Na-download na data sa session na ito"
+
+msgid "Total download speed"
+msgstr "Kabuuang bilis ng download"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "Kabuuang na-upload na data (para sa mga nakalistang torrent)"
+
+msgid "Total upload speed"
+msgstr "Kabuuang bilis ng upload"
+
+msgid "Toggle Debug Panel"
+msgstr "I-toggle ang Debug Panel"
+
+msgid "Debug Mode"
+msgstr "Debug Mode"
+
+msgid "Normal Mode"
+msgstr "Normal Mode"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "1 torrent"
+msgstr[1] "{0} torrent"
+
+msgid "No DHT Peers"
+msgstr "Walang DHT Peer"
+
+msgid "Search"
+msgstr "Maghanap"
+
+msgid "Show All"
+msgstr "Ipakita Lahat"
+
+msgid "Active"
+msgstr "Aktibo"
+
+msgid "Inactive"
+msgstr "Hindi Aktibo"
+
+msgid "Connected"
+msgstr "Konektado"
+
+msgid "Downloading"
+msgstr "Nagda-download"
+
+msgid "Seeding"
+msgstr "Nag-se-seed"
+
+msgid "Complete"
+msgstr "Kumpleto"
+
+msgid "Incomplete"
+msgstr "Hindi kumpleto"
+
+msgid "Stopped"
+msgstr "Nakahinto"
+
+msgid "First"
+msgstr "Una"
+
+msgid "First page"
+msgstr "Unang pahina"
+
+msgid "Prev"
+msgstr "Nakaraan"
+
+msgid "Previous page"
+msgstr "Nakaraang pahina"
+
+msgid "Next"
+msgstr "Susunod"
+
+msgid "Next page"
+msgstr "Susunod na pahina"
+
+msgid "Last"
+msgstr "Huli"
+
+msgid "Last page"
+msgstr "Huling pahina"
+
+msgid "Enter URL or select torrent file"
+msgstr "Pakilala ang URL o pumili ng torrent file"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr "Error sa pagdagdag ng torrent: {0}"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "Error sa pag-upload ng torrent file: {0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "Hindi suportado ang pag-download mula sa lokasyong hindi I2P na {0}"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "Error: Hindi suportado ang info hash na Version 2"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "Hindi wasto ang URL: Kailangang magsimula sa \"{0}\" o \"{1}\""
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "Nabura ang magnet: {0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "Hindi mabura ang torrent file: {0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "Nabura ang data file: {0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "Hindi mabura ang data file: {0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "Hindi mabura ang directory: {0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "Nabura ang directory: {0}"
+
+msgid "Browser API enabled."
+msgstr "Naka-enable ang browser API."
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr "Nabigong buksan ang I2PSnark Bridge extension: {0}"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " na mga file o folder ang hindi kasama sa \"{0}\" dahil sa mga filter rule."
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "Ang mga sumusunod na file o folder ay hindi kasama sa \"{0}\" dahil sa mga filter rule: "
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "Ginawa ang torrent para sa \"{0}\""
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "Maraming I2P tracker ang nangangailangan na magparehistro ka ng bagong torrent bago mag-seed - pakigawa na ito bago simulan ang \"{0}\""
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "Error sa paggawa ng torrent para sa \"{0}\""
+
+msgid "Removed"
+msgstr "Naalis"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "Pakilala ang wastong pangalan at URL ng tracker"
+
+msgid "Restored default trackers"
+msgstr "Naibalik ang mga default na tracker"
+
+msgid "Enter valid name and filter pattern"
+msgstr "Pakilala ang wastong pangalan at pattern ng filter"
+
+msgid "Restored default torrent create filters"
+msgstr "Naibalik ang mga default na torrent create filter"
+
+msgid "Torrent details"
+msgstr "Detalye ng torrent"
+
+msgid "Torrent has comments"
+msgstr "May comment ang torrent"
+
+msgid "Open file"
+msgstr "Buksan ang file"
+
+msgid "View files"
+msgstr "Tingnan ang mga file"
+
+msgid "Completed"
+msgstr "Tapos na"
+
+msgid "Share ratio"
+msgstr "Rateg ng Bahagi"
+
+msgid "Last activity"
+msgstr "Huling aktibidad"
+
+msgid "Stop"
+msgstr "Ihinto"
+
+msgid "Stop torrent"
+msgstr "Ihinto ang torrent"
+
+msgid "Start"
+msgstr "Simulan"
+
+msgid "Start torrent"
+msgstr "Simulan ang torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "Alisin at burahin ang torrent, panatilihin ang mga na-download na file"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "Burahin ang .torrent file at ang kaugnay na data file"
+
+msgid "Destination"
+msgstr "Destination"
+
+msgid "Checking"
+msgstr "Sinusuri"
+
+msgid "Allocating"
+msgstr "Nilaalaman"
+
+msgid "Failed to connect to all configured trackers"
+msgstr "Nabigong makakonekta sa lahat ng naka-configure na tracker"
+
+msgid "Starting"
+msgstr "Sinisimulan"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "Nag-se-seed sa {0} peer"
+msgstr[1] "Nag-se-seed sa {0} na peer"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "Nakakonekta sa {0} sa {1} peer sa swarm"
+
+msgid "Stalled"
+msgstr "Nakatigil"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "Nag-se-seed sa {0} peer sa swarm"
+msgstr[1] "Nag-se-seed sa {0} na peer sa swarm"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "Nagda-download mula sa {0} peer"
+msgstr[1] "Nagda-download mula sa {0} na peer"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "No Peers"
+msgstr "Walang Peer"
+
+msgid "Peer attached to swarm"
+msgstr "Naka-attach sa swarm ang peer"
+
+msgid "Destination (identity) of peer"
+msgstr "Destination (identity) ng peer"
+
+msgid "seconds"
+msgstr "segundo"
+
+msgid "Seed"
+msgstr "Seed"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "Hindi Interesting (Walang piraso kailangan ng peer na ito)"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "Naka-choke (Hindi pinapayagan ng peer na mag-request ng piraso)"
+
+msgid "Peer is interested but currently idle"
+msgstr "Interested ang peer ngunit idle ngayon"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "Hindi Interested (Wala kaming piraso na kailangan ng peer)"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "Naka-choking (Hindi namin pinapayagang mag-request ng piraso ang peer)"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "Detalye sa tracker na {0}"
+
+msgid "Info"
+msgstr "Impormasyon"
+
+msgid "Add Torrent"
+msgstr "Add Torrent"
+
+msgid "From URL"
+msgstr "Mula sa URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "Pakilala ang URL ng download ng torrent file (I2P lamang), magnet link, o info hash"
+
+msgid "Add torrent"
+msgstr "Magdagdag ng torrent"
+
+msgid "Torrent file"
+msgstr "Torrent file"
+
+msgid "Data dir"
+msgstr "Data dir"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "Pakilala ang directory kung saan isasave ang data (default {0})"
+
+msgid "Create Torrent"
+msgstr "Gumawa ng Torrent"
+
+msgid "Data to seed"
+msgstr "Data na i-seed"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "File o directory na i-seed (buong path o nasa loob ng directory na {0} )"
+
+msgid "Create torrent"
+msgstr "Gumawa ng torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "Alisin sa torrent ang mga file kung nasa loob ng torrent folder ang mga ito"
+
+msgid "Content Filters"
+msgstr "Mga Content Filter"
+
+msgid "Alternates"
+msgstr "Mga Alternatibo"
+
+msgid "Primary"
+msgstr "Primary"
+
+msgid "Tracker Type"
+msgstr "Uri ng Tracker"
+
+msgid "none"
+msgstr "wala"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "Hindi maidagdag ang magnet: Hindi suportado ang Version 2 na magnet link"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "Hindi wasto ang magnet URL {0}"
+
+msgid "Files"
+msgstr "Mga File"
+
+msgid "Save priorities"
+msgstr "I-save ang priority"
+
+msgid "Comments"
+msgstr "Mga Comment"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "Pakisubukan muli ang pagsusumite ng form (masamang nonce)"
+
+msgid "Unknown command"
+msgstr "Hkilalang command"
+
+msgid "Resource Does Not Exist"
+msgstr "Wala ang Resource"
+
+msgid "Resource"
+msgstr "Resource"
+
+msgid "Base"
+msgstr "Base"
+
+msgid "Directory"
+msgstr "Directory"
+
+msgid "File type"
+msgstr "Uri ng file"
+
+msgid "Size"
+msgstr "Laki"
+
+msgid "Download Status"
+msgstr "Katayuan ng Download"
+
+msgid "Remaining"
+msgstr "Natitira"
+
+msgid "Download Priority"
+msgstr "Priority ng Download"
+
+msgid "up"
+msgstr "up"
+
+msgid "Parent directory"
+msgstr "Parent directory"
+
+msgid "Audio Playlist"
+msgstr "Audio Playlist"
+
+msgid "Resource Not found"
+msgstr "Hindi natagpuan ang Resource"
+
+msgid "Info hash"
+msgstr "Info hash"
+
+msgid "Created"
+msgstr "Ginawa"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr "Laki ng mga file na talagang na-download: {0}, hindi kasama ang {1} na BEP 47 padding file"
+
+msgid "Added"
+msgstr "Naidagdag"
+
+msgid "Pieces"
+msgstr "Mga Piraso"
+
+msgid "Average download speed for torrent"
+msgstr "Karaniwang bilis ng download para sa torrent"
+
+msgid "Download speed"
+msgstr "Bilis ng download"
+
+msgid "Completion"
+msgstr "Kakumpihan"
+
+msgid "Skipped"
+msgstr "Inilaktaw"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "Gagamitin lamang ang mga I2P tracker; ipinapakita ang mga hindi-I2P tracker para sa impormasyon lamang"
+
+msgid "Tracker"
+msgstr "Tracker"
+
+msgid "Web Seeds"
+msgstr "Mga Web Seed"
+
+msgid "Refresh page for results"
+msgstr "I-refresh ang pahina para sa resulta"
+
+msgid "Force Recheck"
+msgstr "Pilit na Recheck"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "Ihinto ang torrent upang suriin ang katapatan ng file"
+
+msgid "Check integrity of the downloaded files"
+msgstr "Suriin ang katapatan ng mga na-download na file"
+
+msgid "Download file at high priority"
+msgstr "I-download ang file sa mataas na priority"
+
+msgid "High"
+msgstr "Mataas"
+
+msgid "Download file at normal priority"
+msgstr "I-download ang file sa karaniwang priority"
+
+msgid "Normal"
+msgstr "Karaniwan"
+
+msgid "Do not download this file"
+msgstr "Hindi i-download ang file na ito"
+
+msgid "Skip"
+msgstr "Laktawan"
+
+msgid "complete"
+msgstr "kumpleto"
+
+msgid "remaining"
+msgstr "natitira"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "1 bituin"
+msgstr[1] "{0} bituin"
+
+msgid "No rating"
+msgstr "Walang rating"
+
+msgid "Rate and Comment"
+msgstr "Mag-rate at Mag-comment"
+
+msgid "Rate Torrent"
+msgstr "I-rate ang Torrent"
+
+msgid "Add Comment"
+msgstr "Magdagdag ng Comment"
+
+msgid "My Rating"
+msgstr "Ang Aking Rating"
+
+msgid "Average Rating"
+msgstr "Karaniwang Rating"
+
+msgid "No community ratings currently available"
+msgstr "Wala pangavailable na rating ng komunidad"
+
+msgid "Submitted"
+msgstr "Isinumite"
+
+msgid "Mark for deletion"
+msgstr "Markahan para burahin"
+
+msgid "Delete Selected"
+msgstr "Burahin ang Napili"
+
+msgid "Ratings and Comments"
+msgstr "Mga Rating at Comment"
+
+msgid "Author name required to rate or comment"
+msgstr "Kailangan ang pangalan ng may-akda upang mag-rate o mag-comment"
+
+msgid "Your author name for published comments and ratings"
+msgstr "Ang pangalan ng may-akda mo para sa mga nai-publish na comment at rating"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "Na-update ang priority ng mga file na nagda-download para sa torrent "
+
+msgid "Edit Torrent"
+msgstr "I-edit ang Torrent"
+
+msgid "Active Trackers"
+msgstr "Mga Aktibong Tracker"
+
+msgid "Delete"
+msgstr "Burahin"
+
+msgid "Add Tracker"
+msgstr "Magdagdag ng Tracker"
+
+msgid "Torrent Comment"
+msgstr "Comment ng Torrent"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "Kailangang ihinto ang torrent para mai-edit"
+
+msgid "Save Changes"
+msgstr "I-save ang mga Pagbabago"
+
+msgid "Torrent must be stopped"
+msgstr "Kailangang ihinto ang torrent"
+
+msgid "Not found"
+msgstr "Hindi natagpuan"
+
+msgid "File not found in torrent"
+msgstr "Hindi natagpuan ang file sa torrent"
+
+msgid "Unrecognized"
+msgstr "Hindi kinilala"
+
+msgid "Preview"
+msgstr "Preview"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "Hindi maidagdag ang torrent {0} sa loob ng isa pang torrent: {1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "Hindi maidagdag ang torrent {0} na kasama ang isa pang torrent: {1}"

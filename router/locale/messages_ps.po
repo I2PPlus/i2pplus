@@ -1,0 +1,163 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "سمه"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: سمه؛ IPv6: ازموونه"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: سمه؛ IPv6: فایروال شوی"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: ازموونه؛ IPv6: سمه"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: فایروال شوی؛ IPv6: سمه"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: غیر فعال؛ IPv6: سمه"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: متقارن NAT؛ IPv6: سمه"
+
+msgid "Symmetric NAT"
+msgstr "متقارن NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: متقارن NAT؛ IPv6: ازموونه"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: فایروال شوی؛ IPv6: ازموونه"
+
+msgid "Firewalled"
+msgstr "فایروال شوی"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: ازموونه؛ IPv6: فایروال شوی"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: غیر فعال؛ IPv6: ازموونه"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: غیر فعال؛ IPv6: فایروال شوی"
+
+msgid "Disconnected"
+msgstr "قطع شوی"
+
+msgid "Port Conflict"
+msgstr "د پورټ شخړنه"
+
+msgid "Testing"
+msgstr "ازموونه"
+
+msgid "Starting up"
+msgstr "پیلېږی"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "ټولې د ټونل غوښتنې ردولې کېږی:<br>"
+
+msgid "Hidden Mode"
+msgstr "پټ حالت"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "د ټونل غوښتنې ردولې کېږی:<br>"
+
+msgid "High message delay"
+msgstr "د پیغام لوړ ځنډ"
+
+msgid "Declining requests: "
+msgstr "غوښتنې ردولې کېږی: "
+
+msgid "Limit reached"
+msgstr "حد ته ورسېد"
+
+msgid "Participation disabled"
+msgstr "ګډون غیر فعال دی"
+
+msgid "High system load"
+msgstr "د سیسټم لوړ بار"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "ټولې د ټونل غوښتنې رد کېږی:<br>"
+
+msgid "High number of requests"
+msgstr "د غوښتنو لوړ شمېر"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "ډېرې د ټونل غوښتنې رد کېږی:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "ډېرې د ټونل غوښتنې منل کېږی"
+
+msgid "Accepting tunnel requests"
+msgstr "د ټونل غوښتنې منل کېږی"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "غوښتنې ردولې کېږی: د باندویډټ حد"
+
+msgid "Declining requests"
+msgstr "غوښتنې ردولې کېږی"
+
+msgid "Shutting down"
+msgstr "بندېږی"
+
+msgid "Restarting"
+msgstr "بیا پیلېږی"
+
+msgid "Declining Tunnel Requests"
+msgstr "د ټونل غوښتنې ردولې کېږی"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "د ټونل غوښتنې پرېښودل کېږی: ډېر ورو"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "د ټونل غوښتنې پرېښودل کېږی: د وظیفو لوړه وېره"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "د ټونل غوښتنې پرېښودل کېږی:<br>د CPU لوړ بار"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "د ټونل غوښتنې پرېښودل کېږی: بډل شوی"
+
+msgid "Declining requests:"
+msgstr "غوښتنې ردولې کېږی:"
+
+msgid "Request overload"
+msgstr "د غوښتنو بډول"
+
+msgid "Connection limit reached"
+msgstr "د اتصال حد ته ورسېد"
+
+msgid "Transit throttle drop"
+msgstr "د ترانزیت ورو کولو پرېښودل"
+
+msgid "Transit throttle reject"
+msgstr "د ترانزیت ورو کولو ردول"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "د ټونل غوښتنې پرېښودل کېږی: لوړ بار"
+
+msgid "Transit request throttle"
+msgstr "د ترانزیت د غوښتنو ورو کول"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "د ټونل غوښتنې پرېښودل کېږی: د صف وخت"

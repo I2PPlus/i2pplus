@@ -1,0 +1,163 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "ปกติ"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4:ปกติ;IPv6:กำลังทดสอบ"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4:ปกติ;IPv6:ติดไฟร์วอลล์"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4:กำลังทดสอบ;IPv6:ปกติ"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4:ติดไฟร์วอลล์;IPv6:ปกติ"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4:ปิดใช้งาน;IPv6:ปกติ"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4:NATแบบสมมาตร;IPv6:ปกติ"
+
+msgid "Symmetric NAT"
+msgstr "NATแบบสมมาตร"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4:NATแบบสมมาตร;IPv6:กำลังทดสอบ"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4:ติดไฟร์วอลล์;IPv6:กำลังทดสอบ"
+
+msgid "Firewalled"
+msgstr "ติดไฟร์วอลล์"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4:กำลังทดสอบ;IPv6:ติดไฟร์วอลล์"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4:ปิดใช้งาน;IPv6:กำลังทดสอบ"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4:ปิดใช้งาน;IPv6:ติดไฟร์วอลล์"
+
+msgid "Disconnected"
+msgstr "ตัดการเชื่อมต่อแล้ว"
+
+msgid "Port Conflict"
+msgstr "พอร์ตขัดแย้งกัน"
+
+msgid "Testing"
+msgstr "กำลังทดสอบ"
+
+msgid "Starting up"
+msgstr "กำลังเริ่มทำงาน"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "ปฏิเสธคำขออุโมงคมทั้งหมด:<br>"
+
+msgid "Hidden Mode"
+msgstr "โหมดซ่อนตัว"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "ปฏิเสธคำขออุโมงคม:<br>"
+
+msgid "High message delay"
+msgstr "ความล่าช้าของข้อความสูง"
+
+msgid "Declining requests: "
+msgstr "ปฏิเสธคำขอ: "
+
+msgid "Limit reached"
+msgstr "ถึงขีดจำกัดแล้ว"
+
+msgid "Participation disabled"
+msgstr "ปิดใช้งานการเข้าร่วม"
+
+msgid "High system load"
+msgstr "โหลดระบบสูง"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "ปฏิเสธคำขออุโมงคมทั้งหมด:<br>"
+
+msgid "High number of requests"
+msgstr "จำนวนคำขอสูง"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "ปฏิเสธคำขออุโมงคมส่วนใหญ่:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "ยอมรับคำขออุโมงคมส่วนใหญ่"
+
+msgid "Accepting tunnel requests"
+msgstr "ยอมรับคำขออุโมงคม"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "ปฏิเสธคำขอ:ขีดจำกัดแบนด์วิดท์"
+
+msgid "Declining requests"
+msgstr "ปฏิเสธคำขอ"
+
+msgid "Shutting down"
+msgstr "กำลังปิดเครื่อง"
+
+msgid "Restarting"
+msgstr "กำลังเริ่มใหม่"
+
+msgid "Declining Tunnel Requests"
+msgstr "ปฏิเสธคำขออุโมงคม"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "ทิ้งคำขออุโมงคม:ช้าเกินไป"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "ทิ้งคำขออุโมงคม:ความล่าช้าของงานสูง"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "ทิ้งคำขออุโมงคม:<br>โหลดCPUสูง"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "ทิ้งคำขออุโมงคม:ทำงานหนักเกินไป"
+
+msgid "Declining requests:"
+msgstr "ปฏิเสธคำขอ:"
+
+msgid "Request overload"
+msgstr "คำขอโหลดเกิน"
+
+msgid "Connection limit reached"
+msgstr "ถึงขีดจำกัดการเชื่อมต่อแล้ว"
+
+msgid "Transit throttle drop"
+msgstr "ทิ้งจากการจำกัดอัตราของtransit"
+
+msgid "Transit throttle reject"
+msgstr "ปฏิเสธจากการจำกัดอัตราของtransit"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "ทิ้งคำขออุโมงคม:โหลดสูง"
+
+msgid "Transit request throttle"
+msgstr "การจำกัดอัตราคำขอtransit"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "ทิ้งคำขออุโมงคม:เวลาคิว"

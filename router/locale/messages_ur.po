@@ -1,0 +1,163 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "OK"
+msgstr "ٹھیک ہے"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: ٹھیک ہے؛ IPv6: آزمائش"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: ٹھیک ہے؛ IPv6: فائر وال"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: آزمائش؛ IPv6: ٹھیک ہے"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: فائر WALL؛ IPv6: ٹھیک ہے"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: غیر فعال؛ IPv6: ٹھیک ہے"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: سمیٹرک NAT؛ IPv6: ٹھیک ہے"
+
+msgid "Symmetric NAT"
+msgstr "سمیٹرک NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: سمیٹرک NAT؛ IPv6: آزمائش"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: فائر WALL؛ IPv6: آزمائش"
+
+msgid "Firewalled"
+msgstr "فائر وال"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: آزمائش؛ IPv6: فائر WALL"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: غیر فعال؛ IPv6: آزمائش"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: غیر فعال؛ IPv6: فائر WALL"
+
+msgid "Disconnected"
+msgstr "منسلکیت منقطع"
+
+msgid "Port Conflict"
+msgstr "پورٹ کا تنازعہ"
+
+msgid "Testing"
+msgstr "آزمائش"
+
+msgid "Starting up"
+msgstr "شروع ہو رہا ہے"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "تمام ٹنل درخواستیں مسترد کی جا رہی ہیں:<br>"
+
+msgid "Hidden Mode"
+msgstr "ہیڈن موڈ"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "ٹنل درخواستیں مسترد کی جا رہی ہیں:<br>"
+
+msgid "High message delay"
+msgstr "پیغام کی زیادہ تاخیر"
+
+msgid "Declining requests: "
+msgstr "درخواستیں مسترد کی جا رہی ہیں: "
+
+msgid "Limit reached"
+msgstr "حد تک پہنچ گئی"
+
+msgid "Participation disabled"
+msgstr "شرکت غیر فعال"
+
+msgid "High system load"
+msgstr "سسٹم پر زیادہ لوڈ"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "تمام ٹنل درخواستیں رد کی جا رہی ہیں:<br>"
+
+msgid "High number of requests"
+msgstr "درخواستوں کی زیادہ تعداد"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "زیادہ تر ٹنل درخواستیں رد کی جا رہی ہیں:<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "زیادہ تر ٹنل درخواستیں قبول"
+
+msgid "Accepting tunnel requests"
+msgstr "ٹنل درخواستیں قبول"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "درخواستیں مسترد: بینڈ وائٹ کی حد"
+
+msgid "Declining requests"
+msgstr "درخواستیں مسترد"
+
+msgid "Shutting down"
+msgstr "بند ہو رہا ہے"
+
+msgid "Restarting"
+msgstr "دوبارہ شروع کیا جا رہا ہے"
+
+msgid "Declining Tunnel Requests"
+msgstr "ٹنل درخواستیں مسترد"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "ٹنل درخواستیں چھوڑی جا رہی ہیں: بہت سست"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "ٹنل درخواستیں چھوڑی جا رہی ہیں: زیادہ کام لیگ"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "ٹنل درخواستیں چھوڑی جا رہی ہیں:<br>CPU پر زیادہ لوڈ"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "ٹنل درخواستیں چھوڑی جا رہی ہیں: اوور لوڈڈ"
+
+msgid "Declining requests:"
+msgstr "درخواستیں مسترد:"
+
+msgid "Request overload"
+msgstr "درخواستوں کا اوور لوڈ"
+
+msgid "Connection limit reached"
+msgstr "کنکشن کی حد تک پہنچ گئی"
+
+msgid "Transit throttle drop"
+msgstr "ٹرانزٹ پٹ بندی کی وجہ سے چھوڑ"
+
+msgid "Transit throttle reject"
+msgstr "ٹرانزٹ پٹ بندی کی وجہ سے مسترد"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "ٹنل درخواستیں چھوڑی جا رہی ہیں: زیادہ لوڈ"
+
+msgid "Transit request throttle"
+msgstr "ٹرانزٹ درخواست پٹ بندی"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "ٹنل درخواستیں چھوڑی جا رہی ہیں: قطار کا وقت"

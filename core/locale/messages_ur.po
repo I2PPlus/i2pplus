@@ -1,0 +1,91 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0,number,####} ms"
+msgid_plural "{0,number,####} ms"
+msgstr[0] "{0,number,####} ms"
+msgstr[1] "{0,number,####} ms"
+
+#, java-format
+msgid "{0} sec"
+msgid_plural "{0} sec"
+msgstr[0] "{0} سیکنڈ"
+msgstr[1] "{0} سیکنڈ"
+
+#, java-format
+msgid "{0} min"
+msgid_plural "{0} min"
+msgstr[0] "{0} منٹ"
+msgstr[1] "{0} منٹ"
+
+#, java-format
+msgid "{0} hour"
+msgid_plural "{0} hours"
+msgstr[0] "{0} گھنٹہ"
+msgstr[1] "{0} گھنٹے"
+
+#, java-format
+msgid "{0} day"
+msgid_plural "{0} days"
+msgstr[0] "{0} دن"
+msgstr[1] "{0} دن"
+
+#, java-format
+msgid "{0} year"
+msgid_plural "{0} years"
+msgstr[0] "{0} سال"
+msgstr[1] "{0} سال"
+
+msgid "n/a"
+msgstr "لاگو نہیں"
+
+#, java-format
+msgid "{0,number,####} ns"
+msgid_plural "{0,number,###} ns"
+msgstr[0] "{0,number,####} ns"
+msgstr[1] "{0,number,###} ns"
+
+#, java-format
+msgid "{0,number,####} μs"
+msgid_plural "{0,number,###} μs"
+msgstr[0] "{0,number,####} μs"
+msgstr[1] "{0,number,###} μs"
+
+msgid "CRIT"
+msgstr "CRIT"
+
+msgid "DEBUG"
+msgstr "DEBUG"
+
+msgid "ERROR"
+msgstr "خرابی"
+
+msgid "INFO"
+msgstr "INFO"
+
+msgid "WARN"
+msgstr "WARN"
+
+#, java-format
+msgid "{0} similar message omitted"
+msgid_plural "{0} similar messages omitted"
+msgstr[0] "{0} متشابہ پیغام چھوڑا گیا"
+msgstr[1] "{0} متشابہ پیغامات چھوڑے گئے"

@@ -1,0 +1,71 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "Simulan ang I2P"
+
+msgid "I2P is starting!"
+msgstr "Nagsisimula ang I2P!"
+
+msgid "Starting"
+msgstr "Nagsisimula"
+
+msgid "Launch I2P Browser"
+msgstr "Ilunsad ang I2P Browser"
+
+msgid "Configure I2P System Tray"
+msgstr "I-configure ang I2P System Tray"
+
+msgid "Disable system tray"
+msgstr "I-disable ang system tray"
+
+msgid "Restart I2P"
+msgstr "I-restart ang I2P"
+
+msgid "Stop I2P"
+msgstr "Ihinto ang I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "I-restart ang I2P kaagad"
+
+msgid "Stop I2P Immediately"
+msgstr "Ihinto ang I2P kaagad"
+
+msgid "Cancel I2P Shutdown"
+msgstr "Kanselahin ang shutdown ng I2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "Shutdown sa {0}"
+
+msgid "Shutdown imminent"
+msgstr "Malapit ang shutdown"
+
+msgid "Network"
+msgstr "Network"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: I-right-click para sa menu"
+
+msgid "Enable notifications"
+msgstr "I-enable ang mga abiso"
+
+msgid "Disable notifications"
+msgstr "I-disable ang mga abiso"

@@ -1,0 +1,692 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ps
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "د هاست نیم \"{0}\" ناولن کریکټر {1} لری"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "هاست نیم نه شی د \"{0}\" په پیل کې وی"
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "هاست نیم نه شی د \"{0}\" په پای کې وی"
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "هاست نیم نه شی د \"{0}\" په منځ کې ولری"
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "د هاست نیم \"{0}\" د ASCII بدلون ته اړتیا لری، خو د بدلون کتابتونزه په دې JVM کې شته نه ده"
+
+msgid "Source"
+msgstr "منبع"
+
+msgid "Imported from"
+msgstr "د ایمپورټ منبع"
+
+msgid "Imported from file"
+msgstr "له فایل څخه ایمپورټ شوی"
+
+msgid "Manually added via SusiDNS"
+msgstr "د SusiDNS له لارې په لاس کې زیات شوی"
+
+msgid "Manually added"
+msgstr "په لاس کې زیات شوی"
+
+msgid "Added via address helper"
+msgstr "د addresshelper په مرسته زیات شوی"
+
+msgid "Via helper"
+msgstr "د مرستندوی له لارې"
+
+msgid "Via helper from"
+msgstr "د مرستندوی له مخې"
+
+msgid "None"
+msgstr "هیڅ"
+
+msgid "Hidden"
+msgstr "پټ"
+
+msgid "Signed"
+msgstr "امضا شوی"
+
+msgid "Key"
+msgstr "کلیمه"
+
+#, java-format
+msgid "Type {0}"
+msgstr "ډول {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 بیت"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 بیت"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "د <span class=active> لپاره لټون"
+msgstr[1] "د <span class=active> لپاره لټون"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "فلټر شوی لست یو متن لری۔"
+msgstr[1] "فلټر شوی لست {0} متنونه لری۔"
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "د <span class=active> لپاره یو پایل"
+msgstr[1] "د <span class=active> لپاره {0} پایلونه"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "کتاب یو متن لری"
+msgstr[1] "کتاب {0} متنونه لری"
+
+msgid "Add"
+msgstr "اضافه کړئ"
+
+msgid "Replace"
+msgstr "بدلې کړئ"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "هاست نیم {0} په پتې کتاب کې شته، بدلون یې نه شو۔"
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "هاست نیم {0} په پتې کتاب کې شته، خو بل تاریب لری۔ د ځای نیولو لپاره «بدلې کړئ» ته کلیک وکړئ۔"
+
+msgid "Unable to resolve Base 32 address"
+msgstr "د Base 32 پتې حل نه شوای"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "د {0} لپاره تاریب زیات شو۔"
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "د {0} لپاره تاریب بدلون شو۔"
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "خبرداری - هاست نیم د \".i2p\" په پای کې نشته"
+
+msgid "Invalid Base 32 host name."
+msgstr "د Base 32 هاست نیم ناسم دی۔"
+
+msgid "Invalid Base 64 destination."
+msgstr "د Base 64 تاریب ناسم دی۔"
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "هاست نیم \"{0}\" ناسم دی۔"
+
+msgid "Please enter a host name and destination"
+msgstr "مهربانی وکړئ هاست نیم او تاریب ولیکئ"
+
+msgid "Add Alternate"
+msgstr "بدیل اضافه کړئ"
+
+msgid "Unsupported"
+msgstr "نه ملاتړ کیږی"
+
+msgid "Address book saved."
+msgstr "پتې کتاب ذخیره شو۔"
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "تېروتنه: addressbook فایل نه شو لیکلی۔"
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "ناڅرګنده د فورمې لیکنه، ښایی چې په خپل براوزر کې «back» یا «reload» تڼۍ یې کارولې۔ مهربانی وکړئ بیا یې ولیکئ۔"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "که ستونزه دوام وکړی، وګورئ چې په براوزر کې cookies فعال دې۔"
+
+msgid "Save"
+msgstr "وساته"
+
+msgid "Blacklist saved."
+msgstr "بلاک لیست ذخیره شو۔"
+
+msgid "Reload"
+msgstr "بیا بار کړئ"
+
+msgid "Blacklist reloaded from file."
+msgstr "بلاک لیست له فایل بیا بار شو۔"
+
+msgid "Configuration saved."
+msgstr "ترتیبات ذخیره شو۔"
+
+msgid "Configuration reloaded."
+msgstr "ترتیبات بیا بار شول۔"
+
+msgid "New domain"
+msgstr "نوی ډومین"
+
+msgid "Subscription log reloaded."
+msgstr "د سابسکریپشن لاګ بیا بار شو۔"
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0} پتې کتاب په {1} ډیټابیس کې"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "هاست نیم {0} په پتې کتاب کې نشته۔"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "د {0} تاریب د نومولو سروس {1} ته زیاتول ناکام شو۔"
+
+msgid "Delete Entry"
+msgstr "متن ړنګوه"
+
+msgid "Delete Selected"
+msgstr "غوره ړنګوه"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "د {0} تاریب له نومولو سروس {1} څخه ړنګول ناکام شو۔"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "تاریب {0} ړنګل شو۔"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 تاریب ړنګل شو۔"
+msgstr[1] "{0} تاریبونه ړنګل شول۔"
+
+msgid "No valid entries selected to delete."
+msgstr "د ړنګولو لپاره هیڅ ناسم متن نه دی غوره شوی۔"
+
+msgid "Blacklist Selected"
+msgstr "غوره بلاک لیست"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "1 تاریب په بلاک لیست کې اضافه شو۔"
+msgstr[1] "{0} تاریبونه په بلاک لیست کې اضافه شول۔"
+
+msgid "No valid entries selected to blacklist."
+msgstr "د بلاک لیست لپاره هیڅ ناسم متن نه دی غوره شوی۔"
+
+msgid "Save Notes"
+msgstr "یادداشتونه وساته"
+
+msgid "You must enter a file"
+msgstr "باید فایل ولیکئ"
+
+msgid "No entries found in file"
+msgstr "په فایل کې هیڅ متن ونه موندل شو۔"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "له {0} فایل څخه وارد شو۔"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "له فایل څخه {0} متن بار شو۔"
+msgstr[1] "له فایل څخه {0} متنونه بار شول۔"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "له فایل څخه {0} تکراری متن پاتې شو۔"
+msgstr[1] "له فایل څخه {0} تکراری متنونه پاتې شول۔"
+
+msgid "Import from file failed"
+msgstr "له فایل ایمپورټ ناکام شو۔"
+
+msgid "Subscriptions saved."
+msgstr "سابسکریپشنونه ذخیره شو۔"
+
+msgid "Update"
+msgstr "نوې کړئ"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "هڅه کېږی چې addressbook د سابسکریپشن سرچینو څخه نوې کړی..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "سابسکریپشنونه نه شی نوې کړی: HTTP پروکسی چلېږی نه دی!"
+
+msgid "Subscriptions reloaded."
+msgstr "سابسکریپشنونه بیا بار شول۔"
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "که SusiDNS ستاسو د راوټر پتې کتاب د خپرولو لپاره تنظیم شوی وی، نو متنونه به ستاسو په خپور شوی پتې کتاب کې ښکاره شی او د شریکولو لپاره په یو hosts.txt فایل کې ذخیره شی۔"
+
+msgid "Published Addressbook"
+msgstr "خپور شوی پتې کتاب"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "ترڅو SusiDNS ستاسو د راوټر پتې کتاب ستاسو خپور شوی پتې کتاب ته ولېږی، په ترتیباتو مخ کې 'should_publish=true' وټاکئ۔"
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "له سابسکریپشنونو څخه راغلی ټول کوربه به دا پتې کتاب کې ښکاره شی، سوا له هغو څخه چې په لاس کې دلته یا خپل د ماسټر پتې کتاب ته یې زیات کړئ۔"
+
+msgid "Router Addressbook"
+msgstr "د راوټر پتې کتاب"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "هغه کوربه چې په لاس کې دلته یې زیات کړئ هیڅکله به نه خپر شی۔ کولای شئ دلته د نورو پتې کتابونو د کوربو لپاره نور نومونه هم ورکړئ۔"
+
+msgid "Private Addressbook"
+msgstr "د خصوصی پتې کتاب"
+
+msgid "Local Records"
+msgstr "محلی ریکارډونه"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2P اپلیکیشنونه (په ګړه کې HTTP پروکسی) ستاسو د محلی پتې کتابونو کوربو کاروی ترڅو د .i2p هاست نیمونه حل کړی۔"
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "نورې سابسکریپشنونه د راوټر د مرستې د مخ د FAQ په برخه کې موندل کېږی۔"
+
+msgid "Subscriptions"
+msgstr "سابسکریپشنونه"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "ستاسو له سابسکریپشنونو څخه راغلی کوربه ستاسو د راوټر پتې کتاب ته زیات کېږی او په اوتوماتیک توګه همغه ځول کېږی (په ابدۍ توګه هر 12 ساعته)۔"
+
+msgid "Configure Subscriptions"
+msgstr "سابسکریپشنونه ترتیب کړئ"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "که په لاس کې دلته کوربه زیات کړئ، نو دوی به ستاسو په خپور شوی پتې کتاب (که تنظیم شوی وی) کې شامل شی۔"
+
+msgid "Master Addressbook"
+msgstr "د ماسټر پتې کتاب"
+
+msgid "Searchable by"
+msgstr "د لټون ماخذ"
+
+msgid "I2P applications"
+msgstr "د I2P اپلیکیشنونو"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "د ماسټر، راوټر او خصوصی پتې کتابونه یوځای د I2P د اپلیکیشنونو لپاره د DNS مرجع ګڼل کېږی۔"
+
+msgid "Optional,"
+msgstr "اختیاری،"
+
+msgid "for websites"
+msgstr "د ویب سایتونو لپاره"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "که SusiDNS ستاسو د راوټر پتې کتاب د خپرولو لپاره تنظیم کړئ، نو به د ټولو کوربو په شاملولو سره یو hosts.txt فایل صادر کړی (په ابدۍ توګه ستاسو د eepsite ریښه ته)۔"
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "په لاس کې د ماسټر پتې کتاب ته زیات شوې پتې ستاسو د راوټر پتې کتاب سره یوځای شی۔"
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "ستاسو له سابسکریپشنونو څخه راخلی کوربه ستاسو د راوټر پتې کتاب سره یوځای شی۔"
+
+msgid "Import"
+msgstr "وارد کړئ"
+
+msgid "address book"
+msgstr "پتې کتاب"
+
+msgid "Router"
+msgstr "راوټر"
+
+msgid "Master"
+msgstr "ماسټر"
+
+msgid "Private"
+msgstr "خصوصی"
+
+msgid "Published"
+msgstr "خپور شوی"
+
+msgid "Blacklist"
+msgstr "بلاک لیست"
+
+msgid "Configuration"
+msgstr "ترتیبات"
+
+msgid "Help"
+msgstr "مرسته"
+
+msgid "Book"
+msgstr "کتاب"
+
+msgid "No entries"
+msgstr "هیڅ متن نشته"
+
+msgid "Add new destination"
+msgstr "نوی تاریب اضافه کړئ"
+
+msgid "Import from hosts.txt file"
+msgstr "له hosts.txt فایل څخه وارد کړئ"
+
+msgid "other"
+msgstr "نور"
+
+msgid "Export in hosts.txt format"
+msgstr "په hosts.txt بڼه صادر کړئ"
+
+msgid "Export results in hosts.txt format"
+msgstr "پایلونه په hosts.txt بڼه صادر کړئ"
+
+msgid "Export book in hosts.txt format"
+msgstr "کتاب په hosts.txt بڼه صادر کړئ"
+
+msgid "Search"
+msgstr "لټون"
+
+msgid "latest"
+msgstr "وروستی"
+
+msgid "Alive"
+msgstr "ژوندی"
+
+msgid "Dead"
+msgstr "مړ"
+
+msgid "all"
+msgstr "ټول"
+
+msgid "Info"
+msgstr "معلومات"
+
+msgid "Type"
+msgstr "ډول"
+
+msgid "Hostname"
+msgstr "هاست نیم"
+
+msgid "Encryption"
+msgstr "کریپټ"
+
+msgid "Link (b32)"
+msgstr "لنک (b32)"
+
+msgid "Destination"
+msgstr "تاریب"
+
+msgid "Added"
+msgstr "زیات شوی"
+
+msgid "Status"
+msgstr "حالت"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "د addressbook څخه د کوربو د ړنګولو لپاره غوره کړئ"
+
+msgid "More information on this entry"
+msgstr "د دې متن په اړه نور معلومات"
+
+msgid "unknown"
+msgstr "ناڅرګند"
+
+msgid "Base 32 address"
+msgstr "د Base 32 پته"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "د کوربه د پتې د شریکولو مرستندوی لنک، د پتې کتاب ته د زیاتولو په خیار سره"
+
+msgid "Mark for deletion"
+msgstr "د ړنګولو لپاره نښه وکړئ"
+
+msgid "Cancel"
+msgstr "لغو کړئ"
+
+msgid "This book currently contains no entries."
+msgstr "دا کتاب اوس هیڅ متن نه لری۔"
+
+msgid "e.g. newdomain.i2p"
+msgstr "مثال: newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 یا B32"
+
+msgid "Full destination or b32 address"
+msgstr "بشپړ تاریب یا b32 پته"
+
+msgid "Select file"
+msgstr "فایل غوره کړئ"
+
+msgid "blacklist"
+msgstr "بلاک لیست"
+
+msgid "Blacklist Management"
+msgstr "د بلاک لیست مدیریت"
+
+msgid "File location"
+msgstr "د فایل لاره"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "د بلاک لیست لپاره I2P پتې ولیکئ (هره کرښه ته یو)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "بلاک لیست فایل د I2P هاست نیمو لست لری چې باید د HTTP پروکسی له لارې لاسرسی بند کړی او له پتې کتاب له ښودلو څخه بېشته شی۔"
+
+msgid "configuration"
+msgstr "ترتیبات"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker لا یو کتنه یې نه دی بشپړ کړی"
+
+msgid "Run HostChecker"
+msgstr "HostChecker پرانیستئ"
+
+msgid "Hints"
+msgstr "اشاره"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "دلته د فایلونو او دېریکټریو لارې د addressbook د کار په دېریکټرۍ نسبتی دی، چې معمولاً ~/.i2p/addressbook/ (Linux) یا %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) ده۔"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "که غواړئ په لاس کې کرښې یو پتې کتاب ته زیات کړئ، هغه د خصوصی یا د ماسټر پتې کتابونو ته یې زیات کړئ۔"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "د راوټر پتې کتاب او خپور شوی پتې کتاب د addressbook په اپلیکیشن سره نوې کېږی۔"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "کله چې خپل پتې کتاب خپور کړئ، د ماسټر او د راوټر د پتې کتابونو ټول تاریبونه به هلته ښکاره شی۔"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "د خصوصی تاریبو لپاره د خصوصی پتې کتاب وکاروئ، دا خپر نه کېږی۔"
+
+msgid "Options"
+msgstr "انتخابونه"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "هغه فایل چې د سابسکریپشن URLونو لست لری (د بدلونو اړتیا نشته)"
+
+msgid "Update interval in hours"
+msgstr "د نوې کولو وېره په ساعتونو کې"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "ستاسو عمومی hosts.txt فایل (په خپل ویب سرور د اسناد ریښه کې یو لاره غوره کړئ)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "ستاسو hosts.txt (مه بدلوئ)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "ستاسو شخصی پتې کتاب، دا کوربه به خپر شی۔"
+
+msgid "Your private addressbook, it is never published"
+msgstr "ستاسو خصوصی پتې کتاب، هیڅکله نه خپر کېږی۔"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "ستاسو د eepProxy پورټ (د بدلونو اړتیا نشته)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "ستاسو د eepProxy هاست نیم (د بدلونو اړتیا نشته)"
+
+msgid "Whether to update the published addressbook"
+msgstr "ایا د خپور شوی پتې کتاب نوې کړی"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "هغه فایل چې د ترلاسه شویو سابسکریپشن URLونو د etags سرلیک لری (د بدلونو اړتیا نشته)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "هغه فایل چې د هر ترلاسه شوی سابسکریپشن URL د بدلون وخت نښه لری (د بدلونو اړتیا نشته)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "د فعلیت د لیکلو فایل (خوښنه یې /dev/null ته وټاکئ)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "د کارولو لپاره د اوورډرایډ ټیم نوم (په ابدۍ توګه د کنسول لخوا غوره شوی ټیم)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "د کوربه چکر د پرانیستو وېره (په ساعتونو کې، ابدی 4 ساعته ده)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "د کوربه چکر په پرانیستو کې تر ټولو لوړ موازی pingونه (ابدی 16 ده، تر ټولو لوړه 160 ده)"
+
+msgid "delete hosts"
+msgstr "کوربه ړنګئ"
+
+msgid "addressbook"
+msgstr "addressbook"
+
+msgid "Details"
+msgstr "جزئیات"
+
+msgid "Address Helper"
+msgstr "د پتې مرستندوی"
+
+msgid "link"
+msgstr "لنک"
+
+msgid "Encoded Name"
+msgstr "کوډ شوی نوم"
+
+msgid "Base 32 Address"
+msgstr "د Base 32 پته"
+
+msgid "Base 64 Hash"
+msgstr "د Base 64 هیش"
+
+msgid "Public Key"
+msgstr "عامه کلیمه"
+
+msgid "Signing Key"
+msgstr "د نښې کلیمه"
+
+msgid "Certificate"
+msgstr "پاګلیکت"
+
+msgid "Validated"
+msgstr "تایید شوی"
+
+msgid "no"
+msgstr "نه"
+
+msgid "yes"
+msgstr "هو"
+
+msgid "Added Date"
+msgstr "د زیاتولو نېټه"
+
+msgid "Last Modified"
+msgstr "وروستې بدلونې"
+
+msgid "Notes"
+msgstr "یادداشتونه"
+
+msgid "Add notes about domain"
+msgstr "د ډومین په اړه یادداشتونه ورکړئ"
+
+msgid "Visual Identification for"
+msgstr "د بیاګانې لپاره"
+
+msgid "Create your own identification images"
+msgstr "خپلې د پېژندنې انځورونه جوړ کړئ"
+
+msgid "Launch Image Generator"
+msgstr "د انځور جوړوونکی پرانیستئ"
+
+msgid "Introduction"
+msgstr "پیژندنه"
+
+msgid "What is the addressbook?"
+msgstr "addressbook څه دی؟"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "د addressbook اپلیکیشن ستاسو د I2P د نصب یوه برخه ده۔"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "دا ستاسو hosts.txt فایل د ویشل شویو سرچینو یا «سابسکریپشنونو» څخه په منظم توګه نوې کوی۔"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "د نورو سایتونو ته سابسکریپشن کول اسانه دی، یوازې دوی خپل <a href=\"subscriptions\">سابسکریپشن</a> فایل ته اضافه کړئ۔"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "د I2P د نومولو په اړه نور معلومات د لیدلو لپاره، <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>عمومی لید</a> وګورئ۔"
+
+msgid "How does the addressbook application work?"
+msgstr "addressbook اپلیکیشن څنګه کار کوی؟"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "addressbook اپلیکیشن ستاسو سابسکریپشنونه په منظم توګه ګورځوی او د دوی منځپانګه ستاسو په «راوټر» پتې کتاب کې یوځای کوی۔"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "بیا دا ستاسو «ماسټر» پتې کتاب هم د راوټر پتې کتاب کې یوځای کوی۔"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "که تنظیم شوی وی، اوس د راوټر پتې کتاب په «خپور شوی» پتې کتاب کې لیکل کېږی، چې که تاسو یو eepsite چلوئ نو به عامه ویې لاسرس وی۔"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "راوټر هم یو خصوصی پتې کتاب کاروی، چې نه یوځای کېږی نه خپر کېږی۔"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "د خصوصی پتې کتاب کوربه ته ستا لاسرسی درلودی شی، خو دوی پتې هیڅکله نورو ته نه ورکوی۔"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "د خصوصی پتې کتاب ستاسو د نورو پتې کتابونو د کوربو لپاره د نور نومونو لپاره هم کارول کېږی۔"
+
+msgid "subscription log"
+msgstr "د سابسکریپشن لاګ"
+
+msgid "Subscription Log"
+msgstr "د سابسکریپشن لاګ"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "وروستې (بد ډومینونه پرېښودل شوی)"
+
+msgid "subscriptions"
+msgstr "سابسکریپشنونه"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "د سابسکریپشن فایل د i2p URLونو یوه لست لری۔"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "addressbook اپلیکیشن په منظم توګه دا لست د نویو eepsiteونو لپاره ګورځوی۔"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "هغه URLونه خپور شوی hosts.txt فایلونو ته اشاره کوی۔"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "د سابسکریپشن URLونو لست د FAQ کې وګورئ۔"

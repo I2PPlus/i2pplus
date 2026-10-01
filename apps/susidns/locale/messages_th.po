@@ -1,0 +1,692 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "ชื่อโฮสต์\"{0}\"มีอักขระที่ไม่อนุญาต{1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "ชื่อโฮสต์ต้องไม่ขึ้นต้นด้วย\"{0}\""
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "ชื่อโฮสต์ต้องไม่ลงท้ายด้วย\"{0}\""
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "ชื่อโฮสต์ต้องไม่มี\"{0}\""
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "ชื่อโฮสต์\"{0}\"ต้องแปลงเป็นASCIIแต่ไลบรารีการแปลงไม่มีในJVMนี้"
+
+msgid "Source"
+msgstr "แหล่งที่มา"
+
+msgid "Imported from"
+msgstr "นำเข้าจาก"
+
+msgid "Imported from file"
+msgstr "นำเข้าจากไฟล์"
+
+msgid "Manually added via SusiDNS"
+msgstr "เพิ่มด้วยตนเองผ่านSusiDNS"
+
+msgid "Manually added"
+msgstr "เพิ่มด้วยตนเอง"
+
+msgid "Added via address helper"
+msgstr "เพิ่มผ่านaddresshelper"
+
+msgid "Via helper"
+msgstr "ผ่านhelper"
+
+msgid "Via helper from"
+msgstr "ผ่านhelperจาก"
+
+msgid "None"
+msgstr "ไม่มี"
+
+msgid "Hidden"
+msgstr "ซ่อนอยู่"
+
+msgid "Signed"
+msgstr "ลงนามแล้ว"
+
+msgid "Key"
+msgstr "กุญแจ"
+
+#, java-format
+msgid "Type {0}"
+msgstr "ประเภท{0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024บิต"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048บิต"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "ค้นหา<span class=active>"
+msgstr[1] "ค้นหา<span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "รายการที่กรองมี1รายการ"
+msgstr[1] "รายการที่กรองมี{0}รายการ"
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "พบผลลัพธ์หนึ่งรายการสำหรับ:<span class=active>"
+msgstr[1] "พบผลลัพธ์{0}รายการสำหรับ:<span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "สมุดที่อยู่มี1รายการ"
+msgstr[1] "สมุดที่อยู่มี{0}รายการ"
+
+msgid "Add"
+msgstr "เพิ่ม"
+
+msgid "Replace"
+msgstr "แทนที่"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "ชื่อโฮสต์{0}มีอยู่ในสมุดที่อยู่แล้วไม่เปลี่ยนแปลง"
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "ชื่อโฮสต์{0}มีอยู่ในสมุดที่อยู่แล้วโดยมีปลายทางต่างกันคลิก\"แทนที่\"เพื่อเขียนทับ"
+
+msgid "Unable to resolve Base 32 address"
+msgstr "ไม่สามารถแปลงที่อยู่Base 32ได้"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "เพิ่มปลายทางสำหรับ{0}แล้ว"
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "เปลี่ยนปลายทางสำหรับ{0}แล้ว"
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "คำเตือน-ชื่อโฮสต์ไม่ลงท้ายด้วย\".i2p\""
+
+msgid "Invalid Base 32 host name."
+msgstr "ชื่อโฮสต์Base 32ไม่ถูกต้อง"
+
+msgid "Invalid Base 64 destination."
+msgstr "ปลายทางBase 64ไม่ถูกต้อง"
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "ชื่อโฮสต์\"{0}\"ไม่ถูกต้อง"
+
+msgid "Please enter a host name and destination"
+msgstr "โปรดป้อนชื่อโฮสต์และปลายทาง"
+
+msgid "Add Alternate"
+msgstr "เพิ่มทางเลือก"
+
+msgid "Unsupported"
+msgstr "ไม่ได้รับการสนับสนุน"
+
+msgid "Address book saved."
+msgstr "บันทึกสมุดที่อยู่แล้ว"
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "ข้อผิดพลาด:ไม่สามารถเขียนไฟล์addressbookได้"
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "ส่งแบบฟอร์มไม่ถูกต้องอาจเป็นเพราะใช้ปุ่ม\"ย้อนกลับ\"หรือ\"โหลดใหม่\"ในเบราว์เซอร์โปรดส่งอีกครั้ง"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "หากปัญหายังคงอยู่โปรดตรวจสอบว่าเบราว์เซอร์ของคุณเปิดใช้งานคุกกี้อยู่"
+
+msgid "Save"
+msgstr "บันทึก"
+
+msgid "Blacklist saved."
+msgstr "บันทึกบัญชีดำแล้ว"
+
+msgid "Reload"
+msgstr "โหลดใหม่"
+
+msgid "Blacklist reloaded from file."
+msgstr "โหลดบัญชีดำใหม่จากไฟล์แล้ว"
+
+msgid "Configuration saved."
+msgstr "บันทึกการกำหนดค่าแล้ว"
+
+msgid "Configuration reloaded."
+msgstr "โหลดการกำหนดค่าใหม่แล้ว"
+
+msgid "New domain"
+msgstr "โดเมนใหม่"
+
+msgid "Subscription log reloaded."
+msgstr "โหลดบันทึกการติดตามใหม่แล้ว"
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "สมุดที่อยู่{0}ในฐานข้อมูล{1}"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "ชื่อโฮสต์{0}ไม่อยู่ในสมุดที่อยู่"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "เพิ่มปลายทางสำหรับ{0}ลงในบริการตั้งชื่อ{1}ไม่สำเร็จ"
+
+msgid "Delete Entry"
+msgstr "ลบรายการ"
+
+msgid "Delete Selected"
+msgstr "ลบที่เลือก"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "ลบปลายทางสำหรับ{0}ออกจากบริการตั้งชื่อ{1}ไม่สำเร็จ"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "ลบปลายทาง{0}แล้ว"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "ลบปลายทาง1รายการแล้ว"
+msgstr[1] "ลบปลายทาง{0}รายการแล้ว"
+
+msgid "No valid entries selected to delete."
+msgstr "ไม่ได้เลือกรายการที่ถูกต้องเพื่อลบ"
+
+msgid "Blacklist Selected"
+msgstr "เลือกเข้าบัญชีดำแล้ว"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "เพิ่มปลายทาง1รายการเข้าบัญชีดำแล้ว"
+msgstr[1] "เพิ่มปลายทาง{0}รายการเข้าบัญชีดำแล้ว"
+
+msgid "No valid entries selected to blacklist."
+msgstr "ไม่ได้เลือกรายการที่ถูกต้องเพื่อเพิ่มเข้าบัญชีดำ"
+
+msgid "Save Notes"
+msgstr "บันทึกหมายเหตุ"
+
+msgid "You must enter a file"
+msgstr "คุณต้องป้อนไฟล์"
+
+msgid "No entries found in file"
+msgstr "ไม่พบรายการในไฟล์"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "นำเข้าจากไฟล์{0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "โหลด{0}รายการจากไฟล์"
+msgstr[1] "โหลด{0}รายการจากไฟล์"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "ข้ามรายการซ้ำ{0}รายการจากไฟล์"
+msgstr[1] "ข้ามรายการซ้ำ{0}รายการจากไฟล์"
+
+msgid "Import from file failed"
+msgstr "นำเข้าจากไฟล์ไม่สำเร็จ"
+
+msgid "Subscriptions saved."
+msgstr "บันทึกการติดตามแล้ว"
+
+msgid "Update"
+msgstr "อัปเดต"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "กำลังพยายามอัปเดตaddressbookจากแหล่งการติดตาม..."
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "ไม่สามารถอัปเดตการติดตามได้:proxyของHTTPไม่กำลังทำงาน!"
+
+msgid "Subscriptions reloaded."
+msgstr "โหลดการติดตามใหม่แล้ว"
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "หากกำหนดค่าSusiDNSให้เผยแพร่สมุดที่อยู่เราเตอร์ของคุณรายการจะปรากฏในสมุดที่อยู่ที่เผยแพร่และบันทึกลงไฟล์hosts.txtเพื่อแบ่งปัน"
+
+msgid "Published Addressbook"
+msgstr "สมุดที่อยู่ที่เผยแพร่"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "เพื่อกำหนดค่าSusiDNSให้ส่งสมุดที่อยู่เราเตอร์ของคุณไปยังสมุดที่อยู่ที่เผยแพร่ให้ตั้ง'should_publish=true'บนหน้ากำหนดค่า"
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "โฮสต์ทั้งหมดที่ได้จากการติดตามจะปรากฏในสมุดที่อยู่นี้รวมถึงโฮสต์ที่เพิ่มด้วยตนเองที่นี่หรือในสมุดที่อยู่หลัก"
+
+msgid "Router Addressbook"
+msgstr "สมุดที่อยู่เราเตอร์"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "โฮสต์ที่เพิ่มด้วยตนเองที่นี่จะไม่ถูกเผยแพร่เลยและยังเพิ่มชื่ออ้างอิงของโฮสต์ในสมุดที่อยู่อื่นได้ที่นี่"
+
+msgid "Private Addressbook"
+msgstr "สมุดที่อยู่ส่วนตัว"
+
+msgid "Local Records"
+msgstr "ระเบียนในเครื่อง"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "แอปI2P(รวมถึงproxyของHTTP)ใช้โฮสต์ในสมุดที่อยู่ในเครื่องของคุณเพื่อแปลงชื่อโฮสต์.i2p"
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "การติดตามเพิ่มเติมหาได้ในส่วนคำถามที่พบบ่อยของหน้าช่วยเหลือเราเตอร์"
+
+msgid "Subscriptions"
+msgstr "การติดตาม"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "โฮสต์ที่มาจากการติดตามของคุณจะถูกเพิ่มในสมุดที่อยู่เราเตอร์และซิงค์อัตโนมัติ(โดยค่าเริ่มต้นทุก12ชั่วโมง)"
+
+msgid "Configure Subscriptions"
+msgstr "กำหนดค่าการติดตาม"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "หากเพิ่มโฮสต์ด้วยตนเองที่นี่รายการเหล่านั้นจะรวมอยู่ในสมุดที่อยู่ที่เผยแพร่ของคุณ(ถ้ามีการกำหนดค่าไว้)"
+
+msgid "Master Addressbook"
+msgstr "สมุดที่อยู่หลัก"
+
+msgid "Searchable by"
+msgstr "ค้นหาได้จาก"
+
+msgid "I2P applications"
+msgstr "แอปI2P"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "สมุดที่อยู่หลักเราเตอร์และส่วนตัวทำหน้าที่รวมกันเป็นอำนาจDNSของแอปI2P"
+
+msgid "Optional,"
+msgstr "ไม่บังคับ"
+
+msgid "for websites"
+msgstr "สำหรับเว็บไซต์"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "หากกำหนดค่าSusiDNSให้เผยแพร่สมุดที่อยู่เราเตอร์ของคุณจะส่งออกไฟล์hosts.txtที่มีโฮสต์ทั้งหมด(โดยค่าเริ่มต้นไปยังรากของeepsite)"
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "ที่อยู่ที่เพิ่มด้วยตนเองในสมุดที่อยู่หลักจะถูกรวมเข้ากับสมุดที่อยู่เราเตอร์"
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "โฮสต์ที่ได้รับจากการติดตามของคุณจะถูกรวมเข้ากับสมุดที่อยู่เราเตอร์"
+
+msgid "Import"
+msgstr "นำเข้า"
+
+msgid "address book"
+msgstr "สมุดที่อยู่"
+
+msgid "Router"
+msgstr "เราเตอร์"
+
+msgid "Master"
+msgstr "หลัก"
+
+msgid "Private"
+msgstr "ส่วนตัว"
+
+msgid "Published"
+msgstr "เผยแพร่แล้ว"
+
+msgid "Blacklist"
+msgstr "บัญชีดำ"
+
+msgid "Configuration"
+msgstr "การกำหนดค่า"
+
+msgid "Help"
+msgstr "ช่วยเหลือ"
+
+msgid "Book"
+msgstr "สมุด"
+
+msgid "No entries"
+msgstr "ไม่มีรายการ"
+
+msgid "Add new destination"
+msgstr "เพิ่มปลายทางใหม่"
+
+msgid "Import from hosts.txt file"
+msgstr "นำเข้าจากไฟล์hosts.txt"
+
+msgid "other"
+msgstr "อื่น"
+
+msgid "Export in hosts.txt format"
+msgstr "ส่งออกในรูปแบบhosts.txt"
+
+msgid "Export results in hosts.txt format"
+msgstr "ส่งออกผลลัพธ์ในรูปแบบhosts.txt"
+
+msgid "Export book in hosts.txt format"
+msgstr "ส่งออกสมุดในรูปแบบhosts.txt"
+
+msgid "Search"
+msgstr "ค้นหา"
+
+msgid "latest"
+msgstr "ล่าสุด"
+
+msgid "Alive"
+msgstr "มีชีวิต"
+
+msgid "Dead"
+msgstr "ตายแล้ว"
+
+msgid "all"
+msgstr "ทั้งหมด"
+
+msgid "Info"
+msgstr "ข้อมูล"
+
+msgid "Type"
+msgstr "ประเภท"
+
+msgid "Hostname"
+msgstr "ชื่อโฮสต์"
+
+msgid "Encryption"
+msgstr "การเข้ารหัส"
+
+msgid "Link (b32)"
+msgstr "ลิงก์(b32)"
+
+msgid "Destination"
+msgstr "ปลายทาง"
+
+msgid "Added"
+msgstr "เพิ่มเมื่อ"
+
+msgid "Status"
+msgstr "สถานะ"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "เลือกโฮสต์ที่จะลบออกจากaddressbook"
+
+msgid "More information on this entry"
+msgstr "ข้อมูลเพิ่มเติมเกี่ยวกับรายการนี้"
+
+msgid "unknown"
+msgstr "ไม่ทราบ"
+
+msgid "Base 32 address"
+msgstr "ที่อยู่Base 32"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "ลิงก์helperสำหรับแบ่งปันที่อยู่โฮสต์พร้อมตัวเลือกเพิ่มเข้าaddressbook"
+
+msgid "Mark for deletion"
+msgstr "ทำเครื่องหมายเพื่อลบ"
+
+msgid "Cancel"
+msgstr "ยกเลิก"
+
+msgid "This book currently contains no entries."
+msgstr "สมุดนี้ไม่มีรายการอยู่ในขณะนี้"
+
+msgid "e.g. newdomain.i2p"
+msgstr "เช่นnewdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64หรือB32"
+
+msgid "Full destination or b32 address"
+msgstr "ปลายทางแบบเต็มหรือที่อยู่b32"
+
+msgid "Select file"
+msgstr "เลือกไฟล์"
+
+msgid "blacklist"
+msgstr "บัญชีดำ"
+
+msgid "Blacklist Management"
+msgstr "การจัดการบัญชีดำ"
+
+msgid "File location"
+msgstr "ตำแหน่งไฟล์"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "ป้อนที่อยู่I2Pที่จะเพิ่มเข้าบัญชีดำ(หนึ่งบรรทัดต่อหนึ่งรายการ)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "ไฟล์บัญชีดำประกอบด้วยรายการชื่อโฮสต์I2Pที่ควรถูกบล็อกไม่ให้เข้าถึงผ่านproxyของHTTPและไม่แสดงในสมุดที่อยู่"
+
+msgid "configuration"
+msgstr "การกำหนดค่า"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostCheckerกำลังสแกนอยู่แล้ว"
+
+msgid "Run HostChecker"
+msgstr "เรียกใช้HostChecker"
+
+msgid "Hints"
+msgstr "คำแนะนำ"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "พาธไฟล์และไดเรกทอรีที่นี่สัมพันธ์กับไดเรกทอรีทำงานของaddressbookซึ่งปกติคือ~/.i2p/addressbook/ (Linux)หรือ%LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "หากต้องการเพิ่มบรรทัดด้วยตนเองลงในaddressbookให้เพิ่มลงในสมุดที่อยู่ส่วนตัวหรือสมุดที่อยู่หลัก"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "สมุดที่อยู่เราเตอร์และสมุดที่อยู่ที่เผยแพร่จะถูกอัปเดตโดยแอปaddressbook"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "เมื่อเผยแพร่addressbookของคุณปลายทางทั้งหมดจากสมุดที่อยู่หลักและเราเตอร์จะปรากฏที่นั่น"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "ใช้สมุดที่อยู่ส่วนตัวสำหรับปลายทางส่วนตัวซึ่งจะไม่ถูกเผยแพร่"
+
+msgid "Options"
+msgstr "ตัวเลือก"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "ไฟล์ที่ประกอบด้วยรายการURLของการติดตาม(ไม่จำเป็นต้องเปลี่ยน)"
+
+msgid "Update interval in hours"
+msgstr "ช่วงเวลาอัปเดตเป็นชั่วโมง"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "ไฟล์hosts.txtสาธารณะของคุณ(เลือกพาธภายในรากเอกสารของเว็บเซิร์ฟเวอร์)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "ไฟล์hosts.txtของคุณ(อย่าเปลี่ยน)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "addressbookส่วนตัวของคุณโฮสต์เหล่านี้จะถูกเผยแพร่"
+
+msgid "Your private addressbook, it is never published"
+msgstr "addressbookส่วนตัวของคุณจะไม่ถูกเผยแพร่"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "พอร์ตสำหรับeepProxyของคุณ(ไม่จำเป็นต้องเปลี่ยน)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "ชื่อโฮสต์สำหรับeepProxyของคุณ(ไม่จำเป็นต้องเปลี่ยน)"
+
+msgid "Whether to update the published addressbook"
+msgstr "การอัปเดตสมุดที่อยู่ที่เผยแพร่หรือไม่"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "ไฟล์ที่ประกอบด้วยส่วนหัวetagsจากURLการติดตามที่ดึงมา(ไม่จำเป็นต้องเปลี่ยน)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "ไฟล์ที่ประกอบด้วยเวลาแก้ไขของURLการติดตามแต่ละรายการที่ดึงมา(ไม่จำเป็นต้องเปลี่ยน)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "ไฟล์ที่ใช้บันทึกกิจกรรม(เปลี่ยนเป็น/dev/nullได้ตามต้องการ)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "ชื่อธีมที่ใช้แทน(ค่าเริ่มต้นคือธีมที่เลือกในคอนโซล)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "ช่วงเวลา(เป็นชั่วโมง)ในการเรียกใช้hostchecker(ค่าเริ่มต้นคือ4ชั่วโมง)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "จำนวนpingพร้อมกันสูงสุดเมื่อเรียกใช้hostchecker(ค่าเริ่มต้นคือ16สูงสุดคือ160)"
+
+msgid "delete hosts"
+msgstr "ลบโฮสต์"
+
+msgid "addressbook"
+msgstr "addressbook"
+
+msgid "Details"
+msgstr "รายละเอียด"
+
+msgid "Address Helper"
+msgstr "addresshelper"
+
+msgid "link"
+msgstr "ลิงก์"
+
+msgid "Encoded Name"
+msgstr "ชื่อที่เข้ารหัส"
+
+msgid "Base 32 Address"
+msgstr "ที่อยู่Base 32"
+
+msgid "Base 64 Hash"
+msgstr "แฮชBase 64"
+
+msgid "Public Key"
+msgstr "กุญแจสาธารณะ"
+
+msgid "Signing Key"
+msgstr "กุญแจลงนาม"
+
+msgid "Certificate"
+msgstr "ใบรับรอง"
+
+msgid "Validated"
+msgstr "ตรวจสอบแล้ว"
+
+msgid "no"
+msgstr "ไม่"
+
+msgid "yes"
+msgstr "ใช่"
+
+msgid "Added Date"
+msgstr "วันที่เพิ่ม"
+
+msgid "Last Modified"
+msgstr "แก้ไขล่าสุด"
+
+msgid "Notes"
+msgstr "หมายเหตุ"
+
+msgid "Add notes about domain"
+msgstr "เพิ่มหมายเหตุเกี่ยวกับโดเมน"
+
+msgid "Visual Identification for"
+msgstr "การระบุตัวตนด้วยภาพสำหรับ"
+
+msgid "Create your own identification images"
+msgstr "สร้างภาพระบุตัวตนของคุณเอง"
+
+msgid "Launch Image Generator"
+msgstr "เปิดตัวสร้างภาพ"
+
+msgid "Introduction"
+msgstr "บทแนะนำ"
+
+msgid "What is the addressbook?"
+msgstr "addressbookคืออะไร"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "แอปaddressbookเป็นส่วนหนึ่งของการติดตั้งI2Pของคุณ"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "มันจะอัปเดตไฟล์hosts.txtของคุณเป็นประจำจากแหล่งที่กระจายหรือ\"การติดตาม\""
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "การติดตามเว็บไซต์เพิ่มเติมทำได้ง่ายเพียงเพิ่มลงในไฟล์<a href=\"subscriptions\">การติดตาม</a>ของคุณ"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "หากต้องการข้อมูลเพิ่มเติมเกี่ยวกับการตั้งชื่อในI2Pดู<a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>ภาพรวม</a>"
+
+msgid "How does the addressbook application work?"
+msgstr "แอปaddressbookทำงานอย่างไร"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "แอปaddressbookจะตรวจสอบการติดตามของคุณเป็นประจำและรวมเนื้อหาเข้าสู่สมุดที่อยู่\"เราเตอร์\""
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "จากนั้นมันจะรวมสมุดที่อยู่\"หลัก\"ของคุณเข้าสู่สมุดที่อยู่เราเตอร์ด้วย"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "หากมีการกำหนดค่าไว้สมุดที่อยู่เราเตอร์จะถูกเขียนลงสมุดที่อยู่\"ที่เผยแพร่\"ซึ่งจะพร้อมใช้งานแบบสาธารณะเมื่อคุณใช้งานeepsite"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "เราเตอร์ยังใช้สมุดที่อยู่ส่วนตัวซึ่งไม่ถูกรวมหรือเผยแพร่"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "คุณเข้าถึงโฮสต์ในสมุดที่อยู่ส่วนตัวได้แต่ที่อยู่ของโฮสต์เหล่านั้นจะไม่ถูกเผยแพร่ให้ผู้อื่น"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "สมุดที่อยู่ส่วนตัวยังใช้เป็นชื่ออ้างอิงของโฮสต์ในสมุดที่อยู่อื่นของคุณได้"
+
+msgid "subscription log"
+msgstr "บันทึกการติดตาม"
+
+msgid "Subscription Log"
+msgstr "บันทึกการติดตาม"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "ล่าสุด(ไม่รวมโดเมนที่เสีย)"
+
+msgid "subscriptions"
+msgstr "การติดตาม"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "ไฟล์การติดตามประกอบด้วยรายการURLของi2p"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "แอปaddressbookจะตรวจสอบรายการนี้เป็นประจำเพื่อหาeepsiteใหม่"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "URLเหล่านั้นอ้างถึงไฟล์hosts.txtที่เผยแพร่แล้ว"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "ดูคำถามที่พบบ่อยเพื่อดูรายการURLการติดตาม"

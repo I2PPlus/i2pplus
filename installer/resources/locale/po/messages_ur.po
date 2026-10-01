@@ -1,0 +1,154 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "wrapper لوڈ کرنے میں ناکامی"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAME پہلے ہی چل رہا ہے۔"
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME چلا رہا ہے"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME کا انتظار"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "انتباہ: $APP_LONG_NAME شروع ہونے میں ناکام رہا ہو۔"
+
+msgid "Must be root to perform this action."
+msgstr "یہ عمل کرنے کے لیے root ہونا ضروری ہے۔"
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME شروع ہو رہا ہے"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "$APP_LONG_NAME روکا جا رہا ہے"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAME چل نہیں رہا تھا۔"
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME روکنے میں ناکام۔"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "$APP_LONG_NAME کے باہر نکلنے کا انتظار"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME روکنے میں ناکامی۔"
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "$APP_LONG_NAME روک دیا گیا۔"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "$APP_LONG_NAME کو نرمی سے روکا جا رہا ہے"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME چل نہیں رہا ہے۔"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME چل رہا ہے: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAME چل رہا ہے: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "$APP_LONG_NAME ڈیمن پہلے ہی انسٹال شدہ ہے۔"
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "$APP_LONG_NAME ڈیمن انسٹال کیا جا رہا ہے"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "$DIST_OS کے لیے انسٹال ابھی معاونت یافتہ نہیں"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "$APP_LONG_NAME ڈیمن ہٹایا جا رہا ہے"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "$APP_LONG_NAME ڈیمن ابھی انسٹال شدہ نہیں ہے۔"
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "$DIST_OS کے لیے ہٹانا ابھی معاونت یافتہ نہیں"
+
+msgid "Commands:"
+msgstr "کمانڈز:"
+
+msgid "Launch in the current console."
+msgstr "موجودہ کنسول میں چلائیں۔"
+
+msgid "Start in the background as a daemon process."
+msgstr "پس منظر میں ڈیمن عمل کے طور پر شروع کریں۔"
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "اگر ڈیمن کے طور پر یا کسی دوسرے کنسول میں چل رہا ہے تو روکیں۔"
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "نرمی سے روکیں، اس میں 11 منٹ یا اس سے زیادہ لگ سکتے ہیں۔"
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "نرمی سے دوبارہ شروع کریں، اس میں 11 منٹ یا اس سے زیادہ لگ سکتے ہیں۔"
+
+msgid "Stop if running and then start."
+msgstr "اگر چل رہا ہے تو روکیں اور پھر شروع کریں۔"
+
+msgid "Restart only if already running."
+msgstr "صرف اس صورت میں دوبارہ شروع کریں جب وہ پہلے ہی چل رہا ہو۔"
+
+msgid "Query the current status."
+msgstr "موجودہ حالت کی جانچ کریں۔"
+
+msgid "Install to start automatically when system boots."
+msgstr "نظام کے بوٹ ہونے پر خودکار طور پر شروع ہونے کے لیے انسٹال کریں۔"
+
+msgid "Uninstall."
+msgstr "اَن انسٹال کریں۔"
+
+msgid "Request a Java thread dump if running."
+msgstr "اگر چل رہا ہے تو Java دھاگہ ڈمپ کی درخواست کریں۔"
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "براہِ کرم i2prouter میں ترمیم کریں اور متغیر RUN_AS_USER مقرر کریں"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "I2P کو root صارف کے طور پر چلانا *تجویز کردہ نہیں* ہے۔"
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "اگر پھر بھی root کے طور پر چلانا ہے تو i2prouter میں ترمیم کریں اور ALLOW_ROOT=true مقرر کریں۔"

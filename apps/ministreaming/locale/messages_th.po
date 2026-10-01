@@ -1,0 +1,73 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Message timeout"
+msgstr "หมดเวลาข้อความ"
+
+msgid "Failed delivery to local destination"
+msgstr "ส่งมอบไปยังปลายทางในเครื่องไม่สำเร็จ"
+
+msgid "Local router failure"
+msgstr "เราเตอร์ในเครื่องล้มเหลว"
+
+msgid "Local network failure"
+msgstr "เครือข่ายในเครื่องล้มเหลว"
+
+msgid "Session closed"
+msgstr "เซสชันปิดแล้ว"
+
+msgid "Invalid message"
+msgstr "ข้อความไม่ถูกต้อง"
+
+msgid "Invalid message options"
+msgstr "ตัวเลือกข้อความไม่ถูกต้อง"
+
+msgid "Buffer overflow"
+msgstr "บัฟเฟอร์ล้น"
+
+msgid "Message expired"
+msgstr "ข้อความหมดอายุ"
+
+msgid "Local lease set invalid"
+msgstr "LeaseSetในเครื่องไม่ถูกต้อง"
+
+msgid "No local tunnels"
+msgstr "ไม่มีอุโมงคมในเครื่อง"
+
+msgid "Unsupported encryption options"
+msgstr "ตัวเลือกการเข้ารหัสที่ไม่ได้รับการสนับสนุน"
+
+msgid "Invalid destination"
+msgstr "ปลายทางไม่ถูกต้อง"
+
+msgid "Destination lease set expired"
+msgstr "LeaseSetของปลายทางหมดอายุ"
+
+msgid "Destination lease set not found"
+msgstr "ไม่พบLeaseSetของปลายทาง"
+
+msgid "Local destination shutdown"
+msgstr "ปลายทางในเครื่องปิดเครื่อง"
+
+msgid "Connection was reset"
+msgstr "การเชื่อมต่อถูกรีเซ็ต"
+
+msgid "Failure code"
+msgstr "รหัสความล้มเหลว"

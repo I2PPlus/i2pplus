@@ -1,0 +1,71 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "I2P شروع کریں"
+
+msgid "I2P is starting!"
+msgstr "I2P شروع ہو رہا ہے!"
+
+msgid "Starting"
+msgstr "شروع ہو رہا ہے"
+
+msgid "Launch I2P Browser"
+msgstr "I2P براؤزر چلائیں"
+
+msgid "Configure I2P System Tray"
+msgstr "I2P سسٹم ٹرے کی ترتیبات"
+
+msgid "Disable system tray"
+msgstr "سسٹم ٹرے غیر فعال کریں"
+
+msgid "Restart I2P"
+msgstr "I2P دوبارہ شروع کریں"
+
+msgid "Stop I2P"
+msgstr "I2P روکیں"
+
+msgid "Restart I2P Immediately"
+msgstr "I2P ابھی دوبارہ شروع کریں"
+
+msgid "Stop I2P Immediately"
+msgstr "I2P ابھی روکیں"
+
+msgid "Cancel I2P Shutdown"
+msgstr "I2P بند کرنے کی منسوخی"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "{0} میں بندی"
+
+msgid "Shutdown imminent"
+msgstr "بندی قریب ہے"
+
+msgid "Network"
+msgstr "نیٹ ورک"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P: مینو کے لیے دائیں کلک کریں"
+
+msgid "Enable notifications"
+msgstr "نوٹیفکیشنز فعال کریں"
+
+msgid "Disable notifications"
+msgstr "نوٹیفکیشنز غیر فعال کریں"

@@ -1,0 +1,154 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "โหลดwrapperไม่สำเร็จ"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "$APP_LONG_NAMEกำลังทำงานอยู่แล้ว"
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "กำลังเรียกใช้$APP_LONG_NAME"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "กำลังรอ$APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "คำเตือน:$APP_LONG_NAMEอาจเริ่มทำงานไม่สำเร็จ"
+
+msgid "Must be root to perform this action."
+msgstr "ต้องใช้สิทธิ์rootเพื่อดำเนินการนี้"
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "กำลังเริ่ม$APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "กำลังหยุด$APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "$APP_LONG_NAMEไม่ได้กำลังทำงาน"
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "ไม่สามารถหยุด$APP_LONG_NAMEได้"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "กำลังรอ$APP_LONG_NAMEออกจากโปรแกรม"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "หยุด$APP_LONG_NAMEไม่สำเร็จ"
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "หยุด$APP_LONG_NAMEแล้ว"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "กำลังหยุด$APP_LONG_NAMEอย่างสุภาพ"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAMEไม่ได้ทำงานอยู่"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAMEกำลังทำงาน:PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "$APP_LONG_NAMEกำลังทำงาน:PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "daemonของ$APP_LONG_NAMEติดตั้งไว้แล้ว"
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "กำลังติดตั้งdaemonของ$APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "ขณะนี้ไม่รองรับการติดตั้งสำหรับ$DIST_OS"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "กำลังถอนการติดตั้งdaemonของ$APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "daemonของ$APP_LONG_NAMEยังไม่ได้ติดตั้ง"
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "ขณะนี้ไม่รองรับการถอนการติดตั้งสำหรับ$DIST_OS"
+
+msgid "Commands:"
+msgstr "คำสั่ง:"
+
+msgid "Launch in the current console."
+msgstr "เรียกใช้งานในคอนโซลปัจจุบัน"
+
+msgid "Start in the background as a daemon process."
+msgstr "เริ่มในพื้นหลังเป็นโปรเซสdaemon"
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "หยุดหากกำลังทำงานเป็นdaemonหรือในคอนโซลอื่น"
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "หยุดอย่างสุภาพอาจใช้เวลาสูงสุด11นาทีหรือมากกว่า"
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "เริ่มใหม่อย่างสุภาพอาจใช้เวลาสูงสุด11นาทีหรือมากกว่า"
+
+msgid "Stop if running and then start."
+msgstr "หยุดหากกำลังทำงานแล้วเริ่มใหม่"
+
+msgid "Restart only if already running."
+msgstr "เริ่มใหม่เฉพาะเมื่อกำลังทำงานอยู่"
+
+msgid "Query the current status."
+msgstr "ตรวจสอบสถานะปัจจุบัน"
+
+msgid "Install to start automatically when system boots."
+msgstr "ติดตั้งเพื่อเริ่มอัตโนมัติเมื่อระบบบูต"
+
+msgid "Uninstall."
+msgstr "ถอนการติดตั้ง"
+
+msgid "Request a Java thread dump if running."
+msgstr "ขอthread dumpของJavaหากกำลังทำงาน"
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "โปรดแก้ไขi2prouterและตั้งค่าตัวแปรRUN_AS_USER"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "การใช้งานI2Pในฐานะผู้ใช้root*ไม่*แนะนำ"
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "หากต้องการรันเป็นrootอยู่ดีให้แก้ไขi2prouterและตั้งค่าALLOW_ROOT=true"

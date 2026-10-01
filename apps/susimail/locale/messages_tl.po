@@ -1,0 +1,472 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} bagong mensahe"
+msgstr[1] "{0} bagong mensahe"
+
+msgid "Email"
+msgstr "Email"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr "Walang encoder na natagpuan para sa pag-encode ng \\'{0}\\'."
+
+msgid "Re:"
+msgstr "Re:"
+
+msgid "Fwd:"
+msgstr "Fwd:"
+
+msgid "Drafts"
+msgstr "Mga Draft"
+
+msgid "Sent"
+msgstr "Naipadala"
+
+msgid "Trash"
+msgstr "Trash"
+
+msgid "Bulk Mail"
+msgstr "Bulk Mail"
+
+msgid "Inbox"
+msgstr "Inbox"
+
+msgid "View message as HTML"
+msgstr "Tingnan ang mensahe bilang HTML"
+
+msgid "View message as plain text"
+msgstr "Tingnan ang mensahe bilang plain text"
+
+msgid "unknown"
+msgstr "Hindi alam"
+
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "Para protektahan ang iyong privacy, hinablang ng SusiMail ang Javascript at kahit anong remote na nilalaman sa HTML na mensaheng ito."
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "I-enable ang Javascript para sa mas maayos na display at karagdagang feature."
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "Inalis ang mga tracking image mula sa mensahe: {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "Hindi ipinakita ang mga naka-block na image: {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr "Hindi suportado ang charset \\'{0}\\'."
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "Hindi ipinakita ang bahagi ({0}) dahil sa {1}"
+
+msgid "Reloading the page may fix the error."
+msgstr "Maaaring ayusin ng pag-reload ng pahina ang error."
+
+msgid "File"
+msgstr "File"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "I-download ang attachment {0}"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "Nilagay ang file sa isang zipfile para sa mga dahilan ng seguridad."
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "Attachment ({0})."
+
+msgid "Need username for authentication."
+msgstr "Kailangan ang username para sa authentication."
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "Hindi isama ang @mail.i2p sa username"
+
+msgid "Need password for authentication."
+msgstr "Kailangan ang password para sa authentication."
+
+msgid "Need hostname for connect."
+msgstr "Kailangan ang hostname para sa koneksyon."
+
+msgid "Need port number for pop3 connect."
+msgstr "Kailangan ang port number para sa pop3 connect."
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "Hindi nasa saklaw na 0..65535 ang POP3 port number."
+
+msgid "POP3 port number is invalid."
+msgstr "Hindi wasto ang POP3 port number."
+
+msgid "Need port number for smtp connect."
+msgstr "Kailangan ang port number para sa smtp connect."
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "Hindi nasa saklaw na 0..65535 ang SMTP port number."
+
+msgid "SMTP port number is invalid."
+msgstr "Hindi wasto ang SMTP port number."
+
+msgid "Cannot connect"
+msgstr "Hindi makakonekta"
+
+msgid "Error connecting to server"
+msgstr "Error sa pagkonekta sa server"
+
+msgid "Draft saved."
+msgstr "Naka-save ang draft."
+
+msgid "Unable to save mail."
+msgstr "Hindi ma-save ang mail."
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "Sa {0}, isinulat ni {1}:"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "Error sa pagbabasa ng na-upload na file: {0}"
+
+msgid "begin forwarded mail"
+msgstr "simula ng ipinapadalang mail"
+
+msgid "end forwarded mail"
+msgstr "tatapos ng ipinapadalang mail"
+
+msgid "Could not fetch mail body."
+msgstr "Hindi makuha ang nilalaman ng mail."
+
+msgid "Message id not valid."
+msgstr "Hindi wasto ang id ng mensahe."
+
+msgid "Internal error, lost connection."
+msgstr "Internal error, nawalan ng koneksyon."
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "Walang Encoding na natagpuan para sa {0}"
+
+msgid "Attachment not found."
+msgstr "Hindi natagpuan ang attachment."
+
+msgid "Message not found."
+msgstr "Hindi natagpuan ang mensahe."
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "1 mensahe ang nabura."
+msgstr[1] "{0} mensahe ang nabura."
+
+msgid "No messages marked for deletion."
+msgstr "Walang mensaheng markahan para burahin."
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr "Hindi nagbago ang host. I-edit ang configuration file {0} para baguhin ang host."
+
+msgid "Configuration saved"
+msgstr "Naka-save ang Configuration"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "Hindi wasto ang bilang ng pagesize, ibinabalik sa default na halaga."
+
+msgid "Login"
+msgstr "Login"
+
+msgid "Loading messages, please wait..."
+msgstr "Naglo-load ng mga mensahe, pakihintay..."
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "1 mensahe"
+msgstr[1] "{0} mensahe"
+
+msgid "No messages"
+msgstr "Walang mensahe"
+
+msgid "Show Message"
+msgstr "Ipakita ang Mensahe"
+
+msgid "New Message"
+msgstr "Bagong Mensahe"
+
+msgid "Configuration"
+msgstr "Configuration"
+
+msgid "I2PMail"
+msgstr "I2PMail"
+
+msgid "No new messages"
+msgstr "Walang bagong mensahe"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} ay isang eksklusibong serbisyo ng I2P na ibinibigay ng {1}."
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} webmail client &copy Susi 2004-2005."
+
+msgid "Checking for new messages on server"
+msgstr "Sinusuri ang bagong mensahe sa server"
+
+msgid "Refresh the page for updates"
+msgstr "I-refresh ang pahina para sa mga update"
+
+msgid "Removed tracking image placeholder"
+msgstr "Inalis ang placeholder ng tracking image"
+
+msgid "no subject"
+msgstr "walang paksa"
+
+msgid "No Drafts folder?"
+msgstr "Walang folder na Drafts?"
+
+msgid "Found no valid sender address."
+msgstr "Hindi nahanap ang wastong address ng sender."
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr "Hindi nahanap ang wastong address sa \\'{0}\\'."
+
+msgid "No recipients found."
+msgstr "Hindi nahanap ang anumang recipient."
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "Masyadong malaki ang Email, {0} ang max"
+
+msgid "Sending mail."
+msgstr "Ipinapadala ang mail."
+
+msgid "Error sending mail"
+msgstr "Error sa pagpapadala ng mail"
+
+msgid "Mail sent."
+msgstr "Naipadala ang mail."
+
+msgid "Cancel"
+msgstr "Kanselahin"
+
+msgid "Save as Draft"
+msgstr "I-save bilang Draft"
+
+msgid "Send"
+msgstr "Ipadala"
+
+msgid "From"
+msgstr "Mula"
+
+msgid "To"
+msgstr "Hanggang"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Bcc"
+msgstr "Bcc"
+
+msgid "Subject"
+msgstr "Paksa"
+
+msgid "Add Attachment"
+msgstr "Magdagdag ng Attachment"
+
+msgid "Add attachment"
+msgstr "Magdagdag ng attachment"
+
+msgid "Attachments"
+msgstr "Mga Attachment"
+
+msgid "Delete selected attachments"
+msgstr "Burahin ang napiling mga attachment"
+
+msgid "I2PMail Login"
+msgstr "Login ng I2PMail"
+
+msgid "User"
+msgstr "User"
+
+msgid "Username"
+msgstr "Username"
+
+msgid "Password"
+msgstr "Password"
+
+msgid "Toggle password visibility"
+msgstr "I-toggle ang pagkikita ng password"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "POP3 Port"
+msgstr "POP3 Port"
+
+msgid "SMTP Port"
+msgstr "SMTP Port"
+
+msgid "Read Mail Offline"
+msgstr "Basahin ang Mail Offline"
+
+msgid "Settings"
+msgstr "Settings"
+
+msgid "Learn about I2PMail"
+msgstr "Alamin ang I2PMail"
+
+msgid "Create Account"
+msgstr "Gumawa ng Account"
+
+msgid "New"
+msgstr "Bago"
+
+msgid "Check Mail"
+msgstr "Suriin ang Mail"
+
+msgid "Refresh Page"
+msgstr "I-refresh ang Pahina"
+
+msgid "Change to Folder"
+msgstr "Lumipat sa Folder"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "1 Mensahe"
+msgstr[1] "{0} Mensahe"
+
+msgid "Logout"
+msgstr "Mag-logout"
+
+msgid "Date"
+msgstr "Petsa"
+
+msgid "Size"
+msgstr "Laki"
+
+msgid "Mark for deletion"
+msgstr "Markahan para burahin"
+
+msgid "Really delete the marked messages?"
+msgstr "Talagang burahin ang mga markahang mensahe?"
+
+msgid "Yes, really delete them!"
+msgstr "Oo, talaga silang burahin!"
+
+msgid "Delete Selected"
+msgstr "Burahin ang Napili"
+
+msgid "Mark All"
+msgstr "Markahan Lahat"
+
+msgid "Clear All"
+msgstr "Alisin Lahat"
+
+msgid "Message contains HTML"
+msgstr "May HTML ang mensahe"
+
+msgid "Message is new"
+msgstr "Bago ang mensahe"
+
+msgid "Message is spam"
+msgstr "Spam ang mensahe"
+
+msgid "Message body not downloaded"
+msgstr "Hindi na-download ang nilalaman ng mensahe"
+
+msgid "First"
+msgstr "Una"
+
+msgid "Previous"
+msgstr "Nakaraang"
+
+msgid "Next"
+msgstr "Susunod"
+
+msgid "Last"
+msgstr "Huli"
+
+msgid "Really delete this message?"
+msgstr "Talagang burahin ang mensaheng ito?"
+
+msgid "Yes, really delete it!"
+msgstr "Oo, talaga itong burahin!"
+
+msgid "Reply"
+msgstr "Sumagot"
+
+msgid "Reply All"
+msgstr "Sumagot Lahat"
+
+msgid "Forward"
+msgstr "I-forward"
+
+msgid "Save As"
+msgstr "I-save bilang"
+
+msgid "Delete"
+msgstr "Burahin"
+
+msgid "Back to Folder"
+msgstr "Bumalik sa Folder"
+
+msgid "Move to Folder"
+msgstr "Ilipat sa Folder"
+
+msgid "View message in new tab"
+msgstr "Tingnan ang mensahe sa bagong tab"
+
+msgid "Folder Page Size"
+msgstr "Laki ng Pahina ng Folder"
+
+msgid "Set"
+msgstr "Itakda"
+
+msgid "Advanced Configuration"
+msgstr "Advanced na Configuration"
+
+msgid "Save Configuration"
+msgstr "I-save ang Configuration"
+
+msgid "No response from server"
+msgstr "Walang tugon mula sa server"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr "Nabigo ang login sa mail server, mali ang username o password."
+
+msgid "Logout and then login again with the correct username and password."
+msgstr "Mag-logout at mag-login muli gamit ang wastong username at password."
+
+msgid "Login failed"
+msgstr "Nabigo ang login"
+
+msgid "Server refused connection"
+msgstr "Tinanggihan ng server ang koneksyon"
+
+msgid "Mail rejected"
+msgstr "Tinanggihan ang mail"

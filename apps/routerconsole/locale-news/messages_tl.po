@@ -1,0 +1,58 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "I2P+ installation complete!"
+msgstr "Tapos na ang pag-install ng I2P+!"
+
+msgid "Welcome to I2P+!"
+msgstr "Maligayang pagdating sa I2P+!"
+
+#, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
+msgstr "Pakisabi {0}magtiyaga{1} habang nag-a-boot ang I2P+ at naghahanap ng mga peer."
+
+#, java-format
+msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgstr "Habang naghihintay, pakisuri {0}i-adjust ang iyong mga setting ng bandwidth{1} sa {2}configuration page{3}."
+
+#, java-format
+msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
+msgstr "Maaari mo ring patakbuhin ang bandwidth test sa pamamagitan ng {0}Setup Wizard{1} upang matukoy ang iyong bandwidth, at may gabay para sa mga bagong user at karagdagang dokumentasyon kasama ang FAQ sa {2}help section{1}."
+
+#, java-format
+msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgstr "Maaari mo ring i-enable ang I2P+ updates sa {0}update configuration page{1}."
+
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr "Maaari mo ring i-setup ang browser mo upang gamitin ang I2P proxy at maabot ang mga eepsite."
+
+msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
+msgstr "Ilagay lamang ang 127.0.0.1 (o localhost) port 4444 bilang http proxy sa mga setting ng browser mo."
+
+msgid "Do not use SOCKS for this."
+msgstr "Huwag gumamit ng SOCKS para dito."
+
+#, java-format
+msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr "May higit pang impormasyon sa {0}I2P browser proxy setup page{1}."
+
+#, java-format
+msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
+msgstr "Itutok ang iyong IRC client sa {0}localhost:6668{1} at kumustahin kami sa {2}#saltR{3}."

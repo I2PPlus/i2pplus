@@ -1,0 +1,71 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Start I2P"
+msgstr "เริ่มI2P"
+
+msgid "I2P is starting!"
+msgstr "I2Pกำลังเริ่ม!"
+
+msgid "Starting"
+msgstr "กำลังเริ่ม"
+
+msgid "Launch I2P Browser"
+msgstr "เปิดเบราว์เซอร์I2P"
+
+msgid "Configure I2P System Tray"
+msgstr "กำหนดค่าซิสเทมเทรย์I2P"
+
+msgid "Disable system tray"
+msgstr "ปิดใช้งานซิสเทมเทรย์"
+
+msgid "Restart I2P"
+msgstr "เริ่มI2Pใหม่"
+
+msgid "Stop I2P"
+msgstr "หยุดI2P"
+
+msgid "Restart I2P Immediately"
+msgstr "เริ่มI2Pใหม่ทันที"
+
+msgid "Stop I2P Immediately"
+msgstr "หยุดI2Pทันที"
+
+msgid "Cancel I2P Shutdown"
+msgstr "ยกเลิกการปิดเครื่องI2P"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "ปิดเครื่องใน{0}"
+
+msgid "Shutdown imminent"
+msgstr "การปิดเครื่องกำลังจะเกิดขึ้น"
+
+msgid "Network"
+msgstr "เครือข่าย"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P:คลิกขวาเพื่อเปิดเมนู"
+
+msgid "Enable notifications"
+msgstr "เปิดใช้งานการแจ้งเตือน"
+
+msgid "Disable notifications"
+msgstr "ปิดใช้งานการแจ้งเตือน"

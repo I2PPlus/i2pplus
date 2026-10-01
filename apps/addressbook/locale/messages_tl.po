@@ -1,0 +1,100 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Cryptocurrency related services"
+msgstr "Mga serbisyo na may kinalaman sa cryptocurrency"
+
+msgid "Controlled substances marketplaces"
+msgstr "Mga marketplace ng controlled substances"
+
+msgid "E-book libraries and publishing"
+msgstr "Mga library at paglathala ng e-book"
+
+msgid "File hosting and storage services"
+msgstr "Mga serbisyo sa pagho-host at pag-iimbak ng file"
+
+msgid "Peer-to-peer file sharing"
+msgstr "Pagbabahagi ng file peer-to-peer"
+
+msgid "Discussion forums and message boards"
+msgstr "Mga forum ng pag-uusap at message board"
+
+msgid "Image galleries and photo sharing"
+msgstr "Mga gallery ng larawan at pagbabahagi ng larawan"
+
+msgid "Gaming servers and communities"
+msgstr "Mga server ng laro at komunidad"
+
+msgid "Git repositories and code hosting"
+msgstr "Mga repository ng Git at pagho-host ng code"
+
+msgid "Help and support resources"
+msgstr "Mga mapagkukunan ng tulong at suporta"
+
+msgid "Human rights and civil liberties"
+msgstr "Mga karapatang-pangtao at kalayaan ng mamamayan"
+
+msgid "Official I2P infrastructure services"
+msgstr "Mga opisyal na serbisyo ng imprastrukturang I2P"
+
+msgid "News and media outlets"
+msgstr "Mga outlet ng balita at media"
+
+msgid "Text/code paste services"
+msgstr "Mga serbisyo ng paste ng teksto/code"
+
+msgid "Personal websites and blogs"
+msgstr "Mga personal na website at blog"
+
+msgid "Internet radio and streaming"
+msgstr "Radyo ng internet at streaming"
+
+msgid "Search engines and directories"
+msgstr "Mga search engine at directory"
+
+msgid "Software repositories and downloads"
+msgstr "Mga repository at download ng software"
+
+msgid "Statistics and analytics"
+msgstr "Mga Statistics at analytics"
+
+msgid "Utilities and web tools"
+msgstr "Mga utility at web tool"
+
+msgid "Torrent and content trackers"
+msgstr "Mga tracker ng torrent at nilalaman"
+
+msgid "Conspiracy / Religious content"
+msgstr "Nilalaman ng conspiracy / relihiyon"
+
+msgid "Unclassified or pending review"
+msgstr "Hindi nakaharip o naghihintay ng pagsusuri"
+
+msgid "Not yet categorized"
+msgstr "Hindi pa nauri"
+
+msgid "Video streaming and media"
+msgstr "Streaming ng video at media"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki at dokumentasyong pakikipagtulungan"
+
+msgid "Work in progress / development"
+msgstr "Pinagkakakatiwalaang paggawa / development"

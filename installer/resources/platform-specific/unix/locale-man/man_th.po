@@ -1,0 +1,262 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: th
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, no-wrap
+msgid "EEPGET"
+msgstr "EEPGET"
+
+#, no-wrap
+msgid "January 26, 2017"
+msgstr "26มกราคม2017"
+
+#, no-wrap
+msgid "I2P"
+msgstr "I2P"
+
+#, no-wrap
+msgid "NAME"
+msgstr "NAME"
+
+msgid "Eepget - I2P downloader"
+msgstr "Eepget -ตัวดาวน์โหลดI2P"
+
+#, no-wrap
+msgid "SYNOPSIS"
+msgstr "SYNOPSIS"
+
+msgid "B<eepget> [I<options>]I<URL>"
+msgstr "B<eepget> [I<options>]I<URL>"
+
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr "DESCRIPTION"
+
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "ดาวน์โหลดไฟล์แบบไม่โต้ตอบผ่านHTTP.รองรับการถ่ายโอนผ่านทั้งI2Pและอินเทอร์เน็ตทั่วไป"
+
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "Eepgetรองรับการเชื่อมต่อเครือข่ายที่ช้าหรือไม่เสถียรได้หากการดาวน์โหลดไม่สำเร็จเนื่องจากปัญหาเครือข่ายeepgetจะลองซ้ำจนได้ไฟล์ครบถ้วน(หากตั้งค่าตัวเลือก-nไว้)หากเซิร์ฟเวอร์ระยะไกลรองรับeepgetจะสั่งให้เซิร์ฟเวอร์ดาวน์โหลดต่อจากจุดที่ถูกขัดจังหวะ"
+
+#, no-wrap
+msgid "OPTIONS"
+msgstr "OPTIONS"
+
+msgid "B<-c>"
+msgstr "B<-c>"
+
+#, no-wrap
+msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
+msgstr "Clearnet.อย่าใช้proxy.เหมือนกับB<-p> :0 ."
+
+msgid "B<-e> etag"
+msgstr "B<-e> etag"
+
+#, no-wrap
+msgid "Sets the etag value in the request headers."
+msgstr "กำหนดค่าetagในส่วนหัวของคำขอ"
+
+msgid "B<-h> name=value"
+msgstr "B<-h> name=value"
+
+#, no-wrap
+msgid "Adds an arbitrary request header with the given name and value."
+msgstr "เพิ่มส่วนหัวคำขอตามอำเภอใจด้วยชื่อและค่าที่กำหนด"
+
+msgid "B<-l> lineLen"
+msgstr "B<-l> lineLen"
+
+#, no-wrap
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "ควบคุมการแสดงความคืบหน้า. B<\\ lineLen >คือความยาวของบรรทัดความคืบหน้าหนึ่งบรรทัดเป็นจำนวนอักขระ.ค่าเริ่มต้นคือ40."
+
+msgid "B<-m> markSize"
+msgstr "B<-m> markSize"
+
+#, no-wrap
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "ควบคุมการแสดงความคืบหน้า. B<\\ markSize >คือจำนวนไบต์ที่อักขระ'#'หนึ่งตัวแทน.ค่าเริ่มต้นคือ1024."
+
+msgid "B<-n> retries"
+msgstr "B<-n> retries"
+
+#, no-wrap
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "ระบุจำนวนครั้งที่จะลองดาวน์โหลดใหม่หากการดาวน์โหลดไม่สำเร็จ.หากไม่ได้ระบุตัวเลือกนี้eepgetจะไม่ลองใหม่."
+
+msgid "B<-o> file"
+msgstr "B<-o> file"
+
+#, no-wrap
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
+msgstr "กำหนดไฟล์ผลลัพธ์ที่จะเขียน.หากไม่ได้ระบุตัวเลือกนี้ชื่อไฟล์ผลลัพธ์จะถูกกำหนดจากURL."
+
+msgid "B<-p> proxy_host[:port]"
+msgstr "B<-p> proxy_host[:port]"
+
+#, no-wrap
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "ระบุเซิร์ฟเวอร์proxyI2P(eeproxy)ที่จะใช้.หากไม่ระบุพอร์ตeepgetจะใช้4444.หากไม่ได้ระบุตัวเลือกนี้eepgetจะใช้127.0.0.1:4444.ระบุB<-c>หรือB<-p> :0เพื่อปิดใช้งานeeproxy."
+
+msgid "B<-t> seconds"
+msgstr "B<-t>วินาที"
+
+#, no-wrap
+msgid "Sets the inactivity timeout. The default is 60 seconds."
+msgstr "กำหนดเวลาหมดอายุเมื่อไม่มีกิจกรรม.ค่าเริ่มต้นคือ60วินาที."
+
+msgid "B<-u> username"
+msgstr "B<-u> username"
+
+#, no-wrap
+msgid "Sets the username for proxy authorization, if required."
+msgstr "กำหนดชื่อผู้ใช้สำหรับการอนุญาตผ่านproxyหากจำเป็น."
+
+msgid "B<-x> password"
+msgstr "B<-x> password"
+
+#, no-wrap
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "กำหนดรหัสผ่านสำหรับการอนุญาตผ่านproxyหากจำเป็น.หากระบุชื่อผู้ใช้แต่ไม่ระบุรหัสผ่านEepGetจะถามรหัสผ่าน."
+
+#, no-wrap
+msgid "EXIT STATUS"
+msgstr "EXIT STATUS"
+
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
+msgstr "B<eepget>จะจบด้วยสถานะศูนย์เมื่อถ่ายโอนสำเร็จและสถานะไม่ศูนย์หากมีปัญหาในการดาวน์โหลด."
+
+#, no-wrap
+msgid "REPORTING BUGS"
+msgstr "REPORTING BUGS"
+
+msgid "Please enter a ticket on E<.UR https://github.com/I2PPlus/i2pplus/issues> the I2P Bug Tracker E<.UE .>"
+msgstr "โปรดสร้างticketที่E<.UR https://github.com/I2PPlus/i2pplus/issues>ตัวติดตามบั๊กของI2P E<.UE .>"
+
+#, no-wrap
+msgid "SEE ALSO"
+msgstr "SEE ALSO"
+
+msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+
+#, no-wrap
+msgid "I2PROUTER"
+msgstr "I2PROUTER"
+
+msgid "i2prouter - start and stop the I2P router"
+msgstr "i2prouter -เริ่มและหยุดเราเตอร์I2P"
+
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+
+msgid "Control the I2P service."
+msgstr "ควบคุมบริการI2P."
+
+#, no-wrap
+msgid "B<console>"
+msgstr "B<console>"
+
+msgid "Runs I2P as a console application under the current user."
+msgstr "เรียกใช้I2Pเป็นแอปพลิเคชันคอนโซลภายใต้ผู้ใช้ปัจจุบัน."
+
+#, no-wrap
+msgid "B<start>"
+msgstr "B<start>"
+
+msgid "Starts the I2P service."
+msgstr "เริ่มบริการI2P."
+
+#, no-wrap
+msgid "B<stop>"
+msgstr "B<stop>"
+
+msgid "Stops the I2P service."
+msgstr "หยุดบริการI2P."
+
+#, no-wrap
+msgid "B<restart>"
+msgstr "B<restart>"
+
+msgid "Stops the I2P service and then starts it."
+msgstr "หยุดบริการI2Pแล้วเริ่มใหม่."
+
+#, no-wrap
+msgid "B<condrestart>"
+msgstr "B<condrestart>"
+
+msgid "Restart the I2P service only if it is already running."
+msgstr "เริ่มบริการI2Pใหม่เฉพาะเมื่อกำลังทำงานอยู่."
+
+#, no-wrap
+msgid "B<graceful>"
+msgstr "B<graceful>"
+
+msgid "Stop I2P gracefully (may take up to 11 minutes)"
+msgstr "หยุดI2Pอย่างสุภาพ(อาจใช้เวลาสูงสุด11นาที)"
+
+#, no-wrap
+msgid "B<install>"
+msgstr "B<install>"
+
+msgid "Install initscript to start I2P automatically when the system boots."
+msgstr "ติดตั้งinitscriptเพื่อเริ่มI2Pอัตโนมัติเมื่อระบบบูต."
+
+#, no-wrap
+msgid "B<remove>"
+msgstr "B<remove>"
+
+msgid "Uninstall initscript that was installed with B<install>"
+msgstr "ถอนการติดตั้งinitscriptที่ติดตั้งด้วยB<install>"
+
+#, no-wrap
+msgid "B<status>"
+msgstr "B<status>"
+
+msgid "Prints whether the I2P service is running."
+msgstr "แสดงว่าบริการI2Pกำลังทำงานอยู่หรือไม่."
+
+#, no-wrap
+msgid "B<dump>"
+msgstr "B<dump>"
+
+msgid "Dumps the current threads into B<wrapper.log>."
+msgstr "ถ่ายโอนเธรดปัจจุบันไปยังB<wrapper.log>."
+
+msgid "B<i2prouter-nowrapper>(1)"
+msgstr "B<i2prouter-nowrapper>(1)"
+
+#, no-wrap
+msgid "I2PROUTER-NOWRAPPER"
+msgstr "I2PROUTER-NOWRAPPER"
+
+msgid "i2prouter-nowrapper - start the I2P router"
+msgstr "i2prouter-nowrapper -เริ่มเราเตอร์I2P"
+
+msgid "B<i2prouter-nowrapper>"
+msgstr "B<i2prouter-nowrapper>"
+
+msgid "Start the I2P router, without the service wrapper.  This means the router will not restart if it crashes.  Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "เริ่มเราเตอร์I2Pโดยไม่ใช้service wrapperหมายความว่าเราเตอร์จะไม่เริ่มใหม่หากเกิดขัดข้องนอกจากนี้จะใช้ขนาดหน่วยความจำค่าเริ่มต้นซึ่งอาจไม่เพียงพอสำหรับI2P."
+
+msgid "You should really use the B<i2prouter>(1)  script instead.  There are no options.  To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "ควรใช้สคริปต์B<i2prouter>(1)แทนดีกว่าไม่มีตัวเลือกใดเพื่อหยุดเราเตอร์ให้ใช้เบราว์เซอร์เข้าถึงE<.UR http://localhost:7657/>คอนโซลเราเตอร์E<.UE .>"
+
+msgid "B<i2prouter>(1)"
+msgstr "B<i2prouter>(1)"

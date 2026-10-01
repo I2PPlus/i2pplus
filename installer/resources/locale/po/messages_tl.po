@@ -1,0 +1,154 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: tl
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Failed to load the wrapper"
+msgstr "Nabigong i-load ang wrapper"
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr "Tumatakbo na ang $APP_LONG_NAME."
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr "Tinatakbo ang $APP_LONG_NAME"
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr "Naghihintay ng $APP_LONG_NAME"
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr "BABALA: Maaaring nabigo ang pagsisimula ng $APP_LONG_NAME."
+
+msgid "Must be root to perform this action."
+msgstr "Kailangang root para gawin ang aksyong ito."
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr "Sinisimulan ang $APP_LONG_NAME"
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr "Inihinto ang $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr "Hindi tumatakbo noon ang $APP_LONG_NAME."
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr "Hindi maaaring ihinto ang $APP_LONG_NAME."
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr "Naghihintay na lumabas ang $APP_LONG_NAME"
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr "Nabigong ihinto ang $APP_LONG_NAME."
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr "Nakahinto ang $APP_LONG_NAME."
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr "Inihinto nang mahinahon ang $APP_LONG_NAME"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "Hindi tumatakbo ang $APP_LONG_NAME."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "Tumatakbo ang $APP_LONG_NAME: PID:$pid"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr "Tumatakbo ang $APP_LONG_NAME: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr "Naka-install na ang daemon ng $APP_LONG_NAME."
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr "Ini-install ang daemon ng $APP_LONG_NAME"
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr "Kasalukuyang hindi suportado ang pag-install para sa $DIST_OS"
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr "Inaalis ang daemon ng $APP_LONG_NAME"
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr "Hindi naka-install kasalukuyan ang daemon ng $APP_LONG_NAME."
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr "Kasalukuyang hindi suportado ang pag-aalis para sa $DIST_OS"
+
+msgid "Commands:"
+msgstr "Mga utos:"
+
+msgid "Launch in the current console."
+msgstr "Ilunsad sa kasalukuyang console."
+
+msgid "Start in the background as a daemon process."
+msgstr "Simulan sa background bilang proseso ng daemon."
+
+msgid "Stop if running as a daemon or in another console."
+msgstr "Ihinto kung tumatakbo bilang daemon o nasa ibang console."
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr "Ihinto nang mahinahon, maaaring tumagal ng 11 minuto o higit pa."
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr "I-restart nang mahinahon, maaaring tumagal ng 11 minuto o higit pa."
+
+msgid "Stop if running and then start."
+msgstr "Ihinto kung tumatakbo at saka simulan."
+
+msgid "Restart only if already running."
+msgstr "I-restart lamang kung tumatakbo na."
+
+msgid "Query the current status."
+msgstr "Tingan ang kasalukuyang katayuan."
+
+msgid "Install to start automatically when system boots."
+msgstr "I-install upang awtomatikong magsimula kapag nagsimula ang sistema."
+
+msgid "Uninstall."
+msgstr "I-uninstall."
+
+msgid "Request a Java thread dump if running."
+msgstr "Humingi ng Java thread dump kung tumatakbo."
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr "Pakisuri ang i2prouter at itakda ang variable na RUN_AS_USER"
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr "Hindi inirerekomenda ang pagpapatakbo ng I2P bilang root user."
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr "Para patakbuhin bilang root pa rin, pakisuri ang i2prouter at itakda ang ALLOW_ROOT=true."

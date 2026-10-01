@@ -1,0 +1,692 @@
+# Project-Id-Version: I2P
+# Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues
+# POT-Creation-Date: 2024-01-01 00:00+0000
+# PO-Revision-Date: 2024-01-01 00:00+0000
+# Last-Translator: I2P+ Translation Team
+# Language-Team: none
+# Language: ur
+# MIME-Version: 1.0
+# Content-Type: text/plain; charset=UTF-8
+# Content-Transfer-Encoding: 8bit
+# Plural-Forms: nplurals=2; plural=(n != 1);
+#
+msgid ""
+msgstr ""
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "ہوسٹ نیم \"{0}\" میں غیر قانونی کردار {1} موجود ہے"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "ہوسٹ نیم \"{0}\" سے شروع نہیں ہو سکتا"
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "ہوسٹ نیم \"{0}\" پر ختم نہیں ہو سکتا"
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "ہوسٹ نیم میں \"{0}\" موجود نہیں ہو سکتا"
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "ہوسٹ نیم \"{0}\" کو ASCII میں تبدیل کرنے کی ضرورت ہے لیکن یہ JVM میں تبدیلی لائبریری دستیاب نہیں"
+
+msgid "Source"
+msgstr "ماخذ"
+
+msgid "Imported from"
+msgstr "اس سے درآمد کیا گیا"
+
+msgid "Imported from file"
+msgstr "فائل سے درآمد کیا گیا"
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNS کے ذریعے دستی طور پر شامل کیا گیا"
+
+msgid "Manually added"
+msgstr "دستی طور پر شامل کیا گیا"
+
+msgid "Added via address helper"
+msgstr "ایڈریس ہیلپر کے ذریعے شامل شدہ"
+
+msgid "Via helper"
+msgstr "ہیلپر کے ذریعے"
+
+msgid "Via helper from"
+msgstr "ہیلپر کے ذریعے، ماخذ"
+
+msgid "None"
+msgstr "کوئی نہیں"
+
+msgid "Hidden"
+msgstr "چھپا ہوا"
+
+msgid "Signed"
+msgstr "دستخط شدہ"
+
+msgid "Key"
+msgstr "کلید"
+
+#, java-format
+msgid "Type {0}"
+msgstr "قسم {0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 بِٹ"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 بِٹ"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "<span class=active> کے لیے تلاش"
+msgstr[1] "<span class=active> کے لیے تلاش"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "فلٹر شدہ فہرست میں 1 اندراج ہے۔"
+msgstr[1] "فلٹر شدہ فہرست میں {0} اندراجات ہیں۔"
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "<span class=active> کے لیے 1 نتیجہ:"
+msgstr[1] "<span class=active> کے لیے {0} نتائج:"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "کتاب میں 1 اندراج ہے"
+msgstr[1] "کتاب میں {0} اندراجات ہیں"
+
+msgid "Add"
+msgstr "شامل کریں"
+
+msgid "Replace"
+msgstr "بدلیں"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "ہوسٹ نیم {0} پہلے ہی پتہ کتاب میں موجود ہے، تبدیلی نہیں کی گئی۔"
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "ہوسٹ نیم {0} پہلے ہی پتہ کتاب میں کسی مختلف مقصد کے ساتھ موجود ہے۔ اوور رائٹ کرنے کے لیے \"بدلیں\" پر کلک کریں۔"
+
+msgid "Unable to resolve Base 32 address"
+msgstr "Base 32 پتہ حل نہیں کیا جا سکا"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "{0} کے لیے مقصد شامل کر دیا گیا۔"
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "{0} کے لیے مقصد تبدیل کر دیا گیا۔"
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "انتباہ - ہوسٹ نیم \".i2p\" پر ختم نہیں ہوتا"
+
+msgid "Invalid Base 32 host name."
+msgstr "غلط Base 32 ہوسٹ نیم۔"
+
+msgid "Invalid Base 64 destination."
+msgstr "غلط Base 64 مقصد۔"
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "غلط ہوسٹ نیم \"{0}\"۔"
+
+msgid "Please enter a host name and destination"
+msgstr "براہِ کرم ہوسٹ نیم اور مقصد درج کریں"
+
+msgid "Add Alternate"
+msgstr "متبادل شامل کریں"
+
+msgid "Unsupported"
+msgstr "غیر معاون"
+
+msgid "Address book saved."
+msgstr "پتہ کتاب محفوظ ہو گئی۔"
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "خرابی: پتہ کتاب فائل لکھی نہیں جا سکی۔"
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "فارم کی غیر درست روانگی، ممکن ہے آپ نے براؤزر کا \"back\" یا \"reload\" بٹن استعمال کیا ہو۔ براہِ کرم دوبارہ جمع کریں۔"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "اگر مسئلہ برقرار رہے تو یقینی بنائیں کہ آپ کے براؤزر میں cookies فعال ہیں۔"
+
+msgid "Save"
+msgstr "محفوظ کریں"
+
+msgid "Blacklist saved."
+msgstr "بلیک لسٹ محفوظ ہو گئی۔"
+
+msgid "Reload"
+msgstr "دوبارہ لوڈ کریں"
+
+msgid "Blacklist reloaded from file."
+msgstr "بلیک لسٹ فائل سے دوبارہ لوڈ ہو گئی۔"
+
+msgid "Configuration saved."
+msgstr "ترتیبات محفوظ ہو گئیں۔"
+
+msgid "Configuration reloaded."
+msgstr "ترتیبات دوبارہ لوڈ ہو گئیں۔"
+
+msgid "New domain"
+msgstr "نیا ڈومین"
+
+msgid "Subscription log reloaded."
+msgstr "سبسکرپشن لاگ دوبارہ لوڈ ہو گیا۔"
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{1} ڈیٹابیس میں {0} پتہ کتاب"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "ہوسٹ نیم {0} پتہ کتاب میں نہیں ہے۔"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "نیمنگ سروس {1} میں {0} کا مقصد شامل کرنا ناکام رہا"
+
+msgid "Delete Entry"
+msgstr "اندراج حذف کریں"
+
+msgid "Delete Selected"
+msgstr "منتخب حذف کریں"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "نیمنگ سروس {1} سے {0} کا مقصد حذف کرنا ناکام رہا"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "مقصد {0} حذف ہو گیا۔"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "1 مقصد حذف ہوا۔"
+msgstr[1] "{0} مقاصد حذف ہوئے۔"
+
+msgid "No valid entries selected to delete."
+msgstr "حذف کرنے کے لیے کوئی درست اندراج منتخب نہیں کیا گیا۔"
+
+msgid "Blacklist Selected"
+msgstr "منتخب بلیک لسٹ"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "1 مقصد بلیک لسٹ میں شامل ہوا۔"
+msgstr[1] "{0} مقاصد بلیک لسٹ میں شامل ہوئے۔"
+
+msgid "No valid entries selected to blacklist."
+msgstr "بلیک لسٹ کرنے کے لیے کوئی درست اندراج منتخب نہیں کیا گیا۔"
+
+msgid "Save Notes"
+msgstr "نوٹس محفوظ کریں"
+
+msgid "You must enter a file"
+msgstr "آپ کو فائل درج کرنی ہوگی"
+
+msgid "No entries found in file"
+msgstr "فائل میں کوئی اندراج نہیں ملا"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "فائل {0} سے درآمد کیا گیا"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "فائل سے {0} اندراج لوڈ ہوا"
+msgstr[1] "فائل سے {0} اندراجات لوڈ ہوئے"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "فائل سے {0} نقلی اندراج چھوڑ دیا گیا"
+msgstr[1] "فائل سے {0} نقلی اندراجات چھوڑ دیے گئے"
+
+msgid "Import from file failed"
+msgstr "فائل سے درآمد ناکام رہا"
+
+msgid "Subscriptions saved."
+msgstr "سبسکرپشنز محفوظ ہو گئیں۔"
+
+msgid "Update"
+msgstr "اپ ڈیٹ کریں"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "سبسکرپشن ماخذوں سے پتہ کتاب اپ ڈیٹ کرنے کی کوشش جاری ہے…"
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "سبسکرپشنز اپ ڈیٹ نہیں ہو سکتیں: HTTP پراکسی چل نہیں رہی!"
+
+msgid "Subscriptions reloaded."
+msgstr "سبسکرپشنز دوبارہ لوڈ ہو گئیں۔"
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "اگر SusiDNS کو آپ کی روٹر پتہ کتاب شائع کرنے کے لیے ترتیب دیا گیا ہو تو اندراجات آپ کی شائع شدہ پتہ کتاب میں نظر آئیں گے اور شیئر کرنے کے لیے ایک hosts.txt فائل میں محفوظ ہوں گے۔"
+
+msgid "Published Addressbook"
+msgstr "شائع شدہ پتہ کتاب"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "اپنی روٹر پتہ کتاب اپنی شائع شدہ پتہ کتاب میں بھیجنے کے لیے SusiDNS کو ترتیب دینے کے لیے ترتیبات صفحے پر 'should_publish=true' مقرر کریں۔"
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "سبسکرپشنز سے حاصل ہونے والے تمام میزبان اس پتہ کتاب میں نظر آئیں گے، نیز وہ بھی جو آپ یہاں یا اپنی ماسٹر پتہ کتاب میں دستی طور پر شامل کرتے ہیں۔"
+
+msgid "Router Addressbook"
+msgstr "روٹر پتہ کتاب"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "یہاں دستی طور پر شامل کیے گئے میزبان کبھی شائع نہیں کیے جائیں گے۔ آپ یہاں دوسری پتہ کتابوں کے میزبانوں کے لیے بھی ایلیاس شامل کر سکتے ہیں۔"
+
+msgid "Private Addressbook"
+msgstr "نجی پتہ کتاب"
+
+msgid "Local Records"
+msgstr "مقامی ریکارڈ"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2P ایپلیکیشنز (جن میں HTTP پراکسی بھی شامل ہے) آپ کی مقامی پتہ کتابوں کے میزبانوں کو استعمال کر کے .i2p ہوسٹ نیم حل کرتی ہیں۔"
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "مزید سبسکرپشنز روٹر مدد صفحے کے FAQ حصے میں مل سکتی ہیں۔"
+
+msgid "Subscriptions"
+msgstr "سبسکرپشنز"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "آپ کی سبسکرپشنز سے حاصل ہونے والے میزبان آپ کی روٹر پتہ کتاب میں شامل ہوتے ہیں اور خودکار طور پر مطابقت پیدا کیے جاتے ہیں (طے شدہ طور پر ہر 12 گھنٹے)۔"
+
+msgid "Configure Subscriptions"
+msgstr "سبسکرپشنز ترتیب دیں"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "اگر آپ یہاں دستی طور پر میزبان شامل کریں تو وہ آپ کی شائع شدہ پتہ کتاب (اگر ترتیب دی گئی ہو) میں شامل ہوں گے۔"
+
+msgid "Master Addressbook"
+msgstr "ماسٹر پتہ کتاب"
+
+msgid "Searchable by"
+msgstr "تلاش کا ذریعہ"
+
+msgid "I2P applications"
+msgstr "I2P ایپلیکیشنز"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "ماسٹر، روٹر اور نجی پتہ کتابیں مل کر I2P ایپلیکیشنز کے لیے DNS اتھارٹی کا کام کرتی ہیں۔"
+
+msgid "Optional,"
+msgstr "اختیاری،"
+
+msgid "for websites"
+msgstr "ویب سائٹس کے لیے"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "اگر آپ SusiDNS کو اپنی روٹر پتہ کتاب شائع کرنے کے لیے ترتیب دیں تو یہ تمام میزبانوں پر مشتمل hosts.txt فائل برآمد کرے گا (طے شدہ طور پر آپ کے eepsite کی جڑ پر)۔"
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "آپ کی ماسٹر پتہ کتاب میں دستی طور پر شامل کیے گئے پتے آپ کی روٹر پتہ کتاب میں ضم ہو جائیں گے۔"
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "آپ کی سبسکرپشنز سے موصول ہونے والے میزبان آپ کی روٹر پتہ کتاب میں ضم ہو جائیں گے۔"
+
+msgid "Import"
+msgstr "درآمد کریں"
+
+msgid "address book"
+msgstr "پتہ کتاب"
+
+msgid "Router"
+msgstr "روٹر"
+
+msgid "Master"
+msgstr "ماسٹر"
+
+msgid "Private"
+msgstr "نجی"
+
+msgid "Published"
+msgstr "شائع شدہ"
+
+msgid "Blacklist"
+msgstr "بلیک لسٹ"
+
+msgid "Configuration"
+msgstr "ترتیبات"
+
+msgid "Help"
+msgstr "مدد"
+
+msgid "Book"
+msgstr "کتاب"
+
+msgid "No entries"
+msgstr "کوئی اندراج نہیں"
+
+msgid "Add new destination"
+msgstr "نیا مقصد شامل کریں"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txt فائل سے درآمد کریں"
+
+msgid "other"
+msgstr "دیگر"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txt فارمیٹ میں برآمد کریں"
+
+msgid "Export results in hosts.txt format"
+msgstr "نتائج hosts.txt فارمیٹ میں برآمد کریں"
+
+msgid "Export book in hosts.txt format"
+msgstr "کتاب hosts.txt فارمیٹ میں برآمد کریں"
+
+msgid "Search"
+msgstr "تلاش"
+
+msgid "latest"
+msgstr "تازہ ترین"
+
+msgid "Alive"
+msgstr "زندہ"
+
+msgid "Dead"
+msgstr "نامرد"
+
+msgid "all"
+msgstr "سب"
+
+msgid "Info"
+msgstr "معلومات"
+
+msgid "Type"
+msgstr "قسم"
+
+msgid "Hostname"
+msgstr "ہوسٹ نیم"
+
+msgid "Encryption"
+msgstr "خفیہ کاری"
+
+msgid "Link (b32)"
+msgstr "لنک (b32)"
+
+msgid "Destination"
+msgstr "مقصد"
+
+msgid "Added"
+msgstr "شامل شدہ"
+
+msgid "Status"
+msgstr "حالت"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "پتہ کتاب سے حذف کرنے کے لیے میزبان منتخب کریں"
+
+msgid "More information on this entry"
+msgstr "اس اندراج کے بارے میں مزید معلومات"
+
+msgid "unknown"
+msgstr "نامعلوم"
+
+msgid "Base 32 address"
+msgstr "Base 32 پتہ"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "میزبان پتہ شیئر کرنے کے لیے ہیلپر لنک، جس میں پتہ کتاب میں شامل کرنے کا اختیار ہے"
+
+msgid "Mark for deletion"
+msgstr "حذف کے لیے نشان زد کریں"
+
+msgid "Cancel"
+msgstr "منسوخ کریں"
+
+msgid "This book currently contains no entries."
+msgstr "یہ کتاب اس وقت کوئی اندراج نہیں رکھتی۔"
+
+msgid "e.g. newdomain.i2p"
+msgstr "مثلاً newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 یا B32"
+
+msgid "Full destination or b32 address"
+msgstr "مکمل مقصد یا b32 پتہ"
+
+msgid "Select file"
+msgstr "فائل منتخب کریں"
+
+msgid "blacklist"
+msgstr "بلیک لسٹ"
+
+msgid "Blacklist Management"
+msgstr "بلیک لسٹ انتظام"
+
+msgid "File location"
+msgstr "فائل کا مقام"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "بلیک لسٹ کرنے کے لیے I2P پتے درج کریں (ہر سطر میں ایک)"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "بلیک لسٹ فائل میں ایسے I2P ہوسٹ نیموں کی فہرست ہوتی ہے جن سے HTTP پراکسی کے ذریعے رسائی روکی جائے اور پتہ کتاب میں دکھایا نہ جائے۔"
+
+msgid "configuration"
+msgstr "ترتیبات"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker پہلے ہی اسکین چلا رہا ہے"
+
+msgid "Run HostChecker"
+msgstr "HostChecker چلائیں"
+
+msgid "Hints"
+msgstr "اشارے"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "یہاں دیے گئے فائل اور ڈائریکٹری راستے پتہ کتاب کے کام کی ڈائریکٹری کے لحاظ سے نسبی ہیں، جو عام طور پر ~/.i2p/addressbook/ (Linux) یا %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows) ہوتی ہے۔"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "اگر آپ کسی پتہ کتاب میں سطریں دستی طور پر شامل کرنا چاہتے ہیں تو انہیں نجی یا ماسٹر پتہ کتابوں میں شامل کریں۔"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "روٹر پتہ کتاب اور شائع شدہ پتہ کتاب پتہ کتاب ایپلیکیشن کے ذریعے اپ ڈیٹ ہوتی ہیں۔"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "جب آپ اپنی پتہ کتاب شائع کرتے ہیں تو ماسٹر اور روٹر پتہ کتابوں کے تمام مقاصد وہاں نظر آتے ہیں۔"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "نجی مقاصد کے لیے نجی پتہ کتاب استعمال کریں، یہ شائع نہیں کی جاتیں۔"
+
+msgid "Options"
+msgstr "آپشنز"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "سبسکرپشن URL کی فہرست پر مشتمل فائل (تبدیل کرنے کی ضرورت نہیں)"
+
+msgid "Update interval in hours"
+msgstr "اپ ڈیٹ کا وقفہ گھنٹوں میں"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "آپ کی عوامی hosts.txt فائل (اپنی ویب سرور دستاویزی جڑ کے اندر کا راستہ منتخب کریں)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "آپ کی hosts.txt (تبدیل نہ کریں)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "آپ کی ذاتی پتہ کتاب، یہ میزبان شائع کیے جائیں گے"
+
+msgid "Your private addressbook, it is never published"
+msgstr "آپ کی نجی پتہ کتاب، یہ کبھی شائع نہیں کی جاتی"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "آپ کے eepProxy کا پورٹ (تبدیل کرنے کی ضرورت نہیں)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "آپ کے eepProxy کا ہوسٹ نیم (تبدیل کرنے کی ضرورت نہیں)"
+
+msgid "Whether to update the published addressbook"
+msgstr "شائع شدہ پتہ کتاب اپ ڈیٹ کرنے کی فرماندگی"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "حاصل کردہ سبسکرپشن URL کے etags ہیڈر پر مشتمل فائل (تبدیل کرنے کی ضرورت نہیں)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "ہر حاصل کردہ سبسکرپشن URL کے لیے تبدیلی کے ٹائم اسٹیمپ پر مشتمل فائل (تبدیل کرنے کی ضرورت نہیں)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "سرگرمی لاگ کرنے کے لیے فائل (چاہیں تو /dev/null میں تبدیل کر دیں)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "استعمال کرنے کے لیے اوور رائیڈ تھیم کا نام (طے شدہ طور پر کنسول میں منتخب کردہ تھیم)"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "ہوسٹ چیکر چلانے کا وقفہ (گھنٹوں میں) (طے شدہ 4 گھنٹے ہے)"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "ہوسٹ چیکر چلاتے وقت زیادہ سے زیادہ بیک وقت پنگز (طے شدہ 16 ہے، زیادہ سے زیادہ 160)"
+
+msgid "delete hosts"
+msgstr "میزبان حذف کریں"
+
+msgid "addressbook"
+msgstr "addressbook"
+
+msgid "Details"
+msgstr "تفصیلات"
+
+msgid "Address Helper"
+msgstr "پتہ ہیلپر"
+
+msgid "link"
+msgstr "لنک"
+
+msgid "Encoded Name"
+msgstr "انکوڈ شدہ نام"
+
+msgid "Base 32 Address"
+msgstr "Base 32 پتہ"
+
+msgid "Base 64 Hash"
+msgstr "Base 64 ہیش"
+
+msgid "Public Key"
+msgstr "عوامی کلید"
+
+msgid "Signing Key"
+msgstr "دستخط کی کلید"
+
+msgid "Certificate"
+msgstr "اسناد"
+
+msgid "Validated"
+msgstr "تصدیق شدہ"
+
+msgid "no"
+msgstr "نہیں"
+
+msgid "yes"
+msgstr "ہاں"
+
+msgid "Added Date"
+msgstr "شامل ہونے کی تاریخ"
+
+msgid "Last Modified"
+msgstr "آخری تبدیلی"
+
+msgid "Notes"
+msgstr "نوٹس"
+
+msgid "Add notes about domain"
+msgstr "ڈومین کے بارے میں نوٹس شامل کریں"
+
+msgid "Visual Identification for"
+msgstr "بصری شناخت کے لیے"
+
+msgid "Create your own identification images"
+msgstr "اپنی شناختی تصاویر خود بنائیں"
+
+msgid "Launch Image Generator"
+msgstr "تصویر جنیٹر چلائیں"
+
+msgid "Introduction"
+msgstr "تعارف"
+
+msgid "What is the addressbook?"
+msgstr "پتہ کتاب کیا ہے؟"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "پتہ کتاب ایپلیکیشن آپ کے I2P تنصیب کا حصہ ہے۔"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "یہ تقسیم شدہ ماخذوں یا \"سبسکرپشنز\" سے آپ کی hosts.txt فائل باقاعدہ اپ ڈیٹ کرتی ہے۔"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "مزید سائٹس کی سبسکرپشن آسان ہے، بس انہیں اپنی <a href=\"subscriptions\">سبسکرپشنز</a> فائل میں شامل کر دیں۔"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2P میں نام رکھنے کے بارے میں مزید معلومات کے لیے <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>تعارف</a> دیکھیں۔"
+
+msgid "How does the addressbook application work?"
+msgstr "پتہ کتاب ایپلیکیشن کیسے کام کرتی ہے؟"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "پتہ کتاب ایپلیکیشن باقاعدہ آپ کی سبسکرپشنز کی جانچ پڑتال کرتی ہے اور ان کا مواد آپ کی \"روٹر\" پتہ کتاب میں ضم کر دیتی ہے۔"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "پھر یہ آپ کی \"ماسٹر\" پتہ کتاب کو بھی روٹر پتہ کتاب میں ضم کر دیتا ہے۔"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "اگر ترتیب دی گئی ہو تو روٹر پتہ کتاب اب \"شائع شدہ\" پتہ کتاب میں لکھی جاتی ہے، جو eepsite چلا رہے ہیں تو عوامی طور پر دستیاب ہوگی۔"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "روٹر ایک نجی پتہ کتاب بھی استعمال کرتا ہے جسے نہ ضم کیا جاتا ہے اور نہ شائع۔"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "نجی پتہ کتاب کے میزبان آپ تک رسائی رکھتے ہیں لیکن ان کے پتے کبھی دوسروں میں تقسیم نہیں کیے جاتے۔"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "نجی پتہ کتاب کو آپ کی دوسری پتہ کتابوں کے میزبانوں کے ایلیاس کے لیے بھی استعمال کیا جا سکتا ہے۔"
+
+msgid "subscription log"
+msgstr "سبسکرپشن لاگ"
+
+msgid "Subscription Log"
+msgstr "سبسکرپشن لاگ"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "سب سے تازہ (خراب ڈومینز کے مستثنیٰ)"
+
+msgid "subscriptions"
+msgstr "سبسکرپشنز"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "سبسکرپشن فائل میں i2p URL کی فہرست ہوتی ہے۔"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "پتہ کتاب ایپلیکیشن باقاعدہ اس فہرست میں نئے eepsites کی جانچ پڑتال کرتی ہے۔"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "یہ URL شائع شدہ hosts.txt فائلوں کی طرف اشارہ کرتے ہیں۔"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "سبسکرپشن URL کی فہرست کے لیے FAQ دیکھیں۔"
