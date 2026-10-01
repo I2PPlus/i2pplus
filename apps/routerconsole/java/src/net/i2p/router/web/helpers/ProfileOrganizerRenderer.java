@@ -280,6 +280,9 @@ class ProfileOrganizerRenderer {
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
                .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
                .append("<th class=latency data-sort-method=number title=\"")
+               .append(_t("Round trip time to this peer on the direct link, as measured by the transport"))
+               .append("\">").append(_t("RTT")).append("</th>")
+               .append("<th class=latency data-sort-method=number title=\"")
                .append(_t("Packets retransmitted / packets sent, as reported by the UDP transport"))
                .append("\">").append(_t("Loss")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
@@ -511,6 +514,12 @@ class ProfileOrganizerRenderer {
             buf.append("</td><td class=latency data-sort=").append(score).append(">");
             if (prof.isLowLatency()) {buf.append("<span class=lowlatency>✔</span>");}
             else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
+            else {buf.append("<span>&ensp;</span>");}
+            // Direct-link RTT. Empty means not measured, which is distinct from
+            // measured-and-slow: never probed, so no evidence either way.
+            int firstHopRtt = prof.getFirstHopRtt(_context.clock().now());
+            buf.append("</td><td data-sort=").append(firstHopRtt < 0 ? -1 : firstHopRtt).append(">");
+            if (firstHopRtt > 0) {buf.append(firstHopRtt).append("ms");}
             else {buf.append("<span>&ensp;</span>");}
             float lossRatio = prof.getLossRatio();
             if (lossRatio > 0.0f) {
