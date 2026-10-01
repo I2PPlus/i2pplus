@@ -980,11 +980,20 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         /** Wait before the first pass, so startup builds are not competing with it. */
         private static final long STARTUP_DELAY = 5 * 60 * 1000L;
         /**
-         *  A peer that succeeded this recently already has evidence, so skip it.
-         *  Deliberately shorter than the pre-connect cooldown: this is about
-         *  traffic freshness, not about whether we already probed it.
+         *  A peer we have built through this recently needs no probe.
+         *
+         *  <p>Deliberately generous, and comfortably wider than one build cycle:
+         *  a peer we are already successfully sending through is confirmed for
+         *  as long as that keeps being true, so the only peers worth spending
+         *  budget on are the idle ones the sweep exists to find. A narrow window
+         *  would re-probe the peers working hardest, which is where the budget
+         *  is least useful.
+         *
+         *  <p>Widening this constant reduces coverage — it widens the skip set,
+         *  not the probe set — so it is only safe because the test below keys on
+         *  our own send successes rather than on incidental inbound traffic.
          */
-        static final long RECENTLY_ACTIVE_MS = 2 * 60 * 1000L;
+        static final long RECENTLY_ACTIVE_MS = 10 * 60 * 1000L;
 
         FastTierProbeJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
@@ -1058,22 +1067,23 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         /**
          *  Whether this peer has traffic recent enough that probing adds nothing.
          *
-         *  <p>Either direction counts: a peer that has heard from us recently is
-         *  demonstrably reachable, and one we reached recently is equally known
-         *  good. Both save the budget for peers whose state is actually stale.
+         *  <p>Only our own successful sends count. Inbound hearing is deliberately
+         *  ignored: {@link PeerProfile#getLastHeardFrom} advances on DHT replies,
+         *  explore traffic and transit acknowledgments, so it marks most of the
+         *  tier as recently active without ever showing the peer works as a first
+         *  hop. Keying on it made a 2 minute window behave like a much longer one
+         *  and left a pass probing 33 peers out of a 128 budget.
          *
-         *  @param ctx the router context
-         *  @param peer the peer to test
-         *  @param now current time in ms
-         *  @return true if recent traffic means we should skip probing
+         * @param ctx the router context
+         * @param peer the peer to test
+         * @param now current time in ms
+         * @return true if recent traffic means we should skip probing
          */
         static boolean isRecentlyActive(RouterContext ctx, Hash peer, long now) {
             PeerProfile profile = ctx.profileOrganizer().getProfile(peer);
             if (profile == null) {return true;}
             long lastSuccess = profile.getLastSendSuccessful();
-            if (lastSuccess > 0 && now - lastSuccess < RECENTLY_ACTIVE_MS) {return true;}
-            long lastHeard = profile.getLastHeardFrom();
-            return lastHeard > 0 && now - lastHeard < RECENTLY_ACTIVE_MS;
+            return lastSuccess > 0 && now - lastSuccess < RECENTLY_ACTIVE_MS;
         }
     }
 

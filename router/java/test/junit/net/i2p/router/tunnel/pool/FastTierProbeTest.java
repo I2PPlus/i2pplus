@@ -33,6 +33,7 @@ public class FastTierProbeTest {
 
     private static final long NOW = 2_000_000_000L;
     private static final long ONE_MIN = 60 * 1000L;
+    private static final long ELEVEN_MIN = 11 * 60 * 1000L;
 
     private RouterContext _ctx;
     private ProfileOrganizer _po;
@@ -91,19 +92,33 @@ public class FastTierProbeTest {
             TunnelPoolManager.FastTierProbeJob.isRecentlyActive(_ctx, hash(1), NOW));
     }
 
-    /** The same holds for inbound: hearing from them proves reachability too. */
+    /**
+     *  Inbound hearing must NOT count as evidence. It advances on DHT replies,
+     *  explore traffic and transit acknowledgments, so keying on it marked most
+     *  of the tier as recently active and starved the sweep of budget. A peer
+     *  heard from constantly but never successfully sent to is exactly the
+     *  suspect this sweep exists to find.
+     */
     @Test
-    public void recentlyHeardFromIsSkipped() {
+    public void recentlyHeardFromIsStillProbed() {
         setTraffic(0, NOW - ONE_MIN);
+        org.junit.Assert.assertFalse(
+            "incidental inbound traffic is not evidence the peer works as a first hop",
+            TunnelPoolManager.FastTierProbeJob.isRecentlyActive(_ctx, hash(1), NOW));
+    }
+
+    /** Inside the window we skip, outside it we probe. */
+    @Test
+    public void windowBoundaryIsInclusiveOfSkip() {
+        setTraffic(NOW - ONE_MIN, 0);
         org.junit.Assert.assertTrue(
-            "recent inbound traffic is equally good evidence",
             TunnelPoolManager.FastTierProbeJob.isRecentlyActive(_ctx, hash(1), NOW));
     }
 
     /** Stale in both directions means probe it. */
     @Test
     public void stalePeerIsProbed() {
-        setTraffic(NOW - 60 * ONE_MIN, NOW - 60 * ONE_MIN);
+        setTraffic(NOW - ELEVEN_MIN, NOW - ELEVEN_MIN);
         org.junit.Assert.assertFalse(
             "no recent traffic either way, so the peer is worth probing",
             TunnelPoolManager.FastTierProbeJob.isRecentlyActive(_ctx, hash(1), NOW));
@@ -127,6 +142,16 @@ public class FastTierProbeTest {
         when(_po.getProfile(any(Hash.class))).thenReturn(null);
         org.junit.Assert.assertTrue(
             TunnelPoolManager.FastTierProbeJob.isRecentlyActive(_ctx, hash(1), NOW));
+    }
+
+    /**
+     *  The window widens the skip set, so it must stay a documented constant
+     *  rather than drifting upward silently.
+     */
+    @Test
+    public void recencyWindowIsTenMinutes() {
+        org.junit.Assert.assertEquals(10 * 60 * 1000L,
+            TunnelPoolManager.FastTierProbeJob.RECENTLY_ACTIVE_MS);
     }
 
     /** The batch cap is what bounds a pass; it must stay a small slice. */
