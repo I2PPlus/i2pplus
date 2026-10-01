@@ -63,8 +63,8 @@ public class TranslationStatus {
     // fallback used when the build tree is not available.
     private static final String[] BASE_LANGS = { "ar", "az", "bn", "bo", "cs", "da", "de", "el", "es", "et",
                                                  "fa", "fi", "fr", "he", "hi", "hu", "in", "it", "ja",
-                                                 "ko", "nb", "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sv",
-                                                 "sw", "tr", "uk", "vi", "zh" };
+                                                 "ko", "nb", "nl", "pl", "ps", "pt", "ro", "ru", "sk", "sl", "sv",
+                                                 "sw", "th", "tl", "tr", "uk", "ur", "vi", "zh" };
 
     // Non-compiled resources, as paths relative to the source root. Only the
     // containing directory is checked for existence; the file name is used to
@@ -689,6 +689,7 @@ public class TranslationStatus {
         else if (langCode.equals("hi")) {countryCode = "in";}
         else if (langCode.equals("in")) {countryCode = "id";}
         else if (langCode.equals("fa")) {countryCode = "ir";}
+        else if (langCode.equals("ps")) {countryCode = "af";}
         else if (langCode.equals("he") || langCode.equals("iw")) {countryCode = "il";}
         else if (langCode.equals("ja")) {countryCode = "jp";}
         else if (langCode.equals("ko")) {countryCode = "kr";}
@@ -697,8 +698,11 @@ public class TranslationStatus {
         else if (langCode.equals("sl")) {countryCode = "si";}
         else if (langCode.equals("sq")) {countryCode = "al";}
         else if (langCode.equals("sv")) {countryCode = "se";}
+        else if (langCode.equals("th")) {countryCode = "th";}
         else if (langCode.equals("sw")) {countryCode = "tz";}
+        else if (langCode.equals("tl")) {countryCode = "ph";}
         else if (langCode.equals("uk")) {countryCode = "ua";}
+        else if (langCode.equals("ur")) {countryCode = "pk";}
         else if (langCode.equals("vi")) {countryCode = "vn";}
         else if (langCode.equals("zh")) {countryCode = "cn";}
         else if (!langCode.isEmpty()) {countryCode = langCode.toLowerCase();}

@@ -39,6 +39,7 @@
 <% if (!routerStarting) {%>
 <%
     java.util.Map langToCountry = new java.util.HashMap();
+    langToCountry.put("th", "th");
     langToCountry.put("bo", "xt");
     langToCountry.put("uk", "ua");
     langToCountry.put("ar", "lang_ar");
@@ -52,6 +53,7 @@
     langToCountry.put("et", "ee");
     langToCountry.put("en", "us");
     langToCountry.put("es", "es");
+    langToCountry.put("tl", "ph");
     langToCountry.put("fi", "fi");
     langToCountry.put("fr", "fr");
     langToCountry.put("el", "gr");
@@ -64,6 +66,7 @@
     langToCountry.put("ko", "kr");
     langToCountry.put("nl", "nl");
     langToCountry.put("nb", "no");
+    langToCountry.put("ps", "af");
     langToCountry.put("fa", "ir");
     langToCountry.put("pl", "pl");
     langToCountry.put("pt", "pt");
@@ -74,6 +77,7 @@
     langToCountry.put("sw", "tz");
     langToCountry.put("bo", "xt");
     langToCountry.put("tr", "tr");
+    langToCountry.put("ur", "pk");
     langToCountry.put("vi", "vn");
     String currentCountry = langToCountry.containsKey(lang) ? (String)langToCountry.get(lang) : "us";
 %>
@@ -102,6 +106,7 @@
 <a href="#" data-param="lang" data-value="et" title="Eesti"><img src="/flags.jsp?c=ee" alt=""></a>
 <a href="#" data-param="lang" data-value="en" title="English"><img src="/flags.jsp?c=us" alt=""></a>
 <a href="#" data-param="lang" data-value="es" title="Espanol"><img src="/flags.jsp?c=es" alt=""></a>
+<a href="#" data-param="lang" data-value="tl" title="Filipino"><img src="/flags.jsp?c=ph" alt=""></a>
 <a href="#" data-param="lang" data-value="fi" title="Finnish"><img src="/flags.jsp?c=fi" alt=""></a>
 <a href="#" data-param="lang" data-value="fr" title="Francais"><img src="/flags.jsp?c=fr" alt=""></a>
 <a href="#" data-param="lang" data-value="el" title="Greek"><img src="/flags.jsp?c=gr" alt=""></a>
@@ -114,6 +119,7 @@
 <a href="#" data-param="lang" data-value="ko" title="Korean"><img src="/flags.jsp?c=kr" alt=""></a>
 <a href="#" data-param="lang" data-value="nl" title="Nederlands"><img src="/flags.jsp?c=nl" alt=""></a>
 <a href="#" data-param="lang" data-value="nb" title="Norsk"><img src="/flags.jsp?c=no" alt=""></a>
+<a href="#" data-param="lang" data-value="ps" title="Pashto"><img src="/flags.jsp?c=af" alt=""></a>
 <a href="#" data-param="lang" data-value="fa" title="Persian"><img src="/flags.jsp?c=ir" alt=""></a>
 <a href="#" data-param="lang" data-value="pl" title="Polski"><img src="/flags.jsp?c=pl" alt=""></a>
 <a href="#" data-param="lang" data-value="pt" title="Portugues"><img src="/flags.jsp?c=pt" alt=""></a>
@@ -122,9 +128,11 @@
 <a href="#" data-param="lang" data-value="sl" title="Slovencina"><img src="/flags.jsp?c=sk" alt=""></a>
 <a href="#" data-param="lang" data-value="sv" title="Svenska"><img src="/flags.jsp?c=se" alt=""></a>
 <a href="#" data-param="lang" data-value="sw" title="Kiswahili"><img src="/flags.jsp?c=tz" alt=""></a>
+<a href="#" data-param="lang" data-value="th" title="Thai"><img src="/flags.jsp?c=th" alt=""></a>
 <a href="#" data-param="lang" data-value="bo" title="Tibetan"><img src="/flags.jsp?c=xt" alt=""></a>
 <a href="#" data-param="lang" data-value="tr" title="Turkce"><img src="/flags.jsp?c=tr" alt=""></a>
 <a href="#" data-param="lang" data-value="uk" title="Ukrainian"><img src="/flags.jsp?c=ua" alt=""></a>
+<a href="#" data-param="lang" data-value="ur" title="Urdu"><img src="/flags.jsp?c=pk" alt=""></a>
 <a href="#" data-param="lang" data-value="vi" title="Vietnamese"><img src="/flags.jsp?c=vn" alt=""></a>
 </div>
 </span>

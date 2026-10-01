@@ -2661,7 +2661,7 @@
 
   <target name="copyflags">
     <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/eepsite/docroot/help/lib/">
-      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg bn.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gr.svg hu.svg id.svg il.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg tz.svg us.svg lang_ar.svg lang_ca.svg ua.svg vn.svg xt.svg"/>
+      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="af.svg az.svg bn.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gr.svg hu.svg id.svg il.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg ph.svg pl.svg pk.svg pt.svg ro.svg ru.svg se.svg si.svg th.svg tr.svg tz.svg us.svg lang_ar.svg lang_ca.svg ua.svg vn.svg xt.svg"/>
     </copy>
   </target>
 
