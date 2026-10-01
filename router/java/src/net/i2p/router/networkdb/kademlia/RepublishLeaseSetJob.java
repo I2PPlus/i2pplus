@@ -63,28 +63,46 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final long MIN_RESCHEDULE = 60L * 1000;
 
     /**
-     *  The LeaseSet lifetime this router is designed around, in ms. Tunnel
-     *  lifetime is capped at ten minutes plus a one minute grace, so a pool
-     *  holding fresh tunnels advertises close to this.
+     *  The pool's own lease-eligibility floor, mirrored from
+     *  {@code TunnelPool.LEASE_MIN_REMAINING_MS}. A tunnel with less than this
+     *  remaining is refused for publication, so a LeaseSet minted from a healthy
+     *  pool cannot present below it.
+     *
+     *  <p>This is the correct yardstick for the anomaly check. An earlier
+     *  version compared against the ~600s design target, which is unreachable in
+     *  practice: a LeaseSet's expiry is the <em>minimum</em> across its leases, so
+     *  holding 600s requires every lease to be simultaneously fresh, and the
+     *  target sat far above the floor. That combination made the check true for
+     *  essentially every LeaseSet on every pass — 129 warnings in twelve minutes
+     *  — which is log volume, not a fault signal.
      *
      * @since 0.9.71+
      */
-    static final long DESIGNED_LEASE_LIFETIME_MS = 10L * 60 * 1000;
+    static final long LEASE_ELIGIBILITY_FLOOR_MS = 2L * 60 * 1000;
+
+    /** Minimum gap between short-expiry warnings for one destination. */
+    private static final long SHORT_EXPIRY_LOG_INTERVAL = 5L * 60 * 1000;
+
+    /** Last short-expiry warning per destination, for rate limiting. */
+    private static final ConcurrentHashMap<Hash, Long> _lastShortExpiryLog = new ConcurrentHashMap<>();
 
     /**
-     *  Whether a LeaseSet expiry is far enough below the design target to be
-     *  worth reporting.
+     *  Whether a LeaseSet expiry is short enough to indicate the inbound pool
+     *  could not supply a viable lease.
      *
-     *  <p>One third of the target is the threshold: a pool that cannot replace
-     *  its tunnels is the actual fault, and the emergency re-mint log line that
-     *  follows says so repeatedly without identifying the cause. This names it.
+     *  <p>The threshold is the pool's eligibility floor, not the design target:
+     *  presenting <em>at or below</em> the floor means no lease in the copy had
+     *  the minimum remaining life the pool requires to publish, which is the
+     *  actual fault this signal exists to name. Anything above the floor is
+     *  ordinary decay and must stay silent, or the signal costs log volume while
+     *  pointing at nothing.
      *
      * @param effectiveExpiry ms until the copy currently in effect expires
-     * @return true if the expiry is anomalously short
+     * @return true if the pool could barely qualify any lease in the copy
      * @since 0.9.71+
      */
     static boolean effectiveExpiryAnomalouslyShort(long effectiveExpiry) {
-        return effectiveExpiry > 0 && effectiveExpiry * 3 < DESIGNED_LEASE_LIFETIME_MS;
+        return effectiveExpiry > 0 && effectiveExpiry < LEASE_ELIGIBILITY_FLOOR_MS;
     }
     /**
      *  Emergency re-mint window: when the stored copy is within this much of
@@ -789,12 +807,16 @@ public class RepublishLeaseSetJob extends JobImpl {
         // either, or the next pass re-enters the emergency window immediately.
         long effectiveExpiry = (requested && freshTimeUntilExpiry > timeUntilExpiry)
                              ? freshTimeUntilExpiry : timeUntilExpiry;
-        if (effectiveExpiryAnomalouslyShort(effectiveExpiry)) {
-            _log.warn("LeaseSet for " + name + " [" + shortHash() +
-                      "] expiring in only " + (effectiveExpiry / 1000) +
-                      "s against a ~" + (DESIGNED_LEASE_LIFETIME_MS / 1000) +
-                      "s target — the inbound pool is serving near-exhausted tunnels");
-        }
+          if (effectiveExpiryAnomalouslyShort(effectiveExpiry)) {
+              Long lastWarn = _lastShortExpiryLog.get(_dest);
+              if (lastWarn == null || (now - lastWarn > SHORT_EXPIRY_LOG_INTERVAL)) {
+                  _lastShortExpiryLog.put(_dest, now);
+                  _log.warn("LeaseSet for " + name + " [" + shortHash() +
+                            "] expiring in only " + (effectiveExpiry / 1000) +
+                            "s, under the " + (LEASE_ELIGIBILITY_FLOOR_MS / 1000) +
+                            "s pool lease floor — no lease in the copy had enough life to publish");
+              }
+          }
         scheduleRepublish(computeNextRepublish(effectiveExpiry));
     }
 

@@ -178,19 +178,40 @@ public class RemintDecisionTest {
 
     // ---- anomaly signal ----
 
-    /** A LeaseSet far under its ten minute target names the real fault. */
+    /** Below the pool's eligibility floor: no lease in the copy was publishable. */
     @Test
     public void testShortExpiryIsFlaggedAsAnomalous() {
-        assertTrue("63s against a 10m target", RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(63_000L));
-        assertTrue(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(120_000L));
+        assertTrue("63s is under the 2m pool floor",
+                   RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(63_000L));
+        assertTrue(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(119_000L));
     }
 
-    /** A healthy LeaseSet is not flagged. */
+    /**
+     *  At or above the floor is ordinary decay, not a fault. This is the
+     *  boundary that the old design-target comparison got wrong: it fired on
+     *  every LeaseSet, because the ~600s target sits far above the 2m floor the
+     *  pool actually enforces.
+     */
     @Test
     public void testHealthyExpiryIsNotFlagged() {
+        assertFalse("exactly at the floor is publishable",
+                    RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(120_000L));
         assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(9L * 60 * 1000));
         assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(
-            RepublishLeaseSetJob.DESIGNED_LEASE_LIFETIME_MS));
+            RepublishLeaseSetJob.LEASE_ELIGIBILITY_FLOOR_MS));
+    }
+
+    /**
+     *  Pins the regression directly: the old check treated anything under a
+     *  third of the 600s design target as anomalous, which is true for nearly
+     *  every real LeaseSet and produced a warning on every pass.
+     */
+    @Test
+    public void testOrdinaryDecayIsNotFlagged() {
+        for (long s = 120; s <= 600; s += 20) {
+            assertFalse("a " + s + "s LeaseSet is normal decay, not a fault",
+                        RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(s * 1000L));
+        }
     }
 
     /** Unknown expiry is not an anomaly. */
