@@ -14,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.router.Banlist;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
@@ -43,10 +44,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
     /** Last write time per accepted tier key, for rate limiting. @since 0.9.71+ */
     private final Map<String, Long> _tierLogTime = new ConcurrentHashMap<>(8);
     /** Accepts per tier since the last log line, so volume is visible. @since 0.9.71+ */
-    private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
-    /** If the build timeout exceeds this value, the message survives the ~8.5s transport handshake,
-     *  so preConnectTo() is unnecessary and adds ~8.5s of avoidable latency. */
-    private static final long PRECONNECT_TIMEOUT_THRESHOLD_MS = 15 * 1000L;
+private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** Pre-connect cooldown: peers connected within this window don't need pre-connect again. */
     private static final long PRECONNECT_COOLDOWN_MS = 5 * 60 * 1000L;
     /** Property to enable/disable conditional pre-connect in selectFirstHop. */
@@ -1066,25 +1064,22 @@ class ClientPeerSelector extends TunnelPeerSelector {
     static boolean shouldPreConnect(RouterContext ctx, Hash peer) {
         // Approach 3: property toggle
         if (!Boolean.parseBoolean(ctx.getProperty(PROP_PRECONNECT_OPTIMIZE, Boolean.toString(PROP_PRECONNECT_OPTIMIZE_DEFAULT)))) return false;
-        // Approach 1: if the request timeout is sufficient, the
-        // build message survives the ~8.5s handshake without
-        // needing preConnectTo.  The 15s default requestTimeout
-        // is the minimum needed for handshake + propagation + reply.
-        //
-        // Read the tuned value, not the property: BuildExecutor moves
-        // requestTimeout at runtime through BuildRequestor.setRequestTimeout(),
-        // and reading ctx.getProperty() here saw neither the tuned value nor a
-        // configured one.  With the property unset that default equalled the
-        // threshold, so the >= below was always true and first-hop pre-connect
-        // never ran at all.
-        long requestTimeout = BuildRequestor.getRequestTimeout(ctx);
-        // Strictly greater: a timeout exactly at the threshold is documented as
-        // the minimum that still needs the handshake to be warmed out of the way.
-        if (requestTimeout > PRECONNECT_TIMEOUT_THRESHOLD_MS) return false;
         // Approach 4: recently connected peers don't need pre-connect
         if (wasRecentlyConnected(ctx, peer)) return false;
-        // Still need pre-connect: timeout is too short and
-        // peer hasn't been connected recently.
+        // The condition that actually matters: do we have a session with this
+        // peer?  Without one the build request cannot leave until a handshake
+        // completes, so the build's whole reply budget is spent waiting.
+        //
+        // This deliberately replaces a timeout test.  The old rule inferred
+        // "the handshake will fit" from requestTimeout > 15s, on the assumption
+        // that a ~8.5s SSU2 handshake always completes inside a larger budget.
+        // That assumption does not hold: with adaptive timeouts tuned to 17s and
+        // 22s, 71% of builds skipped pre-connect entirely, and the builds that
+        // then expired had a first hop with no session 22-33% of the time.  A
+        // timeout is a proxy for a fact we can read directly, and reading the
+        // fact is what fixes it.
+        CommSystemFacade commSystem = ctx.commSystem();
+        if (commSystem.isEstablished(peer) || commSystem.isConnecting(peer)) return false;
         return true;
     }
 

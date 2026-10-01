@@ -2,7 +2,6 @@ package net.i2p.router.tunnel.pool;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -12,43 +11,47 @@ import org.junit.Test;
 
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
+import net.i2p.router.CommSystemFacade;
 import net.i2p.util.Clock;
 
 /**
  * Tests for ClientPeerSelector.shouldPreConnect.
  *
- * <p>Drives the request timeout through {@link BuildRequestor#setRequestTimeout}
- * rather than the {@code i2p.tunnel.build.requestTimeout} property, because
- * that is what the code reads. It previously read the property directly, which
- * had two consequences, both pinned below:
- * <ul>
- * <li>It never saw the runtime-tuned value, since tuning writes a static.</li>
- * <li>With the property unset its own default equalled the threshold, so the
- *     comparison was always true and first-hop pre-connect never ran on a
- *     default install.</li>
- * </ul>
+ * <p>The predicate keys off the contact peer's transport session, not the build
+ * timeout. It previously inferred "the handshake fits in the budget" from
+ * {@code requestTimeout > 15s}, and with adaptive timeouts tuned to 17s and 22s
+ * that skipped pre-connect for 71% of builds. The builds that then expired had
+ * a first hop with no session 22-33% of the time, which is the failure these
+ * tests now pin shut.
+ *
+ * <p>{@code testTimeoutNoLongerGoverns} is the specific regression: a long
+ * timeout must not suppress pre-connect when no session exists.
  *
  * @since 0.9.71+
  */
 public class ClientPeerSelectorPreConnectTest {
 
     private static final long NOW = 2_000_000_000L;
-    private static final long ONE_HOUR = 60 * 60 * 1000L;
     private static final long FIVE_MIN = 5 * 60 * 1000L;
     private static final int TIMEOUT_10S = 10_000;
-    private static final int TIMEOUT_15S = 15_000;
     private static final int TIMEOUT_20S = 20_000;
 
     private RouterContext _ctx;
+    private CommSystemFacade _commSystem;
 
     @Before
     public void setUp() {
         ClientPeerSelector.clearPreConnectHistory();
         _ctx = mock(RouterContext.class);
+        _commSystem = mock(CommSystemFacade.class);
         Clock clock = mock(Clock.class);
         when(clock.now()).thenReturn(NOW);
         when(_ctx.clock()).thenReturn(clock);
+        when(_ctx.commSystem()).thenReturn(_commSystem);
         when(_ctx.getProperty(ClientPeerSelector.PROP_PRECONNECT_OPTIMIZE, "true")).thenReturn("true");
+        // Default: no session, none in progress — the case that needs pre-connect.
+        when(_commSystem.isEstablished(org.mockito.ArgumentMatchers.any())).thenReturn(false);
+        when(_commSystem.isConnecting(org.mockito.ArgumentMatchers.any())).thenReturn(false);
     }
 
     @After
@@ -66,36 +69,43 @@ public class ClientPeerSelectorPreConnectTest {
         return Hash.create(data);
     }
 
-    /** A timeout below the threshold leaves the handshake inside the budget. */
+    /** No session and none in progress: the build cannot leave, so warm it. */
     @Test
-    public void testTimeoutInsufficient_needPreConnect() {
+    public void testNoSession_needPreConnect() {
         BuildRequestor.setRequestTimeout(TIMEOUT_10S);
         assertTrue(ClientPeerSelector.shouldPreConnect(_ctx, hash(1)));
     }
 
     /**
-     *  The regression: a timeout exactly at the threshold must still pre-connect.
-     *  With {@code >=} this returned false, and since the tuned default sits at
-     *  the threshold, pre-connect was dead on a default install.
+     *  The regression this change fixes. A generous timeout used to mean
+     *  "pre-connect is unnecessary"; it only means the budget is larger than
+     *  the handshake, not that a session already exists. With adaptive
+     *  timeouts at 17s and 22s this path skipped pre-connect for most builds.
      */
     @Test
-    public void testTimeoutExactlyAtThreshold_needPreConnect() {
-        BuildRequestor.setRequestTimeout(TIMEOUT_15S);
-        assertTrue("a timeout AT the threshold still needs the handshake warmed",
+    public void testTimeoutNoLongerGoverns() {
+        BuildRequestor.setRequestTimeout(TIMEOUT_20S);
+        assertTrue("a long timeout must not suppress pre-connect when there is no session",
                    ClientPeerSelector.shouldPreConnect(_ctx, hash(1)));
     }
 
-    /** Only strictly above the threshold is the budget demonstrably sufficient. */
+    /** An established session is the real reason to skip. */
     @Test
-    public void testTimeoutAboveThreshold_skipPreConnect() {
-        BuildRequestor.setRequestTimeout(TIMEOUT_20S);
+    public void testEstablishedSession_skipPreConnect() {
+        when(_commSystem.isEstablished(hash(1))).thenReturn(true);
+        assertFalse(ClientPeerSelector.shouldPreConnect(_ctx, hash(1)));
+    }
+
+    /** A handshake already in flight will get there without a second one. */
+    @Test
+    public void testAlreadyConnecting_skipPreConnect() {
+        when(_commSystem.isConnecting(hash(1))).thenReturn(true);
         assertFalse(ClientPeerSelector.shouldPreConnect(_ctx, hash(1)));
     }
 
     /** The property still switches the feature off. */
     @Test
     public void testPropertyDisabled_skipPreConnect() {
-        BuildRequestor.setRequestTimeout(TIMEOUT_10S);
         when(_ctx.getProperty(ClientPeerSelector.PROP_PRECONNECT_OPTIMIZE, "true")).thenReturn("false");
         assertFalse(ClientPeerSelector.shouldPreConnect(_ctx, hash(1)));
     }
@@ -103,7 +113,6 @@ public class ClientPeerSelectorPreConnectTest {
     /** A peer pre-connected inside the cooldown is not probed again. */
     @Test
     public void testRecentlyConnected_skipPreConnect() {
-        BuildRequestor.setRequestTimeout(TIMEOUT_10S);
         Hash peer = hash(1);
         ClientPeerSelector.recordPreConnect(peer, NOW);
         assertFalse(ClientPeerSelector.shouldPreConnect(_ctx, peer));
@@ -112,22 +121,23 @@ public class ClientPeerSelectorPreConnectTest {
     /** Once the cooldown lapses the peer is worth probing again. */
     @Test
     public void testCooldownExpired_needPreConnect() {
-        BuildRequestor.setRequestTimeout(TIMEOUT_10S);
         Hash peer = hash(1);
         ClientPeerSelector.recordPreConnect(peer, NOW - FIVE_MIN - 1000L);
         assertTrue(ClientPeerSelector.shouldPreConnect(_ctx, peer));
     }
 
     /**
-     *  The tuned value must win over any configured property, since tuning is
-     *  what the builder actually runs with. This is the specific reason the
-     *  property read was wrong.
+     *  The cooldown is checked before the session state, so a peer we just
+     *  pre-connected is not re-probed even if the handshake has not completed
+     *  yet. Without this ordering a slow handshake would be retried on every
+     *  build and pile handshakes onto the same peer.
      */
     @Test
-    public void testTunedTimeoutIsObservedNotTheProperty() {
-        BuildRequestor.setRequestTimeout(TIMEOUT_20S);
-        // Even if a stale property claims a short timeout, the tuned value governs.
-        when(_ctx.getProperty("i2p.tunnel.build.requestTimeout", 20_000L)).thenReturn(10_000L);
-        assertFalse(ClientPeerSelector.shouldPreConnect(_ctx, hash(1)));
+    public void testCooldownBeatsSessionState() {
+        Hash peer = hash(1);
+        ClientPeerSelector.recordPreConnect(peer, NOW);
+        when(_commSystem.isEstablished(peer)).thenReturn(false);
+        when(_commSystem.isConnecting(peer)).thenReturn(false);
+        assertFalse(ClientPeerSelector.shouldPreConnect(_ctx, peer));
     }
 }
