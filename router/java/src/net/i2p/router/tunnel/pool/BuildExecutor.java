@@ -2227,26 +2227,17 @@ public class BuildExecutor implements Runnable {
             _manager.buildComplete(cfg);
             ExpireJob.scheduleExpiration(_context, cfg);
 
-            /* Mark participating peers as low-latency when build completes quickly.
-             * Only write profile when the flag actually changes to avoid disk churn.
+            /* The low-latency flag is no longer written from build time.
+             * buildTime is the whole build across every hop, and this loop stamped
+             * it onto every peer in the tunnel, so a fast set of hops marked a
+             * slow first hop as low latency -- and wrote that to disk. Latency is
+             * now judged per peer, from the transport's own direct-link RTT,
+             * recorded by the reachability probe in ProfileOrganizer.noteFirstHopRtt.
              */
-            int peerTimeout = _context.getProperty("router.peerTestTimeout", 750);
-            int lowLatencyThreshold = 3 * peerTimeout;
-            boolean lowLat = buildTime < lowLatencyThreshold;
-            Hash selfHash = _context.routerHash();
-            for (int i = 0; i < cfg.getLength(); i++) {
-                Hash peer = cfg.getPeer(i);
-                if (peer != null && !peer.equals(selfHash)) {
-                    PeerProfile prof = _context.profileOrganizer().getProfile(peer);
-                    if (prof != null && prof.isLowLatency() != lowLat) {
-                        prof.setLowLatency(lowLat);
-                        _context.profileOrganizer().writeProfile(prof);
-                    }
-                }
-            }
 
             // Record successful tunnel participation for ghost peer detection
             if (_ghostPeerManager != null) {
+                Hash selfHash = _context.routerHash();
                 for (int i = 0; i < cfg.getLength(); i++) {
                     Hash peer = cfg.getPeer(i);
                     if (peer != null && !peer.equals(selfHash)) {
