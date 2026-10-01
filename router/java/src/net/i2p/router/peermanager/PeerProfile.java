@@ -441,6 +441,22 @@ public class PeerProfile {
     private static final long FIRST_HOP_RTT_VALIDITY_MS = RateConstants.ONE_HOUR;
 
     /**
+     *  Absolute ceiling for the low-latency flag, in ms. Fixed, not derived from
+     *  the network, so a rising average cannot promote genuinely slow peers.
+     * @since 0.9.71+
+     */
+    static final long LOW_LATENCY_CEILING_MS = 1000L;
+
+    /**
+     *  Fraction of the sliding average first-hop RTT a peer must beat to count
+     *  as low latency. Half the average is the usual meaning of "low" latency
+     *  relative to a population, and it tightens automatically as more peers are
+     *  measured because the average is taken over the measured set only.
+     * @since 0.9.71+
+     */
+    static final double LOW_LATENCY_RELATIVE_FACTOR = 0.5d;
+
+    /**
      *  Record the transport's measured round trip time to this peer.
      *
      *  <p>This is the direct link cost, which is what first-hop selection needs.
@@ -483,6 +499,36 @@ public class PeerProfile {
      * @since 0.9.71+
      */
     public long getFirstHopRttTime() {return _firstHopRttTime;}
+
+    /**
+     *  Whether this peer counts as low latency, judged on its direct link.
+     *
+     *  <p>Two drivers, both required, because either alone is misleading:
+     *  <ul>
+     *   <li>an absolute ceiling, so a peer is never low latency merely because
+     *       the whole network has slowed and every average rose with it;</li>
+     *   <li>the population boundary, so on a fast network a peer at the
+     *       absolute ceiling is still not low if it sits at the typical value.</li>
+     *  </ul>
+     *
+     *  <p>Only the direct link is consulted. Latency to this peer has nothing to
+     *  do with how long a build or test involving other peers took.
+     *
+     * @param now        current time in ms
+     * @param boundaryMs population-derived RTT boundary in ms
+     * @param ceilingMs  absolute low-latency ceiling in ms
+     * @return TRUE or FALSE, or null when this peer has no usable first-hop RTT
+     * @since 0.9.71+
+     */
+    public Boolean getLowLatencyForFirstHopRtt(long now, long boundaryMs, long ceilingMs) {
+        int rtt = getFirstHopRtt(now);
+        if (rtt < 0) {return null;}
+        if (rtt > ceilingMs) {return Boolean.FALSE;}
+        if (boundaryMs > 0 && rtt > (long)(boundaryMs * LOW_LATENCY_RELATIVE_FACTOR)) {
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
+    }
 
     /**
      * When did we last have a problem sending to this peer?
@@ -874,17 +920,26 @@ public class PeerProfile {
      * @since 0.9.70
      */
     void recalculateLowLatency() {
-        if (_peerTestResponseTimeAvg <= 0)
+        // Judged on the direct link to this peer, not on how long a test through
+        // a multi-hop tunnel took. _peerTestResponseTimeAvg is the round trip
+        // across every hop of that tunnel, so using it here measured the latency
+        // of hops the peer was merely a member of.
+        long now = _context.clock().now();
+        int firstHop = getFirstHopRtt(now);
+        // Unmeasured peers keep whatever was persisted; absent evidence is not
+        // evidence of high latency.
+        if (firstHop < 0)
             return;
         ProfileOrganizer organizer = _context.profileOrganizer();
-        float cohortAvg = organizer.getAverageLowLatencyRTT();
-        // When the fast tier has enough data (≥ 300 peers), tighten the cap to
-        // the cohort average so only the faster half of fast peers qualify.
-        // Falls back to the fixed timeout-based cap otherwise.
-        double cap = (cohortAvg > 0 && organizer.getFastPeerCount() >= 300)
-                     ? cohortAvg
-                     : 1.5 * _context.getProperty("router.peerTestTimeout", 750);
-        _lowLatency = _peerTestResponseTimeAvg < cap;
+        long cohortAvg = organizer.getMeanFirstHopRtt(now);
+        // Once enough peers carry a first-hop RTT, tighten to the cohort average
+        // so only the faster half of the measured set qualifies. Until then the
+        // absolute ceiling alone decides, so the bar does not track the mean of
+        // a handful of probes.
+        long cap = (cohortAvg > 0 && organizer.getCountMeasuredFirstHopRtts() >= ProfileOrganizer.MIN_MEASURED_PEERS)
+                 ? (long)(cohortAvg * LOW_LATENCY_RELATIVE_FACTOR)
+                 : LOW_LATENCY_CEILING_MS;
+        _lowLatency = firstHop <= Math.min(cap, LOW_LATENCY_CEILING_MS);
     }
 
     /**

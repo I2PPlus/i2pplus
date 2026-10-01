@@ -336,6 +336,22 @@ public class ProfileOrganizer {
     /** Absolute cap: the ceiling never rises above this even on a fully slow pool. */
     private static final long AUTO_RTT_CAP_MS = 3000L;
 
+    /**
+     *  Measured peers required before the sliding average may tighten admission.
+     *
+     *  <p>Until this many peers carry a first-hop RTT, the low-latency test is the
+     *  absolute ceiling alone. That keeps early behaviour stable: a mean taken
+     *  over a handful of probes would otherwise set the bar for the whole tier.
+     *  Set high on purpose, because a bar that tightens on thin evidence is worse
+     *  than a slightly loose one -- an over-tight tier just refills from the
+     *  untested-peer branch and the measurement is wasted.
+     *
+     * @since 0.9.71+
+     */
+    static final int MIN_MEASURED_PEERS = 500;
+
+
+
     /** Config property for the maximum number of peer profiles. */
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     /** Runtime-adjustable default max profile count. */
@@ -3293,6 +3309,88 @@ public class ProfileOrganizer {
         if (profile == null) {return;}
         profile.setFirstHopRtt(rtt, when);
         _context.statManager().addRateData("tunnel.firstHopRtt", rtt);
+        refreshLowLatencyFromFirstHop(profile, getMeanFirstHopRtt(when));
+    }
+
+    /**
+     *  Re-judge a peer's low-latency standing from its direct-link RTT.
+     *
+     *  <p>Low latency is about the peer, so it is now decided from the latency to
+     *  that peer rather than from how long a build or a test involving it took.
+     *  The threshold is the population-derived ceiling already used for
+     *  first-hop selection, so "low" means low relative to this network instead of
+     *  against a fixed number that is either too loose on a fast link or too
+     *  strict on a slow one.
+     *
+     *  <p>Only peers with a recorded RTT are touched. An unprobed peer keeps the
+     *  value it already had, which is what makes this safe to roll out: the flag
+     *  is load-bearing for fast-tier admission, so a peer we have not measured
+     *  must not be silently demoted on absent evidence.
+     *
+     * @param profile the profile whose flag may be refreshed
+     * @since 0.9.71+
+     */
+    /**
+     *  Sliding average of measured first-hop RTT across the peers we could select.
+     *
+     *  <p>Taken over the high-capacity set rather than a fixed list, so the
+     *  average tracks the population as it is measured and turns over as peers
+     *  are demoted or promoted. Peers with no usable measurement are excluded
+     *  rather than counted as zero, which would drag the average down and make
+     *  the bar looser exactly when coverage is worst.
+     *
+     *  <p>Returns 0 when nothing has been measured, and callers must treat that
+     *  as unknown rather than as a zero-latency population.
+     *
+     * @param now current time in ms
+     * @return mean first-hop RTT in ms over measured peers, or 0 if none
+     * @since 0.9.71+
+     */
+    long getMeanFirstHopRtt(long now) {
+        getReadLock();
+        try {
+            long total = 0;
+            int counted = 0;
+            for (PeerProfile profile : _highCapacityPeers.values()) {
+                if (profile == null) {continue;}
+                int rtt = profile.getFirstHopRtt(now);
+                if (rtt < 0) {continue;}
+                total += rtt;
+                counted++;
+            }
+            if (counted == 0) {return 0;}
+            return total / counted;
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    int getCountMeasuredFirstHopRtts() {
+        getReadLock();
+        try {
+            int counted = 0;
+            long now = _context.clock().now();
+            for (PeerProfile profile : _highCapacityPeers.values()) {
+                if (profile != null && profile.getFirstHopRtt(now) >= 0) {counted++;}
+            }
+            return counted;
+        } finally {
+            releaseReadLock();
+        }
+    }
+
+    private void refreshLowLatencyFromFirstHop(PeerProfile profile, long averageRttMs) {
+        // The relative driver only earns its keep once the average is measured
+        // over enough peers to mean anything. Below that the absolute ceiling
+        // alone decides, so admission does not track the mean of three probes.
+        if (averageRttMs <= 0 || getCountMeasuredFirstHopRtts() < MIN_MEASURED_PEERS) {
+            averageRttMs = 0;
+        }
+        Boolean low = profile.getLowLatencyForFirstHopRtt(_context.clock().now(), averageRttMs,
+                                                            PeerProfile.LOW_LATENCY_CEILING_MS);
+        if (low == null) {return;}
+        if (profile.isLowLatency() == low.booleanValue()) {return;}
+        profile.setLowLatency(low.booleanValue());
     }
 
     public void demoteIfUnreachableNow(Hash peer) {
