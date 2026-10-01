@@ -995,6 +995,67 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          */
         static final long RECENTLY_ACTIVE_MS = 10 * 60 * 1000L;
 
+        /** Uptime before which the sweep runs at its faster cadence. */
+        static final long FAST_WINDOW_MS = 4 * 60 * 60 * 1000L;
+        /** Peers per pass while young, when nothing has been measured yet. */
+        static final int PROBE_BATCH_FAST = 256;
+        /** Peers per pass once the fast window has passed. */
+        static final int PROBE_BATCH_STEADY = 128;
+        /**
+         *  Wall clock wanted for one pass over the whole tier, while young.
+         *
+         *  <p>A young router has measured nothing, so the tier is unpopulated
+         *  with first-hop latency and nothing can be judged until it is covered.
+         *  Twenty minutes reaches a full sweep quickly without turning the probe
+         *  into a sustained flood: probes carry establishment cost and the
+         *  failures that come with it, and those failures are what demote peers.
+         */
+        static final long FAST_PASS_TARGET_MS = 20 * 60 * 1000L;
+        /** Wall clock wanted for one pass once steady. Matches the original cadence. */
+        static final long STEADY_PASS_TARGET_MS = 75 * 60 * 1000L;
+        /** Floor on the gap between passes regardless of band size. */
+        static final long MIN_PROBE_INTERVAL_MS = 60 * 1000L;
+        /** Ceiling on the gap between passes, so coverage never stops refreshing. */
+        static final long MAX_PROBE_INTERVAL_MS = 15 * 60 * 1000L;
+
+        /**
+         *  Peers to probe per pass, based on how much of the profile is still
+         *  unmeasured.
+         *
+         * @param uptimeMs router uptime in ms
+         * @return the batch size for the next pass
+         * @since 0.9.71+
+         */
+        static int probeBatchFor(long uptimeMs) {
+            return uptimeMs < FAST_WINDOW_MS ? PROBE_BATCH_FAST : PROBE_BATCH_STEADY;
+        }
+
+        /**
+         *  Gap between passes, derived from the tier size so a full sweep takes a
+         *  predictable wall-clock time whatever the population.
+         *
+         *  <p>Computing the interval from {@code targetPass * batch / bandSize}
+         *  rather than fixing it means the same cadence holds at 200 peers or
+         *  2000: a small tier is not over-probed and a large one is not starved.
+         *  Clamped so a very small or very large band cannot produce an absurd
+         *  interval.
+         *
+         * @param uptimeMs router uptime in ms
+         * @param bandSize how many peers are selectable, non-negative
+         * @param batch    peers per pass, must be positive
+         * @return the delay until the next pass, in ms
+         * @since 0.9.71+
+         */
+        static long probeIntervalFor(long uptimeMs, int bandSize, int batch) {
+            long target = (uptimeMs < FAST_WINDOW_MS) ? FAST_PASS_TARGET_MS : STEADY_PASS_TARGET_MS;
+            if (bandSize <= 0 || batch <= 0) {return MAX_PROBE_INTERVAL_MS;}
+            long passes = (bandSize + batch - 1) / batch;
+            long interval = target / Math.max(1L, passes);
+            if (interval < MIN_PROBE_INTERVAL_MS) {return MIN_PROBE_INTERVAL_MS;}
+            if (interval > MAX_PROBE_INTERVAL_MS) {return MAX_PROBE_INTERVAL_MS;}
+            return interval;
+        }
+
         FastTierProbeJob(RouterContext ctx, TunnelPoolManager mgr) {
             super(ctx);
             _mgr = mgr;
@@ -1011,18 +1072,24 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             // when unset, which would switch the sweep off by default.
             if (!Boolean.parseBoolean(getContext().getProperty("router.tunnel.probeFastTier", "true"))) {return;}
             if (!Boolean.parseBoolean(getContext().getProperty(ClientPeerSelector.PROP_PRECONNECT_OPTIMIZE, "true"))) {return;}
+            long uptime = getContext().router().getUptime();
+            int batch = probeBatchFor(uptime);
+            int bandSize = getContext().profileOrganizer().getHighCapPeerCount();
+            long interval = probeIntervalFor(uptime, bandSize, batch);
             try {
-                int probed = probeBatch();
+                int probed = probeBatch(batch);
                 getContext().statManager().addRateData("tunnel.fastTierProbe", probed);
                 if (_mgr._log.shouldDebug()) {
-                    _mgr._log.debug("Fast tier probe pass: " + probed + " of " + PROBE_BATCH + " slots used");
+                    _mgr._log.debug("Fast tier probe pass: " + probed + " of " + batch +
+                                    " slots used, band=" + bandSize + ", next in " +
+                                    (interval / 1000) + "s");
                 }
             } catch (RuntimeException re) {
                 _mgr._log.error("Fast tier probe pass failed", re);
             } finally {
                 // Reschedule even after a failure, so one bad pass does not end
                 // reachability monitoring for the life of the process.
-                getTiming().setStartAfter(getContext().clock().now() + PROBE_INTERVAL);
+                getTiming().setStartAfter(getContext().clock().now() + interval);
                 getContext().jobQueue().addJob(this);
             }
         }
@@ -1039,23 +1106,23 @@ public class TunnelPoolManager implements TunnelManagerFacade {
          *
          *  @return how many peers were actually probed
          */
-        private int probeBatch() {
+        private int probeBatch(int batch) {
             RouterContext ctx = getContext();
-            Set<Hash> candidates = new HashSet<>(PROBE_BATCH * 2);
+            Set<Hash> candidates = new HashSet<>(batch * 2);
             // Oversample so that filtering out recently-active peers still
             // leaves a full batch; the selector's own cap is what it is because
             // it is drawn once per build, not because the pool is this small.
-            ctx.profileOrganizer().selectHighCapacityPeers(PROBE_BATCH * 2, null, candidates);
+            ctx.profileOrganizer().selectHighCapacityPeers(batch * 2, null, candidates);
             if (candidates.isEmpty()) {
                 // No high-capacity peers yet (early startup); fall back to the
                 // fast tier so the sweep still covers whatever is selectable.
-                ctx.profileOrganizer().selectFastPeers(PROBE_BATCH * 2, null, candidates);
+                ctx.profileOrganizer().selectFastPeers(batch * 2, null, candidates);
             }
             if (candidates.isEmpty()) {return 0;}
             long now = ctx.clock().now();
             int probed = 0;
             for (Hash peer : candidates) {
-                if (probed >= PROBE_BATCH) {break;}
+                if (probed >= batch) {break;}
                 if (isRecentlyActive(ctx, peer, now)) {continue;}
                 TunnelPeerSelector.preConnectTo(ctx, peer);
                 ClientPeerSelector.recordPreConnect(peer, now);

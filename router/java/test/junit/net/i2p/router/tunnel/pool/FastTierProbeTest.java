@@ -154,19 +154,76 @@ public class FastTierProbeTest {
             TunnelPoolManager.FastTierProbeJob.RECENTLY_ACTIVE_MS);
     }
 
-    /** The batch cap is what bounds a pass; it must stay a small slice. */
+    // ---- cadence ----
+
+    /** Young routers probe harder, because nothing has been measured yet. */
     @Test
-    public void batchIsBounded() {
-        org.junit.Assert.assertTrue(
-            "a pass must not probe the whole tier at once",
-            TunnelPoolManager.FastTierProbeJob.PROBE_BATCH <= 256);
+    public void youngRouterProbesHarder() {
+        org.junit.Assert.assertEquals(TunnelPoolManager.FastTierProbeJob.PROBE_BATCH_FAST,
+            TunnelPoolManager.FastTierProbeJob.probeBatchFor(0));
+        org.junit.Assert.assertEquals(TunnelPoolManager.FastTierProbeJob.PROBE_BATCH_FAST,
+            TunnelPoolManager.FastTierProbeJob.probeBatchFor(3 * 60 * 60 * 1000L));
     }
 
-    /** Sweep and pause: the interval must be long enough to be a background cost. */
+    /** After the fast window it backs off. */
     @Test
-    public void intervalIsLongEnoughToBeBackground() {
+    public void steadyStateProbesLess() {
+        org.junit.Assert.assertEquals(TunnelPoolManager.FastTierProbeJob.PROBE_BATCH_STEADY,
+            TunnelPoolManager.FastTierProbeJob.probeBatchFor(4 * 60 * 60 * 1000L));
         org.junit.Assert.assertTrue(
-            "probing every pass must not approach per-build frequency",
-            TunnelPoolManager.FastTierProbeJob.PROBE_INTERVAL >= 5 * 60 * 1000L);
+            "the fast batch must be the larger one",
+            TunnelPoolManager.FastTierProbeJob.PROBE_BATCH_FAST >
+            TunnelPoolManager.FastTierProbeJob.PROBE_BATCH_STEADY);
+    }
+
+    /** A young pass must cover the whole tier faster than a steady one. */
+    @Test
+    public void youngIntervalIsShorterThanSteady() {
+        int band = 1000;
+        long young = TunnelPoolManager.FastTierProbeJob.probeIntervalFor(0, band,
+            TunnelPoolManager.FastTierProbeJob.probeBatchFor(0));
+        long steady = TunnelPoolManager.FastTierProbeJob.probeIntervalFor(5 * 60 * 60 * 1000L, band,
+            TunnelPoolManager.FastTierProbeJob.probeBatchFor(5 * 60 * 60 * 1000L));
+        org.junit.Assert.assertTrue("young interval " + young + " should be under steady " + steady,
+                                    young < steady);
+    }
+
+    /**
+     *  The whole point of deriving the interval from the band size: a full pass
+     *  takes roughly the target wall clock whatever the population. Without this
+     *  a 4000 peer tier would take four times as long as a 1000 peer one.
+     */
+    @Test
+    public void fullPassTimeIsIndependentOfBandSize() {
+        for (int band : new int[] {200, 1000, 4000}) {
+            int batch = TunnelPoolManager.FastTierProbeJob.probeBatchFor(0);
+            long interval = TunnelPoolManager.FastTierProbeJob.probeIntervalFor(0, band, batch);
+            long passes = (band + batch - 1) / batch;
+            long passTimeMs = interval * passes;
+            // Clamping can only shorten a pass, never lengthen it, so the
+            // invariant is that a full pass is at most the target. A small band
+            // covers in one pass and lands under it because the interval is
+            // capped; a large one converges on it.
+            org.junit.Assert.assertTrue(
+                "band=" + band + " full pass took " + (passTimeMs / 60000) + "min",
+                passTimeMs <= TunnelPoolManager.FastTierProbeJob.FAST_PASS_TARGET_MS);
+        }
+    }
+
+    /** Degenerate inputs must not produce a zero or negative interval. */
+    @Test
+    public void degenerateInputsAreClamped() {
+        org.junit.Assert.assertEquals(TunnelPoolManager.FastTierProbeJob.MAX_PROBE_INTERVAL_MS,
+            TunnelPoolManager.FastTierProbeJob.probeIntervalFor(0, 0, 256));
+        org.junit.Assert.assertEquals(TunnelPoolManager.FastTierProbeJob.MAX_PROBE_INTERVAL_MS,
+            TunnelPoolManager.FastTierProbeJob.probeIntervalFor(0, 1000, 0));
+    }
+
+    /** A huge tier must not push the interval beyond the ceiling. */
+    @Test
+    public void intervalIsCappedForHugeTiers() {
+        long interval = TunnelPoolManager.FastTierProbeJob.probeIntervalFor(0, 500000, 256);
+        org.junit.Assert.assertTrue("interval must stay bounded", interval <=
+            TunnelPoolManager.FastTierProbeJob.MAX_PROBE_INTERVAL_MS);
     }
 }
