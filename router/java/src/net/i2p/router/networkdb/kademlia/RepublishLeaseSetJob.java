@@ -2,6 +2,7 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -9,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.data.TunnelId;
+import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
@@ -58,6 +61,31 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final long EXPIRY_WINDOW = 4L * 60 * 1000;
     /** Minimum reschedule interval — prevents sub-minute flood treadmills. */
     private static final long MIN_RESCHEDULE = 60L * 1000;
+
+    /**
+     *  The LeaseSet lifetime this router is designed around, in ms. Tunnel
+     *  lifetime is capped at ten minutes plus a one minute grace, so a pool
+     *  holding fresh tunnels advertises close to this.
+     *
+     * @since 0.9.71+
+     */
+    static final long DESIGNED_LEASE_LIFETIME_MS = 10L * 60 * 1000;
+
+    /**
+     *  Whether a LeaseSet expiry is far enough below the design target to be
+     *  worth reporting.
+     *
+     *  <p>One third of the target is the threshold: a pool that cannot replace
+     *  its tunnels is the actual fault, and the emergency re-mint log line that
+     *  follows says so repeatedly without identifying the cause. This names it.
+     *
+     * @param effectiveExpiry ms until the copy currently in effect expires
+     * @return true if the expiry is anomalously short
+     * @since 0.9.71+
+     */
+    static boolean effectiveExpiryAnomalouslyShort(long effectiveExpiry) {
+        return effectiveExpiry > 0 && effectiveExpiry * 3 < DESIGNED_LEASE_LIFETIME_MS;
+    }
     /**
      *  Emergency re-mint window: when the stored copy is within this much of
      *  expiring, re-mint whatever the pool holds down to a single viable lease,
@@ -112,6 +140,8 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final ConcurrentHashMap<Hash, AtomicInteger> _globalFailCount = new ConcurrentHashMap<>();
     /** Consecutive re-mint deferral count per destination, to bound fresh-build waiting. */
     private static final ConcurrentHashMap<Hash, AtomicInteger> _remintDefers = new ConcurrentHashMap<>();
+    /** When this destination last ran a re-mint that could not improve anything. @since 0.9.71+ */
+    private static final ConcurrentHashMap<Hash, Long> _lastIneffectiveRemint = new ConcurrentHashMap<>();
     /** Max verifications per destination before falling back to direct retry. */
     private static final int MAX_FLOODFILL_VERIFICATIONS = 3;
     // Tracks defer start for startup-gate; cleared on success or FIRST_PUBLISH_TIMEOUT
@@ -364,7 +394,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                            "] (not published to network)");
             }
             _lastPublished = now;
-            refloatLeaseSet(name, now, timeUntilExpiry);
+            refloatLeaseSet(ls, name, now, timeUntilExpiry);
             return;
         }
 
@@ -380,7 +410,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                           "] expires in " + (timeUntilExpiry / 1000) +
                           "s — re-minting instead of flooding dying copy");
             }
-            refloatLeaseSet(name, now, timeUntilExpiry);
+            refloatLeaseSet(ls, name, now, timeUntilExpiry);
             return;
         }
 
@@ -530,6 +560,56 @@ public class RepublishLeaseSetJob extends JobImpl {
     }
 
     /**
+     *  How long to hold off a further re-mint after one that changed nothing.
+     *
+     *  <p>A re-mint inside the emergency window is permitted even when it does not
+     *  extend the stored copy, because a thin copy the pool can still serve beats
+     *  letting the LeaseSet die. That exemption is what makes the loop possible:
+     *  if the fresh copy expires no later than the stored one, publishing it does
+     *  not move {@code timeUntilExpiry}, so the next cycle is still inside the
+     *  emergency window and re-arms immediately. Measured in production that was
+     *  roughly one re-mint per second per pool, all of it re-advertising the same
+     *  two aging leases.
+     *
+     *  <p>The hold-off is deliberately not a fixed interval. It is half the time
+     *  the stored copy has left, so however close to expiry the copy is, a
+     *  further attempt is always scheduled before it can lapse. A fixed floor
+     *  would have to be small enough for a nearly-dead copy and would then be
+     *  needlessly slow for a healthy one: these LeaseSets are designed to last
+     *  around ten minutes but were observed at sixty seconds, so no single
+     *  constant is right for both. Five minutes, the obvious choice, would let a
+     *  sixty-second copy lapse unrepublished for four minutes, which is the exact
+     *  outage the emergency path exists to prevent.
+     *
+     *  <p>Always strictly less than {@code timeUntilExpiry} for any positive
+     *  value, which is the invariant that matters: holding off can never be the
+     *  reason a LeaseSet lapses unrepublished.
+     *
+     * @param timeUntilExpiry ms until the stored copy expires
+     * @return minimum ms to wait before another re-mint attempt
+     * @since 0.9.71+
+     */
+    static long ineffectiveRemintDelay(long timeUntilExpiry) {
+        // Below the reschedule floor there is no interval that both keeps up
+        // with the loop and leaves room to retry, so a copy about to lapse is
+        // re-offered quickly instead of being abandoned. The emergency path
+        // would otherwise let it die unrepublished, which is the outage this
+        // whole mechanism exists to prevent.
+        if (timeUntilExpiry <= 0) {return MIN_RESCHEDULE;}
+        if (timeUntilExpiry <= MIN_RESCHEDULE) {
+            // Quarter, not the reschedule floor: the floor can equal or exceed a
+            // nearly-expired copy, and a hold-off that long is indistinguishable
+            // from abandoning it.
+            // No lower floor: a quarter of the remaining life is the only value
+            // guaranteed to leave room, and a copy this close to expiry wants no
+            // hold-off at all. The job schedule still floors at MIN_RESCHEDULE,
+            // so this cannot turn into a spin.
+            return Math.min(MIN_RESCHEDULE, timeUntilExpiry / 4);
+        }
+        return Math.max(MIN_RESCHEDULE, timeUntilExpiry / 2);
+    }
+
+    /**
      *  Re-mint from the tunnel pool's current tunnels rather than re-signing or
      *  flooding the stored copy, whose leases may be near expiry.  The client
      *  signs whatever leases we send, so sending the stored (dying) copy would
@@ -563,7 +643,44 @@ public class RepublishLeaseSetJob extends JobImpl {
      *  @param now current time in ms
      *  @param timeUntilExpiry time until the stored copy expires, in ms
      */
-    private void refloatLeaseSet(String name, long now, long timeUntilExpiry) {
+    /**
+     *  Whether two lease sets advertise exactly the same tunnels.
+     *
+     *  <p>Compares tunnel ids as a set, so a re-mint that merely reorders the
+     *  same leases is recognised as a no-op. This is the loop's true cause: inside
+     *  the emergency window the viability gate is skipped, so a pool that cannot
+     *  replace its aging tunnels re-mints the identical set, the stored expiry
+     *  does not move, the next pass is still inside the emergency window, and the
+     *  cycle repeats. Measured in production that was ~170 re-mints per burst,
+     *  six milliseconds apart.
+     *
+     * @param stored the currently published lease set, may be null
+     * @param fresh  the candidate from the pool, may be null
+     * @return true if both carry the same non-empty set of tunnel ids
+     * @since 0.9.71+
+     */
+    static boolean sameLeaseTunnels(LeaseSet stored, LeaseSet fresh) {
+        if (stored == null || fresh == null) {return false;}
+        int count = stored.getLeaseCount();
+        if (count == 0 || count != fresh.getLeaseCount()) {return false;}
+        Set<TunnelId> ids = new HashSet<>(count);
+        for (int i = 0; i < count; i++) {
+            Lease lease = stored.getLease(i);
+            if (lease == null) {return false;}
+            ids.add(lease.getTunnelId());
+        }
+        if (ids.size() != count) {return false;}
+        for (int i = 0; i < count; i++) {
+            Lease lease = fresh.getLease(i);
+            if (lease == null || !ids.contains(lease.getTunnelId())) {return false;}
+        }
+        return true;
+    }
+
+    /**
+     *  @param storedLeaseSet the LeaseSet currently published, for no-op detection
+     */
+    private void refloatLeaseSet(LeaseSet storedLeaseSet, String name, long now, long timeUntilExpiry) {
         LeaseSet fresh = getFreshPoolLeaseSet();
         long freshTimeUntilExpiry = fresh != null ? fresh.getEarliestLeaseDate() - now : 0;
         if (_log.shouldInfo()) {
@@ -586,9 +703,36 @@ public class RepublishLeaseSetJob extends JobImpl {
         int required = Math.min(2, Math.max(1, target - 1));
         boolean extendsExpiry = freshTimeUntilExpiry > timeUntilExpiry;
         boolean emergency = timeUntilExpiry <= EMERGENCY_REMINT_WINDOW;
+        boolean unchanged = sameLeaseTunnels(storedLeaseSet, fresh);
+        boolean ineffective = unchanged && !extendsExpiry;
+        long sinceLastIneffective = now - _lastIneffectiveRemint.getOrDefault(_dest, 0L);
+        long backoff = ineffectiveRemintDelay(timeUntilExpiry);
+        if (ineffective && sinceLastIneffective < backoff) {
+            // Re-publishing the identical lease set does not move the expiry, so
+            // it cannot bring the next emergency pass any closer. Hold off instead
+            // of spinning, while still asking the pool for replacements so the
+            // re-mint becomes meaningful once capacity arrives.
+            if (_log.shouldInfo()) {
+                _log.info("Holding off ineffective re-mint for " + name + " [" + shortHash() +
+                          "] — same " + freshCount + " leases, expiry still " +
+                          (timeUntilExpiry / 1000) + "s, next attempt in " +
+                          ((backoff - sinceLastIneffective) / 1000) + "s");
+            }
+            if (pool != null) {pool.requestFreshTunnelBuild();}
+            scheduleRepublish(computeNextRepublish(timeUntilExpiry));
+            return;
+        }
+        if (ineffective) {
+            _lastIneffectiveRemint.put(_dest, now);
+        } else {
+            _lastIneffectiveRemint.remove(_dest);
+        }
         if (fresh != null && shouldRemint(freshCount, required, extendsExpiry,
                                           timeUntilExpiry, EMERGENCY_REMINT_WINDOW)) {
-            if (_log.shouldWarn() && emergency) {
+            // A re-mint that cannot improve anything is not an emergency worth
+            // repeating at WARN; it is the steady state of a pool waiting on
+            // builds, and saying so 170 times a burst buries the real alarms.
+            if (_log.shouldWarn() && emergency && !ineffective) {
                 _log.warn("Re-minting LeaseSet for " + name + " [" + shortHash() +
                           "] under emergency window (" + (timeUntilExpiry / 1000) +
                           "s to expiry, " + freshCount + "/" + target + " viable leases)");
@@ -641,7 +785,16 @@ public class RepublishLeaseSetJob extends JobImpl {
                           "], keeping cycle alive until expiry");
             }
         }
-        long effectiveExpiry = requested ? freshTimeUntilExpiry : timeUntilExpiry;
+        // A re-mint that does not extend the copy must not shorten the interval
+        // either, or the next pass re-enters the emergency window immediately.
+        long effectiveExpiry = (requested && freshTimeUntilExpiry > timeUntilExpiry)
+                             ? freshTimeUntilExpiry : timeUntilExpiry;
+        if (effectiveExpiryAnomalouslyShort(effectiveExpiry)) {
+            _log.warn("LeaseSet for " + name + " [" + shortHash() +
+                      "] expiring in only " + (effectiveExpiry / 1000) +
+                      "s against a ~" + (DESIGNED_LEASE_LIFETIME_MS / 1000) +
+                      "s target — the inbound pool is serving near-exhausted tunnels");
+        }
         scheduleRepublish(computeNextRepublish(effectiveExpiry));
     }
 

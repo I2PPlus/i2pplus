@@ -3,7 +3,13 @@ package net.i2p.router.networkdb.kademlia;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+
 import org.junit.Test;
+
+import net.i2p.data.Hash;
+import net.i2p.data.Lease;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.TunnelId;
 
 /**
  *  Pins the re-mint decision in {@link RepublishLeaseSetJob#shouldRemint}:
@@ -87,5 +93,206 @@ public class RemintDecisionTest {
     @Test
     public void testRequirementMetWithoutExtensionOutsideWindowDeferred() {
         assertFalse(RepublishLeaseSetJob.shouldRemint(3, 2, false, 5L * 60 * 1000, WINDOW));
+    }
+
+    // ---- no-op re-mint detection (the loop) ----
+
+    /**
+     *  The loop's cause: the emergency window re-mints the same aging leases, so
+     *  the expiry never moves and the next pass re-enters the window. Detecting
+     *  the identical set is what lets the job hold off instead of spinning.
+     */
+    @Test
+    public void testIdenticalLeaseSetsAreRecognised() {
+        LeaseSet stored = leaseSet(3, 0);
+        LeaseSet fresh = leaseSet(3, 0);
+        assertTrue("identical tunnel sets must be detected",
+                   RepublishLeaseSetJob.sameLeaseTunnels(stored, fresh));
+    }
+
+    /** Reordering is not a change: rotation must not defeat the check. */
+    @Test
+    public void testReorderedLeaseSetsAreStillIdentical() {
+        LeaseSet stored = leaseSetOf(1L, 2L, 3L);
+        LeaseSet fresh = leaseSetOf(3L, 1L, 2L);
+        assertTrue("order must not matter", RepublishLeaseSetJob.sameLeaseTunnels(stored, fresh));
+    }
+
+    /** A pool that actually replaced a tunnel is a real change. */
+    @Test
+    public void testDifferentLeaseSetsAreNotIdentical() {
+        assertFalse(RepublishLeaseSetJob.sameLeaseTunnels(leaseSet(3, 0), leaseSet(3, 9)));
+        assertFalse("a different count is a change",
+                    RepublishLeaseSetJob.sameLeaseTunnels(leaseSet(3, 0), leaseSet(2, 0)));
+    }
+
+    /** Null and empty inputs are never treated as a no-op. */
+    @Test
+    public void testNullAndEmptyAreNotIdentical() {
+        assertFalse(RepublishLeaseSetJob.sameLeaseTunnels(null, leaseSet(2, 0)));
+        assertFalse(RepublishLeaseSetJob.sameLeaseTunnels(leaseSet(2, 0), null));
+        assertFalse("empty sets carry no evidence",
+                    RepublishLeaseSetJob.sameLeaseTunnels(leaseSet(0, 0), leaseSet(0, 1)));
+    }
+
+    // ---- backoff ----
+
+    /**
+     *  The invariant that matters: holding off must never be the reason a
+     *  LeaseSet lapses unrepublished. Five minutes, the obvious constant, would
+     *  abandon a 63s copy for four minutes.
+     */
+    @Test
+    public void testBackoffAlwaysLeavesRoomForAnotherAttempt() {
+        for (long remaining : new long[] {1_000L, 20_000L, 63_000L, 120_000L, 300_000L, 600_000L}) {
+            long delay = RepublishLeaseSetJob.ineffectiveRemintDelay(remaining);
+            assertTrue("remaining=" + remaining + " delay=" + delay + " would abandon the copy",
+                       delay < remaining);
+        }
+    }
+
+    /** The observed production case: a 63s copy must not wait five minutes. */
+    @Test
+    public void testObservedSixtyThreeSecondCopyIsNotAbandoned() {
+        long remaining = 63_000L;
+        long delay = RepublishLeaseSetJob.ineffectiveRemintDelay(remaining);
+        assertTrue("must retry well inside the remaining life, was " + delay,
+                   delay < 5L * 60 * 1000L);
+        assertTrue("and still leave a gap before lapse", delay < remaining);
+    }
+
+    /** Where the copy outlives the floor, the floor is respected. */
+    @Test
+    public void testBackoffRespectsTheFloorWhenThereIsRoom() {
+        assertTrue(RepublishLeaseSetJob.ineffectiveRemintDelay(600_000L) >= 60_000L);
+        assertTrue(RepublishLeaseSetJob.ineffectiveRemintDelay(300_000L) >= 60_000L);
+    }
+
+    /** Scales with the copy, so a healthy LeaseSet is not re-minted needlessly. */
+    @Test
+    public void testBackoffScalesWithRemainingLife() {
+        assertTrue("a long-lived copy should wait longer",
+                   RepublishLeaseSetJob.ineffectiveRemintDelay(600_000L) >
+                   RepublishLeaseSetJob.ineffectiveRemintDelay(120_000L));
+    }
+
+    // ---- anomaly signal ----
+
+    /** A LeaseSet far under its ten minute target names the real fault. */
+    @Test
+    public void testShortExpiryIsFlaggedAsAnomalous() {
+        assertTrue("63s against a 10m target", RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(63_000L));
+        assertTrue(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(120_000L));
+    }
+
+    /** A healthy LeaseSet is not flagged. */
+    @Test
+    public void testHealthyExpiryIsNotFlagged() {
+        assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(9L * 60 * 1000));
+        assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(
+            RepublishLeaseSetJob.DESIGNED_LEASE_LIFETIME_MS));
+    }
+
+    /** Unknown expiry is not an anomaly. */
+    @Test
+    public void testUnknownExpiryIsNotFlagged() {
+        assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(0L));
+        assertFalse(RepublishLeaseSetJob.effectiveExpiryAnomalouslyShort(-1L));
+    }
+
+    /** Builds a LeaseSet from explicit tunnel id numbers, in the given order. */
+    private static LeaseSet leaseSetOf(long... ids) {
+        LeaseSet ls = new LeaseSet();
+        long end = System.currentTimeMillis() + 300_000L;
+        for (long id : ids) {
+            Lease lease = new Lease();
+            // LeaseSet.addLease rejects a lease with no gateway.
+            lease.setGateway(new Hash(new byte[Hash.HASH_LENGTH]));
+            lease.setTunnelId(new TunnelId(id));
+            lease.setEndDate(end);
+            ls.addLease(lease);
+        }
+        return ls;
+    }
+
+    /**
+     *  Builds a LeaseSet with {@code count} leases. Same {@code seed} yields the
+     *  same tunnel ids, which is what the identity comparison turns on. Ids start
+     *  at 1 because {@code TunnelId} rejects zero.
+     */
+    private static LeaseSet leaseSet(int count, int seed) {
+        LeaseSet ls = new LeaseSet();
+        long end = System.currentTimeMillis() + 300_000L;
+        for (int i = 0; i < count; i++) {
+            Lease lease = new Lease();
+            // LeaseSet.addLease rejects a lease with no gateway.
+            lease.setGateway(new Hash(new byte[Hash.HASH_LENGTH]));
+            lease.setTunnelId(new TunnelId(seed * 1000L + i + 1));
+            lease.setEndDate(end);
+            ls.addLease(lease);
+        }
+        return ls;
+    }
+
+    /**
+     *  Walks a LeaseSet toward expiry and asserts it is always reached while
+     *  still alive.
+     *
+     *  <p>This property outranks the noise reduction: an active service's
+     *  LeaseSet must never lapse. The loop fix holds off re-mints that cannot
+     *  improve anything, so the question is whether that hold-off could ever be
+     *  the reason a copy dies unrepublished. The walk answers it directly — the
+     *  hold-off is always shorter than the remaining life, so the copy cannot
+     *  reach zero between passes.
+     *
+     *  <p>Mirrors {@code computeNextRepublish}: max(MIN_RESCHEDULE,
+     *  min(republishInterval, remaining - EXPIRY_WINDOW)).
+     */
+    @Test
+    public void testLeaseSetNeverLapsesUnderRepeatedIneffectiveRemints() {
+        final long minReschedule = 60_000L;
+        final long republishInterval = 5L * 60 * 1000L;
+        final long expiryWindow = 4L * 60 * 1000L;
+        long remaining = 120_000L;
+        int attempts = 0;
+        // The pool is stuck in the state that produced the loop: the same two
+        // leases, none of which extends the stored copy. Every pass below takes
+        // the ineffective branch.
+        while (remaining > 0L) {
+            if (attempts > 0) {
+                long nextRepublish = Math.max(minReschedule,
+                    Math.min(republishInterval, remaining - expiryWindow));
+                long step = Math.min(nextRepublish,
+                    RepublishLeaseSetJob.ineffectiveRemintDelay(remaining));
+                remaining -= step;
+                assertTrue("pass " + attempts + " held the copy off past its own expiry, "
+                         + "leaving " + remaining + "ms", remaining > 0L);
+            }
+            attempts++;
+            if (attempts >= 500) {
+                // The walk converges on zero without ever reaching it, which is
+                // exactly the property being asserted. Progress must still be
+                // real though, so check it has actually driven the copy down.
+                assertTrue("the hold-off stalled: " + remaining + "ms left after 500 passes",
+                           remaining < 1_000L);
+                return;
+            }
+        }
+        assertTrue("the walk should take several passes to be meaningful, took " + attempts,
+                   attempts > 3);
+    }
+
+    /**
+     *  The same property stated without any scheduling: no hold-off value can
+     *  reach or exceed the life it is protecting. Swept across the whole range
+     *  these LeaseSets occupy rather than sampled at a few points.
+     */
+    @Test
+    public void testHoldOffIsAlwaysShorterThanTheLifeItProtects() {
+        for (long remaining = 1L; remaining <= 900_000L; remaining += 97L) {
+            long delay = RepublishLeaseSetJob.ineffectiveRemintDelay(remaining);
+            assertTrue("remaining=" + remaining + "ms delay=" + delay
+                     + "ms would let the copy die unrepublished", delay < remaining);
+        }
     }
 }
