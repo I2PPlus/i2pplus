@@ -2100,12 +2100,37 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // connection establishment — same approach as TransportManager.establishTo().
         Transport udp = ctx.commSystem().getTransports().get("SSU");
         if (udp != null) {
-            try { udp.send(onm); return; } catch (Exception e) { /* ignored */ }
+            try { udp.send(onm); noteFirstHopRtt(ctx, peer, udp); return; } catch (Exception e) { /* ignored */ }
         }
         Transport ntcp = ctx.commSystem().getTransports().get("NTCP");
         if (ntcp != null) {
-            try { ntcp.send(onm); } catch (Exception e) { /* ignored */ }
+            try { ntcp.send(onm); noteFirstHopRtt(ctx, peer, ntcp); } catch (Exception e) { /* ignored */ }
         }
+    }
+
+    /**
+     *  Extract the transport's measured direct-link RTT and record it on the peer.
+     *
+     *  <p>The probe goes out over one specific transport and that transport
+     *  already maintains a per-peer round trip time, so the first-hop latency
+     *  tier selection needs is available here for free. Reading it from the
+     *  transport also keeps it honest: it is the cost of the one hop, not the
+     *  cost of a multi-hop tunnel that merely contained this peer.
+     *
+     *  <p>A freshly established session has not measured yet and reports 0,
+     *  which is discarded rather than stored as a fast peer; the next pass picks
+     *  it up.
+     *
+     * @param ctx the router context
+     * @param peer the probed peer
+     * @param transport the transport the probe was sent over
+     * @since 0.9.71+
+     */
+    static void noteFirstHopRtt(RouterContext ctx, Hash peer, Transport transport) {
+        if (transport == null) {return;}
+        int rtt = transport.getEstimatedRTT(peer);
+        if (rtt <= 0) {return;}
+        ctx.profileOrganizer().noteFirstHopRtt(peer, rtt, ctx.clock().now());
     }
 
     /**

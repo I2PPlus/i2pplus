@@ -3274,6 +3274,27 @@ public class ProfileOrganizer {
      * Non-blocking - only acts if the peer is currently in those tiers.
      * @since 0.9.71+
      */
+    /**
+     *  Record a measured direct-link RTT against a peer.
+     *
+     *  <p>Owns the profile write so callers holding a transport measurement do
+     *  not have to know how the value is stored or aged out. The value decays
+     *  on the existing Active tier window, so a first-hop latency never
+     *  outlives the evidence class it belongs to.
+     *
+     * @param peer the measured peer
+     * @param rtt the measured round trip time in ms
+     * @param when timestamp of the measurement
+     * @since 0.9.71+
+     */
+    public void noteFirstHopRtt(Hash peer, int rtt, long when) {
+        if (rtt <= 0) {return;}
+        PeerProfile profile = getProfile(peer);
+        if (profile == null) {return;}
+        profile.setFirstHopRtt(rtt, when);
+        _context.statManager().addRateData("tunnel.firstHopRtt", rtt);
+    }
+
     public void demoteIfUnreachableNow(Hash peer) {
         if (!getWriteLock()) return;
         try {
@@ -3462,31 +3483,78 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Immediately demote a peer from fast/high-cap tiers if its tunnel test RTT
-     * exceeds the low-latency threshold (timeout * 2), matching the PeerTestJob metric.
-     * Uses the immediate test result rather than the smoothed average for instant action.
-     * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
-     * Non-blocking - only acts if the peer is currently in those tiers.
+     *  Demote a peer from fast/high-cap tiers when its direct-link latency is poor.
+     *
+     *  <p>{@code responseTimeMs} is the round trip through an entire multi-hop
+     *  tunnel, which {@code TestJob.noteSuccess} attributes to every peer in that
+     *  tunnel. That is a reasonable profile statistic but the wrong input for
+     *  first-hop selection: a peer with a fast direct link is blamed for the other
+     *  hops it happened to be a member of, and the result is compared against a
+     *  first-hop threshold. In production that evicted a large share of the fast
+     *  tier on a latency distribution taken across the wrong hops, shrinking the
+     *  candidate pool and leaving slower survivors.
+     *
+     *  <p>The tier decision therefore uses {@link PeerProfile#getFirstHopRtt},
+     *  measured on the direct link. The passed-in tunnel time is not consulted.
+     *  A peer with no recorded first-hop RTT is left alone: unknown is not slow.
+     *
+     * @param peer the peer to evaluate
+     * @param responseTimeMs full-tunnel test round trip, unused by the tier decision
+     * @since 0.9.71+
      */
     void demoteIfHighRTT(Hash peer, long responseTimeMs) {
+        PeerProfile profile = getProfile(peer);
+        if (profile == null) {return;}
+        demoteIfSlowFirstHop(peer, profile.getFirstHopRtt(_context.clock().now()));
+    }
+
+    /**
+     *  Whether a measured first-hop RTT warrants removal from the fast tiers.
+     *
+     *  <p>Pure so the policy is testable without a populated profile. An unknown
+     *  measurement (negative) is never slow: we have not probed the peer, and
+     *  evicting on absent evidence would drain the tier of exactly the peers we
+     *  have not looked at yet.
+     *
+     * @param firstHopRttMs direct-link RTT in ms, negative when unknown
+     * @param thresholdMs the latency ceiling in ms
+     * @return true if the peer should be evicted from the fast/high-cap tiers
+     * @since 0.9.71+
+     */
+    static boolean firstHopRttIsSlow(int firstHopRttMs, int thresholdMs) {
+        return firstHopRttMs >= 0 && firstHopRttMs >= thresholdMs;
+    }
+
+    /**
+     *  Remove a peer from the fast/high-cap tiers if its measured direct-link RTT
+     *  reaches the low-latency threshold.
+     *
+     *  <p>The threshold is unchanged at {@code router.peerTestTimeout * 2}; only the
+     *  measurement changed, from a whole tunnel to one hop.
+     *
+     * @param peer the peer to evaluate
+     * @param firstHopRttMs direct-link RTT in ms, negative when unknown
+     * @since 0.9.71+
+     */
+    void demoteIfSlowFirstHop(Hash peer, int firstHopRttMs) {
         int timeout = _context.getProperty("router.peerTestTimeout", 750);
-        if (responseTimeMs >= timeout * 2) {
-            if (!getWriteLock()) return;
-            try {
-                boolean inFast = _fastPeers.containsKey(peer);
-                boolean inHighCap = _highCapacityPeers.containsKey(peer);
-                if (inFast || inHighCap) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
-                                  "] from fast/high-cap tiers due to high RTT: " + responseTimeMs + "ms (threshold: " + (timeout * 2) + "ms)");
-                    }
-                    if (inFast) removeFastPeer(peer);
-                    if (inHighCap) _highCapacityPeers.remove(peer);
-                    promoteToFillTiers();
+        if (!firstHopRttIsSlow(firstHopRttMs, timeout * 2)) {return;}
+        if (!getWriteLock()) return;
+        try {
+            boolean inFast = _fastPeers.containsKey(peer);
+            boolean inHighCap = _highCapacityPeers.containsKey(peer);
+            if (inFast || inHighCap) {
+                if (_log.shouldInfo()) {
+                    _log.info("Demoting peer [" + peer.toBase32().substring(0, 6) +
+                              "] from fast/high-cap tiers due to high first hop RTT: " +
+                              firstHopRttMs + "ms (threshold: " + (timeout * 2) + "ms)");
                 }
-            } finally {
-                releaseWriteLock();
+                if (inFast) removeFastPeer(peer);
+                if (inHighCap) _highCapacityPeers.remove(peer);
+                promoteToFillTiers();
             }
+        } finally {
+            releaseWriteLock();
         }
     }
 

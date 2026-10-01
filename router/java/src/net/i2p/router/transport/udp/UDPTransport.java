@@ -1863,11 +1863,28 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * The peer state for the peer with the given ident, or null
-     * if no state exists.
+     *  The peer state for the peer with the given ident, or null
+     *  if no state exists.
      */
     PeerState getPeerState(Hash remotePeer) {
         return _peersByIdent.get(remotePeer);
+    }
+
+    /**
+     *  Measured round trip time to a peer over SSU.
+     *
+     *  <p>PeerState seeds its RTT at 0 and only assigns a real value from an
+     *  observed round trip, so 0 here means the session has not measured yet.
+     *  Callers treat that as unknown, not as an impossibly good peer.
+     *
+     * @param peer the peer to measure
+     * @return the measured RTT in ms, or 0 if there is no session or none measured
+     * @since 0.9.71+
+     */
+    @Override
+    public int getEstimatedRTT(Hash peer) {
+        PeerState state = getPeerState(peer);
+        return (state != null) ? state.getRTT() : 0;
     }
 
     /**

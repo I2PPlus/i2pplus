@@ -423,6 +423,67 @@ public class PeerProfile {
      */
     public void setLastSendSuccessful(long when) {_lastSentToSuccessfully = when;}
 
+    /** Measured direct-link RTT in ms, or 0 when never measured. @since 0.9.71+ */
+    private volatile int _firstHopRtt;
+    /** When {@link #_firstHopRtt} was last refreshed, in ms since the epoch. @since 0.9.71+ */
+    private volatile long _firstHopRttTime;
+
+    /**
+     *  How long a recorded first-hop RTT stays usable.
+     *
+     *  <p>Reuses {@link RateConstants#ONE_HOUR}, the same Active tier period
+     *  {@link #getIsActive(long, long)} applies to {@link #getLastSendSuccessful()},
+     *  so first-hop latency ages out with the profile's other active evidence
+     *  instead of introducing a second decay scheme.
+     *
+     * @since 0.9.71+
+     */
+    private static final long FIRST_HOP_RTT_VALIDITY_MS = RateConstants.ONE_HOUR;
+
+    /**
+     *  Record the transport's measured round trip time to this peer.
+     *
+     *  <p>This is the direct link cost, which is what first-hop selection needs.
+     *  A value of 0 means the session has not measured yet and is stored as
+     *  unknown rather than as zero latency.
+     *
+     * @param rtt   measured round trip time in ms, 0 if unmeasured
+     * @param when  timestamp of the measurement
+     * @since 0.9.71+
+     */
+    public void setFirstHopRtt(int rtt, long when) {
+        if (rtt <= 0) {return;}
+        _firstHopRtt = rtt;
+        _firstHopRttTime = when;
+    }
+
+    /**
+     *  The direct-link RTT to this peer, or -1 when it is unknown or stale.
+     *
+     *  <p>Stale means older than the Active tier window. That window is the one
+     *  already applied to {@link #getLastSendSuccessful()}, so a first-hop RTT
+     *  is treated with the same freshness rules as the rest of the profile's
+     *  active-tier evidence rather than inventing a second decay scheme.
+     *
+     * @param now current time in ms
+     * @return the RTT in ms, or -1 if never measured or older than the window
+     * @since 0.9.71+
+     */
+    public int getFirstHopRtt(long now) {
+        int rtt = _firstHopRtt;
+        if (rtt <= 0) {return -1;}
+        long when = _firstHopRttTime;
+        if (when > 0 && now - when >= FIRST_HOP_RTT_VALIDITY_MS) {return -1;}
+        return rtt;
+    }
+
+    /**
+     *  When the direct-link RTT was last refreshed.
+     * @return timestamp in ms, or 0 if never measured
+     * @since 0.9.71+
+     */
+    public long getFirstHopRttTime() {return _firstHopRttTime;}
+
     /**
      * When did we last have a problem sending to this peer?
      *

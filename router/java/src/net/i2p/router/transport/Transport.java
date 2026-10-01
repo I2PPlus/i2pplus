@@ -198,6 +198,25 @@ public interface Transport {
      * @param msg the message to send, containing destination, payload, and callbacks
      */
     public void send(OutNetMessage msg);
+
+    /**
+     *  The transport's own measured round trip time to a peer.
+     *
+     *  <p>This is the direct link cost of reaching the peer, which is what
+     *  first-hop selection needs. It is deliberately distinct from
+     *  {@code PeerProfile.getTunnelTestTimeAverage()}, which is the round trip
+     *  through an entire multi-hop tunnel and is not a valid measure of one hop.
+     *
+     *  <p>Implementations that do not track latency return 0, which callers
+     *  must read as <em>unknown</em> rather than as zero latency. Unknown is
+     *  never treated as slow.
+     *
+     * @param peer the peer to measure
+     * @return the estimated round trip time in ms, or 0 if not measured
+     * @since 0.9.71+
+     */
+    default int getEstimatedRTT(Hash peer) {return 0;}
+
     /** Start accepting connections. */
     public void startListening();
     /** Stop accepting connections. */
