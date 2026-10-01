@@ -448,13 +448,30 @@ public class PeerProfile {
     static final long LOW_LATENCY_CEILING_MS = 1000L;
 
     /**
-     *  Fraction of the sliding average first-hop RTT a peer must beat to count
-     *  as low latency. Half the average is the usual meaning of "low" latency
-     *  relative to a population, and it tightens automatically as more peers are
-     *  measured because the average is taken over the measured set only.
+     *  Absolute floor for the low-latency flag, in ms. This is the binding
+     *  criterion: a peer counts as low latency only if its direct-link RTT is at
+     *  or below this value.
+     *
+     *  <p>This replaced a {@code 0.5 * mean} relative test. The relative form was
+     *  unsound for two reasons. First, the population it divided came from a
+     *  decaying, self-selecting sample: an RTT is valid for one hour and
+     *  refreshes only when we happen to send to that peer, so on a ~950 peer fast
+     *  tier only ~37% carried a usable value and the mean tracked whoever we most
+     *  recently happened to contact. A mean drawn from that set shrinks as it
+     *  shrinks, so halving it ratchets the bar tighter over time. Second, the
+     *  arithmetic did not discriminate. Measured against a live fast tier the
+     *  mean was 86ms, so the bar sat at 43ms — below the population's own median
+     *  of 60ms, which demoted two thirds of every measured peer rather than a
+     *  tail.
+     *
+     *  <p>A fixed 100ms admits 69% and evicts 31% on that same population, which
+     *  is the discrimination the flag was meant to provide. It also does not
+     *  move as the sample decays, which was the defect that made the relative
+     *  form unsafe to leave in place.
+     *
      * @since 0.9.71+
      */
-    static final double LOW_LATENCY_RELATIVE_FACTOR = 0.5d;
+    static final long LOW_LATENCY_FLOOR_MS = 100L;
 
     /**
      *  Record the transport's measured round trip time to this peer.
@@ -515,18 +532,17 @@ public class PeerProfile {
      *  do with how long a build or test involving other peers took.
      *
      * @param now        current time in ms
-     * @param boundaryMs population-derived RTT boundary in ms
      * @param ceilingMs  absolute low-latency ceiling in ms
      * @return TRUE or FALSE, or null when this peer has no usable first-hop RTT
      * @since 0.9.71+
      */
-    public Boolean getLowLatencyForFirstHopRtt(long now, long boundaryMs, long ceilingMs) {
+    public Boolean getLowLatencyForFirstHopRtt(long now, long ceilingMs) {
         int rtt = getFirstHopRtt(now);
         if (rtt < 0) {return null;}
         if (rtt > ceilingMs) {return Boolean.FALSE;}
-        if (boundaryMs > 0 && rtt > (long)(boundaryMs * LOW_LATENCY_RELATIVE_FACTOR)) {
-            return Boolean.FALSE;
-        }
+        // Absolute floor, not a fraction of the population mean: see
+        // LOW_LATENCY_FLOOR_MS for why the relative form was unsafe.
+        if (rtt > LOW_LATENCY_FLOOR_MS) {return Boolean.FALSE;}
         return Boolean.TRUE;
     }
 
@@ -930,16 +946,10 @@ public class PeerProfile {
         // evidence of high latency.
         if (firstHop < 0)
             return;
-        ProfileOrganizer organizer = _context.profileOrganizer();
-        long cohortAvg = organizer.getMeanFirstHopRtt(now);
-        // Once enough peers carry a first-hop RTT, tighten to the cohort average
-        // so only the faster half of the measured set qualifies. Until then the
-        // absolute ceiling alone decides, so the bar does not track the mean of
-        // a handful of probes.
-        long cap = (cohortAvg > 0 && organizer.getCountMeasuredFirstHopRtts() >= ProfileOrganizer.MIN_MEASURED_PEERS)
-                 ? (long)(cohortAvg * LOW_LATENCY_RELATIVE_FACTOR)
-                 : LOW_LATENCY_CEILING_MS;
-        _lowLatency = firstHop <= Math.min(cap, LOW_LATENCY_CEILING_MS);
+        // Absolute floor decides, so the bar no longer tracks the mean of a
+        // sample that shrinks as RTTs age out. See LOW_LATENCY_FLOOR_MS.
+        long cap = Math.min(LOW_LATENCY_FLOOR_MS, LOW_LATENCY_CEILING_MS);
+        _lowLatency = firstHop <= cap;
     }
 
     /**

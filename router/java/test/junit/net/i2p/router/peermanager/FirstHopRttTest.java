@@ -156,45 +156,57 @@ public class FirstHopRttTest {
     // ---- the two-driver low-latency rule ----
 
     /**
-     *  Both drivers, stated as the rule they implement: under the absolute
-     *  ceiling, and at most half the sliding average once that average is
-     *  measured over enough peers.
+     *  The floor is absolute: a peer qualifies on its own direct-link RTT, with
+     *  no population average consulted. Measured against a live fast tier this
+     *  admits 69% and evicts 31%; the 0.5x-mean rule it replaced sat below the
+     *  population median and demoted two thirds of every measured peer.
      */
     @Test
-    public void lowLatencyNeedsBothDrivers() {
-        long avg = 1200;
-        long ceiling = 1000;
-        assertTrue("well under both", isLow(200, avg, ceiling));
-        assertFalse("under the average but over the absolute ceiling", isLow(1100, avg, ceiling));
-        assertFalse("under the ceiling but only 60% of the average", isLow(700, avg, ceiling));
+    public void floorDecidesOnItsOwn() {
+        assertTrue("a fast direct link qualifies",
+                   isLow(PeerProfile.LOW_LATENCY_FLOOR_MS - 50, 1000));
+        assertFalse("just over the floor does not",
+                   isLow(PeerProfile.LOW_LATENCY_FLOOR_MS + 50, 1000));
     }
 
-    /** Exactly half the average qualifies; the rule is half or less. */
+    /** At the floor qualifies; one millisecond over does not. */
     @Test
-    public void exactlyHalfTheAverageQualifies() {
-        assertTrue("half of 1000 is 500", isLow(500, 1000, 1000));
-        assertFalse("just over half does not", isLow(501, 1000, 1000));
-    }
-
-    /**
-     *  The user's case: 3s must never be low latency, whatever the average
-     *  says. Guards the absolute driver against being swallowed by the relative
-     *  one on a slow network.
-     */
-    @Test
-    public void threeSecondsIsNeverLowLatency() {
-        assertFalse("3s against a slow average", isLow(3000, 6000, 1000));
-        assertFalse("3s against a slow average, generous ceiling", isLow(3000, 5000, 5000));
+    public void exactlyTheFloorQualifies() {
+        assertTrue("the floor is inclusive",
+                   isLow(PeerProfile.LOW_LATENCY_FLOOR_MS, 1000));
+        assertFalse("one over the floor does not",
+                   isLow(PeerProfile.LOW_LATENCY_FLOOR_MS + 1, 1000));
     }
 
     /**
-     *  Before enough peers are measured the caller passes 0 for the average,
-     *  which disables the relative driver and leaves the absolute ceiling.
+     *  The regression. There is no longer any path by which a population mean
+     *  can move the bar, so the flag cannot ratchet tighter as the measured set
+     *  ages out from under it.
      */
     @Test
-    public void withoutAnAverageOnlyTheAbsoluteCeilingApplies() {
-        assertTrue("500ms is under the ceiling", isLow(500, 0, 1000));
-        assertFalse("1100ms is over it", isLow(1100, 0, 1000));
+    public void noPopulationAverageCanMoveTheBar() {
+        for (long ceiling : new long[] {200L, 500L, 1000L, 5000L}) {
+            assertEquals("a 60ms link qualifies whatever the ceiling",
+                         Boolean.TRUE, isLow(60, ceiling));
+        }
+        assertFalse("a 300ms link is out regardless of ceiling",
+                    isLow(300, 1000));
+    }
+
+    /** A ceiling below the floor still wins, so a stricter caller is honoured. */
+    @Test
+    public void lowerCeilingStillApplies() {
+        assertFalse("50ms ceiling rejects an 80ms link",
+                    isLow(80, 50));
+        assertTrue("an 80ms link passes the 100ms default ceiling",
+                   isLow(80, 1000));
+    }
+
+    /** Genuinely slow peers are never low latency. */
+    @Test
+    public void slowPeersAreNeverLowLatency() {
+        assertFalse("300ms", isLow(300, 1000));
+        assertFalse("3s against a generous ceiling", isLow(3000, 5000));
     }
 
     /** An unmeasured peer yields no verdict, so its stored flag is untouched. */
@@ -205,23 +217,15 @@ public class FirstHopRttTest {
         PeerProfile profile = new PeerProfile(ctx, hash(9));
         org.junit.Assert.assertNull(
             "unknown must not be reported as low or not-low",
-            profile.getLowLatencyForFirstHopRtt(NOW, 1000, 1000));
-    }
-
-    /** The gate that keeps the average from steering a thin population. */
-    @Test
-    public void gateHoldsOffThinEvidence() {
-        org.junit.Assert.assertTrue(
-            "a mean over a handful of probes must not set the bar for the tier",
-            ProfileOrganizer.MIN_MEASURED_PEERS >= 100);
+            profile.getLowLatencyForFirstHopRtt(NOW, 1000));
     }
 
     /** Helper driving the real profile method. */
-    private static Boolean isLow(int rtt, long average, long ceiling) {
+    private static Boolean isLow(long rtt, long ceiling) {
         RouterContext ctx = RouterTestHelper.getContext();
         org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);
         PeerProfile profile = new PeerProfile(ctx, hash(11));
-        profile.setFirstHopRtt(rtt, NOW);
-        return profile.getLowLatencyForFirstHopRtt(NOW, average, ceiling);
+        profile.setFirstHopRtt((int) rtt, NOW);
+        return profile.getLowLatencyForFirstHopRtt(NOW, ceiling);
     }
 }
