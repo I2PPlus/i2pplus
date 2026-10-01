@@ -664,7 +664,6 @@ public class PeerTestJob extends JobImpl {
 
             if (isHighBandwidthTier(data)) {
                 try {
-                    data.profile.setLowLatency(false);
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
                         _log.info("Demoting [" + _shortHash + "] -> test timeout");
@@ -686,7 +685,6 @@ public class PeerTestJob extends JobImpl {
 
             if (testAvg > (timeout * 2L) && isHighBandwidthTier(data)) {
                 try {
-                    data.profile.setLowLatency(false);
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer);
                     if (_log.shouldInfo())
                         _log.info("Demoting [" + _shortHash + "]" +
@@ -698,14 +696,13 @@ public class PeerTestJob extends JobImpl {
             if (!data.profile.isLowLatency() &&
                 data.capabilities != null && data.isReachable && testAvg < (timeout * 2) &&
                 isHighOrMidBandwidthTier(data)) {
-                try {
-                    if (!data.profile.isLowLatency() && data.capabilities != null &&
-                        data.isReachable && isHighBandwidthTier(data)) {
-                        data.profile.setLowLatency(true);
-                        if (_log.shouldInfo())
-                            _log.info("Setting low latency flag for [" + _shortHash + "]");
-                    }
-                } catch (NumberFormatException nfe) { /* ignored */ }
+                // testAvg is a whole-tunnel round trip, so it does not measure
+                // this peer's latency. The flag is set from the measured
+                // direct-link RTT instead; the demotion paths that key on a slow
+                // or unreachable test are left in place.
+                if (_log.shouldInfo())
+                    _log.info("Test round trip within tolerance for [" + _shortHash +
+                              "]; low latency judged from the direct link");
                 _matchFound = true;
                 return true;
             }
@@ -781,10 +778,11 @@ public class PeerTestJob extends JobImpl {
                     String bw = peerInfo.getBandwidthTier();
                     PeerProfile prof = getContext().profileOrganizer().getProfile(h);
                     if (prof != null && cap != null && reachable && (bw.equals("O") || bw.equals("P") || bw.equals("X"))) {
-                        prof.setLowLatency(true);
-                        if (_log.shouldInfo())
-                            _log.info("[" + _peer.getIdentity().getHash().toBase64().substring(0,6) +
-                                      "] Setting low latency flag for fast tier router");
+                        // No flag is written here. Advertised capability and
+                        // bandwidth tier say nothing about how fast this peer
+                        // answers, and the flag gates fast-tier admission.
+                        // Low latency is set from the measured direct-link RTT,
+                        // in ProfileOrganizer.noteFirstHopRtt.
                     }
                     if (prof != null && prof.getCapacityBonus() == -30 && cap != null && reachable) {
                         try {
@@ -881,7 +879,6 @@ public class PeerTestJob extends JobImpl {
             if (data.routerInfo != null && data.profile != null && data.capabilities != null &&
                 (!data.isReachable || data.bandwidthTier.equals("L") || data.bandwidthTier.equals("M") || data.bandwidthTier.equals("N"))) {
                 try {
-                    data.profile.setLowLatency(false);
                     getContext().profileOrganizer().demoteIfNotLowLatency(_peer.getIdentity().getHash());
                     if (_log.shouldInfo())
                         _log.info("Demoting [" +
