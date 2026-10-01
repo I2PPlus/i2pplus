@@ -494,6 +494,7 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectFuture", "Rejected tunnel build (time in future)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout", "Rejected tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.preConnectFail", "Pre-connect probe failed", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLookupStale", "Dropped deferred next-hop lookup (expired in queue)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTooOld", "Rejected tunnel build (too old)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.buildHandler.queueSize", "Build handler inbound queue depth", "Tunnels", RATES);

@@ -29,6 +29,7 @@ import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.RouterContext;
@@ -2054,8 +2055,16 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  layer to initiate a connection. Used to pre-warm connections for
      *  first-hop peers before the build message is sent.
      *
-     *  @param ctx the router context
-     *  @param peer hash of the peer to connect to
+     *  <p>A failed send is treated as evidence of unreachability rather than
+     *  a transient transport hiccup: a pre-connect probe has no reply to wait
+     *  for, so the transport giving up on it means the peer could not be
+     *  reached at all. That is the cheapest reachability signal available,
+     *  and without acting on it an unconnectable peer stays in the fast tier
+     *  because nothing else records that it never answers. The peer is
+     *  dropped from the fast/high-cap tiers on the first failed probe.
+     *
+     * @param ctx the router context
+     * @param peer hash of the peer to connect to
      */
     protected static void preConnectTo(RouterContext ctx, Hash peer) {
         RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
@@ -2083,6 +2092,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         dlm.setMessageExpiration(lifetime);
         OutNetMessage onm = new OutNetMessage(ctx, dlm, lifetime,
             OutNetMessage.PRIORITY_MY_BUILD_REQUEST, ri);
+        // A pre-connect that cannot be delivered is a reachability failure, so
+        // attach the demotion callback before the send that may fail.
+        onm.setOnFailedSendJob(new PreConnectFailJob(ctx, peer));
         // Send directly to the transport instead of going through GetBidsJob,
         // which may drop messages to non-connected peers. Direct send forces
         // connection establishment — same approach as TransportManager.establishTo().
@@ -2094,6 +2106,67 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (ntcp != null) {
             try { ntcp.send(onm); } catch (Exception e) { /* ignored */ }
         }
+    }
+
+    /**
+     *  Demotes a peer that could not be reached by a pre-connect probe.
+     *
+     *  <p>Fired from {@link OutNetMessage}'s failed-send path, so it runs only
+     *  after the transport has exhausted its own retries for the probe. That
+     *  distinguishes it from a single dropped packet: by then the peer has
+     *  failed to answer across every transport we hold.
+     *
+     *  <p>Uses {@link ProfileOrganizer#demoteIfUnreachableNow} rather than the
+     *  three-strike path because send-failure strikes already exist for
+     *  in-use tunnels and count a congested path as much as a dead peer. A
+     *  peer that cannot be connected to at all is unambiguous, and leaving it
+     *  in the fast tier is what starves the pools.
+     *
+     *  @since 0.9.71+
+     */
+    private static final class PreConnectFailJob extends JobImpl {
+        private final Hash _peer;
+
+        PreConnectFailJob(RouterContext ctx, Hash peer) {
+            super(ctx);
+            _peer = peer;
+        }
+
+        @Override
+        public String getName() {return "Pre-Connect Failure";}
+
+        @Override
+        public void runJob() {
+            applyProbeFailure(getContext(), _peer);
+            Log log = getContext().logManager().getLog(TunnelPeerSelector.class);
+            if (log.shouldDebug()) {
+                log.debug("Pre-connect to [" + _peer.toBase64().substring(0,6) +
+                          "] failed after transport retries; demoted from fast tiers");
+            }
+        }
+    }
+
+    /**
+     *  Act on a pre-connect probe that could not be delivered.
+     *
+     *  <p>Separated from the job so the decision is testable without a
+     *  transport and a job queue: a probe that failed every transport retry
+     *  means the peer is not reachable, so it leaves the fast tiers at once
+     *  rather than after the three-strike send-failure path.
+     *
+     *  <p>Demotion is immediate because unlike a send failure on a live tunnel,
+     *  this has no ambiguity to accumulate against — there was no reply at all.
+     *  Waiting for strikes leaves exactly the peers this sweep exists to find
+     *  sitting in the tier where selection will pick them again.
+     *
+     * @param ctx the router context
+     * @param peer the peer that failed to answer the probe
+     * @since 0.9.71+
+     */
+    static void applyProbeFailure(RouterContext ctx, Hash peer) {
+        ctx.statManager().addRateData("tunnel.preConnectFail", 1);
+        recordFirstHopFail(ctx, peer);
+        ctx.profileOrganizer().demoteIfUnreachableNow(peer);
     }
 
     /**
