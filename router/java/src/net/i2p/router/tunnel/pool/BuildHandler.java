@@ -495,6 +495,9 @@ public class BuildHandler implements Runnable {
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout2", "Rejected tunnel build (can't contact next hop)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTimeout", "Rejected tunnel build (unknown next hop)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.preConnectFail", "Pre-connect probe failed", "Tunnels [Participating]", RATES);
+        ctx.statManager().createRequiredRateStat("tunnel.firstHopRtt",
+                                               "First hop round trip time (ms)",
+                                               "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.dropLookupStale", "Dropped deferred next-hop lookup (expired in queue)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.rejectTooOld", "Rejected tunnel build (too old)", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.buildHandler.queueSize", "Build handler inbound queue depth", "Tunnels", RATES);
@@ -1882,7 +1885,7 @@ public class BuildHandler implements Runnable {
          * @return the name
          */
         @Override
-        public String getName() {return "Timeout Building Tunnel Hop";}
+        public String getName() {return "Build Request Send Failed";}
         /**
          * Remove the participating tunnel when the next hop cannot be contacted.
          */
@@ -1903,7 +1906,7 @@ public class BuildHandler implements Runnable {
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             getContext().statManager().addRateData("tunnel.nextHopLookupTimeout", getNextHopLookupTimeout(getContext()));
             if (log.shouldDebug()) {
-                log.debug("Timeout (" + (getNextHopLookupTimeout(getContext()) / 1000) + "s) contacting next hop" + _cfg);
+                log.debug("Failed to send build request to next hop (transport gave up): " + _cfg);
             }
             countNextHopOutcome(NEXT_HOP_TIMEOUT, log, getContext().clock().now());
         }
