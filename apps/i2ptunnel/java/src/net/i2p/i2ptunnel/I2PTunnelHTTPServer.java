@@ -1322,11 +1322,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     // otherwise impossible to attribute to a backend. Log the
                     // resolved target and both timeout budgets: the I2P-side
                     // per-read budget and the local socket's header-read budget.
-                    _log.info("[HTTPServer] " + toString() + " localport=" + socket.getLocalPort()
-                              + " backend=" + getSocketString(socket.getLocalPort())
-                              + " i2pReadTimeout=" + readTimeout
-                              + " localHeaderReadTimeout=" + SERVER_READ_TIMEOUT_GET
-                              + " peer=" + peerB32);
+                    _log.info("[HTTPServer] " + toString()
+                              + "\n* Read timeout: " + readTimeout
+                              + " Header Read timeout: " + SERVER_READ_TIMEOUT_GET
+                              + "\n* Client: " + peerB32);
                 }
 
                 // Instead of i2ptunnelrunner, use something that reads the HTTP
