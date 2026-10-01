@@ -270,7 +270,9 @@ public class TranslationStatus {
                 foundLangs.add(loc);
                 ResourceBundle bun;
                 try {
-                    bun = ResourceBundle.getBundle(clz, loc, cl);
+                    // Load by the name actually found in the archive rather than
+                    // by Locale, which cannot round-trip Hebrew on JDK 1.8.
+                    bun = ResourceBundle.getBundle(bundleName(clz, s), Locale.ROOT, cl);
                 } catch (Exception e) {
                     System.err.println("FAILED loading class " + clz + " lang " + loc);
                     continue;
@@ -589,14 +591,37 @@ public class TranslationStatus {
     /**
      * Parse a locale code string (e.g. "ar" or "zh_TW") into a Locale.
      *
+     * <p>Used only for reporting. Do NOT pass the result to
+     * {@link ResourceBundle#getBundle}: on JDK 1.8 {@code new Locale("he")}
+     * canonicalises to {@code iw} (the ISO 639 code Java used before the 639-1
+     * revision), so the bundle lookup would search for {@code MessagesBundle_iw}
+     * while the file on disk is {@code MessagesBundle_he}. JDK 17 and later
+     * canonicalise the other way. Load bundles by explicit name instead, via
+     * {@link #bundleName}.
+     *
      * @param s locale code
-     * @return Locale
+     * @return Locale, for display only
      */
-    private static Locale localeFromString(String s) {
+    static Locale localeFromString(String s) {
         int c = s.indexOf('_');
         if (c < 0)
             return new Locale(s);
         return new Locale(s.substring(0, c), s.substring(c + 1));
+    }
+
+    /**
+     * The bundle name to load for a suffix found in the archive, with any
+     * resource-bundle suffix already applied.
+     *
+     * <p>Passing the suffix in the bundle name sidesteps locale negotiation
+     * entirely, so the same code finds {@code _he} on JDK 1.8 and JDK 17+.
+     *
+     * @param clz base bundle class name, package separated by '.'
+     * @param s  suffix as it appears in the entry name, e.g. "he" or "he_IL"
+     * @return the bundle name to hand to {@code ResourceBundle.getBundle}
+     */
+    static String bundleName(String clz, String s) {
+        return clz + '_' + s;
     }
 
     /**
