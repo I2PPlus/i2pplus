@@ -10,157 +10,153 @@
 
 [<img src="../apps/routerconsole/resources/icons/flags_svg/ar.svg" width="24" height="18" title="العربية">](README-ar.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/bn.svg" width="24" height="18" title="বাংলা">](README-bn.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/xt.svg" width="24" height="18" title="བོད་ཡིག">](README-bo.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/cz.svg" width="24" height="18" title="Čeština">](README-cs.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/de.svg" width="24" height="18" title="Deutsch">](README-de.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/gr.svg" width="24" height="18" title="Ελληνικά">](README-el.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/es.svg" width="24" height="18" title="Español">](README-es.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ir.svg" width="24" height="18" title="فارسی">](README-fa.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/fr.svg" width="24" height="18" title="Français">](README-fr.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/il.svg" width="24" height="18" title="עברית">](README-he.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/in.svg" width="24" height="18" title="हिन्दी">](README-hi.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/hu.svg" width="24" height="18" title="Magyar">](README-hu.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/id.svg" width="24" height="18" title="Bahasa Indonesia">](README-id.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/it.svg" width="24" height="18" title="Italiano">](README-it.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/jp.svg" width="24" height="18" title="日本語">](README-ja.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/kr.svg" width="24" height="18" title="한국어">](README-ko.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/nl.svg" width="24" height="18" title="Nederlands">](README-nl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/pl.svg" width="24" height="18" title="Polski">](README-pl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/pt.svg" width="24" height="18" title="Português">](README-pt.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ro.svg" width="24" height="18" title="Română">](README-ro.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ru.svg" width="24" height="18" title="Русский">](README-ru.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/th.svg" width="24" height="18" title="ภาษาไทย">](README-th.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/tr.svg" width="24" height="18" title="Türkçe">](README-tr.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ua.svg" width="24" height="18" title="Українська">](README-uk.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/pk.svg" width="24" height="18" title="اردو">](README-ur.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/vn.svg" width="24" height="18" title="Tiếng Việt">](README-vi.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/cn.svg" width="24" height="18" title="中文">](README-zh.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/az.svg" width="24" height="18" title="Azerbaijani">](README-az.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/lang_ca.svg" width="24" height="18" title="Català">](README-ca.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/dk.svg" width="24" height="18" title="Dansk">](README-da.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ee.svg" width="24" height="18" title="Eesti">](README-et.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ph.svg" width="24" height="18" title="Filipino">](README-tl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/fi.svg" width="24" height="18" title="Suomi">](README-fi.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/no.svg" width="24" height="18" title="Norsk (bokmål)">](README-nb.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/af.svg" width="24" height="18" title="پښتو">](README-ps.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/sk.svg" width="24" height="18" title="Slovenčina">](README-sl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/se.svg" width="24" height="18" title="Svenska">](README-sv.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/tz.svg" width="24" height="18" title="Kiswahili">](README-sw.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/gb.svg" width="24" height="18" title="English">](../README.md)
 
-Dies ist der Quellcode des Soft-Forks der Java-Implementierung von I2P.
+Aquest és el codi font del soft-fork de la implementació de Java d'I2P.
 
-Neueste Version: https://i2pplus.github.io/
+Última versió: https://i2pplus.github.io/
 
-## Installation
+## Instal·lació
 
-Siehe [INSTALL.md](docs/INSTALL.md) oder https://i2pplus.github.io/ für Installationsanweisungen.
+Consulta [INSTALL.md](docs/INSTALL.md) o https://i2pplus.github.io/ per a les instruccions d'instal·lació.
 
-### Hinweis zum Windows-Installer
+### Nota sobre l'instal·lador de Windows
 
-Bei Java > 1.8 oder alternativen Distributionen (AdoptOpenJDK usw.) kann der Installer-Exe mit "Java not found" oder "invalid/corrupt" Fehlern fehlschlagen. Workaround: Extrahieren Sie install.jar aus der Exe und führen Sie `java -jar install.jar` über die Kommandozeile aus.
+Amb Java > 1.8 o distribucions alternatives (AdoptOpenJDK, etc.), l'exe de l'instal·lador pot fallar amb els errors "Java not found" o "invalid/corrupt". Solució alternativa: extreu install.jar de l'exe i executa `java -jar install.jar` des de la línia de comandes.
 
-## Dokumentation
+## Documentació
 
 https://geti2p.net/how
 
 FAQ: https://geti2p.net/faq
 
 API: https://i2pplus.github.io/javadoc/
-oder führen Sie 'ant javadoc' aus und starten Sie dann bei build/javadoc/index.html
+o executa 'ant javadoc' i després comença a build/javadoc/index.html
 
-## Wie man beiträgt / Bei I2P entwickeln
+## Com contribuir / Desenvolupar I2P+
 
-Bitte überprüfen Sie [HACKING.md](docs/HACKING.md) und andere Dokumente im docs-Verzeichnis.
+Consulta [HACKING.md](docs/HACKING.md) i altres documents del directori docs.
 
-## Pakete aus dem Quellcode erstellen
+## Compilació de paquets des del codi font
 
-Um den Entwicklungszweig aus der Quellcodeverwaltung zu erhalten: https://github.com/I2PPlus/i2pplus/
+Per obtenir la branca de desenvolupament des del control de versions: https://github.com/I2PPlus/i2pplus
 
-### Voraussetzungen
+### Requisits previs
 
-- Java SDK (vorzugsweise Oracle/Sun oder OpenJDK) 1.8.0 oder höher
-  - Bestimmte Subsysteme für eingebettete Systeme (core, router, mstreaming, streaming, i2ptunnel)
-- Apache Ant 1.9.8 oder höher
-- Die xgettext-, msgfmt- und msgmerge-Tools aus dem GNU gettext-Paket installiert
-  http://www.gnu.org/software/gettext/
-- Die Build-Umgebung muss ein UTF-8-Gebiet verwenden.
-- Für Debian-Paket-Builds: `dpkg-deb`- und `fakeroot`-Pakete (über Ihren Paketmanager)
+- Java SDK 1.8.0 o superior
+- Apache Ant 1.9.8 o superior
+- Les eines xgettext, msgfmt i msgmerge instal·lades des del paquet GNU gettext
+  mitjançant el vostre gestor de paquets o http://www.gnu.org/software/gettext/
+- L'entorn de compilació ha d'utilitzar una configuració regional UTF-8.
+- Per a la compilació de paquets Debian: els paquets `dpkg-deb` i `fakeroot` (mitjançant el vostre gestor de paquets)
 
-### Ant-Build-Prozess
+### Procés de compilació amb Ant
 
-Führen Sie auf x86-Systemen Folgendes aus (dies wird mit IzPack4 erstellt):
+Als sistemes x86 executa el següent (això compilarà amb IzPack4):
 
     ant pkg
 
-Auf Nicht-x86-Systemen verwenden Sie stattdessen eine der folgenden Optionen:
+En sistemes que no siguin x86, utilitza un dels següents en canvi:
 
     ant installer-linux
     ant installer-freebsd
     ant installer-osx
     ant installer-windows
 
-Wenn Sie mit IzPack5 erstellen möchten, laden Sie es herunter von: http://izpack.org/downloads/
-installieren Sie es dann, und führen Sie dann den/die folgenden Befehl(e) aus:
+Si vols compilar amb IzPack5, baixa'l des de: http://izpack.org/downloads/ i després
+instal·la'l, i executa llavors la/les comanda/es següent/s:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
 
-Um ein unsigniertes Update für eine bestehende Installation zu erstellen, führen Sie aus:
+Per compilar una actualització sense signar per a una instal·lació existent, executa:
 
     ant updater
 
-Wenn Sie Probleme beim Erstellen eines vollständigen Installers haben (Java14 und später können Build-Fehler für izpack bezüglich pack200 erzeugen),
-können Sie ein vollständiges Installations-zip erstellen, das extrahiert und an Ort und Stelle ausgeführt werden kann:
+o amb Gradle:
+
+    ./gradlew updater
+
+Si tens problemes en compilar un instal·lador complet (Java14 i versions posteriors poden generar errors de compilació d'izpack relacionats amb pack200),
+pots compilar un zip d'instal·lació complet que es pot descomprimir i executar in situ:
 
      ant zip-linux
      ant zip-freebsd
      ant zip-macos
      ant zip-windows
 
-Führen Sie 'ant' ohne Argumente aus, um andere Build-Optionen zu sehen.
+Executa 'ant' sense arguments per veure altres opcions de compilació.
 
-Um ein eigenständiges Debian-Paket für Debian/Ubuntu ohne externe Jetty/Tomcat-Abhängigkeiten zu erstellen:
-```bash
-ant buildDeb
-```
-
-Dies erstellt ein eigenständiges `.deb`-Paket, das die gebündelten Jetty- und Tomcat-Bibliotheken ohne externe Abhängigkeiten enthält.
-
-
-Um ein AppImage für Linux zu erstellen:
+Per compilar un AppImage per a Linux:
 ```bash
 ant buildAppImage
 ```
 
-Siehe [tools/appimage/README.md](tools/appimage/README.md) für Details.
+Consulta [tools/appimage/README.md](tools/appimage/README.md) per als detalls.
 
+Per compilar un paquet Debian autònom per a Debian/Ubuntu sense dependències externes de Jetty/Tomcat:
+```bash
+ant buildDeb
+```
 
-Weitere Informationen zum Ausführen von I2P in Docker finden Sie unter [docker/README.md](docker/README.md)
+Això crea un paquet `.deb` autònom que inclou les biblioteques de Jetty i Tomcat incloses. Només requereix l'entorn d'execució d'OpenJDK (instal·lat automàticament mitjançant el gestor de paquets).
 
+Per executar-ho a Docker, consulta [docker/README.md](docker/README.md)
 
-## Kontaktinformationen
+## Informació de contacte
 
-Brauchen Sie Hilfe? Besuchen Sie den IRC-Kanal #saltR im I2P-IRC-Netzwerk
+Necessites ajuda? Visita el canal d'IRC #saltR a la xarxa d'IRC d'I2P
 
-Fehlerberichte: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues oder https://github.com/I2PPlus/i2pplus/issues
+Informes d'errors: https://github.com/I2PPlus/i2pplus/issues
 
-## Lizenzen
+## Llicències
 
-I2P+ ist unter AGPL v.3 lizenziert.
+I2P+ està llicenciat sota l'AGPL v.3.
 
-Für die verschiedenen Unterkomponentenlizenzen siehe: [README.md](docs/LICENSES.md)
+Per a les diverses llicències dels subcomponents, consulta: [README.md](docs/LICENSES.md)
 
-## Siehe auch
+## Vegeu també
 
-### Dokumentation
+### Documentació
 
-- [docs/README.md](docs/README.md) - Vollständiger Dokumentationsindex
-- [docs/INSTALL.md](docs/INSTALL.md) - Installationsanleitung
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless-Installation (Konsolenmodus)
-- [docs/HACKING.md](docs/HACKING.md) - Entwicklerhandbuch und Build-Systeme
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Quellbaumlayout und wo etwas zu finden ist
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Laufzeit-Debugging mit JDWP und anderen Tools
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-Sitzungsverbote mit nftables verwalten
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Drittanbieterlizenzen
-- [docs/history.txt](docs/history.txt) - Vollständiges Änderungsprotokoll
+- [docs/README.md](docs/README.md) - Índex complet de documentació
+- [docs/INSTALL.md](docs/INSTALL.md) - Guia d'instal·lació
+- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Instal·lació headless (mode consola)
+- [docs/HACKING.md](docs/HACKING.md) - Guia per a desenvolupadors i sistemes de compilació
+- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Estructura de l'arbre de codi font i on trobar-hi les coses
+- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Vista general de l'arbre de codi font del router
+- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Vista general de l'arbre de codi font de la biblioteca principal
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Depuració en temps d'execució amb JDWP i altres eines
+- [docs/THEMING.md](docs/THEMING.md) - Sistema de temes de la consola i de les aplicacions web
+- [docs/LICENSES.md](docs/LICENSES.md) - Llicències de tercers
+- [docs/history.txt](docs/history.txt) - Registre complet de canvis
 
-### Sub-projects
+### Subprojectes
 
-- [apps/README.md](apps/README.md) - Anwendungsübersicht
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Adressbuch-Anwendung
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktop-GUI-Anwendung
+- [apps/README.md](apps/README.md) - Visió general de les aplicacions
+- [apps/addressbook/README.md](apps/addressbook/README.md) - Aplicació de llibreta d'adreces
+- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Aplicació d'interfície gràfica d'escriptori
 - [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent-Client
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P Tunnel-Anwendung
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Bildgenerierungswerkzeuge
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP-Server
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin-Überwachungsbibliothek
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimale Streaming-Bibliothek
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200-Komprimierung
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy-Skripte
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router-Konsole
+- [apps/i2psnark/README.md](apps/i2psnark/README.md) - Client BitTorrent I2PSnark
+- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Aplicació de túnels d'I2P
+- [apps/imagegen/README.md](apps/imagegen/README.md) - Eines de generació d'imatges
+- [apps/jetty/README.md](apps/jetty/README.md) - Servidor HTTP Jetty
+- [apps/jrobin/README.md](apps/jrobin/README.md) - Biblioteca de monitoratge JRobin
+- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Biblioteca de streaming mínima
+- [apps/pack200/README.md](apps/pack200/README.md) - Compressió Pack200
+- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Scripts de proxy
+- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Consola del router
 - [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Streaming-Bibliothek
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS-Server
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P-E-Mail-Client
-- [apps/systray/README.md](apps/systray/README.md) - System-Tray-Anwendung
-- [core/README.md](core/README.md) - Core-Bibliotheksdokumentation
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Native JNI-Bibliothek für Kryptographie (GMP)
+- [apps/streaming/README.md](apps/streaming/README.md) - Biblioteca de streaming
+- [apps/susidns/README.md](apps/susidns/README.md) - Servidor DNS
+- [apps/susimail/README.md](apps/susimail/README.md) - Client de correu d'I2P
+- [apps/systray/README.md](apps/systray/README.md) - Aplicació de safata del sistema
+- [core/README.md](core/README.md) - Documentació de la biblioteca principal
+- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Biblioteca JNI nativa per a criptografia (GMP)
 
-### MISC
+### Miscel·lània
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-Sitzungsverbote mit nftables verwalten
-- [installer/resources/README.md](installer/resources/README.md) - Gebündelte Installer-Ressourcen
-- [tools/scripts/README.md](tools/scripts/README.md) - Hilfsskripte für Entwicklung und Verwaltung
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Validierungs- und Testskripte
-
-
-
-- [docker/README.md](docker/README.md) - I2P+ in Docker ausführen
-
+- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Gestió de les restriccions de sessió d'I2P amb nftables
+- [installer/resources/README.md](installer/resources/README.md) - Recursos de l'instal·lador inclosos
+- [tools/scripts/README.md](tools/scripts/README.md) - Scripts utilitaris per al desenvolupament i l'administració
+- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Scripts de validació i proves

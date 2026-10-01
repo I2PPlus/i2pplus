@@ -13,13 +13,18 @@ See also: [Project README](../README.md)
 ### Translated READMEs
 
 - [README-ar.md](README-ar.md) - Arabic
+- [README-az.md](README-az.md) - Azerbaijani
 - [README-bn.md](README-bn.md) - Bengali
 - [README-bo.md](README-bo.md) - Tibetan
+- [README-ca.md](README-ca.md) - Catalan
 - [README-cs.md](README-cs.md) - Czech
+- [README-da.md](README-da.md) - Danish
 - [README-de.md](README-de.md) - German
 - [README-el.md](README-el.md) - Greek
 - [README-es.md](README-es.md) - Spanish
+- [README-et.md](README-et.md) - Estonian
 - [README-fa.md](README-fa.md) - Persian
+- [README-fi.md](README-fi.md) - Finnish
 - [README-fr.md](README-fr.md) - French
 - [README-he.md](README-he.md) - Hebrew
 - [README-hi.md](README-hi.md) - Hindi
@@ -28,12 +33,18 @@ See also: [Project README](../README.md)
 - [README-it.md](README-it.md) - Italian
 - [README-ja.md](README-ja.md) - Japanese
 - [README-ko.md](README-ko.md) - Korean
+- [README-nb.md](README-nb.md) - Norwegian (Bokmål)
 - [README-nl.md](README-nl.md) - Dutch
 - [README-pl.md](README-pl.md) - Polish
+- [README-ps.md](README-ps.md) - Pashto
 - [README-pt.md](README-pt.md) - Portuguese
 - [README-ro.md](README-ro.md) - Romanian
 - [README-ru.md](README-ru.md) - Russian
+- [README-sl.md](README-sl.md) - Slovak
+- [README-sv.md](README-sv.md) - Swedish
+- [README-sw.md](README-sw.md) - Swahili
 - [README-th.md](README-th.md) - Thai
+- [README-tl.md](README-tl.md) - Filipino
 - [README-tr.md](README-tr.md) - Turkish
 - [README-uk.md](README-uk.md) - Ukrainian
 - [README-ur.md](README-ur.md) - Urdu

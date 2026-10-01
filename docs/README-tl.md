@@ -10,157 +10,153 @@
 
 [<img src="../apps/routerconsole/resources/icons/flags_svg/ar.svg" width="24" height="18" title="العربية">](README-ar.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/bn.svg" width="24" height="18" title="বাংলা">](README-bn.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/xt.svg" width="24" height="18" title="བོད་ཡིག">](README-bo.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/cz.svg" width="24" height="18" title="Čeština">](README-cs.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/de.svg" width="24" height="18" title="Deutsch">](README-de.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/gr.svg" width="24" height="18" title="Ελληνικά">](README-el.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/es.svg" width="24" height="18" title="Español">](README-es.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ir.svg" width="24" height="18" title="فارسی">](README-fa.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/fr.svg" width="24" height="18" title="Français">](README-fr.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/il.svg" width="24" height="18" title="עברית">](README-he.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/in.svg" width="24" height="18" title="हिन्दी">](README-hi.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/hu.svg" width="24" height="18" title="Magyar">](README-hu.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/id.svg" width="24" height="18" title="Bahasa Indonesia">](README-id.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/it.svg" width="24" height="18" title="Italiano">](README-it.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/jp.svg" width="24" height="18" title="日本語">](README-ja.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/kr.svg" width="24" height="18" title="한국어">](README-ko.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/nl.svg" width="24" height="18" title="Nederlands">](README-nl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/pl.svg" width="24" height="18" title="Polski">](README-pl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/pt.svg" width="24" height="18" title="Português">](README-pt.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ro.svg" width="24" height="18" title="Română">](README-ro.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ru.svg" width="24" height="18" title="Русский">](README-ru.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/th.svg" width="24" height="18" title="ภาษาไทย">](README-th.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/tr.svg" width="24" height="18" title="Türkçe">](README-tr.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ua.svg" width="24" height="18" title="Українська">](README-uk.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/pk.svg" width="24" height="18" title="اردو">](README-ur.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/vn.svg" width="24" height="18" title="Tiếng Việt">](README-vi.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/cn.svg" width="24" height="18" title="中文">](README-zh.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/az.svg" width="24" height="18" title="Azerbaijani">](README-az.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/lang_ca.svg" width="24" height="18" title="Català">](README-ca.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/dk.svg" width="24" height="18" title="Dansk">](README-da.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ee.svg" width="24" height="18" title="Eesti">](README-et.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/ph.svg" width="24" height="18" title="Filipino">](README-tl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/fi.svg" width="24" height="18" title="Suomi">](README-fi.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/no.svg" width="24" height="18" title="Norsk (bokmål)">](README-nb.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/af.svg" width="24" height="18" title="پښتو">](README-ps.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/sk.svg" width="24" height="18" title="Slovenčina">](README-sl.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/se.svg" width="24" height="18" title="Svenska">](README-sv.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/tz.svg" width="24" height="18" title="Kiswahili">](README-sw.md) [<img src="../apps/routerconsole/resources/icons/flags_svg/gb.svg" width="24" height="18" title="English">](../README.md)
 
-Dies ist der Quellcode des Soft-Forks der Java-Implementierung von I2P.
+Ito ang source code para sa soft-fork ng Java na implementasyon ng I2P.
 
-Neueste Version: https://i2pplus.github.io/
+Pinakabagong release: https://i2pplus.github.io/
 
-## Installation
+## Pag-iinstall
 
-Siehe [INSTALL.md](docs/INSTALL.md) oder https://i2pplus.github.io/ für Installationsanweisungen.
+Tingnan ang [INSTALL.md](docs/INSTALL.md) o https://i2pplus.github.io/ para sa mga tagubilin sa pag-iinstall.
 
-### Hinweis zum Windows-Installer
+### Tala tungkol sa Windows installer
 
-Bei Java > 1.8 oder alternativen Distributionen (AdoptOpenJDK usw.) kann der Installer-Exe mit "Java not found" oder "invalid/corrupt" Fehlern fehlschlagen. Workaround: Extrahieren Sie install.jar aus der Exe und führen Sie `java -jar install.jar` über die Kommandozeile aus.
+Sa Java > 1.8 o mga alternatibong distribusyon (AdoptOpenJDK, atbp.), maaaring mabigo ang installer exe na may "Java not found" o "invalid/corrupt" na mga error. Solusyon: i-extract ang install.jar mula sa exe at patakbuhin ang `java -jar install.jar` mula sa command line.
 
-## Dokumentation
+## Dokumentasyon
 
 https://geti2p.net/how
 
 FAQ: https://geti2p.net/faq
 
 API: https://i2pplus.github.io/javadoc/
-oder führen Sie 'ant javadoc' aus und starten Sie dann bei build/javadoc/index.html
+o patakbuhin ang 'ant javadoc' tapos magsimula sa build/javadoc/index.html
 
-## Wie man beiträgt / Bei I2P entwickeln
+## Paano mag-ambag / Mag-hack sa I2P+
 
-Bitte überprüfen Sie [HACKING.md](docs/HACKING.md) und andere Dokumente im docs-Verzeichnis.
+Pakitingnan ang [HACKING.md](docs/HACKING.md) at iba pang mga dokumento sa docs directory.
 
-## Pakete aus dem Quellcode erstellen
+## Pagbuo ng mga package mula sa source
 
-Um den Entwicklungszweig aus der Quellcodeverwaltung zu erhalten: https://github.com/I2PPlus/i2pplus/
+Para makuha ang development branch mula sa source control: https://github.com/I2PPlus/i2pplus
 
-### Voraussetzungen
+### Mga kinakailangan
 
-- Java SDK (vorzugsweise Oracle/Sun oder OpenJDK) 1.8.0 oder höher
-  - Bestimmte Subsysteme für eingebettete Systeme (core, router, mstreaming, streaming, i2ptunnel)
-- Apache Ant 1.9.8 oder höher
-- Die xgettext-, msgfmt- und msgmerge-Tools aus dem GNU gettext-Paket installiert
-  http://www.gnu.org/software/gettext/
-- Die Build-Umgebung muss ein UTF-8-Gebiet verwenden.
-- Für Debian-Paket-Builds: `dpkg-deb`- und `fakeroot`-Pakete (über Ihren Paketmanager)
+- Java SDK 1.8.0 o mas mataas
+- Apache Ant 1.9.8 o mas mataas
+- Ang mga tool na xgettext, msgfmt, at msgmerge na naka-install mula sa GNU gettext package
+  sa pamamagitan ng iyong package manager o http://www.gnu.org/software/gettext/
+- Dapat gumamit ng UTF-8 locale ang build environment.
+- Para sa mga build ng Debian package: mga package na `dpkg-deb` at `fakeroot` (sa pamamagitan ng iyong package manager)
 
-### Ant-Build-Prozess
+### Proseso ng pagbuo gamit ang Ant
 
-Führen Sie auf x86-Systemen Folgendes aus (dies wird mit IzPack4 erstellt):
+Sa mga system na x86, patakbuhin ang sumusunod (ito ay bubuuin gamit ang IzPack4):
 
     ant pkg
 
-Auf Nicht-x86-Systemen verwenden Sie stattdessen eine der folgenden Optionen:
+Sa mga hindi-x86, gumamit ng isa sa mga sumusunod sa halip:
 
     ant installer-linux
     ant installer-freebsd
     ant installer-osx
     ant installer-windows
 
-Wenn Sie mit IzPack5 erstellen möchten, laden Sie es herunter von: http://izpack.org/downloads/
-installieren Sie es dann, und führen Sie dann den/die folgenden Befehl(e) aus:
+Kung nais mong bumuo gamit ang IzPack5, i-download mula sa: http://izpack.org/downloads/ at pagkatapos
+i-install ito, at pagkatapos patakbuhin ang mga sumusunod na utos:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
 
-Um ein unsigniertes Update für eine bestehende Installation zu erstellen, führen Sie aus:
+Para bumuo ng hindi naka-sign na update para sa umiiral na pag-iinstall, patakbuhin:
 
     ant updater
 
-Wenn Sie Probleme beim Erstellen eines vollständigen Installers haben (Java14 und später können Build-Fehler für izpack bezüglich pack200 erzeugen),
-können Sie ein vollständiges Installations-zip erstellen, das extrahiert und an Ort und Stelle ausgeführt werden kann:
+o gamit ang Gradle:
+
+    ./gradlew updater
+
+Kung mayroon kang problema sa pagbuo ng kumpletong installer (maaaring magbigay ng mga build error ang Java14 at pataas para sa izpack na may kinalaman sa pack200),
+maaari kang bumuo ng kumpletong installation zip na maaaring i-extract at patakbuhin sa mismong lugar:
 
      ant zip-linux
      ant zip-freebsd
      ant zip-macos
      ant zip-windows
 
-Führen Sie 'ant' ohne Argumente aus, um andere Build-Optionen zu sehen.
+Patakbuhin ang 'ant' nang walang mga argumento para makita ang iba pang mga opsyon sa pagbuo.
 
-Um ein eigenständiges Debian-Paket für Debian/Ubuntu ohne externe Jetty/Tomcat-Abhängigkeiten zu erstellen:
-```bash
-ant buildDeb
-```
-
-Dies erstellt ein eigenständiges `.deb`-Paket, das die gebündelten Jetty- und Tomcat-Bibliotheken ohne externe Abhängigkeiten enthält.
-
-
-Um ein AppImage für Linux zu erstellen:
+Para bumuo ng AppImage para sa Linux:
 ```bash
 ant buildAppImage
 ```
 
-Siehe [tools/appimage/README.md](tools/appimage/README.md) für Details.
+Tingnan ang [tools/appimage/README.md](tools/appimage/README.md) para sa mga detalye.
 
+Para bumuo ng self-contained na Debian package para sa Debian/Ubuntu nang walang mga external na dependency sa Jetty/Tomcat:
+```bash
+ant buildDeb
+```
 
-Weitere Informationen zum Ausführen von I2P in Docker finden Sie unter [docker/README.md](docker/README.md)
+Nagbibigay ito ng self-contained na `.deb` na package na may kasamang nakabundleng Jetty at Tomcat na mga library. Kinakailangan lamang ang OpenJDK runtime (awtomatikong nai-install sa pamamagitan ng package manager).
 
+Para patakbuhin sa Docker, tingnan ang [docker/README.md](docker/README.md)
 
-## Kontaktinformationen
+## Impormasyon sa pakikipag-ugnayan
 
-Brauchen Sie Hilfe? Besuchen Sie den IRC-Kanal #saltR im I2P-IRC-Netzwerk
+Kailangan ng tulong? Bisitahin ang IRC channel #saltR sa I2P IRC network
 
-Fehlerberichte: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues oder https://github.com/I2PPlus/i2pplus/issues
+Mga ulat ng bug: https://github.com/I2PPlus/i2pplus/issues
 
-## Lizenzen
+## Mga Lisensya
 
-I2P+ ist unter AGPL v.3 lizenziert.
+Ang I2P+ ay lisensyado sa ilalim ng AGPL v.3.
 
-Für die verschiedenen Unterkomponentenlizenzen siehe: [README.md](docs/LICENSES.md)
+Para sa iba't ibang lisensya ng mga sub-component, tingnan: [README.md](docs/LICENSES.md)
 
-## Siehe auch
+## Tingnan din
 
-### Dokumentation
+### Dokumentasyon
 
-- [docs/README.md](docs/README.md) - Vollständiger Dokumentationsindex
-- [docs/INSTALL.md](docs/INSTALL.md) - Installationsanleitung
-- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless-Installation (Konsolenmodus)
-- [docs/HACKING.md](docs/HACKING.md) - Entwicklerhandbuch und Build-Systeme
-- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Quellbaumlayout und wo etwas zu finden ist
-- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Laufzeit-Debugging mit JDWP und anderen Tools
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-Sitzungsverbote mit nftables verwalten
-- [docs/THEMING.md](docs/THEMING.md) - Console and webapp theming system
-- [docs/LICENSES.md](docs/LICENSES.md) - Drittanbieterlizenzen
-- [docs/history.txt](docs/history.txt) - Vollständiges Änderungsprotokoll
+- [docs/README.md](docs/README.md) - Kumpletong index ng dokumentasyon
+- [docs/INSTALL.md](docs/INSTALL.md) - Gabay sa pag-iinstall
+- [docs/INSTALL-headless.md](docs/INSTALL-headless.md) - Headless (console mode) na pag-iinstall
+- [docs/HACKING.md](docs/HACKING.md) - Gabay sa pag-develop at mga sistema ng pagbuo
+- [docs/DIRECTORIES.md](docs/DIRECTORIES.md) - Ayos ng source tree at kung saan makakahanap ng mga bagay
+- [router/java/src/net/i2p/README.md](router/java/src/net/i2p/README.md) - Pangkalahatang-ideya ng source tree ng router
+- [core/java/src/net/i2p/README.md](core/java/src/net/i2p/README.md) - Pangkalahatang-ideya ng source tree ng core library
+- [docs/DEBUGGING.md](docs/DEBUGGING.md) - Runtime debugging gamit ang JDWP at iba pang mga tool
+- [docs/THEMING.md](docs/THEMING.md) - Sistema ng theming ng console at webapp
+- [docs/LICENSES.md](docs/LICENSES.md) - Mga lisensya ng third-party
+- [docs/history.txt](docs/history.txt) - Kumpletong changelog
 
-### Sub-projects
+### Mga sub-proyek
 
-- [apps/README.md](apps/README.md) - Anwendungsübersicht
-- [apps/addressbook/README.md](apps/addressbook/README.md) - Adressbuch-Anwendung
-- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktop-GUI-Anwendung
+- [apps/README.md](apps/README.md) - Pangkalahatang-ideya ng mga application
+- [apps/addressbook/README.md](apps/addressbook/README.md) - Application na addressbook
+- [apps/desktopgui/README.md](apps/desktopgui/README.md) - Desktop GUI na application
 - [apps/i2pcontrol/README.md](apps/i2pcontrol/README.md) - I2P Control API
-- [apps/i2psnark/README.md](apps/i2psnark/README.md) - I2PSnark BitTorrent-Client
-- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - I2P Tunnel-Anwendung
-- [apps/imagegen/README.md](apps/imagegen/README.md) - Bildgenerierungswerkzeuge
-- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP-Server
-- [apps/jrobin/README.md](apps/jrobin/README.md) - JRobin-Überwachungsbibliothek
-- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimale Streaming-Bibliothek
-- [apps/pack200/README.md](apps/pack200/README.md) - Pack200-Komprimierung
-- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Proxy-Skripte
-- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router-Konsole
+- [apps/i2psnark/README.md](apps/i2psnark/README.md) - BitTorrent client na I2PSnark
+- [apps/i2ptunnel/README.md](apps/i2ptunnel/README.md) - Application na I2P Tunnel
+- [apps/imagegen/README.md](apps/imagegen/README.md) - Mga tool sa paggawa ng larawan
+- [apps/jetty/README.md](apps/jetty/README.md) - Jetty HTTP server
+- [apps/jrobin/README.md](apps/jrobin/README.md) - Library sa pagsubaybay ng JRobin
+- [apps/ministreaming/README.md](apps/ministreaming/README.md) - Minimal na streaming library
+- [apps/pack200/README.md](apps/pack200/README.md) - Pack200 compression
+- [apps/proxyscript/README.md](apps/proxyscript/README.md) - Mga script sa proxy
+- [apps/routerconsole/README.md](apps/routerconsole/README.md) - Router console
 - [apps/sam/README.md](apps/sam/README.md) - Simple Anonymous Messaging
-- [apps/streaming/README.md](apps/streaming/README.md) - Streaming-Bibliothek
-- [apps/susidns/README.md](apps/susidns/README.md) - DNS-Server
-- [apps/susimail/README.md](apps/susimail/README.md) - I2P-E-Mail-Client
-- [apps/systray/README.md](apps/systray/README.md) - System-Tray-Anwendung
-- [core/README.md](core/README.md) - Core-Bibliotheksdokumentation
-- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Native JNI-Bibliothek für Kryptographie (GMP)
+- [apps/streaming/README.md](apps/streaming/README.md) - Streaming library
+- [apps/susidns/README.md](apps/susidns/README.md) - DNS server
+- [apps/susimail/README.md](apps/susimail/README.md) - Kliyente ng email sa I2P
+- [apps/systray/README.md](apps/systray/README.md) - Application sa system tray
+- [core/README.md](core/README.md) - Dokumentasyon ng core library
+- [installer/lib/jbigi/README.md](installer/lib/jbigi/README.md) - Native na JNI library para sa cryptography (GMP)
 
-### MISC
+### Iba pa
 
-- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - I2P-Sitzungsverbote mit nftables verwalten
-- [installer/resources/README.md](installer/resources/README.md) - Gebündelte Installer-Ressourcen
-- [tools/scripts/README.md](tools/scripts/README.md) - Hilfsskripte für Entwicklung und Verwaltung
-- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Validierungs- und Testskripte
-
-
-
-- [docker/README.md](docker/README.md) - I2P+ in Docker ausführen
-
+- [docs/i2p-sessionban-nftables.md](docs/i2p-sessionban-nftables.md) - Pamamahala ng mga I2P session ban gamit ang nftables
+- [installer/resources/README.md](installer/resources/README.md) - Nakabundleng mga resource ng installer
+- [tools/scripts/README.md](tools/scripts/README.md) - Mga utility script para sa pag-unlad at administrasyon
+- [tools/scripts/tests/README.md](tools/scripts/tests/README.md) - Mga script sa pagpapatunay at pagsubok
