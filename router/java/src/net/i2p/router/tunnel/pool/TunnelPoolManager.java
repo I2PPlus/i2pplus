@@ -19,6 +19,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
+import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.PeerTestJob;
 import net.i2p.router.peermanager.PeerManagerFacadeImpl;
 import net.i2p.router.TunnelPoolSettings;
@@ -126,6 +127,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // The following are for TestJob
         long[] RATES = RateConstants.SHORT_TERM_RATES;
         long[] TEST_RATES = RateConstants.TUNNEL_TEST_RATES;
+        ctx.statManager().createRequiredRateStat("tunnel.fastTierProbe", "Fast tier peers probed", "Tunnels [Participating]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
         ctx.statManager().createRequiredRateStat("tunnel.testFailedCompletelyTime", "Time to complete fail for tunnel test (max 60s)", "Tunnels", RATES);
@@ -942,6 +944,136 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _context.jobQueue().addJob(new BootstrapPool(_context, this, _inboundExploratory));
         if (!_context.getBooleanProperty("router.tunnel.disableSlowTunnelRemoval")) {
             _context.jobQueue().addJob(new RemoveSlowTunnelsJob(_context, this));
+        }
+        _context.jobQueue().addJob(new FastTierProbeJob(_context, this));
+    }
+
+    /**
+     *  Background reachability probe over the peers a client pool would
+     *  provisionally use as a first hop.
+     *
+     *  <p>Selection samples a bounded slice of the high-capacity tier
+     *  ({@link net.i2p.router.peermanager.ProfileOrganizer#maxCandidateSample}),
+     *  so an unconnectable peer can sit in that tier indefinitely and be drawn
+     *  into builds that fail at the first hop. Nothing else records
+     *  reachability cheaply: send-failure strikes only accumulate on tunnels
+     *  already in use, and a peer that never answers produces no reply to
+     *  blame. This job supplies that missing signal by pre-connecting to a
+     *  bounded slice and letting
+     *  {@link TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
+     *
+     *  <p>Sweep, pause, sweep: each pass probes at most
+     *  {@link #PROBE_BATCH} peers and then waits {@link #PROBE_INTERVAL}, so the
+     *  whole tier is covered over several passes without a burst of outbound
+     *  traffic. Only peers we are not already talking to are probed — a peer
+     *  with recent successful traffic has fresh evidence already, and probing
+     *  it would spend the budget re-confirming what we know.
+     *
+     *  @since 0.9.71+
+     */
+    static class FastTierProbeJob extends JobImpl {
+        private final TunnelPoolManager _mgr;
+        /** Peers probed per pass. Bounds the burst so a pass is not a flood. */
+        static final int PROBE_BATCH = 128;
+        /** Delay between passes, giving the probed slice time to be used or fail. */
+        static final long PROBE_INTERVAL = 10 * 60 * 1000L;
+        /** Wait before the first pass, so startup builds are not competing with it. */
+        private static final long STARTUP_DELAY = 5 * 60 * 1000L;
+        /**
+         *  A peer that succeeded this recently already has evidence, so skip it.
+         *  Deliberately shorter than the pre-connect cooldown: this is about
+         *  traffic freshness, not about whether we already probed it.
+         */
+        static final long RECENTLY_ACTIVE_MS = 2 * 60 * 1000L;
+
+        FastTierProbeJob(RouterContext ctx, TunnelPoolManager mgr) {
+            super(ctx);
+            _mgr = mgr;
+            getTiming().setStartAfter(ctx.clock().now() + STARTUP_DELAY);
+        }
+
+        @Override
+        public String getName() {return "Fast Tier Reachability Probe";}
+
+        @Override
+        public void runJob() {
+            if (_mgr.isShutdown()) {return;}
+            // Enabled unless explicitly disabled: getBooleanProperty() is false
+            // when unset, which would switch the sweep off by default.
+            if (!Boolean.parseBoolean(getContext().getProperty("router.tunnel.probeFastTier", "true"))) {return;}
+            if (!Boolean.parseBoolean(getContext().getProperty(ClientPeerSelector.PROP_PRECONNECT_OPTIMIZE, "true"))) {return;}
+            try {
+                int probed = probeBatch();
+                getContext().statManager().addRateData("tunnel.fastTierProbe", probed);
+                if (_mgr._log.shouldDebug()) {
+                    _mgr._log.debug("Fast tier probe pass: " + probed + " of " + PROBE_BATCH + " slots used");
+                }
+            } catch (RuntimeException re) {
+                _mgr._log.error("Fast tier probe pass failed", re);
+            } finally {
+                // Reschedule even after a failure, so one bad pass does not end
+                // reachability monitoring for the life of the process.
+                getTiming().setStartAfter(getContext().clock().now() + PROBE_INTERVAL);
+                getContext().jobQueue().addJob(this);
+            }
+        }
+
+        /**
+         *  Probe one bounded slice of the provisionally-selectable fast tier.
+         *
+         *  <p>Selection asks for {@code howMany} candidates through the same
+         *  {@code selectHighCapacityPeers} entry point, so the population here is
+         *  exactly the one a client pool would draw from — not the whole tier.
+         *  Asking for more than the batch size and then filtering by recent
+         *  activity is what makes the pass fill its budget instead of coming
+         *  back nearly empty once busy peers are excluded.
+         *
+         *  @return how many peers were actually probed
+         */
+        private int probeBatch() {
+            RouterContext ctx = getContext();
+            Set<Hash> candidates = new HashSet<>(PROBE_BATCH * 2);
+            // Oversample so that filtering out recently-active peers still
+            // leaves a full batch; the selector's own cap is what it is because
+            // it is drawn once per build, not because the pool is this small.
+            ctx.profileOrganizer().selectHighCapacityPeers(PROBE_BATCH * 2, null, candidates);
+            if (candidates.isEmpty()) {
+                // No high-capacity peers yet (early startup); fall back to the
+                // fast tier so the sweep still covers whatever is selectable.
+                ctx.profileOrganizer().selectFastPeers(PROBE_BATCH * 2, null, candidates);
+            }
+            if (candidates.isEmpty()) {return 0;}
+            long now = ctx.clock().now();
+            int probed = 0;
+            for (Hash peer : candidates) {
+                if (probed >= PROBE_BATCH) {break;}
+                if (isRecentlyActive(ctx, peer, now)) {continue;}
+                TunnelPeerSelector.preConnectTo(ctx, peer);
+                ClientPeerSelector.recordPreConnect(peer, now);
+                probed++;
+            }
+            return probed;
+        }
+
+        /**
+         *  Whether this peer has traffic recent enough that probing adds nothing.
+         *
+         *  <p>Either direction counts: a peer that has heard from us recently is
+         *  demonstrably reachable, and one we reached recently is equally known
+         *  good. Both save the budget for peers whose state is actually stale.
+         *
+         *  @param ctx the router context
+         *  @param peer the peer to test
+         *  @param now current time in ms
+         *  @return true if recent traffic means we should skip probing
+         */
+        static boolean isRecentlyActive(RouterContext ctx, Hash peer, long now) {
+            PeerProfile profile = ctx.profileOrganizer().getProfile(peer);
+            if (profile == null) {return true;}
+            long lastSuccess = profile.getLastSendSuccessful();
+            if (lastSuccess > 0 && now - lastSuccess < RECENTLY_ACTIVE_MS) {return true;}
+            long lastHeard = profile.getLastHeardFrom();
+            return lastHeard > 0 && now - lastHeard < RECENTLY_ACTIVE_MS;
         }
     }
 
