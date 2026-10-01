@@ -518,7 +518,7 @@ class ProfileOrganizerRenderer {
             // Direct-link RTT. Empty means not measured, which is distinct from
             // measured-and-slow: never probed, so no evidence either way.
             int firstHopRtt = prof.getFirstHopRtt(_context.clock().now());
-            buf.append("</td><td data-sort=").append(firstHopRtt < 0 ? -1 : firstHopRtt).append(">");
+            buf.append("</td><td").append(firstHopRtt < 0 ? "" : " data-sort=" + firstHopRtt).append(">");
             if (firstHopRtt > 0) {buf.append(firstHopRtt).append("ms");}
             else {buf.append("<span>&ensp;</span>");}
             float lossRatio = prof.getLossRatio();
