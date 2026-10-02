@@ -222,7 +222,7 @@ public class ConfigUIHelper extends HelperBase {
         //{ "mg", "mg", "Malagasy", null },
         //{ "pt_BR", "br", "Português", "Brazil" },
         //{ "tk", "tm", "Türkmen", null },
-        { "zh_TW", "tw", "Chinese 中文（台灣）", "Taiwan" },
+        { "zh_TW", "tw", "Taiwanese 台灣", null },
     };
 
     /**
