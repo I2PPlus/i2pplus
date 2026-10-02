@@ -54,6 +54,24 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final CopyOnWriteArrayList<I2PThread> _handlerThreads;
     private final int _defaultMaxPctTunnels;
     private final int _startupMaxPctTunnels;
+    /**
+     *  Wall-clock ms at which some pool last published an incomplete LeaseSet,
+     *  or 0 if never. Used as a decaying signal rather than a live counter so a
+     *  pool destroyed while incomplete cannot leave the relief stuck on.
+     */
+    private volatile long _lastIncompleteLeaseSet;
+    /** Wall-clock ms of the last participation-share log, for rate limiting. */
+    private volatile long _lastShareLimitLog;
+    /** Build success at or above which no build-success relief is applied. */
+    static final double SHARE_RELIEF_TOP = 0.60;
+    /** Build success at or below which relief reaches its full factor of 2. */
+    static final double SHARE_RELIEF_BOTTOM = 0.40;
+    /** Relief factor applied while any pool has published an incomplete LeaseSet. */
+    static final double INCOMPLETE_LEASESET_RELIEF = 2.0;
+    /** How long an incomplete-LeaseSet observation keeps relief active, in ms. */
+    static final long INCOMPLETE_LEASESET_WINDOW_MS = 5L * 60 * 1000;
+    /** Minimum ms between participation-share limit log lines. */
+    private static final long SHARE_LIMIT_LOG_INTERVAL_MS = 60L * 1000;
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
     private static final String PROP_SLOW_TUNNEL_THRESHOLD = "router.tunnel.slowThreshold";
     private static final String PROP_SLOW_TUNNEL_MIN = "router.tunnel.slowThresholdMin";
@@ -1848,11 +1866,21 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public Set<Hash> selectPeersInTooManyTunnels() {
         Set<Hash> rv = new HashSet<>();
         long uptime = _context.router().getUptime();
-        long max = uptime > 30*60*1000L ? _defaultMaxPctTunnels : _startupMaxPctTunnels;
+        int basePct = uptime > 30*60*1000L ? _defaultMaxPctTunnels : _startupMaxPctTunnels;
 
-        // Increase threshold under low tunnel build success
+        long now = _context.clock().now();
         double buildSuccess = _context.profileOrganizer().getTunnelBuildSuccess();
-        if (isFirewalled() || buildSuccess < 0.40) {max *= 2;}
+        boolean firewalled = isFirewalled();
+        boolean incompleteLeaseSet = hasRecentIncompleteLeaseSet(now);
+
+        // Relief factor: the previous behaviour doubled the limit outright below
+        // 0.40 build success, and never gave any relief between 0.40 and 1.0.
+        // The graded scale keeps both endpoints identical and only fills that
+        // gap, so a router sitting at 0.55 with thin pools stops being held to
+        // the full open-port percentage. A pool that cannot fill its LeaseSet is
+        // a stronger signal still, and takes precedence.
+        double relief = participationRelief(firewalled, buildSuccess, incompleteLeaseSet);
+        int max = participationShareLimit(basePct, relief);
 
         // Count exploratory and client tunnels separately
         ObjectCounterUnsafe<Hash> lcExp = new ObjectCounterUnsafe<>();
@@ -1864,19 +1892,143 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         // Check percentage limits separately for each tunnel type
         for (Hash h : lcExp.objects()) {
             if (lcExp.count(h) > 0 && exploratoryCount > 0 &&
-                (lcExp.count(h) + 1) * 100 / (exploratoryCount + 1) > max) {
+                exceedsShareLimit(lcExp.count(h), exploratoryCount, max)) {
                 rv.add(h);
             }
         }
 
         for (Hash h : lcClient.objects()) {
             if (lcClient.count(h) > 0 && clientCount > 0 &&
-                (lcClient.count(h) + 1) * 100 / (clientCount + 1) > max) {
+                exceedsShareLimit(lcClient.count(h), clientCount, max)) {
                 rv.add(h);
             }
         }
 
+        logShareLimit(now, basePct, max, buildSuccess, firewalled, incompleteLeaseSet, rv.size());
         return rv;
+    }
+
+    /**
+     *  The relief factor actually applied to the participation share, combining
+     *  the three inputs. Pure, so the precedence between them is testable
+     *  without a router.
+     *
+     *  <p>Firewalled and incomplete-LeaseSet are both hard signals that the first
+     *  hop pool is too narrow, and either one takes full relief regardless of
+     *  what aggregate build success says. Build success is the weakest signal
+     *  and only applies when neither of the others fires.
+     *
+     *  @param firewalled whether the router is firewalled
+     *  @param buildSuccess build success ratio, or 1.0 when unknown
+     *  @param incompleteLeaseSet whether a pool published an incomplete LeaseSet recently
+     *  @return the multiplier to apply
+     *  @since 0.9.71+
+     */
+    static double participationRelief(boolean firewalled, double buildSuccess,
+                                      boolean incompleteLeaseSet) {
+        if (firewalled) {return 2.0;}
+        if (incompleteLeaseSet) {return INCOMPLETE_LEASESET_RELIEF;}
+        return buildSuccessRelief(buildSuccess);
+    }
+
+    /**
+     *  Graded relief factor for the per-peer participation share, from tunnel
+     *  build success. Pure: no state, no clock, no logging.
+     *
+     *  <p>Returns 1.0 (no relief) at or above {@link #SHARE_RELIEF_TOP} and 2.0
+     *  (the pre-existing full relief) at or below {@link #SHARE_RELIEF_BOTTOM},
+     *  interpolating linearly between. A build success of 1.0 is passed in when
+     *  no data exists yet, which yields no relief and so leaves the startup
+     *  thresholds to govern.
+     *
+     *  @param buildSuccess build success ratio in [0,1], or 1.0 when unknown
+     *  @return the multiplier to apply to the participation share percentage
+     *  @since 0.9.71+
+     */
+    static double buildSuccessRelief(double buildSuccess) {
+        if (buildSuccess >= SHARE_RELIEF_TOP) {return 1.0;}
+        if (buildSuccess <= SHARE_RELIEF_BOTTOM) {return 2.0;}
+        double span = SHARE_RELIEF_TOP - SHARE_RELIEF_BOTTOM;
+        return 1.0 + (SHARE_RELIEF_TOP - buildSuccess) / span;
+    }
+
+    /**
+     *  Apply a relief factor to a participation share percentage, never returning
+     *  less than the un-relieved base.
+     *
+     *  @param basePct the un-relieved percentage
+     *  @param relief the multiplier from {@link #buildSuccessRelief}
+     *  @return the percentage to compare peer shares against
+     *  @since 0.9.71+
+     */
+    static int participationShareLimit(int basePct, double relief) {
+        int scaled = (int) Math.round(basePct * relief);
+        return Math.max(basePct, scaled);
+    }
+
+    /**
+     *  Whether a peer's share of tunnel participation exceeds the limit. Pure.
+     *
+     *  <p>The {@code +1} on both numerator and denominator is the historical
+     *  form. It equals the unsmoothed integer share exactly whenever the total
+     *  is at least ten times the count, and inflates it for smaller pools (a
+     *  peer alone in a pool of two reads 66, not 50). It is reproduced here
+     *  rather than tidied because changing it would change which peers are
+     *  excluded. Integer division truncates, so the comparison is against the
+     *  truncated percentage -- callers relying on an exact boundary must
+     *  respect that.
+     *
+     *  @param count tunnels this peer participates in
+     *  @param total tunnels across all peers in this class
+     *  @param maxPct the limit returned by {@link #participationShareLimit}
+     *  @return whether the peer should be excluded
+     *  @since 0.9.71+
+     */
+    static boolean exceedsShareLimit(int count, int total, int maxPct) {
+        return (count + 1) * 100 / (total + 1) > maxPct;
+    }
+
+    /**
+     *  Note that some pool published an incomplete LeaseSet, which is a direct
+     *  signal that first-hop supply is too narrow to fill one.
+     *
+     *  @param now current time in ms
+     *  @since 0.9.71+
+     */
+    void noteIncompleteLeaseSet(long now) {
+        _lastIncompleteLeaseSet = now;
+    }
+
+    /**
+     *  Whether an incomplete-LeaseSet observation is recent enough to still
+     *  justify relaxing the participation share. Decays on its own, so it cannot
+     *  be left stuck on by a pool that was destroyed mid-renewal.
+     *
+     *  @param now current time in ms
+     *  @return whether relief applies
+     *  @since 0.9.71+
+     */
+    boolean hasRecentIncompleteLeaseSet(long now) {
+        long seen = _lastIncompleteLeaseSet;
+        return seen > 0 && now - seen < INCOMPLETE_LEASESET_WINDOW_MS;
+    }
+
+    /**
+     *  Rate-limited log of the participation share limit actually in force, so a
+     *  surprising exclusion count can be read against the reason for it instead
+     *  of guessed at.
+     */
+    private void logShareLimit(long now, int basePct, int max, double buildSuccess,
+                               boolean firewalled, boolean incompleteLeaseSet, int excluded) {
+        if (!_log.shouldInfo()) {return;}
+        long last = _lastShareLimitLog;
+        if (now - last < SHARE_LIMIT_LOG_INTERVAL_MS) {return;}
+        _lastShareLimitLog = now;
+        _log.info("Participation share limit " + basePct + "% -> " + max + "%"
+                  + " (buildSuccess=" + Math.round(buildSuccess * 100) + "%"
+                  + ", firewalled=" + firewalled
+                  + ", incompleteLeaseSet=" + incompleteLeaseSet
+                  + "), excluding " + excluded + " peers");
     }
 
     /**

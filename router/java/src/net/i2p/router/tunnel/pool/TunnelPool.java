@@ -3178,6 +3178,10 @@ public class TunnelPool {
                 _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
             }
             _hasIncompleteLeaseSet = true;
+            // Tell the pool manager: a pool that cannot fill its LeaseSet is a
+            // direct signal that first-hop supply is too narrow, and it relaxes
+            // the per-peer participation share for a few minutes.
+            _manager.noteIncompleteLeaseSet(_context.clock().now());
             if (leases.isEmpty()) {return null;}
         } else {
             _hasIncompleteLeaseSet = false;
