@@ -1,3 +1,67 @@
+2026-10-02 dr|z3d
+  * Console: Translation status listed every language with an empty
+    name and code and an unknown flag; languages are named and coded
+    again
+  * Peermanager: The profiles page first hop RTT column was almost
+    entirely empty, because a latency was only recorded when a tunnel
+    build happened to use that peer. It is now measured from live
+    sessions as they run, kept for four hours, and a peer is only
+    dropped from the fast tiers on latency once most of the tier has
+    been measured
+
+2026-10-01 dr|z3d
+  * Tunnel: Fast tier peers judged by direct link latency instead of
+    tunnel round trip, demoted when a reachability probe fails and
+    swept when unreachable; peers we successfully send to skip the
+    probe, and probing runs harder while the router is young; build
+    send failures no longer reported as next hop timeouts; a build's
+    latency no longer stamped onto every peer in the tunnel; first
+    hop pre-connect now runs whenever the chosen hop has no
+    transport session, instead of inferring that from the build
+    timeout, which skipped it for most builds
+  * Peermanager: First hop RTT persisted across restarts, tunnel
+    test description corrected, low latency judged on the direct
+    link to the peer rather than tunnel test time, and settled on a
+    fixed 100ms floor after half the average proved tighter than the
+    network it was judging
+  * Router: A LeaseSet no longer re-advertises the same set of
+    tunnels over and over when the pool has nothing fresher to give;
+    re-mints that cannot extend the copy are held off and asked for
+    replacement tunnels instead. The warning for a LeaseSet with
+    less life left than the pool will publish is measured against
+    that pool floor rather than the nominal lease length, so it
+    reports a real fault instead of firing on every LeaseSet
+  * Console: Measured first hop RTT shown on the profiles page;
+    peers with no measurement left without a sort tag
+  * Installer: Translation bundles loaded by name so legacy locale
+    codes resolve on JDK 8
+  * Translation: Complete Urdu, Thai, Tagalog and Pashto added and
+    exposed in the console, login and eepsite
+
+2026-09-30 dr|z3d
+  * Tunnel.pool: Candidate sample widened to 256 and configurable via
+    profileOrganizer.minCandidateSample; a gateway that misses its
+    first build is dropped from the fast tiers at once instead of
+    after three strikes; accepted first hop logged with the quality
+    tier it was taken from; next hop contact outcomes summarised
+    instead of logged per build; tunnel lifetime capped at 10m plus
+    1m grace so a LeaseSet cannot outlive its tunnels
+  * Tunnel: Superseded test round returns its permits, so the builds
+    in flight gauge no longer leaks; refusal reasons split into
+    in-flight gates and per-pool refusals; min retest gap raised to
+    120s; expire log names the gateway and direction; pool birth and
+    expiry bookkeeping demoted to debug
+  * I2PTunnel: Server handler pools sized and grown from each pool's
+    own queue depth and active count; per-client request error
+    warnings rate limited
+  * Peermanager: We are never selected as our own tunnel hop; self
+    exclusion rationale corrected
+  * Translation: Swahili and Hebrew completed and exposed in the
+    console, login and eepsite; Catalan completed and added to the
+    language selectors, which now sort by language name; Slovak and
+    Bangla installer resources added; SusiDNS strings filled in
+    across all locales
+
 2026-09-29 dr|z3d
   * Tuner: Activity window keyed on peer supply, not build success;
     ample fast peers pin the floor, startup grace exempts; null
