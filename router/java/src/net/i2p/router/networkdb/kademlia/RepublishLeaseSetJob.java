@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
@@ -63,6 +64,28 @@ public class RepublishLeaseSetJob extends JobImpl {
     private static final long MIN_RESCHEDULE = 60L * 1000;
 
     /**
+     *  How long before a LeaseSet expires we start insisting the pool holds
+     *  genuinely fresh tunnels, rather than minting whatever is on hand.
+     *
+     *  <p>The mint used to be purely reactive: expiry came into range, we asked
+     *  the pool for a copy and signed whatever it held.  Since a LeaseSet's date
+     *  is the <em>earliest</em> lease end, one near-floor lease caps the whole
+     *  copy, which is how published sets ended up at 76-120s.  Starting the
+     *  supply check this far ahead leaves time to wait for a build.
+     *
+     *  <p>Three minutes is chosen against {@code EXPIRY_WINDOW} (4m) so the check
+     *  engages one interval before the renew path does, and against
+     *  {@link #EMERGENCY_REMINT_WINDOW} (2m) so there is a full minute of
+     *  pre-flight before the mint is allowed to become thin.
+     *
+     * @since 0.9.71+
+     */
+    private static final long LEASE_SUPPLY_WINDOW = 3L * 60 * 1000;
+
+    /** Consecutive supply checks a destination may defer before minting anyway. */
+    private static final int MAX_SUPPLY_DEFERRALS = 4;
+
+    /**
      *  The pool's own lease-eligibility floor, mirrored from
      *  {@code TunnelPool.LEASE_MIN_REMAINING_MS}. A tunnel with less than this
      *  remaining is refused for publication, so a LeaseSet minted from a healthy
@@ -85,6 +108,10 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     /** Last short-expiry warning per destination, for rate limiting. */
     private static final ConcurrentHashMap<Hash, Long> _lastShortExpiryLog = new ConcurrentHashMap<>();
+
+    /** Consecutive supply-check deferrals per destination, bounded so a pool that
+     *  never reaches the freshness threshold cannot defer its LeaseSet forever. */
+    private static final ConcurrentHashMap<Hash, Integer> _supplyDeferrals = new ConcurrentHashMap<>();
 
     /**
      *  Whether a LeaseSet expiry is short enough to indicate the inbound pool
@@ -723,6 +750,44 @@ public class RepublishLeaseSetJob extends JobImpl {
         boolean emergency = timeUntilExpiry <= EMERGENCY_REMINT_WINDOW;
         boolean unchanged = sameLeaseTunnels(storedLeaseSet, fresh);
         boolean ineffective = unchanged && !extendsExpiry;
+        // Supply pre-flight: inside the pre-flight window, do not sign a copy
+        // built from near-floor leases if the pool is not stocked with fresh
+        // ones and we still have time to wait.  Skipped inside the emergency
+        // window, where a thin copy beats a lapsed one -- the pre-flight must
+        // never become the reason a LeaseSet dies.
+        boolean inSupplyWindow = timeUntilExpiry <= LEASE_SUPPLY_WINDOW;
+        boolean supplyExhausted = _supplyDeferrals.getOrDefault(_dest, 0) >= MAX_SUPPLY_DEFERRALS;
+        // Inside the supply window, make the pool's build and prune targets
+        // answer to lease-material count rather than tunnel count. This is the
+        // coupling the pool otherwise lacks: it can sit at full active size
+        // while holding nothing advertiseable, because churn only prunes once
+        // the pool is over target and skips anything recently active.
+        if (inSupplyWindow && pool != null) {
+            if (!emergency && !supplyExhausted && countFreshLeases(fresh, now) < required) {
+                pool.requestLeaseSurge(required);
+            } else {
+                // Mint is under way, satisfied, or we are inside the emergency
+                // window where any pool will do: stop asking for a surge so the
+                // pool returns to plain active-count upkeep.
+                pool.clearLeaseSurge();
+            }
+        }
+        if (inSupplyWindow && !emergency && !supplyExhausted && pool != null
+                && !poolHasAnyViableLease(fresh, now)) {
+            Integer seen = _supplyDeferrals.merge(_dest, 1, Integer::sum);
+            pool.requestFreshTunnelBuild();
+            if (_log.shouldInfo()) {
+                _log.info("Waiting on fresh tunnels for " + name + " [" + shortHash() +
+                          "] — pool is not stocked for a mint in " +
+                          (timeUntilExpiry / 1000) + "s (attempt " + seen + "/" +
+                          MAX_SUPPLY_DEFERRALS + ")");
+            }
+            scheduleRepublish(MISSING_LEASESET_RETRY);
+            return;
+        }
+        if (!inSupplyWindow || emergency) {
+            _supplyDeferrals.remove(_dest);
+        }
         long sinceLastIneffective = now - _lastIneffectiveRemint.getOrDefault(_dest, 0L);
         long backoff = ineffectiveRemintDelay(timeUntilExpiry);
         if (ineffective && sinceLastIneffective < backoff) {
@@ -829,6 +894,29 @@ public class RepublishLeaseSetJob extends JobImpl {
      *  @param now current time in ms
      *  @return the number of leases with at least a viability window remaining
      */
+    /**
+     *  Whether the pool can sign anything at all right now.
+     *
+     *  <p>Deliberately a starvation test, not a sufficiency test. Being below the
+     *  target lease count is an ordinary, already-handled condition: {@link
+     *  #shouldRemint} defers on it and falls back to a thin copy after a bounded
+     *  number of attempts. Re-deciding it here with a second threshold and a
+     *  second counter meant the two mechanisms shadowed each other, and a pool
+     *  that was merely one lease short could defer indefinitely.
+     *
+     *  <p>So the question here is strictly "is there anything publishable at
+     *  all", read from the pool's own LeaseSet -- the same input the surrounding
+     *  decision already uses -- rather than from raw tunnel state.
+     *
+     * @param fresh the pool's current LeaseSet, may be null
+     * @param now current time in ms
+     * @return true when the pool has at least one lease still viable for a re-mint
+     * @since 0.9.71+
+     */
+    private boolean poolHasAnyViableLease(LeaseSet fresh, long now) {
+        return countFreshLeases(fresh, now) > 0;
+    }
+
     private int countFreshLeases(LeaseSet ls, long now) {
         if (ls == null) {
             return 0;

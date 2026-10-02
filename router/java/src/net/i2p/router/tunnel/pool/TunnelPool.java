@@ -410,6 +410,30 @@ public class TunnelPool {
      *  the pool with UNTESTED tunnels that block the addTunnel cap.
      */
     private volatile long _lastDeficitBuildTime;
+
+    /**
+     *  Lease-material target override, or 0 when none is active.
+     *
+     *  <p>A pool normally replenishes toward {@link #getEffectiveTarget()}: enough
+     *  tunnels to serve traffic. That is the right target most of the time, but it
+     *  is blind to a second question. A pool can sit at full size while holding
+     *  nothing with enough life left to be advertised -- {@code pruneExcessTunnels}
+     *  only prunes once the pool exceeds target, and it skips anything recently
+     *  active, so a near-expiry tunnel is retained indefinitely and never counted
+     *  as fresh by {@code countFreshTunnels}. The result is an inbound pool that
+     *  looks healthy by count and cannot sign a LeaseSet worth publishing.
+     *
+     *  <p>This field bridges that gap. {@code RepublishLeaseSetJob} raises it when
+     *  a mint is imminent and the pool cannot supply viable leases, so build demand
+     *  and pruning both shift from "enough tunnels" to "enough advertiseable ones"
+     *  for exactly as long as the mint needs, then release it. The alternative is
+     *  raising {@link #LEASE_MIN_REMAINING_MS} permanently, which buys the same
+     *  effect by making every tunnel past a fixed age ineligible -- sustained extra
+     *  build load on a path that is already denied most of its demand.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile int _leaseSurgeTarget;
     /**
      *  Normal minimum interval between ensureSufficientTunnels() runs for a
      *  healthy or partially-degraded pool (usable tunnels &gt; 1).
@@ -502,11 +526,34 @@ public class TunnelPool {
      *  @since 0.9.71+
      */
     static final long MAX_TUNNEL_LIFETIME_MS = 11L * 60 * 1000;
-    /** Tunnels must have at least this much remaining life to be published:
-     * the lease ends {@link #LEASE_SAFETY_MARGIN} before the tunnel expires
-     * and the lease end is floored 60s out, so a tunnel closer to death than
-     * this would produce a lease ending after the gateway stops routing. */
-    private static final long LEASE_MIN_REMAINING_MS = 2L * 60 * 1000;
+    /**
+     *  Tunnels must have at least this much remaining life to be published.
+     *
+     *  <p>The lease ends {@link #LEASE_SAFETY_MARGIN} before the tunnel expires
+     *  and the lease end is floored 60s out, so a tunnel closer to death than this
+     *  would produce a lease ending after the gateway stops routing.
+     *
+     *  <p>Raised from two minutes to three. This is the admission gate for
+     *  LeaseSet leases, and it is what pins published LeaseSets near the floor:
+     *  a LeaseSet's staleness is judged on its <em>latest</em> lease (see
+     *  {@code LeaseSet.isCurrent()}), so admitting near-dead tunnels let one
+     *  two-minute lease cap the advertised lifetime of the whole set. Client
+     *  destinations were publishing LeaseSets at 76-120s rather than the 600s the
+     *  {@code leaseMaxDuration} cap allows.
+     *
+     *  <p>Three minutes is the compromise that still admits tunnels: a tunnel
+     *  lives 11 minutes, so it is eligible for roughly the first 8. Ten minutes
+     *  would only be satisfiable in a tunnel's first minute and would starve the
+     *  pools. {@link #getLeaseViabilityWindow} is the matching window the
+     *  re-mint side already uses.
+     *
+     *  <p>Effect on pool size: the floor is also an eligibility gate, so a pool
+     *  short on fresh tunnels now publishes a <em>smaller</em> LeaseSet rather
+     *  than one full of short-lived leases.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long LEASE_MIN_REMAINING_MS = 3L * 60 * 1000;
 
     /**
      * Early expiry time for pruned tunnels.
@@ -1542,7 +1589,56 @@ public class TunnelPool {
      *
      *  @return the number of tunnels to build and keep
      */
+    /**
+     *  Raise the pool's target to lease-material terms until {@link
+     *  #clearLeaseSurge} is called.
+     *
+     *  @param count how many advertiseable tunnels the imminent mint needs
+     * @since 0.9.71+
+     */
+    public void requestLeaseSurge(int count) {
+        if (count > 0 && count > _leaseSurgeTarget) {
+            _leaseSurgeTarget = count;
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> lease surge to " + count);
+            }
+        }
+    }
+
+    /**
+     *  Drop any lease-material target override. Called once the mint is published
+     *  or its window passes, so the pool returns to plain active-count upkeep.
+     *
+     * @since 0.9.71+
+     */
+    public void clearLeaseSurge() {
+        if (_leaseSurgeTarget != 0) {
+            _leaseSurgeTarget = 0;
+            if (_log.shouldDebug()) {
+                _log.debug(toString() + " -> lease surge cleared");
+            }
+        }
+    }
+
+    /** The active lease-material target, or 0 when no surge is in force. */
+    int getLeaseSurgeTarget() {return _leaseSurgeTarget;}
+
+    /**
+     *  The target build and prune both aim at: the surge while one is active,
+     *  otherwise the ordinary active-count target.
+     */
     int getEffectiveTarget() {
+        return Math.max(getActiveTarget(), _leaseSurgeTarget);
+    }
+
+    /**
+     *  The tunnel count the pool maintains, never less than 2 per direction
+     *  regardless of the configured quantity, unless the pool is a ping pool
+     *  or expressly zero-hop.
+     *
+     *  @return the number of tunnels to build and keep
+     */
+    private int getActiveTarget() {
         if (isPingPool() || _settings.isZeroHop()) {return _settings.getQuantity();}
         return Math.max(2, _settings.getQuantity());
     }
@@ -1777,6 +1873,14 @@ public class TunnelPool {
             int currentSize = _tunnels.size();
             int pruneThreshold = computePruneThreshold(target, isServerPool());
             pruneOverBudget(toRemove, isServerPool(), now, currentSize, pruneThreshold);
+            // While a lease surge is in force the pool may be at, or under, its
+            // active target yet still short of advertiseable tunnels. Prune the
+            // soonest-expiring of those so the replacement builds have somewhere
+            // to land and the pool does not sit full of leases it cannot publish.
+            int leaseSurge = _leaseSurgeTarget;
+            if (leaseSurge > 0) {
+                pruneForLeaseSurge(toRemove, leaseSurge, now);
+            }
             markFailedTunnelsForEarlyExpiry(toRemove, target, now);
         } finally {_tunnelsLock.unlock();}
 
@@ -1974,6 +2078,54 @@ public class TunnelPool {
             scheduleEarlyExpiry((PooledTunnelCreatorConfig) info, now, 0, true);
             toRemove.add(info);
             toPrune--;
+        }
+    }
+
+    /**
+     *  Schedule early expiry for the least lease-material GOOD tunnels while a
+     *  lease surge is active.
+     *
+     *  <p>Counts tunnels with at least {@link #LEASE_MIN_REMAINING_MS} of life
+     *  left -- the same bar {@code selectLeaseTunnels} applies -- and prunes the
+     *  soonest-expiring offenders until that many advertiseable tunnels remain, or
+     *  there is nothing left to give. Tunnels that are {@code isRecentlyActive()}
+     *  are never pruned: they may still be carrying client data, and evicting
+     *  those to gain fresher replacements would trade LeaseSet lifetime for a data
+     *  path outage, which is the worse failure.
+     *
+     *  <p>Deliberately one-sided. This only ever gives up tunnels that cannot be
+     *  advertised; it never raises the target itself, so a pool already stocked
+     *  with fresh tunnels is left alone.
+     *
+     *  @param toRemove accumulates pruned tunnels, never null
+     *  @param leaseSurge how many advertiseable tunnels are needed
+     *  @param now current time in ms
+     *  @since 0.9.71+
+     */
+    private void pruneForLeaseSurge(List<TunnelInfo> toRemove, int leaseSurge, long now) {
+        long viable = now + LEASE_MIN_REMAINING_MS;
+        List<TunnelInfo> candidates = new ArrayList<>();
+        int advertiseable = 0;
+        for (TunnelInfo info : _tunnels) {
+            if (info == null || toRemove.contains(info)) {continue;}
+            if (info.getTestStatus() != TunnelTestStatus.GOOD
+                || !(info instanceof PooledTunnelCreatorConfig)) {continue;}
+            if (info.getExpiration() >= viable) {
+                advertiseable++;
+            } else if (!((PooledTunnelCreatorConfig) info).isRecentlyActive()) {
+                candidates.add(info);
+            }
+        }
+        if (advertiseable >= leaseSurge || candidates.isEmpty()) {return;}
+        // Soonest expiry first: the least useful tunnels are the ones closest to
+        // death, and giving those up costs the least.
+        Collections.sort(candidates, EXPIRATION_COMPARATOR);
+        int wanted = leaseSurge - advertiseable;
+        for (int i = 0; i < candidates.size() && wanted > 0; i++) {
+            PooledTunnelCreatorConfig cfg = (PooledTunnelCreatorConfig) candidates.get(i);
+            scheduleEarlyExpiry(cfg, now, 0, true);
+            toRemove.add(candidates.get(i));
+            wanted--;
         }
     }
 

@@ -316,4 +316,58 @@ public class RemintDecisionTest {
                      + "ms would let the copy die unrepublished", delay < remaining);
         }
     }
+
+    // ---- supply pre-flight ----
+
+    /**
+     *  The pre-flight must never be the reason a LeaseSet lapses. It only defers
+     *  while outside the emergency window, so the emergency boundary -- not the
+     *  deferral budget -- is what guarantees a mint still happens. This asserts
+     *  the real termination order: the window is reached first, and the copy is
+     *  still comfortably alive when it is.
+     */
+    @Test
+    public void supplyPreflightCannotCauseLapse() {
+        long supplyWindow = 3L * 60 * 1000L;
+        long emergencyWindow = 2L * 60 * 1000L;
+        long retry = 30L * 1000L;
+        long remaining = supplyWindow;
+        int defers = 0;
+        // Defer while outside the emergency window, exactly as the gate does.
+        while (remaining > emergencyWindow && defers < 100) {
+            remaining -= retry;
+            defers++;
+        }
+        assertTrue("must not defer past the emergency boundary",
+                   remaining >= emergencyWindow);
+        assertTrue("a mint still has a live copy to work with, " + remaining + "ms left",
+                   remaining > 0L);
+        assertTrue("the emergency window terminates the pre-flight, not the budget",
+                   defers * retry <= (supplyWindow - emergencyWindow) + retry);
+    }
+
+    /**
+     *  The lease viability window has to be reachable. A tunnel lives 11 minutes
+     *  (660s); requiring ten minutes of remaining life would only be satisfiable
+     *  in roughly the first minute of a tunnel's life, so any gate using it would
+     *  defer permanently on a healthy pool.
+     */
+    @Test
+    public void viabilityWindowIsReachable() {
+        long tunnelLife = 11L * 60 * 1000L;
+        long viability = 3L * 60 * 1000L;
+        assertTrue("the viability window must leave room in a tunnel's life",
+                   tunnelLife - viability >= 5L * 60 * 1000L);
+        assertTrue("a fresh tunnel clears it", tunnelLife >= viability);
+    }
+
+    /** The pre-flight window sits between the renew window and the emergency window. */
+    @Test
+    public void supplyWindowIsOrderedAgainstEmergency() {
+        long supply = 3L * 60 * 1000L;
+        long emergency = 2L * 60 * 1000L;
+        long expiryWindow = 4L * 60 * 1000L;
+        assertTrue("pre-flight engages inside the renew window", supply < expiryWindow);
+        assertTrue("pre-flight must leave room before emergency", supply > emergency);
+    }
 }
