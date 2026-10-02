@@ -1457,6 +1457,11 @@ public class ProfileOrganizer {
         }
         if (best <= 0) {return false;}
         profile.setFirstHopRtt(best, now);
+        // Same stat the pre-connect path records, so the graph reflects the
+        // sampler too. Without it the console only ever showed measurements
+        // taken at pre-connect, which is the smaller of the two sources and the
+        // one that used to read a freshly created session as zero.
+        _context.statManager().addRateData("tunnel.firstHopRtt", best);
         profile.recalculateLowLatency();
         return true;
     }
