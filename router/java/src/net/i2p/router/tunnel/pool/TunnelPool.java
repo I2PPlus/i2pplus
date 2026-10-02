@@ -2103,19 +2103,8 @@ public class TunnelPool {
      *  @since 0.9.71+
      */
     private void pruneForLeaseSurge(List<TunnelInfo> toRemove, int leaseSurge, long now) {
-        long viable = now + LEASE_MIN_REMAINING_MS;
-        List<TunnelInfo> candidates = new ArrayList<>();
-        int advertiseable = 0;
-        for (TunnelInfo info : _tunnels) {
-            if (info == null || toRemove.contains(info)) {continue;}
-            if (info.getTestStatus() != TunnelTestStatus.GOOD
-                || !(info instanceof PooledTunnelCreatorConfig)) {continue;}
-            if (info.getExpiration() >= viable) {
-                advertiseable++;
-            } else if (!((PooledTunnelCreatorConfig) info).isRecentlyActive()) {
-                candidates.add(info);
-            }
-        }
+        List<TunnelInfo> candidates = leaseSurgeCandidates(_tunnels, toRemove, now);
+        int advertiseable = countLeaseViableTunnels(_tunnels, toRemove, now);
         if (advertiseable >= leaseSurge || candidates.isEmpty()) {return;}
         // Soonest expiry first: the least useful tunnels are the ones closest to
         // death, and giving those up costs the least.
@@ -2127,6 +2116,61 @@ public class TunnelPool {
             toRemove.add(candidates.get(i));
             wanted--;
         }
+    }
+
+    /**
+     *  Tunnels a lease surge may schedule for early expiry: GOOD, past the lease
+     *  admission floor (so they can no longer be advertised), not already being
+     *  pruned, and not recently active.
+     *
+     *  <p>Split out from {@link #pruneForLeaseSurge} as a pure function because
+     *  this is the decision that can remove a tunnel from the pool, and it needs
+     *  to be testable without standing up a populated pool. Soonest-expiry-first
+     *  is applied by the caller, not here.
+     *
+     *  @param tunnels the pool's tunnels
+     * @param toRemove already-scheduled prunes, excluded
+     *  @param now current time in ms
+     *  @return prunable tunnels, in pool order
+     *  @since 0.9.71+
+     */
+    static List<TunnelInfo> leaseSurgeCandidates(List<TunnelInfo> tunnels,
+                                                  List<TunnelInfo> toRemove, long now) {
+        long viable = now + LEASE_MIN_REMAINING_MS;
+        List<TunnelInfo> candidates = new ArrayList<>();
+        if (tunnels == null) {return candidates;}
+        for (TunnelInfo info : tunnels) {
+            if (info == null || toRemove.contains(info)) {continue;}
+            if (info.getTestStatus() != TunnelTestStatus.GOOD
+                || !(info instanceof PooledTunnelCreatorConfig)) {continue;}
+            if (info.getExpiration() < viable
+                && !((PooledTunnelCreatorConfig) info).isRecentlyActive()) {
+                candidates.add(info);
+            }
+        }
+        return candidates;
+    }
+
+    /**
+     *  How many tunnels could still be advertised right now, on the same bar
+     *  {@link #selectLeaseTunnels} applies.
+     *
+     *  @param tunnels the pool's tunnels
+     *  @param toRemove already-scheduled prunes, excluded
+     *  @param now current time in ms
+     *  @return number of tunnels with lease admission remaining
+     *  @since 0.9.71+
+     */
+    static int countLeaseViableTunnels(List<TunnelInfo> tunnels,
+                                       List<TunnelInfo> toRemove, long now) {
+        long viable = now + LEASE_MIN_REMAINING_MS;
+        int count = 0;
+        if (tunnels == null) {return 0;}
+        for (TunnelInfo info : tunnels) {
+            if (info == null || toRemove.contains(info)) {continue;}
+            if (info.getExpiration() >= viable) {count++;}
+        }
+        return count;
     }
 
     /**
