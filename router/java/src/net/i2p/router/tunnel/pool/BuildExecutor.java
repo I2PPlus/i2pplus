@@ -1079,11 +1079,11 @@ public class BuildExecutor implements Runnable {
         StringBuilder buf = new StringBuilder(192);
         buf.append("Build expired unanswered: ");
         buf.append(cfg.isInbound() ? "inbound" : "outbound");
-        buf.append(", destination=").append(destination != null ? destination : "exploratory");
-        buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
+        buf.append(" [").append(destination != null ? destination : "exploratory");
+        buf.append("] ").append(length).append(length == 1 ? " hop" : " hops");
         for (int hop = 0; hop < length; hop++) {
             Hash peer = cfg.getPeer(hop);
-            buf.append("; hop ").append(hop);
+            buf.append("\n* Hop ").append(hop);
             if (hop == gatewayHop) {
                 buf.append(" (gateway)");
             }
