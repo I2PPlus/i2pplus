@@ -688,19 +688,10 @@ class ConstantPool {
             case 'B': case 'S': case 'C': case 'Z':
                 return CONSTANT_Integer;
             case 'L':
-                /*
-                switch (classRefs[0].stringValue()) {
-                case "java/lang/String":
-                    return CONSTANT_String;
-                case "java/lang/invoke/MethodHandle":
-                    return CONSTANT_MethodHandle;
-                case "java/lang/invoke/MethodType":
-                    return CONSTANT_MethodType;
-                default:  // java/lang/Object, etc.
-                    return CONSTANT_LoadableValue;
-                }
-                */
-                return CONSTANT_String;  // JDK 7 ConstantValue limited to String
+                // JVMS 4.7.2: a ConstantValue attribute may only be applied to a
+                // static final field of type int/long/float/double/String. Every
+                // primitive form is handled above, so 'L' can only be String.
+                return CONSTANT_String;
             }
             assert(false);
             return CONSTANT_None;
@@ -734,13 +725,6 @@ class ConstantPool {
         if (c2 != '(' && c1 == '(')  return S2_COMES_FIRST;
         if (p1 == null)  p1 = structureSignature(s1);
         if (p2 == null)  p2 = structureSignature(s2);
-        /*
-         // non-classes before classes (because there are fewer of them)
-         if (p1.length == 1 && p2.length > 1)  return S1_COMES_FIRST;
-         if (p2.length == 1 && p1.length > 1)  return S2_COMES_FIRST;
-         // all else being equal, use the same comparison as for Utf8 strings
-         return s1.compareTo(s2);
-         */
         if (p1.length != p2.length)  return p1.length - p2.length;
         int length = p1.length;
         for (int i = length; --i >= 0; ) {
@@ -1051,9 +1035,6 @@ class ConstantPool {
         protected String debugName;
         protected Entry[] cpMap;
         protected boolean flattenSigs;
-        protected Entry[] getMap() {
-            return cpMap;
-        }
         protected Index(String debugName) {
             this.debugName = debugName;
         }
@@ -1521,11 +1502,6 @@ class ConstantPool {
             }
         }
     }
-
-    static double percent(int num, int den) {
-        return (int)((10000.0*num)/den + 0.5) / 100.0;
-    }
-
     public static String tagName(int tag) {
         switch (tag) {
             case CONSTANT_Utf8:                 return "Utf8";
@@ -1597,12 +1573,6 @@ class ConstantPool {
         for (int i = 0; i < TAGS_IN_ORDER.length; i++) {
             TAG_ORDER[TAGS_IN_ORDER[i]] = (byte)(i+1);
         }
-        /*
-        System.out.println("TAG_ORDER[] = {");
-        for (int i = 0; i < TAG_ORDER.length; i++)
-            System.out.println("  "+TAG_ORDER[i]+",");
-        System.out.println("};");
-        */
     }
     static final byte[] NUMBER_TAGS = {
         CONSTANT_Integer, CONSTANT_Float, CONSTANT_Long, CONSTANT_Double

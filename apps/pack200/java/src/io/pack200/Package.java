@@ -137,11 +137,6 @@ class Package {
                                                  "SourceFile", "RUNH").layout();
         attrDefs = Collections.unmodifiableMap(ad);
     }
-
-    Version getDefaultClassVersion() {
-        return defaultClassVersion;
-    }
-
     /** Return the highest version number of all classes,
      *  or 0 if there are no classes.
      */
@@ -502,10 +497,6 @@ class Package {
             public String getName() {
                 return descriptor.nameRef.stringValue();
             }
-            public String getType() {
-                return descriptor.typeRef.stringValue();
-            }
-
             protected Entry[] getCPMap() {
                 return cpMap;
             }
@@ -1080,24 +1071,9 @@ class Package {
         String obvious = n.substring(0, cutoff)+".java";
         return obvious;
     }
-/*
-    static {
-        assert(getObviousSourceFile("foo").equals("foo.java"));
-        assert(getObviousSourceFile("foo/bar").equals("bar.java"));
-        assert(getObviousSourceFile("foo/bar$baz").equals("bar.java"));
-        assert(getObviousSourceFile("foo/bar#baz#1").equals("bar.java"));
-        assert(getObviousSourceFile("foo.bar.baz#1").equals("baz.java"));
-    }
-*/
-
     static Utf8Entry getRefString(String s) {
         return ConstantPool.getUtf8Entry(s);
     }
-
-    static LiteralEntry getRefLiteral(Comparable<?> s) {
-        return ConstantPool.getLiteralEntry(s);
-    }
-
     void stripAttributeKind(String what) {
         if (verbose > 0)
             Utils.log.info("Stripping "+what.toLowerCase()+" data and attributes...");

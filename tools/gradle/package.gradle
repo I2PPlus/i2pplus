@@ -93,32 +93,28 @@ task updaterCompact(type: Zip) {
 }
 
 // Pack200-compress lib jars and webapps in pkg-temp before zipping (mirrors ant pack200).
-// Needs the JDK 8 pack200 tool and GNU parallel, like the ant target.
+// Uses the in-tree io.pack200 fork rather than the JDK's pack200 tool, which was removed
+// in Java 14, so this works on any modern JDK. The same jar ships as lib/pack200.jar so
+// routers can unpack what we pack here. GNU parallel is used when installed but is no
+// longer required: tools/scripts/pack200.sh falls back to a serial loop.
 def rootDirAbs = rootDir.absolutePath
 def pack200MarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before"
 task pack200Updater(type: Exec) {
     group = 'package'
     description = 'Pack200-compress pkg-temp lib jars and webapps (mirrors ant pack200).'
     dependsOn prepUpdateCompact
-    commandLine 'sh', '-c', '''before=0; count=0;
-for f in __PKGDIR__/lib/*.jar __PKGDIR__/webapps/*war; do
-  before=$((before + $(wc -c < "$f"))); count=$((count+1));
-done &&
-b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))) &&
-echo "Pack200: Compressing $count files (${b_mb}MB)..." &&
-echo $before > __MARKER__ &&
-find __PKGDIR__/lib/*.jar __PKGDIR__/webapps/*war -type f | parallel '
-  mv {} {}.jar && pack200 --effort=5 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &&
-  rm -f {}.jar' &&
-after=0;
-for f in __PKGDIR__/lib/*.pack __PKGDIR__/webapps/*.pack; do
-  after=$((after + $(wc -c < "$f")));
-done &&
-saved=$((before - after)) &&
-a_mb=$(printf "%d.%02d" $((after/1000000)) $(((after%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))) &&
-echo "Pack200 done: $b_mb -> ${a_mb}MB (saved ${s_mb}MB)"'''
-        .replace('__PKGDIR__', pkgTmpDirAbs)
-        .replace('__MARKER__', pack200MarkerAbs)
+    dependsOn ':apps:pack200:jar'
+    workingDir rootDirAbs
+    commandLine 'sh', 'tools/scripts/pack200.sh'
+    environment 'MODE', 'compress'
+    environment 'JAVA', "${System.getProperty('java.home')}/bin/java"
+    environment 'PKGDIR', pkgTmpDirAbs
+    environment 'MARKER', pack200MarkerAbs
+    doFirst {
+        // Resolved here rather than at configuration time so the :apps:pack200:jar
+        // dependency above has already produced the file.
+        environment 'P200JAR', project(':apps:pack200').jar.archiveFile.get().asFile.absolutePath
+    }
 }
 
 task updater200Compact(type: Zip) {

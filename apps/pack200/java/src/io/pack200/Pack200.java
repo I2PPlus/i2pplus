@@ -28,8 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
+import java.lang.reflect.InvocationTargetException;
 import java.util.SortedMap;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -688,43 +687,45 @@ public abstract class Pack200 {
     private static final String PACK_PROVIDER = "io.pack200.Pack200.Packer";
     private static final String UNPACK_PROVIDER = "io.pack200.Pack200.Unpacker";
 
-    private static Class<?> packerImpl;
-    private static Class<?> unpackerImpl;
-
+    /**
+     * Instantiate the packer or unpacker, honouring an optional class-name
+     * override supplied in the given system property.
+     *
+     * <p>This used to read the property inside
+     * {@code AccessController.doPrivileged}, branching on
+     * {@code System.getSecurityManager()}. Both APIs are deprecated for removal,
+     * this fork never runs under a SecurityManager, and reading a system
+     * property needs no privilege at all - so the branch was dead weight that
+     * could only misbehave on a modern JDK. The two cached fields it consulted
+     * were never assigned, so the decision was always made here anyway.
+     *
+     * @param prop the system property naming an implementation class
+     * @return a new Packer or Unpacker
+     */
     private static synchronized Object newInstance(String prop) {
-        String implName = "(unknown)";
-        try {
-            Class<?> impl = (PACK_PROVIDER.equals(prop))? packerImpl: unpackerImpl;
-            if (impl == null) {
-                // The first time, we must decide which class to use.
-                if (System.getSecurityManager() == null) {
-                    implName = System.getProperty(prop, "");
-                } else {
-                    implName = AccessController.doPrivileged((PrivilegedAction<String>) () -> System.getProperty(prop, ""));
-                }
-                if (implName != null && !implName.isEmpty())
-                    impl = Class.forName(implName);
-                else if (PACK_PROVIDER.equals(prop))
-                    impl = io.pack200.PackerImpl.class;
-                else
-                    impl = io.pack200.UnpackerImpl.class;
+        String implName = System.getProperty(prop, "");
+        Class<?> impl;
+        if (!implName.isEmpty()) {
+            try {
+                impl = Class.forName(implName);
+            } catch (ClassNotFoundException e) {
+                throw new Error("Class not found: " + implName +
+                                ":\ncheck property " + prop +
+                                " in your properties file.", e);
             }
-            // We have a class.  Now instantiate it.
-            @SuppressWarnings("deprecation")
-            Object result = impl.newInstance();
-            return result;
-        } catch (ClassNotFoundException e) {
-            throw new Error("Class not found: " + implName +
-                                ":\ncheck property " + prop +
-                                " in your properties file.", e);
-        } catch (InstantiationException e) {
+        } else {
+            impl = PACK_PROVIDER.equals(prop) ? PackerImpl.class : UnpackerImpl.class;
+        }
+        try {
+            return impl.getDeclaredConstructor().newInstance();
+        } catch (InvocationTargetException e) {
+            throw new Error("Constructor threw for " + implName +
+                            ":\ncheck property " + prop +
+                            " in your properties file.", e.getCause());
+        } catch (ReflectiveOperationException e) {
             throw new Error("Could not instantiate: " + implName +
-                                ":\ncheck property " + prop +
-                                " in your properties file.", e);
-        } catch (IllegalAccessException e) {
-            throw new Error("Cannot access class: " + implName +
-                                ":\ncheck property " + prop +
-                                " in your properties file.", e);
+                            ":\ncheck property " + prop +
+                            " in your properties file.", e);
         }
     }
 

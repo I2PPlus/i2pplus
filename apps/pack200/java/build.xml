@@ -71,13 +71,71 @@
     </jar>
   </target>
 
+  <!-- Unit tests. Mirrors the junit.test target in the other app modules so
+       tools/scripts/run-tests.sh can drive this module the same way. No
+       clover/cobertura instrumentation here: the fork is third-party code that
+       the static-analysis configs already exclude. -->
+  <target name="junit.compileTest" depends="compile">
+    <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
+    <mkdir dir="${build}/testobj"/>
+    <javac srcdir="./test/junit" debug="true" deprecation="on"
+      source="${javac.version}" target="${javac.version}" release="${javac.release}"
+      includeAntRuntime="false" encoding="UTF-8" destdir="${build}/testobj">
+      <classpath>
+        <pathelement path="${javac.classpath}"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${build}"/>
+        <pathelement path="${src}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="junit.compileTest">
+    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <mkdir dir="${junit.reports.dir}/pack200/junit/"/>
+    <delete>
+      <fileset dir="${junit.reports.dir}/pack200/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+    </delete>
+    <property name="junit.home" value="${basedir}/../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="${basedir}/../../../tools/test/hamcrest"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <junit printsummary="withOutAndErr" fork="yes" showoutput="yes"
+      tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
+      <classpath>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${build}"/>
+        <pathelement location="${build}/testobj"/>
+        <pathelement path="${src}"/>
+      </classpath>
+      <batchtest todir="${junit.reports.dir}/pack200/junit/">
+        <fileset dir="./test/junit">
+          <include name="**/*Test.java"/>
+        </fileset>
+      </batchtest>
+      <formatter type="xml"/>
+    </junit>
+    <!-- junit stamps the real hostname into the XML; replace it so reports are stable -->
+    <property name="host.fakename" value="i2ptester"/>
+    <replaceregexp byline="true"
+      match="(hostname=)&quot;[^&quot;]+&quot;"
+      replace="\1&quot;${host.fakename}&quot;">
+      <fileset dir="${junit.reports.dir}/pack200/junit/"/>
+    </replaceregexp>
+  </target>
+
+  <target name="test" depends="junit.test"/>
+
   <target name="javadoc" depends="init">
     <mkdir dir="${build}/${javadoc}"/>
     <javadoc
       sourcepath="${src}"
       destdir="${build}/${javadoc}"
       packagenames="*"
-      use="true"
       access="package"
       splitindex="true"/>
   </target>

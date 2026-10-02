@@ -64,10 +64,6 @@ public class UnpackerImpl extends TLGlobals implements Pack200.Unpacker {
         return props;
     }
 
-    // Back-pointer to NativeUnpacker, when active.
-    Object _nunp;
-
-
     public String toString() {
         return Utils.getVersionString();
     }
@@ -102,22 +98,17 @@ public class UnpackerImpl extends TLGlobals implements Pack200.Unpacker {
                 if (verbose > 0)
                     Utils.log.info("Copying unpacked JAR file...");
                 Utils.copyJarFile(new JarInputStream(in0), out);
-            } else if (props.getBoolean(Utils.DEBUG_DISABLE_NATIVE)) {
-                (new DoUnpack()).run(in0, out);
-                in0.close();
-                Utils.markJarFile(out);
             } else {
-                try {
-                    (new NativeUnpack(this)).run(in0, out);
-                } catch (UnsatisfiedLinkError | NoClassDefFoundError ex) {
-                    // failover to java implementation
-                    (new DoUnpack()).run(in0, out);
-                }
+                // The original NativeUnpack path was removed: it needs a native
+                // "unpack" library that this Java-only fork never shipped, so every
+                // call raised UnsatisfiedLinkError and fell back here anyway. It also
+                // made System.loadLibrary fire on JDK 24+, emitting a restricted-method
+                // warning on every invocation.
+                (new DoUnpack()).run(in0, out);
                 in0.close();
                 Utils.markJarFile(out);
             }
         } finally {
-            _nunp = null;
             Utils.currentInstance.set(null);
         }
     }

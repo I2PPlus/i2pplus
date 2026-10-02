@@ -60,7 +60,6 @@ class Utils {
      * Disables use of native code, prefers the Java-coded implementation.
      * (installer only)
      */
-    static final String DEBUG_DISABLE_NATIVE = COM_PREFIX+"disable.native";
 
     /*
      * Property indicating that the unpacker should

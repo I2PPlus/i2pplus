@@ -113,14 +113,6 @@ class PopulationCoding implements CodingMethod {
     public void setUnfavoredCoding(CodingMethod unfavoredCoding) {
         this.unfavoredCoding = unfavoredCoding;
     }
-
-    public int favoredValueMaxLength() {
-        if (L == 0)
-            return Integer.MAX_VALUE;
-        else
-            return BandStructure.UNSIGNED5.setL(L).umax();
-    }
-
     public void resortFavoredValues() {
         Coding tc = (Coding) tokenCoding;
         // Make a local copy before reordering.

@@ -160,8 +160,10 @@ Configuration cache is enabled in `gradle.properties`. If you see "configuration
 - Each platform installer stages into its own directory; Ant shares one
   `pkg-temp` for everything and deletes it per target (`installer-all` in Ant
   is order-dependent)
-- `lib/pack200.jar` is not built (no Gradle module for pack200); the payload
-  and the launcher Class-Path still reference it for Ant parity
+- `lib/pack200.jar` is built by the `:apps:pack200` module and rides in the
+  update payload (ant parity with `prepupdateSmall`); the launcher
+  Class-Path references it too. `pack200Updater` compresses with that same
+  jar, so no JDK-provided `pack200` tool is needed.
 - The installer payload is seeded from `prepUpdate`, so its contents follow
   the fix-ups (no jars in `WEB-INF/lib`, clean locale trees)
 - Jetty runtime jars (vendored in `apps/jetty/jettylib/`) and the Tomcat

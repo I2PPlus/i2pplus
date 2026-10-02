@@ -78,11 +78,6 @@ class TLGlobals {
         bootstrapMethodEntries = new HashMap<>();
         props = new PropMap();
     }
-
-    SortedMap<String, String> getPropMap() {
-        return props;
-    }
-
     Map<String, Utf8Entry> getUtf8Entries() {
         return utf8Entries;
     }

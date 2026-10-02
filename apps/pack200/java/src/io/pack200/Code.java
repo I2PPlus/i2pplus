@@ -118,11 +118,6 @@ class Code extends Attribute.Holder {
     void setInstructionMap(int[] insnMap) {
         setInstructionMap(insnMap, insnMap.length);
     }
-
-    int[] getInstructionMap() {
-        return expandInstructionMap(getInsnMap());
-    }
-
     void addFixups(Collection<Fixups.Fixup> moreFixups) {
         if (fixups == null) {
             fixups = new Fixups(bytes);
@@ -333,13 +328,6 @@ class Code extends Attribute.Holder {
     Instruction instructionAt(int pc) {
         return Instruction.at(bytes, pc);
     }
-
-    static boolean flagsRequireCode(int flags) {
-        // A method's flags force it to have a Code attribute,
-        // if the flags are neither native nor abstract.
-        return (flags & (Modifier.NATIVE | Modifier.ABSTRACT)) == 0;
-    }
-
     public String toString() {
         return m+".Code";
     }
@@ -352,46 +340,4 @@ class Code extends Attribute.Holder {
     void setShort(int pc, int x) { Instruction.setShort(bytes, pc, x); }
     void setByte(int pc, int x)  { Instruction.setByte(bytes, pc, x); }
 
-/* TEST CODE ONLY
-    private boolean assertBCICodingsOK() {
-        boolean ok = true;
-        int len = java.lang.reflect.Array.getLength(insnMap);
-        int base = 0;
-        if (insnMap.getClass().getComponentType() == Byte.TYPE)
-            base = Byte.MIN_VALUE;
-        if (insnMap.getClass().getComponentType() == Short.TYPE)
-            base = Short.MIN_VALUE;
-        for (int i = -1, imax = getLength()+1; i <= imax; i++) {
-            int bci = i;
-            int enc = Math.min(-999, bci-1);
-            int dec = enc;
-            try {
-                enc = encodeBCI(bci);
-                dec = decodeBCI(enc);
-            } catch (RuntimeException ee) {
-                ee.printStackTrace();
-            }
-            if (dec == bci) {
-                //System.out.println("BCI="+bci+(enc<len?"":"   ")+" enc="+enc);
-                continue;
-            }
-            if (ok) {
-                for (int q = 0; q <= 1; q++) {
-                    StringBuffer sb = new StringBuffer();
-                    sb.append("bci "+(q==0?"map":"del")+"["+len+"] = {");
-                    for (int j = 0; j < len; j++) {
-                        int mapi = ((Number)java.lang.reflect.Array.get(insnMap, j)).intValue() - base;
-                        mapi -= j*q;
-                        sb.append(" "+mapi);
-                    }
-                    sb.append(" }");
-                    System.out.println("*** "+sb);
-                }
-            }
-            System.out.println("*** BCI="+bci+" enc="+enc+" dec="+dec);
-            ok = false;
-        }
-        return ok;
-    }
-//*/
 }

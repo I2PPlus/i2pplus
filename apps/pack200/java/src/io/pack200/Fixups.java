@@ -161,7 +161,6 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
     static int fmtLen(int fmt) { return 1+(fmt-U1_FORMAT)/(U2_FORMAT-U1_FORMAT); }
     static int descLoc(int desc) { return desc >>> LOC_SHIFT; }
     static int descFmt(int desc) { return desc  &  FMT_MASK; }
-    static int descEnd(int desc) { return descLoc(desc) + fmtLen(descFmt(desc)); }
     static int makeDesc(int loc, int fmt) {
         int desc = (loc << LOC_SHIFT) | fmt;
         assert(descLoc(desc) == loc);
@@ -258,7 +257,6 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
         }
         public int location() { return descLoc(desc); }
         public int format() { return descFmt(desc); }
-        public Entry entry() { return entry; }
         @Override
         public int compareTo(Fixup that) {
             // Ordering depends only on location.
@@ -488,79 +486,5 @@ final class Fixups extends AbstractCollection<Fixups.Fixup> {
 
 /*
     /// Testing.
-    public static void main(String[] av) {
-        byte[] bytes = new byte[1 << 20];
-        ConstantPool cp = new ConstantPool();
-        Fixups f = new Fixups(bytes);
-        boolean isU1 = false;
-        int span = 3;
-        int nextLoc = 0;
-        int[] locs = new int[100];
-        final int[] indexes = new int[100];
-        int iptr = 1;
-        for (int loc = 0; loc < bytes.length; loc++) {
-            if (loc == nextLoc && loc+1 < bytes.length) {
-                int fmt = (isU1 ? U1_FORMAT : U2_FORMAT);
-                Entry e = ConstantPool.getUtf8Entry("L"+loc);
-                f.add(loc, fmt, e);
-                isU1 ^= true;
-                if (iptr < 10) {
-                    // Make it close in.
-                    nextLoc += fmtLen(fmt) + (iptr < 5 ? 0 : 1);
-                } else {
-                    nextLoc += span;
-                    span = (int)(span * 1.77);
-                }
-                // Here are the bytes that would have gone here:
-                locs[iptr] = loc;
-                if (fmt == U1_FORMAT) {
-                    indexes[iptr++] = (loc & 0xFF);
-                } else {
-                    indexes[iptr++] = ((loc & 0xFF) << 8) | ((loc+1) & 0xFF);
-                    ++loc;  // skip a byte
-                }
-                continue;
-            }
-            bytes[loc] = (byte)loc;
-        }
-        System.out.println("size="+f.size()
-                           +" overflow="+(f.bigDescs[BIGSIZE]-1));
-        System.out.println("Fixups: "+f);
-        // Test collection contents.
-        assert(iptr == 1+f.size());
-        List l = new ArrayList(f);
-        Collections.sort(l);  // should not change the order
-        if (!l.equals(new ArrayList(f)))  System.out.println("** disordered");
-        f.setBytes(null);
-        if (!l.equals(new ArrayList(f)))  System.out.println("** bad set 1");
-        f.setBytes(bytes);
-        if (!l.equals(new ArrayList(f)))  System.out.println("** bad set 2");
-        Fixups f3 = new Fixups(f);
-        if (!l.equals(new ArrayList(f3))) System.out.println("** bad set 3");
-        Iterator fi = f.iterator();
-        for (int i = 1; i < iptr; i++) {
-            Fixup fx = (Fixup) fi.next();
-            if (fx.location() != locs[i]) {
-                System.out.println("** "+fx+" != "+locs[i]);
-            }
-            if (fx.format() == U1_FORMAT)
-                System.out.println(fx+" -> "+bytes[locs[i]]);
-            else
-                System.out.println(fx+" -> "+bytes[locs[i]]+" "+bytes[locs[i]+1]);
-        }
-        assert(!fi.hasNext());
-        indexes[0] = 1;  // like iptr
-        Index ix = new Index("ix") {
-            public int indexOf(Entry e) {
-                return indexes[indexes[0]++];
-            }
-        };
-        f.finishRefs(ix);
-        for (int loc = 0; loc < bytes.length; loc++) {
-            if (bytes[loc] != (byte)loc) {
-                System.out.println("** ["+loc+"] = "+bytes[loc]+" != "+(byte)loc);
-            }
-        }
-    }
 //*/
 }

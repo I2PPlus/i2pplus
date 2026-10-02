@@ -86,17 +86,6 @@ class Instruction  {
         return isNonstandard(bc);
     }
 
-    public void setNonstandardLength(int length) {
-        assert(isNonstandard());
-        this.length = length;
-    }
-
-    /** A fake instruction at this pc whose next() will be at nextpc. */
-    public Instruction forceNextPC(int nextpc) {
-        int llength = nextpc - pc;
-        return new Instruction(bytes, pc, -1, -1, llength);
-    }
-
     public static Instruction at(byte[] bytes, int pc) {
         return Instruction.at(bytes, pc, null);
     }
@@ -154,16 +143,6 @@ class Instruction  {
             return getShort(bytes, pc+indexLoc);
     }
 
-    public void setCPIndex(int cpi) {
-        int indexLoc = BC_INDEX[w][bc];
-        assert(indexLoc != 0);
-        if (length == 2)
-            setByte(bytes, pc+indexLoc, cpi);  // _ldc opcode only
-        else
-            setShort(bytes, pc+indexLoc, cpi);
-        assert(getCPIndex() == cpi);
-    }
-
     public ConstantPool.Entry getCPRef(ConstantPool.Entry[] cpMap) {
         int index = getCPIndex();
         return (index < 0) ? null : cpMap[index];
@@ -218,16 +197,6 @@ class Instruction  {
         return 0;
     }
 
-    public void setConstant(int con) {
-        int conLoc = BC_CON[w][bc];
-        assert(conLoc != 0);
-        switch (length - conLoc) {
-        case 1: setByte(bytes, pc+conLoc, con); break;
-        case 2: setShort(bytes, pc+conLoc, con); break;
-        }
-        assert(con == getConstant());
-    }
-
     public abstract static class Switch extends Instruction {
         // Each case is a (value, label) pair, indexed 0 <= n < caseCount
         public abstract int  getCaseCount();
@@ -250,7 +219,6 @@ class Instruction  {
             this.special = true;
             length = getLength(getCaseCount());
         }
-        public int getAlignedPC() { return apc; }
         public String toString() {
             String s = super.toString();
             s += " Default:"+labstr(getDefaultLabel());
@@ -269,7 +237,6 @@ class Instruction  {
     public static class TableSwitch extends Switch {
         // apc:  (df, lo, hi, (hi-lo+1)*(label))
         public int getLowCase()        { return intAt(1); }
-        public int getHighCase()       { return intAt(2); }
         public int getCaseCount()      { return intAt(2)-intAt(1)+1; }
         public int getCaseValue(int n) { return getLowCase()+n; }
         public int getCaseLabel(int n) { return intAt(3+n)+pc; }
@@ -380,16 +347,6 @@ class Instruction  {
 
     /// Fetching values from byte arrays:
 
-    public int getIntAt(int off) {
-        return getInt(bytes, pc+off);
-    }
-    public int getShortAt(int off) {
-        return getShort(bytes, pc+off);
-    }
-    public int getByteAt(int off) {
-        return getByte(bytes, pc+off);
-    }
-
     public static int getInt(byte[] bytes, int pc) {
         return (getShort(bytes, pc+0) << 16) + (getShort(bytes, pc+2) << 0);
     }
@@ -423,12 +380,6 @@ class Instruction  {
         assert(l > 0);
         return l;
     }
-    public static int opWideLength(int bc) {
-        int l = BC_LENGTH[1][bc];
-        assert(l > 0);
-        return l;
-    }
-
     public static boolean isLocalSlotOp(int bc) {
         return (bc < BC_SLOT[0].length && BC_SLOT[0][bc] > 0);
     }

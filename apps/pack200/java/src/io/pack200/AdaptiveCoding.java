@@ -48,22 +48,6 @@ class AdaptiveCoding implements CodingMethod {
         this.headCoding = headCoding;
         this.tailCoding = tailCoding;
     }
-
-    public void setHeadCoding(CodingMethod headCoding) {
-        this.headCoding = headCoding;
-    }
-    public void setHeadLength(int headLength) {
-        assert(isCodableLength(headLength));
-        this.headLength = headLength;
-    }
-    public void setTailCoding(CodingMethod tailCoding) {
-        this.tailCoding = tailCoding;
-    }
-
-    public boolean isTrivial() {
-        return headCoding == tailCoding;
-    }
-
     // CodingMethod methods.
     public void writeArrayTo(OutputStream out, int[] a, int start, int end) throws IOException {
         writeArray(this, out, a, start, end);

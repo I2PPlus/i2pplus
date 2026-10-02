@@ -25,8 +25,6 @@
 
 package io.pack200;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 
@@ -58,7 +56,6 @@ final class Histogram {
         counts = table[1];
         this.matrix = makeMatrix(hist2col);
         this.totalWeight = valueSequence.length;
-        assert(assertWellFormed(valueSequence));
     }
     public
     Histogram(int[] valueSequence, int start, int end) {
@@ -93,7 +90,6 @@ final class Histogram {
         int[][] table = makeTable(hist2col);
         values = table[1]; //backwards
         counts = table[0]; //backwards
-        assert(assertWellFormed(null));
     }
 
     /** Histogram of int values, reported compactly as a ragged matrix,
@@ -117,19 +113,11 @@ final class Histogram {
      */
     public
     int[][] getMatrix() { return matrix; }
-
-    public
-    int getRowCount() { return matrix.length; }
-
     public
     int getRowFrequency(int rn) { return matrix[rn][0]; }
 
     public
     int getRowLength(int rn) { return matrix[rn].length-1; }
-
-    public
-    int getRowValue(int rn, int vn) { return matrix[rn][vn+1]; }
-
     public
     int getRowWeight(int rn) {
         return getRowFrequency(rn) * getRowLength(rn);
@@ -143,21 +131,6 @@ final class Histogram {
     public
     int getTotalLength() {
         return values.length;
-    }
-
-    /** Returns an array of all values, sorted. */
-    public
-    int[] getAllValues() {
-
-        return values;
-    }
-
-    /** Returns an array parallel with {@link #getValues},
-     *  with a frequency for each value.
-     */
-    public
-    int[] getAllFrequencies() {
-        return counts;
     }
 
     private static double log2 = Math.log(2);
@@ -191,10 +164,6 @@ final class Histogram {
             return Histogram.this.getBitLength(value);
         }
     };
-    public BitMetric getBitMetric() {
-        return bitMetric;
-    }
-
     /** bit-length is negative entropy:  -H(matrix). */
     public
     double getBitLength() {
@@ -374,17 +343,6 @@ final class Histogram {
         }
     }
 
-/*
-    public static
-    int[][] makeHistogramMatrix(int[] values) {
-        // Make sure they are sorted.
-        values = maybeSort(values);
-        long[] hist2col = computeHistogram2Col(values);
-        int[][] matrix = makeMatrix(hist2col);
-        return matrix;
-    }
-*/
-
     private static
     int[][] makeMatrix(long[] hist2col) {
         // Sort by increasing count, then by increasing value.
@@ -484,95 +442,6 @@ final class Histogram {
         }
         return hist;
     }
-
-    /** Regroup the histogram, so that it becomes an approximate histogram
-     *  whose rows are of the given lengths.
-     *  If matrix rows must be split, the latter parts (larger values)
-     *  are placed earlier in the new matrix.
-     *  If matrix rows are joined, they are resorted into ascending order.
-     *  In the new histogram, the counts are averaged over row entries.
-     */
-    private static
-    int[][] regroupHistogram(int[][] matrix, int[] groups) {
-        long oldEntries = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            oldEntries += matrix[i].length-1;
-        }
-        long newEntries = 0;
-        for (int ni = 0; ni < groups.length; ni++) {
-            newEntries += groups[ni];
-        }
-        if (newEntries > oldEntries) {
-
-            long ok = oldEntries;
-            for (int ni = 0; ni < groups.length; ni++) {
-                if (ok < groups[ni]) {
-                    int[] newGroups = new int[ni+1];
-                    System.arraycopy(groups, 0, newGroups, 0, ni+1);
-                    groups = newGroups;
-                    groups[ni] = (int) ok;
-
-                    break;
-                }
-                ok -= groups[ni];
-            }
-        } else {
-            long excess = oldEntries - newEntries;
-            int[] newGroups = new int[groups.length+1];
-            System.arraycopy(groups, 0, newGroups, 0, groups.length);
-            newGroups[groups.length] = (int) excess;
-            groups = newGroups;
-        }
-        int[][] newMatrix = new int[groups.length][];
-        // Fill pointers.
-        int i = 0;  // into matrix
-        int jMin = 1;
-        int jMax = matrix[i].length;
-        for (int ni = 0; ni < groups.length; ni++) {
-            int groupLength = groups[ni];
-            int[] group = new int[1+groupLength];
-            long groupWeight = 0;  // count of all in new group
-            newMatrix[ni] = group;
-            int njFill = 1;
-            while (njFill < group.length) {
-                int len = group.length - njFill;
-                while (jMin == jMax) {
-                    jMin = 1;
-                    jMax = matrix[++i].length;
-                }
-                if (len > jMax - jMin)  len = jMax - jMin;
-                groupWeight += (long) matrix[i][0] * len;
-                System.arraycopy(matrix[i], jMax - len, group, njFill, len);
-                jMax -= len;
-                njFill += len;
-            }
-            Arrays.sort(group, 1, group.length);
-            // compute average count of new group:
-            group[0] = (int) ((groupWeight + groupLength/2) / groupLength);
-        }
-        assert(jMin == jMax);
-        assert(i == matrix.length-1);
-        return newMatrix;
-    }
-
-    public static
-    Histogram makeByteHistogram(InputStream bytes) throws IOException {
-        byte[] buf = new byte[1<<12];
-        int[] tally = new int[1<<8];
-        for (int nr; (nr = bytes.read(buf)) > 0; ) {
-            for (int i = 0; i < nr; i++) {
-                tally[buf[i] & 0xFF] += 1;
-            }
-        }
-        // Build a matrix.
-        int[][] matrix = new int[1<<8][2];
-        for (int i = 0; i < tally.length; i++) {
-            matrix[i][0] = tally[i];
-            matrix[i][1] = i;
-        }
-        return new Histogram(matrix);
-    }
-
     /** Slice and sort the given input array. */
     private static
     int[] sortedSlice(int[] valueSequence, int start, int end) {
@@ -609,209 +478,4 @@ final class Histogram {
         return values;
     }
 
-    /// Debug stuff follows.
-
-    private boolean assertWellFormed(int[] valueSequence) {
-/*
-        // Sanity check.
-        int weight = 0;
-        int vlength = 0;
-        for (int i = 0; i < matrix.length; i++) {
-            int vlengthi = (matrix[i].length-1);
-            int count = matrix[i][0];
-            assert(vlengthi > 0);  // no empty rows
-            assert(count > 0);  // no impossible rows
-            vlength += vlengthi;
-            weight += count * vlengthi;
-        }
-        assert(isSorted(values, 0, true));
-        // make sure the counts all add up
-        assert(totalWeight == weight);
-        assert(vlength == values.length);
-        assert(vlength == counts.length);
-        int weight2 = 0;
-        for (int i = 0; i < counts.length; i++) {
-            weight2 += counts[i];
-        }
-        assert(weight2 == weight);
-        int[] revcol1 = new int[matrix.length];  //1st matrix colunm
-        for (int i = 0; i < matrix.length; i++) {
-            // spot checking:  try a random query on each matrix row
-            assert(matrix[i].length > 1);
-            revcol1[matrix.length-i-1] = matrix[i][0];
-            assert(isSorted(matrix[i], 1, true));
-            int rand = (matrix[i].length+1) / 2;
-            int val = matrix[i][rand];
-            int count = matrix[i][0];
-            int pos = Arrays.binarySearch(values, val);
-            assert(values[pos] == val);
-            assert(counts[pos] == matrix[i][0]);
-            if (valueSequence != null) {
-                int count2 = 0;
-                for (int j = 0; j < valueSequence.length; j++) {
-                    if (valueSequence[j] == val)  count2++;
-                }
-                assert(count2 == count);
-            }
-        }
-        assert(isSorted(revcol1, 0, true));
-//*/
-        return true;
-    }
-
-/*
-    public static
-    int[] readValuesFrom(InputStream instr) {
-        return readValuesFrom(new InputStreamReader(instr));
-    }
-    public static
-    int[] readValuesFrom(Reader inrdr) {
-        inrdr = new BufferedReader(inrdr);
-        final StreamTokenizer in = new StreamTokenizer(inrdr);
-        final int TT_NOTHING = -99;
-        in.commentChar('#');
-        return readValuesFrom(new Iterator() {
-            int token = TT_NOTHING;
-            private int getToken() {
-                if (token == TT_NOTHING) {
-                    try {
-                        token = in.nextToken();
-                        assert(token != TT_NOTHING);
-                    } catch (IOException ee) {
-                        throw new RuntimeException(ee);
-                    }
-                }
-                return token;
-            }
-            public boolean hasNext() {
-                return getToken() != StreamTokenizer.TT_EOF;
-            }
-            public Object next() {
-                int ntok = getToken();
-                token = TT_NOTHING;
-                switch (ntok) {
-                case StreamTokenizer.TT_EOF:
-                    throw new NoSuchElementException();
-                case StreamTokenizer.TT_NUMBER:
-                    return Integer.valueOf((int) in.nval);
-                default:
-                    assert(false);
-                    return null;
-                }
-            }
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        });
-    }
-    public static
-    int[] readValuesFrom(Iterator iter) {
-        return readValuesFrom(iter, 0);
-    }
-    public static
-    int[] readValuesFrom(Iterator iter, int initSize) {
-        int[] na = new int[Math.max(10, initSize)];
-        int np = 0;
-        while (iter.hasNext()) {
-            Integer val = (Integer) iter.next();
-            if (np == na.length) {
-                int[] na2 = new int[np*2];
-                System.arraycopy(na, 0, na2, 0, np);
-                na = na2;
-            }
-            na[np++] = val.intValue();
-        }
-        if (np != na.length) {
-            int[] na2 = new int[np];
-            System.arraycopy(na, 0, na2, 0, np);
-            na = na2;
-        }
-        return na;
-    }
-
-    public static
-    Histogram makeByteHistogram(byte[] bytes) {
-        try {
-            return makeByteHistogram(new ByteArrayInputStream(bytes));
-        } catch (IOException ee) {
-            throw new RuntimeException(ee);
-        }
-    }
-
-    public static
-    void main(String[] av) throws IOException {
-        if (av.length > 0 && av[0].equals("-r")) {
-            int[] values = new int[Integer.parseInt(av[1])];
-            int limit = values.length;
-            if (av.length >= 3) {
-                limit  = (int)( limit * Double.parseDouble(av[2]) );
-            }
-            Random rnd = new Random();
-            for (int i = 0; i < values.length; i++) {
-                values[i] = rnd.nextInt(limit);;
-            }
-            Histogram rh = new Histogram(values);
-            rh.print("random", System.out);
-            return;
-        }
-        if (av.length > 0 && av[0].equals("-s")) {
-            int[] values = readValuesFrom(System.in);
-            Random rnd = new Random();
-            for (int i = values.length; --i > 0; ) {
-                int j = rnd.nextInt(i+1);
-                if (j < i) {
-                    int tem = values[i];
-                    values[i] = values[j];
-                    values[j] = tem;
-                }
-            }
-            for (int i = 0; i < values.length; i++)
-                System.out.println(values[i]);
-            return;
-        }
-        if (av.length > 0 && av[0].equals("-e")) {
-            // edge cases
-            new Histogram(new int[][] {
-                {1, 11, 111},
-                {0, 123, 456},
-                {1, 111, 1111},
-                {0, 456, 123},
-                {3},
-                {},
-                {3},
-                {2, 22},
-                {4}
-            }).print(System.out);
-            return;
-        }
-        if (av.length > 0 && av[0].equals("-b")) {
-            // edge cases
-            Histogram bh = makeByteHistogram(System.in);
-            bh.print("bytes", System.out);
-            return;
-        }
-        boolean regroup = false;
-        if (av.length > 0 && av[0].equals("-g")) {
-            regroup = true;
-        }
-
-        int[] values = readValuesFrom(System.in);
-        Histogram h = new Histogram(values);
-        if (!regroup)
-            h.print(System.out);
-        if (regroup) {
-            int[] groups = new int[12];
-            for (int i = 0; i < groups.length; i++) {
-                groups[i] = 1<<i;
-            }
-            int[][] gm = regroupHistogram(h.getMatrix(), groups);
-            Histogram g = new Histogram(gm);
-            System.out.println("h.getBitLength(g) = "+
-                               h.getBitLength(g.getBitMetric()));
-            System.out.println("g.getBitLength(h) = "+
-                               g.getBitLength(h.getBitMetric()));
-            g.print("regrouped", System.out);
-        }
-    }
-//*/
 }

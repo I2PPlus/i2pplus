@@ -874,7 +874,6 @@ class Attribute implements Comparable<Attribute> {
         '(' numeral ')'
 
   reference:
-        reference_type ( 'N' )? uint_type
   reference_type:
         ( constant_ref | schema_ref | utf8_ref | untyped_ref )
   constant_ref:

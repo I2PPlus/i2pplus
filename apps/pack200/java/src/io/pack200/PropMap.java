@@ -29,8 +29,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -62,16 +60,12 @@ final class PropMap implements SortedMap<String, String>  {
     static {
         Properties props = new Properties();
 
-        // Allow implementation selected via -Dpack.disable.native=true
-        String propValue = getPropertyValue(Utils.DEBUG_DISABLE_NATIVE, "false");
-        props.put(Utils.DEBUG_DISABLE_NATIVE,
-                  String.valueOf(Boolean.parseBoolean(propValue)));
-
         // Set the DEBUG_VERBOSE from system
         int verbose = 0;
         try {
             verbose = Integer.decode(getPropertyValue(Utils.DEBUG_VERBOSE, "0"));
         } catch (NumberFormatException e) {
+            // An unparseable -D value leaves verbosity at 0 rather than failing the pack.
         }
         props.put(Utils.DEBUG_VERBOSE, String.valueOf(verbose));
 
@@ -103,9 +97,10 @@ final class PropMap implements SortedMap<String, String>  {
         // to allow override if necessary.
         String propFile = "intrinsic.properties";
 
-        PrivilegedAction<InputStream> pa =
-            () -> PackerImpl.class.getResourceAsStream(propFile);
-        try (InputStream propStr = AccessController.doPrivileged(pa)) {
+        // No AccessController: nothing here runs under a SecurityManager, and
+        // loading a classpath resource needs no privilege. The wrapper was
+        // deprecated for removal and only added a failure mode on modern JDKs.
+        try (InputStream propStr = PackerImpl.class.getResourceAsStream(propFile)) {
             if (propStr == null) {
                 throw new RuntimeException(propFile + " cannot be loaded");
             }
@@ -128,8 +123,7 @@ final class PropMap implements SortedMap<String, String>  {
     }
 
     private static String getPropertyValue(String key, String defaultValue) {
-        PrivilegedAction<String> pa = () -> System.getProperty(key);
-        String s = AccessController.doPrivileged(pa);
+        String s = System.getProperty(key);
         return s != null ? s : defaultValue;
     }
 
@@ -177,9 +171,6 @@ final class PropMap implements SortedMap<String, String>  {
     boolean getBoolean(String s) {
         return toBoolean(getProperty(s));
     }
-    boolean setBoolean(String s, boolean val) {
-        return toBoolean(setProperty(s, String.valueOf(val)));
-    }
     int toInteger(String val) {
         return toInteger(val, 0);
     }
@@ -209,10 +200,6 @@ final class PropMap implements SortedMap<String, String>  {
     long getLong(String s) {
         return toLong(getProperty(s));
     }
-    long setLong(String s, long val) {
-        return toLong(setProperty(s, String.valueOf(val)));
-    }
-
     int getTime(String s) {
         String sval = getProperty(s, "0");
         if (Utils.NOW.equals(sval)) {

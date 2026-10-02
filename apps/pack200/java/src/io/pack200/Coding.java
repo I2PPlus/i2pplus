@@ -413,12 +413,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
         return of(B, H, S, 0);
     }
 
-    public boolean canRepresentValue(int x) {
-        if (isSubrange())
-            return canRepresentUnsigned(x);
-        else
-            return canRepresentSigned(x);
-    }
     /** Can this coding represent a single value, possibly a delta?
      *  This ignores the D property.  That is, for delta codings,
      *  this tests whether a delta value of 'x' can be coded.
@@ -577,10 +571,6 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
 
     /** Does this coding support at least one negative value?
         Includes codings that can do so via 32-bit wraparound.
-     */
-    boolean isSigned() {
-        return min < 0;
-    }
     /** Does this coding code arrays by making successive differences? */
     boolean isDelta() {
         return del != 0;
@@ -590,10 +580,8 @@ class Coding implements Comparable<Coding>, CodingMethod, Histogram.BitMetric {
     public int H() { return H; }
     public int L() { return L; }
     public int S() { return S; }
-    public int del() { return del; }
     public int min() { return min; }
     public int max() { return max; }
-    public int umin() { return umin; }
     public int umax() { return umax; }
     public int byteMin(int b) { return byteMin[b-1]; }
     public int byteMax(int b) { return byteMax[b-1]; }

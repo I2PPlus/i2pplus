@@ -274,10 +274,6 @@ class BandStructure {
         if (i == null)  return 0;
         return i.intValue();
     }
-    public static Coding[] getBasicCodings() {
-        return basicCodings.clone();
-    }
-
     protected byte[] bandHeaderBytes;    // used for input only
     protected int    bandHeaderBytePos;  // BHB read pointer, for input only
     protected int    bandHeaderBytePos0; // for debug
@@ -325,10 +321,6 @@ class BandStructure {
     public static final int DISBURSE_PHASE  = 6; // pass out data after read
 
     public static final int DONE_PHASE      = 8; // done writing or reading
-
-    static boolean phaseIsRead(int p) {
-        return (p % 2) == 0;
-    }
     static int phaseCmp(int p0, int p1) {
         assert((p0 % 2) == (p1 % 2) || (p0 % 8) == 0 || (p1 % 8) == 0);
         return p0 - p1;
@@ -1365,8 +1357,6 @@ class BandStructure {
         }
 
         public long getCount() { return count; }
-        public void setCount(long c) { count = c; }
-
         @Override
         public void write(int b) throws IOException {
             count++;
@@ -1961,21 +1951,6 @@ class BandStructure {
         }
         return testBit(archiveOptions, mask);
     }
-
-    protected List<Attribute.Layout> getPredefinedAttrs(int ctype) {
-        assert(attrIndexLimit[ctype] != 0);
-        List<Attribute.Layout> res = new ArrayList<>(attrIndexLimit[ctype]);
-        // Remove nulls and non-predefs.
-        for (int ai = 0; ai < attrIndexLimit[ctype]; ai++) {
-            if (testBit(attrDefSeen[ctype], 1L<<ai))  continue;
-            Attribute.Layout def = attrDefs.get(ctype).get(ai);
-            if (def == null)  continue;  // unused flag bit
-            assert(isPredefinedAttr(ctype, ai));
-            res.add(def);
-        }
-        return res;
-    }
-
     protected boolean isPredefinedAttr(int ctype, int ai) {
         assert(attrIndexLimit[ctype] != 0);
         // Overflow attrs are never predefined.

@@ -14,6 +14,19 @@
     <property name="apps.jrobin.jfree.svg.build.dir" value="${build.root}apps/jrobin/java/src/org/jfree/svg/build"/>
     <property name="apps.ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
     <property name="apps.pack200.java.build.dir" value="${build.root}apps/pack200/java/build"/>
+    <!-- Pack200 compressor. The JDK's pack200 tool was removed in Java 14, so every
+         pack200/repack200 target invokes our own io.pack200 fork instead, running on
+         ant's JVM via ${java.home} so the builder needs no second, older JDK. The jar is
+         built by buildPack200, which is on the dependency chain of every updater target
+         (updater200 -> prepupdate -> build2 -> builddep -> builddepSmall -> buildPack200).
+         Overridable in override.properties for an out-of-tree jar. -->
+    <property name="pack200.tool"
+              value="${java.home}/bin/java -cp ${build.root}build/pack200.jar io.pack200.Driver"/>
+    <property name="pack200.jar" value="${build.root}build/pack200.jar"/>
+    <!-- Pre-pack byte total, written by pack200.sh and read back by zipit200 for
+         its savings report. Derived from build.root so a non-default build dir
+         works; this used to be hardcoded to the literal path build-i2p/. -->
+    <property name="pack200.marker" value="${build.root}.pack200-before"/>
     <property name="apps.routerconsole.java.build.dir" value="${build.root}apps/routerconsole/java/build"/>
     <property name="apps.sam.java.build.dir" value="${build.root}apps/sam/java/build"/>
     <property name="apps.streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
@@ -119,9 +132,9 @@
     <echo message="  updaterCompactRouterConsoleNoThemes          Updater with RouterConsole only (no themes)"/>
     <echo message="  updaterCompactRouterConsole                  Updater with RouterConsole and console/webapp themes only"/>
     <echo message="  updaterCompactWithDocs                       Compact updater with readme and proxy docs"/>
-    <echo message="  updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
     <echo message="  updaterCompactWithGeoIP                      Compact updater with GeoIP database"/>
-    <echo message="  updater200                                   Updater (pack200 - requires Java &lt; v14 or pre-existing lib/pack200.jar) &#10140; ./dist/i2pupdate200.zip"/>
+    <echo message="  updaterCompactWithGeoIPAndJbigi              Compact updater with GeoIP database and Jbigi"/>
+    <echo message="  updater200                                   Updater (pack200-compressed) &#10140; ./dist/i2pupdate200.zip"/>
     <echo message="  updater200Compact                            Updater (pack200) w/o SAM, DesktopGUI, systray, country/continent lists, docs/proxy, docs/readme, translations"/>
     <echo message="  updater200CompactWithDocs                    Compact updater (pack200) with readme and proxy docs"/>
     <echo message="  updater200CompactWithGeoIP                   Compact updater (pack200) with GeoIP database"/>
@@ -143,7 +156,7 @@
     <echo message="  signed-updater200                            Signed Updater (pack200) &#10140; ./dist/i2pupdate.su3"/>
     <echo message="  signed-updater200WithJavadocAndJetty         Signed Updater (pack200) + javadocs + Jetty &#10140; ./dist/i2pupdate.su3"/>
     <echo message="  signed-updater200WithJavadoc                 Signed Updater (pack200) + javadocs &#10140; ./dist/i2pupdate.su3"/>
-    <echo message="  signed-updater200withJetty                   Signed Updater (pack200) + Jetty"/>
+    <echo message="  signed-updater200WithJetty                   Signed Updater (pack200) + Jetty"/>
     <echo message=""/>
     <echo message=" === I2PSnark ==="/>
     <echo message="  i2psnark                                     Build standalone I2PSnark install &#10140; ./dist/i2psnark-standalone.zip"/>
@@ -154,7 +167,6 @@
     <echo message="  buildProperties                              Display build properties and Ant / JDK versions for current build"/>
     <echo message="  buildRequirements                            Information about requirements for building packages using ant"/>
     <echo message="  distclean                                    Clean up all derived and temporary files in workspace"/>
-    <echo message="  distcleanWebapps                             Clean up all webapp-related derived and temporary files in workspace"/>
     <echo message="  getGitRev                                    Check current Git revision in workspace and print truncated revision hash"/>
     <echo message="  getGitRevLong                                Check current Git revision in workspace and print full revision hash"/>
     <echo message="  poupdate-source                              Update the .po files for translators (requires jsp files to be compiled first)"/>
@@ -247,7 +259,7 @@
     <echo message=" * For translation support, GNU gettext is required, and can be installed from repos in most Linux distros"/>
     <echo message=" * To enable Javascript compression of the console and webapp scripts, the uglifyjs package is required"/>
     <echo message=" * To enable HTML compression of javadocs, the minify package is required"/>
-    <echo message=" * To build pack200 updates, Java 13 or earlier is required; on Linux, the GNU parallel package is also required"/>
+    <echo message=" * To build pack200 updates: any Java 14+ JDK. GNU parallel is used when present but is no longer required"/>
     <echo message=" * On a Linux system with multiple Java installations, you can configure ant to use a specific version by setting"/>
     <echo message="   an alias in your ~/.bashrc file, e.g. alias ant8=&quot;JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64 ant&quot;"/>
     <echo message=""/>
@@ -2005,14 +2017,6 @@
   </target>
 
   <target name="-pre-sign">
-    <!-- If you're distributing su3 files to others, at a minimum you should set this -->
-    <!--
-    <fail message="javac.compilerargs must contain a -bootclasspath option in override.properties">
-      <condition>
-      <not><contains string="${javac.compilerargs}" substring="-bootclasspath"/></not>
-      </condition>
-    </fail>
-    -->
     <fail message="build.built-by must be set in override.properties">
       <condition>
         <equals arg1="${build.built-by}" arg2="unknown"/>
@@ -2263,15 +2267,6 @@
       </copy>
       <copy quiet="true" verbose="false" file="installer/lib/wrapper/all/wrapper.jar" todir="${pkg.temp.dir}/lib"/>
     </parallel>
-  </target>
-
-  <target name="preppkgRepack" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
-    <ant target="repack200"/>
-    <!-- no use doing repack200 on jbigi.jar -->
-    <copy quiet="true" verbose="false" file="${build.root}build/jbigi.jar" todir="${pkg.temp.dir}/lib"/>
-    <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/lib/wrapper/solaris/">
-      <fileset dir="installer/lib/wrapper/solaris/" excludes="*.txt README.md"/>
-    </copy>
   </target>
 
   <target name="preppkg-freebsd" depends="preppkg-unix">
@@ -2928,6 +2923,7 @@
   <target name="updaterCompactRouterConsoleNoThemes" depends="timestamp.started, prepupdateRouterConsole, zipit, timestamp.stopped"/>
   <target name="updaterCompactWithDocs" depends="timestamp.started, prepupdatecompact, prepConsoleDocUpdates, zipit, timestamp.stopped"/>
   <target name="updaterCompactWithGeoIP" depends="timestamp.started, prepupdatecompact, prepgeoupdate, zipit, timestamp.stopped"/>
+  <target name="updaterCompactWithGeoIPAndJbigi" depends="timestamp.started, prepupdatecompact, prepjbigiupdate, prepgeoupdate, zipit, timestamp.stopped"/>
   <target name="updaterCompactWithJettyAndGeoIP" depends="timestamp.started, prepupdatecompact, prepgeoupdate, prepjupdate, zipit, timestamp.stopped"/>
   <target name="updaterRepack" depends="timestamp.started, prepupdate, repack200, zipit, timestamp.stopped"/>
   <target name="updaterRouter" depends="timestamp.started, prepupdateRouter, zipit, timestamp.stopped"/>
@@ -3100,6 +3096,7 @@
   <target name="updater200WithGeoIPAndJavadoc" depends="timestamp.started, prepupdate, prepgeoupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithGeoIPAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadocAndJetty" depends="timestamp.started, prepjupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithJavadocAndJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJavadoc" depends="timestamp.started, prepupdate, copyJavadoc, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJbigi" depends="timestamp.started, prepupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyAndGeoIPAndLicenses" depends="timestamp.started, prepjupdate, prepgeoupdate, preplicenses, pack200, zipit200, timestamp.stopped"/>
@@ -3107,15 +3104,23 @@
   <target name="updater200WithJettyAndJbigi" depends="timestamp.started, prepjupdate, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyAndLicences" depends="timestamp.started, prepjupdate, preplicenses, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJetty" depends="timestamp.started, prepjupdate, pack200, zipit200, timestamp.stopped"/>
-  <target name="updater200WithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, repack200, pack200, zipit200, timestamp.stopped"/>
+  <target name="updater200WithJettyFixesAndGeoIP" depends="timestamp.started, prepjupdatefixes, prepgeoupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyFixesAndJbigi" depends="timestamp.started, prepjupdatefixes, prepjbigiupdate, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithJettyFixes" depends="timestamp.started, prepjupdatefixes, pack200, zipit200, timestamp.stopped"/>
   <target name="updater200WithLicences" depends="timestamp.started, prepupdate, preplicenses, pack200, zipit200, timestamp.stopped"/>
+  <!-- Signs the pack200 update. Callers that build the plain (non-compressed)
+       i2pupdate.zip must use -sign-update-plain instead: this hardcodes the
+       i2pupdate200.zip input, so signing the plain build here either failed or,
+       worse, signed a stale i2pupdate200.zip left over from an earlier run. -->
   <target name="-sign-update" depends="buildrouter">
     <su3sign infile="dist/i2pupdate200.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${full.version}"/>
   </target>
 
-  <target name="signed-updater" depends="timestamp.started, -pre-sign, updater, -sign-update, timestamp.stopped"/>
+  <target name="-sign-update-plain" depends="buildrouter">
+    <su3sign infile="dist/i2pupdate.zip" sigtype="ROUTER" outfile="dist/i2pupdate.su3" su3.ver="${full.version}"/>
+  </target>
+
+  <target name="signed-updater" depends="timestamp.started, -pre-sign, updater, -sign-update-plain, timestamp.stopped"/>
   <target name="signed-updater200" depends="timestamp.started, -pre-sign, updater200, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJetty" depends="timestamp.started, -pre-sign, updater200WithJetty, -sign-update, timestamp.stopped"/>
   <target name="signed-updater200WithJettyAndGeoIP" depends="timestamp.started, -pre-sign, updater200WithJettyAndGeoIP, -sign-update, timestamp.stopped"/>
@@ -3145,122 +3150,91 @@
     <zip destfile="./dist/i2pupdate200.zip" level="6" basedir="${pkg.temp.dir}" excludes="README.md" whenempty="fail" comment="${release.number}"/>
     <exec executable="sh" osfamily="unix" failonerror="false">
       <arg value="-c"/>
-      <arg value="if [ -f ${java.io.tmpdir}/build-i2p/.pack200-before ]; then before=$(cat ${java.io.tmpdir}/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${java.io.tmpdir}/build-i2p/.pack200-before; fi"/>
+      <arg value="if [ -f ${pack200.marker} ]; then before=$(cat ${pack200.marker}); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${pack200.marker}; fi"/>
     </exec>
     <exec executable="sh" osfamily="mac" failonerror="false">
       <arg value="-c"/>
-      <arg value="if [ -f ${java.io.tmpdir}/build-i2p/.pack200-before ]; then before=$(cat ${java.io.tmpdir}/build-i2p/.pack200-before); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${java.io.tmpdir}/build-i2p/.pack200-before; fi"/>
+      <arg value="if [ -f ${pack200.marker} ]; then before=$(cat ${pack200.marker}); zipsize=$(wc -c &lt; dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf &quot;%d.%02d&quot; $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))); echo &quot;Pack200: jars (${b_mb}MB) -&gt; zip (${z_mb}MB) (saved ${s_mb}MB)&quot;; rm -f ${pack200.marker}; fi"/>
     </exec>
     <antcall target="sha256sum">
       <param name="sha256.file" value="dist/i2pupdate200.zip"/>
     </antcall>
   </target>
 
-  <target name="pack200">
-    <!-- Unix and friends (requires gnu parallel) -->
-    <exec executable="sh" osfamily="unix" failonerror="true">
-      <arg value="-c"/>
-      <arg value="before=0; count=0;
-                for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  before=$((before + $(wc -c &lt; &quot;$f&quot;))); count=$((count+1));
-                done &amp;&amp;
-                b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))) &amp;&amp;
-                echo &quot;Pack200: Compressing $count files (${b_mb}MB)...&quot; &amp;&amp;
-                echo $before &gt; ${java.io.tmpdir}/build-i2p/.pack200-before &amp;&amp;
-                find ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war -type f | parallel '
-                  mv {} {}.jar &amp;&amp; pack200 --effort=5 --modification-time=latest --segment-limit=-1 -g {}.pack {}.jar &amp;&amp;
-                  rm -f {}.jar' &amp;&amp;
-                after=0;
-                for f in ${pkg.temp.dir}/lib/*.pack ${pkg.temp.dir}/webapps/*.pack; do
-                  after=$((after + $(wc -c &lt; &quot;$f&quot;)));
-                done &amp;&amp;
-                saved=$((before - after)) &amp;&amp;
-                a_mb=$(printf &quot;%d.%02d&quot; $((after/1000000)) $(((after%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))) &amp;&amp;
-                echo &quot;Pack200 done: $b_mb -&gt; ${a_mb}MB (saved ${s_mb}MB)&quot;"/>
+  <!-- Compress every staged jar/war to a .pack stream for an i2pupdate200.zip.
+       POSIX platforms share tools/scripts/pack200.sh, which owns the byte
+       accounting and the pack200 invocation; the two execs exist only because
+       ant does not accept a comma list for osfamily. Windows keeps a cmd
+       one-liner and therefore does not print the size report.
+       Requires pack200.jar, which buildPack200 puts in build/ and every
+       updater target pulls in via prepupdate -> build2 -> builddepSmall. -->
+  <target name="pack200" depends="buildPack200">
+    <!-- Unix and friends -->
+    <exec executable="sh" osfamily="unix" failonerror="true" dir="${basedir}">
+      <arg value="tools/scripts/pack200.sh"/>
+      <env key="MODE" value="compress"/>
+      <env key="JAVA" value="${java.home}/bin/java"/>
+      <env key="P200JAR" value="${pack200.jar}"/>
+      <env key="PKGDIR" value="${pkg.temp.dir}"/>
+      <env key="MARKER" value="${pack200.marker}"/>
     </exec>
 
     <!-- macOS -->
-    <exec executable="sh" osfamily="mac" failonerror="true">
-      <arg value="-c"/>
-      <arg value="before=0; count=0;
-                for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  before=$((before + $(wc -c &lt; &quot;$f&quot;))); count=$((count+1));
-                done &amp;&amp;
-                b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))) &amp;&amp;
-                echo &quot;Pack200: Compressing $count files (${b_mb}MB)...&quot; &amp;&amp;
-                echo $before &gt; ${java.io.tmpdir}/build-i2p/.pack200-before &amp;&amp;
-                for i in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  mv $i $i.jar &amp;&amp; pack200 --effort=5 --modification-time=latest --segment-limit=-1 -g $i.pack $i.jar &amp;&amp;
-                  rm -f $i.jar &amp; done; wait &amp;&amp;
-                after=0;
-                for f in ${pkg.temp.dir}/lib/*.pack ${pkg.temp.dir}/webapps/*.pack; do
-                  after=$((after + $(wc -c &lt; &quot;$f&quot;)));
-                done &amp;&amp;
-                saved=$((before - after)) &amp;&amp;
-                a_mb=$(printf &quot;%d.%02d&quot; $((after/1000000)) $(((after%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))) &amp;&amp;
-                echo &quot;Pack200 done: $b_mb -&gt; ${a_mb}MB (saved ${s_mb}MB)&quot;"/>
+    <exec executable="sh" osfamily="mac" failonerror="true" dir="${basedir}">
+      <arg value="tools/scripts/pack200.sh"/>
+      <env key="MODE" value="compress"/>
+      <env key="JAVA" value="${java.home}/bin/java"/>
+      <env key="P200JAR" value="${pack200.jar}"/>
+      <env key="PKGDIR" value="${pkg.temp.dir}"/>
+      <env key="MARKER" value="${pack200.marker}"/>
     </exec>
 
     <!-- Windows -->
     <exec executable="cmd" osfamily="windows" failonerror="true">
       <arg value="/c"/>
       <arg value="for %i in (${pkg.temp.dir}\webapps\*.war) do (move %i %i.jar &amp;&amp;
-                    pack200 -g ${pkg.temp.dir}\webapps\%~ni.war.pack %i.jar &amp;&amp; del %i.jar) &amp;
+                    ${java.home}\bin\java -cp ${pack200.jar} io.pack200.Driver
+                    --effort=5 --modification-time=latest --segment-limit=-1
+                    -g ${pkg.temp.dir}\webapps\%~ni.war.pack %i.jar &amp;&amp; del %i.jar) &amp;
                     for %i in (${pkg.temp.dir}\lib\*.jar) do
-                    (pack200 --effort=5 --modification-time=latest --segment-limit=-1 -g %i.pack %i &amp;&amp; del %i)"/>
+                    (${java.home}\bin\java -cp ${pack200.jar} io.pack200.Driver
+                    --effort=5 --modification-time=latest --segment-limit=-1
+                    -g %i.pack %i &amp;&amp; del %i)"/>
     </exec>
   </target>
 
-  <target name="repack200">
+  <!-- pack200 -r does NOT produce a .pack stream: it normalises a jar in place so
+       it is byte-stable enough for jarsigner (see the repack option in
+       DriverResource). It is used by the Repack/release targets that ship a plain,
+       signed i2pupdate.zip, not by the compressed variants, hence no .pack
+       output and no marker file. POSIX shares tools/scripts/pack200.sh with
+       the pack200 target above. -->
+  <target name="repack200" depends="buildPack200">
     <!-- Unix and friends -->
-    <exec executable="sh" osfamily="unix" failonerror="true">
-      <arg value="-c"/>
-      <arg value="before=0; count=0;
-                for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  before=$((before + $(wc -c &lt; &quot;$f&quot;))); count=$((count+1));
-                done &amp;&amp;
-                b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))) &amp;&amp;
-                echo &quot;Repacking $count files (${b_mb}MB)...&quot; &amp;&amp;
-                for i in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait &amp;&amp;
-                after=0;
-                for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  after=$((after + $(wc -c &lt; &quot;$f&quot;)));
-                done &amp;&amp;
-                saved=$((before - after)) &amp;&amp;
-                a_mb=$(printf &quot;%d.%02d&quot; $((after/1000000)) $(((after%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))) &amp;&amp;
-                echo &quot;Repack done: $b_mb -&gt; ${a_mb}MB (saved ${s_mb}MB)&quot;"/>
+    <exec executable="sh" osfamily="unix" failonerror="true" dir="${basedir}">
+      <arg value="tools/scripts/pack200.sh"/>
+      <env key="MODE" value="repack"/>
+      <env key="JAVA" value="${java.home}/bin/java"/>
+      <env key="P200JAR" value="${pack200.jar}"/>
+      <env key="PKGDIR" value="${pkg.temp.dir}"/>
     </exec>
 
     <!-- macOS -->
-    <exec executable="sh" osfamily="mac" failonerror="true">
-      <arg value="-c"/>
-      <arg value="before=0; count=0;
-                for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  before=$((before + $(wc -c &lt; &quot;$f&quot;))); count=$((count+1));
-                done &amp;&amp;
-                b_mb=$(printf &quot;%d.%02d&quot; $((before/1000000)) $(((before%1000000)/10000))) &amp;&amp;
-                echo &quot;Repacking $count files (${b_mb}MB)...&quot; &amp;&amp;
-                for i in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  mv $i $i.jar &amp;&amp; pack200 -r $i.jar &amp;&amp; mv $i.jar $i &amp; done; wait &amp;&amp;
-                after=0;
-                for f in ${pkg.temp.dir}/lib/*.jar ${pkg.temp.dir}/webapps/*war; do
-                  after=$((after + $(wc -c &lt; &quot;$f&quot;)));
-                done &amp;&amp;
-                saved=$((before - after)) &amp;&amp;
-                a_mb=$(printf &quot;%d.%02d&quot; $((after/1000000)) $(((after%1000000)/10000))); s_mb=$(printf &quot;%d.%02d&quot; $((saved/1000000)) $(((saved%1000000)/10000))) &amp;&amp;
-                echo &quot;Repack done: $b_mb -&gt; ${a_mb}MB (saved ${s_mb}MB)&quot;"/>
+    <exec executable="sh" osfamily="mac" failonerror="true" dir="${basedir}">
+      <arg value="tools/scripts/pack200.sh"/>
+      <env key="MODE" value="repack"/>
+      <env key="JAVA" value="${java.home}/bin/java"/>
+      <env key="P200JAR" value="${pack200.jar}"/>
+      <env key="PKGDIR" value="${pkg.temp.dir}"/>
     </exec>
 
-    <!-- Windows -->
+    <!-- Windows: one guarded exec covering wars and lib jars, in place. -->
     <exec executable="cmd" osfamily="windows" failonerror="true">
       <arg value="/c"/>
-      <arg value="for %i in (${pkg.temp.dir}\webapps\*.war) do (move %i %i.jar &amp;&amp; pack200 -r %i.jar &amp;&amp; move %i.jar %i)"/>
-    </exec>
-
-    <exec executable="cmd" osfamily="windows" failonerror="true">
-      <arg value="/c"/>
-      <arg value="for %i in (${pkg.temp.dir}\lib\*.jar) do (pack200 -r %i)"/>
+      <arg value="for %i in (${pkg.temp.dir}\webapps\*.war ${pkg.temp.dir}\lib\*.jar) do @if exist %i
+                    (move %i %i.jar &amp;&amp;
+                    ${java.home}\bin\java -cp ${pack200.jar} io.pack200.Driver -r %i.jar &amp;&amp;
+                    move %i.jar %i &amp;&amp; echo repacked %~nxi) || (echo FAILED %i &amp;&amp; exit /b 1)"/>
     </exec>
   </target>
 

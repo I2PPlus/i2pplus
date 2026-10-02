@@ -237,109 +237,63 @@ public class FileUtil {
      * @since 0.8.1
      */
     public static boolean isPack200Supported() {
-        try {
-            Class.forName("java.util.jar.Pack200", false, ClassLoader.getSystemClassLoader());
-            return true;
-        } catch (Exception e) { /* ignored */ }
-        try {
-            Class.forName("io.pack200.Pack200", false, ClassLoader.getSystemClassLoader());
-            return true;
-        } catch (Exception e) { /* ignored */ }
-        /*
-         * try {
-         * Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
-         * return true;
-         * } catch (Exception e) {}
-         * try {
-         * Class.forName("org.apache.harmony.unpack200.Archive", false, ClassLoader.getSystemClassLoader());
-         * return true;
-         * } catch (Exception e) {}
-         */
-        return false;
+        return P200 != null || findPack200Class() != null;
     }
 
-    private static boolean failedOracle;
-
-    // private static boolean _failedApache;
+    /**
+     * The unpacker implementation class, resolved once by {@link #findPack200Class}.
+     *
+     * Set to null permanently when no unpacker is on the classpath, so we do not
+     * retry the (failing) class lookup on every .pack entry in an update zip.
+     */
+    private static volatile Class<?> P200;
 
     /**
-     * Unpack using either Oracle or Apache's unpack200 library,
-     * with the classes discovered at runtime so neither is required at compile time.
+     * Locate a Pack200 unpacker.
+     *
+     * The JDK's own java.util.jar.Pack200 was removed in Java 14, so on every
+     * Java we support the only implementation is the io.pack200 fork, shipped as
+     * lib/pack200.jar in the update payload itself. Loading it reflectively keeps
+     * it off the compile classpath, so the router still starts without it.
+     *
+     * @return the Pack200 class, or null if unavailable
+     */
+    private static Class<?> findPack200Class() {
+        Class<?> p200 = P200;
+        if (p200 != null) return p200;
+        synchronized (FileUtil.class) {
+            if (P200 == null) {
+                try {
+                    // https://github.com/pack200/pack200
+                    P200 = Class.forName("io.pack200.Pack200", true, ClassLoader.getSystemClassLoader());
+                } catch (ClassNotFoundException e) {
+                    // leave P200 null; callers report "unsupported"
+                }
+            }
+        }
+        return P200;
+    }
+
+    /**
+     * Unpack a .pack stream with the io.pack200 fork, discovered at runtime so the
+     * jar is not required at compile time.
      *
      * Caller must close streams
      *
-     * @throws IOException on unpack error or if neither library is available.
+     * @throws IOException on unpack error or if the library is unavailable.
      *         Will not throw ClassNotFoundException.
-     *
-     * @throws org.apache.harmony.pack200.Pack200Exception which is not an IOException
      * @throws java.lang.reflect.InvocationTargetException on duplicate zip entries in the packed jar
      * @since 0.8.1
      */
     private static void unpack(InputStream in, JarOutputStream out) throws Exception {
-        // For Sun, OpenJDK, IcedTea, etc, use this
-        // Pack200.newUnpacker().unpack(in, out);
-        if (!failedOracle) {
-            try {
-                Class<?> p200;
-                try {
-                    // through java 13
-                    p200 = Class.forName("java.util.jar.Pack200", true, ClassLoader.getSystemClassLoader());
-                } catch (Exception e) {
-                    // https://github.com/pack200/pack200
-                    p200 = Class.forName("io.pack200.Pack200", true, ClassLoader.getSystemClassLoader());
-                }
-                Method newUnpacker = p200.getMethod("newUnpacker");
-                Object unpacker = newUnpacker.invoke(null, (Object[]) null);
-                Method unpack = unpacker.getClass().getMethod("unpack", InputStream.class, JarOutputStream.class);
-                // throws IOException
-                unpack.invoke(unpacker, new Object[] {in, out});
-                return;
-            } catch (ClassNotFoundException e) {
-                failedOracle = true;
-                e.printStackTrace();
-            } catch (NoSuchMethodException e) {
-                failedOracle = true;
-                e.printStackTrace();
-            }
-        }
-
-        // ------------------
-        // For Apache Harmony or if you put its pack200.jar in your library directory use this
-        // (new Archive(in, out)).unpack();
-        // warning:
-        // Apache ONLY supports format 150.7 which is Java 5.
-        // Incompatible with pack200 from Java 6-13
-        // Error is:
-        // org.apache.commons.compress.harmony.pack200.Pack200Exception: Invalid segment minor version
-        /*
-         * if (!_failedApache) {
-         * try {
-         * Class<?> p200;
-         * try {
-         * // new commons-compress-1.x.jar
-         * p200 = Class.forName("org.apache.commons.compress.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
-         * } catch (Exception e) {
-         * // old pack200.jar
-         * p200 = Class.forName("org.apache.harmony.unpack200.Archive", true, ClassLoader.getSystemClassLoader());
-         * }
-         * Constructor<?> newUnpacker = p200.getConstructor(InputStream.class, JarOutputStream.class);
-         * Object unpacker = newUnpacker.newInstance(in, out);
-         * Method unpack = unpacker.getClass().getMethod("unpack");
-         * // throws IOException or Pack200Exception
-         * unpack.invoke(unpacker, (Object[]) null);
-         * return;
-         * } catch (ClassNotFoundException e) {
-         * _failedApache = true;
-         * e.printStackTrace();
-         * } catch (NoSuchMethodException e) {
-         * _failedApache = true;
-         * e.printStackTrace();
-         * }
-         * }
-         */
-        // ------------------
-        // For gcj, gij, etc., use this
-        throw new IOException("Unpack200 not supported");
+        Class<?> p200 = findPack200Class();
+        if (p200 == null)
+            throw new IOException("Unpack200 not supported");
+        Method newUnpacker = p200.getMethod("newUnpacker");
+        Object unpacker = newUnpacker.invoke(null, (Object[]) null);
+        Method unpack = unpacker.getClass().getMethod("unpack", InputStream.class, JarOutputStream.class);
+        // throws IOException
+        unpack.invoke(unpacker, new Object[] {in, out});
     }
 
     /**

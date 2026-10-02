@@ -182,13 +182,6 @@ class CodingChooser {
         c.reset();
         return c;
     }
-
-    ByteArrayOutputStream getContext() {
-        if (context == null)
-            context = new ByteArrayOutputStream(1 << 16);
-        return context;
-    }
-
     // These variables are reset and reused:
     private int[] values;
     private int start, end;  // slice of values
@@ -1376,102 +1369,4 @@ class CodingChooser {
     }
 
     // For debug only.
-/*
-    public static
-    int[] readValuesFrom(InputStream instr) {
-        return readValuesFrom(new InputStreamReader(instr));
-    }
-    public static
-    int[] readValuesFrom(Reader inrdr) {
-        inrdr = new BufferedReader(inrdr);
-        final StreamTokenizer in = new StreamTokenizer(inrdr);
-        final int TT_NOTHING = -99;
-        in.commentChar('#');
-        return readValuesFrom(new Iterator() {
-            int token = TT_NOTHING;
-            private int getToken() {
-                if (token == TT_NOTHING) {
-                    try {
-                        token = in.nextToken();
-                        assert(token != TT_NOTHING);
-                    } catch (IOException ee) {
-                        throw new RuntimeException(ee);
-                    }
-                }
-                return token;
-            }
-            public boolean hasNext() {
-                return getToken() != StreamTokenizer.TT_EOF;
-            }
-            public Object next() {
-                int ntok = getToken();
-                token = TT_NOTHING;
-                switch (ntok) {
-                case StreamTokenizer.TT_EOF:
-                    throw new NoSuchElementException();
-                case StreamTokenizer.TT_NUMBER:
-                    return Integer.valueOf((int) in.nval);
-                default:
-                    assert(false);
-                    return null;
-                }
-            }
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        });
-    }
-    public static
-    int[] readValuesFrom(Iterator iter) {
-        return readValuesFrom(iter, 0);
-    }
-    public static
-    int[] readValuesFrom(Iterator iter, int initSize) {
-        int[] na = new int[Math.max(10, initSize)];
-        int np = 0;
-        while (iter.hasNext()) {
-            Integer val = (Integer) iter.next();
-            if (np == na.length) {
-                na = BandStructure.realloc(na);
-            }
-            na[np++] = val.intValue();
-        }
-        if (np != na.length) {
-            na = BandStructure.realloc(na, np);
-        }
-        return na;
-    }
-
-    public static
-    void main(String[] av) throws IOException {
-        int effort = MID_EFFORT;
-        int ap = 0;
-        if (ap < av.length && av[ap].equals("-e")) {
-            ap++;
-            effort = Integer.parseInt(av[ap++]);
-        }
-        int verbose = 1;
-        if (ap < av.length && av[ap].equals("-v")) {
-            ap++;
-            verbose = Integer.parseInt(av[ap++]);
-        }
-        Coding[] bcs = BandStructure.getBasicCodings();
-        CodingChooser cc = new CodingChooser(effort, bcs);
-        if (ap < av.length && av[ap].equals("-p")) {
-            ap++;
-            cc.optUsePopulationCoding = false;
-        }
-        if (ap < av.length && av[ap].equals("-a")) {
-            ap++;
-            cc.optUseAdaptiveCoding = false;
-        }
-        cc.verbose = verbose;
-        int[] values = readValuesFrom(System.in);
-        int[] sizes = {0,0};
-        CodingMethod cm = cc.choose(values, BandStructure.UNSIGNED5, sizes);
-        System.out.println("size: "+sizes[BYTE_SIZE]+"/zs="+sizes[ZIP_SIZE]);
-        System.out.println(cm);
-    }
-//*/
-
 }
