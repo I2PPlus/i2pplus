@@ -596,6 +596,7 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildTimeoutRate", "Tunnel build timeout rate (0-100)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildPacedOut", "Tunnel build skipped (1st hop busy)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildStalePruned", "Builds pruned due to stale queue", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildNoSession", "Build abandoned (first hop has no session)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildBanFiltered", "Tunnel build dropped (banlisted hop)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat(buildDirectionStat(true, "Attempted"), "Inbound builds", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat(buildDirectionStat(false, "Attempted"), "Outbound builds", "Tunnels", RATES);
@@ -1958,6 +1959,25 @@ public class BuildExecutor implements Runnable {
             }
         }
 
+        // Fail fast when the first hop has no session. The peer passed selection
+        // with a session, but 27% of inbound first hops have lost it by the time
+        // the build is dispatched -- and they are not dead: those peers were heard
+        // from a median of 10s before expiry, statistically identical to the hops
+        // that kept their session. Queuing the request to a peer with no session
+        // burns the entire reply budget (15-22s) before it expires, while holding
+        // one of only ~3 permitted build slots. Abandoning it frees the slot at
+        // once and lets the pool try another candidate.
+        if (cfg.getLength() > 1) {
+            Hash buildPeer = BuildRequestor.getBuildRequestPeer(cfg);
+            if (buildPeer != null && !_context.commSystem().isEstablished(buildPeer)) {
+                _context.statManager().addRateData("tunnel.buildNoSession", 1);
+                if (_log.shouldDebug()) {
+                    _log.debug("buildTunnel() GATED (no session): first hop has no session for " + cfg);
+                }
+                cfg.getTunnelPool().removeInProgress(cfg);
+                return;
+            }
+        }
         long beforeBuild = System.currentTimeMillis();
         if (cfg.getLength() > 1) {
             do {cfg.setReplyMessageId(_context.random().nextLong(I2NPMessage.MAX_ID_VALUE));} // should we allow an ID of 0?
