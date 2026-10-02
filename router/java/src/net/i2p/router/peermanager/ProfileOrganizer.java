@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -26,6 +27,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade;
+import net.i2p.router.transport.Transport;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.Router;
@@ -1376,9 +1378,104 @@ public class ProfileOrganizer {
      *
      * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
      */
+    /**
+     *  Fraction of a tier population that must carry a usable first-hop RTT before
+     *  latency is allowed to influence tier membership.
+     *
+     *  <p>A low-latency decision taken over a small measured subset describes that
+     *  subset, not the tier: the peers we happen to have sessions with are the
+     *  ones we have been talking to, so an early sample is drawn from whoever was
+     *  contacted most recently rather than from the population. Requiring a
+     *  majority of the tier to be measured keeps the decision anchored to the tier
+     *  it is applied to.
+     *
+     * @param measured peers in the tier with a usable first-hop RTT
+     * @param population peers in the tier
+     * @return true when latency may be used to judge this tier
+     * @since 0.9.71+
+     */
+    static boolean latencySampleIsBroadEnough(int measured, int population) {
+        if (population <= 0) {return false;}
+        return measured * 2 >= population;
+    }
+
+    /**
+     *  Refresh direct-link RTT for tier peers that already have a transport
+     *  session, and re-judge their low-latency standing.
+     *
+     *  <p>Decoupled from the build pre-connect on purpose. The pre-connect is a
+     *  one-shot probe fired to force establishment, so it reads the transport at
+     *  the least informative moment: a session that was just created has not
+     *  completed a round trip and reports zero. This samples instead from sessions
+     *  that have been up long enough to have measured, which is the value the
+     *  latency tiers actually want.
+     *
+     *  <p>Peers with no session are skipped rather than probed. Probing here would
+     *  re-create the problem above: establishing a session to measure it is what
+     *  makes the measurement unavailable.
+     *
+     * @return number of peers whose RTT was refreshed
+     * @since 0.9.71+
+     */
+    int sampleFirstHopRtts() {
+        CommSystemFacade commSystem = _context.commSystem();
+        if (commSystem == null) {return 0;}
+        Collection<Transport> transports = commSystem.getTransports().values();
+        if (transports.isEmpty()) {return 0;}
+        long now = _context.clock().now();
+        int sampled = 0;
+        getReadLock();
+        try {
+            for (PeerProfile profile : _fastPeers.values()) {
+                if (sampleFirstHopRtt(profile, transports, now)) {sampled++;}
+            }
+            for (PeerProfile profile : _highCapacityPeers.values()) {
+                if (sampleFirstHopRtt(profile, transports, now)) {sampled++;}
+            }
+        } finally {
+            releaseReadLock();
+        }
+        if (sampled > 0 && _log.shouldDebug()) {
+            _log.debug("Sampled first hop RTT for " + sampled + " tier peers");
+        }
+        return sampled;
+    }
+
+    /**
+     *  Record the best RTT any transport reports for this peer, if any.
+     *
+     * @return true if a measurement was recorded
+     */
+    private boolean sampleFirstHopRtt(PeerProfile profile, Collection<Transport> transports, long now) {
+        if (profile == null) {return false;}
+        Hash peer = profile.getPeer();
+        if (peer == null) {return false;}
+        int best = 0;
+        for (Transport transport : transports) {
+            int rtt = transport.getEstimatedRTT(peer);
+            if (rtt > best) {best = rtt;}
+        }
+        if (best <= 0) {return false;}
+        profile.setFirstHopRtt(best, now);
+        profile.recalculateLowLatency();
+        return true;
+    }
+
     void reorganize(boolean shouldCoalesce) {
         final long now = _context.clock().now();
         final long start = System.currentTimeMillis();
+
+        // Refresh direct-link RTTs for the tiers before anything judges on them.
+        // Without this the only sampling point was the build pre-connect, which
+        // reads the transport immediately after forcing a new session -- always a
+        // freshly established PeerState, which reports 0 and is discarded. The
+        // 5-minute pre-connect cooldown then blocked the retry that would have
+        // caught a measurement, so a peer needed two build selections five minutes
+        // apart to record anything, and peers never selected for a build recorded
+        // nothing at all. Observed coverage on a mature router was 3% of the fast
+        // tier. Sampling here reads peers that already hold a session and so
+        // already hold a measurement, and repeats on every reorganize.
+        sampleFirstHopRtts();
 
         // Tiered expiration windows based on interaction level.
         // Active peers (Tier 1) retain long-term data for tunnel selection quality.

@@ -117,17 +117,20 @@ public class FirstHopRttTest {
      *  no longer, matching the profile's other active-tier evidence.
      */
     @Test
-    public void recordedRttAgesOutAfterTheActiveWindow() {
+    public void recordedRttAgesOutAfterTheRetentionWindow() {
         RouterContext ctx = RouterTestHelper.getContext();
         org.junit.Assume.assumeTrue("no RouterContext available", ctx != null);
         PeerProfile profile = new PeerProfile(ctx, hash(3));
         assertEquals("never measured reads as unknown", -1, profile.getFirstHopRtt(NOW));
         profile.setFirstHopRtt(300, NOW);
         assertEquals("just recorded", 300, profile.getFirstHopRtt(NOW));
+        long window = PeerProfile.FIRST_HOP_RTT_VALIDITY_MS;
         assertEquals("still valid just inside the window", 300,
-                     profile.getFirstHopRtt(NOW + HOUR - 1));
-        assertEquals("stale exactly at the window", -1, profile.getFirstHopRtt(NOW + HOUR));
-        assertEquals("stale beyond the window", -1, profile.getFirstHopRtt(NOW + 10 * HOUR));
+                     profile.getFirstHopRtt(NOW + window - 1));
+        assertEquals("valid an hour in, which the old window would have dropped", 300,
+                     profile.getFirstHopRtt(NOW + HOUR));
+        assertEquals("stale exactly at the window", -1, profile.getFirstHopRtt(NOW + window));
+        assertEquals("stale beyond the window", -1, profile.getFirstHopRtt(NOW + window + HOUR));
     }
 
     /** An unmeasured value is not stored, so it cannot masquerade as a fast peer. */
@@ -227,5 +230,47 @@ public class FirstHopRttTest {
         PeerProfile profile = new PeerProfile(ctx, hash(11));
         profile.setFirstHopRtt((int) rtt, NOW);
         return profile.getLowLatencyForFirstHopRtt(NOW, ceiling);
+    }
+    /**
+     *  Eviction may only be driven by latency once the measurement covers the tier
+     *  it is applied to. A judgement drawn from a small measured subset describes
+     *  that subset: the peers holding sessions are the ones we have been talking
+     *  to, so an early sample is whoever was contacted most recently.
+     */
+    @Test
+    public void evictionWaitsForBroadCoverage() {
+        assertFalse("a single measured peer cannot evict a tier of 100",
+                    ProfileOrganizer.latencySampleIsBroadEnough(1, 100));
+        assertFalse("a tenth is still a self-selected sample",
+                    ProfileOrganizer.latencySampleIsBroadEnough(10, 100));
+        assertTrue("a majority is enough",
+                   ProfileOrganizer.latencySampleIsBroadEnough(50, 100));
+        assertTrue("all measured",
+                   ProfileOrganizer.latencySampleIsBroadEnough(100, 100));
+    }
+
+    /** The boundary: exactly half the tier measured is the minimum that passes. */
+    @Test
+    public void evictionBoundaryIsHalf() {
+        assertTrue("exactly half", ProfileOrganizer.latencySampleIsBroadEnough(5, 10));
+        assertFalse("one short of half", ProfileOrganizer.latencySampleIsBroadEnough(4, 10));
+    }
+
+    /** An empty tier must not enable latency-driven eviction. */
+    @Test
+    public void emptyTierNeverEvicts() {
+        assertFalse(ProfileOrganizer.latencySampleIsBroadEnough(0, 0));
+        assertFalse(ProfileOrganizer.latencySampleIsBroadEnough(0, 10));
+    }
+    /**
+     *  The retention window. Lengthened from one hour so a measurement survives
+     *  the gap between talking to a peer, now that the sampler refreshes values
+     *  on every reorganize and the window only governs how long a value outlives
+     *  its session.
+     */
+    @Test
+    public void retentionIsFourHours() {
+        assertEquals("4h retention",
+                     4 * 60 * 60 * 1000L, PeerProfile.FIRST_HOP_RTT_VALIDITY_MS);
     }
 }

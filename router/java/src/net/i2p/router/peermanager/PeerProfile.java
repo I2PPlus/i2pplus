@@ -431,14 +431,23 @@ public class PeerProfile {
     /**
      *  How long a recorded first-hop RTT stays usable.
      *
-     *  <p>Reuses {@link RateConstants#ONE_HOUR}, the same Active tier period
-     *  {@link #getIsActive(long, long)} applies to {@link #getLastSendSuccessful()},
-     *  so first-hop latency ages out with the profile's other active evidence
-     *  instead of introducing a second decay scheme.
+     *  <p>Four hours rather than the {@link RateConstants#ONE_HOUR} Active tier
+     *  period that {@link #getLastSendSuccessful()} uses. Link latency is a
+     *  slow-changing property of a path, and it is now refreshed continuously by
+     *  {@code ProfileOrganizer.sampleFirstHopRtts()} on every reorganize, so this
+     *  window no longer decides how current a measurement is -- it only decides
+     *  how long a value outlives the session that produced it. An hour threw away
+     *  measurements of peers we simply had not talked to lately, which is what
+     *  left the profiles page 97% blank.
+     *
+     *  <p>The cost is that a peer whose session has gone away keeps its latency
+     *  standing for up to four hours, and the low-latency bar is absolute, so a
+     *  stale value is trusted as though current. If peer counts or the fast-tier
+     *  mix look wrong after this, this constant is the first thing to lower.
      *
      * @since 0.9.71+
      */
-    private static final long FIRST_HOP_RTT_VALIDITY_MS = RateConstants.ONE_HOUR;
+    static final long FIRST_HOP_RTT_VALIDITY_MS = 4 * 60 * 60 * 1000L;
 
     /**
      *  Absolute ceiling for the low-latency flag, in ms. Fixed, not derived from
