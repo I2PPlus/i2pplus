@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.regex.Pattern;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -141,13 +142,19 @@ public class LoginServlet extends HttpServlet {
     private static final Set<String> ALLOWED_THEMES =
             Collections.unmodifiableSet(
                 new HashSet<>(Arrays.asList("dark", "classic", "light", "midnight")));
+    /**
+     *  Languages offered by the login page flag bar (login.jsp langToCountry).
+     *  Any addition there MUST be mirrored here, or the selection is silently
+     *  discarded and falls back to "en".
+     */
     private static final Set<String> ALLOWED_LANGS =
             Collections.unmodifiableSet(
                 new HashSet<>(Arrays.asList(
-                    "ar", "az", "bn", "cs", "zh", "da", "de", "et", "en",
-                    "es", "fi", "fr", "el", "hi", "hu", "in", "it",
-                    "ja", "ko", "nl", "nb", "fa", "pl", "pt", "ro",
-                    "ru", "sl", "sv", "bo", "tr", "vi")));
+                    "ar", "az", "bn", "bo", "ca", "cs", "da", "de", "el",
+                    "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hu",
+                    "in", "it", "ja", "ko", "nb", "nl", "pl", "ps", "pt",
+                    "ro", "ru", "sl", "sv", "sw", "th", "tl", "tr", "uk",
+                    "ur", "vi", "zh", "zh_TW")));
 
     private static String sanitizeTheme(String theme) {
         if (theme != null && ALLOWED_THEMES.contains(theme)) return theme;
@@ -175,7 +182,16 @@ public class LoginServlet extends HttpServlet {
         }
         if (langRaw != null) {
             String lang = sanitizeLang(langRaw);
-            updatePreference("routerconsole.lang", lang);
+            // Region-qualified codes (zh_TW) must be split, or Translate would
+            // build new Locale("zh_TW") and miss the bundle. Mirrors CSSHelper.setLang().
+            int under = lang.indexOf('_');
+            if (under > 0 && lang.length() > under + 1) {
+                updatePreference("routerconsole.lang", lang.substring(0, under).toLowerCase(Locale.US));
+                updatePreference("routerconsole.country", lang.substring(under + 1).toUpperCase(Locale.US));
+            } else {
+                updatePreference("routerconsole.lang", lang);
+                updatePreference("routerconsole.country", "");
+            }
             resp.setContentType("application/json");
             resp.getWriter().write("{\"success\":true,\"lang\":\"" +
                 DataHelper.escapeHTML(lang) + "\"}");

@@ -85,7 +85,7 @@ public class ConfigUIHelper {
         // { "gl", "lang_gl", "Galego", null },
         // { "mg", "mg", "Malagasy", null },
         // { "pt_BR", "br", "Português", "Brazil" },
-        // { "zh_TW", "tw", "Chinese 中文", "Taiwan" },
+        {"zh_TW", "tw", "Chinese 中文（台灣）", "Taiwan"},
     };
 
     /**

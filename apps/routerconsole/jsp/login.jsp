@@ -48,6 +48,7 @@
     langToCountry.put("ca", "lang_ca");
     langToCountry.put("cs", "cz");
     langToCountry.put("zh", "cn");
+    langToCountry.put("zh_TW", "tw");
     langToCountry.put("da", "dk");
     langToCountry.put("de", "de");
     langToCountry.put("et", "ee");
@@ -101,6 +102,7 @@
 <a href="#" data-param="lang" data-value="ca" title="Catalan"><img src="/flags.jsp?c=lang_ca" alt=""></a>
 <a href="#" data-param="lang" data-value="cs" title="Cestina"><img src="/flags.jsp?c=cz" alt=""></a>
 <a href="#" data-param="lang" data-value="zh" title="Chinese"><img src="/flags.jsp?c=cn" alt=""></a>
+<a href="#" data-param="lang" data-value="zh_TW" title="Chinese (Taiwan)"><img src="/flags.jsp?c=tw" alt=""></a>
 <a href="#" data-param="lang" data-value="da" title="Dansk"><img src="/flags.jsp?c=dk" alt=""></a>
 <a href="#" data-param="lang" data-value="de" title="Deutsch"><img src="/flags.jsp?c=de" alt=""></a>
 <a href="#" data-param="lang" data-value="et" title="Eesti"><img src="/flags.jsp?c=ee" alt=""></a>

@@ -64,7 +64,7 @@ public class TranslationStatus {
     private static final String[] BASE_LANGS = { "ar", "az", "bn", "bo", "cs", "da", "de", "el", "es", "et",
                                                  "fa", "fi", "fr", "he", "hi", "hu", "in", "it", "ja",
                                                  "ko", "nb", "nl", "pl", "ps", "pt", "ro", "ru", "sk", "sl", "sv",
-                                                 "sw", "th", "tl", "tr", "uk", "ur", "vi", "zh" };
+                                                 "sw", "th", "tl", "tr", "uk", "ur", "vi", "zh", "zh_TW" };
 
     // Non-compiled resources, as paths relative to the source root. Only the
     // containing directory is checked for existence; the file name is used to
@@ -713,7 +713,11 @@ public class TranslationStatus {
         else if (langCode.equals("uk")) {countryCode = "ua";}
         else if (langCode.equals("ur")) {countryCode = "pk";}
         else if (langCode.equals("vi")) {countryCode = "vn";}
-        else if (langCode.equals("zh")) {countryCode = "cn";}
+        else if (langCode.equals("zh")) {
+            // zh_TW resolves to getLanguage()=="zh"; the region distinguishes
+            // Taiwan from the Simplified default (which has no region set).
+            countryCode = loc.getCountry().equalsIgnoreCase("TW") ? "tw" : "cn";
+        }
         else if (!langCode.isEmpty()) {countryCode = langCode.toLowerCase();}
         return countryCode;
     }
