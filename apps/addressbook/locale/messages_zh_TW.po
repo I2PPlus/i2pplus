@@ -1,0 +1,94 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Cryptocurrency related services"
+msgstr "加密貨幣相關服務"
+
+msgid "Controlled substances marketplaces"
+msgstr "管制藥物市集"
+
+msgid "E-book libraries and publishing"
+msgstr "電子書庫與出版"
+
+msgid "File hosting and storage services"
+msgstr "檔案代管與儲存服務"
+
+msgid "Peer-to-peer file sharing"
+msgstr "點對點檔案分享"
+
+msgid "Discussion forums and message boards"
+msgstr "討論論壇與留言板"
+
+msgid "Image galleries and photo sharing"
+msgstr "圖片庫與相片分享"
+
+msgid "Gaming servers and communities"
+msgstr "遊戲伺服器與社群"
+
+msgid "Git repositories and code hosting"
+msgstr "Git儲存庫與程式碼代管"
+
+msgid "Help and support resources"
+msgstr "說明與支援資源"
+
+msgid "Human rights and civil liberties"
+msgstr "人權與公民自由"
+
+msgid "Official I2P infrastructure services"
+msgstr "I2P官方基礎設施服務"
+
+msgid "News and media outlets"
+msgstr "新聞與媒體機構"
+
+msgid "Text/code paste services"
+msgstr "文字/程式碼貼上服務"
+
+msgid "Personal websites and blogs"
+msgstr "個人網站與部落格"
+
+msgid "Internet radio and streaming"
+msgstr "網際網路廣播與串流"
+
+msgid "Search engines and directories"
+msgstr "搜尋引擎與目錄"
+
+msgid "Software repositories and downloads"
+msgstr "軟體儲存庫與下載"
+
+msgid "Statistics and analytics"
+msgstr "統計與分析"
+
+msgid "Utilities and web tools"
+msgstr "實用工具與網頁工具"
+
+msgid "Torrent and content trackers"
+msgstr "torrent與內容tracker"
+
+msgid "Conspiracy / Religious content"
+msgstr "陰謀論/宗教內容"
+
+msgid "Unclassified or pending review"
+msgstr "未分類或待審核"
+
+msgid "Not yet categorized"
+msgstr "尚未分類"
+
+msgid "Video streaming and media"
+msgstr "視訊串流與媒體"
+
+msgid "Wiki and collaborative documentation"
+msgstr "Wiki與協作文件"
+
+msgid "Work in progress / development"
+msgstr "進行中/開發中"

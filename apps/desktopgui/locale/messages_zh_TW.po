@@ -1,0 +1,65 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Start I2P"
+msgstr "啟動I2P"
+
+msgid "I2P is starting!"
+msgstr "I2P正在啟動！"
+
+msgid "Starting"
+msgstr "啟動中"
+
+msgid "Launch I2P Browser"
+msgstr "啟動I2P瀏覽器"
+
+msgid "Configure I2P System Tray"
+msgstr "設定I2P系統匣"
+
+msgid "Disable system tray"
+msgstr "停用系統匣"
+
+msgid "Restart I2P"
+msgstr "重新啟動I2P"
+
+msgid "Stop I2P"
+msgstr "停止I2P"
+
+msgid "Restart I2P Immediately"
+msgstr "立即重新啟動I2P"
+
+msgid "Stop I2P Immediately"
+msgstr "立即停止I2P"
+
+msgid "Cancel I2P Shutdown"
+msgstr "取消I2P關機"
+
+#, java-format
+msgid "Shutdown in {0}"
+msgstr "將在{0}後關機"
+
+msgid "Shutdown imminent"
+msgstr "即將關機"
+
+msgid "Network"
+msgstr "網路"
+
+msgid "I2P: Right-click for menu"
+msgstr "I2P：按右鍵開啟選單"
+
+msgid "Enable notifications"
+msgstr "啟用通知"
+
+msgid "Disable notifications"
+msgstr "停用通知"

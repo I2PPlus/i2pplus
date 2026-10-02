@@ -1,0 +1,432 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "這似乎是不正確的目的地："
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper無法處理這類目的地！"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "若要瀏覽您位址簿中的目的地，請按一下<a href=\"{0}\">這裡</a>。若要瀏覽位址小幫手提供的衝突目的地，請按一下<a href=\"{1}\">這裡</a>。"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "位址簿中{0}的目的地"
+
+msgid "Conflicting address helper destination"
+msgstr "衝突的位址小幫手目的地"
+
+msgid "Corrupt Base32 address"
+msgstr "損壞的Base32位址"
+
+msgid "Destination LeaseSet not found"
+msgstr "找不到目的地LeaseSet"
+
+msgid "Host"
+msgstr "主機"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "目的地"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "不儲存直接前往{0}"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "您可以瀏覽此網站而不必將它儲存到位址簿。此位址會保留到您重新啟動I2P路由器為止。"
+
+msgid "Continue without saving"
+msgstr "不儲存直接繼續"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "將{0}儲存到路由器位址簿並繼續前往網站"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "此位址會儲存到您的路由器位址簿，也就是您訂閱的位址存放之處。"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "如果您想記錄手動新增的網站，請改為新增到主要或私人位址簿。"
+
+msgid "Save & continue"
+msgstr "儲存&繼續"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "將{0}儲存到主要位址簿並繼續前往網站"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "此位址會儲存到您的主要位址簿。如果您希望將某些位址與主要的路由器位址簿分開管理，但不介意發布，請選取此選項。"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "將{0}儲存到私人位址簿並繼續前往網站"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "此位址會儲存到您的私人位址簿，確保永不發布。"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32位址需要查詢密碼"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32位址需要加密金鑰"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32位址需要加密金鑰與查詢密碼"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32位址解密失敗，請檢查加密金鑰"
+
+msgid "Generate"
+msgstr "產生"
+
+msgid "Encryption key"
+msgstr "加密金鑰"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "您必須輸入伺服器營運者提供的PSK加密金鑰，或產生DH加密金鑰並將其傳送給伺服器營運者。"
+
+msgid "Ask the server operator for help."
+msgstr "請向伺服器營運者求助。"
+
+msgid "Enter PSK encryption key"
+msgstr "輸入PSK加密金鑰"
+
+msgid "Generate new DH encryption key"
+msgstr "產生新的DH加密金鑰"
+
+msgid "Lookup password"
+msgstr "查詢密碼"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "您必須輸入伺服器營運者提供的密碼。"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "透過來自{0}的位址小幫手新增"
+
+msgid "Added via address helper"
+msgstr "透過位址小幫手新增"
+
+msgid "Missing lookup password"
+msgstr "缺少查詢密碼"
+
+msgid "Missing private key"
+msgstr "缺少私密金鑰"
+
+msgid "Invalid private key"
+msgstr "無效的私密金鑰"
+
+msgid "Your new encryption key"
+msgstr "您的新加密金鑰"
+
+msgid "Router Console"
+msgstr "路由器主控台"
+
+msgid "Addressbook"
+msgstr "位址簿"
+
+msgid "Configuration"
+msgstr "組態"
+
+msgid "Help"
+msgstr "說明"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "複製金鑰並傳送給伺服器營運者。"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "獲得授權後，您可以前往該網站。"
+
+msgid "Go back and fix the error"
+msgstr "返回並修正錯誤"
+
+msgid "router"
+msgstr "路由器"
+
+msgid "master"
+msgstr "主要"
+
+msgid "private"
+msgstr "私人"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "正在重新導向{0}"
+
+msgid "Redirection in progress"
+msgstr "重新導向進行中"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "已將{0}儲存到{1}位址簿，正在重新導向。"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "無法將{0}儲存到{1}位址簿，正在重新導向。"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "如果您未被自動重新導向，請按一下這裡。"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "已儲存{0}的驗證資訊，正在重新導向。"
+
+msgid "Website Unknown"
+msgstr "未知網站"
+
+msgid "I2P Router Console"
+msgstr "I2P路由器主控台"
+
+msgid "Website Not Found in Addressbook"
+msgstr "位址簿中找不到網站"
+
+msgid "The website was not found in your router's addressbook."
+msgstr "在您的路由器位址簿中找不到該網站。"
+
+msgid "Check the link or find a Base 32 or Base 64 address."
+msgstr "請檢查連結，或找出Base 32或Base 64位址。"
+
+#, java-format
+msgid "If you have the Base 64 address, {0}add it to your addressbook{1}."
+msgstr "如果您有Base 64位址，請{0}將它新增到您的位址簿{1}。"
+
+msgid "Otherwise, find a Base 32 or address helper link, or use a jump service link below."
+msgstr "否則，請找出Base 32位址或位址小幫手連結，或使用下方的跳轉服務連結。"
+
+#, java-format
+msgid "Seeing this page often? See {0}the FAQ{1} for help in {2}adding some subscriptions{3} to your addressbook."
+msgstr "經常看到這個頁面嗎？請參閱{0}常見問題{1}，了解如何{2}新增一些訂閱{3}到您的位址簿。"
+
+msgid "Could not find the following destination:"
+msgstr "找不到下列目的地："
+
+msgid "Warning: Non-HTTP Protocol"
+msgstr "警告：非HTTP協定"
+
+msgid "The request uses a bad protocol."
+msgstr "此請求使用了無效的協定。"
+
+msgid "The I2P HTTP Proxy supports HTTP and HTTPS requests only."
+msgstr "I2P HTTP代理僅支援HTTP與HTTPS請求。"
+
+msgid "Other protocols such as FTP are not allowed."
+msgstr "不允許FTP等其他協定。"
+
+msgid "Error: Request Denied"
+msgstr "錯誤：請求遭拒絕"
+
+msgid "Error: Cannot Access Router Console via I2P Proxy"
+msgstr "錯誤：無法透過I2P代理存取路由器主控台"
+
+msgid "Your browser is misconfigured."
+msgstr "您的瀏覽器設定有誤。"
+
+msgid "Do not use the proxy to access the router console, localhost, or local LAN destinations."
+msgstr "請勿使用代理存取路由器主控台、localhost或本機LAN目的地。"
+
+msgid "You need to prevent 127.0.0.1 (or the address you're accessing the I2P console on) from being routed via I2P's http proxy, usually by excluding the address in your browser's proxy configuration section."
+msgstr "您必須避免127.0.0.1（或您用來存取I2P主控台的位址）經由I2P的http代理傳送，通常做法是在瀏覽器的代理設定區段中排除該位址。"
+
+msgid "Warning: Destination Key Conflict"
+msgstr "警告：目的地金鑰衝突"
+
+msgid "The address helper link you followed specifies a different destination key than the entry in your address book."
+msgstr "您所點擊的位址小幫手連結所指定的目的地金鑰，與您位址簿中的項目不同。"
+
+msgid "Someone could be trying to impersonate another website, or people have given two websites identical names."
+msgstr "可能是有人想冒充另一個網站，或是兩個網站被取用了相同的名稱。"
+
+msgid "Resolve the conflict by deciding which key you trust, and then either ignore the address helper link, or delete the host entry from your address book and click the address helper link again."
+msgstr "請先決定信任哪一把金鑰以解決衝突，然後選擇忽略該位址小幫手連結，或從位址簿中刪除該主機項目，再重新點擊該位址小幫手連結。"
+
+msgid "Connection Reset"
+msgstr "連線重設"
+
+msgid "The connection to the website was reset while the page was loading."
+msgstr "載入頁面時，與該網站的連線被重設。"
+
+msgid "The website could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "該網站可能暫時無法提供服務、忙碌過載，或已封鎖您的存取。"
+
+#, java-format
+msgid "You may want to {0}retry{1}."
+msgstr "您可以考慮{0}重試{1}。"
+
+#, java-format
+msgid "If you leave this page open, it will automatically retry connecting to the website every {0} seconds after a failed connection attempt."
+msgstr "若您讓這個頁面保持開啟，連線失敗後將會每隔{0}秒自動嘗試重新連線到該網站。"
+
+msgid "Website Unreachable"
+msgstr "網站不可達"
+
+msgid "The website was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "無法連線到該網站，因為它使用的加密選項不受您的I2P或Java版本支援。"
+
+msgid "Could not connect to the following destination:"
+msgstr "無法連線到下列目的地："
+
+msgid "The website was not reachable, because its lease set was not found."
+msgstr "無法連線到該網站，因為找不到它的LeaseSet。"
+
+msgid "The website is probably down, but there could also be network congestion."
+msgstr "該網站可能已離線，但也可能是網路壅塞。"
+
+msgid "The connection to the proxy was reset."
+msgstr "與代理的連線被重設。"
+
+msgid "The proxy could be temporarily unavailable, too busy, or it has blocked your access."
+msgstr "代理可能暫時無法使用、忙碌過載，或已封鎖您的存取。"
+
+#, java-format
+msgid "You may want to {0}retry{1} as this will randomly reselect an outproxy from the pool you have defined {2}here{3} (if you have more than one configured)."
+msgstr "您可以考慮{0}重試{1}，因為這會從您以{2}這裡{3}定義的出口代理池中隨機重新選取一個出口代理（如果您設定了多個）。"
+
+#, java-format
+msgid "If you continue to have trouble you may want to edit your outproxy list {0}here{1}."
+msgstr "如果您持續遇到問題，可以考慮在{0}這裡{1}編輯出口代理清單。"
+
+msgid "Outproxy Unreachable"
+msgstr "出口代理不可達"
+
+msgid "The HTTP outproxy was not reachable, because it uses encryption options that are not supported by your I2P or Java version."
+msgstr "無法連線到HTTP出口代理，因為它使用的加密選項不受您的I2P或Java版本支援。"
+
+msgid "The website was not reachable."
+msgstr "無法連線到該網站。"
+
+msgid "The website is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "該網站已離線、網路壅塞，或您的路由器尚未與對等點良好整合。"
+
+msgid "Warning: No Outproxy Configured"
+msgstr "警告：未設定出口代理"
+
+msgid "Your request was for a site outside of I2P, but you have no HTTP outproxy configured."
+msgstr "您的請求是要存取I2P以外的網站，但您尚未設定HTTP出口代理。"
+
+msgid "Please configure an outproxy in I2PTunnel."
+msgstr "請在I2PTunnel中設定出口代理。"
+
+msgid "Outproxy Not Found"
+msgstr "找不到出口代理"
+
+msgid "The HTTP Outproxy was not found."
+msgstr "找不到HTTP出口代理。"
+
+msgid "It is offline, there is network congestion, or your router is not yet well-integrated with peers."
+msgstr "它已離線、網路壅塞，或您的路由器尚未與對等點良好整合。"
+
+msgid "Information: New Host Name"
+msgstr "資訊：新主機名稱"
+
+msgid "Information: New Host Name with Address Helper"
+msgstr "資訊：透過位址小幫手取得的新主機名稱"
+
+msgid "The address helper link you followed is for a new host name that is not in your address book."
+msgstr "您所點擊的位址小幫手連結對應的是一個不在您位址簿中的新主機名稱。"
+
+msgid "You may save this host name to your local address book."
+msgstr "您可以將這個主機名稱儲存到您的本機位址簿。"
+
+msgid "If you save it to your address book, you will not see this message again."
+msgstr "如果您將它儲存到位址簿，就不會再看到這個訊息。"
+
+msgid "If you do not save it, the host name will be forgotten after the next router restart."
+msgstr "如果您不儲存，主機名稱會在下次重新啟動路由器後被遺忘。"
+
+msgid "If you do not wish to visit this host, click the \"back\" button on your browser."
+msgstr "如果您不想造訪這個主機，請按一下瀏覽器上的「返回」按鈕。"
+
+msgid "Proxy Authorization Required"
+msgstr "代理需要驗證"
+
+msgid "I2P HTTP Proxy Authorization Required"
+msgstr "I2P HTTP代理需要驗證"
+
+msgid "This proxy is configured to require a username and password for access."
+msgstr "此代理已設定為需要使用者名稱與密碼才能存取。"
+
+#, java-format
+msgid "Please enter your username and password, or check your {0}router configuration{1} or {2}I2PTunnel configuration{3}."
+msgstr "請輸入您的使用者名稱與密碼，或檢查您的{0}路由器組態{1}或{2}I2PTunnel組態{3}。"
+
+#, java-format
+msgid "To disable authorization, remove the configuration {0}i2ptunnel.proxy.auth=basic{1}, then stop and restart the HTTP Proxy tunnel."
+msgstr "若要停用驗證，請移除組態設定{0}i2ptunnel.proxy.auth=basic{1}，然後停止並重新啟動HTTP代理隧道。"
+
+msgid "The HTTP outproxy was not reachable, because its lease set was not found."
+msgstr "無法連線到HTTP出口代理，因為找不到它的LeaseSet。"
+
+msgid "The outproxy is probably down, but there could also be network congestion."
+msgstr "出口代理可能已離線，但也可能是網路壅塞。"
+
+msgid "Warning: Request Denied"
+msgstr "警告：請求遭拒絕"
+
+msgid "This address appears to be malformed. Please verify you have supplied a valid address!"
+msgstr "這個位址似乎格式錯誤。請確認您提供的位址有效！"
+
+msgid "Warning: Bad Address Helper"
+msgstr "警告：位址小幫手無效"
+
+#, java-format
+msgid "The helper key in the URL ({0}i2paddresshelper={1}) is not resolvable."
+msgstr "URL中的小幫手金鑰（{0}i2paddresshelper={1}）無法解析。"
+
+msgid "It seems to be garbage data, or a mistyped Base 32 address."
+msgstr "這看起來像是無效的資料，或是一個輸入錯誤的Base 32位址。"
+
+msgid "Check your URL to try and fix the helper key to be a valid Base 32 hostname or Base 64 key."
+msgstr "請檢查您的URL，嘗試將小幫手金鑰修正為有效的Base 32主機名稱或Base 64金鑰。"
+
+msgid "Warning: Address Blacklisted"
+msgstr "警告：位址已列入黑名單"
+
+msgid "The requested destination is in your blacklist and access has been blocked."
+msgstr "所請求的目的地在您的黑名單中，存取已被封鎖。"
+
+msgid "To allow access to this site, remove it from your blacklist on the SusiDNS blacklist management page."
+msgstr "若要允許存取這個網站，請在SusiDNS黑名單管理頁面中將它從黑名單移除。"
+
+msgid "Warning: Invalid Destination"
+msgstr "警告：無效的目的地"
+
+msgid "The website destination specified was not valid, or was otherwise unreachable."
+msgstr "指定的網站目的地無效，或無法連線。"
+
+msgid "Perhaps you pasted in the wrong Base 64 string or the link you are following is bad."
+msgstr "也許您貼上了錯誤的Base 64字串，或您點擊的連結有問題。"
+
+msgid "The I2P host could also be offline."
+msgstr "這個I2P主機也可能已離線。"
+
+msgid "Warning: Authorization Required"
+msgstr "警告：需要驗證"
+
+msgid "Warning: Invalid Request URI"
+msgstr "警告：無效的請求URI"
+
+msgid "The request URI is invalid, and probably contains illegal characters."
+msgstr "請求URI無效，而且可能包含非法字元。"
+
+msgid "If you clicked a link, check the end of the URI for any characters the browser has mistakenly added on."
+msgstr "如果您點擊了連結，請檢查URI結尾是否有瀏覽器誤加的字元。"
+
+msgid "The Base32 address is invalid."
+msgstr "Base32位址無效。"

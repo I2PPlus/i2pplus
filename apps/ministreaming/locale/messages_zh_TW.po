@@ -1,0 +1,67 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Message timeout"
+msgstr "訊息逾時"
+
+msgid "Failed delivery to local destination"
+msgstr "傳送到本機目的地失敗"
+
+msgid "Local router failure"
+msgstr "本機路由器故障"
+
+msgid "Local network failure"
+msgstr "本機網路故障"
+
+msgid "Session closed"
+msgstr "工作階段已關閉"
+
+msgid "Invalid message"
+msgstr "無效的訊息"
+
+msgid "Invalid message options"
+msgstr "無效的訊息選項"
+
+msgid "Buffer overflow"
+msgstr "緩衝區溢位"
+
+msgid "Message expired"
+msgstr "訊息已到期"
+
+msgid "Local lease set invalid"
+msgstr "本機LeaseSet無效"
+
+msgid "No local tunnels"
+msgstr "沒有本機隧道"
+
+msgid "Unsupported encryption options"
+msgstr "不支援的加密選項"
+
+msgid "Invalid destination"
+msgstr "無效的目的地"
+
+msgid "Destination lease set expired"
+msgstr "目的地LeaseSet已到期"
+
+msgid "Destination lease set not found"
+msgstr "找不到目的地LeaseSet"
+
+msgid "Local destination shutdown"
+msgstr "本機目的地關機"
+
+msgid "Connection was reset"
+msgstr "連線已被重設"
+
+msgid "Failure code"
+msgstr "失敗代碼"

@@ -1,0 +1,1669 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Magnet"
+msgstr "magnet"
+
+msgid "Unable to connect to I2P"
+msgstr "無法連線到I2P"
+
+msgid "Error connecting to I2P - check your I2CP settings!"
+msgstr "連線到I2P時發生錯誤，請檢查您的I2CP設定！"
+
+msgid "Configuring I2PSnark with I2CP options"
+msgstr "以I2CP選項設定I2PSnark"
+
+msgid "No write permissions for data directory"
+msgstr "資料目錄沒有寫入權限"
+
+msgid "Data directory cannot be created"
+msgstr "無法建立資料目錄"
+
+msgid "No write permissions for temp directory"
+msgstr "暫存目錄沒有寫入權限"
+
+msgid "Temp directory cannot be created"
+msgstr "無法建立暫存目錄"
+
+msgid "No write permissions for torrent directory"
+msgstr "torrent目錄沒有寫入權限"
+
+msgid "Torrent directory cannot be created"
+msgstr "無法建立torrent目錄"
+
+#, java-format
+msgid "Total uploaders limit changed to {0}"
+msgstr "上傳者總數上限已變更為{0}"
+
+#, java-format
+msgid "Minimum uploaders limit is {0}"
+msgstr "上傳者數量下限為{0}"
+
+#, java-format
+msgid "Up BW limit changed to {0}KBps"
+msgstr "上傳頻寬上限已變更為{0}KBps"
+
+#, java-format
+msgid "Minimum up bandwidth limit is {0}KBps"
+msgstr "上傳頻寬下限為{0}KBps"
+
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr "最大下載速度已變更為{0}KB/s"
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr "下載速度限制為{0}KB/s"
+
+msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
+msgstr "注意：您可能需要停止並重新啟動torrent，或重新啟動I2PSnark才會生效。"
+
+msgid "Enabled +0/1 tunnel hop randomization on Inbound tunnels"
+msgstr "已啟用傳入隧道的+0/1 hop隨機化"
+
+msgid "Disabled tunnel hop randomization on Inbound tunnels"
+msgstr "已停用傳入隧道的hop隨機化"
+
+msgid "Enabled +0/1 tunnel hop randomization on Outbound tunnels"
+msgstr "已啟用傳出隧道的+0/1 hop隨機化"
+
+msgid "Disabled tunnel hop randomization on Outbound tunnels"
+msgstr "已停用傳出隧道的hop隨機化"
+
+msgid "Enabled a separate destination for each torrent"
+msgstr "已為每個torrent啟用獨立目的地"
+
+msgid "Disabled a separate destination for each torrent"
+msgstr "已停用每個torrent的獨立目的地"
+
+#, java-format
+msgid "Maximum destinations changed to {0}"
+msgstr "最大目的地數量已變更為{0}"
+
+msgid "Unlimited destinations restored (one per torrent)"
+msgstr "已還原無限制目的地（每個torrent一個）"
+
+msgid "Enabled randomizing torrent start times"
+msgstr "已啟用torrent啟動時間隨機化"
+
+msgid "Disabled randomizing torrent start times"
+msgstr "已停用torrent啟動時間隨機化"
+
+#, java-format
+msgid "Startup delay range changed to {0} - {1}"
+msgstr "啟動延遲範圍已變更為{0} - {1}"
+
+#, java-format
+msgid "Refresh time changed to {0}"
+msgstr "重新整理時間已變更為{0}"
+
+msgid "Refresh disabled"
+msgstr "已停用重新整理"
+
+#, java-format
+msgid "Page size changed to {0}"
+msgstr "每頁顯示數量已變更為{0}"
+
+msgid "New files will be publicly readable"
+msgstr "新檔案將可由所有使用者讀取"
+
+msgid "New files will not be publicly readable"
+msgstr "新檔案將無法由所有使用者讀取"
+
+msgid "Stop all torrents before changing data directory"
+msgstr "變更資料目錄前請先停止所有torrent"
+
+msgid "Data directory must be an absolute path"
+msgstr "資料目錄必須是絕對路徑"
+
+msgid "Not a directory"
+msgstr "不是目錄"
+
+msgid "Unreadable"
+msgstr "無法讀取"
+
+#, java-format
+msgid "Data directory changed to {0}"
+msgstr "資料目錄已變更為{0}"
+
+msgid "I2CP and tunnel changes will take effect after stopping all torrents"
+msgstr "停止所有torrent後，I2CP與隧道的變更才會生效"
+
+#, java-format
+msgid "I2CP options changed to: {0}"
+msgstr "I2CP選項已變更為：{0}"
+
+msgid "Disconnecting old I2CP destination"
+msgstr "正在中斷舊的I2CP目的地連線"
+
+msgid "Unable to connect with the new settings, reverting to the old I2CP settings"
+msgstr "無法使用新設定連線，將還原為舊的I2CP設定"
+
+msgid "Unable to reconnect with the old settings!"
+msgstr "無法使用舊設定重新連線！"
+
+msgid "Reconnected on the new I2CP destination"
+msgstr "已使用新的I2CP目的地重新連線"
+
+#, java-format
+msgid "I2CP listener restarted for \"{0}\""
+msgstr "已為\"{0}\"重新啟動I2CP監聽端"
+
+msgid "Enabled autostart"
+msgstr "已啟用自動啟動"
+
+msgid "Disabled autostart"
+msgstr "已停用自動啟動"
+
+msgid "Enabled open trackers - torrent restart required to take effect."
+msgstr "已啟用open tracker：需要重新啟動torrent才會生效。"
+
+msgid "Disabled open trackers - torrent restart required to take effect."
+msgstr "已停用open tracker：需要重新啟動torrent才會生效。"
+
+msgid "Enabled DHT."
+msgstr "已啟用DHT。"
+
+msgid "Disabled DHT."
+msgstr "已停用DHT。"
+
+msgid "DHT change requires tunnel shutdown and reopen"
+msgstr "變更DHT需要關閉並重新開啟隧道"
+
+msgid "Enabled Ratings."
+msgstr "已啟用評分。"
+
+msgid "Disabled Ratings."
+msgstr "已停用評分。"
+
+msgid "Enabled Comments."
+msgstr "已啟用留言。"
+
+msgid "Disabled Comments."
+msgstr "已停用留言。"
+
+#, java-format
+msgid "Comments name set to {0}."
+msgstr "留言者名稱已設為{0}。"
+
+msgid "Collapsible panels enabled."
+msgstr "已啟用可收合面板。"
+
+msgid "Collapsible panels disabled."
+msgstr "已停用可收合面板。"
+
+msgid "Torrent filter bar enabled."
+msgstr "已啟用torrent篩選列。"
+
+msgid "Torrent filter bar disabled."
+msgstr "已停用torrent篩選列。"
+
+msgid "Lightbox enabled for image thumbnails."
+msgstr "已為影像縮圖啟用燈箱。"
+
+msgid "Lightbox disabled for image thumbnails."
+msgstr "已為影像縮圖停用燈箱。"
+
+msgid "Add and Create sections enabled on all torrent listing pages."
+msgstr "已在所有torrent清單頁面啟用新增與建立區段。"
+
+msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
+msgstr "多頁torrent清單頁面僅在第一頁顯示新增與建立區段。"
+
+msgid "API key updated."
+msgstr "API金鑰已更新。"
+
+msgid "Preallocate files for new torrents enabled."
+msgstr "已為新torrent啟用預先配置檔案空間。"
+
+msgid "Preallocate files for new torrents disabled."
+msgstr "已為新torrent停用預先配置檔案空間。"
+
+msgid "Preserve original file names enabled."
+msgstr "已啟用保留原始檔名。"
+
+msgid "Preserve original file names disabled."
+msgstr "已停用保留原始檔名。"
+
+#, java-format
+msgid "Maximum files per torrent changed to {0}"
+msgstr "每個torrent的最大檔案數已變更為{0}"
+
+#, java-format
+msgid "Invalid maximum files per torrent: {0}"
+msgstr "每個torrent的最大檔案數無效：{0}"
+
+#, java-format
+msgid "Temp directory for staging changed to {0}"
+msgstr "用於暫存資料的目錄已變更為{0}"
+
+msgid "Temp directory staging disabled."
+msgstr "已停用暫存目錄預置功能。"
+
+#, java-format
+msgid "Torrent directory changed to {0}"
+msgstr "torrent目錄已變更為{0}"
+
+msgid "Torrent directory reset to data directory."
+msgstr "torrent目錄已重設為資料目錄。"
+
+msgid "Open Tracker list changed - torrent restart required to take effect."
+msgstr "open tracker清單已變更：需要重新啟動torrent才會生效。"
+
+msgid "Private tracker list changed - affects newly created torrents only."
+msgstr "私人tracker清單已變更：僅影響新建立的torrent。"
+
+#, java-format
+msgid "Unable to save the config to {0}"
+msgstr "無法將組態儲存至{0}"
+
+#, java-format
+msgid "Torrent file deleted: {0}"
+msgstr "已刪除torrent檔案：{0}"
+
+#, java-format
+msgid "Torrent file moved from {0} to {1}"
+msgstr "已將torrent檔案從{0}移至{1}"
+
+#, java-format
+msgid "Error: Could not add torrent: {0}"
+msgstr "錯誤：無法新增torrent：{0}"
+
+#, java-format
+msgid "Torrent already running: {0}"
+msgstr "torrent已在執行中：{0}"
+
+#, java-format
+msgid "Cannot open \"{0}\""
+msgstr "無法開啟\"{0}\""
+
+#, java-format
+msgid "Torrent with this info hash is already running: {0}"
+msgstr "具有此info hash的torrent已在執行中：{0}"
+
+#, java-format
+msgid "Torrent with the same data location is already running: {0}"
+msgstr "資料位置相同的torrent已在執行中：{0}"
+
+#, java-format
+msgid "Torrent in \"{0}\" is invalid"
+msgstr "\"{0}\"中的torrent無效"
+
+#, java-format
+msgid "ERROR - Out of memory, cannot create torrent from {0}"
+msgstr "錯誤：記憶體不足，無法以{0}建立torrent"
+
+#, java-format
+msgid "ERROR - cannot create torrent from {0}"
+msgstr "錯誤：無法以{0}建立torrent"
+
+msgid "Initializing I2PSnark and opening tunnels"
+msgstr "正在初始化I2PSnark並開啟隧道"
+
+#, java-format
+msgid "Torrent added and started: {0}"
+msgstr "已新增並啟動torrent：{0}"
+
+#, java-format
+msgid "Torrent added: {0}"
+msgstr "已新增torrent：{0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "錯誤：私人torrent\"{0}\"中沒有I2P tracker"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "警告：\"{0}\"中沒有I2P tracker，只會announce到I2P open tracker與DHT。"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "警告：\"{0}\"中沒有I2P tracker，且open tracker已停用，只會announce到DHT。"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "警告：\"{0}\"中沒有I2P tracker，且DHT與open tracker都已停用，您應在啟動torrent前啟用open tracker或DHT。"
+
+#, java-format
+msgid "Open trackers are disabled and we have no DHT peers. Fetch of {0} may not succeed until you start another torrent, enable open trackers, or enable DHT."
+msgstr "open tracker已停用且沒有DHT對等點。在您啟動另一個torrent、啟用open tracker或啟用DHT之前，{0}的取得可能不會成功。"
+
+#, java-format
+msgid "Adding {0}"
+msgstr "正在新增{0}"
+
+#, java-format
+msgid "Download already running: {0}"
+msgstr "下載已在執行中：{0}"
+
+#, java-format
+msgid "Failed to copy torrent file to {0}"
+msgstr "無法將torrent檔案複製至{0}"
+
+msgid " - torrent file already exists"
+msgstr " - torrent檔案已存在"
+
+#, java-format
+msgid "Too many files in \"{0}\" ({1})!"
+msgstr "\"{0}\"中的檔案數過多（{1}）！"
+
+#, java-format
+msgid "Torrent file \"{0}\" cannot end in \".torrent\"!"
+msgstr "torrent檔案\"{0}\"的結尾不能是\".torrent\"！"
+
+#, java-format
+msgid "No pieces in \"{0}\"!"
+msgstr "\"{0}\"中沒有區塊！"
+
+#, java-format
+msgid "Too many pieces in \"{0}\", limit is {1}!"
+msgstr "\"{0}\"中的區塊數過多，上限為{1}！"
+
+#, java-format
+msgid "Pieces are too large in \"{0}\" ({1}B)!"
+msgstr "\"{0}\"中的區塊過大（{1}B）！"
+
+#, java-format
+msgid "Limit is {0}B"
+msgstr "上限為{0}B"
+
+#, java-format
+msgid "Torrent \"{0}\" has no data!"
+msgstr "torrent\"{0}\"沒有資料！"
+
+#, java-format
+msgid "Torrents larger than {0}B are not supported yet \"{1}\"!"
+msgstr "尚不支援大於{0}B的torrent\"{1}\"！"
+
+#, java-format
+msgid "Error: Could not remove the torrent {0}"
+msgstr "錯誤：無法移除torrent {0}"
+
+#, java-format
+msgid "Torrent stopped: {0}"
+msgstr "已停止torrent：{0}"
+
+#, java-format
+msgid "Torrent removed: {0}"
+msgstr "已移除torrent：{0}"
+
+#, java-format
+msgid "Starting torrents in {0}&hellip;"
+msgstr "正在啟動{0}中的torrent&hellip;"
+
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "下載頻寬限制為{0} KB/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "上傳頻寬限制為{0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr "正在連線到{0}的I2P實例之I2CP連接埠"
+
+#, java-format
+msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
+msgstr "上傳頻寬限制為{0} KBps，最多同時對{1}個對等點上傳。"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr "儲存空間：設定的資料分割區目前有{0}GB可供下載"
+
+#, java-format
+msgid "Storage: {0}MB currently available for downloads on configured data partition"
+msgstr "儲存空間：設定的資料分割區目前有{0}MB可供下載"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured data partition"
+msgstr "警告：設定的資料分割區只剩{0}MB可供下載"
+
+#, java-format
+msgid "Temp storage: {0}GB currently available for downloads on configured temp partition"
+msgstr "暫存空間：設定的暫存分割區目前有{0}GB可供下載"
+
+#, java-format
+msgid "Temp storage: {0}MB currently available for downloads on configured temp partition"
+msgstr "暫存空間：設定的暫存分割區目前有{0}MB可供下載"
+
+#, java-format
+msgid "Warning - Only {0}MB available for downloads on configured temp partition"
+msgstr "警告：設定的暫存分割區只剩{0}MB可供下載"
+
+#, java-format
+msgid "Download finished: {0}"
+msgstr "下載完成：{0}"
+
+msgid "I2PSnark"
+msgstr "I2PSnark"
+
+#, java-format
+msgid "Starting torrent: {0}"
+msgstr "正在啟動torrent：{0}"
+
+msgid "Unable to load torrent create file filter config: "
+msgstr "無法載入建立torrent的檔案篩選組態： "
+
+msgid "Unable to save torrent create file filter config: "
+msgstr "無法儲存建立torrent的檔案篩選組態： "
+
+msgid "Torrent not found"
+msgstr "找不到torrent"
+
+msgid "Opening the I2P tunnel"
+msgstr "正在開啟I2P隧道"
+
+#, java-format
+msgid "Resolving torrent lookup: {0}"
+msgstr "正在解析torrent查詢：{0}"
+
+msgid "Opening the I2P tunnel and starting all torrents."
+msgstr "正在開啟I2P隧道並啟動所有torrent。"
+
+msgid "Connecting to I2P"
+msgstr "正在連線到I2P"
+
+msgid "Connected to I2P at"
+msgstr "已連線到位於"
+
+#, java-format
+msgid "Starting up torrent {0}"
+msgstr "正在啟動torrent {0}"
+
+msgid "Stopping all torrents and closing the I2P tunnel."
+msgstr "正在停止所有torrent並關閉I2P隧道。"
+
+msgid "Closing I2P tunnel after notifying trackers."
+msgstr "通知tracker後正在關閉I2P隧道。"
+
+msgid "I2P tunnel closed."
+msgstr "I2P隧道已關閉。"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active download in progress"
+msgstr "略過目的地輪替：{0}個下載正在進行中"
+
+#, java-format
+msgid "Skipping destination cycle - {0} active downloads in progress"
+msgstr "略過目的地輪替：{0}個下載正在進行中"
+
+msgid "No actively downloading torrents - cycling destinations"
+msgstr "沒有正在下載的torrent，正在輪替目的地"
+
+#, java-format
+msgid "Cannot check {0}"
+msgstr "無法檢查{0}"
+
+msgid "Torrent already started"
+msgstr "torrent已啟動"
+
+msgid "No storage"
+msgstr "沒有儲存空間"
+
+msgid "Starting recheck of {}"
+msgstr "開始重新檢查{}"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, now {1} complete"
+msgstr "已完成torrent {0}的重新檢查，目前{1}完成"
+
+#, java-format
+msgid "Finished recheck of torrent {0}, unchanged"
+msgstr "已完成torrent {0}的重新檢查，沒有變更"
+
+#, java-format
+msgid "Error checking torrent {0}"
+msgstr "檢查torrent {0}時發生錯誤"
+
+msgid "Data directory does not exist"
+msgstr "資料目錄不存在"
+
+msgid "Cannot create diskspace bar"
+msgstr "無法建立磁碟空間長條圖"
+
+msgid "Data partition"
+msgstr "資料分割區"
+
+#, java-format
+msgid "No valid trackers for {0} - enable opentrackers or DHT?"
+msgstr "{0}沒有有效的tracker，要啟用open tracker或DHT嗎？"
+
+msgid "Updating"
+msgstr "正在更新"
+
+#, java-format
+msgid "Updating from {0}"
+msgstr "正在從{0}更新"
+
+#, java-format
+msgid "Downloading {0}"
+msgstr "正在下載{0}"
+
+#, java-format
+msgid "Requesting torrent file: {0}"
+msgstr "正在要求torrent檔案：{0}"
+
+#, java-format
+msgid "Failed to retrieve torrent file: {0}"
+msgstr "無法取得torrent檔案：{0}"
+
+#, java-format
+msgid "Torrent downloaded from {0}"
+msgstr "已從{0}下載torrent"
+
+#, java-format
+msgid "Torrent already in the queue: {0}"
+msgstr "torrent已在佇列中：{0}"
+
+#, java-format
+msgid "Torrent at {0} was not valid"
+msgstr "{0}的torrent無效"
+
+msgid "Configuration"
+msgstr "組態"
+
+msgid "User Interface"
+msgstr "使用者介面"
+
+msgid "Switch to Embedded Mode"
+msgstr "切換至嵌入模式"
+
+msgid "Switch to Fullscreen Mode"
+msgstr "切換至全螢幕模式"
+
+msgid "Theme"
+msgstr "主題"
+
+msgid "To change themes manually, disable universal theming"
+msgstr "若要手動變更主題，請先停用統一主題設定"
+
+msgid "Universal theming is enabled."
+msgstr "已啟用統一主題。"
+
+msgid "Configure"
+msgstr "設定"
+
+msgid "Refresh time"
+msgstr "重新整理時間"
+
+msgid "How frequently torrent status is updated on the main page"
+msgstr "主頁面上torrent狀態的更新頻率"
+
+msgid "Never"
+msgstr "永不"
+
+msgid "Page size"
+msgstr "每頁顯示數量"
+
+msgid "Maximum number of torrents to display per page"
+msgstr "每頁顯示的最大torrent數量"
+
+msgid "torrents"
+msgstr "torrent"
+
+msgid "Language"
+msgstr "語言"
+
+msgid "Collapsible panels"
+msgstr "可收合面板"
+
+msgid "Your browser does not support this feature."
+msgstr "您的瀏覽器不支援此功能。"
+
+msgid "Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"
+msgstr "允許'Add Torrent'與'Create Torrent'面板收合，並在非嵌入模式下預設收合"
+
+msgid "Torrent filter bar"
+msgstr "torrent篩選列"
+
+msgid "Show filter bar above torrents for selective display based on status"
+msgstr "在torrent上方顯示篩選列，可依狀態選擇要顯示的內容"
+
+msgid "requires javascript"
+msgstr "需要javascript"
+
+msgid "Enable lightbox"
+msgstr "啟用燈箱"
+
+msgid "Use a lightbox to display images when thumbnails are clicked"
+msgstr "點擊縮圖時使用燈箱顯示影像"
+
+msgid "Persist Add/Create"
+msgstr "保留新增／建立"
+
+msgid "Display the 'Add' and 'Create' sections on all torrent listing pages when in multipage mode"
+msgstr "在多頁模式下，於所有torrent清單頁面顯示'Add'與'Create'區段"
+
+msgid "Comments &amp; Ratings"
+msgstr "留言&amp;評分"
+
+msgid "Enable Ratings"
+msgstr "啟用評分"
+
+msgid "Show ratings on torrent pages"
+msgstr "在torrent頁面顯示評分"
+
+msgid "Enable Comments"
+msgstr "啟用留言"
+
+msgid "Show comments on torrent pages"
+msgstr "在torrent頁面顯示留言"
+
+msgid "Comment Author"
+msgstr "留言作者"
+
+msgid "Set the author name for your comments and ratings"
+msgstr "設定您留言與評分時使用的作者名稱"
+
+msgid "Torrent Options"
+msgstr "torrent選項"
+
+msgid "Half available bandwidth recommended."
+msgstr "建議使用一半的可用頻寬。"
+
+msgid "Bandwidth limit"
+msgstr "頻寬限制"
+
+msgid "Maximum bandwidth allocated for downloading"
+msgstr "配置給下載的最大頻寬"
+
+msgid "Maximum bandwidth allocated for uploading"
+msgstr "配置給上傳的最大頻寬"
+
+msgid "View or change router bandwidth"
+msgstr "檢視或變更路由器頻寬"
+
+msgid "Total uploader limit"
+msgstr "上傳者總數上限"
+
+msgid "Maximum number of peers to upload to"
+msgstr "上傳的最大對等點數量"
+
+msgid "peers"
+msgstr "對等點"
+
+msgid "Use open trackers also"
+msgstr "同時使用open tracker"
+
+msgid "Announce torrents to open trackers as well as trackers listed in the torrent file"
+msgstr "將torrent announce到open tracker，以及torrent檔案中列出的tracker"
+
+msgid "Enable DHT"
+msgstr "啟用DHT"
+
+msgid "Use DHT to find additional peers"
+msgstr "使用DHT尋找其他對等點"
+
+msgid "Auto start torrents"
+msgstr "自動啟動torrent"
+
+msgid "Automatically start torrents when added and restart torrents when I2PSnark starts"
+msgstr "新增torrent時自動啟動，並在I2PSnark啟動時重新啟動torrent"
+
+msgid "Startup delay"
+msgstr "啟動延遲"
+
+msgid "minutes"
+msgstr "分鐘"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the earliest"
+msgstr "I2PSnark啟動時，自動啟動的torrent最早會延遲多久載入"
+
+msgid "min"
+msgstr "最短"
+
+msgid "How long before auto-started torrents are loaded when I2PSnark starts, at the latest"
+msgstr "I2PSnark啟動時，自動啟動的torrent最晚會延遲多久載入"
+
+msgid "max"
+msgstr "最長"
+
+msgid "Data Storage"
+msgstr "資料儲存"
+
+msgid "Data directory"
+msgstr "資料目錄"
+
+msgid "Directory where torrents and downloaded/shared files are stored"
+msgstr "儲存torrent與已下載／分享檔案的目錄"
+
+msgid "Temp directory"
+msgstr "暫存目錄"
+
+msgid "Optional directory where downloads are staged before being moved into the data directory on completion. Leave empty to disable."
+msgstr "選用的目錄，下載內容會先暫存於此，完成後再移入資料目錄。留空表示停用。"
+
+msgid "Torrent directory"
+msgstr "torrent目錄"
+
+msgid "Optional directory to store .torrent files separately from downloaded data. Leave empty to store in the data directory."
+msgstr "選用的目錄，將.torrent檔案與下載資料分開儲存。留空表示儲存於資料目錄。"
+
+msgid "Files readable by all"
+msgstr "檔案對所有使用者可讀取"
+
+msgid "Set file permissions to allow other local users to access the downloaded files"
+msgstr "設定檔案權限，讓其他本機使用者存取已下載的檔案"
+
+msgid "Preallocate files"
+msgstr "預先配置檔案空間"
+
+msgid "Extend new torrent files to their full size and allocate the space on disk immediately when the torrent starts, to prevent a full disk from interrupting downloads and avoid fragmentation as pieces arrive"
+msgstr "在torrent啟動時，立即將新的torrent檔案擴展至完整大小並配置磁碟空間，以免磁碟滿載中斷下載，並避免區塊寫入時造成磁碟碎片"
+
+msgid "Preserve file names"
+msgstr "保留原始檔名"
+
+msgid "Preserve original file names from the torrent. When disabled, filenames are filtered to remove illegal filesystem characters. When enabled, original filenames are used; if a filename contains characters not supported by your filesystem, the file will be created with a safe fallback name and a warning will be shown"
+msgstr "保留torrent中的原始檔名。停用時會篩選檔名並移除檔案系統不允許的字元。啟用時使用原始檔名，若檔名含有檔案系統不支援的字元，將改用安全的替代檔名建立檔案並顯示警告"
+
+msgid "Max files per torrent"
+msgstr "每個torrent的最大檔案數"
+
+msgid "Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"
+msgstr "每個torrent允許的最大檔案數量，請注意tracker可能會設定自己的上限，而您的作業系統也可能限制可開啟的檔案數量，導致檔案過多的torrent（以及後續的torrent）無法載入"
+
+msgid "Tunnel Configuration"
+msgstr "隧道組態"
+
+msgid "Primary destination (identity) for this session; its DHT, tracker, and blacklist are shared with the per-torrent destinations"
+msgstr "本次工作階段的主要目的地（身分），其DHT、tracker與封鎖清單會與各torrent的目的地共用"
+
+msgid "Our destination (identity) for this session"
+msgstr "我們本次工作階段的目的地（身分）"
+
+msgid "Primary Dest."
+msgstr "主要目的地"
+
+msgid "Dest."
+msgstr "目的地"
+
+msgid "Inbound Settings"
+msgstr "傳入設定"
+
+msgid "Outbound Settings"
+msgstr "傳出設定"
+
+msgid "Vary Tunnel Length"
+msgstr "變動隧道長度"
+
+msgid "Add 0 or 1 additional hops randomly to Inbound tunnels"
+msgstr "隨機為傳入隧道增加0或1個額外hop"
+
+msgid "Inbound"
+msgstr "傳入"
+
+msgid "Add 0 or 1 additional hops randomly to Outbound tunnels"
+msgstr "隨機為傳出隧道增加0或1個額外hop"
+
+msgid "Outbound"
+msgstr "傳出"
+
+msgid "Multi-destination"
+msgstr "多重目的地"
+
+msgid "Use a separate destination for each torrent, so that trackers and the DHT cannot link your torrents to each other. Destinations are temporary and change on restart."
+msgstr "為每個torrent使用獨立目的地，讓tracker與DHT無法將您的各個torrent相互關聯。目的地是暫時的，重新啟動後會變更。"
+
+msgid "Maximum destinations"
+msgstr "最大目的地數量"
+
+msgid "When more torrents run than this maximum, the extra torrents share destinations in randomized, variable-size groups, to limit memory use. Zero means one destination per torrent."
+msgstr "當執行的torrent數量超過此上限時，其餘的torrent會以隨機且大小不一的群組共用目的地，以限制記憶體用量。0表示每個torrent一個目的地。"
+
+msgid "Random startup delay"
+msgstr "隨機啟動延遲"
+
+msgid "Stagger multi-dest torrent starts with a random delay so that torrents which start together cannot be correlated by trackers or DHT peers, and tunnel builds are spread out. Disable to start all torrents in a batch immediately."
+msgstr "以隨機延遲錯開多目的地的torrent啟動，使同時啟動的torrent無法被tracker或DHT對等點相互關聯，並分散隧道建立作業。停用後會立即以批次方式啟動所有torrent。"
+
+msgid "I2CP host"
+msgstr "I2CP主機"
+
+msgid "I2CP port"
+msgstr "I2CP連接埠"
+
+msgid "I2CP options"
+msgstr "I2CP選項"
+
+msgid "Browser Integration"
+msgstr "瀏覽器整合"
+
+msgid "Enable browser API"
+msgstr "啟用瀏覽器API"
+
+msgid "Allow magnet links and torrent URLs to be added without the CSRF nonce, from loopback or the allowed hosts below"
+msgstr "允許從loopback或下方允許的主機新增magnet連結與torrent網址，不需CSRF nonce"
+
+msgid "Allowed hosts"
+msgstr "允許的主機"
+
+msgid "Comma-separated hostnames or IPs allowed to add torrents without a nonce; loopback is always allowed"
+msgstr "以逗號分隔、可在不使用nonce的情況下新增torrent的主機名稱或IP；loopback一律允許"
+
+msgid "API key"
+msgstr "API金鑰"
+
+msgid "Optional password for remote access, bypasses host allow list"
+msgstr "可選的遠端存取密碼，可略過主機允許清單"
+
+msgid "Install browser handler"
+msgstr "安裝瀏覽器處理程式"
+
+msgid "Update browser handler"
+msgstr "更新瀏覽器處理程式"
+
+#, java-format
+msgid "Update the installed I2PSnark Bridge extension to v{0}"
+msgstr "將已安裝的I2PSnark Bridge外掛更新至v{0}"
+
+msgid "Open the I2PSnark Bridge extension in your browser to add magnet links; the extension registers itself with the browser, no router-side files are written"
+msgstr "在瀏覽器中開啟I2PSnark Bridge外掛以新增magnet連結；該外掛會自行向瀏覽器註冊，不會在路由器端寫入任何檔案"
+
+msgid "Download the PowerShell installer that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "下載PowerShell安裝程式，將magnet連結與.torrent檔案註冊到您的瀏覽器；I2PSnark Bridge外掛需要Firefox系列的瀏覽器"
+
+msgid "Download the installer script that registers magnet links and .torrent files with your browser; the I2PSnark Bridge extension requires a Firefox-family browser"
+msgstr "下載安裝指令碼，將magnet連結與.torrent檔案註冊到您的瀏覽器；I2PSnark Bridge外掛需要Firefox系列的瀏覽器"
+
+msgid "Download browser handler script"
+msgstr "下載瀏覽器處理程式指令碼"
+
+msgid "Save configuration"
+msgstr "儲存組態"
+
+msgid "Torrent Create File Filtering"
+msgstr "建立torrent的檔案篩選"
+
+msgid "Mark filter for deletion"
+msgstr "標記篩選項目為刪除"
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "Filter Pattern"
+msgstr "篩選模式"
+
+msgid "Starts With"
+msgstr "開頭為"
+
+msgid "Contains"
+msgstr "包含"
+
+msgid "Ends With"
+msgstr "結尾為"
+
+msgid "Enabled by Default"
+msgstr "預設啟用"
+
+msgid "Delete selected"
+msgstr "刪除所選項目"
+
+msgid "Save Filter Configuration"
+msgstr "儲存篩選組態"
+
+msgid "Restore defaults"
+msgstr "還原預設值"
+
+msgid "Add File Filter"
+msgstr "新增檔案篩選"
+
+msgid "Add"
+msgstr "新增"
+
+msgid "Trackers"
+msgstr "tracker"
+
+msgid "Select trackers for removal from I2PSnark's known list"
+msgstr "選擇要從I2PSnark已知清單中移除的tracker"
+
+msgid "Website URL"
+msgstr "網站網址"
+
+msgid "Standard"
+msgstr "標準"
+
+msgid "Open"
+msgstr "公開"
+
+msgid "Private"
+msgstr "私人"
+
+msgid "Announce URL"
+msgstr "announce網址"
+
+msgid "Mark tracker for deletion"
+msgstr "標記tracker為刪除"
+
+msgid "Add tracker"
+msgstr "新增tracker"
+
+msgid "Save tracker configuration"
+msgstr "儲存tracker組態"
+
+msgid "This configures the maximum number of tunnels to open, determined by the number of connected peers (actual usage may be less)"
+msgstr "設定要開啟的最大隧道數量，由已連線的對等點數量決定（實際使用量可能較少）"
+
+msgid "Changing this setting to less than 3 hops may improve speed at the expense of anonymity and is not recommended"
+msgstr "將此設定調低至3個hop以下可能提高速度，但會犧牲匿名性，因此不建議如此設定"
+
+#, java-format
+msgid "I2PSnark Bridge extension v{0} is outdated, update to v{1} on the config page"
+msgstr "I2PSnark Bridge外掛v{0}版本已過時，請在組態頁面更新至v{1}"
+
+msgid "Click \"Add torrent\" button to fetch torrent"
+msgstr "點擊\"新增torrent\"按鈕以取得torrent"
+
+msgid "Torrents"
+msgstr "torrent"
+
+msgid "Refresh page"
+msgstr "重新整理頁面"
+
+msgid "Torrent &amp; filesharing forum"
+msgstr "torrent&amp;檔案分享論壇"
+
+msgid "Forum"
+msgstr "論壇"
+
+msgid "Search torrents"
+msgstr "搜尋torrent"
+
+msgid "Clear search"
+msgstr "清除搜尋"
+
+msgid "Anonymous BitTorrent Client"
+msgstr "匿名BitTorrent用戶端"
+
+#, java-format
+msgid "Are you sure you want to delete {0} and all downloaded data?"
+msgstr "確定要刪除{0}及所有已下載的資料嗎？"
+
+#, java-format
+msgid "Deleting <b>{0}</b> and all associated data..."
+msgstr "正在刪除<b>{0}</b>及所有相關資料……"
+
+#, java-format
+msgid "Are you sure you want to delete torrent file {0} and associated metadata?"
+msgstr "確定要刪除torrent檔案{0}及相關中繼資料嗎？"
+
+msgid "Note: Downloaded data will not be deleted."
+msgstr "注意：已下載的資料不會被刪除。"
+
+#, java-format
+msgid "Deleting {0} and associated metadata only..."
+msgstr "只刪除{0}及相關中繼資料……"
+
+msgid "clear messages"
+msgstr "清除訊息"
+
+msgid "Expand"
+msgstr "展開"
+
+msgid "Shrink"
+msgstr "收合"
+
+#, java-format
+msgid "Warning! Javascript is disabled in your browser. If {0} is enabled, you will lose any input in the add/create torrent sections when a refresh occurs."
+msgstr "警告！您的瀏覽器已停用Javascript。若{0}已啟用，重新整理時您將遺失新增／建立torrent區段中的所有輸入。"
+
+msgid "page refresh"
+msgstr "重新整理頁面"
+
+msgid "Warning - No I2P"
+msgstr "警告：沒有I2P"
+
+msgid "No torrents found."
+msgstr "找不到torrent。"
+
+msgid "No torrents loaded."
+msgstr "沒有載入任何torrent。"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Torrent"
+msgstr "torrent"
+
+msgid "ETA"
+msgstr "ETA"
+
+msgid "RX"
+msgstr "RX"
+
+msgid "RX Rate"
+msgstr "RX速率"
+
+msgid "TX"
+msgstr "TX"
+
+msgid "TX Rate"
+msgstr "TX速率"
+
+msgid "Start All"
+msgstr "全部啟動"
+
+msgid "Stop All"
+msgstr "全部停止"
+
+msgid "Stop all torrents and the I2P tunnel"
+msgstr "停止所有torrent與I2P隧道"
+
+msgid "Start all torrents and the I2P tunnel"
+msgstr "啟動所有torrent與I2P隧道"
+
+msgid "Start all stopped torrents"
+msgstr "啟動所有已停止的torrent"
+
+msgid "Hide Peers"
+msgstr "隱藏對等點"
+
+msgid "Show Peers"
+msgstr "顯示對等點"
+
+#, java-format
+msgid "Sort by {0}"
+msgstr "以{0}排序"
+
+msgid "Up Rate"
+msgstr "上傳速率"
+
+msgid "Total size of loaded torrents"
+msgstr "已載入torrent的總大小"
+
+#, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] "已連線{0}個對等點"
+
+msgid "Active downloads"
+msgstr "作用中的下載"
+
+msgid "Active uploads"
+msgstr "作用中的上傳"
+
+msgid "Active Inbound tunnels"
+msgstr "作用中的傳入隧道"
+
+msgid "Active Outbound tunnels"
+msgstr "作用中的傳出隧道"
+
+msgid "Estimated download time for all torrents"
+msgstr "所有torrent的預估下載時間"
+
+msgid "Data downloaded this session"
+msgstr "本次工作階段下載的資料量"
+
+msgid "Total download speed"
+msgstr "總下載速度"
+
+msgid "Total data uploaded (for listed torrents)"
+msgstr "總上傳資料量（所列torrent）"
+
+msgid "Total upload speed"
+msgstr "總上傳速度"
+
+msgid "Toggle Debug Panel"
+msgstr "切換除錯面板"
+
+msgid "Debug Mode"
+msgstr "除錯模式"
+
+msgid "Normal Mode"
+msgstr "一般模式"
+
+#, java-format
+msgid "1 torrent"
+msgid_plural "{0} torrents"
+msgstr[0] "{0}個torrent"
+
+msgid "No DHT Peers"
+msgstr "沒有DHT對等點"
+
+msgid "Search"
+msgstr "搜尋"
+
+msgid "Show All"
+msgstr "顯示全部"
+
+msgid "Active"
+msgstr "作用中"
+
+msgid "Inactive"
+msgstr "未作用中"
+
+msgid "Connected"
+msgstr "已連線"
+
+msgid "Downloading"
+msgstr "下載中"
+
+msgid "Seeding"
+msgstr "做種中"
+
+msgid "Complete"
+msgstr "已完成"
+
+msgid "Incomplete"
+msgstr "未完成"
+
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "First"
+msgstr "首頁"
+
+msgid "First page"
+msgstr "首頁"
+
+msgid "Prev"
+msgstr "上一頁"
+
+msgid "Previous page"
+msgstr "上一頁"
+
+msgid "Next"
+msgstr "下一頁"
+
+msgid "Next page"
+msgstr "下一頁"
+
+msgid "Last"
+msgstr "末頁"
+
+msgid "Last page"
+msgstr "末頁"
+
+msgid "Enter URL or select torrent file"
+msgstr "輸入URL或選擇torrent檔案"
+
+#, java-format
+msgid "Error adding the torrent: {0}"
+msgstr "新增torrent時發生錯誤：{0}"
+
+#, java-format
+msgid "Error uploading the torrent file: {0}"
+msgstr "上傳torrent檔案時發生錯誤：{0}"
+
+#, java-format
+msgid "Download from non-I2P location {0} is not supported"
+msgstr "不支援從非I2P位置{0}下載"
+
+msgid "Error: Version 2 info hashes are not supported"
+msgstr "錯誤：不支援版本2的info hash"
+
+#, java-format
+msgid "Invalid URL: Must start with \"{0}\" or \"{1}\""
+msgstr "無效的URL：必須以\"{0}\"或\"{1}\"開頭"
+
+#, java-format
+msgid "Magnet deleted: {0}"
+msgstr "已刪除magnet：{0}"
+
+#, java-format
+msgid "Torrent file could not be deleted: {0}"
+msgstr "無法刪除torrent檔案：{0}"
+
+#, java-format
+msgid "Data file deleted: {0}"
+msgstr "已刪除資料檔案：{0}"
+
+#, java-format
+msgid "Data file could not be deleted: {0}"
+msgstr "無法刪除資料檔案：{0}"
+
+#, java-format
+msgid "Directory could not be deleted: {0}"
+msgstr "無法刪除目錄：{0}"
+
+#, java-format
+msgid "Directory deleted: {0}"
+msgstr "已刪除目錄：{0}"
+
+msgid "Browser API enabled."
+msgstr "已啟用瀏覽器API。"
+
+#, java-format
+msgid "Failed to open the I2PSnark Bridge extension: {0}"
+msgstr "無法開啟I2PSnark Bridge外掛：{0}"
+
+#, java-format
+msgid " files or folders were excluded from \"{0}\" due to filter rules."
+msgstr " 個檔案或資料夾因篩選規則而從\"{0}\"中排除。"
+
+#, java-format
+msgid "The following files or folders were excluded from \"{0}\" due to filter rules: "
+msgstr "下列檔案或資料夾因篩選規則而從\"{0}\"中排除："
+
+#, java-format
+msgid "Torrent created for \"{0}\""
+msgstr "已為\"{0}\"建立torrent"
+
+#, java-format
+msgid "Many I2P trackers require you to register new torrents before seeding - please do so before starting \"{0}\""
+msgstr "許多I2P tracker要求在做種前先註冊新的torrent，請在開始\"{0}\"前先完成註冊"
+
+#, java-format
+msgid "Error creating a torrent for \"{0}\""
+msgstr "為\"{0}\"建立torrent時發生錯誤"
+
+msgid "Removed"
+msgstr "已移除"
+
+msgid "Enter valid tracker name and URLs"
+msgstr "請輸入有效的tracker名稱與網址"
+
+msgid "Restored default trackers"
+msgstr "已還原預設tracker"
+
+msgid "Enter valid name and filter pattern"
+msgstr "請輸入有效的名稱與篩選模式"
+
+msgid "Restored default torrent create filters"
+msgstr "已還原預設的建立torrent篩選條件"
+
+msgid "Torrent details"
+msgstr "torrent詳細資料"
+
+msgid "Torrent has comments"
+msgstr "此torrent有留言"
+
+msgid "Open file"
+msgstr "開啟檔案"
+
+msgid "View files"
+msgstr "檢視檔案"
+
+msgid "Completed"
+msgstr "已完成"
+
+msgid "Share ratio"
+msgstr "分享比率"
+
+msgid "Last activity"
+msgstr "最後活動時間"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Stop torrent"
+msgstr "停止torrent"
+
+msgid "Start"
+msgstr "啟動"
+
+msgid "Start torrent"
+msgstr "啟動torrent"
+
+msgid "Remove and delete torrent, retaining downloaded files"
+msgstr "移除並刪除torrent，保留已下載的檔案"
+
+msgid "Delete .torrent file and associated data files"
+msgstr "刪除.torrent檔案與相關資料檔案"
+
+msgid "Destination"
+msgstr "目的地"
+
+msgid "Checking"
+msgstr "檢查中"
+
+msgid "Allocating"
+msgstr "配置中"
+
+msgid "Failed to connect to all configured trackers"
+msgstr "無法連線到所有已設定的tracker"
+
+msgid "Starting"
+msgstr "啟動中"
+
+#, java-format
+msgid "Seeding to {0} peer"
+msgid_plural "Seeding to {0} peers"
+msgstr[0] "做種給{0}個對等點"
+
+#, java-format
+msgid "Connected to {0} of {1} peers in swarm"
+msgstr "已連線群集中{1}個對等點中的{0}個"
+
+msgid "Stalled"
+msgstr "停滯"
+
+#, java-format
+msgid "Seeding to {0} peer in swarm"
+msgid_plural "Seeding to {0} peers in swarm"
+msgstr[0] "在群集中做種給{0}個對等點"
+
+#, java-format
+msgid "Downloading from {0} peer"
+msgid_plural "Downloading from {0} peers"
+msgstr[0] "從{0}個對等點下載"
+
+msgid "OK"
+msgstr "正常"
+
+msgid "No Peers"
+msgstr "沒有對等點"
+
+msgid "Peer attached to swarm"
+msgstr "對等點已加入群集"
+
+msgid "Destination (identity) of peer"
+msgstr "對等點的目的地（身分）"
+
+msgid "seconds"
+msgstr "秒"
+
+msgid "Seed"
+msgstr "做種"
+
+msgid "Uninteresting (The peer has no pieces we need)"
+msgstr "無興趣（該對等點沒有我們需要的區塊）"
+
+msgid "Choked (The peer is not allowing us to request pieces)"
+msgstr "choked（該對等點不允許我們索取區塊）"
+
+msgid "Peer is interested but currently idle"
+msgstr "對等點有興趣但目前閒置"
+
+msgid "Uninterested (We have no pieces the peer needs)"
+msgstr "不感興趣（我們沒有該對等點需要的區塊）"
+
+msgid "Choking (We are not allowing the peer to request pieces)"
+msgstr "choking（我們不允許該對等點索取區塊）"
+
+#, java-format
+msgid "Details at {0} tracker"
+msgstr "詳細資料位於{0}tracker"
+
+msgid "Info"
+msgstr "資訊"
+
+msgid "Add Torrent"
+msgstr "新增torrent"
+
+msgid "From URL"
+msgstr "從URL"
+
+msgid "Enter the torrent file download URL (I2P only), magnet link, or info hash"
+msgstr "輸入torrent檔案下載網址（僅限I2P）、magnet連結或info hash"
+
+msgid "Add torrent"
+msgstr "新增torrent"
+
+msgid "Torrent file"
+msgstr "torrent檔案"
+
+msgid "Data dir"
+msgstr "資料目錄"
+
+#, java-format
+msgid "Enter the directory to save the data in (default {0})"
+msgstr "輸入儲存資料的目錄（預設{0}）"
+
+msgid "Create Torrent"
+msgstr "建立torrent"
+
+msgid "Data to seed"
+msgstr "要做種的資料"
+
+#, java-format
+msgid "File or directory to seed (full path or within the directory {0} )"
+msgstr "要做種的檔案或目錄（完整路徑，或位於{0}目錄內）"
+
+msgid "Create torrent"
+msgstr "建立torrent"
+
+msgid "Exclude files from the torrent if they reside in the torrent folder"
+msgstr "位於torrent資料夾內的檔案將從該torrent中排除"
+
+msgid "Content Filters"
+msgstr "內容篩選"
+
+msgid "Alternates"
+msgstr "備用tracker"
+
+msgid "Primary"
+msgstr "主要tracker"
+
+msgid "Tracker Type"
+msgstr "tracker類型"
+
+msgid "none"
+msgstr "無"
+
+msgid "Cannot add magnet: Version 2 magnet links are not supported"
+msgstr "無法新增magnet：不支援版本2的magnet連結"
+
+#, java-format
+msgid "Invalid magnet URL {0}"
+msgstr "無效的magnet URL {0}"
+
+msgid "Files"
+msgstr "檔案"
+
+msgid "Save priorities"
+msgstr "儲存優先權"
+
+msgid "Comments"
+msgstr "留言"
+
+msgid "Please retry form submission (bad nonce)"
+msgstr "請重新送出表單（nonce無效）"
+
+msgid "Unknown command"
+msgstr "未知指令"
+
+msgid "Resource Does Not Exist"
+msgstr "資源不存在"
+
+msgid "Resource"
+msgstr "資源"
+
+msgid "Base"
+msgstr "基礎"
+
+msgid "Directory"
+msgstr "目錄"
+
+msgid "File type"
+msgstr "檔案類型"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Download Status"
+msgstr "下載狀態"
+
+msgid "Remaining"
+msgstr "剩餘"
+
+msgid "Download Priority"
+msgstr "下載優先權"
+
+msgid "up"
+msgstr "上傳"
+
+msgid "Parent directory"
+msgstr "上層目錄"
+
+msgid "Audio Playlist"
+msgstr "音訊播放清單"
+
+msgid "Resource Not found"
+msgstr "找不到資源"
+
+msgid "Info hash"
+msgstr "Info hash"
+
+msgid "Created"
+msgstr "建立時間"
+
+#, java-format
+msgid "Size of the files actually downloaded: {0}, excluding {1} of BEP 47 padding files"
+msgstr "實際下載的檔案大小：{0}，不含{1}的BEP 47填補檔案"
+
+msgid "Added"
+msgstr "已新增"
+
+msgid "Pieces"
+msgstr "區塊"
+
+msgid "Average download speed for torrent"
+msgstr "此torrent的平均下載速度"
+
+msgid "Download speed"
+msgstr "下載速度"
+
+msgid "Completion"
+msgstr "完成度"
+
+msgid "Skipped"
+msgstr "已略過"
+
+msgid "Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"
+msgstr "只會使用I2P tracker；非I2P tracker僅供參考顯示"
+
+msgid "Tracker"
+msgstr "tracker"
+
+msgid "Web Seeds"
+msgstr "web seed"
+
+msgid "Refresh page for results"
+msgstr "重新整理頁面以取得結果"
+
+msgid "Force Recheck"
+msgstr "強制重新檢查"
+
+msgid "Stop the torrent in order to check file integrity"
+msgstr "停止torrent以檢查檔案完整性"
+
+msgid "Check integrity of the downloaded files"
+msgstr "檢查已下載檔案的完整性"
+
+msgid "Download file at high priority"
+msgstr "以高優先權下載檔案"
+
+msgid "High"
+msgstr "高"
+
+msgid "Download file at normal priority"
+msgstr "以一般優先權下載檔案"
+
+msgid "Normal"
+msgstr "一般"
+
+msgid "Do not download this file"
+msgstr "不要下載此檔案"
+
+msgid "Skip"
+msgstr "略過"
+
+msgid "complete"
+msgstr "完成"
+
+msgid "remaining"
+msgstr "剩餘"
+
+#, java-format
+msgid "1 star"
+msgid_plural "{0} stars"
+msgstr[0] "{0}顆星"
+
+msgid "No rating"
+msgstr "無評分"
+
+msgid "Rate and Comment"
+msgstr "評分與留言"
+
+msgid "Rate Torrent"
+msgstr "評分此torrent"
+
+msgid "Add Comment"
+msgstr "新增留言"
+
+msgid "My Rating"
+msgstr "我的評分"
+
+msgid "Average Rating"
+msgstr "平均評分"
+
+msgid "No community ratings currently available"
+msgstr "目前沒有可用的社群評分"
+
+msgid "Submitted"
+msgstr "已送出"
+
+msgid "Mark for deletion"
+msgstr "標記為刪除"
+
+msgid "Delete Selected"
+msgstr "刪除所選項目"
+
+msgid "Ratings and Comments"
+msgstr "評分與留言"
+
+msgid "Author name required to rate or comment"
+msgstr "評分或留言必須填寫作者名稱"
+
+msgid "Your author name for published comments and ratings"
+msgstr "您發布留言與評分時使用的作者名稱"
+
+msgid "File downloading priorities updated for torrent "
+msgstr "已更新torrent的下載優先權： "
+
+msgid "Edit Torrent"
+msgstr "編輯torrent"
+
+msgid "Active Trackers"
+msgstr "作用中的tracker"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Add Tracker"
+msgstr "新增tracker"
+
+msgid "Torrent Comment"
+msgstr "torrent留言"
+
+msgid "Torrent must be stopped in order to edit"
+msgstr "必須先停止torrent才能編輯"
+
+msgid "Save Changes"
+msgstr "儲存變更"
+
+msgid "Torrent must be stopped"
+msgstr "必須先停止torrent"
+
+msgid "Not found"
+msgstr "找不到"
+
+msgid "File not found in torrent"
+msgstr "torrent中找不到檔案"
+
+msgid "Unrecognized"
+msgstr "無法辨識"
+
+msgid "Preview"
+msgstr "預覽"
+
+#, java-format
+msgid "Cannot add torrent {0} inside another torrent: {1}"
+msgstr "無法將torrent {0}加入另一個torrent內：{1}"
+
+#, java-format
+msgid "Cannot add torrent {0} including another torrent: {1}"
+msgstr "無法將含有另一個torrent的torrent {0}加入：{1}"

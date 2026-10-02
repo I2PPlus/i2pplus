@@ -1,0 +1,1780 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "This seems to be a bad destination:"
+msgstr "這似乎是不正確的目的地："
+
+msgid "i2paddresshelper cannot help you with a destination like that!"
+msgstr "i2paddresshelper無法處理這類目的地！"
+
+#, java-format
+msgid "To visit the destination in your addressbook, click <a href=\"{0}\">here</a>. To visit the conflicting addresshelper destination, click <a href=\"{1}\">here</a>."
+msgstr "若要瀏覽您位址簿中的目的地，請按一下<a href=\"{0}\">這裡</a>。若要瀏覽位址小幫手提供的衝突目的地，請按一下<a href=\"{1}\">這裡</a>。"
+
+#, java-format
+msgid "Destination for {0} in addressbook"
+msgstr "位址簿中{0}的目的地"
+
+msgid "Conflicting address helper destination"
+msgstr "衝突的位址小幫手目的地"
+
+msgid "Corrupt Base32 address"
+msgstr "損壞的Base32位址"
+
+msgid "Destination LeaseSet not found"
+msgstr "找不到目的地LeaseSet"
+
+msgid "Host"
+msgstr "主機"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Destination"
+msgstr "目的地"
+
+#, java-format
+msgid "Continue to {0} without saving"
+msgstr "不儲存直接前往{0}"
+
+msgid "You can browse to the site without saving it to the addressbook. The address will be remembered until you restart your I2P router."
+msgstr "您可以瀏覽此網站而不必將它儲存到位址簿。此位址會保留到您重新啟動I2P路由器為止。"
+
+msgid "Continue without saving"
+msgstr "不儲存直接繼續"
+
+#, java-format
+msgid "Save {0} to router address book and continue to website"
+msgstr "將{0}儲存到路由器位址簿並繼續前往網站"
+
+msgid "This address will be saved to your Router addressbook where your subscription-based addresses are stored."
+msgstr "此位址會儲存到您的路由器位址簿，也就是您訂閱的位址存放之處。"
+
+msgid "If you want to keep track of sites you have added manually, add to your Master or Private addressbook instead."
+msgstr "如果您想記錄手動新增的網站，請改為新增到主要或私人位址簿。"
+
+msgid "Save & continue"
+msgstr "儲存&繼續"
+
+#, java-format
+msgid "Save {0} to master addressbook and continue to website"
+msgstr "將{0}儲存到主要位址簿並繼續前往網站"
+
+msgid "This address will be saved to your Master addressbook. Select this option for addresses you wish to keep separate from the main router address book, but don't mind publishing."
+msgstr "此位址會儲存到您的主要位址簿。如果您希望將某些位址與主要的路由器位址簿分開管理，但不介意發布，請選取此選項。"
+
+#, java-format
+msgid "Save {0} to private addressbook and continue to website"
+msgstr "將{0}儲存到私人位址簿並繼續前往網站"
+
+msgid "This address will be saved to your Private addressbook, ensuring it is never published."
+msgstr "此位址會儲存到您的私人位址簿，確保永不發布。"
+
+msgid "Base32 address requires lookup password"
+msgstr "Base32位址需要查詢密碼"
+
+msgid "Base32 address requires encryption key"
+msgstr "Base32位址需要加密金鑰"
+
+msgid "Base32 address requires encryption key and lookup password"
+msgstr "Base32位址需要加密金鑰與查詢密碼"
+
+msgid "Base32 address decryption failure, check encryption key"
+msgstr "Base32位址解密失敗，請檢查加密金鑰"
+
+msgid "Generate"
+msgstr "產生"
+
+msgid "Encryption key"
+msgstr "加密金鑰"
+
+msgid "You must either enter a PSK encryption key provided by the server operator, or generate a DH encryption key and send that to the server operator."
+msgstr "您必須輸入伺服器營運者提供的PSK加密金鑰，或產生DH加密金鑰並將其傳送給伺服器營運者。"
+
+msgid "Ask the server operator for help."
+msgstr "請向伺服器營運者求助。"
+
+msgid "Enter PSK encryption key"
+msgstr "輸入PSK加密金鑰"
+
+msgid "Generate new DH encryption key"
+msgstr "產生新的DH加密金鑰"
+
+msgid "Lookup password"
+msgstr "查詢密碼"
+
+msgid "You must enter the password provided by the server operator."
+msgstr "您必須輸入伺服器營運者提供的密碼。"
+
+msgid "HTTP Outproxy"
+msgstr "HTTP出口代理"
+
+msgid "Click a link below for an address helper from a jump service"
+msgstr "請按一下下方連結，以取得跳轉服務提供的位址小幫手"
+
+#, java-format
+msgid "Added via address helper from {0}"
+msgstr "透過來自{0}的位址小幫手新增"
+
+msgid "Added via address helper"
+msgstr "透過位址小幫手新增"
+
+msgid "Missing lookup password"
+msgstr "缺少查詢密碼"
+
+msgid "Missing private key"
+msgstr "缺少私密金鑰"
+
+msgid "Invalid private key"
+msgstr "無效的私密金鑰"
+
+msgid "Your new encryption key"
+msgstr "您的新加密金鑰"
+
+msgid "Router Console"
+msgstr "路由器主控台"
+
+msgid "Addressbook"
+msgstr "位址簿"
+
+msgid "Configuration"
+msgstr "組態"
+
+msgid "Help"
+msgstr "說明"
+
+msgid "Copy the key and send it to the server operator."
+msgstr "複製金鑰並傳送給伺服器營運者。"
+
+msgid "After you are granted permission, you may proceed to the website."
+msgstr "獲得授權後，您可以前往該網站。"
+
+msgid "Go back and fix the error"
+msgstr "返回並修正錯誤"
+
+msgid "router"
+msgstr "路由器"
+
+msgid "master"
+msgstr "主要"
+
+msgid "private"
+msgstr "私人"
+
+#, java-format
+msgid "Redirecting to {0}"
+msgstr "正在重新導向{0}"
+
+msgid "Redirection in progress"
+msgstr "重新導向進行中"
+
+#, java-format
+msgid "Saved {0} to the {1} addressbook, redirecting now."
+msgstr "已將{0}儲存到{1}位址簿，正在重新導向。"
+
+#, java-format
+msgid "Failed to save {0} to the {1} addressbook, redirecting now."
+msgstr "無法將{0}儲存到{1}位址簿，正在重新導向。"
+
+msgid "Click here if you are not redirected automatically."
+msgstr "如果您未被自動重新導向，請按一下這裡。"
+
+#, java-format
+msgid "Saved the authentication for {0}, redirecting now."
+msgstr "已儲存{0}的驗證資訊，正在重新導向。"
+
+msgid "Failed to save configuration"
+msgstr "無法儲存組態"
+
+msgid "Configuration changes saved"
+msgstr "組態變更已儲存"
+
+msgid "Client"
+msgstr "客戶端"
+
+msgid "internal"
+msgstr "內部"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0}個入站隧道、{0}個出站隧道"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0}個入站隧道"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0}個出站隧道"
+
+msgid "lower bandwidth and reliability"
+msgstr "較低的頻寬與可靠性"
+
+msgid "standard bandwidth and reliability"
+msgstr "標準的頻寬與可靠性"
+
+msgid "higher bandwidth and reliability"
+msgstr "較高的頻寬與可靠性"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "錯誤：隧道尚未初始化"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "無效的表單提交，可能是因為您使用了瀏覽器的'back'或'reload'按鈕。請重新提交。"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "如果問題持續發生，請確認您的瀏覽器已啟用cookie。"
+
+msgid "No services configured, cannot restart!"
+msgstr "沒有設定服務，無法重新啟動！"
+
+msgid "Stopping tunnel"
+msgstr "正在停止隧道"
+
+msgid "Starting tunnel"
+msgstr "正在啟動隧道"
+
+msgid "Error restarting tunnel"
+msgstr "重新啟動隧道時發生錯誤"
+
+msgid "Restarted all running tunnels"
+msgstr "已重新啟動所有執行中的隧道"
+
+msgid "No clients configured, cannot restart!"
+msgstr "沒有設定客戶端，無法重新啟動！"
+
+msgid "Restarted all running client tunnels"
+msgstr "已重新啟動所有執行中的客戶端隧道"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "已重新載入所有隧道的組態"
+
+msgid "Error: Invalid tunnel"
+msgstr "錯誤：無效的隧道"
+
+msgid "Started tunnel"
+msgstr "已啟動隧道"
+
+msgid "Stopped tunnel"
+msgstr "已停止隧道"
+
+msgid "Restarting tunnel"
+msgstr "正在重新啟動隧道"
+
+msgid "New Tunnel"
+msgstr "新增隧道"
+
+msgid "Port not set"
+msgstr "未設定連接埠"
+
+msgid "Invalid port"
+msgstr "無效的連接埠"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "警告：不建議使用小於1024的連接埠"
+
+msgid "Warning - duplicate port"
+msgstr "警告：重複的連接埠"
+
+msgid "Standard client"
+msgstr "標準客戶端"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS客戶端"
+
+msgid "IRC client"
+msgstr "IRC客戶端"
+
+msgid "Standard server"
+msgstr "標準伺服器"
+
+msgid "HTTP server"
+msgstr "HTTP伺服器"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "SOCKS 4/4a/5代理"
+
+msgid "SOCKS IRC proxy"
+msgstr "SOCKS IRC代理"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS代理"
+
+msgid "IRC server"
+msgstr "IRC伺服器"
+
+msgid "Streamr client"
+msgstr "Streamr客戶端"
+
+msgid "Streamr server"
+msgstr "Streamr伺服器"
+
+msgid "HTTP bidir"
+msgstr "HTTP雙向"
+
+msgid "Host not set"
+msgstr "未設定主機"
+
+msgid "Invalid address"
+msgstr "無效的位址"
+
+msgid "Tunnel Manager"
+msgstr "隧道管理員"
+
+msgid "Edit Client Tunnel"
+msgstr "編輯客戶端隧道"
+
+msgid "Edit Server Tunnel"
+msgstr "編輯伺服器隧道"
+
+msgid "Are you sure you want to delete?"
+msgstr "您確定要刪除嗎？"
+
+msgid "required"
+msgstr "必填"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "必須先停止此隧道與所有共用它的客戶端隧道才能變更此組態"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "必須先停止隧道才能變更此組態"
+
+msgid "New Client Configuration"
+msgstr "新增客戶端組態"
+
+msgid "Name"
+msgstr "名稱"
+
+msgid "Auto Start Tunnel"
+msgstr "自動啟動隧道"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "顯示於隧道管理員首頁與路由器主控台側邊欄的隧道名稱"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "啟用此選項以確保路由器啟動時此服務可用"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "路由器啟動時自動啟動隧道"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Shared Client"
+msgstr "共用客戶端"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "顯示於隧道管理員首頁的隧道描述"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "所有啟用此功能的客戶端流量都會經由同一組隧道傳送。這會讓對手更難分析這些隧道，但也會將這些客戶端連結在一起。"
+
+msgid "Share tunnels with other configured clients"
+msgstr "與其他已設定的客戶端共用隧道"
+
+msgid "Target"
+msgstr "目標"
+
+msgid "Access Point"
+msgstr "存取點"
+
+msgid "Use Outproxy Plugin"
+msgstr "使用出口代理外掛"
+
+msgid "Enable DCC"
+msgstr "啟用DCC"
+
+msgid "Port"
+msgstr "連接埠"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "指定此服務要從哪個本機連接埠存取"
+
+msgid "Hostname or IP address of the target server"
+msgstr "目標伺服器的主機名稱或IP位址"
+
+msgid "Reachable by"
+msgstr "可存取來源"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "客戶端隧道可存取的本機介面（IP位址）"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "如果您已安裝出口代理外掛（例如Orchid），請改用它而非任何已設定的出口代理來存取I2P以外的網站"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "如果有可用外掛，請使用外掛而非下方列出的代理"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "啟用直接聊天與檔案傳輸，繞過I2P。請注意，此功能會損害您的匿名性，因此不建議使用。"
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "啟用Direct Client-to-Client協定"
+
+msgid "Outproxies"
+msgstr "出口代理"
+
+msgid "SSL Outproxies"
+msgstr "SSL出口代理"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "在此指定出口代理的.i2p位址或目的地（b32或b64）。"
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "若要從池中隨機選取，請以逗號分隔，例如server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "出口代理類型"
+
+msgid "Tunnel Destination"
+msgstr "隧道目的地"
+
+msgid "Use SSL"
+msgstr "使用SSL"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "在此指定隧道的.i2p位址或目的地（b32或b64）。"
+
+msgid "name, name:port, or destination"
+msgstr "名稱、name:port或目的地"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "如果您要存取遠端I2P路由器上的服務，可以使用SSL連線以避免流量遭攔截。客戶端應用程式也應設定為使用SSL。"
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "客戶端使用SSL連線到隧道"
+
+msgid "Please specify the full b64 destination."
+msgstr "請指定完整的b64目的地。"
+
+msgid "Local destination"
+msgstr "本機目的地"
+
+msgid "Local Base32"
+msgstr "本機Base32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "唯讀：本機目的地（如果已知）"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Start this Tunnel"
+msgstr "啟動此隧道"
+
+msgid "Start"
+msgstr "啟動"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "刪除此隧道（無法復原）"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Advanced networking options"
+msgstr "進階網路選項"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "注意：當此客戶端設定為共用隧道時，這些選項會套用至所有設定為共用隧道的客戶端。"
+
+msgid "Profile"
+msgstr "設定檔"
+
+msgid "Delay Connect"
+msgstr "延遲連線"
+
+msgid "Connection Profile"
+msgstr "連線設定檔"
+
+msgid "interactive connection"
+msgstr "互動式連線"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "大量連線（下載／網站／BT）"
+
+msgid "Delay Connection"
+msgstr "延遲連線"
+
+msgid "for request/response connections"
+msgstr "用於請求／回應連線"
+
+msgid "Router I2CP Address"
+msgstr "路由器I2CP位址"
+
+msgid "I2CP Hostname or IP"
+msgstr "I2CP主機名稱或IP"
+
+msgid "I2CP Port Number"
+msgstr "I2CP連接埠號"
+
+msgid "Delay tunnel open until required"
+msgstr "延遲開啟隧道直到需要時"
+
+msgid "Signature type"
+msgstr "簽章類型"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "僅在需要時才建立隧道，以節省資源"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "在連接埠偵測到活動前不要開啟隧道"
+
+msgid "This is the default, recommended option"
+msgstr "這是預設且建議的選項"
+
+msgid "Encryption types"
+msgstr "加密類型"
+
+msgid "Legacy options"
+msgstr "舊版選項"
+
+msgid "Post Quantum"
+msgstr "後量子"
+
+msgid "Both encryption types"
+msgstr "兩種加密類型"
+
+msgid "Tunnel Options"
+msgstr "隧道選項"
+
+msgid "Length"
+msgstr "長度"
+
+msgid "Count"
+msgstr "計數"
+
+msgid "Length of each Tunnel"
+msgstr "每條隧道的長度"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "0跳隧道（無匿名性）"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "1跳隧道（低匿名性）"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "2跳隧道（中匿名性）"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "3跳隧道（高匿名性）"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0}跳隧道"
+
+msgid "Number of Tunnels in Group"
+msgstr "群組中的隧道數量"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "0跳隧道不適用"
+
+msgid "Variance"
+msgstr "變異"
+
+msgid "Backup Count"
+msgstr "備援數量"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "隧道長度的隨機化程度"
+
+msgid "0 hop variance"
+msgstr "0跳變異"
+
+msgid "no randomization, consistent performance"
+msgstr "不隨機化，效能穩定"
+
+msgid "+ 0-1 hop variance"
+msgstr "+0-1跳變異"
+
+msgid "medium randomization, lower performance"
+msgstr "中等隨機化，效能較低"
+
+msgid "+ 0-2 hop variance"
+msgstr "+0-2跳變異"
+
+msgid "high randomization, very low performance"
+msgstr "高度隨機化，效能非常低"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/-0-1跳變異"
+
+msgid "standard randomization, standard performance"
+msgstr "標準隨機化，標準效能"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/-0-2跳變異"
+
+msgid "not recommended"
+msgstr "不建議"
+
+msgid "hop variance"
+msgstr "跳數變異"
+
+msgid "Number of Reserve Tunnels"
+msgstr "保留隧道的數量"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0}條備援隧道"
+
+msgid "no redundancy, no added resource usage"
+msgstr "無冗餘，不增加資源用量"
+
+msgid "low redundancy, low resource usage"
+msgstr "低冗餘，低資源用量"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "中冗餘，中等資源用量"
+
+msgid "high redundancy, high resource usage"
+msgstr "高冗餘，高資源用量"
+
+msgid "Reduce tunnel quantity"
+msgstr "減少隧道數量"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "閒置時減少隧道數量以節省資源，但保持隧道開啟（以確保能立即使用）"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "閒置時減少隧道數量"
+
+msgid "Idle period"
+msgstr "閒置時間"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "減少後的隧道閒置時間"
+
+msgid "Reduced count"
+msgstr "減少後的數量"
+
+msgid "Reduced tunnel count"
+msgstr "減少後的隧道數量"
+
+msgid "Close tunnels when idle"
+msgstr "閒置時關閉隧道"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "未使用時關閉隧道以節省資源"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "在指定的閒置時間後關閉客戶端隧道"
+
+msgid "Close Tunnel Idle Time"
+msgstr "關閉隧道的閒置時間"
+
+msgid "New Keys on Reopen"
+msgstr "重新開啟時產生新金鑰"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "隧道重新開啟時變更隧道識別（目的地）"
+
+msgid "Enable"
+msgstr "啟用"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "隧道重新開啟時保留隧道識別（目的地）"
+
+msgid "Disable"
+msgstr "停用"
+
+msgid "Persistent private key"
+msgstr "固定的私密金鑰"
+
+msgid "Private key file"
+msgstr "私密金鑰檔案"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "啟用此功能可確保您的隧道識別（目的地）保持固定，適用於以目的地為基礎提供功能的服務，例如IRC使用者驗證"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "產生金鑰以啟用固定的客戶端隧道識別"
+
+msgid "Path to Private Key File"
+msgstr "私密金鑰檔案的路徑"
+
+msgid "HTTP Filtering"
+msgstr "HTTP篩選"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "啟用時，您的網頁瀏覽器或http客戶端的使用者代理不會被偽裝，可能會降低您的匿名性"
+
+msgid "Do not spoof User-Agent header"
+msgstr "不要偽裝User-Agent標頭"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "啟用時，您的網頁請求之referer（來源頁面）不會被篩選，可能會降低您的匿名性"
+
+msgid "Do not block Referer header"
+msgstr "不要封鎖Referer標頭"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "啟用時，您的網頁瀏覽器所廣播的accept標頭（支援的mime類型）不會被篩選，可能會降低您的匿名性"
+
+msgid "Do not block Accept headers"
+msgstr "不要封鎖Accept標頭"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "啟用時允許對I2P位址使用SSL"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "允許對I2P位址使用SSL"
+
+msgid "Local Authorization"
+msgstr "本機驗證"
+
+msgid "Local Credentials"
+msgstr "本機認證資訊"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "啟用以要求使用者名稱與密碼才能存取此本機服務（例如在區域網路中架設時）"
+
+msgid "Require local authorization for this service"
+msgstr "此服務需要本機驗證"
+
+msgid "Set username required to access this service"
+msgstr "設定存取此服務所需的使用者名稱"
+
+msgid "Username"
+msgstr "使用者名稱"
+
+msgid "Set password required to access this service"
+msgstr "設定存取此服務所需的密碼"
+
+msgid "Password"
+msgstr "密碼"
+
+msgid "Outproxy Authorization"
+msgstr "出口代理驗證"
+
+msgid "Remote Credentials"
+msgstr "遠端認證資訊"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "如果出口代理需要使用者名稱與密碼才能存取，請啟用"
+
+msgid "Outproxy requires authorization"
+msgstr "出口代理需要驗證"
+
+msgid "Enter username required by outproxy"
+msgstr "輸入出口代理要求的使用者名稱"
+
+msgid "Enter password required by outproxy"
+msgstr "輸入出口代理要求的密碼"
+
+msgid "Jump URL List"
+msgstr "跳轉URL清單"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "當位址簿中找不到主機時，提供跳轉連結的位址小幫手URL清單"
+
+msgid "Custom options"
+msgstr "自訂選項"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "進階隧道、串流與I2CP選項"
+
+msgid "New Server Configuration"
+msgstr "新增伺服器組態"
+
+msgid "Hostname"
+msgstr "主機名稱"
+
+msgid "Random startup delay (when auto-start is enabled) to defend against correlation attacks"
+msgstr "隨機啟動延遲（啟用自動啟動時），以防禦關聯式攻擊"
+
+msgid "Startup Delay"
+msgstr "啟動延遲"
+
+msgid "Minimum"
+msgstr "最小值"
+
+msgid "Minimum startup delay"
+msgstr "最小啟動延遲"
+
+msgid "seconds"
+msgstr "秒"
+
+msgid "Maximum"
+msgstr "最大值"
+
+msgid "Maximum startup delay"
+msgstr "最大啟動延遲"
+
+msgid "Add random delay before tunnel shutdown, then start graceful router shutdown / restart process"
+msgstr "在隧道關閉前加入隨機延遲，然後啟動平滑的路由器關機／重新啟動流程"
+
+msgid "Shutdown Delay"
+msgstr "關機延遲"
+
+msgid "Minimum shutdown delay"
+msgstr "最小關機延遲"
+
+msgid "Maximum shutdown delay"
+msgstr "最大關機延遲"
+
+msgid "Website Hostname"
+msgstr "網站主機名稱"
+
+msgid "(leave blank for outproxies)"
+msgstr "（出口代理請留空）"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "網站主機名稱，例如mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "指定伺服器執行所在的連接埠"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "供客戶端存取的監聽介面（IP位址）（通常為127.0.0.1）"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "若要避免連線到遠端伺服器時流量遭嗅探，您可以啟用SSL連線。請注意，目標伺服器必須設定為接受SSL連線。"
+
+msgid "Use SSL to connect to target"
+msgstr "使用SSL連線到目標"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "存取服務所需的連接埠（可與服務架設所在的連接埠不同）"
+
+msgid "Generate a QR Code for this domain"
+msgstr "為此網域產生QR碼"
+
+msgid "Generate QR Code"
+msgstr "產生QR碼"
+
+msgid "Add to Private addressbook"
+msgstr "新增到私人位址簿"
+
+msgid "Add to local addressbook"
+msgstr "新增到本機位址簿"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "註冊、取消註冊或變更主機名稱的詳細資料"
+
+msgid "Registration Authentication"
+msgstr "註冊驗證"
+
+msgid "HTTPS configuration"
+msgstr "HTTPS組態"
+
+msgid "SSL Wizard"
+msgstr "SSL精靈"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "注意：若要啟用QR碼產生或註冊驗證，請將上方的網站主機名稱欄位（適用於網站）或其他項目的名稱欄位設定為以.i2p結尾的主機名稱，例如mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "私密金鑰檔案的絕對路徑（如果不存在將會建立）"
+
+msgid "Alternate private key file"
+msgstr "替代的私密金鑰檔案"
+
+msgid "Alternate local destination"
+msgstr "替代的本機目的地"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "新金鑰的絕對路徑（將會建立）"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "唯讀：替代的本機目的地"
+
+msgid "Specify filename or full path for new key"
+msgstr "指定新金鑰的檔案名稱或完整路徑"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "目的地建立後無法變更組態"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "簽章類型只能在隧道初次建立時設定。若要變更，您必須建立新的隧道。"
+
+msgid "Legacy option, with alternate key configured"
+msgstr "舊版選項，已設定替代金鑰"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "舊版選項（已棄用），為向下相容而保留"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "建議用於盲化與加密的目的地"
+
+msgid "Inbound"
+msgstr "入站"
+
+msgid "Outbound"
+msgstr "出站"
+
+msgid "no anonymity"
+msgstr "無匿名性"
+
+msgid "low anonymity"
+msgstr "低匿名性"
+
+msgid "medium anonymity"
+msgstr "中匿名性"
+
+msgid "high anonymity"
+msgstr "高匿名性"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "隧道深度的隨機化程度"
+
+msgid "very high randomization, very low performance"
+msgstr "極高隨機化，效能非常低"
+
+msgid "+ 0-3 hop variance"
+msgstr "+0-3跳變異"
+
+msgid "definitely not recommended"
+msgstr "絕對不建議"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/-0-3跳變異"
+
+msgid "backup tunnels"
+msgstr "備援隧道"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "減少隧道以節省資源"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "減少隧道數量前的閒置時間"
+
+msgid "minutes"
+msgstr "分鐘"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "為維持服務可用性而保持開啟的隧道數量"
+
+msgid "Server Access Options"
+msgstr "伺服器存取選項"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "防止客戶端透過入口代理存取此服務"
+
+msgid "Block Access via Inproxies"
+msgstr "封鎖透過入口代理的存取"
+
+msgid "Block Accesses containing Referers"
+msgstr "封鎖含有referer的存取"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "為每個連線的客戶端使用唯一的IP位址（僅限本機非SSL伺服器）"
+
+msgid "Unique Local Address per Client"
+msgstr "每位客戶端使用唯一的本機位址"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "只有在多台路由器上架設此服務時才啟用"
+
+msgid "Optimize for Multihoming"
+msgstr "針對多重代管最佳化"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "拒絕符合這些字串的使用者代理（可能來自入口代理）"
+
+msgid "Block these User-Agents"
+msgstr "封鎖這些使用者代理"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "以逗號分隔，例如Mozilla,Opera（區分大小寫）"
+
+msgid "Encrypt Leaseset"
+msgstr "加密LeaseSet"
+
+msgid "Optional Lookup Password"
+msgstr "選用的查詢密碼"
+
+msgid "Keyring Manager"
+msgstr "金鑰環管理員"
+
+msgid "Allow all clients to connect to this service"
+msgstr "允許所有客戶端連線到此服務"
+
+msgid "Send key to all users."
+msgstr "將金鑰傳送給所有使用者。"
+
+msgid "Encrypted"
+msgstr "已加密"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "防止泛洪節點發現此伺服器"
+
+msgid "Blinded"
+msgstr "已盲化"
+
+msgid "Send password to all users."
+msgstr "將密碼傳送給所有使用者。"
+
+msgid "Blinded with lookup password"
+msgstr "已盲化並使用查詢密碼"
+
+msgid "Send key and password to all users."
+msgstr "將金鑰與密碼傳送給所有使用者。"
+
+msgid "Encrypted with lookup password"
+msgstr "已加密並使用查詢密碼"
+
+msgid "Send individual key to each user."
+msgstr "將個別金鑰傳送給每位使用者。"
+
+msgid "Encrypted with per-user key"
+msgstr "已加密並使用使用者專屬金鑰"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "已加密並使用查詢密碼與使用者專屬金鑰"
+
+msgid "Enter key from each user."
+msgstr "輸入每位使用者提供的金鑰。"
+
+msgid "Encryption Key"
+msgstr "加密金鑰"
+
+msgid "Generate New Key"
+msgstr "產生新金鑰"
+
+msgid "Encryption key required to access this service"
+msgstr "存取此服務所需的加密金鑰"
+
+msgid "Generate new encryption key"
+msgstr "產生新的加密金鑰"
+
+msgid "Tunnel must be stopped first"
+msgstr "必須先停止隧道"
+
+msgid "Client Manager"
+msgstr "客戶端管理員"
+
+msgid "Client Name"
+msgstr "客戶端名稱"
+
+msgid "Client Key"
+msgstr "客戶端金鑰"
+
+msgid "Revoke"
+msgstr "撤銷"
+
+msgid "Add"
+msgstr "新增"
+
+msgid "Restricted Access List"
+msgstr "受限存取清單"
+
+msgid "Activate to enable editing"
+msgstr "啟用以開啟編輯功能"
+
+msgid "Tunnel Filter"
+msgstr "隧道篩選"
+
+msgid "Help with defining tunnel filters"
+msgstr "說明如何定義隧道篩選"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "防止清單中的客戶端連線到此服務"
+
+msgid "Blacklist"
+msgstr "黑名單"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "只允許清單中的客戶端連線到此服務"
+
+msgid "Whitelist"
+msgstr "白名單"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "包含篩選定義的檔案之絕對路徑"
+
+msgid "Absolute path to filter definition"
+msgstr "篩選定義的絕對路徑"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "指定客戶端目的地，每行1個"
+
+msgid "Server Throttling"
+msgstr "伺服器節流"
+
+msgid "Inbound connection limits"
+msgstr "入站連線限制"
+
+msgid "Per Minute"
+msgstr "每分鐘"
+
+msgid "Per Hour"
+msgstr "每小時"
+
+msgid "Per Day"
+msgstr "每天"
+
+msgid "Concurrent"
+msgstr "同時"
+
+msgid "Per Client"
+msgstr "每位客戶端"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "單一客戶端每分鐘的網頁請求上限，超過後即封鎖其對伺服器的存取"
+
+msgid "(0 = unlimited)"
+msgstr "（0為無限制）"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "單一客戶端每小時的網頁請求上限，超過後即封鎖其對伺服器的存取"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "單一客戶端每天的網頁請求上限，超過後即封鎖其對伺服器的存取"
+
+msgid "Total"
+msgstr "總計"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "每分鐘的網頁請求總數上限，超過後即封鎖對伺服器的存取"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "每小時的網頁請求總數上限，超過後即封鎖對伺服器的存取"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "每天的網頁請求總數上限，超過後即封鎖對伺服器的存取"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "同時客戶端連線數上限"
+
+msgid "POST limits"
+msgstr "POST限制"
+
+msgid "Per Period"
+msgstr "每個期間"
+
+msgid "Ban Duration"
+msgstr "封鎖時長"
+
+msgid "POST limit period"
+msgstr "POST限制期間"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "設定的時間範圍內，允許單一客戶端發出的post請求數上限"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "如果客戶端在每個指定期間內的post請求數超過上限，就封鎖這麼多分鐘"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "達到post請求數上限並觸發封鎖所需的時間範圍"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "設定的時間範圍內允許的post請求總數"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "如果每個指定期間內的post請求總數超過上限，就全面封鎖存取這麼多分鐘"
+
+msgid "Custom HTTP Headers"
+msgstr "自訂HTTP標頭"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "注意：這些自訂標頭只會套用於尚未設定相關標頭的提供檔案。"
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "為html、xml、json與文字檔案將Allow標頭設為'GET, POST, HEAD'"
+
+msgid "Allow"
+msgstr "Allow"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "啟用Cache-Control標頭（html、xml、json與文字使用no-cache，其他一律使用immutable）"
+
+msgid "Cache-Control"
+msgstr "Cache-Control"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "為html、xml、json與文字檔案將Referrer-Policy標頭設為'same-origin'"
+
+msgid "Referrer-Policy"
+msgstr "Referrer-Policy"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "將X-Content-Type-Options標頭設為'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "正在初始化隧道管理員{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "隧道尚未初始化，請稍候再試。"
+
+msgid "Status Messages"
+msgstr "狀態訊息"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Refresh"
+msgstr "重新整理"
+
+msgid "Global Tunnel Control"
+msgstr "全域隧道控制"
+
+msgid "Tunnel Wizard"
+msgstr "隧道精靈"
+
+msgid "Stop All"
+msgstr "全部停止"
+
+msgid "Start All"
+msgstr "全部啟動"
+
+msgid "Restart all running tunnels"
+msgstr "重新啟動所有執行中的隧道"
+
+msgid "Restart All"
+msgstr "全部重新啟動"
+
+msgid "Restart all running server tunnels"
+msgstr "重新啟動所有執行中的伺服器隧道"
+
+msgid "Restart All Servers"
+msgstr "全部伺服器重新啟動"
+
+msgid "Restart all running client tunnels"
+msgstr "重新啟動所有執行中的客戶端隧道"
+
+msgid "Restart All Clients"
+msgstr "全部客戶端重新啟動"
+
+msgid "I2P Server Tunnels"
+msgstr "I2P伺服器隧道"
+
+msgid "Helper"
+msgstr "小幫手"
+
+msgid "Type"
+msgstr "類型"
+
+msgid "Points at"
+msgstr "指向"
+
+msgid "Preview"
+msgstr "預覽"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Control"
+msgstr "控制"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "編輯伺服器隧道設定："
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "測試IRC伺服器，繞過I2P"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "測試HTTPS伺服器，繞過I2P"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "測試HTTP伺服器，繞過I2P"
+
+msgid "Test HTTP server through I2P"
+msgstr "透過I2P測試HTTP伺服器"
+
+msgid "Base32 Address"
+msgstr "Base32位址"
+
+msgid "Offline"
+msgstr "離線"
+
+msgid "No Preview"
+msgstr "無預覽"
+
+msgid "Starting..."
+msgstr "正在啟動……"
+
+msgid "Starting in"
+msgstr "距離啟動還有"
+
+msgid "Running"
+msgstr "執行中"
+
+msgid "Hops"
+msgstr "跳數"
+
+msgid "in"
+msgstr "入"
+
+msgid "out"
+msgstr "出"
+
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "Stop this Tunnel"
+msgstr "停止此隧道"
+
+msgid "Restart this Tunnel"
+msgstr "重新啟動此隧道"
+
+msgid "Restart"
+msgstr "重新啟動"
+
+msgid "Signature"
+msgstr "簽章"
+
+msgid "Alternate"
+msgstr "替代"
+
+msgid "Alt Destination"
+msgstr "替代目的地"
+
+msgid "Encryption"
+msgstr "加密"
+
+msgid "Supported encryption"
+msgstr "支援的加密"
+
+msgid "New server tunnel"
+msgstr "新增伺服器隧道"
+
+msgid "Standard"
+msgstr "標準"
+
+msgid "Create"
+msgstr "建立"
+
+msgid "I2P Client Tunnels"
+msgstr "I2P客戶端隧道"
+
+msgid "Interface"
+msgstr "介面"
+
+msgid "Edit Tunnel Settings for"
+msgstr "編輯隧道設定："
+
+msgid "Standby"
+msgstr "待命"
+
+msgid "Outproxy"
+msgstr "出口代理"
+
+msgid "internal plugin"
+msgstr "內部外掛"
+
+msgid "none"
+msgstr "無"
+
+msgid "New client tunnel"
+msgstr "新增客戶端隧道"
+
+msgid "Registration Helper"
+msgstr "註冊小幫手"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "此服務使用加密的LeaseSet。不建議進行註冊。註冊驗證已停用。"
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "請務必選取、複製並將適當驗證資料的完整內容貼上到您常用註冊網站的表單中"
+
+msgid "Tunnel name"
+msgstr "隧道名稱"
+
+msgid "Website name"
+msgstr "網站名稱"
+
+msgid "Local Destination"
+msgstr "本機目的地"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "本機目的地無法使用。請啟動隧道。"
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "若要啟用註冊驗證，請編輯隧道並將名稱（或網站名稱）設為以'.i2p'結尾的有效主機名稱"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "若要啟用註冊驗證，請編輯隧道並將名稱設為以'.i2p'結尾的有效主機名稱"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "目的地簽章金鑰無法使用。請啟動隧道。"
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "目的地簽章金鑰已離線。請在離線的機器上使用CLI工具。"
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "新增主機{0}的驗證"
+
+msgid "Copy and paste this to the registration site"
+msgstr "請複製並貼上到註冊網站"
+
+msgid "Advanced authentication strings"
+msgstr "進階驗證字串"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "移除主機{0}的驗證"
+
+msgid "Authentication for changing name"
+msgstr "變更名稱的驗證"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "這會將名稱從{0}變更為{1}，並沿用相同的目的地"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "此隧道必須設定為使用新的主機名稱。"
+
+msgid "Enter old hostname below."
+msgstr "請在下方輸入舊的主機名稱。"
+
+msgid "Authentication for adding alias"
+msgstr "新增別名的驗證"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "這會為{1}新增別名{0}，並沿用相同的目的地"
+
+msgid "Authentication for changing destination"
+msgstr "變更目的地的驗證"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "這會變更{0}的目的地"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "此隧道必須設定為使用新的目的地。"
+
+msgid "Enter old destination below."
+msgstr "請在下方輸入舊的目的地。"
+
+msgid "Authentication for adding alternate destination"
+msgstr "新增替代目的地的驗證"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "這會為{0}新增替代目的地"
+
+msgid "Authentication for adding subdomain"
+msgstr "新增子網域的驗證"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "這會新增{1}的子網域{0}，並使用不同的目的地"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "此隧道必須設定為使用新的子網域與目的地。"
+
+msgid "Enter higher-level domain and destination below."
+msgstr "請在下方輸入較高層級的網域與目的地。"
+
+msgid "Return to Tunnel Configuration"
+msgstr "返回隧道組態"
+
+msgid "Specify old name and destination"
+msgstr "指定舊的名稱與目的地"
+
+msgid "This is only required for advanced authentication."
+msgstr "僅進階驗證需要此項。"
+
+msgid "See above for required items."
+msgstr "必要項目請參閱上方說明。"
+
+msgid "Old / parent hostname "
+msgstr "舊的／上層主機名稱"
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "舊的目的地／子網域上層的私密金鑰檔案"
+
+msgid "Generate Authentication"
+msgstr "產生驗證資訊"
+
+msgid "SSL Helper"
+msgstr "SSL小幫手"
+
+msgid "Experts only!"
+msgstr "僅供專家使用！"
+
+msgid "Alt Base32"
+msgstr "替代Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "I2P連接埠傳入路由"
+
+msgid "Virtual Host"
+msgstr "虛擬主機"
+
+msgid "Via SSL?"
+msgstr "透過SSL？"
+
+msgid "Test HTTPS server through I2P"
+msgstr "透過I2P測試HTTPS伺服器"
+
+msgid "Server"
+msgstr "伺服器"
+
+msgid "SSL Activation"
+msgstr "SSL啟用"
+
+msgid "I2P webserver (eepsite)"
+msgstr "I2P網頁伺服器（匿名網站）"
+
+msgid "Disable SSL"
+msgstr "停用SSL"
+
+msgid "Enable SSL"
+msgstr "啟用SSL"
+
+msgid "New Certificate Password"
+msgstr "新憑證密碼"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "密碼（加密憑證時需要）"
+
+msgid "Generate new SSL certificate"
+msgstr "產生新的SSL憑證"
+
+msgid "Generate SSL certificate and enable"
+msgstr "產生SSL憑證並啟用"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "無法設定，{0}client configurations{1}中找不到與此隧道相符的Jetty伺服器"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "未來版本將加入對非Jetty伺服器的支援"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "返回隧道管理員首頁"
+
+msgid "Return to Tunnel Editor"
+msgstr "返回隧道編輯器"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "I2P隧道管理員：隧道建立精靈"
+
+msgid "Server or client tunnel?"
+msgstr "伺服器隧道或客戶端隧道？"
+
+msgid "Tunnel type"
+msgstr "隧道類型"
+
+msgid "Tunnel name and description"
+msgstr "隧道名稱與描述"
+
+msgid "Tunnel destination"
+msgstr "隧道目的地"
+
+msgid "Binding address and port"
+msgstr "繫結位址與連接埠"
+
+msgid "Tunnel auto-start"
+msgstr "隧道自動啟動"
+
+msgid "Wizard completed"
+msgstr "精靈已完成"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "此精靈會引導您瞭解在I2P中建立隧道的各種可用選項。"
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "首先要決定的是您要建立伺服器隧道還是客戶端隧道。"
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "如果您需要連線到遠端服務，例如I2P內的IRC伺服器或程式碼存放庫，則需要使用客戶端隧道。"
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "相反地，如果您想架設供他人連線的服務，則需要建立伺服器隧道。"
+
+msgid "Server Tunnel"
+msgstr "伺服器隧道"
+
+msgid "Client Tunnel"
+msgstr "客戶端隧道"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "有數種類型的隧道可供選擇："
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "用於連線到I2P內單一服務的基本隧道。"
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "如果下列隧道類型都不符合您的需求，或您不確定需要哪種類型的隧道，請選用此項。"
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "作為HTTP代理以存取I2P內匿名網站的隧道。"
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "請將您的瀏覽器設定為使用此隧道作為http代理，或在GNU/Linux中為命令列應用程式設定\"http_proxy\"環境變數。"
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "如果您知道I2P內的HTTP代理，也可以存取I2P以外的網站。"
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "專為IRC連線所設計的客製化客戶端隧道。"
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "使用這種隧道類型，您的IRC客戶端就能連線到I2P內的IRC網路。"
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "您想連線的每個I2P內IRC網路都需要各自的隧道。（另請參閱SOCKS IRC）"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "實作SOCKS協定的隧道。"
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "這可讓您透過I2P內的SOCKS出口代理建立TCP與UDP連線。"
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "實作SOCKS協定並專為連線IRC網路而客製化的客戶端隧道。"
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "使用這種隧道類型，只要在IRC客戶端中輸入I2P位址，並將IRC客戶端設定為使用此SOCKS隧道，就可以連線到I2P內的IRC網路。"
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "這表示只需要一個I2P隧道，而不必為每個IRC網路各設一條隧道。"
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "如果您知道I2P內的SOCKS出口代理，也可以連線到I2P以外的IRC網路，但仍取決於該出口代理是否被IRC網路封鎖。"
+
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "用於在I2P內架設一般服務的基本伺服器隧道。"
+
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "專為HTTP連線而客製化的伺服器隧道。"
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "如果您想架設匿名網站，請使用這種隧道類型。"
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "用於在I2P內架設IRC網路的客製化伺服器隧道。"
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "通常，I2P內每個要存取的IRC伺服器都需要各自建立一條隧道。"
+
+msgid "Select tunnel type"
+msgstr "選擇隧道類型"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "為您的隧道選擇名稱與描述。"
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "這些內容可以隨您的喜好填寫，只為了讓您在路由器主控台中更容易辨識該隧道。"
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "如果您知道這種類型隧道可用的出口代理（HTTP或SOCKS），請填入下方。"
+
+msgid "Separate multiple proxies with commas."
+msgstr "以逗號分隔多個代理。"
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "I2P出口代理目的地清單，以逗號分隔（例如proxy1.i2p,proxy2.i2p）"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "請輸入此客戶端隧道要連線的服務之I2P目的地。"
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "這可能是完整的Base64目的地金鑰，或是您位址簿中的I2P URL。"
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "請在此輸入b64或.i2p位址"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "這是您服務執行所在的IP，通常與路由器在同一台機器上，因此已自動填入127.0.0.1。"
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "這是服務接受連線的連接埠。"
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "這是本機存取客戶端隧道時所使用的連接埠。"
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "您希望如何存取此隧道？僅本機、整個子網路，或外部網際網路？"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "您多半只想允許127.0.0.1"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "當路由器啟動時，I2P路由器可自動為您啟動這條隧道。"
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "這對經常使用的隧道（尤其是伺服器隧道）很有用，但對只是偶爾使用的隧道而言，就代表I2P路由器會建立並維護不必要的隧道。"
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "精靈已收集足夠的資訊來建立您的隧道。"
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "按下下方的儲存按鈕後，精靈會設定好隧道，並帶您回到主要的I2PTunnel頁面。"
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "由於您選擇在路由器啟動時自動啟動隧道，您不必再做任何設定。"
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "隧道設定完成後，路由器就會啟動它。"
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "由於您選擇不自動啟動隧道，您必須手動啟動它。"
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "只要在主頁面上點擊新隧道所對應的啟動按鈕即可。"
+
+msgid "Below is a summary of the options you chose:"
+msgstr "以下是您所選選項的摘要："
+
+msgid "Tunnel description"
+msgstr "隧道描述"
+
+msgid "Binding address"
+msgstr "繫結位址"
+
+msgid "Tunnel port"
+msgstr "隧道連接埠"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "除了這些基本設定之外，隧道組態還有許多進階選項。"
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "精靈會為這些選項設定合理的預設值，但您可以在主要的I2PTunnel頁面點擊隧道名稱來檢視及編輯。"
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "取消精靈並返回隧道管理員首頁"
+
+msgid "Return to previous page"
+msgstr "返回上一頁"
+
+msgid "Previous"
+msgstr "上一步"
+
+msgid "Save tunnel configuration"
+msgstr "儲存隧道組態"
+
+msgid "Save Tunnel"
+msgstr "儲存隧道"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "完成精靈並檢視隧道設定"
+
+msgid "Finish"
+msgstr "完成"
+
+msgid "Advance to next page"
+msgstr "前往下一頁"
+
+msgid "Next"
+msgstr "下一步"

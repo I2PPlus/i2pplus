@@ -1,0 +1,157 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "OK"
+msgstr "正常"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4：正常；IPv6：測試中"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4：正常；IPv6：受防火牆限制"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4：測試中；IPv6：正常"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4：受防火牆限制；IPv6：正常"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4：已停用；IPv6：正常"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4：對稱型NAT；IPv6：正常"
+
+msgid "Symmetric NAT"
+msgstr "對稱型NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4：對稱型NAT；IPv6：測試中"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4：受防火牆限制；IPv6：測試中"
+
+msgid "Firewalled"
+msgstr "受防火牆限制"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4：測試中；IPv6：受防火牆限制"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4：已停用；IPv6：測試中"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4：已停用；IPv6：受防火牆限制"
+
+msgid "Disconnected"
+msgstr "已中斷連線"
+
+msgid "Port Conflict"
+msgstr "連接埠衝突"
+
+msgid "Testing"
+msgstr "測試中"
+
+msgid "Starting up"
+msgstr "啟動中"
+
+msgid "Declining all tunnel requests:<br>"
+msgstr "拒絕所有隧道請求：<br>"
+
+msgid "Hidden Mode"
+msgstr "隱藏模式"
+
+msgid "Declining Tunnel Requests:<br>"
+msgstr "拒絕隧道請求：<br>"
+
+msgid "High message delay"
+msgstr "訊息延遲過高"
+
+msgid "Declining requests: "
+msgstr "拒絕請求："
+
+msgid "Limit reached"
+msgstr "已達限制"
+
+msgid "Participation disabled"
+msgstr "已停用參與"
+
+msgid "High system load"
+msgstr "系統負載過高"
+
+msgid "Rejecting all tunnel requests:<br>"
+msgstr "拒絕所有隧道請求：<br>"
+
+msgid "High number of requests"
+msgstr "請求數量過多"
+
+msgid "Rejecting most tunnel requests:<br>"
+msgstr "拒絕大部分隧道請求：<br>"
+
+msgid "Accepting most tunnel requests"
+msgstr "接受大部分隧道請求"
+
+msgid "Accepting tunnel requests"
+msgstr "接受隧道請求"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "拒絕請求：頻寬限制"
+
+msgid "Declining requests"
+msgstr "拒絕請求"
+
+msgid "Shutting down"
+msgstr "關機中"
+
+msgid "Restarting"
+msgstr "正在重新啟動"
+
+msgid "Declining Tunnel Requests"
+msgstr "拒絕隧道請求"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "丟棄隧道請求：速度太慢"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "丟棄隧道請求：工作延遲過高"
+
+msgid "Dropping Tunnel Requests:<br>High CPU load"
+msgstr "丟棄隧道請求：<br>CPU負載過高"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "丟棄隧道請求：已過載"
+
+msgid "Declining requests:"
+msgstr "拒絕請求："
+
+msgid "Request overload"
+msgstr "請求過載"
+
+msgid "Connection limit reached"
+msgstr "已達連線限制"
+
+msgid "Transit throttle drop"
+msgstr "中繼節流丟棄"
+
+msgid "Transit throttle reject"
+msgstr "中繼節流拒絕"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "丟棄隧道請求：負載過高"
+
+msgid "Transit request throttle"
+msgstr "中繼請求節流"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "丟棄隧道請求：佇列時間"

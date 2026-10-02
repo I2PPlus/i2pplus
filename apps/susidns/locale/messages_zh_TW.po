@@ -1,0 +1,678 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P\n"
+"Report-Msgid-Bugs-To: https://github.com/I2PPlus/i2pplus/issues\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: I2P+ Translation Team\n"
+"Language-Team: none\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "主機名稱\"{0}\"含有不允許的字元{1}"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "主機名稱不能以\"{0}\"開頭"
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "主機名稱不能以\"{0}\"結尾"
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "主機名稱不能包含\"{0}\""
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "主機名稱\"{0}\"需要轉換為ASCII，但此JVM中無法使用轉換程式庫"
+
+msgid "Source"
+msgstr "來源"
+
+msgid "Imported from"
+msgstr "匯入自"
+
+msgid "Imported from file"
+msgstr "匯入自檔案"
+
+msgid "Manually added via SusiDNS"
+msgstr "透過SusiDNS手動新增"
+
+msgid "Manually added"
+msgstr "手動新增"
+
+msgid "Added via address helper"
+msgstr "透過位址小幫手新增"
+
+msgid "Via helper"
+msgstr "透過小幫手"
+
+msgid "Via helper from"
+msgstr "透過小幫手來自"
+
+msgid "None"
+msgstr "無"
+
+msgid "Hidden"
+msgstr "隱藏"
+
+msgid "Signed"
+msgstr "簽章"
+
+msgid "Key"
+msgstr "金鑰"
+
+#, java-format
+msgid "Type {0}"
+msgstr "類型{0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024位元"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048位元"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "搜尋<span class=active>"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "篩選清單包含{0}筆項目。"
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "{0}個搜尋結果：<span class=active>"
+
+#, java-format
+msgid "Book contains 1 entry"
+msgid_plural "Book contains {0} entries"
+msgstr[0] "位址簿包含{0}筆項目"
+
+msgid "Add"
+msgstr "新增"
+
+msgid "Replace"
+msgstr "取代"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "主機名稱{0}已存在於位址簿中，未變更。"
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "主機名稱{0}已存在於位址簿中，但目的地不同。按一下\"取代\"即可覆寫。"
+
+msgid "Unable to resolve Base 32 address"
+msgstr "無法解析Base32位址"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "已為{0}新增目的地。"
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "已變更{0}的目的地。"
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "警告-主機名稱不是以\".i2p\"結尾"
+
+msgid "Invalid Base 32 host name."
+msgstr "無效的Base32主機名稱。"
+
+msgid "Invalid Base 64 destination."
+msgstr "無效的Base64目的地。"
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "主機名稱\"{0}\"無效。"
+
+msgid "Please enter a host name and destination"
+msgstr "請輸入主機名稱與目的地"
+
+msgid "Add Alternate"
+msgstr "新增替代項目"
+
+msgid "Unsupported"
+msgstr "不支援"
+
+msgid "Address book saved."
+msgstr "位址簿已儲存。"
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "錯誤：無法寫入位址簿檔案。"
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "表單提交無效，可能是您使用了瀏覽器的\"back\"或\"reload\"按鈕。請重新提交。"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "若問題持續存在，請確認您的瀏覽器已啟用cookie。"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Blacklist saved."
+msgstr "黑名單已儲存。"
+
+msgid "Reload"
+msgstr "重新載入"
+
+msgid "Blacklist reloaded from file."
+msgstr "已從檔案重新載入黑名單。"
+
+msgid "Configuration saved."
+msgstr "組態已儲存。"
+
+msgid "Configuration reloaded."
+msgstr "組態已重新載入。"
+
+msgid "New domain"
+msgstr "新網域"
+
+msgid "Subscription log reloaded."
+msgstr "訂閱日誌已重新載入。"
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{0}位址簿位於{1}資料庫中"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "位址簿中沒有主機名稱{0}。"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "無法將{0}的目的地新增至命名服務{1}"
+
+msgid "Delete Entry"
+msgstr "刪除項目"
+
+msgid "Delete Selected"
+msgstr "刪除所選項目"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "無法將{0}的目的地從命名服務{1}刪除"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "目的地{0}已刪除。"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "已刪除{0}個目的地。"
+
+msgid "No valid entries selected to delete."
+msgstr "未選取可刪除的有效項目。"
+
+msgid "Blacklist Selected"
+msgstr "將所選項目加入黑名單"
+
+#, java-format
+msgid "1 destination blacklisted."
+msgid_plural "{0} destinations blacklisted."
+msgstr[0] "已將{0}個目的地加入黑名單。"
+
+msgid "No valid entries selected to blacklist."
+msgstr "未選取可加入黑名單的有效項目。"
+
+msgid "Save Notes"
+msgstr "儲存備註"
+
+msgid "You must enter a file"
+msgstr "您必須輸入檔案"
+
+msgid "No entries found in file"
+msgstr "檔案中找不到項目"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "匯入自檔案{0}"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "已從檔案載入{0}筆項目"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "已從檔案略過{0}筆重複項目"
+
+msgid "Import from file failed"
+msgstr "從檔案匯入失敗"
+
+msgid "Subscriptions saved."
+msgstr "訂閱已儲存。"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "正在嘗試從訂閱來源更新位址簿……"
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "無法更新訂閱：HTTP代理未執行！"
+
+msgid "Subscriptions reloaded."
+msgstr "訂閱已重新載入。"
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "如果您設定SusiDNS發布您的路由器位址簿，這些項目會出現在您的已發布位址簿中，並儲存到hosts.txt檔案以供分享。"
+
+msgid "Published Addressbook"
+msgstr "已發布位址簿"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "若要設定SusiDNS將您的路由器位址簿推送至已發布位址簿，請在組態頁面中設定'should_publish=true'。"
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "除了您在此處或主要位址簿中手動新增的主機之外，所有源自訂閱的主機也都會出現在這個位址簿中。"
+
+msgid "Router Addressbook"
+msgstr "路由器位址簿"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "您在此處手動新增的主機永遠不會發布。您也可以在此處為其他位址簿中的主機新增別名。"
+
+msgid "Private Addressbook"
+msgstr "私人位址簿"
+
+msgid "Local Records"
+msgstr "本機記錄"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2P應用程式（包括HTTP代理）會使用您本機位址簿中的主機來解析.i2p主機名稱。"
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "其他訂閱可在路由器說明頁面的常見問題區段中找到。"
+
+msgid "Subscriptions"
+msgstr "訂閱"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "來自您訂閱的主機會加入您的路由器位址簿，並自動同步（預設每12小時一次）。"
+
+msgid "Configure Subscriptions"
+msgstr "設定訂閱"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "如果您在此處手動新增主機，這些主機會納入您的已發布位址簿（如果有設定）。"
+
+msgid "Master Addressbook"
+msgstr "主要位址簿"
+
+msgid "Searchable by"
+msgstr "可搜尋者"
+
+msgid "I2P applications"
+msgstr "I2P應用程式"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "主要、路由器與私人位址簿共同構成I2P應用程式的DNS權威來源。"
+
+msgid "Optional,"
+msgstr "選用，"
+
+msgid "for websites"
+msgstr "供網站使用"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "如果您設定SusiDNS發布您的路由器位址簿，它會匯出一個包含所有主機的hosts.txt檔案（預設放在您匿名網站的根目錄）。"
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "手動新增到主要位址簿的位址會與您的路由器位址簿合併。"
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "您從訂閱取得的主機會與您的路由器位址簿合併。"
+
+msgid "Import"
+msgstr "匯入"
+
+msgid "address book"
+msgstr "位址簿"
+
+msgid "Router"
+msgstr "路由器"
+
+msgid "Master"
+msgstr "主要"
+
+msgid "Private"
+msgstr "私人"
+
+msgid "Published"
+msgstr "已發布"
+
+msgid "Blacklist"
+msgstr "黑名單"
+
+msgid "Configuration"
+msgstr "組態"
+
+msgid "Help"
+msgstr "說明"
+
+msgid "Book"
+msgstr "位址簿"
+
+msgid "No entries"
+msgstr "沒有項目"
+
+msgid "Add new destination"
+msgstr "新增目的地"
+
+msgid "Import from hosts.txt file"
+msgstr "從hosts.txt檔案匯入"
+
+msgid "other"
+msgstr "其他"
+
+msgid "Export in hosts.txt format"
+msgstr "以hosts.txt格式匯出"
+
+msgid "Export results in hosts.txt format"
+msgstr "以hosts.txt格式匯出結果"
+
+msgid "Export book in hosts.txt format"
+msgstr "以hosts.txt格式匯出位址簿"
+
+msgid "Search"
+msgstr "搜尋"
+
+msgid "latest"
+msgstr "最新"
+
+msgid "Alive"
+msgstr "可達"
+
+msgid "Dead"
+msgstr "不可達"
+
+msgid "all"
+msgstr "全部"
+
+msgid "Info"
+msgstr "資訊"
+
+msgid "Type"
+msgstr "類型"
+
+msgid "Hostname"
+msgstr "主機名稱"
+
+msgid "Encryption"
+msgstr "加密"
+
+msgid "Link (b32)"
+msgstr "連結（b32）"
+
+msgid "Destination"
+msgstr "目的地"
+
+msgid "Added"
+msgstr "已新增"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "選擇要從位址簿刪除的主機"
+
+msgid "More information on this entry"
+msgstr "此項目的更多資訊"
+
+msgid "unknown"
+msgstr "未知"
+
+msgid "Base 32 address"
+msgstr "Base32位址"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "分享主機位址的位址小幫手連結，可選擇加入位址簿"
+
+msgid "Mark for deletion"
+msgstr "標記為刪除"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "This book currently contains no entries."
+msgstr "此位址簿目前沒有任何項目。"
+
+msgid "e.g. newdomain.i2p"
+msgstr "例如newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64或B32"
+
+msgid "Full destination or b32 address"
+msgstr "完整目的地或b32位址"
+
+msgid "Select file"
+msgstr "選擇檔案"
+
+msgid "blacklist"
+msgstr "黑名單"
+
+msgid "Blacklist Management"
+msgstr "黑名單管理"
+
+msgid "File location"
+msgstr "檔案位置"
+
+msgid "Enter I2P addresses to blacklist (one per line)"
+msgstr "輸入要加入黑名單的I2P位址（每行一個）"
+
+msgid "The blacklist file contains a list of I2P hostnames that should be blocked from access via the HTTP proxy, and excluded from the address book display."
+msgstr "黑名單檔案包含一份I2P主機名稱清單，這些主機名稱應禁止透過HTTP代理存取，並從位址簿顯示中排除。"
+
+msgid "configuration"
+msgstr "組態"
+
+msgid "HostChecker is already running a scan"
+msgstr "HostChecker已在執行掃描"
+
+msgid "Run HostChecker"
+msgstr "執行HostChecker"
+
+msgid "Hints"
+msgstr "提示"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "此處的檔案與目錄路徑都是相對於位址簿的工作目錄，通常為~/.i2p/addressbook/（Linux）或%LOCALAPPDATA%\\I2P\\addressbook\\（Windows）。"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "如果您想手動新增資料列到位址簿，請新增到私人或主要位址簿。"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "路由器位址簿與已發布位址簿是由位址簿應用程式更新的。"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "當您發布位址簿時，主要與路由器位址簿中的所有目的地都會出現在其中。"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "私人目的地請使用私人位址簿，這些目的地不會發布。"
+
+msgid "Options"
+msgstr "選項"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "包含訂閱URL清單的檔案（無須變更）"
+
+msgid "Update interval in hours"
+msgstr "更新間隔（小時）"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "您的公開hosts.txt檔案（請選擇網頁伺服器網站根目錄內的路徑）"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "您的hosts.txt（請勿變更）"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "您的個人位址簿，這些主機將會發布"
+
+msgid "Your private addressbook, it is never published"
+msgstr "您的私人位址簿，永遠不會發布"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "eepProxy的連接埠（無須變更）"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "eepProxy的主機名稱（無須變更）"
+
+msgid "Whether to update the published addressbook"
+msgstr "是否更新已發布位址簿"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "包含已擷取訂閱URL之etags標頭的檔案（無須變更）"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "包含每個已擷取訂閱URL之修改時間戳記的檔案（無須變更）"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "要寫入日誌的檔案（如有需要可改為/dev/null）"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "要使用的覆寫主題名稱（預設為主控台選取的主題）"
+
+msgid "Interval (in hours) for running host checker (default is 4 hours)"
+msgstr "執行HostChecker的間隔（以小時為單位）（預設為4小時）"
+
+msgid "Maximum concurrent pings when running host checker (Default is 16, max is 160)"
+msgstr "執行HostChecker時同時作用的ping數量上限（預設為16，最大為160）"
+
+msgid "delete hosts"
+msgstr "刪除主機"
+
+msgid "addressbook"
+msgstr "位址簿"
+
+msgid "Details"
+msgstr "詳細資料"
+
+msgid "Address Helper"
+msgstr "位址小幫手"
+
+msgid "link"
+msgstr "連結"
+
+msgid "Encoded Name"
+msgstr "編碼名稱"
+
+msgid "Base 32 Address"
+msgstr "Base32位址"
+
+msgid "Base 64 Hash"
+msgstr "Base64雜湊值"
+
+msgid "Public Key"
+msgstr "公開金鑰"
+
+msgid "Signing Key"
+msgstr "簽章金鑰"
+
+msgid "Certificate"
+msgstr "憑證"
+
+msgid "Validated"
+msgstr "已驗證"
+
+msgid "no"
+msgstr "否"
+
+msgid "yes"
+msgstr "是"
+
+msgid "Added Date"
+msgstr "新增日期"
+
+msgid "Last Modified"
+msgstr "最後修改時間"
+
+msgid "Notes"
+msgstr "備註"
+
+msgid "Add notes about domain"
+msgstr "新增網域備註"
+
+msgid "Visual Identification for"
+msgstr "視覺識別"
+
+msgid "Create your own identification images"
+msgstr "建立您自己的識別圖片"
+
+msgid "Launch Image Generator"
+msgstr "啟動圖片產生器"
+
+msgid "Introduction"
+msgstr "簡介"
+
+msgid "What is the addressbook?"
+msgstr "什麼是位址簿？"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "位址簿應用程式是您I2P安裝的一部分。"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "它會定期從分散的來源或\"訂閱\"更新您的hosts.txt檔案。"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "訂閱其他網站很簡單，只要將它們加入您的<a href=\"subscriptions\">訂閱</a>檔案即可。"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "如需更多I2P命名相關資訊，請參閱<a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>概觀</a>。"
+
+msgid "How does the addressbook application work?"
+msgstr "位址簿應用程式如何運作？"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "位址簿應用程式會定期輪詢您的訂閱，並將其內容合併到您的\"路由器\"位址簿。"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "接著它也會將您的\"主要\"位址簿合併到路由器位址簿中。"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "如果有設定，路由器位址簿會寫入\"已發布\"位址簿；若您正在經營匿名網站，該位址簿將公開可用。"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "路由器也會使用私人位址簿，此位址簿不會被合併或發布。"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "私人位址簿中的主機您可以存取，但其位址絕不會散佈給其他人。"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "私人位址簿也可用於您其他位址簿中主機的別名。"
+
+msgid "subscription log"
+msgstr "訂閱日誌"
+
+msgid "Subscription Log"
+msgstr "訂閱日誌"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "最新（不含無效網域）"
+
+msgid "subscriptions"
+msgstr "訂閱"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "訂閱檔案包含一份i2p URL清單。"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "位址簿應用程式會定期檢查這份清單以尋找新的匿名網站。"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "這些URL指向已發布的hosts.txt檔案。"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "請參閱常見問題以取得訂閱URL清單。"
