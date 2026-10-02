@@ -243,6 +243,11 @@ public class TranslationStatus {
             String pclz = "";
             int max = 0;
             List<ResourceBundle> buns = new ArrayList<>(64);
+            // The locale must travel with its bundle: loading by name with
+            // Locale.ROOT (so legacy codes resolve on JDK 1.8) makes every bundle
+            // report getLocale() == ROOT, which collapsed each language to an
+            // empty name, an empty code and an unknown flag.
+            List<Locale> bunLocs = new ArrayList<>(64);
             // key count of the English (template) bundle for this resource,
             // used as the reference for the % translated so fallback masking
             // cannot report a locale as more complete than the source.
@@ -256,7 +261,7 @@ public class TranslationStatus {
                     // output goes here, we have to make two passes to find the max
                     // number of entries to generate a true %
                     if (!buns.isEmpty()) {
-                        report(pclz, max, enTot, buns);
+                        report(pclz, max, enTot, buns, bunLocs);
                         resources++;
                     }
                     grandtot += max;
@@ -264,6 +269,7 @@ public class TranslationStatus {
                     max = 0;
                     enTot = -1;
                     buns.clear();
+                    bunLocs.clear();
                 }
                 String s = name.substring(c + 1);
                 Locale loc = localeFromString(s);
@@ -279,6 +285,7 @@ public class TranslationStatus {
                 }
                 // in this pass we just calculate the max strings
                 buns.add(bun);
+                bunLocs.add(loc);
                 int tot = bun.keySet().size() - 1; // subtract empty header string
                 if (loc.getLanguage().isEmpty() || loc.getLanguage().equals("en")) {
                     // English / default template bundle
@@ -289,7 +296,7 @@ public class TranslationStatus {
                     max = tot;
             }
             if (!buns.isEmpty()) {
-                report(pclz, max, enTot, buns);
+                report(pclz, max, enTot, buns, bunLocs);
                 grandtot += max;
                 resources++;
             }
@@ -379,7 +386,8 @@ public class TranslationStatus {
         return Math.max(0, resources - bundlesForLocale);
     }
 
-    private void report(String clz, int max, int enTot, List<ResourceBundle> buns) {
+    private void report(String clz, int max, int enTot, List<ResourceBundle> buns,
+                      List<Locale> bunLocs) {
         if (clz.endsWith(".messages")) {clz = clz.substring(0, clz.length() - 9);}
         String classTitle = "";
         String location = "";
@@ -439,9 +447,10 @@ public class TranslationStatus {
         Set<String> missing = new TreeSet<>(langs);
         // reference total: the English template if found, otherwise the largest bundle
         int ref = enTot >= 0 ? enTot : max;
-        for (ResourceBundle bun : buns) {
+        for (int i = 0; i < buns.size(); i++) {
+            ResourceBundle bun = buns.get(i);
             int tot = bun.keySet().size() - 1; // subtract empty header string
-            Locale loc = bun.getLocale();
+            Locale loc = bunLocs.get(i);
             String lang = loc.getLanguage();
             String country = loc.getCountry();
             String cc = getCountryCode(loc);
