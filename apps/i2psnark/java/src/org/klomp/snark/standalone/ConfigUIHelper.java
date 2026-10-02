@@ -74,6 +74,7 @@ public class ConfigUIHelper {
         {"sl", "sk", "Slovenčina", null},
         {"sv", "se", "Svenska", null},
         {"sw", "tz", "Swahili Kiswahili", null},
+        {"zh_TW", "tw", "Taiwanese 台灣", null},
         {"th", "th", "Thai ไทย", null},
         {"bo", "xt", "Tibetan", null}, // position by name, not iso code
         {"tr", "tr", "Türkçe", null},
@@ -85,7 +86,6 @@ public class ConfigUIHelper {
         // { "gl", "lang_gl", "Galego", null },
         // { "mg", "mg", "Malagasy", null },
         // { "pt_BR", "br", "Português", "Brazil" },
-        {"zh_TW", "tw", "Taiwanese 台灣", null},
     };
 
     /**
