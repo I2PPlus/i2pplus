@@ -423,17 +423,24 @@ public class TunnelPool {
      *  as fresh by {@code countFreshTunnels}. The result is an inbound pool that
      *  looks healthy by count and cannot sign a LeaseSet worth publishing.
      *
-     *  <p>This field bridges that gap. {@code RepublishLeaseSetJob} raises it when
-     *  a mint is imminent and the pool cannot supply viable leases, so build demand
-     *  and pruning both shift from "enough tunnels" to "enough advertiseable ones"
-     *  for exactly as long as the mint needs, then release it. The alternative is
-     *  raising {@link #LEASE_MIN_REMAINING_MS} permanently, which buys the same
-     *  effect by making every tunnel past a fixed age ineligible -- sustained extra
-     *  build load on a path that is already denied most of its demand.
+     *  <p>This field bridges that gap, by way of pruning only.
+     *  {@code RepublishLeaseSetJob} raises it when a mint is imminent and the
+     *  pool cannot supply viable leases; {@link #pruneExcessTunnels} then offers
+     *  up tunnels that can no longer be advertised, dropping the pool below its
+     *  target and so provoking the rebuild. It is deliberately NOT a build
+     *  target: the required count is at most 2 and {@link #getActiveTarget} is at
+     *  least 2, so folding it into {@link #getEffectiveTarget} as a floor could
+     *  never move the number. Build pressure comes from the shortfall, not from
+     *  inflating the target.
+     *
+     *  <p>The alternative to pruning here is raising
+     *  {@link #LEASE_MIN_REMAINING_MS} permanently, which buys the same effect by
+     *  making every tunnel past a fixed age ineligible -- sustained extra build
+     *  load on a path that is already denied most of its demand.
      *
      *  @since 0.9.71+
      */
-    private volatile int _leaseSurgeTarget;
+    private volatile int _leaseSurgeNeed;
     /**
      *  Normal minimum interval between ensureSufficientTunnels() runs for a
      *  healthy or partially-degraded pool (usable tunnels &gt; 1).
@@ -1191,6 +1198,7 @@ public class TunnelPool {
         return null;
     }
 
+
     /**
      *  Log the no-tunnels warning, distinguishing an unreachable destination
      *  (no LeaseSet found) from an empty pool.
@@ -1583,52 +1591,54 @@ public class TunnelPool {
     }
 
     /**
-     *  The tunnel count the pool maintains, never less than 2 per direction
-     *  regardless of the configured quantity, unless the pool is a ping pool
-     *  or expressly zero-hop.
+     *  Note how many advertiseable tunnels the imminent mint needs, so
+     *  {@link #pruneExcessTunnels} can offer up the ones that are no longer
+     *  advertiseable until the pool has enough. Not a build target -- see
+     *  {@link #_leaseSurgeNeed}.
      *
-     *  @return the number of tunnels to build and keep
-     */
-    /**
-     *  Raise the pool's target to lease-material terms until {@link
-     *  #clearLeaseSurge} is called.
+     *  <p>Monotonic: a later request never lowers the requirement, so a second
+     *  mint asking for less cannot relax pruning that an earlier one still needs.
      *
      *  @param count how many advertiseable tunnels the imminent mint needs
-     * @since 0.9.71+
+     *  @since 0.9.71+
      */
     public void requestLeaseSurge(int count) {
-        if (count > 0 && count > _leaseSurgeTarget) {
-            _leaseSurgeTarget = count;
+        if (count > 0 && count > _leaseSurgeNeed) {
+            _leaseSurgeNeed = count;
             if (_log.shouldDebug()) {
-                _log.debug(toString() + " -> lease surge to " + count);
+                _log.debug(toString() + " -> lease surge needs " + count);
             }
         }
     }
 
     /**
-     *  Drop any lease-material target override. Called once the mint is published
+     *  Drop any lease-material prune override. Called once the mint is published
      *  or its window passes, so the pool returns to plain active-count upkeep.
      *
      * @since 0.9.71+
      */
     public void clearLeaseSurge() {
-        if (_leaseSurgeTarget != 0) {
-            _leaseSurgeTarget = 0;
+        if (_leaseSurgeNeed != 0) {
+            _leaseSurgeNeed = 0;
             if (_log.shouldDebug()) {
                 _log.debug(toString() + " -> lease surge cleared");
             }
         }
     }
 
-    /** The active lease-material target, or 0 when no surge is in force. */
-    int getLeaseSurgeTarget() {return _leaseSurgeTarget;}
+    /** The advertiseable count an in-force surge needs, or 0 when none is. */
+    int getLeaseSurgeNeed() {return _leaseSurgeNeed;}
 
     /**
-     *  The target build and prune both aim at: the surge while one is active,
-     *  otherwise the ordinary active-count target.
+     *  The tunnel count the pool builds and keeps: the ordinary active-count
+     *  target, unaffected by any lease surge. The surge influences supply through
+     *  pruning, not by moving this.
+     *
+     *  @return the number of tunnels to build and keep
+     *  @since 0.9.71+
      */
     int getEffectiveTarget() {
-        return Math.max(getActiveTarget(), _leaseSurgeTarget);
+        return getActiveTarget();
     }
 
     /**
@@ -1877,7 +1887,7 @@ public class TunnelPool {
             // active target yet still short of advertiseable tunnels. Prune the
             // soonest-expiring of those so the replacement builds have somewhere
             // to land and the pool does not sit full of leases it cannot publish.
-            int leaseSurge = _leaseSurgeTarget;
+            int leaseSurge = _leaseSurgeNeed;
             if (leaseSurge > 0) {
                 pruneForLeaseSurge(toRemove, leaseSurge, now);
             }

@@ -94,59 +94,78 @@ public class TunnelPoolLeaseSurgeTest {
         return cfg;
     }
 
-    // ---- the target itself ----
+    // ---- the prune gate, not a build target ----
 
-    /** With no surge the pool keeps its ordinary active-count target. */
+    /**
+     *  The surge is deliberately NOT a build target. The required count is capped
+     *  at 2 by the caller and the active target is at least 2, so folding the
+     *  requirement into getEffectiveTarget() as a floor could never move it.
+     *  This pins that: the surge must leave the build target alone, and supply
+     *  arrives via pruning instead.
+     */
     @Test
-    public void noSurgeLeavesTargetUnchanged() {
-        assertEquals(3, createPool(3).getEffectiveTarget());
-    }
-
-    /** A surge raises the target to the advertiseable count a mint needs. */
-    @Test
-    public void surgeRaisesTarget() {
+    public void surgeNeverMovesTheBuildTarget() {
         TunnelPool pool = createPool(2);
-        pool.requestLeaseSurge(4);
-        assertEquals(4, pool.getEffectiveTarget());
-    }
-
-    /** Releasing returns the pool to plain active-count upkeep. */
-    @Test
-    public void clearingSurgeRestoresTarget() {
-        TunnelPool pool = createPool(2);
-        pool.requestLeaseSurge(5);
-        pool.clearLeaseSurge();
+        pool.requestLeaseSurge(2);
+        assertEquals("a lease surge must not raise the build target",
+                     2, pool.getEffectiveTarget());
+        pool.requestLeaseSurge(1);
         assertEquals(2, pool.getEffectiveTarget());
+        // Above anything the caller produces: the invariant is that the surge is
+        // never a target, not merely that today's caps make the max a no-op.
+        pool.requestLeaseSurge(9);
+        assertEquals("the surge must never move the build target, at any value",
+                     2, pool.getEffectiveTarget());
+    }
+
+    /** An in-force surge reports the count pruning must satisfy. */
+    @Test
+    public void surgeRecordsWhatPruningNeeds() {
+        TunnelPool pool = createPool(2);
+        pool.requestLeaseSurge(2);
+        assertEquals(2, pool.getLeaseSurgeNeed());
+    }
+
+    /** No surge means pruning has nothing to satisfy. */
+    @Test
+    public void noSurgeMeansNoPruneRequirement() {
+        assertEquals(0, createPool(2).getLeaseSurgeNeed());
+    }
+
+    /** Releasing the requirement returns the pool to plain upkeep. */
+    @Test
+    public void clearingSurgeClearsTheRequirement() {
+        TunnelPool pool = createPool(2);
+        pool.requestLeaseSurge(2);
+        pool.clearLeaseSurge();
+        assertEquals(0, pool.getLeaseSurgeNeed());
     }
 
     /**
-     *  A surge can only ever raise the target. A later, lower request must not
-     *  walk it back down mid-cycle, or a mint asking for 2 after one asked for 5
-     *  would silently shrink the target while the first is still waiting.
+     *  The requirement is monotonic. A later request for less must not relax
+     *  pruning that an earlier, larger mint still needs.
      */
     @Test
-    public void surgeOnlyEverRises() {
+    public void surgeRequirementOnlyEverRises() {
         TunnelPool pool = createPool(2);
-        pool.requestLeaseSurge(5);
-        pool.requestLeaseSurge(3);
-        assertEquals(5, pool.getEffectiveTarget());
+        pool.requestLeaseSurge(2);
+        pool.requestLeaseSurge(1);
+        assertEquals(2, pool.getLeaseSurgeNeed());
     }
 
-    /** A non-positive request is meaningless and must not be honoured. */
+    /** A non-positive request is meaningless and must not arm the prune gate. */
     @Test
     public void nonPositiveSurgeIgnored() {
         TunnelPool pool = createPool(3);
         pool.requestLeaseSurge(0);
         pool.requestLeaseSurge(-1);
-        assertEquals(3, pool.getEffectiveTarget());
+        assertEquals(0, pool.getLeaseSurgeNeed());
     }
 
-    /** The surge never lowers a target below the pool's own configured floor. */
+    /** With no surge the pool keeps its ordinary active-count target. */
     @Test
-    public void surgeCannotGoBelowActiveTarget() {
-        TunnelPool pool = createPool(4);
-        pool.requestLeaseSurge(1);
-        assertEquals(4, pool.getEffectiveTarget());
+    public void noSurgeLeavesTargetUnchanged() {
+        assertEquals(3, createPool(3).getEffectiveTarget());
     }
 
     // ---- which tunnels the surge may give up ----
