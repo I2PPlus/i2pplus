@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
@@ -963,7 +964,7 @@ public class TunnelPool {
         } finally {_tunnelsLock.unlock();}
         // Only reached when the pool was empty
         if (shouldWarn) {
-            logNoTunnelsWarning();
+            logNoTunnelsWarning(PoolState.EMPTY);
         }
         return null;
     }
@@ -1198,22 +1199,86 @@ public class TunnelPool {
         return null;
     }
 
+    /**
+     *  Why a pool could not supply a tunnel, as counts rather than prose.
+     *
+     *  <p>A bare "No tunnels available" cannot distinguish an empty pool from a
+     *  full one whose tunnels are all ineligible, and the two call for opposite
+     *  responses: the first is a build-supply problem, the second an eligibility
+     *  or backpressure problem. The two fallback buckets are reported because a
+     *  non-zero count there explains a null that the usable count alone would not.
+     */
+    static final class PoolState {
+        /** All counts zero -- the pool really was empty. */
+        static final PoolState EMPTY = new PoolState(0, 0, 0, 0);
+        final int pooled, usable, lastResort, backlogged;
+        PoolState(int pooled, int usable, int lastResort, int backlogged) {
+            this.pooled = pooled;
+            this.usable = usable;
+            this.lastResort = lastResort;
+            this.backlogged = backlogged;
+        }
+        @Override
+        public String toString() {
+            return "pool=" + pooled + " usable=" + usable
+                   + " lastResort=" + lastResort + " backlogged=" + backlogged;
+        }
+    }
+
+    /**
+     *  Count the pool by selection outcome. Pure: no lock, no clock, no logging.
+     *
+     *  <p>A tunnel is counted as usable when it clears the same gates
+     *  {@link #passesScanGates} applies and is not set aside, so a pool reporting
+     *  {@code usable=0} against a non-zero pool count has tunnels it is refusing
+     *  to use -- which is the case worth investigating.
+     *
+     *  @param tunnels the pool's tunnels, not necessarily locked
+     *  @param now current time in ms
+     *  @param backlogged tests whether a tunnel's next peer is backlogged
+     *  @return the classified counts
+     *  @since 0.9.71+
+     */
+    static PoolState classifyPoolState(List<TunnelInfo> tunnels, long now,
+                                       Predicate<TunnelInfo> backlogged) {
+        if (tunnels == null || tunnels.isEmpty()) {return PoolState.EMPTY;}
+        int usable = 0, lastResort = 0, backed = 0;
+        for (TunnelInfo info : tunnels) {
+            if (info == null) {continue;}
+            if (info instanceof PooledTunnelCreatorConfig
+                && ((PooledTunnelCreatorConfig) info).isLastResort()) {
+                lastResort++;
+            } else if (passesScanGates(info, now, false)) {
+                if (backlogged != null && backlogged.test(info)) {backed++;}
+                else {usable++;}
+            }
+        }
+        return new PoolState(tunnels.size(), usable, lastResort, backed);
+    }
+
+    /** Backlog predicate matching the one {@link #scanPoolForTunnel} applies. */
+    private Predicate<TunnelInfo> backlogTest() {
+        if (_settings.isInbound()) {return null;}
+        return info -> info.getLength() > 1 && _context.commSystem().isBacklogged(info.getPeer(1));
+    }
 
     /**
      *  Log the no-tunnels warning, distinguishing an unreachable destination
-     *  (no LeaseSet found) from an empty pool.
+     *  (no LeaseSet found) from a pool that holds nothing usable.
+     *
+     *  @param state pool composition captured when the failure was detected
      */
-    private void logNoTunnelsWarning() {
+    private void logNoTunnelsWarning(PoolState state) {
         String warning;
         if (!_settings.isExploratory()) {
             boolean destReachable = isDestinationReachable();
             if (!destReachable) {
                 warning = toString() + " -> Destination not reachable (no LeaseSet found)";
             } else {
-                warning = toString() + " -> No tunnels available";
+                warning = toString() + " -> No tunnels available (" + state + ")";
             }
         } else {
-            warning = toString() + " -> No tunnels available";
+            warning = toString() + " -> No tunnels available (" + state + ")";
         }
         if (!warning.contains("Ping")) {
             _log.warn(warning);
@@ -1258,6 +1323,7 @@ public class TunnelPool {
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
         boolean shouldWarn = false;
+        PoolState state = null;
         _tunnelsLock.lock();
         try {
             if (!_tunnels.isEmpty()) {
@@ -1270,12 +1336,17 @@ public class TunnelPool {
             }
             if (rv == null && _log.shouldWarn() && uptime > getStartupTime(_context)) {
                 shouldWarn = shouldLogNoTunnelsWarning();
+                // Snapshot under the lock: the pool changes as we speak, so reading
+                // these counts after unlocking would describe a pool we did not fail on.
+                if (shouldWarn) {
+                    state = classifyPoolState(_tunnels, now, backlogTest());
+                }
             }
         } finally {_tunnelsLock.unlock();}
         if (rv != null) {
             _context.statManager().addRateData("tunnel.matchLease", closestTo.equals(rv.getFarEnd()) ? 1 : 0);
         } else if (shouldWarn) {
-            logNoTunnelsWarning();
+            logNoTunnelsWarning(state);
         }
         return rv;
     }
