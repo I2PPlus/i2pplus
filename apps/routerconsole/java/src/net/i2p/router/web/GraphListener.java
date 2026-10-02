@@ -143,12 +143,14 @@ public class GraphListener implements RateSummaryListener {
                         _log.error("RRD write error (" + (_consecutiveErrors + 1) + "/" + MAX_CONSECUTIVE_ERRORS + ")", iae);
                     }
                     if (++_consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
-                        _log.error("RRD permanently stopped after " + MAX_CONSECUTIVE_ERRORS + " consecutive errors");
-                        String path = _isPersistent ? _db.getPath() : null;
+                        // Detach, but never delete the database: it holds up to
+                        // MAX_ROWS of history and a transient write failure must
+                        // not throw that away. GraphGenerator re-creates the
+                        // listener from the same file on its next tick, so the
+                        // recorded history survives and recording resumes.
+                        _log.error("RRD write failed " + MAX_CONSECUTIVE_ERRORS +
+                                   " consecutive times, detaching (history preserved)", iae);
                         stopListening();
-                        if (path != null) {
-                            (new File(path)).delete();
-                        }
                     }
                 }
             } catch (RrdException re) {
@@ -162,12 +164,24 @@ public class GraphListener implements RateSummaryListener {
                     _log.warn("Error adding (" + (_consecutiveErrors + 1) + "/" + MAX_CONSECUTIVE_ERRORS + ")", ioe);
                 }
                 if (++_consecutiveErrors >= MAX_CONSECUTIVE_ERRORS) {
-                    _log.error("RRD permanently stopped after " + MAX_CONSECUTIVE_ERRORS + " consecutive errors");
+                    _log.error("RRD write failed " + MAX_CONSECUTIVE_ERRORS +
+                               " consecutive times, detaching (history preserved)", ioe);
                     stopListening();
                 }
             }
         }
     }
+
+    /**
+     *  Whether this listener has stopped recording.
+     *
+     *  A detached listener keeps its entry in GraphGenerator's rate-to-listener
+     *  map, so the generator uses this to notice that it needs re-creating.
+     *
+     *  @return true if the RRD database is closed and no longer receiving samples
+     *  @since 0.9.71+
+     */
+    boolean isDetached() { return _db == null; }
 
     /**
      * JRobin can only deal with 20 character data source names, so we need to create a unique,

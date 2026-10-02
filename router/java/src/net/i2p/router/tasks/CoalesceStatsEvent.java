@@ -11,6 +11,7 @@ package net.i2p.router.tasks;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.util.List;
+import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -20,6 +21,7 @@ import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -58,6 +60,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     private final RouterContext _ctx;
     private final long _maxMemory;
     private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024L;
+    private final Log _log;
 
     // Cumulative GC pause time (ms) observed at the previous coalesce cycle,
     // used to derive per-minute GC latency. -1 = uninitialized.
@@ -72,6 +75,7 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     public CoalesceStatsEvent(RouterContext ctx) {
         super(ctx.simpleTimer2());
         _ctx = ctx;
+        _log = I2PAppContext.getGlobalContext().logManager().getLog(CoalesceStatsEvent.class);
         StatManager sm = ctx.statManager();
         // NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
         // to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
@@ -118,6 +122,37 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
      */
     @Override
     public void timeReached() {
+        // The reschedule MUST happen even if collection fails. This event is the
+        // heartbeat that feeds every Rate to its RateSummaryListener, and thus to
+        // the RRD4J databases behind the graphs; if an exception escapes before
+        // schedule() runs, SimpleTimer2 never re-arms the event and statistics
+        // stop being recorded for the remaining life of the router. A single
+        // transient failure in any of the calls below used to be unrecoverable.
+        try {
+            collectStats();
+        } catch (Throwable t) {
+            // Never let a stats-collection failure kill the heartbeat. An Error
+            // here (OOM, NoClassDefFoundError) is just as recoverable to the
+            // timer as a RuntimeException, and swallowing it keeps the timer
+            // alive; the failure is logged and the next cycle retries.
+            if (_log.shouldWarn()) {
+                _log.warn("Stats collection failed (" + t + "), continuing", t);
+            }
+        } finally {
+            schedule(Router.COALESCE_TIME);
+        }
+    }
+
+    /**
+     *  Gather this cycle's statistics and coalesce them into the Rates.
+     *
+     *  Called every Router.COALESCE_TIME by timeReached(), which guarantees the
+     *  reschedule and contains any exception this throws, so nothing here needs
+     *  its own try/catch.
+     *
+     *  @since 0.9.71+
+     */
+    private void collectStats() {
         StatManager sm = _ctx.statManager();
         int known = _ctx.netDb().getKnownRouters() - 1;
         sm.addRateData("router.knownPeers", known, 60L*1000);
@@ -172,7 +207,6 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         }
 
         RateStat         sendRate = sm.getRate("transport.sendMessageSize");
-        schedule(Router.COALESCE_TIME);
         if (sendRate != null) {
             Rate rate = sendRate.getRate(RateConstants.ONE_MINUTE);
             if (rate != null) {

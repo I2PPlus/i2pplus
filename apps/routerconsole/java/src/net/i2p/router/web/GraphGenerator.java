@@ -152,8 +152,38 @@ public class GraphGenerator implements Runnable, ClientApp {
                 return;
             }
             specsHolder[0] = adjustDatabases(specsHolder[0]);
+            reviveDetachedListeners();
         } catch (Exception e) {
             _log.error("Failed to sync RRD4J stats to disk", e);
+        }
+    }
+
+    /**
+     *  Re-create any listener whose database was closed after repeated write
+     *  failures, so a transient I/O error cannot silently retire a graph for the
+     *  remaining life of the router.
+     *
+     *  GraphListener detaches on MAX_CONSECUTIVE_ERRORS but stays in the rate-to-
+     *  listener map, so it is never rebuilt by adjustDatabases(): that only adds
+     *  rates missing from the old spec. This runs on the same tick as the spec
+     *  sync, reusing the existing scheduled task rather than adding a thread.
+     *
+     *  @since 0.9.71+
+     */
+    private void reviveDetachedListeners() {
+        for (Map.Entry<Rate, GraphListener> entry : _listenerByRate.entrySet()) {
+            GraphListener lsnr = entry.getValue();
+            if (lsnr == null || !lsnr.isDetached()) {
+                continue;
+            }
+            Rate rate = entry.getKey();
+            if (_log.shouldWarn()) {
+                _log.warn("Re-attaching RRD listener for " + rate.getRateStat().getName() +
+                          '.' + rate.getPeriod());
+            }
+            // Re-open the existing database file rather than creating a new one,
+            // which preserves the recorded history.
+            addDb(rate);
         }
     }
 
@@ -393,12 +423,16 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (height > MAX_Y) {height = MAX_Y;}
         else if (height <= 0) {height = DEFAULT_Y;}
         if (end < 0) {end = 0;}
-        GraphListener lsnr = _listenerByRate.get(rate);
-        if (lsnr != null) {
+GraphListener lsnr = _listenerByRate.get(rate);
+        if (lsnr != null && !lsnr.isDetached()) {
             lsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, null, null, showRestarts);
+            end, showCredit, null, null, showRestarts);
             return true;
         }
+        // A detached listener would throw from renderGraph, which propagates out
+        // of this method and is reported as a generic render failure. Returning
+        // false instead lets the caller show "stat not available", which is the
+// accurate description while reviveDetachedListeners() re-attaches it.
         return false;
     }
 
