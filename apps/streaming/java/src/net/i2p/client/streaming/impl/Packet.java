@@ -91,6 +91,14 @@ class Packet {
      */
     protected Signature _optionSignature;
     /**
+     * Number of option bytes the signature occupied in the packet we read,
+     * or 0 when unknown (a locally built packet, where the signature length
+     * follows from the signing key anyway).
+     *
+     * @since 2.13.0
+     */
+    private int _optionSigLen;
+    /**
      * _optionFrom.
      */
     protected Destination _optionFrom;
@@ -616,16 +624,19 @@ class Packet {
     /**
      * Size of this packet if written to a buffer.
      *
+     * @param keyType the signing key's type, or null when it is not known yet
      * @return How large the current packet would be
+     * @since 2.13.0 the key type is passed in so the signature space is sized
+     *              the same way {@link #writePacket} will write it
      */
-    private int writtenSize() {
+    int writtenSize(SigType keyType) {
         int size = 22;
 
         if (_nacks != null) {size += 4 * _nacks.length;} // if max win is ever > 255, limit to 255
         if (isFlagSet(FLAG_DELAY_REQUESTED)) {size += 2;}
         if (isFlagSet(FLAG_FROM_INCLUDED)) {size += _optionFrom.size();}
         if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) {size += 2;}
-        if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {size += _optionSignature.length();}
+        if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {size += signatureSpaceLen(keyType);}
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
             size += 6;
             size += _transientSigningPublicKey.length();
@@ -635,6 +646,65 @@ class Packet {
         if (_payload != null) {size += _payload.getValid();}
 
         return size;
+    }
+
+    /**
+     * How many option bytes to reserve for the signature when this packet is
+     * written, which is also how many bytes the signature covers.
+     *
+     * <p>For a packet read from the network this is the number of option bytes
+     * the signature really occupied. That can be more than the signature
+     * length: without a FROM field the type is guessed from the option bytes
+     * left over (streaming spec, "Flags and Option Data Fields"), so a sender
+     * that padded the signature region makes the region look like a longer
+     * signature type. The padding is not signature data, but it is covered by
+     * the signature and has to be reproduced for verification to succeed.
+     *
+     * @param keyType the signing key's type, or null when it is not known yet
+     * @return option bytes to reserve for the signature, 0 if there is none
+     * @since 2.13.0
+     */
+    int signatureSpaceLen(SigType keyType) {
+        if (!isFlagSet(FLAG_SIGNATURE_INCLUDED)) {return 0;}
+        if (_optionSigLen > 0) {return _optionSigLen;}
+        if (keyType != null) {return keyType.getSigLen();}
+        return _optionSignature != null ? _optionSignature.length() : 0;
+    }
+
+    /**
+     * @param spk non-null
+     * @return true if we have a crypto provider for the key's signature type
+     */
+    private static boolean keyTypeAvailable(SigningPublicKey spk) {
+        SigType type = spk.getType();
+        return type != null && type.isAvailable();
+    }
+
+    /**
+     * Recast the signature to the signing key's type when the bytes we read are
+     * long enough to be a signature of that type.
+     *
+     * <p>{@link #readPacket} cannot know the signature type when the packet
+     * carries no FROM field - a stray CLOSE or RESET packet - and guesses it
+     * from the option length. That guess is wrong whenever another type shares
+     * the length (ECDSA_SHA256_P256 and all the EdDSA types are 64 bytes) and
+     * whenever the sender padded the signature region, in which case the
+     * signature is the leading {@code type.getSigLen()} bytes and the rest is
+     * signed padding.
+     *
+     * @param type the signing key's type, non-null
+     * @return true if {@link #_optionSignature} is of that type afterwards,
+     *         false if the bytes read cannot be a signature of that type
+     * @since 2.13.0
+     */
+    boolean alignSignatureToType(SigType type) {
+        if (_optionSignature == null || type == null) {return false;}
+        if (_optionSignature.getType() == type) {return true;}
+        byte[] data = _optionSignature.getData();
+        int sigLen = type.getSigLen();
+        if (data == null || data.length < sigLen) {return false;}
+        _optionSignature = new Signature(type, Arrays.copyOf(data, sigLen));
+        return true;
     }
 
 
@@ -743,11 +813,13 @@ class Packet {
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
             Signature optionSignature;
+            int siglen;
             if (_optionFrom != null) {
                 SigType type;
                 if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {type = _transientSigningPublicKey.getType();}
                 else {type = _optionFrom.getSigningPublicKey().getType();}
                 optionSignature = new Signature(type);
+                siglen = optionSignature.length();
             } else {
                 // super cheat for now, look for correct type,
                 // assume no more options. If we add to the options
@@ -755,7 +827,7 @@ class Packet {
                 // We will get this wrong for Ed25519, same length as P256...
                 // See verifySignature() below where we will recast the signature to
                 // the correct type if necessary
-                int siglen = payloadBegin - cur;
+                siglen = payloadBegin - cur;
                 SigType type = null;
                 for (SigType t : SigType.values()) {
                     if (t.getSigLen() == siglen) {
@@ -775,6 +847,10 @@ class Packet {
             System.arraycopy(buffer, cur, buf, 0, buf.length);
             optionSignature.setData(buf);
             setOptionalSignature(optionSignature);
+            // Keep the option length separate from the signature length: the type
+            // above is only a guess, and any bytes it did not account for are
+            // still covered by the signature.
+            _optionSigLen = siglen;
         }
     }
 
@@ -811,47 +887,95 @@ class Packet {
         SigningPublicKey spk = _optionFrom != null ? _optionFrom.getSigningPublicKey() : altSPK;
         // prevent receiveNewSyn() ... !active ... sendReset() ... verifySignature ... NPE
         if (spk == null) {return false;}
-
-        int size = writtenSize();
-
-        if (buffer == null || size > buffer.length) {buffer = new byte[size];}
+        // checked up front, the offline signature is verified with this key too
+        if (!keyTypeAvailable(spk)) {
+            logNoKeyType(ctx, spk);
+            return false;
+        }
         if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-            if (_transientExpires < ctx.clock().now()) {
+            if (!checkOfflineSignature(ctx, spk)) {return false;}
+            // the transient key signs the packet, so it decides the signature
+            // type - it need not be the type of the session key
+            spk = _transientSigningPublicKey;
+        }
+        return verifyWithKey(ctx, spk, buffer);
+    }
+
+    /**
+     * Check the offline signature block, which the session key signs over the
+     * expiry and the transient key.
+     *
+     * @param ctx application context
+     * @param spk the session's signing key, non-null
+     * @return true if the offline signature is present, unexpired and valid
+     * @since 2.13.0
+     */
+    private boolean checkOfflineSignature(I2PAppContext ctx, SigningPublicKey spk) {
+        if (_transientExpires < ctx.clock().now()) {
+            Log l = ctx.logManager().getLog(Packet.class);
+            if (l.shouldWarn()) {l.warn("Offline signature expired " + toString());}
+            return false;
+        }
+        try (ByteArrayStream baos = new ByteArrayStream(6 + _transientSigningPublicKey.length())) {
+            DataHelper.writeLong(baos, 4, _transientExpires / 1000);
+            DataHelper.writeLong(baos, 2, _transientSigningPublicKey.getType().getCode());
+            _transientSigningPublicKey.writeBytes(baos);
+            if (!baos.verifySignature(ctx, _offlineSignature, spk)) {
                 Log l = ctx.logManager().getLog(Packet.class);
-                if (l.shouldWarn()) {l.warn("Offline signature expired " + toString());}
+                if (l.shouldWarn()) {l.warn("Offline signature failed on " + toString());}
                 return false;
             }
-            try (ByteArrayStream baos = new ByteArrayStream(6 + _transientSigningPublicKey.length())) {
-                DataHelper.writeLong(baos, 4, _transientExpires / 1000);
-                DataHelper.writeLong(baos, 2, _transientSigningPublicKey.getType().getCode());
-                _transientSigningPublicKey.writeBytes(baos);
-                boolean ok = baos.verifySignature(ctx, _offlineSignature, spk);
-                if (!ok) {
-                    Log l = ctx.logManager().getLog(Packet.class);
-                    if (l.shouldWarn()) {l.warn("Offline signature failed on " + toString());}
-                    return false;
-                }
-                // use transient key to verify
-                spk = _transientSigningPublicKey;
-            } catch (IOException ioe) {return false;}
-            catch (DataFormatException dfe) {return false;}
-        }
-        SigType type = spk.getType();
-        if (type == null || !type.isAvailable()) {
-            Log l = ctx.logManager().getLog(Packet.class);
-            if (l.shouldWarn()) {l.warn("Unknown Signature Type in " + spk + " cannot verify " + toString());}
+            return true;
+        } catch (IOException ioe) {return false;}
+        catch (DataFormatException dfe) {return false;}
+    }
+
+    /**
+     * Rebuild the packet as it was signed and check the signature against it.
+     * Split out of {@link #verifySignature} so that one is only about picking
+     * the key to verify with.
+     *
+     * @param ctx application context
+     * @param spk the key that signed the packet, non-null
+     * @param buffer scratch space to rebuild in, may be null
+     * @return true if the signature is valid
+     * @since 2.13.0
+     */
+    private boolean verifyWithKey(I2PAppContext ctx, SigningPublicKey spk, byte[] buffer) {
+        if (!keyTypeAvailable(spk)) {
+            logNoKeyType(ctx, spk);
             return false;
         }
-        int written = writePacket(buffer, 0, type.getSigLen());
-        if (written != size) {
-            ctx.logManager().getLog(Packet.class).error("Written " + written + " size " + size + " for " + toString());
+        SigType type = spk.getType();
+        // Fixup of the signature if readPacket() guessed the type wrong, which is
+        // what happens on a close or reset packet with no FROM option. Done
+        // before anything is sized, since the guess decides the byte count.
+        if (!alignSignatureToType(type)) {
+            Log l = ctx.logManager().getLog(Packet.class);
+            if (l.shouldWarn()) {l.warn("Signature of " + _optionSigLen + " option bytes is not a " + type
+                                       + " signature, cannot verify " + toString());}
             return false;
         }
 
-        // Fixup of signature if we guessed wrong on the type in readPacket(), which could happen
-        // on a close or reset packet where we have a signature without a FROM
-        if (type != _optionSignature.getType() && type.getSigLen() == _optionSignature.length()) {
-            _optionSignature = new Signature(type, _optionSignature.getData());
+        int size = writtenSize(type);
+        if (buffer == null || size > buffer.length) {buffer = new byte[size];}
+        // Rebuild the packet with zeroes where the signature goes, which is what
+        // the sender signed over. signatureSpaceLen() keeps this the same length
+        // writtenSize() counted, including any option bytes the signature type
+        // guess did not cover.
+        int sigSpace = signatureSpaceLen(type);
+        int written = writePacket(buffer, 0, sigSpace);
+        if (written != size) {
+            // Neither our bug nor the sender's: we cannot reproduce the option
+            // block, so the range to hash is unknown. Refuse to verify rather than
+            // hash the wrong bytes, and let the caller report the dropped packet.
+            // A WARN, not an ERROR, because the input is untrusted and this
+            // repeats for every packet from the same peer.
+            Log l = ctx.logManager().getLog(Packet.class);
+            if (l.shouldWarn()) {l.warn("Wrote " + written + " of " + size + " bytes for " + type
+                                       + " signature of " + sigSpace + " option bytes, cannot verify "
+                                       + toString());}
+            return false;
         }
 
         boolean ok;
@@ -871,6 +995,15 @@ class Packet {
     }
 
     /**
+     * @param ctx application context
+     * @param spk the key with the unusable type, non-null
+     */
+    private void logNoKeyType(I2PAppContext ctx, SigningPublicKey spk) {
+        Log l = ctx.logManager().getLog(Packet.class);
+        if (l.shouldWarn()) {l.warn("Unknown Signature Type in " + spk + " cannot verify " + toString());}
+    }
+
+    /**
      * String representation of this packet.
      */
     @Override
@@ -881,21 +1014,24 @@ class Packet {
 
     /**
      * Format as a string builder for logging.
+     *
+     * <p>Not gated on the log level: every caller builds this from inside a log
+     * message that has already passed its own shouldXxx() test, so gating the
+     * description on INFO meant a WARN or ERROR about a packet logged an empty
+     * string - the one thing that makes such a message useless. The bulky
+     * parts (the NACK list, offline key material) stay behind shouldDebug().
      */
     protected StringBuilder formatAsString() {
-        Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
         StringBuilder buf = new StringBuilder(64);
-        if (l.shouldInfo()) {
-            buf.append("[StreamID From: ").append(toId(_receiveStreamId))
-               .append(" / To: ").append(toId(_sendStreamId)).append("]");
-            if (_sequenceNum != 0 || isFlagSet(FLAG_SYNCHRONIZE)) {
-                buf.append(" [").append(_sequenceNum).append("]");
-            }
-            toFlagString(buf);
-            ByteArray payload = _payload;
-            if (payload != null && payload.getValid() > 0) {
-                buf.append("\n* Data: ").append(payload.getValid()).append(" bytes;");
-            }
+        buf.append("[StreamID From: ").append(toId(_receiveStreamId))
+           .append(" / To: ").append(toId(_sendStreamId)).append("]");
+        if (_sequenceNum != 0 || isFlagSet(FLAG_SYNCHRONIZE)) {
+            buf.append(" [").append(_sequenceNum).append("]");
+        }
+        toFlagString(buf);
+        ByteArray payload = _payload;
+        if (payload != null && payload.getValid() > 0) {
+            buf.append("\n* Data: ").append(payload.getValid()).append(" bytes;");
         }
         return buf;
     }
@@ -910,36 +1046,46 @@ class Packet {
     }
 
     private final void toFlagString(StringBuilder buf) {
-        Log l = I2PAppContext.getCurrentContext().logManager().getLog(Packet.class);
-        if (l.shouldInfo()) {
-            buf.append("\n*");
-            if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
-            if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
-            if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
-            if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
-            if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom.size()).append(" bytes;");}
-            if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
-            else {buf.append(" ACK ").append(getAckThrough());}
-            if (_nacks != null) {
-                buf.append(" NACK");
-                for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
-            }
-            if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
-            if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes");
-            if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append("; INTERACTIVE");
-            if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append("; SIGREQ");
-            if (isFlagSet(FLAG_SIGNATURE_OFFLINE)) {
-                if (_transientExpires != 0) {buf.append("; TRANSEXP ").append(new Date(_transientExpires));}
-                else {buf.append(" (No expiration)");}
-                if (_transientSigningPublicKey != null) {
-                    buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
-                } else {buf.append(" (No key data)");}
-                if (_offlineSignature != null) {buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());}
-                else {buf.append(" (No offline signature data)");}
-            }
+        I2PAppContext ctx = I2PAppContext.getCurrentContext();
+        boolean debug = ctx != null && ctx.logManager().getLog(Packet.class).shouldDebug();
+        // Always describe the packet. This used to be gated on shouldInfo(),
+        // which meant every WARN and ERROR that appended toString() to its
+        // message logged an empty description - see formatAsString(). The NACK
+        // list and the offline key material stay behind shouldDebug() because
+        // they run to hundreds of bytes.
+        buf.append("\n*");
+        if (isFlagSet(FLAG_SYNCHRONIZE)) {buf.append(" SYN");}
+        if (isFlagSet(FLAG_CLOSE)) {buf.append(" CLOSE");}
+        if (isFlagSet(FLAG_RESET)) {buf.append(" RESET");}
+        if (isFlagSet(FLAG_ECHO)) {buf.append(" ECHO");}
+        if (isFlagSet(FLAG_FROM_INCLUDED)) {buf.append(" from ").append(_optionFrom != null ? _optionFrom.size() : 0).append(" bytes;");}
+        if (isFlagSet(FLAG_NO_ACK)) {buf.append(" NACK");}
+        else {buf.append(" ACK ").append(getAckThrough());}
+        if (_nacks != null && debug) {
+            buf.append(" NACK");
+            for (int i = 0; i < _nacks.length; i++) {buf.append(' ').append(_nacks[i]);}
+        }
+        if (isFlagSet(FLAG_DELAY_REQUESTED)) buf.append(" DELAY ").append(_optionDelay).append("ms;");
+        if (isFlagSet(FLAG_MAX_PACKET_SIZE_INCLUDED)) buf.append(" MAXSIZE ").append(_optionMaxSize).append(" bytes");
+        if (isFlagSet(FLAG_PROFILE_INTERACTIVE)) buf.append("; INTERACTIVE");
+        if (isFlagSet(FLAG_SIGNATURE_REQUESTED)) buf.append("; SIGREQ");
+        if (isFlagSet(FLAG_SIGNATURE_OFFLINE) && debug) {
+            if (_transientExpires != 0) {buf.append("; TRANSEXP ").append(new Date(_transientExpires));}
+            else {buf.append(" (No expiration)");}
+            if (_transientSigningPublicKey != null) {
+                buf.append(" TRANSKEY ").append(_transientSigningPublicKey.getType()).append(':').append(_transientSigningPublicKey.toBase64());
+            } else {buf.append(" (No key data)");}
+            if (_offlineSignature != null) {buf.append("\n* Offline Signature: ").append(_offlineSignature.getType());}
+            else {buf.append(" (No offline signature data)");}
         }
         if (isFlagSet(FLAG_SIGNATURE_INCLUDED)) {
-            if (_optionSignature != null) {buf.append("\n* Signature: ").append(_optionSignature.getType());}
+            if (_optionSignature != null) {
+                buf.append("\n* Signature: ").append(_optionSignature.getType());
+                if (_optionSigLen > 0 && _optionSigLen != _optionSignature.length()) {
+                    // the type guessed in readPacket() did not cover every option byte
+                    buf.append(" in ").append(_optionSigLen).append(" option bytes");
+                }
+            }
             else {buf.append(" (to be signed)");}
         }
     }
