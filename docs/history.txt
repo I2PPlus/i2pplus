@@ -1,264 +1,361 @@
+2026-10-03 dr|z3d
+  * Installer:
+    - Install IzPack 5 automatically: fetch into installer/lib/izpack/5,
+      track the latest release, refresh on every installer5 build, reuse
+      the cache when offline
+    - Migrate install5.xml and shortcutSpec.xml to the 5.0 schema so the
+      installer compiles; move translations to a custom langpack
+      resource; set our own window and shortcut icons
+    - Restore testpid in i2prouter so stop exits instead of hanging
+  * Streaming:
+    - Size the signature region from the option bytes so signed packets
+      are no longer dropped
+    - Clamp the send threshold to the window ceiling and restore the
+      window on unchoke, so large downloads stop collapsing
+    - Allow one immediate retransmit per overdue packet, not per ack,
+      and require data in flight before calling a stream stalled
+  * Console:
+    - Serialize rrd4j flushes across backends
+    - Keep the flush task alive across write failures
+    - Report flush liveness alongside
+  * Graphs:
+    - Name why a graph stopped and heal it instead of freezing; isolate
+      a failing stat so one cannot freeze them all
+    - Stamp samples with the period due and write the databases off the
+      shared timer, so graphs stop skipping points
+  * Core:
+    - Warn when the timer pool saturates, with queue depth and count
+    - Create group-readable log directories so the service account can
+      write its own logs
+  * Tuner: Escape the growth-factor dead zone so a stuck factor moves
+  * Tunnel: Keep a valid two-hop client selection, and name the hop
+    that failed
+  * Router: Count ban rejections at peer selection and record the cause so
+    a burst of rejected builds can be attributed
+
 2026-10-02 dr|z3d
-  * Console: Translation status listed every language with an empty
-    name and code and an unknown flag; languages are named and coded
-    again
-  * Peermanager: The profiles page first hop RTT column was almost
-    entirely empty, because a latency was only recorded when a tunnel
-    build happened to use that peer. It is now measured from live
-    sessions as they run, kept for four hours, and a peer is only
-    dropped from the fast tiers on latency once most of the tier has
-    been measured
+  * Console: Name and code every language in translation status again
+    instead of listing them blank with an unknown flag
+  * Peermanager:
+    - Measure first hop RTT from live sessions as they run, keeping it
+      four hours, rather than only when a build uses that peer
+    - Drop a peer from the fast tiers on latency only once most of the
+      tier is measured
+    - Report the sampled figure as a tunnel stat
+  * Router:
+    - Publish a LeaseSet only from tunnels with enough life left to be
+      worth leasing
+    - Wait for replacements on a renewal with nothing worth signing,
+      rather than advertise an early-expiring copy
+    - Let an imminent expiry override the wait so the LeaseSet is
+      republished instead of lapsing
+  * Tunnel: Abandon a build as soon as its first hop has no transport
+    session, instead of running out the build timeout
+  * Translation: Add Taiwanese (traditional Chinese) in full, exposed
+    in the console, Snark, login page and eepsite
 
 2026-10-01 dr|z3d
-  * Tunnel: Fast tier peers judged by direct link latency instead of
-    tunnel round trip, demoted when a reachability probe fails and
-    swept when unreachable; peers we successfully send to skip the
-    probe, and probing runs harder while the router is young; build
-    send failures no longer reported as next hop timeouts; a build's
-    latency no longer stamped onto every peer in the tunnel; first
-    hop pre-connect now runs whenever the chosen hop has no
-    transport session, instead of inferring that from the build
-    timeout, which skipped it for most builds
-  * Peermanager: First hop RTT persisted across restarts, tunnel
-    test description corrected, low latency judged on the direct
-    link to the peer rather than tunnel test time, and settled on a
-    fixed 100ms floor after half the average proved tighter than the
-    network it was judging
-  * Router: A LeaseSet no longer re-advertises the same set of
-    tunnels over and over when the pool has nothing fresher to give;
-    re-mints that cannot extend the copy are held off and asked for
-    replacement tunnels instead. The warning for a LeaseSet with
-    less life left than the pool will publish is measured against
-    that pool floor rather than the nominal lease length, so it
-    reports a real fault instead of firing on every LeaseSet
-  * Console: Measured first hop RTT shown on the profiles page;
-    peers with no measurement left without a sort tag
-  * Installer: Translation bundles loaded by name so legacy locale
-    codes resolve on JDK 8
-  * Translation: Complete Urdu, Thai, Tagalog and Pashto added and
-    exposed in the console, login and eepsite
+  * Tunnel:
+    - Judge fast tier peers on direct link latency, not tunnel round
+      trip
+    - Demote on a failed reachability probe and sweep when unreachable;
+      skip the probe for peers we send to successfully, and probe
+      harder while the router is young
+    - Stop reporting build send failures as next hop timeouts
+    - Stop stamping a build's latency onto every peer in the tunnel
+    - Pre-connect the first hop whenever the chosen hop has no
+      transport session, instead of inferring it from the build timeout
+      (which skipped it for most builds)
+  * Peermanager:
+    - Persist first hop RTT across restarts
+    - Correct the tunnel test description
+    - Judge low latency on the direct link, not tunnel test time
+    - Settle on a fixed 100ms floor, after half the average proved
+      tighter than the network it judged
+  * Router:
+    - Stop re-advertising the same tunnels when the pool has nothing
+      fresher; hold off re-mints that cannot extend the copy, and ask
+      for replacement tunnels
+    - Measure the too-short LeaseSet warning against the pool floor,
+      not the nominal lease length, so it reports a real fault instead
+      of firing on every LeaseSet
+  * Console: Show measured first hop RTT on the profiles page; leave
+    unmeasured peers without a sort tag
+  * Installer: Load translation bundles by name so legacy locale codes
+    resolve on JDK 8
+  * Translation: Complete Urdu, Thai, Tagalog and Pashto, exposed in
+    the console, login and eepsite
 
 2026-09-30 dr|z3d
-  * Tunnel.pool: Candidate sample widened to 256 and configurable via
-    profileOrganizer.minCandidateSample; a gateway that misses its
-    first build is dropped from the fast tiers at once instead of
-    after three strikes; accepted first hop logged with the quality
-    tier it was taken from; next hop contact outcomes summarised
-    instead of logged per build; tunnel lifetime capped at 10m plus
-    1m grace so a LeaseSet cannot outlive its tunnels
-  * Tunnel: Superseded test round returns its permits, so the builds
-    in flight gauge no longer leaks; refusal reasons split into
-    in-flight gates and per-pool refusals; min retest gap raised to
-    120s; expire log names the gateway and direction; pool birth and
-    expiry bookkeeping demoted to debug
-  * I2PTunnel: Server handler pools sized and grown from each pool's
-    own queue depth and active count; per-client request error
-    warnings rate limited
-  * Peermanager: We are never selected as our own tunnel hop; self
-    exclusion rationale corrected
-  * Translation: Swahili and Hebrew completed and exposed in the
-    console, login and eepsite; Catalan completed and added to the
-    language selectors, which now sort by language name; Slovak and
-    Bangla installer resources added; SusiDNS strings filled in
-    across all locales
+  * Tunnel.pool:
+    - Widen the candidate sample to 256, configurable via
+      profileOrganizer.minCandidateSample
+    - Drop a gateway that misses its first build from the fast tiers at
+      once, not after three strikes
+    - Log the accepted first hop with its quality tier
+    - Summarise next hop contact outcomes instead of logging per build
+    - Cap tunnel lifetime at 10m plus 1m grace, so a LeaseSet cannot
+      outlive its tunnels
+  * Tunnel:
+    - Return the permits of a superseded test round, so the builds in
+      flight gauge no longer leaks
+    - Split refusal reasons into in-flight gates and per-pool refusals
+    - Raise the min retest gap to 120s
+    - Name the gateway and direction in the expire log
+    - Demote pool birth and expiry bookkeeping to debug
+  * I2PTunnel: Size and grow server handler pools from each pool's own
+    queue depth and active count; rate limit per-client request error
+    warnings
+  * Peermanager: Never select ourselves as our own tunnel hop; correct
+    the self-exclusion rationale
+  * Translation:
+    - Complete Swahili and Hebrew, exposed in the console, login and
+      eepsite
+    - Complete Catalan and add it to the language selectors, now sorted
+      by language name
+    - Add Slovak and Bangla installer resources
+    - Fill in SusiDNS strings across all locales
 
 2026-09-29 dr|z3d
-  * Tuner: Activity window keyed on peer supply, not build success;
-    ample fast peers pin the floor, startup grace exempts; null
-    context to getObservedStat; param-update failure rate limit
-  * Tunnel.pool: Window multiplier published, registered reliably;
-    starvation bypass defers to peer supply; all-banlisted
-    exploratory selections discarded and counted; ban severity class
-    reported; 90s retest gap; builds-in-flight cap; adaptive test
-    window; partners ranked by proven health; far-endpoint diagnostics
-  * I2PTunnel: Stalled source vs congested destination in the body
-    watchdog; 60s stall floor; window scaled by bytes transferred;
-    indeterminate side on equal staleness; transfer logs name the far
-    side and report bytes/sec; body aborted when the io pool saturates
-  * Tunnel: Soft failure streak saturates, no re-condemn; ban start
-    time separates in-flight from stale rejections
-  * Streaming: Outbound tunnel rotated on stall; adaptive throughput
-    floor; dead choke-depth stats fixed
-  * Core: Stall registry for transparent rotation; multipart EEPoST
-    bodies to the in-memory buffer
-  * Console: All tunables editable; two tunnel descriptions condensed;
-    tunnel tables balanced
-  * Router: Empty blocks annotated with reasons; throttler properties
-    clamped on store; null first hop fails the build; statics
-    renamed to _camelCase
+  * Tuner:
+    - Key the activity window on peer supply, not build success
+    - Pin the floor when fast peers are ample; exempt during startup
+      grace
+    - Accept a null context in getObservedStat
+    - Rate limit param-update failures
+  * Tunnel.pool:
+    - Publish the window multiplier and register it reliably
+    - Defer the starvation bypass to peer supply
+    - Discard and count all-banlisted exploratory selections
+    - Report the ban severity class
+    - Set a 90s retest gap
+    - Cap builds in flight; make the test window adaptive
+    - Rank partners by proven health; add far-endpoint diagnostics
+  * I2PTunnel:
+    - Tell a stalled source from a congested destination in the body
+      watchdog; set a 60s stall floor
+    - Scale the window by bytes transferred; mark the side
+      indeterminate on equal staleness
+    - Name the far side and report bytes/sec in transfer logs
+    - Abort the body when the io pool saturates
+  * Tunnel:
+    - Saturate the soft failure streak with no re-condemn
+    - Split in-flight from stale rejections by ban start time
+  * Streaming:
+    - Rotate the outbound tunnel on stall
+    - Add an adaptive throughput floor
+    - Fix dead choke-depth stats
+  * Core:
+    - Add a stall registry for transparent rotation
+    - Route multipart EEPoST bodies to the in-memory buffer
+  * Console:
+    - Make all tunables editable
+    - Condense two tunnel descriptions
+    - Balance the tunnel tables
+  * Router:
+    - Annotate empty blocks with reasons; clamp throttler properties on
+      store
+    - Fail the build on a null first hop
+    - Rename statics to _camelCase
 
 2026-09-28 dr|z3d
-  * Tunnel.pool: Failed test round confirmed against a different
-    partner; per-direction build outcome stats; one outcome bucket per
-    build; verified traffic trusted both ways, reply-leg failures
-    attributed; young tunnels not condemned; partners ranked by proven
-    health; far-endpoint diagnostics
-  * Tunnel: HopConfig start gate released before the drain loop;
-    failure counter saturated; test-round byte credit split from real
-    traffic; build timestamp recorded; counters atomic not
-    synchronized; fragment scan bounded by the high-water mark
-  * Router: Bloom entry size overrun, Long.MIN_VALUE encoding and
-    isKnown double counting fixed; over-cap decay deferred; per-thread
-    scratch pool; load and RTT lookups hoisted out of the build scan
-  * Bloom: Decaying filter window rotated by lock-free token swap;
-    memory accounted, sizing helpers added
-  * Tuner: IV filter m auto-tuned against a target false positive rate
-  * Streaming: 3 distinct SYN burst windows required before autoban,
-    count configurable
-  * Core: JMX load average behind a 1s TTL; EepGet retry-backoff tests
-    no longer wait out the real 5s default
+  * Tunnel.pool:
+    - Confirm a failed test round against a different partner
+    - Add per-direction build outcome stats with one bucket per build
+    - Trust verified traffic both ways, and attribute reply-leg failures
+    - Spare young tunnels from condemnation
+    - Rank partners by proven health; add far-endpoint diagnostics
+  * Tunnel:
+    - Release the HopConfig start gate before the drain loop
+    - Saturate the failure counter; split test-round byte credit from
+      real traffic
+    - Record the build timestamp
+    - Make counters atomic rather than synchronized
+    - Bound the fragment scan by the high-water mark
+  * Router:
+    - Fix Bloom entry size overrun, Long.MIN_VALUE encoding and isKnown
+      double counting
+    - Defer over-cap decay; add a per-thread scratch pool
+    - Hoist load and RTT lookups out of the build scan
+  * Bloom:
+    - Rotate the decaying filter window by lock-free token swap
+    - Account memory; add sizing helpers
+  * Tuner: Auto-tune the IV filter m against a target false positive
+    rate
+  * Streaming: Require 3 distinct SYN burst windows before autoban,
+    configurable count
+  * Core: Put the JMX load average behind a 1s TTL; stop EepGet
+    retry-backoff tests waiting out the real 5s default
 
 2026-09-27 dr|z3d
-  * Tunnel: Unthrottle the test pump and record per-direction test
-    outcomes as counts; retain and revive failing tunnels until
-    natural expiry instead of removing them, defer a round whose
-    partner is unusable, and re-offer never-measured tunnels for a
-    first test; space, decay, and bound first-hop
-    pre-connect before blaming only the proven hop; register the
-    fragment reassembly stats
+  * Tunnel:
+    - Unthrottle the test pump; record per-direction test outcomes as
+      counts
+    - Retain and revive failing tunnels until natural expiry, instead of
+      removing them
+    - Defer a round whose partner is unusable
+    - Re-offer never-measured tunnels for a first test
+    - Space, decay and bound first-hop pre-connect before blaming only
+      the proven hop
+    - Register the fragment reassembly stats
+  * I2PTunnel:
+    - Share the private-target blocklist across proxy protocols and
+      redact digest auth; bound body resume by wall clock; clamp the
+      retry ramp; restore the caller's connect timeout after the
+      failover walk
+    - Purge the deprecated SocketErrorListener interface and its no-op
+      overrides
   * PeerManager: Apply the subnet diversity gate after the other
     selection gates, including in the last-resort selectors
-  * I2PTunnel: Share the private-target blocklist across proxy
-    protocols and redact digest auth; bound body resume by wall clock
-    and clamp the retry ramp; restore the caller's connect timeout
-    after the failover walk
-  * I2PTunnel: Purge the deprecated SocketErrorListener interface and
-    its no-op overrides
   * Streaming: Publish lifetime RTT and window only once a sample exists
-  * Installer: Report a failed wrapper.config rewrite instead of
-    silent exit
-  * Console: Always render the bandwidth footer; add a testing CSS
-    state
+  * Installer: Report a failed wrapper.config rewrite instead of silent
+    exit
+  * Console: Always render the bandwidth footer; add a testing CSS state
 
 2026-09-26 dr|z3d
-  * Core: Align data, HTTP, naming, session contracts
+  * Core: Align data, HTTP, naming and session contracts
   * Router: Validate I2CP receive sessions; tighten crypto, transport
     and tuning contracts; gate the streaming tuner on retransmission
     rate; cap active ghost exclusions
-  * Streaming: Align socket options, timeouts and API contracts;
-    Tuner global is the window-ceiling floor so BDP lifts toward
+  * Streaming: Align socket options, timeouts and API contracts; use
+    the Tuner global as the window-ceiling floor, lifting BDP toward
     8192; publish stream lifetime stats on disconnect
-  * Tuner: Window caps 8192/1024; exponential slow-start climb
-  * I2PTunnel: Redact proxy auth, block private/loopback targets,
-    strip CRLF from proxied headers, escape web UI XSS sinks; 10s
-    connect-leg floor with pool-build grace; retry budgets ramp per
-    1MB of verified Content-Length
-  * SAM: AUTH changes require an authenticated session or loopback;
+  * Tuner: Cap windows at 8192/1024; exponential slow-start climb
+  * I2PTunnel: Redact proxy auth; block private/loopback targets; strip
+    CRLF from proxied headers; escape web UI XSS sinks; 10s connect-leg
+    floor with pool-build grace; retry budgets ramp per 1MB of verified
+    Content-Length
+  * SAM: Require an authenticated session or loopback for AUTH changes;
     STREAM sessions owned by the authenticating user
-  * Tunnel: Cap fragment reassembly at 1024 messages; evict the
-    oldest exclusion reason; insert shortfall hops before the first
-    hop and redraw unusable selections
+  * Tunnel: Cap fragment reassembly at 1024 messages; evict the oldest
+    exclusion reason; insert shortfall hops ahead of the first hop;
+    redraw unusable selections
   * PeerManager: Rotate tier scan start and floor sample at 64
   * NTCP: Bound the read queue with pause and resume backpressure
   * I2PSnark: Fix storage alignment, bencode ordering and torrent
     lifecycle; stop forcing stream window params when autotuner armed
   * Console: Refresh update, console and web-helper contracts; fix
     ImageGen identicon caching
-  * Installer: Correct Windows path handling and translation
-    resource scanning
+  * Installer: Correct Windows path handling and translation resource
+    scanning
 
 2026-09-25 dr|z3d
-  * EepGet: Validate 206 Content-Range against the resume offset and
-    the caller Range header; reject gzip-marker resumes before the
-    body; fresh-file 416 no longer reported as success; completion
-    beats a watchdog abort when the body fully arrived
+  * EepGet:
+    - Validate 206 Content-Range against the resume offset and caller
+      Range header; reject gzip-marker resumes before the body
+    - Reject a fresh-file 416 rather than report success; prefer
+      completion over a watchdog abort when the body fully arrived
   * Core: Prompt re-runs heal transient LeaseSet sign failures;
     harden LeaseSet receive handlers
-  * Router: Fail-fast, generation-safe LeaseSet request lifecycle;
-    key pool-starvation nudges by local client so they find pools
-  * Tunnel: Batch test-job reset, round scoping, and queue-shutdown
-    reclamation; tumbling prebuild timeout window, selection
-    multiplier clamp, ghost-peer bounds, and soft-failure decay;
-    fast-cycle heap-gated window ceiling tuning
+  * Router: Run fail-fast, generation-safe LeaseSet request lifecycle;
+    key pool-starvation nudges by local client
+  * Tunnel:
+    - Batch test-job reset, round scoping, queue-shutdown reclamation
+    - Tumbling prebuild timeout window, selection multiplier clamp,
+      ghost-peer bounds, soft-failure decay
+    - Fast-cycle heap-gated window ceiling tuning
   * UDP: Report effective RTO beside the raw estimate; register
     send-window freeze stats
-  * Streaming: Single-claim slot release on teardown, reservation
-    ledger, and per-stream window ceiling clamp
-  * I2PTunnel: Shared connect deadline covering naming lookups;
-    runner race fixes; speculative warm-slot reuse
+  * Streaming: Release single-claim slots on teardown; reservation
+    ledger; per-stream window ceiling clamp
+  * I2PTunnel: Share a connect deadline across naming lookups; runner
+    race fixes; speculative warm-slot reuse
 
 2026-09-24 dr|z3d
-  * Tunnel: Batch first-test dispatch with ebb defer and drain-time
-    hardening; adaptive spares, scaled prebuild window, throttle
-    bypass, last-chance testing, ghost escalation; bounded
-    next-hop retry; drop banlisted hops at selection/build gate;
-    defer empty-pool retests; first-hop cooldowns under collapse;
-    stop soft-degraded thrash; raise soft send-timeout bar and
-    build cap past configure throttle; build-ban rate stat
-  * NetDb: Proactive refresh of in-use local LeaseSets;
-    main-NetDb fallback for local-destination lookups
+  * Tunnel:
+    - Batch first-test dispatch with ebb defer and drain-time hardening
+    - Add adaptive spares, scaled prebuild window, throttle bypass,
+      last-chance testing, ghost escalation
+    - Bound next-hop retry; drop banlisted hops at selection/build
+      gate; defer empty-pool retests
+    - Add first-hop cooldowns under collapse; stop soft-degraded thrash
+    - Raise soft send-timeout bar and build cap past configure throttle;
+      stat build bans
+  * NetDb: Refresh in-use local LeaseSets proactively; main-NetDb
+    fallback for local-destination lookups
   * Router: Nudge outbound pool on send starvation; fail empty
     lease-set requests before the client timeout
   * Core: Floor LS2 lease end to prevent zero-expiry sign failure
-  * EepGet: Immediate retry on a progressing stall
-  * Tuner: Fast-cycle RTO clamps and server I/O transfer growth
-  * Streaming: Two-strike SYN burst gate within a 60s window
-  * UDP: Path-change growth freeze and minimum congestion cooldown
-  * I2PTunnel: Longer server header timeout, no Range-resume after
-    408; cap failover on timeouts and dead outbound pool, walk all
-    failover legs, keep failover alive while the pool builds;
-    raise server I/O floor with async handoff; burst-queue runner
-    pools with claim priority; warm-slot pacing of empty-response
-    dual-race
-  * I2PSnark: Tracker retry sleep down to 2 minutes, jittered
-    backoff
+  * EepGet: Retry a progressing stall immediately
+  * Tuner: Fast-cycle RTO clamps; server I/O transfer growth
+  * Streaming: Gate SYN bursts at two strikes per 60s
+  * UDP: Path-change growth freeze; minimum congestion cooldown
+  * I2PTunnel:
+    - Lengthen server header timeout; no Range-resume after 408
+    - Cap failover on timeouts and dead outbound pool; walk all
+      failover legs; keep failover alive while the pool builds
+    - Raise server I/O floor with async handoff; burst-queue runner
+      pools with claim priority; warm-slot pacing of empty-response
+      dual-race
+  * I2PSnark: Cut tracker retry sleep to 2 minutes; jittered backoff
 
 2026-09-23 dr|z3d
-  * I2PTunnel: Configurable HTTP keepalive and server handler pool
-    growth; per-tunnel runner and I/O transfer pools; drain-ETA
-    admission gate with reject metrics; load-aware handler
-    rebalance; mid-body HTTP Range resume with tunnel rotation;
-    progress-based resume budget with absolute cycle cap;
-    HTTP-status shedding with live runner ceiling and higher
-    timeouts; idle-based runOnIO stall detection; restore 60s
-    server write timeout; clearer reconnect logging
-  * Router: Per-entry negative-cache TTL instead of global wipes;
-    fail lookup callbacks on early abort; delegate client sub-DB
-    searches to the main NetDb; skip outbound LeaseSet send on a
-    neg-cache hit without stacking cooldowns
+  * I2PTunnel:
+    - Make HTTP keepalive and server handler pool growth configurable;
+      per-tunnel runner and I/O transfer pools
+    - Gate admission on drain-ETA with reject metrics; rebalance
+      handlers by load
+    - Resume mid-body HTTP Range with tunnel rotation; budget resumes
+      by progress with absolute cycle cap
+    - Shed on HTTP status with live runner ceiling and higher timeouts;
+      detect runOnIO stalls by idle time
+    - Restore 60s server write timeout; clarify reconnect logging
+  * Router:
+    - Set per-entry negative-cache TTL instead of global wipes; fail
+      lookup callbacks on early abort
+    - Delegate client sub-DB searches to the main NetDb; skip outbound
+      LeaseSet send on a neg-cache hit without stacking cooldowns
   * NetDb: Wide-flood LeaseSets on store with two-phase floodfill
     verification
-  * Tuner: Relative thresholds for server handler growth
-  * Core: Fix ArraySet iterator-remove boxing hang
+  * Tuner: Use relative thresholds for server handler growth
+  * Core: Fix the ArraySet iterator-remove boxing hang
 
 2026-09-22 dr|z3d
-  * Tunnel: Fix high CPU load — cache endpoint checks, throttle the
-    BuildExecutor peer-selection hot path, extend cache TTLs, make
-    the deficit build throttle unconditional, add a global 60s
-    throttle for RemoveSlowTunnelsJob and ExpireJob, replace the
-    global collapse bypass with per-pool throttle floors, raise the
-    per-pool build cap during collapse, and add build diagnostics
-    with bootstrap recovery reschedule
-  * I2PTunnel: Dedicated I/O transfer pool prevents handler thread
-    exhaustion; flush after each HTTPServer Sender write to prevent
-    eepsite download stalls
-  * Console: Dark theme cleanup; prefetch netdb and profiles pages
+  * Tunnel:
+    - Cut high CPU load: cache endpoint checks, throttle the
+      BuildExecutor peer-selection hot path, extend cache TTLs
+    - Make the deficit build throttle unconditional; add a global 60s
+      throttle for RemoveSlowTunnelsJob and ExpireJob
+    - Replace the global collapse bypass with per-pool throttle floors;
+      raise the per-pool build cap during collapse
+    - Add build diagnostics with bootstrap recovery reschedule
+  * I2PTunnel: Add a dedicated I/O transfer pool to stop handler thread
+    exhaustion; flush after each HTTPServer Sender write to fix eepsite
+    download stalls
+  * Console: Clean up the dark theme; prefetch netdb and profiles pages
 
 2026-09-21 dr|z3d
-  * Tunnel: Remove sub-tier slicing in client peer selection;
-    cross-pool diversity when fast tier > 300 relaxed under build
-    stress; prefer proven expired-latency peers under scarcity;
-    decouple floodfill lookup from builds; reject firewalled peers
-    from fast/high-cap tiers; fix fallback selection UOE
-  * PeerManager: Gate fast/high-cap tiers on X/P/O bandwidth,
-    reject D/E/G/U flags; demote failing fast peers instead of
-    evicting; count timeouts in acceptance ratio; hard 1h latency
-    expiry; cohort-average low-latency cap; test all profiled peers
-  * PeerTest: Startup ramp to 4h/12h with 3s/5s/8s cadence and
-    backpressure; non-blocking never-die test selection; persist
-    latency results across restarts
-  * I2PTunnel: Raise server handler pool baselines; auto-tune from
-    live queue depth
-  * Tuner: Use 1m timeout ratio for BuildRequestTimeoutParam
-  * Console: Restore instant renderer demotion, fix tier rings,
-    batch demotions, cache hostname/whois lookups; drop high-cap
-    RTT gate, show all peers, pre-compute tier snapshots; optimize
-    profiles page; graphing resilient to RRD4J errors
+  * Tunnel:
+    - Remove sub-tier slicing in client peer selection; relax cross-pool
+      diversity when fast tier > 300 and builds are stressed
+    - Prefer proven expired-latency peers under scarcity; decouple
+      floodfill lookup from builds
+    - Reject firewalled peers from fast/high-cap tiers; fix fallback
+      selection UOE
+  * PeerManager:
+    - Gate fast/high-cap tiers on X/P/O bandwidth; reject D/E/G/U flags
+    - Demote failing fast peers instead of evicting; count timeouts in
+      the acceptance ratio
+    - Add a hard 1h latency expiry and a cohort-average low-latency cap;
+      test all profiled peers
+  * PeerTest:
+    - Ramp startup to 4h/12h with 3s/5s/8s cadence and backpressure;
+      use non-blocking never-die test selection
+    - Persist latency results across restarts
+  * I2PTunnel: Raise server handler pool baselines; auto-tune from live
+    queue depth
+  * Tuner: Use a 1m timeout ratio for BuildRequestTimeoutParam
+  * Console:
+    - Restore instant renderer demotion; fix tier rings; batch
+      demotions; cache hostname/whois lookups
+    - Drop the high-cap RTT gate, show all peers, pre-compute tier
+      snapshots
+    - Optimize the profiles page; make graphing resilient to RRD4J errors
 
 2026-09-20 dr|z3d
-  * PeerManager: Separate timeouts from rejections in tunnel
-    acceptance ratio; remove -30 penalty, show all tier peers
-  * Console: Optimize profiles page; make graphing resilient to
+  * PeerManager: Separate timeouts from rejections in the tunnel
+    acceptance ratio; remove the -30 penalty; show all tier peers
+  * Console: Optimize the profiles page; make graphing resilient to
     transient RRD4J errors
 
 2026-09-19 dr|z3d
