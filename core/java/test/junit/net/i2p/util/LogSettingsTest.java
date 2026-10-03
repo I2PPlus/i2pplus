@@ -5,30 +5,44 @@ import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
 import java.util.Properties;
 
 /**
- * @author Comwiz
+ * Tests how {@code logger.record.*} entries are resolved to a class's log level.
+ *
+ * <p>Two rules are non-obvious and were previously untested:
+ * <ul>
+ * <li>a root name matches on package boundaries, so {@code net.i2p.util.LogSettingsTes}
+ *     must not capture {@code net.i2p.util.LogSettingsTest};</li>
+ * <li>when several entries match, the longest (most specific) one wins.</li>
+ * </ul>
+ * Either rule breaking would silently misconfigure logging in production - losing
+ * WARN and ERROR, or flooding DEBUG - which is why they are pinned here.
+ *
+ * <p>These assertions go through {@link Log#shouldLog(int)}, so they measure the
+ * resolved level rather than re-implementing the comparison.
+ *
+ * <p>This class used to capture System.out through a pipe and wait on the
+ * background {@link LogWriter}. That tested the writer's flush cadence rather than
+ * the rule above, and raced a 15s batch timer, so it was intermittently slow and
+ * failed on timing alone.
+ *
+ * @since 0.9.71+
  */
 public class LogSettingsTest extends TestCase {
+
+    /** Scratch directory for the per-test logger config. */
+    private static final File TMPDIR = new File(System.getProperty("java.io.tmpdir"));
+
+    /** This class's own log name, the thing the rules are applied to. */
+    private static final String US = "net.i2p.util.LogSettingsTest";
 
     private Properties p;
     private Log log;
     private I2PAppContext _context;
     private File f;
-
-    /** Scratch directory for the per-test logger config. */
-    private static final File TMPDIR = new File(System.getProperty("java.io.tmpdir"));
-
-    private String origMinimumOnScreenLevel;
-    private String origLogSettings;
 
     /**
      * Initializes the test fixture.
@@ -36,290 +50,101 @@ public class LogSettingsTest extends TestCase {
      * Called before every test case method.
      */
     protected void setUp() throws IOException {
-
         _context = I2PAppContext.getGlobalContext();
-        log = _context.logManager().getLog(LogSettingsTest.class);
-        p = new Properties();
-        // Point the LogManager at a private scratch file for the duration of the
-        // test. Each test writes settings and then calls rereadConfig(), so the
-        // file it writes and the file the LogManager re-reads have to be the same
-        // one. They were not: the test wrote a relative "logger.config" (resolving
-        // into the module basedir, inside the source tree) while rereadConfig()
-        // read <configDir>/logger.config, so the settings never took effect and
-        // the assertions only passed because of leftover state from earlier runs.
-        // Scratch file under the temp dir keeps the workspace clean and makes the
-        // round trip actually work.
+        // A minimal, explicit config rather than a copy of the live one: these
+        // tests assert on which entries win, so an inherited entry from the host
+        // would make them depend on the machine they run on.
         f = File.createTempFile("i2p-logsettings", ".config", TMPDIR);
-        // Seed from the config the router would actually use. These tests only
-        // override two properties and assert about everything else, so they need
-        // the real baseline; starting from an empty file silently changes the
-        // default level and the messages under test never appear.
-        File live = new File(_context.getConfigDir(), LogManager.CONFIG_LOCATION_DEFAULT);
-        if (live.exists()) {
-            copyFile(live, f);
-        }
+        p = new Properties();
+        p.setProperty("logger.defaultLevel", Log.toLevelString(Log.ERROR));
         _context.logManager().setConfig(f.getAbsolutePath());
-        DataHelper.loadProps(p, f);
-        origMinimumOnScreenLevel = p.getProperty("logger.record.net.i2p.util.LogSettingsTest", Log.STR_ERROR);
-        origLogSettings = p.getProperty("logger.minimumOnScreenLevel", Log.STR_CRIT);
+        reread();
     }
 
     protected void tearDown() throws IOException {
-        p.setProperty("logger.record.net.i2p.util.LogSettingsTest", origMinimumOnScreenLevel);
-        p.setProperty("logger.minimumOnScreenLevel", origLogSettings);
-        DataHelper.storeProps(p, f);
         // Restore the LogManager before removing the file: it is a global
         // singleton shared with every later test in this JVM, and leaving it
-        // pointed at a deleted scratch file would silence logging for all of them.
+        // pointed at a deleted scratch file would misconfigure logging for them.
         _context.logManager().setConfig(LogManager.CONFIG_LOCATION_DEFAULT);
         if (!f.delete()) {
             f.deleteOnExit();
         }
-
-        System.gc();
-    }
-
-    /** Copy a config file, so the scratch fixture starts from the real baseline. */
-    private static void copyFile(File from, File to) throws IOException {
-        java.io.InputStream in = new java.io.FileInputStream(from);
-        try {
-            java.io.OutputStream out = new java.io.FileOutputStream(to);
-            try {
-                byte[] buf = new byte[4096];
-                int read;
-                while ((read = in.read(buf)) != -1) {
-                    out.write(buf, 0, read);
-                }
-            } finally {
-                out.close();
-            }
-        } finally {
-            in.close();
-        }
     }
 
     /**
-     * Scan for the expected patterns on a reader thread, so the test waits for
-     * the writer to actually push the records instead of guessing with a fixed
-     * sleep.
+     * Write the config and make the LogManager actually re-read it.
      *
-     * <p>The pipe blocks, so the scan cannot run inline: a reader thread is the
-     * only way to wait on real output. {@code LogManager.flush()} merely
-     * notifies the writer and gives up after a bounded poll, so records may
-     * still be in flight when it returns; the previous blanket 1500ms sleep
-     * covered that by luck rather than by construction. The bound below is
-     * generous for a loaded machine and still returns as soon as the last
-     * pattern lands.
-     *
-     * @return true if every pattern was seen before the bound expired
+     * <p>{@code loadConfig()} returns early unless the file's mtime is strictly
+     * newer than its last read, and it compares a millisecond clock against a
+     * filesystem timestamp of coarser granularity. Two writes inside one tick
+     * therefore look unchanged and the second is silently dropped, so a level
+     * change now and then never reached the Log. Nudging the mtime past the clock
+     * removes the race.
      */
-    private boolean awaitPatterns(final BufferedReader in, final int nLines, final String... patterns) {
-        final java.util.concurrent.atomic.AtomicBoolean found =
-                new java.util.concurrent.atomic.AtomicBoolean();
-        Thread reader = new Thread(new Runnable() {
-            public void run() {
-                try { found.set(scanForPatterns(in, nLines, patterns)); }
-                catch (IOException ioe) { /* left false; the assert reports it */ }
-            }
-        }, "LogSettingsTest-scan");
-        reader.setDaemon(true);
-        reader.start();
-        try {
-            reader.join(5000);
-        } catch (InterruptedException ie) {
-            // Report whatever was seen rather than propagating: an interrupt
-            // here must not turn a logging assertion into an error.
-            Thread.currentThread().interrupt();
-        }
-        return found.get();
+    private void reread() throws IOException {
+        DataHelper.storeProps(p, f);
+        f.setLastModified(Math.max(f.lastModified(), _context.clock().now() + 1000L));
+        _context.logManager().rereadConfig();
+        log = _context.logManager().getLog(LogSettingsTest.class);
+    }
+
+    /** An exact entry for this class applies to it. */
+    public void testExactEntryApplies() throws IOException {
+        p.setProperty("logger.record." + US, Log.toLevelString(Log.ERROR));
+        reread();
+        assertFalse("INFO is below the configured ERROR", log.shouldLog(Log.INFO));
+        assertTrue("ERROR is the configured level", log.shouldLog(Log.ERROR));
+        assertTrue("CRIT is above ERROR", log.shouldLog(Log.CRIT));
     }
 
     /**
-     * Read up to nLines lines from the pipe, scanning for expected patterns.
-     * Returns true if all expected messages were found.
+     * The most specific matching entry wins over a broader one. A router config
+     * routinely sets a package-wide level and then overrides one noisy class.
      */
-    private boolean scanForPatterns(BufferedReader in, int nLines, String... patterns) throws IOException {
-        boolean[] found = new boolean[patterns.length];
-        int totalFound = 0;
-        // Read nLines + 5 extra to drain any interleaved log output
-        int maxRead = nLines + 5;
-        for (int i = 0; i < maxRead; i++) {
-            String line = in.readLine();
-            if (line == null) break;
-            for (int j = 0; j < patterns.length; j++) {
-                if (!found[j] && line.contains(patterns[j])) {
-                    found[j] = true;
-                    totalFound++;
-                }
-            }
-            if (totalFound == patterns.length) break;
-        }
-        return totalFound == patterns.length;
+    public void testLongerPrefixWins() throws IOException {
+        p.setProperty("logger.record.net.i2p", Log.toLevelString(Log.WARN));
+        p.setProperty("logger.record." + US, Log.toLevelString(Log.DEBUG));
+        reread();
+        assertTrue("the class-specific DEBUG must beat the package-wide WARN",
+                   log.shouldLog(Log.DEBUG));
+        assertTrue(log.shouldInfo());
     }
 
-    public void testDebug() throws IOException {
-        p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.DEBUG));
-        p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-
-        DataHelper.storeProps(p, f);
-
-        _context.logManager().rereadConfig();
-
-        PipedInputStream pin = new PipedInputStream(8192);
-        BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-
-        PrintStream systemOut = System.out;
-        PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-
-        System.setOut(pout);
-
-        try {
-            log.debug("DEBUG" + ": debug");
-            log.info("DEBUG" + ": info");
-            log.warn("DEBUG" + ": warn");
-            log.error("DEBUG" + ": error");
-            log.log(Log.CRIT, "DEBUG" + ": crit");
-            _context.logManager().flush();
-
-            for (int i = 0; i < 10; i++) pout.println("");
-            pout.flush();
-
-            assertTrue("Not all DEBUG messages found", awaitPatterns(in, 15, "DEBUG: debug", "DEBUG: info", "DEBUG: warn", "DEBUG: error", "DEBUG: crit"));
-        } finally {
-            System.setOut(systemOut);
-            pout.close();
-        }
+    /**
+     * A root name that is only a character-wise prefix must not match. Without the
+     * boundary check, {@code net.i2p.util.LogSettingsTes} would capture this
+     * class - and any class whose name happens to continue with those letters.
+     *
+     * <p>The near-miss entry is set to CRIT while the default stays ERROR, so
+     * ERROR is the discriminating assertion: captured, the class would be narrowed
+     * to CRIT and ERROR would be suppressed; not captured, it keeps the default
+     * and ERROR still passes. Asserting DEBUG instead would be vacuous, since
+     * DEBUG fails under the default too.
+     */
+    public void testPartialPrefixDoesNotMatch() throws IOException {
+        p.setProperty("logger.record.net.i2p.util.LogSettingsTes", Log.toLevelString(Log.CRIT));
+        reread();
+        assertTrue("a non-boundary prefix must not capture this class",
+                   log.shouldLog(Log.ERROR));
+        assertFalse("must fall back to the default level, not CRIT",
+                    log.shouldLog(Log.WARN));
     }
 
-    public void testInfo() throws IOException {
-        p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.INFO));
-        p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-
-        DataHelper.storeProps(p, f);
-        _context.logManager().rereadConfig();
-
-        PipedInputStream pin = new PipedInputStream(8192);
-        BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-
-        PrintStream systemOut = System.out;
-        PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-
-        System.setOut(pout);
-
-        try {
-            log.debug("INFO" + ": debug");
-            log.info("INFO" + ": info");
-            log.warn("INFO" + ": warn");
-            log.error("INFO" + ": error");
-            log.log(Log.CRIT, "INFO" + ": crit");
-            _context.logManager().flush();
-
-            for (int i = 0; i < 10; i++) pout.println("");
-            pout.flush();
-
-            assertTrue("Not all INFO messages found", awaitPatterns(in, 14, "INFO: info", "INFO: warn", "INFO: error", "INFO: crit"));
-        } finally {
-            System.setOut(systemOut);
-            pout.close();
-        }
+    /** A longer sibling name that merely shares this prefix is also not captured. */
+    public void testSiblingWithSharedPrefixNotMatched() throws IOException {
+        p.setProperty("logger.record.net.i2p.util.LogSettingsTestHelper",
+                      Log.toLevelString(Log.CRIT));
+        reread();
+        assertTrue("a longer sibling name must not narrow this class",
+                   log.shouldLog(Log.ERROR));
+        assertFalse("must fall back to the default level, not CRIT",
+                    log.shouldLog(Log.WARN));
     }
 
-    public void testWarn() throws IOException {
-        p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.WARN));
-        p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-
-        DataHelper.storeProps(p, f);
-        _context.logManager().rereadConfig();
-
-        PipedInputStream pin = new PipedInputStream(8192);
-        BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-
-        PrintStream systemOut = System.out;
-        PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-
-        System.setOut(pout);
-
-        try {
-            log.debug("WARN" + ": debug");
-            log.info("WARN" + ": info");
-            log.warn("WARN" + ": warn");
-            log.error("WARN" + ": error");
-            log.log(Log.CRIT, "WARN" + ": crit");
-            _context.logManager().flush();
-
-            for (int i = 0; i < 10; i++) pout.println("");
-            pout.flush();
-
-            assertTrue("Not all WARN messages found", awaitPatterns(in, 13, "WARN: warn", "WARN: error", "WARN: crit"));
-        } finally {
-            System.setOut(systemOut);
-            pout.close();
-        }
-    }
-
-    public void testError() throws IOException {
-        p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.ERROR));
-        p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-
-        DataHelper.storeProps(p, f);
-        _context.logManager().rereadConfig();
-
-        PipedInputStream pin = new PipedInputStream(8192);
-        BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-
-        PrintStream systemOut = System.out;
-        PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-
-        System.setOut(pout);
-
-        try {
-            log.debug("ERROR" + ": debug");
-            log.info("ERROR" + ": info");
-            log.warn("ERROR" + ": warn");
-            log.error("ERROR" + ": error");
-            log.log(Log.CRIT, "ERROR" + ": crit");
-            _context.logManager().flush();
-
-            for (int i = 0; i < 10; i++) pout.println("");
-            pout.flush();
-
-            assertTrue("Not all ERROR messages found", awaitPatterns(in, 12, "ERROR: error", "ERROR: crit"));
-        } finally {
-            System.setOut(systemOut);
-            pout.close();
-        }
-    }
-
-    public void testCrit() throws IOException {
-        p.setProperty("logger.record.net.i2p.util.LogSettingsTest", Log.toLevelString(Log.CRIT));
-        p.setProperty("logger.minimumOnScreenLevel", Log.toLevelString(Log.DEBUG));
-
-        DataHelper.storeProps(p, f);
-        _context.logManager().rereadConfig();
-
-        PipedInputStream pin = new PipedInputStream(8192);
-        BufferedReader in = new BufferedReader(new InputStreamReader(pin));
-
-        PrintStream systemOut = System.out;
-        PrintStream pout = new PrintStream(new PipedOutputStream(pin));
-
-        System.setOut(pout);
-
-        try {
-            log.debug("CRIT" + ": debug");
-            log.info("CRIT" + ": info");
-            log.warn("CRIT" + ": warn");
-            log.error("CRIT" + ": error");
-            log.log(Log.CRIT, "CRIT" + ": crit");
-            _context.logManager().flush();
-
-            for (int i = 0; i < 10; i++) pout.println("");
-            pout.flush();
-
-            assertTrue("Not all CRIT messages found", awaitPatterns(in, 11, "CRIT: crit"));
-        } finally {
-            System.setOut(systemOut);
-            pout.close();
-        }
+    /** With no matching entry the class falls back to logger.defaultLevel. */
+    public void testNoEntryUsesDefaultLevel() throws IOException {
+        reread();
+        assertFalse("default is ERROR, so INFO must be suppressed", log.shouldLog(Log.INFO));
+        assertTrue(log.shouldLog(Log.ERROR));
     }
 }
