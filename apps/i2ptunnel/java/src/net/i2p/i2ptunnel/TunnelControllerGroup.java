@@ -2371,9 +2371,29 @@ public class TunnelControllerGroup implements ClientApp {
      *  @since 0.9.71+
      */
     static ThreadPoolExecutor createServerExecutor(int threads, AtomicLong index) {
+        return createServerExecutor(threads, index, SERVER_KEEPALIVE_MS);
+    }
+
+    /**
+     * As {@link #createServerExecutor(int, AtomicLong)} but with an explicit
+     * worker keepalive.
+     *
+     * <p>The production keepalive is {@link #SERVER_KEEPALIVE_MS} (30s), which a
+     * test cannot wait out: the I2PTunnel suite is run with a 15s per-test
+     * timeout, so asserting on core-thread expiry at the real interval always
+     * fails on the clock rather than on the behaviour. Injecting a short
+     * keepalive lets the test assert the same thing in milliseconds.
+     *
+     * @param threads the fixed core/max worker count
+     * @param index   an {@link AtomicLong} counter used to name worker threads
+     * @param keepAliveMs idle time before a core thread may be reclaimed
+     * @return a never-null, bounded executor with {@code AbortPolicy}
+     * @since 0.9.71+
+     */
+    static ThreadPoolExecutor createServerExecutor(int threads, AtomicLong index, long keepAliveMs) {
         ThreadPoolExecutor tpe = new ThreadPoolExecutor(
             threads, threads,
-            SERVER_KEEPALIVE_MS, TimeUnit.MILLISECONDS,
+            keepAliveMs, TimeUnit.MILLISECONDS,
             new LinkedBlockingQueue<>(serverBacklogQueueCapacity),
             r -> {
                 Thread t = new Thread(r);
@@ -2383,7 +2403,7 @@ public class TunnelControllerGroup implements ClientApp {
             },
             new ThreadPoolExecutor.AbortPolicy()
         );
-        // Allow idle core threads to expire after SERVER_KEEPALIVE_MS (30s).
+        // Allow idle core threads to expire after the keepalive (30s in production).
         // Without this, core threads live forever even when idle, because
         // keepAlive only applies to threads above corePoolSize by default.
         // With a bounded queue, idle threads are reclaimed and recreated on

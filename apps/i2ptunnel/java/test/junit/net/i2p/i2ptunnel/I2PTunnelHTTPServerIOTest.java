@@ -136,10 +136,15 @@ public class I2PTunnelHTTPServerIOTest extends TestCase {
      */
     public void testSenderInterruptible() throws Exception {
         // Use a stream that blocks forever on read()
+        // Blocks until interrupted rather than for a fixed span: the interrupt
+        // is what ends this read, so a timeout-free wait states the intent
+        // directly and cannot leave a 60s stall behind if the interrupt is ever
+        // lost.
+        final java.util.concurrent.CountDownLatch neverReleased = new java.util.concurrent.CountDownLatch(1);
         InputStream blockingIn = new InputStream() {
             public int read() throws IOException {
                 try {
-                    Thread.sleep(60_000);
+                    neverReleased.await();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     throw new IOException("Interrupted");

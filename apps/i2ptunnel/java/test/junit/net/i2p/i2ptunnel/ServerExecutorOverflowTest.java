@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -114,7 +115,13 @@ public class ServerExecutorOverflowTest {
     @Test
     public void testIdleCoreThreadsExpireAfterKeepalive() throws InterruptedException {
         int threads = 4;
-        ThreadPoolExecutor exec = TunnelControllerGroup.createServerExecutor(threads, new AtomicLong());
+        // Inject a short keepalive rather than waiting out the production 30s:
+        // the suite runs with a 15s per-test timeout, so a test that sleeps past
+        // it fails on the clock instead of on the behaviour. This asserts the
+        // reclaim mechanism, not the constant.
+        long keepAliveMs = 100;
+        ThreadPoolExecutor exec =
+            TunnelControllerGroup.createServerExecutor(threads, new AtomicLong(), keepAliveMs);
         try {
             // Allowing core timeout: the pool should report it.
             assertTrue("core threads must be allowed to time out",
@@ -124,9 +131,14 @@ public class ServerExecutorOverflowTest {
             for (int i = 0; i < threads; i++) {
                 exec.execute(done::countDown);
             }
-            done.await();
-            // Wait for keepalive (30s) + margin.  Idle threads should shrink.
-            Thread.sleep(32_000);
+            assertTrue("workers did not start", done.await(5, TimeUnit.SECONDS));
+            // Poll instead of sleeping a fixed interval: reclamation happens on
+            // the pool's own timer, so any fixed wait is either too short or
+            // spends the whole timeout budget.
+            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(8);
+            while (exec.getPoolSize() >= threads && System.nanoTime() < deadline) {
+                Thread.sleep(20);
+            }
             assertTrue("idle core threads should have expired, but pool size is " + exec.getPoolSize(),
                        exec.getPoolSize() < threads);
         } finally {

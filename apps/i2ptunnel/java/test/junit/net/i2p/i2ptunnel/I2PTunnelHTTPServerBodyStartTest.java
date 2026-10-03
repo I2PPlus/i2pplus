@@ -162,40 +162,62 @@ public class I2PTunnelHTTPServerBodyStartTest {
         assertEquals("body should deliver bytes after release", 1, bytes.get());
     }
 
-    /** Rejected execution falls back to inline run so the body is never dropped. */
+    /**
+     * When the I/O pool is saturated, handOffBody must abort the body rather
+     * than run it on the calling handler thread. Running it inline pins that
+     * thread for the whole transfer, which is what drives the runner pool to
+     * zero free threads and stalls every other request to the service.
+     *
+     * <p>This previously asserted the opposite contract (an inline fallback that
+     * still transferred bytes). The production behaviour was changed
+     * deliberately to abort so the client fails fast and retries; this test was
+     * left behind and had been failing on the stale expectation.
+     *
+     * <p>Saturation is established with a latch rather than a sleep, so
+     * rejection is deterministic and the test costs no wall-clock time.
+     */
     @Test
-    public void testHandOffFallsBackWhenPoolRejects() throws Exception {
+    public void testHandOffAbortsBodyWhenPoolRejects() throws Exception {
+        final CountDownLatch holdWorker = new CountDownLatch(1);
+        final CountDownLatch workerBusy = new CountDownLatch(1);
         ThreadPoolExecutor full = new ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(1));
-        full.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {Thread.sleep(2000);}
-                catch (InterruptedException ie) {Thread.currentThread().interrupt();}
-            }
-        });
-        full.execute(new Runnable() {
-            @Override
-            public void run() { /* occupies the single queue slot */ }
-        });
-
-        final InputStream in = new InputStream() {
-            private int _n;
-            @Override
-            public int read() {
-                return _n++ < 1 ? 0x41 : -1;
-            }
-        };
-        OutputStream out = new ByteArrayOutputStream();
-        final I2PTunnelHTTPServer.Sender sender =
-                new I2PTunnelHTTPServer.Sender(out, in, "fallback", null);
         try {
-            I2PTunnelHTTPServer.handOffBody(full, sender, "fallback");
+            full.execute(new Runnable() {
+                @Override
+                public void run() {
+                    workerBusy.countDown();
+                    try { holdWorker.await(); }
+                    catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+                }
+            });
+            assertTrue("worker never started", workerBusy.await(5, TimeUnit.SECONDS));
+            full.execute(new Runnable() {
+                @Override
+                public void run() { /* occupies the single queue slot */ }
+            });
+            assertEquals("queue must be full", 1, full.getQueue().size());
+
+            final InputStream in = new InputStream() {
+                private int _n;
+                @Override
+                public int read() {
+                    return _n++ < 1 ? 0x41 : -1;
+                }
+            };
+            OutputStream out = new ByteArrayOutputStream();
+            final I2PTunnelHTTPServer.Sender sender =
+                    new I2PTunnelHTTPServer.Sender(out, in, "saturated", null);
+            boolean async = I2PTunnelHTTPServer.handOffBody(full, sender, "saturated");
+            assertFalse("a rejected body must not be submitted asynchronously", async);
+            assertEquals("a rejected body must not transfer any bytes",
+                         0, ((ByteArrayOutputStream) out).size());
+            assertNotNull("a rejected body must report a failure to the caller",
+                          sender.getFailure());
         } finally {
+            holdWorker.countDown();
             full.shutdownNow();
         }
-        assertTrue("inline fallback must run the sender",
-                   ((ByteArrayOutputStream) out).size() >= 1);
     }
 
     /** Sender flushes every chunk so partial bodies reach the browser promptly. */
