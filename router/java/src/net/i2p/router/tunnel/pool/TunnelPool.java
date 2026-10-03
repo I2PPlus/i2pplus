@@ -3330,7 +3330,7 @@ public class TunnelPool {
             _log.info(toString() + " -> Data-phase failure (status=" + status +
                       (soft ? ", soft" : "") +
                       ") for tunnel, failures now " + failures +
-                      "\n* " + cfg);
+                      "\n* " + cfg + describeHops(cfg));
         }
         boolean overBar = exceedsRemovalThreshold(failures, soft);
         if (overBar) {
@@ -3355,6 +3355,33 @@ public class TunnelPool {
         } else if (_alive) {
             ensureSufficientTunnels();
         }
+    }
+
+    /**
+     *  Name the hops of a failed tunnel so a data-phase failure is attributable.
+     *
+     *  <p>{@link TunnelInfo#toString()} identifies the tunnel only by nickname,
+     *  which for a client tunnel is the destination nickname — so every soft
+     *  failure in a pool looked identical and there was no way to tell whether
+     *  one peer was failing repeatedly or the failures were spread across the
+     *  pool. Hop 0 is the peer adjacent to us, so a peer recurring at the same
+     *  hop across many failures is the one to penalise.
+     *
+     * @param cfg the tunnel that failed, may be null
+     * @return a loggable hop summary, never null
+     * @since 0.9.71+
+     */
+    private static String describeHops(TunnelInfo cfg) {
+        if (cfg == null) {return "";}
+        StringBuilder rv = new StringBuilder(96);
+        int len = cfg.getLength();
+        for (int hop = 0; hop < len; hop++) {
+            Hash peer = cfg.getPeer(hop);
+            if (peer == null) {continue;}
+            rv.append("\n*   hop ").append(hop).append(": ")
+              .append(peer.toBase32().substring(0, 6));
+        }
+        return rv.toString();
     }
 
     /**
@@ -5331,7 +5358,7 @@ public class TunnelPool {
                           " safe (" + countHealthySafe(stats) + " healthy) + " +
                           stats.nearExpiry + " expiring + " + stats.failingCount +
                           " failing, building " + needed +
-                           " replacements (deficit=" + deficit + ", ip=" + currentInProgress + ")" + boost);
+                          " replacements (deficit=" + deficit + ", ip=" + currentInProgress + ")" + boost);
             }
             _lastDeficitBuildTime = now;
             // Collapsed pools (zero safe, tunnels expiring) are effectively

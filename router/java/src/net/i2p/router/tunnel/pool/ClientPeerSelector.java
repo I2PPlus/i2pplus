@@ -208,20 +208,69 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         rv = finalizeSelection(settings, rv, isInbound);
         // finalizeSelection's own ghost/banned safety net runs after the
         // shortfall ladder, so it can shrink a size the ladder already
-        // approved.  Never emit that shorter tunnel: a peer that turned
-        // unusable mid-selection must not enter the tunnel, and the pool
-        // should redraw instead.  A ladder that legitimately shortened under
-        // stress (approved < min) keeps its result.
+        // approved. Never emit a peer that turned unusable mid-selection:
+        // finalizeSelection has already removed it, so the survivors are
+        // clean and the selection is structurally sound.
+        //
+        // The ladder already treats a short tunnel as an acceptable outcome
+        // (applyShortfallFallbacks exists for exactly that), so a minor
+        // shortfall is not a reason to throw the whole selection away.
+        // Discarding it is what used to starve pools: a starved pool requests
+        // *minimum* length, which leaves zero slack, so a single peer turning
+        // unreliable mid-selection discarded the endpoint and every valid hop
+        // and forced a full redraw -- repeated on every attempt while churn
+        // kept peers tripping the reliability gate. Only a structurally
+        // unusable selection is discarded.
         int min = minRequestedLength(settings);
-        if (rv.size() - 1 < min && approved >= min) {
+        if (shouldDiscardShortSelection(rv.size(), min)) {
             if (log.shouldWarn()) {
-                log.warn("CPS selection fell below minimum for " + settings.getDestinationNickname() +
+                log.warn("CPS selection unusable for " + settings.getDestinationNickname() +
                          " (" + (isInbound ? "in" : "out") + "): " + (rv.size() - 1) +
                          "/" + min + " hops -> discarding for redraw");
             }
             return Collections.emptyList();
         }
+        if (log.shouldDebug() && rv.size() - 1 < min) {
+            log.debug("CPS accepting short selection for " + settings.getDestinationNickname() +
+                      " (" + (isInbound ? "in" : "out") + "): " + (rv.size() - 1) +
+                      "/" + min + " hops, " + approved + " approved before finalize");
+        }
         return rv;
+    }
+
+    /**
+     *  Minimum non-self hops a selection needs to be buildable at all: the peer
+     *  adjacent to us (IBGW for inbound, our first hop for outbound) and the far
+     *  endpoint. Matches the {@code keepAtLeast} floor
+     *  {@link #dropUnreliable} already uses.
+     *
+     * @since 0.9.71+
+     */
+    static final int MIN_STRUCTURAL_NON_SELF_HOPS = 2;
+
+    /**
+     *  Whether a post-finalize selection is too short to build and must be
+     *  discarded for a redraw.
+     *
+     *  <p>Pure decision helper for the shortfall guard in {@code selectPeers()},
+     *  extracted for unit testing. A selection is discarded only when it holds
+     *  fewer than {@link #MIN_STRUCTURAL_NON_SELF_HOPS} non-self hops — that is,
+     *  when it cannot form a tunnel regardless of what was requested. Anything
+     *  longer is returned as a short tunnel, which the shortfall ladder already
+     *  produces deliberately; discarding those to force a redraw converts a
+     *  one-hop shortfall into a whole lost build cycle, and at minimum length
+     *  (what a starved pool asks for) there is no slack to absorb it.
+     *
+     * @param rvSize selection size after {@code finalizeSelection}, including self
+     * @param min minimum requested tunnel length, from {@link #minRequestedLength}
+     * @return true if the selection must be discarded for a redraw
+     * @since 0.9.71+
+     */
+    static boolean shouldDiscardShortSelection(int rvSize, int min) {
+        int nonSelf = rvSize - 1;
+        if (nonSelf >= MIN_STRUCTURAL_NON_SELF_HOPS)
+            return false;   // structurally sound; a short tunnel is acceptable
+        return nonSelf < min;
     }
 
     /**

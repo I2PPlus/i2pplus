@@ -111,7 +111,12 @@ class BuildReplyHandler {
             if (BuildMessageGenerator.isBlank(cfg, hop)) {
                 // self or unused...
                 if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": Skipping record for: " + cfg + " [" + i + "/" + hop + "]");
+                    // Named to read as benign: this hop is locally filled (self or
+                    // unused), so there is nothing to decrypt and the record is
+                    // accepted below as RESULT_OK. "Skipping record" read like a
+                    // dropped reply and cost real investigation time.
+                    log.debug(reply.getUniqueId() + ": Locally-filled record, no decrypt needed for: " +
+                              cfg + " [" + i + "/" + hop + "]");
                 if (cfg.isInbound() && hop + 1 == cfg.getLength()) { // IBEP
                     byte[] h1 = new byte[Hash.HASH_LENGTH];
                     byte[] data = reply.getRecord(i).getData();
