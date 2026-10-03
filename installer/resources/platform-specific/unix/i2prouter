@@ -860,6 +860,39 @@ checkUser() {
     fi
 }
 
+# Is the process in $1 still the wrapper named in the pid file? Matching the
+# command line as well as the pid guards against a recycled pid being mistaken
+# for the wrapper, which would leave the stop and start loops waiting on an
+# unrelated process.
+#   0 - alive and still the wrapper
+#   1 - gone, or the pid belongs to something else
+wrapper_running() {
+    if [ "X$1" = "X" ]
+    then
+        return 1
+    fi
+    case "$DIST_OS" in
+        'freebsd')
+            pidtest=`$PSEXE -p "$1" -o args | tail -1`
+            if [ "X$pidtest" = "XCOMMAND" ] || [ "X$pidtest" = "X" ]
+            then
+                return 1
+            fi
+            ;;
+        'macosx')
+            pidtest=`$PSEXE -ww -p "$1" -o command | grep -F "$WRAPPER_CMD" | tail -1`
+            ;;
+        *)
+            pidtest=`$PSEXE -p "$1" -o args | grep -F "$WRAPPER_CMD" | tail -1`
+            ;;
+    esac
+    if [ "X$pidtest" = "X" ]
+    then
+        return 1
+    fi
+    return 0
+}
+
 getpid() {
     pid=""
     if [ -f "$PIDFILE" ]
@@ -867,35 +900,14 @@ getpid() {
         if [ -r "$PIDFILE" ]
         then
             pid=`cat "$PIDFILE"`
-            if [ "X$pid" != "X" ]
+            # It is possible that 'a' process with the pid exists but that it is not the correct process.
+            # This can happen in a number of cases, but the most common is during system startup after an unclean shutdown.
+            # If the pid is not the running wrapper then the pid file is considered to be stale.
+            if [ "X$pid" != "X" ] && ! wrapper_running "$pid"
             then
-                # It is possible that 'a' process with the pid exists but that it is not the correct process.
-                # This can happen in a number of cases, but the most common is during system startup after an unclean shutdown.
-                # The ps statement below looks for the specific wrapper command running as the pid.
-                # If it is not found then the pid file is considered to be stale.
-                case "$DIST_OS" in
-                    'freebsd')
-                        pidtest=`$PSEXE -p $pid -o args | tail -1`
-                        if [ "X$pidtest" = "XCOMMAND" ]
-                        then
-                            pidtest=""
-                        fi
-                        ;;
-                    'macosx')
-                        pidtest=`$PSEXE -ww -p $pid -o command | grep -F "$WRAPPER_CMD" | tail -1`
-                        ;;
-                    *)
-                        pidtest=`$PSEXE -p $pid -o args | grep -F "$WRAPPER_CMD" | tail -1`
-                        ;;
-                esac
-
-                if [ "X$pidtest" = "X" ]
-                then
-                    # This is a stale pid file.
-                    rm -f "$PIDFILE"
-                    echo "Removed stale pid file: $PIDFILE"
-                    pid=""
-                fi
+                rm -f "$PIDFILE"
+                echo "Removed stale pid file: $PIDFILE"
+                pid=""
             fi
         else
             echo "Cannot read $PIDFILE."
@@ -907,13 +919,19 @@ getpid() {
 
 
 testpid() {
-    case "$DIST_OS" in
-    esac
+    # The wait loops hold $pid from a single getpid() call, so something has to
+    # re-check it against the process table once a second. Without this the loop
+    # in stopit() never ends: the wrapper exits and removes its pid file, but $pid
+    # keeps its old value and "Waiting for $APP_LONG_NAME to exit" repeats
+    # forever.
+    if [ "X$pid" != "X" ] && ! wrapper_running "$pid"
+    then
+        pid=""
+    fi
     if [ "X$pid" = "X" ]
     then
         # Process is gone so remove the pid file.
         rm -f "$PIDFILE"
-        pid=""
     fi
 }
 

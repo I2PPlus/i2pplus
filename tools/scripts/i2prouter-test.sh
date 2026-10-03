@@ -239,6 +239,98 @@ assert_eq ""    "`run_javapid_case ''`"  \
     "getjavapid returns nothing when there is no wrapper pid"
 
 #---------------------------------------------------------------------------
+echo "-- testpid ends the stop wait loop --"
+#---------------------------------------------------------------------------
+# stopit() holds $pid from one getpid() call and relies on testpid to clear it
+# once the wrapper is gone. When testpid cannot re-check the process the loop
+# never exits and "Waiting for $APP_LONG_NAME to exit" repeats forever, long
+# after the router has stopped.
+newtmp
+cat > "$TMPROOT/ps" <<'STUB'
+#!/bin/sh
+# Minimal ps stub for wrapper_running/testpid. Reports a process only for the
+# pid in WRAPPER_STUB_PID, and only when WRAPPER_STUB_ALIVE is 1. With
+# WRAPPER_STUB_OTHER set it reports a live process that is not the wrapper,
+# which is what a recycled pid looks like.
+target=""
+prev=""
+for arg in "$@"
+do
+    case "$prev" in
+        -p) target="$arg" ;;
+    esac
+    prev="$arg"
+done
+[ -n "$target" ] || exit 0
+[ "${WRAPPER_STUB_ALIVE:-1}" = "1" ] || exit 0
+[ "$target" = "${WRAPPER_STUB_PID:-}" ] || exit 0
+echo "COMMAND"
+if [ -n "${WRAPPER_STUB_OTHER:-}" ]
+then
+    echo "$target /usr/bin/some-other-daemon --worker"
+else
+    echo "$target /bin/sh $WRAPPER_CMD start"
+fi
+STUB
+chmod +x "$TMPROOT/ps"
+
+# $1 = wrapper pid to set, $2 = description. Prints $pid after testpid, then
+# whether the pid file survived. Each case runs in its own shell so our own
+# $pid and $PSEXE stay out of scope.
+run_testpid_case() {
+    cat > "$TMPROOT/runner.sh" <<RUNNER
+#!/bin/sh
+`sed -n '/^wrapper_running()/,/^}/p' "$TARGET"`
+`sed -n '/^testpid()/,/^}/p' "$TARGET"`
+PSEXE="$TMPROOT/ps"
+DIST_OS=linux
+WRAPPER_CMD="\$WRAPPER_CMD"
+WRAPPER_STUB_PID="\$WRAPPER_STUB_PID"
+WRAPPER_STUB_ALIVE="\$WRAPPER_STUB_ALIVE"
+WRAPPER_STUB_OTHER="\$WRAPPER_STUB_OTHER"
+export WRAPPER_CMD WRAPPER_STUB_PID WRAPPER_STUB_ALIVE WRAPPER_STUB_OTHER
+pid="$1"
+testpid
+if [ -f "\$PIDFILE" ]
+then
+    kept=pidfile-kept
+else
+    kept=pidfile-removed
+fi
+printf '%s|%s' "\${pid:-GONE}" "\$kept"
+RUNNER
+    PIDFILE="$TMPROOT/i2p.pid" WRAPPER_CMD="$TMPROOT/i2psvc" \
+    WRAPPER_STUB_PID="$2" WRAPPER_STUB_ALIVE="$3" WRAPPER_STUB_OTHER="$4" \
+        sh "$TMPROOT/runner.sh"
+}
+
+printf '4242' > "$TMPROOT/i2p.pid"
+assert_eq "4242|pidfile-kept" "`run_testpid_case 4242 4242 1 ''`" \
+    "testpid keeps a live wrapper"
+
+printf '4242' > "$TMPROOT/i2p.pid"
+assert_eq "GONE|pidfile-removed" "`run_testpid_case 4242 4242 0 ''`" \
+    "testpid clears the pid and removes the pid file once the wrapper exits"
+
+printf '4242' > "$TMPROOT/i2p.pid"
+assert_eq "GONE|pidfile-removed" "`run_testpid_case 4242 4242 1 other`" \
+    "testpid clears a pid that no longer belongs to the wrapper"
+
+printf '4242' > "$TMPROOT/i2p.pid"
+assert_eq "GONE|pidfile-removed" "`run_testpid_case '' 4242 1 ''`" \
+    "testpid with no pid is a no-op that still tidies the pid file"
+
+# The wait loop terminates on liveness alone; it must not depend on the pid file
+# surviving, because the wrapper removes that itself on the way out.
+loop_body=`sed -n '/^stopit()/,/^}/p' "$TARGET" | sed -n '/while \[ "X\$pid" != "X" \]/,/done/p'`
+if [ -n "$loop_body" ] && printf '%s\n' "$loop_body" | grep -q 'testpid'
+then
+    pass "stopit() wait loop re-checks the pid through testpid"
+else
+    fail "stopit() wait loop re-checks the pid through testpid"
+fi
+
+#---------------------------------------------------------------------------
 echo "-- obsolete platform code is gone --"
 #---------------------------------------------------------------------------
 for pattern in ia64 pa_risc parisc sparc isainfo KERNEL_BIT ip27 i386 i686 armel cpu64bit_capable hp-ux unix_sv "os/390" kfreebsd solaris sunos aix zos; do
