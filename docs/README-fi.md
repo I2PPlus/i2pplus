@@ -47,6 +47,9 @@ Kehityshaaran hakeminen lähdehallinnasta: https://github.com/I2PPlus/i2pplus
   pakettihallinnan kautta tai osoitteesta http://www.gnu.org/software/gettext/
 - Käännösympäristön on käytettävä UTF-8-kieliasetusta.
 - Debian-pakettien rakentamiseksi: `dpkg-deb`- ja `fakeroot`-paketit (pakettihallinnan kautta)
+- IzPack 5:n Windows-exe (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPackin `izpack2exe.py` on Python 3, mutta sen shebang ilmoittaa `python`, joten
+  build välittää tulkin eksplisiittisesti. Voit ohittaa sen asetuksella `izpack5.python`.
 
 ### Ant-käännösprosessi
 
@@ -61,13 +64,18 @@ Muissa kuin x86-järjestelmissä käytä sen sijaan jotain seuraavista:
     ant installer-osx
     ant installer-windows
 
-Jos haluat rakentaa IzPack5:llä, lataa osoitteesta: http://izpack.org/downloads/ ja asenna
-se sitten, ja aja sen jälkeen seuraava(t) komento(t):
+Jos haluat rakentaa IzPack5:llä, aja seuraavat komennot. Ne lataavat IzPack 5 -jakauman
+ensimmäisellä käyttökerralla hakemistoon `installer/lib/izpack/5/` (vaatii verkkoyhteyden
+ja ~95MB vapaata tilaa) ja pitävät sen automaattisesti ajan tasalla:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Voit hakea tai päivittää sen ilman installerin rakentamista:
+
+    ant download-izpack5
 
 Allekirjoittamattoman päivityksen rakentamiseksi olemassa olevalle asennukselle aja:
 

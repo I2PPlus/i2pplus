@@ -47,6 +47,9 @@ Ak chcete získať vývojovú vetvu zo systému na správu zdrojového kódu: ht
   prostredníctvom správcu balíkov alebo http://www.gnu.org/software/gettext/
 - Prostredie na zostavenie musí používať lokalitu UTF-8.
 - Pre zostavenie balíkov Debian: balíky `dpkg-deb` a `fakeroot` (prostredníctvom správcu balíkov)
+- Pre exe súbor IzPack 5 pre Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` od IzPacku je napísaný v jazyku Python 3, ale jeho shebang uvádza `python`,
+  preto zostavenie predáva interpret explicitne; možno ho prepísať pomocou `izpack5.python`.
 
 ### Proces zostavenia pomocou Ant
 
@@ -61,13 +64,18 @@ Na systémoch iných ako x86 použite namiesto toho jedno z nasledujúcich:
     ant installer-osx
     ant installer-windows
 
-Ak chcete zostaviť pomocou IzPack5, stiahnite ho z: http://izpack.org/downloads/ a potom
-ho nainštalujte a spustite nasledujúce príkaz(y):
+Ak chcete zostaviť pomocou IzPack5, spustite nasledujúce príkaz(y). Pri prvom použití
+si stiahnu distribúciu IzPack 5 do `installer/lib/izpack/5/` — čo vyžaduje prístup
+k sieti a ~95MB voľného miesta — a automaticky ju udržujú aktuálnu:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Ak ju chcete stiahnuť alebo aktualizovať bez zostavenia inštalátora:
+
+    ant download-izpack5
 
 Ak chcete zostaviť nepodpísanú aktualizáciu pre existujúcu inštaláciu, spustite:
 

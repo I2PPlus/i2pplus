@@ -49,6 +49,9 @@ Para obter o branch de desenvolvimento do controle de código fonte: https://git
   http://www.gnu.org/software/gettext/
 - O ambiente de compilação deve usar uma localização UTF-8.
 - Para compilação de pacotes Debian: pacotes `dpkg-deb` e `fakeroot` (através do seu gerenciador de pacotes)
+- Para o exe do IzPack 5 no Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` do IzPack é Python 3, mas seu shebang diz `python`, então a compilação
+  passa o interpretador explicitamente; sobrescreva com `izpack5.python`.
 
 ### Processo de compilação com Ant
 
@@ -63,13 +66,18 @@ Em sistemas não-x86, use uma das seguintes alternativas:
     ant installer-osx
     ant installer-windows
 
-Se você quiser compilar com IzPack5, baixe de: http://izpack.org/downloads/
-e então instale, e então execute o(s) seguinte(s) comando(s):
+Se você quiser compilar com IzPack5, execute o(s) seguinte(s) comando(s). Eles baixam a
+distribuição do IzPack 5 para `installer/lib/izpack/5/` no primeiro uso — o que exige
+acesso à rede e ~95MB de espaço livre — e a mantêm atualizada automaticamente:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Para obtê-la ou atualizá-la sem compilar um instalador:
+
+    ant download-izpack5
 
 Para compilar uma atualização não assinada para uma instalação existente, execute:
 

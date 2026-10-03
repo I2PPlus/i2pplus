@@ -48,6 +48,9 @@ Pentru a obține branch-ul de dezvoltare din controlul sursă: https://github.co
   http://www.gnu.org/software/gettext/
 - Mediul de build trebuie să folosească o locație UTF-8.
 - Pentru construirea pachetelor Debian: pachetele `dpkg-deb` și `fakeroot` (prin managerul de pachete)
+- Pentru exe-ul IzPack 5 pentru Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` al lui IzPack este Python 3, dar shebang-ul său spune `python`, așa că
+  build-ul transmite explicit interpretorul; poate fi înlocuit cu `izpack5.python`.
 
 ### Procesul de build Ant
 
@@ -62,13 +65,18 @@ Pe sistemele non-x86, folosiți una dintre următoarele în schimb:
     ant installer-osx
     ant installer-windows
 
-Dacă doriți să construiți cu IzPack5, descărcați de la: http://izpack.org/downloads/ și apoi
-instalați-l, apoi rulați următoarea(e) comandă(e):
+Dacă doriți să construiți cu IzPack5, rulați următoarea(e) comandă(e). Ele descarcă
+distribuția IzPack 5 în `installer/lib/izpack/5/` la prima utilizare — ceea ce necesită
+acces la rețea și ~95MB de spațiu liber — și îl actualizează automat:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Pentru a descărca sau actualiza IzPack5 fără a construi un installer:
+
+    ant download-izpack5
 
 Pentru a construi o actualizare nesemnată pentru o instalare existentă, rulați:
 

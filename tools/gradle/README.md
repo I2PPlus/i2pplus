@@ -38,18 +38,20 @@ built from a per-platform staging directory under `/tmp/build-i2p/pkg-installer/
 the payload is seeded from `prepUpdate` and then refined per platform (wrapper
 dirs, jbigi natives, scripts, Windows CRLF). All output goes to `dist/`.
 
-| Task                            | Description                                                        | Output                                   |
-| ------------------------------- | ------------------------------------------------------------------ | ---------------------------------------- |
-| `./gradlew installer`           | Full all-platform installer (Ant `installer`)                      | `dist/install.jar`                       |
-| `./gradlew installerexe`        | Wrap the full installer in a Windows exe (launch4j)                | `dist/i2pinstall.exe`                    |
-| `./gradlew installer-nowindows` | No-windows installer                                               | `dist/i2pinstall_<ver>.jar`              |
-| `./gradlew installer-linux`     | Linux-only installer                                               | `dist/i2pinstall_<ver>_linux-only.jar`   |
-| `./gradlew installer-freebsd`   | FreeBSD-only installer                                             | `dist/i2pinstall_<ver>_freebsd-only.jar` |
-| `./gradlew installer-osx`       | OSX-only installer                                                 | `dist/i2pinstall_<ver>_osx-only.jar`     |
-| `./gradlew installer2app`       | Wrap the OSX installer as a `.app` bundle                          | `dist/i2pinstall_<ver>_osx.tar.bz2`      |
-| `./gradlew installer-windows`   | Windows-only installer exe (skips the broken Ant move)             | `dist/i2pinstall_<ver>_windows.exe`      |
-| `./gradlew installer5*`         | Same family using IzPack 5 (requires `~/IzPack`)                   | (same names)                             |
-| `./gradlew installer-all`       | Build every platform installer                                     |                                          |
+| Task                            | Description                                                     | Output                                   |
+| ------------------------------- | --------------------------------------------------------------- | ---------------------------------------- |
+| `./gradlew installer`           | Full all-platform installer (Ant `installer`)                   | `dist/install.jar`                       |
+| `./gradlew installerexe`        | Wrap the full installer in a Windows exe (launch4j)             | `dist/i2pinstall.exe`                    |
+| `./gradlew installer-nowindows` | No-windows installer                                            | `dist/i2pinstall_<ver>.jar`              |
+| `./gradlew installer-linux`     | Linux-only installer                                            | `dist/i2pinstall_<ver>_linux-only.jar`   |
+| `./gradlew installer-freebsd`   | FreeBSD-only installer                                          | `dist/i2pinstall_<ver>_freebsd-only.jar` |
+| `./gradlew installer-osx`       | OSX-only installer                                              | `dist/i2pinstall_<ver>_osx-only.jar`     |
+| `./gradlew installer2app`       | Wrap the OSX installer as a `.app` bundle                       | `dist/i2pinstall_<ver>_osx.tar.bz2`      |
+| `./gradlew installer-windows`   | Windows-only installer exe (skips the broken Ant move)          | `dist/i2pinstall_<ver>_windows.exe`      |
+| `./gradlew installer5*`         | Same family using IzPack 5 (compiler auto-downloaded)          | (same names)                             |
+| `./gradlew installer5exe`       | Windows exe from the IzPack 5 jar (izpack2exe.py, not launch4j) | `dist/i2pinstall.exe`                    |
+| `./gradlew installer-all`       | Build every platform installer                                  |                                          |
+| `./gradlew downloadIzpack5`     | Download or update the IzPack 5 distribution                   |                                          |
 
 The `preppkg*` staging tasks (`preppkg`, `preppkg-nowindows`,
 `preppkg-linux-only`, `preppkg-freebsd-only`, `preppkg-osx-only`,
@@ -60,13 +62,23 @@ Prerequisites:
 
 - IzPack 4.3.5 standalone compiler jars ship in `installer/lib/izpack/4/`
   (vendored, so the Ant parity builds work out of the box)
-- IzPack 5 must be installed at `~/IzPack`; `installer5*` fails with an
-  Ant-style message otherwise (mirrors `build.xml`)
-- `installer2app` needs `~/IzPack/utils/wrappers/izpack2app/` and skips
-  silently if absent
-- `installerexe`/`installer-windows`/`installer5exe` run launch4j/izpack2exe
-  from the vendored jars in `installer/lib/launch4j/` on x86-family
-  Linux/Windows hosts only
+- IzPack 5 is downloaded on demand into `installer/lib/izpack/5/izpack` by
+  `installer/lib/izpack/5/download-izpack5.sh` (the `downloadIzpack5` task, which
+  every `installer5*` task depends on). It needs network access and ~95MB of
+  free space on the first run; the cache is gitignored and self-updating.
+- Per-host IzPack settings live in `installer/lib/izpack/5/izpack5.properties`
+  (gitignored, written by the download script) and are read ahead of
+  `-Dizpack5.home`. It can set `izpack5.home` (use an existing distribution) and
+  `izpack5.python` (interpreter for the wrapper scripts).
+- Python 3 is required by `installer5exe` and `installer2app`. The scripts'
+  `#!/usr/bin/env python` shebangs do not resolve where only `python3` is on
+  `PATH`, so the interpreter is passed explicitly and defaults to `python3`.
+- `installer2app` needs `utils/wrappers/izpack2app/` from that distribution and
+  skips silently if absent
+- `installerexe`/`installer-windows` run launch4j from the vendored jars in
+  `installer/lib/launch4j/`; `installer5exe` does **not** use launch4j, because
+  launch4j output cannot be Windows-signed. Both are x86-family Linux/Windows
+  hosts only.
 
 ### Individual module builds
 

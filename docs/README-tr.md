@@ -47,6 +47,10 @@ Geliştirme dalını kaynak kontrolünden almak için: https://github.com/I2PPlu
   http://www.gnu.org/software/gettext/
 - Derleme ortamı UTF-8 yerel ayarını kullanmalıdır.
 - Debian paketi derlemeleri için: `dpkg-deb` ve `fakeroot` paketleri (paket yöneticiniz aracılığıyla)
+- IzPack 5 Windows exe için (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPack'in `izpack2exe.py` dosyası Python 3 olmasına rağmen shebang satırı `python` diyor,
+  bu yüzden derleme yorumlayıcıyı açıkça belirtiyor; `izpack5.python` ile geçersiz
+  kılabilirsiniz.
 
 ### Ant Derleme Süreci
 
@@ -61,13 +65,18 @@ x86 dışı sistemlerde, bunun yerine aşağıdakilerden birini kullanın:
     ant installer-osx
     ant installer-windows
 
-IzPack5 ile derlemek istiyorsanız, şuradan indirin: http://izpack.org/downloads/
-ardından kurun ve ardından aşağıdaki komut(lar)ı çalıştırın:
+IzPack5 ile derlemek istiyorsanız, aşağıdaki komut(lar)ı çalıştırın. Bunlar ilk kullanımda
+IzPack 5 dağıtımını `installer/lib/izpack/5/` dizinine indirir — bunun için ağ erişimi ve
+~95MB boş alan gerekir — ve otomatik olarak güncel tutar:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Bir yükleyici oluşturmadan indirmek veya yenilemek için:
+
+    ant download-izpack5
 
 Mevcut bir kurulum için imzasız bir güncelleme oluşturmak için şunu çalıştırın:
 

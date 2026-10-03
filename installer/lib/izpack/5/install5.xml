@@ -23,51 +23,31 @@
   </guiprefs>
 
   <!--
-  Locales:
+    Locales: 2 or 3 character ISO language or country codes. IzPack matches them
+    against the JVM's locales at runtime, preferring country over language codes,
+    and that match is Java-version dependent (Java 8 reports 159 locales, Java 21
+    reports 1050), so a listed code can still be skipped with
+    "WARNING: No locale for: xx".
 
-  This is poorly documented, like a lot of things in izpack, but these can be 2 OR 3
-  character country OR language codes. Whatever it is, there must be xx.xml and xx.gif
-  files available at build time or the build will error out.
+    Each code needs both com/izforge/izpack/bin/langpacks/installer/<iso3>.xml and
+    .../flags/<iso3>.gif on the compiler classpath or the build fails. The
+    distribution supplies all of these except ind, por and zho, which come from
+    installer/lib/izpack/5/patches/resources and are staged onto the classpath by
+    the izpack5-patches target in build.xml.
 
-  At runtime, izpack loads all the JVM's locales and tries to find the "best match" locale
-  for the code. See izpack DefaultLocales.java. It then uses Locale.getDisplayLanguage() on
-  that best match to show the (translated) language name when langDisplayType=native, which
-  we set in guiprefs above.
-
-  From: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491613/Overriding+Built-in+Translations
-    "In IzPack, language packs are identified by a 3 character ISO country or language code.
-    Country codes are converted to lowercase. Country codes are used in preference to language codes.
-    This is to handle the case where a language variation is spoken for which there is no ISO language code."
-
-  This is wrong in that 2-character country and language codes are also allowed.
-
-  It is also wrong in that, unfortunately, country codes combined with "best match" can go very badly.
-  Izpack 4 used the language code "ind" for Indonesian, but Izpack 5 switched to use the country code "idn" instead.
-  This worked fine on Java 8, but on Java 21, the best match finds Javanese/Jawa for "idn", which is a completely
-  different language than Indonesian. See: https://old.reddit.com/r/i2p/comments/1e61lsp/wrong_country_name_indonesia_as_jawa/
-
-  Renamed or custom langpacks (xml + gif) must be checked in to installer/lib/izpack5/patches/resources and may then be added below,
-  and will be bundled with the installer.
-
-  Note that the JVM's installed locales varies widely by Java version. For example, as of 2024 on Ubuntu, Java 8 has 159 locales
-  and Java 21 has 1050. The selected locale may even depend on the ordering of locales returned by getAvailableLocales() in the JVM.
-
-  If no locale for any code is found, it outputs "WARNING: No locale for xx" which is annoying. Even worse, if no locale found, it doesn't
-  display the translation as an option. But that shouldn't stop us from including it if some JVMs have it.
+    Three codes the distribution does ship are deliberately unused: chn and bra
+    are legacy spellings of zho and por, and idn is the upstream typo for
+    Indonesia that Java resolves to Javanese - see
+    https://old.reddit.com/r/i2p/comments/1e61lsp/wrong_country_name_indonesia_as_jawa/
   -->
 
   <locale>
-    <langpack iso3="eng">
-      <str id="installer.reversetitle" txt="I2P+ Installation Wizard"/>
-    </langpack>
-    <langpack iso3="por"/>
+    <langpack iso3="eng"/>
     <langpack iso3="cat"/>
     <langpack iso3="ces"/>
-    <langpack iso3="zho"/>
     <langpack iso3="dan"/>
     <langpack iso3="deu"/>
     <langpack iso3="ell"/>
-    <!-- fa not found in older JVMs, may generate warning, see above -->
     <langpack iso3="fa"/>
     <langpack iso3="fin"/>
     <langpack iso3="fra"/>
@@ -80,6 +60,7 @@
     <langpack iso3="nld"/>
     <langpack iso3="nor"/>
     <langpack iso3="pol"/>
+    <langpack iso3="por"/>
     <langpack iso3="prt"/>
     <langpack iso3="ron"/>
     <langpack iso3="rus"/>
@@ -90,97 +71,107 @@
     <langpack iso3="tur"/>
     <langpack iso3="twn"/>
     <langpack iso3="ukr"/>
-    <!--
-        At runtime, if the JVM does not have a locale:
-        "WARNING: No locale for:"
-        <langpack iso3="eus"/>    Basque
-        <langpack iso3="glg"/>    Galician
-    -->
+    <langpack iso3="zho"/>
+    <!-- Basque and Galician: shipped by the distribution, but no JVM ships
+         these locales, so listing them only produces a warning. -->
+    <!-- <langpack iso3="eus"/> -->
+    <!-- <langpack iso3="glg"/> -->
   </locale>
 
-  <!-- defaults to these files when no explicitly referenced -->
+  <!-- Resolved from the compiler classpath unless a panel references a resource
+       explicitly. Needed by ShortcutPanel, RegistryInstallerListener and the
+       language selector. -->
   <natives>
     <native type="izpack" name="ShellLink.dll"/>
-    <native type="izpack" name="ShellLink_x64.dll"/> <!-- https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491532/Advanced+Features -->
+    <native type="izpack" name="ShellLink_x64.dll"/>
     <native type="izpack" name="WinSetupAPI.dll"/>
-    <native type="izpack" name="WinSetupAPI_x64.dll"/> <!-- https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491676/RegistryInstallerListener+RegistryUninstallerListener -->
+    <native type="izpack" name="WinSetupAPI_x64.dll"/>
     <native type="3rdparty" name="COIOSHelper.dll"/>
     <native type="3rdparty" name="COIOSHelper_x64.dll"/>
   </natives>
 
+  <!--
+    Panel content resources are named <PanelClass>.<suffix>, or <PanelClass>.<id>
+    when the panel carries an id - see PanelHelper.getPanelSpecificKey(). The
+    compiler validates CustomLangPack.xml*, shortcutSpec.xml and customicons.xml
+    at build time.
+    The native URLs are documented at
+    https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491532/Advanced+Features
+    and https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491676/RegistryInstallerListener+RegistryUninstallerListener
+  -->
   <resources>
     <res id="installer.langsel.img" src="installer/lib/izpack/resources/images/i2plogo2.png"/>
     <res id="Installer.image" src="installer/lib/izpack/resources/images/i2plogo.png"/>
-    <res id="HTMLHelloPanel.info" src="installer/resources/welcome.html"/>
-    <res id="shortcutSpec.xml" src="installer/lib/izpack/resources/shortcutSpec.xml"/>
+    <res id="HTMLHelloPanel.info" src="installer/lib/izpack/resources/welcome.html"/>
     <res id="XInfoPanel.info" src="installer/lib/izpack/resources/start-i2p.txt"/>
     <res id="HTMLInfoPanel.winservice" src="installer/resources/platform-specific/windows/windows_service_help.html"/>
-    <res id="CustomLangPack.xml_eng" src="installer/resources/CustomLangPack.xml_eng"/>
+    <res id="shortcutSpec.xml" src="installer/lib/izpack/resources/shortcutSpec.xml"/>
+    <res id="CustomLangPack.xml_eng" src="installer/lib/izpack/resources/CustomLangPack.xml_eng"/>
+    <!-- Window icon. customicons.xml refers to console.png by its jar path
+         (/resources/console.png), so both have to be bundled. -->
+    <res id="customicons.xml" src="installer/lib/izpack/5/customicons.xml"/>
+    <res id="console.png" src="installer/lib/izpack/resources/images/console.png"/>
   </resources>
+
   <variables>
     <!-- desktop shortcuts enabled by default in ShortcutPanel -->
     <variable name="DesktopShortcutCheckboxEnabled" value="true"/>
   </variables>
+
   <conditions>
     <condition type="contains" id="is64bit">
       <string>${SYSTEM[sun.arch.data.model]}</string>
       <value>64</value>
     </condition>
   </conditions>
-  <!--
-    Explicit error dialog on 32-bit Windows; only 64-bit is supported.
-    NOTE: element placement/syntax must be re-verified when building with izpack5.
-  -->
+
+  <!-- 32-bit Windows is unsupported; the message shows as an error dialog. -->
   <installerrequirements>
     <installerrequirement condition="is64bit|!izpack.windowsinstall" message="I2P+ requires 64-bit Windows and a 64-bit Java runtime. This computer is running a 32-bit configuration, which is no longer supported. Installation will now exit."/>
   </installerrequirements>
-  <!-- XInfoConsolePanel -->
-  <jar src="installer/lib/izpack5/patches/java/build/izpack-i2p.jar"/>
+
   <panels>
     <panel classname="HTMLHelloPanel"/>
     <panel classname="TargetPanel"/>
-    <!-- In 5.1.2, PacksPanel will NPE at install time if before TargetPanel -->
+    <!-- Order matters from here on. PacksPanel NPEs at install time if it
+         precedes TargetPanel. -->
     <panel classname="PacksPanel">
       <os family="windows"/>
     </panel>
     <panel classname="InstallPanel"/>
-    <!-- In 5.1.2, ShortcutPanel must be after InstallPanel, so the .ico files will be there,
-         unless <lateShortcutInstall/> is set in shorcutSpec.xml.
-         If you don't do this right, the shortcuts won't have our icons.
-    -->
+    <!-- ShortcutPanel must follow InstallPanel so the .ico files exist, unless
+         shortcutSpec.xml sets lateShortcutInstall. -->
     <panel classname="ShortcutPanel">
       <os family="windows"/>
     </panel>
-    <!--
-         Using the condition this way, the panel is shown on everything *but* Windows.
-         Fails in console mode: Installer says:
-           No console mode helper found for class com.izforge.izpack.panels.xinfo.XInfoPanel, panel type will be skipped in console mode installation
-           No automation helper found for class com.izforge.izpack.panels.xinfo.XInfoPanel, panel type will be skipped in automated installation
-         But isn't actually skipped when installing with -console:
-           SEVERE: com.izforge.izpack.api.exception.IzPackException: Console implementation not found for panel: com.izforge.izpack.panels.xinfo.XInfoPanel
-    -->
+    <!-- Both info panels are condition-gated rather than os-gated: XInfoPanel is
+         skipped entirely under -console without a console helper, so it cannot
+         carry an <os> restriction. -->
     <panel classname="XInfoPanel" condition="!izpack.windowsinstall"/>
     <panel classname="HTMLInfoPanel" id="winservice" condition="izpack.windowsinstall"/>
     <panel classname="SimpleFinishPanel"/>
   </panels>
+
   <packs>
     <pack name="Base" required="yes">
       <description>Base installation files</description>
       <!-- non-jars -->
       <fileset dir="pkg-temp" excludes="**/*.jar" targetdir="$INSTALL_PATH"/>
-      <!-- pack200 jars -->
-      <fileset dir="pkg-temp" includes="**/*.jar"
+      <!-- jars, split by whether -pre-pack200 was able to rewrite them -->
+      <fileset dir="pkg-temp"
+        includes="**/*.jar"
         excludes="lib/commons-logging.jar lib/jasper-compiler.jar lib/jetty-java5-threadpool.jar lib/jetty-sslengine.jar lib/jbigi.jar"
-        targetdir="$INSTALL_PATH">
-      </fileset>
-      <!-- non-pack200 jars -->
+        targetdir="$INSTALL_PATH"/>
       <fileset dir="pkg-temp"
         includes="lib/commons-logging.jar lib/jasper-compiler.jar lib/jetty-java5-threadpool.jar lib/jetty-sslengine.jar lib/jbigi.jar"
-        targetdir="$INSTALL_PATH"></fileset>
+        targetdir="$INSTALL_PATH"/>
       <!--
-          Do variable substitution in these files. See:
-          http://www.javalobby.org/forums/thread.jspa?threadID=15967&tstart=0
-          and the izpack docs for some guidance.
+        Variable substitution on the staged scripts and wrapper.config, which
+        still hold the payload's placeholders at this point.
+
+        type="shell" changes the placeholder prefix from $ to % so that a script's
+        own $VARIABLEs are left alone - unix/i2prouter alone has 473 of them.
+        wrapper.config uses the default $ prefix, hence type="plain".
       -->
       <parsable targetfile="$INSTALL_PATH/wrapper.config" type="plain"/>
       <parsable targetfile="$INSTALL_PATH/i2prouter" type="shell">
@@ -207,11 +198,10 @@
       <parsable targetfile="$INSTALL_PATH/Start I2P Router.app/Contents/MacOS/i2prouter" type="shell">
         <os family="mac"/>
       </parsable>
-      <!-- postinstall stuff for windows (64-bit only) -->
       <!--
-        Copy the wrapper to the install root. I2Psvc.exe is our
-        cross-compiled 64-bit wrapper (see
-        installer/lib/wrapper/build-wrapper-win64.sh).
+        Windows postinstall, all 64-bit only. Copy I2Psvc.exe (the cross-compiled
+        Tanuki service wrapper, see installer/lib/wrapper/build-wrapper-win64.sh)
+        to the install root, where service.ps1 expects it.
       -->
       <executable targetfile="$INSTALL_PATH/utility.jar"
         type="jar"
@@ -307,8 +297,7 @@
           <arg value="$INSTALL_PATH/utility.jar"/>
         </args>
       </executable>
-      <!-- postinstall stuff for *nix -->
-      <!-- stage=never means chmod a+x -->
+      <!-- *nix postinstall. stage="never" only marks the script executable. -->
       <executable targetfile="$INSTALL_PATH/postinstall.sh" type="bin" stage="never" keep="true" failure="warn">
         <os family="unix"/>
       </executable>

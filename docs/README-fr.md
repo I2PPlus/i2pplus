@@ -48,6 +48,9 @@ Pour obtenir la branche de développement depuis le contrôle de code source : h
   http://www.gnu.org/software/gettext/
 - L'environnement de construction doit utiliser une locale UTF-8.
 - Pour les constructions de paquets Debian : paquets `dpkg-deb` et `fakeroot` (via votre gestionnaire de paquets)
+- Pour l'exe Windows d'IzPack 5 (`ant installer5`, `ant installer5-windows`) : Python 3.
+  Le `izpack2exe.py` d'IzPack est écrit en Python 3 mais son shebang indique `python`, donc
+  la construction passe explicitement l'interpréteur ; remplacez-le avec `izpack5.python`.
 
 ### Processus de construction avec Ant
 
@@ -62,13 +65,19 @@ Sur les systèmes non-x86, utilisez l'une des alternatives suivantes :
     ant installer-osx
     ant installer-windows
 
-Si vous voulez construire avec IzPack5, téléchargez depuis : http://izpack.org/downloads/
-puis installez-le, puis exécutez la ou les commandes suivantes :
+Si vous voulez construire avec IzPack5, exécutez la ou les commandes suivantes. Elles
+téléchargent la distribution IzPack 5 dans `installer/lib/izpack/5/` lors de la première
+utilisation — ce qui nécessite un accès réseau et ~95MB d'espace libre — et la
+maintiennent à jour automatiquement :
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Pour la récupérer ou la mettre à jour sans construire d'installateur :
+
+    ant download-izpack5
 
 Pour construire une mise à jour non signée pour une installation existante, exécutez :
 

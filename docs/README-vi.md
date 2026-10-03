@@ -48,6 +48,9 @@ Vui lòng xem [HACKING.md](docs/HACKING.md) và các tài liệu khác trong th�
   http://www.gnu.org/software/gettext/
 - Môi trường build phải sử dụng UTF-8 locale.
 - Cho việc đóng gói Debian: các gói `dpkg-deb` và `fakeroot` (qua trình quản lý gói của bạn)
+- Đối với exe Windows của IzPack 5 (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` của IzPack là Python 3 nhưng dòng shebang của nó lại ghi `python`, nên
+  build truyền interpreter một cách tường minh; có thể ghi đè bằng `izpack5.python`.
 
 ### Quá trình build Ant
 
@@ -62,12 +65,16 @@ Trên hệ không phải x86, sử dụng một trong các lệnh sau:
     ant installer-osx
     ant installer-windows
 
-Nếu bạn muốn build với IzPack5, tải về từ: http://izpack.org/downloads/ rồi cài đặt, sau đó chạy các lệnh sau:
+Nếu bạn muốn build với IzPack5, hãy chạy các lệnh sau. Chúng sẽ tải bản phân phối IzPack 5 vào `installer/lib/izpack/5/` ở lần sử dụng đầu tiên — việc này cần truy cập mạng và ~95MB dung lượng trống — và tự động giữ cho nó luôn cập nhật:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Để tải hoặc làm mới nó mà không cần build installer:
+
+    ant download-izpack5
 
 Để build một bản cập nhật chưa được ký cho cài đặt hiện tại, chạy:
 

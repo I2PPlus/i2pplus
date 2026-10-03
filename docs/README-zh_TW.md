@@ -46,6 +46,9 @@ API：https://i2pplus.github.io/javadoc/
 - 透過套件管理員或http://www.gnu.org/software/gettext/安裝GNU gettext套件中的xgettext、msgfmt與msgmerge工具
 - 建置環境必須使用UTF-8語系。
 - 若要建置Debian套件：需要`dpkg-deb`與`fakeroot`套件（透過套件管理員安裝）
+- 若要建置IzPack 5的Windows exe（`ant installer5`、`ant installer5-windows`）：需要Python 3。
+  IzPack的`izpack2exe.py`是Python 3程式，但其shebang指定的是`python`，
+  因此建置時會明確指定該直譯器；可用`izpack5.python`覆寫。
 
 ### Ant建置流程
 
@@ -60,12 +63,17 @@ API：https://i2pplus.github.io/javadoc/
     ant installer-osx
     ant installer-windows
 
-若要以IzPack5建置，請先從http://izpack.org/downloads/下載並安裝，然後執行以下其中一項指令：
+若要以IzPack5建置，請執行以下其中一項指令。這些指令會在第一次使用時將IzPack 5發行套件
+下載至`installer/lib/izpack/5/`（需要網路連線與~95MB可用空間），並自動保持最新：
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+若要在不建置安裝程式的情況下取得或更新：
+
+    ant download-izpack5
 
 若要為現有安裝建立未簽章的更新檔，請執行：
 

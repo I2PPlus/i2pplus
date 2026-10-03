@@ -47,6 +47,9 @@ För att hämta utvecklingsgrenen från versionshanteringen: https://github.com/
   via din pakethanterare eller http://www.gnu.org/software/gettext/
 - Byggmiljön måste använda en UTF-8-lokal.
 - För Debian-paketbyggen: paketen `dpkg-deb` och `fakeroot` (via din pakethanterare)
+- För IzPack 5:s Windows-exe (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPack `izpack2exe.py` är skriven i Python 3 men dess shebang anger `python`, så bygget
+  skickar tolken explicit; du kan åsätta den med `izpack5.python`.
 
 ### Ant-byggprocess
 
@@ -61,13 +64,18 @@ På icke-x86, använd i stället ett av följande:
     ant installer-osx
     ant installer-windows
 
-Om du vill bygga med IzPack5, ladda ner från: http://izpack.org/downloads/ och
-installera det sedan, och kör därefter följande kommando:
+Om du vill bygga med IzPack5, kör följande kommandon. De laddar ner distributionen
+av IzPack 5 till `installer/lib/izpack/5/` vid första användningen — vilket kräver
+nätverksåtkomst och ~95MB ledigt utrymme — och håller den automatiskt uppdaterad:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+För att hämta eller uppdatera den utan att bygga ett installationsprogram:
+
+    ant download-izpack5
 
 För att bygga en osignerad uppdatering för en befintlig installation, kör:
 

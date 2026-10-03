@@ -48,6 +48,9 @@ Per ottenere il branch di sviluppo dal controllo sorgente: https://github.com/I2
   http://www.gnu.org/software/gettext/
 - L'ambiente di build deve usare una locale UTF-8.
 - Per build di pacchetti Debian: pacchetti `dpkg-deb` e `fakeroot` (tramite il gestore pacchetti)
+- Per l'exe Windows di IzPack 5 (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` di IzPack è in Python 3 ma il suo shebang indica `python`, quindi la build
+  passa esplicitamente l'interprete; per sovrascriverlo usare `izpack5.python`.
 
 ### Processo di build Ant
 
@@ -62,13 +65,18 @@ Sui non-x86, usa uno dei seguenti:
     ant installer-osx
     ant installer-windows
 
-Se vuoi buildare con IzPack5, scarica da: http://izpack.org/downloads/ e poi
-installalo, poi esegui i seguenti comandi:
+Se vuoi buildare con IzPack5, esegui i seguenti comandi. Scaricano la distribuzione
+IzPack 5 in `installer/lib/izpack/5/` al primo utilizzo — operazione che richiede accesso
+alla rete e ~95MB di spazio libero — e la mantengono aggiornata automaticamente:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Per scaricare o aggiornare IzPack5 senza buildare un installer:
+
+    ant download-izpack5
 
 Per buildare un update non firmato per un'installazione esistente, esegui:
 

@@ -48,7 +48,14 @@
   <!--
          Include property files so that values can be easily overridden.
          Users should create an override.properties file to make changes.
+
+         installer/lib/izpack/5/izpack5.properties holds machine-local IzPack 5
+         settings and is written by installer/lib/izpack/5/download-izpack5.sh. It
+         is loaded first so it wins over override.properties, which keeps per-host
+         paths out of git. Ant ignores a missing <property file>, so builds before
+         the first installer5 run are unaffected.
     -->
+  <property file="installer/lib/izpack/5/izpack5.properties"/>
   <property file="override.properties"/>
   <property file="build.properties"/>
   <!--
@@ -106,6 +113,7 @@
     <echo message="  installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;.jar"/>
     <echo message="  installer-osx                                Build OS X GUI installer &#10140; ./dist/i2pinstall&#8230;osx.tar.bz2"/>
     <echo message="  installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;windows.exe"/>
+    <echo message="  download-izpack5                             Download or update the IzPack 5 compiler into ./installer/lib/izpack/5/"/>
     <echo message="  jpackage-win                                 Build native Windows64 installer bundle via jpackage (JDK 14+) &#10140; ./dist/i2pinstaller&#8230;.exe"/>
     <echo message="  7zip-freebsd                                 Installation 7zip for FreeBSD without installer &#10140; ./dist/i2p-freebsd.7z"/>
     <echo message="  7zip-linux                                   Installation 7zip for Linux without installer &#10140; ./dist/i2p-linux.7z"/>
@@ -1598,6 +1606,13 @@
        .po it came from, i.e. the bundler took its cached path. -->
   <target name="reportTranslations" depends="prep-script-translation"
           description="Report whether the translation catalogs are compiled or reused">
+    <!-- Compact dev updaters (prepcompactNoBundle) set no.bundle, which skips
+         prep-script-translation entirely, so the catalog count is legitimately 0.
+         Distinguish that from the real failure mode before reporting: a count of 0
+         with no.bundle set means "translations intentionally omitted", and saying
+         "gettext is missing" there is simply false and sends the reader hunting for
+         a toolchain problem that does not exist. Only a count of 0 *without*
+         no.bundle means the bundler ran and produced nothing. -->
     <resourcecount property="tx.mo.count">
       <fileset dir="${build.root}installer/resources/locale/build/mo" includes="**/*.mo" erroronmissingdir="false"/>
     </resourcecount>
@@ -1608,8 +1623,13 @@
     <condition property="tx.mo.state" value="already compiled" else="compiled this run">
       <isset property="tx.mo.fresh"/>
     </condition>
+    <!-- Set first: Ant properties are write-once, so when no.bundle is set this
+         wins and the count condition below cannot overwrite it. -->
+    <condition property="tx.mo.summary" value="Translations: omitted (no.bundle set - compact build).">
+      <isset property="no.bundle"/>
+    </condition>
     <condition property="tx.mo.summary"
-               value="WARNING: no translation catalogs were produced - gettext is missing, or no.bundle is set"
+               value="WARNING: no translation catalogs were produced in ${build.root}installer/resources/locale/build/mo despite require.gettext=${require.gettext}"
                else="Translations: ${tx.mo.count} catalogs, ${tx.mo.state}.">
       <equals arg1="${tx.mo.count}" arg2="0"/>
     </condition>
@@ -2059,7 +2079,7 @@
       </delete>
       <delete dir="./reports" quiet="true"/>
       <delete file="installer/lib/izpack/4/patches.jar" failonerror="false" quiet="true"/>
-      <delete dir="installer/lib/izpack/5/patches/java/build" quiet="true"/>
+      <delete dir="installer/lib/izpack/5/exe-work" quiet="true"/>
       <delete file="syndie-standalone.zip" failonerror="false" quiet="true"/>
       <delete file="dist/i2psnark-standalone.zip" failonerror="false" quiet="true"/>
       <delete file="core/java/cobertura.ser" quiet="true"/>
@@ -2128,7 +2148,7 @@
       <delete dir="core/c/jbigi/bin" quiet="true"/>
       <delete dir="core/c/jbigi/lib" quiet="true"/>
       <delete dir="core/c/jcpuid/lib" quiet="true"/>
-      <delete dir="installer/lib/izpack/5/patches/java/build" quiet="true"/>
+      <delete dir="installer/lib/izpack/5/exe-work" quiet="true"/>
       <delete dir="installer/lib/wrapper/build-temp" quiet="true"/>
       <delete dir="installer/bin" quiet="true"/>
       <!-- Stale module-level build dirs from old build system / manual ant runs -->
@@ -3500,33 +3520,62 @@
   </target>
 
   <!-- IzPack 5 -->
+  <!-- Fetches the IzPack 5 distribution into installer/lib/izpack/5/. Separate
+       target so it can also be run on its own (ant download-izpack5) and called
+       by an antcall, which is how ensureIzpack5 invokes it. -->
+  <target name="download-izpack5">
+    <exec executable="installer/lib/izpack/5/download-izpack5.sh" failonerror="true"/>
+  </target>
+
   <target name="ensureIzpack5">
-    <!-- Set if unset -->
-    <property name="izpack5.home" value="${user.home}/IzPack"/>
-    <condition property="izpack5.available">
-      <available file="${izpack5.home}" type="dir"/>
+    <!-- Set if unset. override.properties is read at parse time, so an
+         izpack5.home set there is already visible here: remember that before
+         defaulting, so a hand-installed distribution stays authoritative and is
+         not silently replaced by the downloaded copy. -->
+    <condition property="izpack5.home.preset">
+      <isset property="izpack5.home"/>
     </condition>
-    <fail message="Error - IzPack 5.1.x must be installed at ${izpack5.home}, or set izpack5.home=/PATH/TO/IzPack in override.properties, or download from http://izpack.org/downloads/ and install">
+    <property name="izpack5.home" value="${basedir}/installer/lib/izpack/5/izpack"/>
+    <if>
+      <isset property="izpack5.home.preset"/>
+      <then>
+        <echo message="Using the IzPack 5 distribution configured at ${izpack5.home} (izpack5.home is set, not downloading)."/>
+      </then>
+      <else>
+        <antcall target="download-izpack5"/>
+      </else>
+    </if>
+    <condition property="izpack5.available">
+      <available file="${izpack5.home}/lib" type="dir"/>
+    </condition>
+    <fail message="Error - IzPack 5 must be present at ${izpack5.home} (lib/ not found), or set izpack5.home=/PATH/TO/IzPack in override.properties to use an existing installation, or run installer/lib/izpack/5/download-izpack5.sh to fetch it">
       <condition>
         <not>
           <isset property="izpack5.available"/>
         </not>
       </condition>
     </fail>
+    <echo message="IzPack 5 home: ${izpack5.home}"/>
     <path id="izpack5.lib.path">
       <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
     </path>
     <taskdef name="izpack5"
       classpathref="izpack5.lib.path"
       classname="com.izforge.izpack.ant.IzPackTask"/>
+    <!-- Scratch dir for izpack2exe.py's intermediate installer.7z and config.txt.
+         Kept under 5/ (and gitignored) so the wrapper never writes to the repo
+         root. install5exe deletes the contents before each run. -->
+    <property name="izpack5.exe.work" location="${basedir}/installer/lib/izpack/5/exe-work"/>
   </target>
 
   <target name="izpack5-patches" depends="ensureIzpack5, buildProperties">
-    <ant dir="installer/lib/izpack/5/patches/java/" target="jar"/>
     <!-- custom langpacks
          Izpack tries to load the resource both from the classpath and the file system;
          we do it this way because jaring them up and adding a pathelement to izpack5.lib.path doesn't work.
          See installer/lib/izpack/5/install5.xml for details.
+         This used to also build patches/java/izpack-i2p.jar for an XInfoConsolePanel
+         that IzPack no longer needs: 5.1.3 and later ship XInfoConsolePanel
+         themselves, so there are no Java patches to compile.
      -->
     <mkdir dir="com/izforge/izpack/bin/langpacks/"/>
     <copy quiet="true" verbose="false" toDir="com/izforge/izpack/bin/langpacks/">
@@ -3583,49 +3632,114 @@
   </target>
 
   <!-- This makes i2pinstall.exe from install.jar using IzPack5's izpack2exe.py (not bundled)
-         izpack2exe-created files CAN be Windows-signed.
+         izpack2exe-created files CAN be Windows-signable, unlike launch4j output.
+
+       Prerequisites and paths for the wrapper, resolved once here so a missing
+       piece fails with an actionable message instead of a bare exec error.
     -->
   <target name="check-installer5exe">
     <uptodate property="installer5exe.uptodate" targetfile="dist/i2pinstall.exe">
       <srcfiles file="dist/install.jar"/>
     </uptodate>
   </target>
-  <target name="installer5exe" depends="check-installer5exe" unless="noExe">
+
+  <!--
+    Resolves the Python 3 interpreter used for IzPack's wrapper scripts.
+    Both izpack2exe.py and izpack2app.py are Python 3 but are invoked by bare
+    name here: their shebangs say "#!/usr/bin/env python", which does not resolve
+    where the only python on PATH is python3 (pyenv shims, distro images without
+    python-is-python3). Override izpack5.python in
+    installer/lib/izpack/5/izpack5.properties or override.properties if it is
+    somewhere unusual.
+
+    <exec failonerror="false"> still aborts when the binary is missing, so the
+    probe goes through /bin/sh, which these targets already assume exists.
+  -->
+  <target name="ensurePython3">
+    <property name="izpack5.python" value="python3"/>
+    <exec executable="/bin/sh" outputproperty="izpack5.python.path" failonerror="false">
+      <arg value="-c"/>
+      <arg value="command -v &quot;${izpack5.python}&quot; || true"/>
+    </exec>
+    <condition property="izpack5.python.found">
+      <not><equals arg1="${izpack5.python.path}" arg2=""/></not>
+    </condition>
+    <fail message="Error - ${izpack5.python} not found on PATH, needed for IzPack's izpack2exe.py and izpack2app.py wrappers. Set izpack5.python=/path/to/python in installer/lib/izpack/5/izpack5.properties. The scripts are Python 3.">
+      <condition><not><isset property="izpack5.python.found"/></not></condition>
+    </fail>
+  </target>
+
+  <target name="ensureIzpack5exe" depends="ensureIzpack5">
+    <property name="izpack5.exe.script" value="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py"/>
+    <property name="izpack5.exe.7za" value="${izpack5.home}/utils/wrappers/izpack2exe/7za"/>
+
+    <condition property="izpack5.exe.present">
+      <and>
+        <available file="${izpack5.exe.script}"/>
+        <available file="${izpack5.exe.7za}"/>
+        <available file="${izpack5.home}/utils/wrappers/izpack2exe/7zS.sfx"/>
+      </and>
+    </condition>
+    <fail message="Error - ${izpack5.home}/utils/wrappers/izpack2exe is incomplete. The wrapper needs izpack2exe.py, 7za and 7zS.sfx; run installer/lib/izpack/5/download-izpack5.sh --force to reinstall the distribution">
+      <condition><not><isset property="izpack5.exe.present"/></not></condition>
+    </fail>
+  </target>
+
+  <target name="installer5exe" depends="check-installer5exe, ensureIzpack5exe, ensurePython3" unless="noExe">
     <if>
       <isset property="installer5exe.uptodate"/>
       <then>
         <echo>dist/i2pinstall.exe already up to date, skipping rebuild...</echo>
       </then>
       <else>
-        <!-- You must have the optional IzPack utils installed for this -->
-        <!-- izpack doesn't come with +x permission when installed -->
-    <chmod type="file" file="${izpack5.home}/utils/wrappers/izpack2exe/7za" perm="+x"/>
-    <chmod type="file" file="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" perm="+x"/>
-    <!--
-       Note that we must specify the 7za path to use the one from IzPack, which is very old.
-       Either 7zr (from Debian package p7zip) or 7za (from Debian package p7zip-full)
-       will work, but ONLY if the 7za/7zr command line is changed in izpack2exe.py
-       as follows, because their default is LZMA2, which dosn't work on Windows.
+        <!--
+          Use IzPack's own 7za rather than a system 7zr, for two reasons:
 
-       So we don't want any Debian 7za picked up in the PATH.
-       See /usr/share/doc/p7zip/DOC/MANUAL/cmdline/switches/method.htm
-       old: p7zcmd = '"%s" a -mmt -t7z -mx=9 installer.7z "%s"' % (p7z, files)
-       new: p7zcmd = '"%s" a -mmt -t7z -mx=9 -m0=LZMA installer.7z "%s"' % (p7z, files)
+            - The wrapper resolves 7zS.sfx as os.path.dirname(p7z), so it only
+              finds IzPack's customized 7zS.sfx (which carries the wrapper's icon)
+              when p7z is the bundled 7za sitting beside it. Handing it /usr/bin/7zr
+              makes it look for /usr/bin/7zS.sfx, which does not exist.
 
-       We also use IzPack's customized 7zS.sfx file, which uses a customized icon (but not our icon, sadly)
-       More info: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491541/IzPack+Utilities
-    -->
+            - The bundled pair is self-consistent and both are from 2009: 7za is
+              p7zip 4.65 and 7zS.sfx reports FileVersion 4.64. LZMA2 did not exist
+              yet, so 7za defaults to plain LZMA (and rejects -m0=LZMA2 with
+              E_INVALIDARG) and the stub can decode it. A modern p7zip defaults to
+              LZMA2, which that stub has no decoder for, so the exe would fail to
+              unpack on any Windows version. This is a toolchain pairing problem,
+              not an OS support one - I2P+ needs Windows 10 or 11 anyway.
+              Verified: bundled 7za reports "Method = LZMA", /usr/bin/7zr reports
+              "Method = LZMA2:18".
 
-    <exec executable="${izpack5.home}/utils/wrappers/izpack2exe/izpack2exe.py" failonerror="true">
-      <arg value="--file=${basedir}/install.jar"/>
-      <!-- <arg value="-\-with-7z=${izpack5.home}/utils/wrappers/izpack2exe/7za"/> -->
-      <arg value="--with-7z=/usr/bin/7zr"/>
-      <arg value="--no-upx"/>
-      <arg value="--output=${basedir}/dist/i2pinstall.exe"/>
-    </exec>
-    <antcall target="sha256sum">
-      <param name="sha256.file" value="dist/i2pinstall.exe"/>
-    </antcall>
+          More info: https://izpack.atlassian.net/wiki/spaces/IZPACK/pages/491541/IzPack+Utilities
+        -->
+
+        <!-- izpack doesn't ship these with +x permission -->
+        <chmod type="file" file="${izpack5.exe.7za}" perm="+x"/>
+        <chmod type="file" file="${izpack5.exe.script}" perm="+x"/>
+
+        <!--
+          The wrapper writes installer.7z and config.txt into the current working
+          directory and reads them back by relative name, so it has to run in a
+          scratch dir rather than the repo root - otherwise it litters the
+          workspace and, worse, deletes any installer.7z it finds there.
+        -->
+        <mkdir dir="${izpack5.exe.work}"/>
+        <delete quiet="true">
+          <fileset dir="${izpack5.exe.work}" includes="installer.7z config.txt"/>
+        </delete>
+        <!-- don't leave a truncated exe behind for check-installer5exe to trust -->
+        <delete file="${basedir}/dist/i2pinstall.exe" quiet="true"/>
+
+        <exec executable="${izpack5.python}" dir="${izpack5.exe.work}" failonerror="true">
+          <arg path="${izpack5.exe.script}"/>
+          <arg value="--file=${basedir}/dist/install.jar"/>
+          <arg value="--with-7z=${izpack5.exe.7za}"/>
+          <arg value="--no-upx"/>
+          <arg value="--output=${basedir}/dist/i2pinstall.exe"/>
+        </exec>
+        <antcall target="sha256sum">
+          <param name="sha256.file" value="dist/i2pinstall.exe"/>
+        </antcall>
       </else>
     </if>
   </target>
@@ -3677,20 +3791,25 @@
   </target>
 
   <target name="checkForIzpack2App">
-    <!-- we'll set the izpack2app binary name if it's not been set elsewhere yet -->
-    <property name="izpack2app.binary" value="${user.home}/IzPack/utils/wrappers/izpack2app/izpack2app.py"/>
-    <available property="izpack2app.available" file="${izpack2app.binary}"/>
+    <!-- izpack2app.py ships with the IzPack 5 distribution, so look in the cache
+         download-izpack5.sh maintains. Falls back to a hand-installed copy.
+         Optional: installer2app is skipped when it is absent. -->
+    <property name="izpack2app.binary"
+      value="${basedir}/installer/lib/izpack/5/izpack/utils/wrappers/izpack2app/izpack2app.py"/>
+    <condition property="izpack2app.available">
+      <available file="${izpack2app.binary}"/>
+    </condition>
   </target>
 
-  <target name="installer2app" if="izpack2app.available">
+  <target name="installer2app" depends="checkForIzpack2App, ensurePython3" if="izpack2app.available">
     <mkdir dir="${pkg.temp.dir}/osx"/>
-    <exec executable="python" failonerror="true">
-      <arg value="${izpack2app.binary}"/>
-      <arg value="${basedir}/i2pinstall_${full.version}_osx-only.jar"/>
+    <exec executable="${izpack5.python}" failonerror="true">
+      <arg path="${izpack2app.binary}"/>
+      <arg value="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar"/>
       <arg value="${pkg.temp.dir}/osx/i2p-${full.version}_osx-install.app"/>
     </exec>
 
-    <tar longfile="gnu" destfile="${basedir}/i2pinstall_${full.version}_osx.tar.bz2" compression="bzip2">
+    <tar longfile="gnu" destfile="${basedir}/dist/i2pinstall_${full.version}_osx.tar.bz2" compression="bzip2">
       <tarfileset dir="${pkg.temp.dir}/osx/i2p-${full.version}_osx-install.app" prefix="/i2p-${full.version}_osx-install.app" filemode="644">
         <include name="**/**"/>
         <exclude name="Contents/MacOS/*"/>

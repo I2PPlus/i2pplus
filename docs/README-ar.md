@@ -49,6 +49,9 @@ https://geti2p.net/how
   http://www.gnu.org/software/gettext/
 - يجب أن يستخدم بيئة البناء موقع UTF-8.
 - لبناء حزم Debian: حزم `dpkg-deb` و `fakeroot` (عبر مدير الحزم الخاص بك)
+- لملف exe الخاص بـ IzPack 5 لويندوز (`ant installer5`، `ant installer5-windows`): Python 3.
+  ملف `izpack2exe.py` الخاص بـ IzPack هو Python 3 لكن سطر shebang الخاص به يشير إلى
+  `python`، لذا يمرّر البناء المفسّر بشكل صريح؛ يمكن تجاوز ذلك عبر `izpack5.python`.
 
 ### عملية البناء باستخدام Ant
 
@@ -63,13 +66,18 @@ https://geti2p.net/how
     ant installer-osx
     ant installer-windows
 
-إذا كنت تريد البناء باستخدام IzPack5، قم بتنزيله من: http://izpack.org/downloads/
-ثم قم بتثبيته، ثم قم بتشغيل الأمر (الأوامر) التالية:
+إذا كنت تريد البناء باستخدام IzPack5، قم بتشغيل الأمر (الأوامر) التالية. فهي تنزّل
+توزيع IzPack 5 إلى `installer/lib/izpack/5/` عند أول استخدام — وهو ما يتطلب الوصول
+إلى الشبكة و~95MB من المساحة الفارغة — وتُبقيه محدّثًا تلقائيًا:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+لتنزيله أو تحديثه دون بناء مثبت:
+
+    ant download-izpack5
 
 لبناء تحديث غير موقع لتثبيت موجود، قم بتشغيل:
 

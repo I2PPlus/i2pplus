@@ -48,6 +48,9 @@ API: https://i2pplus.github.io/javadoc/
   http://www.gnu.org/software/gettext/
 - สภาพแวดล้อมการ build ต้องใช้ UTF-8 locale
 - สำหรับการสร้างแพ็กเกจ Debian: แพ็กเกจ `dpkg-deb` และ `fakeroot` (ผ่านตัวจัดการแพ็กเกจของคุณ)
+- สำหรับ exe ของ IzPack 5 บน Windows (`ant installer5`, `ant installer5-windows`): Python 3
+  `izpack2exe.py` ของ IzPack เป็น Python 3 แต่บรรทัด shebang ระบุว่า `python` ดังนั้นการ build
+  จะส่งตัวตีความให้อย่างชัดเจน และกำหนดค่าเองได้ด้วย `izpack5.python`
 
 ### กระบวนการ build ด้วย Ant
 
@@ -62,12 +65,19 @@ API: https://i2pplus.github.io/javadoc/
     ant installer-osx
     ant installer-windows
 
-ถ้าต้องการ build ด้วย IzPack5 ให้ดาวน์โหลดจาก: http://izpack.org/downloads/ แล้��ติดตั้ง จากนั้นรันคำสั่งต่อไปนี้:
+หากต้องการ build ด้วย IzPack5 ให้รันคำสั่งต่อไปนี้ คำสั่งเหล่านี้จะดาวน์โหลด
+แพ็กเกจ IzPack 5 ลงใน `installer/lib/izpack/5/` ในการใช้งานครั้งแรก
+ซึ่งต้องใช้การเข้าถึงเครือข่ายและพื้นที่ว่างประมาณ ~95MB
+และจะอัปเดตอัตโนมัติ:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+หากต้องการดาวน์โหลดหรืออัปเดตโดยไม่ต้อง build installer:
+
+    ant download-izpack5
 
 เพื่อสร้าง unsigned update สำหรับการติดตั้งที่มีอยู่ ให้รัน:
 

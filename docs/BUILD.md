@@ -16,8 +16,8 @@ Both write their output outside the workspace: `${java.io.tmpdir}/build-i2p`
 (the `build.root` convention), mirroring each other. Final artifacts land in
 `./dist`.
 
-The **Ant build is authoritative** for releases; the Gradle build exists for
-convenience and does not produce installers.
+The **Ant build is authoritative** for releases; the Gradle build mirrors the
+installer targets but is not used for releases.
 
 ## Prerequisites
 
@@ -47,15 +47,45 @@ For JVM compatibility details, see https://i2pplus.github.io/i2pplus
 
 ### Optional tooling
 
+Only needed by the targets listed against each entry.
+
 - **MinGW** — only for `buildJbigi-win64` (Windows DLLs).
 - **fakeroot / dpkg-deb** — only for `buildDeb`.
-- **launch4j** — bundled; used by `installerexe` (IzPack4 Windows wrapper).
+- **launch4j** — bundled; used by `installerexe` (the IzPack 4 Windows wrapper)
+  and `buildexe` (the standalone `i2p.exe`).
+- **Python 3** — only for `installer5exe`, which drives IzPack's `izpack2exe.py`.
+  The script's `#!/usr/bin/env python` shebang does not resolve where only
+  `python3` is on `PATH`, so the interpreter is passed explicitly and can be
+  overridden with `izpack5.python`.
+- **7-Zip** — not needed. `installer5exe` uses the `7za` and `7zS.sfx` bundled
+  with the IzPack 5 distribution rather than a system `p7zip`.
+
+### The IzPack 5 compiler
+
+IzPack 4 ships in `installer/lib/izpack/4/standalone-compiler.jar`, so `ant
+installer*` needs nothing extra. IzPack 5 is ~95MB of jars and is **downloaded
+and cached** instead:
+
+```bash
+ant download-izpack5          # or: installer/lib/izpack/5/download-izpack5.sh
+```
+
+Every `installer5*` target runs that check first, so the first such build needs
+network access and ~95MB of free space in `installer/lib/izpack/5/`. The cache
+is gitignored and self-updating: each run compares the installed version against
+the latest upstream release and replaces it when they differ. Once cached,
+offline builds keep working. See
+[installer/lib/izpack/README.md](../installer/lib/izpack/README.md).
 
 ## Configuration
 
 - `build.properties` — build settings; `release.number`, `i2p.build.number`.
-- `override.properties` — machine-local overrides (JDK paths, keys); never
-  commit machine-specific values.
+- `override.properties` — overrides (JDK paths, keys). **It is tracked in git**,
+  despite appearing in `.gitignore`, so values written here do get committed.
+  Treat anything machine-specific as belonging in one of the gitignored
+  per-tool files instead — for IzPack that is
+  `installer/lib/izpack/5/izpack5.properties`, which `build.xml` reads ahead of
+  `override.properties`.
 - `ant help` prints the full curated target list with outputs; the sections
   below are the highlights.
 

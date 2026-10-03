@@ -48,6 +48,9 @@ API: [https://i2pplus.github.io/javadoc/](https://i2pplus.github.io/javadoc/) �
 *   GNU gettext पैकेज से स्थापित xgettext, msgfmt, और msgmerge उपकरण [http://www.gnu.org/software/gettext/](http://www.gnu.org/software/gettext/)
 *   निर्माण वातावरण को UTF-8 स्थानीय सेटिंग का उपयोग करना चाहिए।
 *   Debian पैकेज बिल्ड के लिए: `dpkg-deb` और `fakeroot` पैकेज (आपके पैकेज मैनेजर के माध्यम से)
+*   IzPack 5 के Windows exe (`ant installer5`, `ant installer5-windows`) के लिए: Python 3।
+    IzPack का `izpack2exe.py` Python 3 है, लेकिन उसकी shebang `python` बताती है,
+    इसलिए निर्माण इंटरप्रेटर को स्पष्ट रूप से देता है; `izpack5.python` से बदला जा सकता है।
 
 ### एंटी निर्माण प्रक्रिया
 
@@ -59,9 +62,15 @@ x86 सिस्टम पर निम्नलिखित चलाएँ (�
 
 `ant installer-linux ant installer-freebsd ant installer-osx ant installer-windows`
 
-यदि आप IzPack5 के साथ निर्माण करना चाहते हैं, तो इस लिंक से डाउनलोड करें: [http://izpack.org/downloads/](http://izpack.org/downloads/) और फिर इसे स्थापित करें, और फिर निम्नलिखित कमांड(s) चलाएँ:
+यदि आप IzPack5 के साथ निर्माण करना चाहते हैं, तो निम्नलिखित कमांड(s) चलाएँ। ये पहली बार
+उपयोग करने पर IzPack 5 वितरण को `installer/lib/izpack/5/` में डाउनलोड करते हैं — जिसके लिए
+नेटवर्क पहुँच और ~95MB खाली जगह चाहिए — और इसे स्वतः ही अद्यतन रखते हैं:
 
 `ant installer5-linux ant installer5-freebsd ant installer5-osx ant installer5-windows`
+
+किसी इंस्टॉलर को बनाए बिना इसे प्राप्त करने या ताज़ा करने के लिए:
+
+`ant download-izpack5`
 
 मौजूदा स्थापना के लिए एक अस्वीकृत अपडेट बनाने के लिए, चलाएँ:
 

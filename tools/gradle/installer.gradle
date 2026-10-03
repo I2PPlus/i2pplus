@@ -11,9 +11,11 @@
 // (basedir/install.jar, basedir/i2pinstall.exe) that never exist there, so the
 // exe move fails in ant; the ports use dist/ paths instead.
 //
-// IzPack 4 (bundled) serves the installer family; IzPack 5 (external, at
-// ~/IzPack) serves the installer5 family. launch4j is bundled but ships no
-// macOS binaries, so exe targets only run on x86 Linux/Windows, as in ant.
+// IzPack 4 (bundled) serves the installer family; IzPack 5 serves the
+// installer5 family and is downloaded into installer/lib/izpack/5/ by
+// download-izpack5.sh (ant download-izpack5), which tracks the latest
+// upstream release. launch4j is bundled but ships no macOS binaries, so exe
+// targets only run on x86 Linux/Windows, as in ant.
 //
 // Configuration-cache safe: the payload is staged with real Copy tasks (the
 // same lazy from {} pattern update.gradle uses), izpack/launch4j run as Exec
@@ -34,8 +36,33 @@ final def launch4jJar = "${workspaceRootAbs}/installer/lib/launch4j/launch4j.jar
 final def payloadSeed = "${pkgTempDir}"
 final def distAbs = file('dist').absolutePath
 final def fullVersion = "${ext.fullVersion}"
-final def iz5home = System.getProperty('user.home') + '/IzPack'
+// ant ensureIzpack5: when izpack5.home is unset it downloads the distribution
+// into installer/lib/izpack/5/ and defaults the home to that cache's symlink.
+// Properties come from installer/lib/izpack/5/izpack5.properties (gitignored,
+// written by the download script) and then -Dispack5.home, matching the order
+// build.xml uses.
+final def iz5props = new Properties()
+def iz5propsFile = file("${workspaceRootAbs}/installer/lib/izpack/5/izpack5.properties")
+if (iz5propsFile.isFile()) {
+    iz5propsFile.withInputStream { iz5props.load(it) }
+}
+final def iz5homePreset = iz5props.getProperty('izpack5.home') ?: System.getProperty('izpack5.home')
+final def iz5home = iz5homePreset ?: "${workspaceRootAbs}/installer/lib/izpack/5/izpack"
 final def izpack2appPy = "${iz5home}/utils/wrappers/izpack2app/izpack2app.py"
+
+// installer5exe (ant installer5exe): the wrapper is Python 3 but ships a
+// "#!/usr/bin/env python" shebang that does not resolve where only python3 is on
+// PATH, so the interpreter is passed explicitly. It writes installer.7z and
+// config.txt into the working directory, so it runs in the same scratch dir as
+// ant rather than the workspace root.
+final def iz5python = iz5props.getProperty('izpack5.python') ?: System.getProperty('izpack5.python') ?: 'python3'
+final def iz5exeWork = "${workspaceRootAbs}/installer/lib/izpack/5/exe-work"
+final def iz5exeScript = "${iz5home}/utils/wrappers/izpack2exe/izpack2exe.py"
+// IzPack's own 7za, not a system 7zr: the wrapper resolves 7zS.sfx as
+// os.path.dirname(p7z), and the bundled pair is self-consistent - both are from
+// 2009 (p7zip 4.65, SFX FileVersion 4.64), before LZMA2 existed. A modern 7zr
+// defaults to LZMA2, which that stub cannot decode.
+final def iz5exe7za = "${iz5home}/utils/wrappers/izpack2exe/7za"
 
 // One shared instance; task closures capture it by value under the config cache
 final def installerUtil = new InstallerUtil()
@@ -605,7 +632,7 @@ task installer2app {
   outputs.file("${distAbs}/i2pinstall_${fullVersion}_osx.tar.bz2")
   doLast {
     String appDir = "${stageRoot}/osx/osx/i2p-${fullVersion}_osx-install.app"
-    def pb = new ProcessBuilder('python', izpack2appPy,
+    def pb = new ProcessBuilder(iz5python, izpack2appPy,
         "${distAbs}/i2pinstall_${fullVersion}_osx-only.jar", appDir)
     pb.inheritIO()
     if (pb.start().waitFor() != 0) {
@@ -621,21 +648,36 @@ task installer2app {
   }
 }
 
-// IzPack 5 variants; they need IzPack 5 at ${user.home}/IzPack and fail with
-// the ant message otherwise
+// Fetches the IzPack 5 distribution into installer/lib/izpack/5/ (ant
+// download-izpack5). Skipped when izpack5.home was set on the command line,
+// which mirrors ant's ensureIzpack5 leaving a preset home alone.
+tasks.register('downloadIzpack5', Exec) {
+  group = 'package'
+  description = 'Download or update the IzPack 5 distribution (mirrors ant download-izpack5).'
+  onlyIf { !iz5homePreset }
+  commandLine "${workspaceRootAbs}/installer/lib/izpack/5/download-izpack5.sh"
+}
+
+// Shared IzPack 5 failure message (ant ensureIzpack5). A plain String rather
+// than a closure so task closures capture it by value under the config cache.
+final def izpack5Missing = "Error - IzPack 5 must be present at ${iz5home} (lib/ not found), " +
+    "or set izpack5.home=/PATH/TO/IzPack to use an existing installation, " +
+    "or run installer/lib/izpack/5/download-izpack5.sh to fetch it"
+
+// IzPack 5 variants; the distribution is downloaded on demand and the build
+// fails with the ant message if that leaves no usable copy
 def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg) {
   task(taskName, type: Exec) {
     group = 'package'
     description = taskDesc
-    dependsOn stageTask, jbigiTask, prepIzpackConfigs
+    dependsOn stageTask, jbigiTask, prepIzpackConfigs, downloadIzpack5
     commandLine 'java', '-cp', "${cfg.iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
         '-c', "${cfg.izWork}/5/install5.xml", '-b', cfg.wsAbs, '-o', "${cfg.dAbs}/${outJarName}"
     inputs.files(fileTree(cfg.seed), file("${cfg.izWork}/5/install5.xml"))
     outputs.file("${cfg.dAbs}/${outJarName}")
     doFirst {
-      if (!new File(cfg.iz5home).isDirectory()) {
-        throw new GradleException("Error - IzPack 5.1.x must be installed at ${cfg.iz5home}, " +
-            "or set izpack5.home=..., or download from http://izpack.org/downloads/ and install")
+      if (!new File("${cfg.iz5home}/lib").isDirectory()) {
+        throw new GradleException(izpack5Missing)
       }
       // Custom langpacks load relative to the working directory; place
       // them at the repo root, as ant does (distclean wipes com/)
@@ -665,23 +707,27 @@ makeIzpack5Task('installer5-freebsd', 'preppkg-freebsd-only', 'jbigi-freebsd', "
 makeIzpack5Task('installer5-osx', 'preppkg-osx-only', 'jbigi-osx', "i2pinstall_${fullVersion}_osx-only.jar",
     'Build the osx-only installer jar with IzPack 5 (mirrors ant installer5-osx).', izpack5Cfg)
 
-// IzPack5 exe via izpack2exe.py (ant installer5exe), fixed to read dist/install.jar
+// IzPack5 exe via izpack2exe.py (ant installer5exe), fixed to read dist/install.jar.
+// Not launch4j: launch4j output cannot be Windows-signed. The script is Python 3
+// but its shebang says python, so the interpreter is passed explicitly; it writes
+// installer.7z and config.txt into the working directory, hence the scratch dir.
 task installer5exe(type: Exec) {
   group = 'package'
   description = 'Build dist/i2pinstall.exe from dist/install.jar with IzPack5 izpack2exe.py (mirrors ant installer5exe).'
   dependsOn installer5
   onlyIf { launcherSupported }
-  workingDir "${iz5home}/utils/wrappers/izpack2exe"
-  commandLine 'python', 'izpack2exe.py', "--file=${distAbs}/install.jar",
-      '--with-7z=/usr/bin/7zr', '--no-upx', "--output=${distAbs}/i2pinstall.exe"
+  workingDir iz5exeWork
+  commandLine iz5python, iz5exeScript, "--file=${distAbs}/install.jar",
+      "--with-7z=${iz5exe7za}", '--no-upx', "--output=${distAbs}/i2pinstall.exe"
   outputs.file("${distAbs}/i2pinstall.exe")
   doFirst {
-    if (!new File(iz5home).isDirectory()) {
-      throw new GradleException("Error - IzPack 5.1.x must be installed at ${iz5home}, " +
-          "or set izpack5.home=..., or download from http://izpack.org/downloads/ and install")
+    if (!new File("${iz5home}/lib").isDirectory()) {
+      throw new GradleException(izpack5Missing)
     }
-    new File("${iz5home}/utils/wrappers/izpack2exe/7za").setExecutable(true)
-    new File("${iz5home}/utils/wrappers/izpack2exe/izpack2exe.py").setExecutable(true)
+    // the wrapper is not executable as shipped; the 7za has to be for the exec
+    new File(iz5exeScript).setExecutable(true)
+    new File(iz5exe7za).setExecutable(true)
+    new File(iz5exeWork).mkdirs()
   }
   doLast {
     installerUtil.printSha(new File("${distAbs}/i2pinstall.exe"))
@@ -692,7 +738,7 @@ task installer5exe(type: Exec) {
 task installer5WJar(type: Exec) {
   group = 'package'
   description = 'Build the windows-only installer jar with IzPack 5 (mirrors ant installer5-windows).'
-  dependsOn 'preppkg-windows-only', 'jbigi-windows', prepIzpackConfigs
+  dependsOn 'preppkg-windows-only', 'jbigi-windows', prepIzpackConfigs, downloadIzpack5
   commandLine 'java', '-cp', "${iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
       '-c', "${izpackWork}/5/install5.xml", '-b', workspaceRootAbs, '-o', "${distAbs}/install-windows.jar"
   inputs.files(fileTree(payloadSeed), file("${izpackWork}/5/install5.xml"))
@@ -704,17 +750,17 @@ task installer5WExe(type: Exec) {
   description = 'Wrap the izpack5 windows-only installer jar (mirrors ant installer5-windows).'
   dependsOn installer5WJar
   onlyIf { launcherSupported }
-  workingDir "${iz5home}/utils/wrappers/izpack2exe"
-  commandLine 'python', 'izpack2exe.py', "--file=${distAbs}/install-windows.jar",
-      '--with-7z=/usr/bin/7zr', '--no-upx', "--output=${distAbs}/i2pinstall-windows.exe"
+  workingDir iz5exeWork
+  commandLine iz5python, iz5exeScript, "--file=${distAbs}/install-windows.jar",
+      "--with-7z=${iz5exe7za}", '--no-upx', "--output=${distAbs}/i2pinstall-windows.exe"
   outputs.file("${distAbs}/i2pinstall_${fullVersion}_windows.exe")
   doFirst {
-    if (!new File(iz5home).isDirectory()) {
-      throw new GradleException("Error - IzPack 5.1.x must be installed at ${iz5home}, " +
-          "or set izpack5.home=..., or download from http://izpack.org/downloads/ and install")
+    if (!new File("${iz5home}/lib").isDirectory()) {
+      throw new GradleException(izpack5Missing)
     }
-    new File("${iz5home}/utils/wrappers/izpack2exe/7za").setExecutable(true)
-    new File("${iz5home}/utils/wrappers/izpack2exe/izpack2exe.py").setExecutable(true)
+    new File(iz5exeScript).setExecutable(true)
+    new File(iz5exe7za).setExecutable(true)
+    new File(iz5exeWork).mkdirs()
   }
   doLast {
     new File("${distAbs}/i2pinstall-windows.exe").renameTo(new File("${distAbs}/i2pinstall_${fullVersion}_windows.exe"))

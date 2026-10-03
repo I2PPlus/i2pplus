@@ -46,6 +46,9 @@ API: https://i2pplus.github.io/javadoc/
 - xgettext، msgfmt او msgmerge اوزارونه چې له GNU gettext بستې څخه خپل پیکجینډر له لارې یا http://www.gnu.org/software/gettext/ ولى شوي
 - د جوړولو محیط باید UTF-8 locale وکاروي.
 - د Debian بستو د جوړولو لپاره: `dpkg-deb` او `fakeroot` بستې (خپل پیکجینډر له لارې)
+- د IzPack 5 د Windows exe لپاره (`ant installer5`, `ant installer5-windows`): Python 3.
+  د IzPack `izpack2exe.py` Python 3 ده، خو د هغه shebang `python` وایي، نو جوړول
+  ژباړونکی په خپله له مهال پورې کوي؛ د `izpack5.python` له لارې بدلولی شئ.
 
 ### د Ant جوړولو پروسه
 
@@ -60,12 +63,16 @@ API: https://i2pplus.github.io/javadoc/
     ant installer-osx
     ant installer-windows
 
-که ته غواړې IzPack5 سره جوړول، له: http://izpack.org/downloads/ څخه ورداونل کړئ او بیا هغه نصب کړئ، او بیا لاندې کمانډ(ونه) چل کړئ:
+که ته غواړې IzPack5 سره جوړول، لاندې کمانډ(ونه) چل کړئ. دا کمانډونه د لومړي کارولو په مهال د IzPack 5 توزیع `installer/lib/izpack/5/` ته ښکته کوي — چې دې لپاره د نیټورک لاسرسی او ~95MB خالي ځای ته اړتیا لري — او پاتې خپله په اوتوماتیک توګه تازه ساتي:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+د نصب‌کوونکي جوړولو پرته، دا ترلاسه کړئ یا نوی کړئ:
+
+    ant download-izpack5
 
 د موجودې نصبې لپاره د نښه‌نشوې نوي ساز (unsigned update) جوړولو لپاره، چل کړئ:
 

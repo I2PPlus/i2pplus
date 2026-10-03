@@ -48,6 +48,10 @@ Um den Entwicklungszweig aus der Quellcodeverwaltung zu erhalten: https://github
   http://www.gnu.org/software/gettext/
 - Die Build-Umgebung muss ein UTF-8-Gebiet verwenden.
 - Für Debian-Paket-Builds: `dpkg-deb`- und `fakeroot`-Pakete (über Ihren Paketmanager)
+- Für die IzPack 5-Windows-exe (`ant installer5`, `ant installer5-windows`): Python 3.
+  Das `izpack2exe.py` von IzPack ist Python 3, doch seine Shebang-Zeile nennt `python`,
+  daher übergibt der Build den Interpreter ausdrücklich; Sie können ihn mit
+  `izpack5.python` überschreiben.
 
 ### Ant-Build-Prozess
 
@@ -62,13 +66,18 @@ Auf Nicht-x86-Systemen verwenden Sie stattdessen eine der folgenden Optionen:
     ant installer-osx
     ant installer-windows
 
-Wenn Sie mit IzPack5 erstellen möchten, laden Sie es herunter von: http://izpack.org/downloads/
-installieren Sie es dann, und führen Sie dann den/die folgenden Befehl(e) aus:
+Wenn Sie mit IzPack5 erstellen möchten, führen Sie den/die folgenden Befehl(e) aus. Sie
+laden beim ersten Gebrauch die IzPack 5-Distribution in `installer/lib/izpack/5/`
+(Netzwerkzugriff und ~95MB freier Speicherplatz nötig) und halten sie automatisch aktuell:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Um sie ohne Erstellung eines Installers abzurufen oder zu aktualisieren:
+
+    ant download-izpack5
 
 Um ein unsigniertes Update für eine bestehende Installation zu erstellen, führen Sie aus:
 

@@ -20,10 +20,16 @@ Source: https://sourceforge.net/projects/launch4j/
 
 ## Usage
 
-Launch4j is invoked by Ant targets in the root `build.xml`:
+Launch4j is invoked by these Ant targets in the root `build.xml`:
 
-- `installerexe` - Wraps the IzPack 4 `install.jar` into `i2pinstall.exe`
-- `installer5exe` - Wraps the IzPack 5 `install.jar` into `i2pinstall.exe`
+- `installerexe` - Wraps the IzPack 4 `dist/install.jar` into `dist/i2pinstall.exe`
+  (config `installer/i2pinstaller.xml`)
+- `buildexe` - Wraps the standalone router launcher into `i2p.exe`
+
+The **IzPack 5** exe is *not* built with launch4j. `installer5exe` uses IzPack's own
+`izpack2exe.py` from the downloaded distribution, because launch4j-generated exes
+cannot be Windows-signed and `i2pinstall.exe` has to be signable. See
+[../izpack/README.md](../izpack/README.md).
 
 ```bash
 # Direct usage

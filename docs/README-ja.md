@@ -47,6 +47,10 @@ API：https://i2pplus.github.io/javadoc/
   http://www.gnu.org/software/gettext/
 - ビルド環境はUTF-8ロケールを使用する必要があります。
 - Debianパッケージビルド用: `dpkg-deb`と`fakeroot`パッケージ（パッケージマネージャーで）
+- IzPack 5のWindows exe用（`ant installer5`、`ant installer5-windows`）
+  にPython 3が必要です。`izpack2exe.py`はPython 3ですが、shebangが
+  `python`となっているため、ビルドがインタプリタを明示的に渡します。
+  `izpack5.python`で上書きできます。
 
 ### Antビルドプロセス
 
@@ -61,13 +65,19 @@ x86以外の場合は、次のいずれかを使用してください：
     ant installer-osx
     ant installer-windows
 
-IzPack5でビルドする場合は、http://izpack.org/downloads/ からダウンロードし、
-インストールしてから次のコマンドを実行してください：
+IzPack5でビルドする場合は、次のコマンドを実行してください。これらのコマンドは
+IzPack 5のディストリビューションを`installer/lib/izpack/5/`に初回使用時に
+ダウンロードし（ネットワークアクセスと~95MBの空き領域が必要）、その後も
+常に自動的に最新に保ちます：
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+インストーラーをビルドせずに取得または更新するには：
+
+    ant download-izpack5
 
 既存のインストールに対して署名されていない更新をビルドするには、次のコマンドを実行します：
 

@@ -48,6 +48,9 @@ Chcete-li získat vývojovou větev ze správy zdrojového kódu: https://github
   http://www.gnu.org/software/gettext/
 - Buildovací prostředí musí používat UTF-8 locale.
 - Pro sestavování Debian balíčků: balíčky `dpkg-deb` a `fakeroot` (přes správce balíčků)
+- Pro exe soubor IzPack 5 pro Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` od IzPacku je v Pythonu 3, ale jeho shebang říká `python`, takže sestavení
+  předá interpret explicitně; lze to přepsat pomocí `izpack5.python`.
 
 ### Buildovací proces Ant
 
@@ -62,13 +65,18 @@ Na non-x86 systémech použijte místo toho jednu z následujících možností:
     ant installer-osx
     ant installer-windows
 
-Chcete-li sestavovat pomocí IzPack5, stáhněte z: http://izpack.org/downloads/ a poté
-nainstalujte a poté spusťte následující příkaz(y):
+Chcete-li sestavovat pomocí IzPack5, spusťte následující příkaz(y). Při prvním použití
+si stáhnou distribuci IzPack 5 do `installer/lib/izpack/5/` — což vyžaduje přístup
+k síti a ~95MB volného místa — a automaticky ji udržují aktuální:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Chcete-li ji stáhnout nebo aktualizovat, aniž byste sestavovali instalátor:
+
+    ant download-izpack5
 
 Chcete-li sestavit nepodepsanou aktualizaci pro stávající instalaci, spusťte:
 

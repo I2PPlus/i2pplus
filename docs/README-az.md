@@ -47,6 +47,10 @@ Tərtibat filialını mənbə idarəetməsindən əldə etmək üçün: https://
   vasitəsilə və ya http://www.gnu.org/software/gettext/ ünvanından quraşdırılması
 - Qurulma mühiti UTF-8 lokalından istifadə etməlidir.
 - Debian paketlərinin qurulması üçün: `dpkg-deb` və `fakeroot` paketləri (paket meneceriniz vasitəsilə)
+- IzPack 5 Windows exe faylı üçün (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPack-in `izpack2exe.py` faylı Python 3-dür, lakin onun shebang sətri `python`
+  deyir, ona görə qurulma interpretatoru açıq şəkildə ötürür; bunu `izpack5.python`
+  ilə dəyişmək olar.
 
 ### Ant ilə qurulma prosesi
 
@@ -61,13 +65,18 @@ x86 olmayan sistemlərdə bunun əvəzinə aşağıdakılardan birini istifadə 
     ant installer-osx
     ant installer-windows
 
-IzPack5 ilə qurmaq istəyirsinizsə, http://izpack.org/downloads/ ünvanından endirin,
-sonra onu quraşdırın və aşağıdakı əmri(-əmrləri) işə salın:
+IzPack5 ilə qurmaq istəyirsinizsə, aşağıdakı əmri(-əmrləri) işə salın. Onlar ilk dəfə
+istifadə olunanda IzPack 5 paylanmasını `installer/lib/izpack/5/` qovluğuna endirirlər —
+bu, şəbəkə çıxışı və ~95MB boş yer tələb edir — və onu avtomatik yeniləmiş saxlayırlar:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Quraşdırıcı qurmadan onu endirmək və ya yeniləmək üçün:
+
+    ant download-izpack5
 
 Mövcud quraşdırma üçün imzalanmamış yeniləmə qurmaq üçün aşağıdakını işə salın:
 

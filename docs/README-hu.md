@@ -47,6 +47,9 @@ Ha a fejlesztői ágat szeretnéd megszerezni: https://github.com/I2PPlus/i2pplu
   http://www.gnu.org/software/gettext/
 - A fordítókörnyezetnek UTF-8 locale-t kell használnia.
 - Debian csomagok fordításához: `dpkg-deb` és `fakeroot` csomagok (a csomagkezelőn keresztül)
+- Az IzPack 5 Windows exe-hez (`ant installer5`, `ant installer5-windows`): Python 3.
+  Az IzPack `izpack2exe.py` fájlja Python 3 kód, de a shebang `python`-t tartalmaz, ezért
+  a fordítás explicit módon átadja az értelmezőt; felülírható az `izpack5.python` értékkel.
 
 ### Ant fordítási folyamat
 
@@ -61,13 +64,18 @@ Nem x86 rendszereken használj egyet az alábbiak közül:
     ant installer-osx
     ant installer-windows
 
-Ha IzPack5-tel szeretnél fordítani, töltsd le innen: http://izpack.org/downloads/ és telepítsd,
-majd futtasd a következő parancsokat:
+Ha IzPack5-tel szeretnél fordítani, futtasd a következő parancs(oka)t. Ezek az első használatkor
+letöltik az IzPack 5 disztribúciót a `installer/lib/izpack/5/` könyvtárba — ami hálózati
+hozzáférést és ~95MB szabad helyet igényel — és automatikusan naprakészen tartják:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+IzPack5 letöltéséhez vagy frissítéséhez, telepítő készítése nélkül:
+
+    ant download-izpack5
 
 Ha egy meglévő telepítéshez szeretnél aláírás nélküli frissítést fordítani, futtasd:
 

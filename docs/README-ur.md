@@ -47,6 +47,8 @@ https://geti2p.net/how
   http://www.gnu.org/software/gettext/
 - بلڈ اینوائرمنٹ کو UTF-8 لوکیل کا usage کرنا چاہیے۔
 - Debian پیکیج بنانے کے لیے: `dpkg-deb` اور `fakeroot` پیکیجز (آپ کے پیکیج مینیجر کے ذریعے)
+- IzPack 5 Windows exe کے لیے (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPack کا `izpack2exe.py` Python 3 ہے مگر اس کا shebang `python` کہتا ہے، اس لیے بلڈ انٹرپریٹر کو واضح طور پر پاس کرتا ہے؛ `izpack5.python` سے اسے بدل سکتے ہیں۔
 
 ### اینٹ بلڈ پروسیس
 
@@ -61,12 +63,16 @@ x86 سسٹم پر درج ذیل چلایں (یہ IzPack4 کا استعمال ک�
     ant installer-osx
     ant installer-windows
 
-اگر آپ IzPack5 کے ساتھ بلڈ کرنا چاہتے ہیں، اس سے ڈاؤن لوڈ کریں: http://izpack.org/downloads/ پھر انسٹال کریں، اور پھر درج ذیل کمانڈ(ز) چلایں:
+اگر آپ IzPack5 کے ساتھ بلڈ کرنا چاہتے ہیں، درج ذیل کمانڈ(ز) چلائیں۔ یہ پہلی بار استعمال کرتے وقت IzPack 5 کی تقسیم `installer/lib/izpack/5/` میں ڈاؤن لوڈ کرتی ہیں — جس کے لیے نیٹ ورک رسائی اور ~95MB خالی جگہ درکار ہے — اور اسے خودکار طور پر اپڈیٹ کرتی رہتی ہیں:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+انسٹالر نہ بناتے ہوئے اسے ڈاؤن لوڈ یا اپڈیٹ کرنے کے لیے:
+
+    ant download-izpack5
 
 موجودہ انسٹالیشن کے لیے غیر سائن اپڈیٹ بنانے کے لیے، چلایں:
 

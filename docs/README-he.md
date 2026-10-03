@@ -48,6 +48,9 @@ API: https://i2pplus.github.io/javadoc/
   http://www.gnu.org/software/gettext/
 - סביבת הבנייה חייבת להשתמש במיקום UTF-8.
 - לבניית חבילות Debian: חבילות `dpkg-deb` ו-`fakeroot` (דרך מנהל החבילות שלך)
+- עבור קובץ ה-exe של IzPack 5 ב-Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` של IzPack כתוב ב-Python 3 אך ה-shebang שלו מציין `python`, ולכן הבנייה
+  מעבירה את המתפרש במפורש; ניתן לדרוס זאת עם `izpack5.python`.
 
 ### תהליך הבנייה עם Ant
 
@@ -62,13 +65,18 @@ API: https://i2pplus.github.io/javadoc/
     ant installer-osx
     ant installer-windows
 
-אם ברצונך לבנות עם IzPack5, הורד מ: http://izpack.org/downloads/ ואז
-התקן אותו, ואז הרץ את הפקודה(ות) הבאות:
+אם ברצונך לבנות עם IzPack5, הרץ את הפקודה(ות) הבאות. הן מורידות את הפצת IzPack 5
+אל `installer/lib/izpack/5/` בשימוש הראשון — מה שדורש גישה לרשת ו-~95MB של שטח פנוי —
+ומעדכנות אותה אוטומטית:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+כדי להוריד או לעדכן אותה בלי לבנות מתקין:
+
+    ant download-izpack5
 
 כדי לבנת עדכון לא חתום להתקנה קיימת, הרץ:
 

@@ -48,6 +48,9 @@ Untuk mendapatkan cabang pengembangan dari kontrol sumber: https://github.com/I2
   http://www.gnu.org/software/gettext/
 - Lingkungan build harus menggunakan locale UTF-8.
 - Untuk build paket Debian: paket `dpkg-deb` dan `fakeroot` (melalui package manager Anda)
+- Untuk exe Windows IzPack 5 (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` dari IzPack merupakan Python 3 tetapi shebang-nya menyatakan `python`,
+  sehingga build meneruskan interpreter secara eksplisit; bisa ditimpa dengan `izpack5.python`.
 
 ### Proses Build dengan Ant
 
@@ -62,13 +65,18 @@ Pada non-x86, gunakan salah satu alternatif berikut:
     ant installer-osx
     ant installer-windows
 
-Jika Anda ingin membangun dengan IzPack5, unduh dari: http://izpack.org/downloads/
-lalu instal, lalu jalankan perintah berikut:
+Jika Anda ingin membangun dengan IzPack5, jalankan perintah berikut. Perintah tersebut
+mengunduh distribusi IzPack 5 ke `installer/lib/izpack/5/` pada penggunaan pertama — yang
+memerlukan akses jaringan dan ~95MB ruang kosong — dan selalu memperbaruinya secara otomatis:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Untuk mengambil atau menyegarkan IzPack5 tanpa membangun installer:
+
+    ant download-izpack5
 
 Untuk membangun update unsigned untuk instalasi yang sudah ada, jalankan:
 

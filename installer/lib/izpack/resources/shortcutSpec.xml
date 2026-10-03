@@ -1,79 +1,104 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<shortcuts>
- <programGroup defaultName="I2P+" location="startMenu"/>
- <shortcut name="Open I2P+ Profile Folder"
-          target="explorer"
-          commandLine="&quot;%programdata%\i2p&quot;"
-          iconFile="%systemroot%\system32\shell32.dll"
-          iconIndex="3"
-          initialState="normal"
-          startMenu="no"
-          programGroup="yes"
-          desktop="no"
-          startup="no"/>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <!--
- <shortcut name="Start I2P+ (no window)"
-           target="$INSTALL_PATH\I2P.exe"
-           commandLine=""
-           workingDirectory="$INSTALL_PATH"
-           iconFile="$INSTALL_PATH\docs\start.ico"
-           initialState="noShow"
-	   programGroup="yes"
-	   startMenu="no"
-	   desktop="yes"
-           startup="no"/>
- <shortcut name="Start I2P+ (restartable)"
-           target="$INSTALL_PATH\I2Psvc.exe"
-           commandLine="-c wrapper.config"
-           workingDirectory="$INSTALL_PATH"
-           iconFile="$INSTALL_PATH\docs\start.ico"
-           initialState="noShow"
-	   programGroup="yes"
-	   startMenu="no"
-	   desktop="yes"
-           startup="no"/>
+  Windows shortcuts for the IzPack 5 ShortcutPanel. IzPack 4 created these from
+  service.ps1 instead, so this file is only referenced by install5.xml.
+
+  The resource id in install5.xml must stay "shortcutSpec.xml": that is the
+  default name the panel looks for, and the panel skips itself entirely when it
+  finds nothing. Ids may be suffixed _<iso3> for a localized spec, or prefixed
+  with a platform name (Win_/Unix_).
+
+  Every attribute used below is valid for IzPack 5 - see
+  izpack-shortcuts-5.0.xsd and IzPack's src/doc-reST/desktop-shortcuts.txt.
+  location="startMenu" puts the "I2P+" program group at the top level of the
+  Start menu; shortcuts also need at least one of programGroup/desktop/
+  applications/startMenu/startup, which is why every one below sets it.
+
+  The commented-out blocks are alternatives that need a launcher we no longer
+  ship (I2P.exe) or an uninstaller path that does not exist, kept for reference.
 -->
- <shortcut name="I2P+ Router Console"
-           target="$INSTALL_PATH\docs\startconsole.html"
-           commandLine=""
-           workingDirectory="$INSTALL_PATH"
-           iconFile="$INSTALL_PATH\docs\console.ico"
-           initialState="normal"
-           programGroup="yes"
-           startMenu="no"
-	   desktop="yes"
-           startup="no"/>
+<izpack:shortcuts version="5.0"
+                  xmlns:izpack="http://izpack.org/schema/shortcuts"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://izpack.org/schema/shortcuts http://izpack.org/schema/5.0/izpack-shortcuts-5.0.xsd">
 
- <shortcut name="Start I2P+ Service"
-           target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
-           commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\service.ps1&quot; -Action Start"
-           workingDirectory="$INSTALL_PATH"
-           iconFile="$INSTALL_PATH\docs\start.ico"
-           initialState="normal"
-           programGroup="yes"
-           startMenu="no"
-	   desktop="yes"
-           startup="no"/>
+  <programGroup defaultName="I2P+" location="startMenu"/>
 
- <shortcut name="Stop I2P+ Service"
-           target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
-           commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\service.ps1&quot; -Action Stop"
-           workingDirectory="$INSTALL_PATH"
-           iconFile="$INSTALL_PATH\docs\stop.ico"
-           initialState="normal"
-           programGroup="yes"
-           startMenu="no"
-	   desktop="yes"
-           startup="no"/>
+  <shortcut name="Open I2P+ Profile Folder"
+            target="explorer"
+            commandLine="&quot;%programdata%\i2p&quot;"
+            iconFile="%systemroot%\system32\shell32.dll"
+            iconIndex="3"
+            initialState="normal"
+            programGroup="yes"
+            desktop="no"
+            startMenu="no"
+            startup="no"/>
 
-<!--
- <shortcut name="Uninstall I2P+"
-           target="$INSTALL_PATH\uninstaller\uninstaller.jar"
-           commandLine=""
-           iconFile="$INSTALL_PATH\docs\uninstall.ico"
-           initialState="noShow"
-           startMenu="no"
-           programGroup="yes"
-           startup="no"/>
--->
-</shortcuts>
+  <shortcut name="I2P+ Router Console"
+            target="$INSTALL_PATH\docs\startconsole.html"
+            commandLine=""
+            workingDirectory="$INSTALL_PATH"
+            iconFile="$INSTALL_PATH\docs\console.ico"
+            initialState="normal"
+            programGroup="yes"
+            desktop="yes"
+            startMenu="no"
+            startup="no"/>
+
+  <shortcut name="Start I2P+ Service"
+            target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
+            commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\service.ps1&quot; -Action Start"
+            workingDirectory="$INSTALL_PATH"
+            iconFile="$INSTALL_PATH\docs\start.ico"
+            initialState="normal"
+            programGroup="yes"
+            desktop="yes"
+            startMenu="no"
+            startup="no"/>
+
+  <shortcut name="Stop I2P+ Service"
+            target="%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe"
+            commandLine="-NoProfile -ExecutionPolicy Bypass -File &quot;$INSTALL_PATH\service.ps1&quot; -Action Stop"
+            workingDirectory="$INSTALL_PATH"
+            iconFile="$INSTALL_PATH\docs\stop.ico"
+            initialState="normal"
+            programGroup="yes"
+            desktop="yes"
+            startMenu="no"
+            startup="no"/>
+
+  <!--
+    <shortcut name="Start I2P+ (no window)"
+              target="$INSTALL_PATH\I2P.exe"
+              commandLine=""
+              workingDirectory="$INSTALL_PATH"
+              iconFile="$INSTALL_PATH\docs\start.ico"
+              initialState="noShow"
+              programGroup="yes"
+              desktop="yes"
+              startMenu="no"
+              startup="no"/>
+
+    <shortcut name="Start I2P+ (restartable)"
+              target="$INSTALL_PATH\I2Psvc.exe"
+              commandLine="-c wrapper.config"
+              workingDirectory="$INSTALL_PATH"
+              iconFile="$INSTALL_PATH\docs\start.ico"
+              initialState="noShow"
+              programGroup="yes"
+              desktop="yes"
+              startMenu="no"
+              startup="no"/>
+
+    <shortcut name="Uninstall I2P+"
+              target="$INSTALL_PATH\uninstaller\uninstaller.jar"
+              commandLine=""
+              iconFile="$INSTALL_PATH\docs\uninstall.ico"
+              initialState="noShow"
+              programGroup="yes"
+              desktop="no"
+              startMenu="no"
+              startup="no"/>
+  -->
+</izpack:shortcuts>

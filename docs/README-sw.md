@@ -47,6 +47,9 @@ Kupata tawi la maendeleo kutoka kwenye udhibiti wa chanzo: https://github.com/I2
   kupitia kijidhibiti chako cha vifurushi au http://www.gnu.org/software/gettext/
 - Mazingira ya kujenga lazima yatumie lugha (locale) ya UTF-8.
 - Kwa kujenga vifurushi vya Debian: vifurushi `dpkg-deb` na `fakeroot` (kupitia kijidhibiti chako cha vifurushi)
+- Kwa exe ya IzPack 5 kwenye Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` ya IzPack ni Python 3 lakini shebang yake inasema `python`, hivyo
+  kujenga hupitisha kipeleuzi kwa moja kwa moja; badilisha kwa `izpack5.python`.
 
 ### Mchakato wa kujenga wa Ant
 
@@ -61,13 +64,19 @@ Kwenye mifumo isiyokuwa ya x86, badala yake tumia moja kati ya yafuatayo:
     ant installer-osx
     ant installer-windows
 
-Ukitaka kujenga kwa kutumia IzPack5, pakua kutoka: http://izpack.org/downloads/ kisha
-isakinishje, kisha endesha amri zifuatazo:
+Ukitaka kujenga kwa kutumia IzPack5, endesha amri zifuatazo. Amri hizi hupakua
+usambazaji wa IzPack 5 kwenye `installer/lib/izpack/5/` wakati wa matumizi ya kwanza —
+ambayo huhitaji muunganisho wa mtandao na nafasi ya bure ya ~95MB — na huweka
+ikusarinishwa kwa njia moja kwa moja:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Kupakua au kusasisha IzPack5 bila kujenga kisakinishaji:
+
+    ant download-izpack5
 
 Kujenga masasisho isiyotiwa saini kwa usakinishaji uliopo, endesha:
 

@@ -48,6 +48,9 @@ API: https://i2pplus.github.io/javadoc/
   http://www.gnu.org/software/gettext/
 - Среда сборки должна использовать локаль UTF-8.
 - Для сборки Debian-пакетов: пакеты `dpkg-deb` и `fakeroot` (через ваш пакетный менеджер)
+- Для exe-файла IzPack 5 под Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` от IzPack — это Python 3, но его shebang указывает `python`,
+  поэтому сборка явно передаёт интерпретатор; переопределить его можно через `izpack5.python`.
 
 ### Процесс сборки Ant
 
@@ -62,13 +65,18 @@ API: https://i2pplus.github.io/javadoc/
      ant installer-osx
      ant installer-windows
 
-Если вы хотите собрать с использованием IzPack5, загрузите его с сайта: http://izpack.org/downloads/, а затем
-установите его, а затем выполните следующую команду (ы):
+Если вы хотите собрать с использованием IzPack5, выполните следующую команду (ы).
+Они при первом использовании загружают дистрибутив IzPack 5 в `installer/lib/izpack/5/` —
+что требует доступа в сеть и ~95MB свободного места — и автоматически обновляют её:
 
      ant installer5-linux
      ant installer5-freebsd
      ant installer5-osx
      ant installer5-windows
+
+Чтобы загрузить или обновить IzPack5, не создавая инсталлятор:
+
+     ant download-izpack5
 
 Чтобы создать не подписанное обновление для существующей установки, выполните:
 

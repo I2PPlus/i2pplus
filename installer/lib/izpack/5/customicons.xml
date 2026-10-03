@@ -1,6 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<!--
+  Window icon for the IzPack 5 installer. install5.xml registers this file and
+  console.png as resources; without them IconsProvider logs "No custom icons
+  available" and IzPack's built-in icon is used.
+
+  res is resolved at runtime by IconsProvider through
+  InstallerFrame.class.getResource(path), so it is a path inside the installer
+  jar rather than a path in this repository - and <res> entries are stored under
+  resources/ in the jar, hence the leading slash.
+
+  This overrides the JFrameIcon entry in IzPack's built-in icons.xml, which
+  InstallerFrame.setIconImage uses for the window icon. It is not the same thing
+  as the Installer.image resource, which is the heading logo beside each panel.
+-->
 <izpack:icons version="5.0"
               xmlns:izpack="http://izpack.org/schema/icons"
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://izpack.org/schema/icons http://izpack.org/schema/5.0/izpack-icons-5.0.xsd">
-    <icon res="installer/resources/console.png" id="JFrameIcon"/>
+
+    <icon res="/resources/console.png" id="JFrameIcon"/>
 </izpack:icons>

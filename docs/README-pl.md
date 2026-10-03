@@ -48,6 +48,9 @@ Aby uzyskać gałąź deweloperską z kontroli źródła: https://github.com/I2P
   http://www.gnu.org/software/gettext/
 - Środowisko budowania musi używać lokalizacji UTF-8.
 - Do budowania pakietów Debian: pakiety `dpkg-deb` i `fakeroot` (za pośrednictwem menedżera pakietów)
+- Dla pliku exe IzPack 5 na Windows (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` z IzPack to Python 3, ale jego shebang wskazuje `python`, więc podczas
+  budowania interpreter jest przekazywany jawnie; można to nadpisać przez `izpack5.python`.
 
 ### Proces budowania z Ant
 
@@ -62,13 +65,18 @@ Na systemach nie-x86, użyj jednego z następujących zamiast tego:
     ant installer-osx
     ant installer-windows
 
-Jeśli chcesz budować z IzPack5, pobierz z: http://izpack.org/downloads/
-następnie zainstaluj, a następnie uruchom następujące polecenie(a):
+Jeśli chcesz budować z IzPack5, uruchom następujące polecenie(a). Przy pierwszym
+użyciu pobierają one dystrybucję IzPack 5 do `installer/lib/izpack/5/` — wymaga to
+dostępu do sieci i ~95MB wolnego miejsca — i automatycznie utrzymują ją w aktualności:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Aby pobrać lub odświeżyć ją bez budowania instalatora:
+
+    ant download-izpack5
 
 Aby zbudować niepodpisany update dla istniejącej instalacji, uruchom:
 

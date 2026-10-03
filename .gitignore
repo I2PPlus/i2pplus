@@ -280,6 +280,15 @@ installer/java/build/
 installer/lib/izpack/patches.jar
 # IzPack 5 langpack staging (written by the installer5 tasks)
 /com/
+# IzPack 5 distribution cache (downloaded and auto-updated by
+# installer/lib/izpack/5/download-izpack5.sh)
+/installer/lib/izpack/5/izpack
+/installer/lib/izpack/5/izpack-*/
+/installer/lib/izpack/5/version.txt
+# machine-local IzPack settings, written by the same script
+/installer/lib/izpack/5/izpack5.properties
+# izpack2exe.py scratch dir (installer.7z + config.txt)
+/installer/lib/izpack/5/exe-work/
 
 # Session bans
 router/sessionbans/

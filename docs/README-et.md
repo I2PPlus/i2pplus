@@ -47,6 +47,9 @@ Arendusharu hankimiseks lähtekoodi haldussüsteemist: https://github.com/I2PPlu
   teie pakihalduri kaudu või aadressilt http://www.gnu.org/software/gettext/
 - Ehituskeskkonnas peab olema UTF-8 lokaat.
 - Debiani pakettide ehitamiseks: `dpkg-deb` ja `fakeroot` pakid (teie pakihalduri kaudu)
+- IzPack 5 Windows exe jaoks (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPacki `izpack2exe.py` on Python 3, kuid selle shebang räägib `python`, mistõttu build
+  annab tõlgendaja teadlikult edasi. Selle saab asendada `izpack5.python`-ga.
 
 ### Ehitusprotsess Anti abil
 
@@ -61,13 +64,18 @@ x86-välistel süsteemidel kasutage selle asemel ühte järgmistest:
     ant installer-osx
     ant installer-windows
 
-Kui soovite ehitada IzPack5 abil, laadige selle alla aadressilt: http://izpack.org/downloads/ ja
-seejärel installige see ning käivitage seejärel järgmine(d) käsk(ud):
+Kui soovite ehitada IzPack5 abil, käivitage järgmine(d) käsk(ud). Need laadivad IzPack 5
+leviku esimesel kasutamisel kaustasse `installer/lib/izpack/5/` (vajab võrguühendust ja
+~95MB vaba ruumi) ning hoiavad selle automaatselt ajakohasena:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+Selle hankimiseks või värskendamiseks ilma installeri ehitamiseta:
+
+    ant download-izpack5
 
 Olemasoleva paigalduse jaoks allkirjastamata uuenduse ehitamiseks käivitage:
 

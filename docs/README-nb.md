@@ -47,6 +47,9 @@ For å hente utviklingsgrenen fra kildekontrollen: https://github.com/I2PPlus/i2
   via pakkehåndtereren din eller http://www.gnu.org/software/gettext/
 - Byggemiljøet må bruke en UTF-8-locale.
 - For bygg av Debian-pakker: `dpkg-deb`- og `fakeroot`-pakker (via pakkehåndtereren din)
+- For IzPack 5 Windows exe (`ant installer5`, `ant installer5-windows`): Python 3.
+  IzPacks `izpack2exe.py` er Python 3, men shebang-linjen sier `python`, så byggingen
+  sender inn tolkeren eksplisitt; overstyr med `izpack5.python`.
 
 ### Ant-byggeprosess
 
@@ -61,13 +64,18 @@ På ikke-x86, bruk i stedet ett av følgende:
     ant installer-osx
     ant installer-windows
 
-Hvis du vil bygge med IzPack5, last ned fra: http://izpack.org/downloads/ og
-installer det, og kjør deretter følgende kommando(er):
+Hvis du vil bygge med IzPack5, kjør følgende kommando(er). De laster ned
+IzPack 5-distribusjonen til `installer/lib/izpack/5/` ved første bruk — noe som
+krever nettverkstilgang og ~95MB ledig disk — og holder den oppdatert automatisk:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+For å hente eller oppdatere den uten å bygge et installasjonsprogram:
+
+    ant download-izpack5
 
 For å bygge en usignert oppdatering for en eksisterende installasjon, kjør:
 

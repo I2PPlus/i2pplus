@@ -50,6 +50,9 @@ API: https://i2pplus.github.io/javadoc/
   http://www.gnu.org/software/gettext/
 - محیط ساخت باید از یک محلی UTF-8 استفاده کند.
 - برای ساخت بسته‌های Debian: بسته‌های `dpkg-deb` و `fakeroot` (از طریق مدیر بسته خود)
+- برای exe ویندوز IzPack 5 (`ant installer5`, `ant installer5-windows`): Python 3.
+  `izpack2exe.py` از IzPack با Python 3 است، اما shebang آن `python` را اعلام می‌کند،
+  بنابراین build مفسر را صریحاً مشخص می‌کند؛ با `izpack5.python` آن را تغییر دهید.
 
 ### فرآیند ساخت Ant
 
@@ -64,13 +67,18 @@ API: https://i2pplus.github.io/javadoc/
     ant installer-osx
     ant installer-windows
 
-اگر می‌خواهید با IzPack5 بسازید، از http://izpack.org/downloads/ دانلود کنید سپس
-آن را نصب کنید و سپس دستور(ات) زیر را اجرا کنید:
+اگر می‌خواهید با IzPack5 بسازید، دستور(ات) زیر را اجرا کنید. این دستورها در نخستین
+استفاده توزیع IzPack 5 را در `installer/lib/izpack/5/` دانلود می‌کنند (به دسترسی شبکه و
+~95MB فضای آزاد نیاز دارد) و آن را به‌طور خودکار به‌روز نگه می‌دارند:
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+برای دریافت یا به‌روزرسانی آن بدون ساخت یک نصب‌کننده:
+
+    ant download-izpack5
 
 برای ساخت یک به‌روزرسانی امضا نشده برای نصب موجود، دستور زیر را اجرا کنید:
 

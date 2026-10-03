@@ -47,6 +47,9 @@ API：https://i2pplus.github.io/javadoc/
   http://www.gnu.org/software/gettext/
 -构建环境必须使用UTF-8语言环境。
 -构建Debian软件包需要：`dpkg-deb`和`fakeroot`软件包（通过您的软件包管理器）
+- 若要构建IzPack 5的Windows exe（`ant installer5`、`ant installer5-windows`）：需要Python 3。
+  IzPack的`izpack2exe.py`是Python 3程序，但其shebang指定的是`python`，
+  因此构建时会明确指定解释器；可用`izpack5.python`覆盖。
 
 ### Ant构建过程
 
@@ -61,12 +64,17 @@ API：https://i2pplus.github.io/javadoc/
     ant installer-osx
     ant installer-windows
 
-如果要使用IzPack5进行构建，请从http://izpack.org/downloads/下载进行安装，然后执行以下操作：
+如果要使用IzPack5进行构建，请执行以下命令。这些命令会在首次使用时把IzPack 5发行包
+下载到`installer/lib/izpack/5/`（需要网络连接和~95MB可用空间），并自动保持为最新版本：
 
     ant installer5-linux
     ant installer5-freebsd
     ant installer5-osx
     ant installer5-windows
+
+如需在不构建安装程序的情况下获取或更新：
+
+    ant download-izpack5
 
 不带任何参数运行“ ant”以查看其他构建选项。
 
