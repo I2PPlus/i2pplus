@@ -1029,7 +1029,9 @@ class Connection {
         _nextSendTime = -1;
         _createdOn = _context.clock().now();
         _congestionWindowEnd = _options.getWindowSize()-1;
-        _ssthresh = ConnectionPacketHandler.getMaxSlowStartWindow(_context);
+        _ssthresh = initialSsthresh(ConnectionPacketHandler.getMaxSlowStartWindow(_context),
+                                    _options.getMaxWindowSize(),
+                                    ConnectionOptions.getInitialWindowSize());
         _lastCongestionHighestUnacked = -1;
         _lastReceivedOn = -1;
         _activityTimer = new ActivityTimer();
@@ -1119,6 +1121,43 @@ class Connection {
      * @since 0.9.46
      */
     int getSSThresh() {return _ssthresh;}
+
+    /**
+     *  The slow-start threshold a freshly constructed connection starts with,
+     *  clamped so it can never exceed the connection's window ceiling.
+     *
+     *  <p>{@code ConnectionPacketHandler.adjustWindow()} picks its growth path on
+     *  {@code window < ssthresh}: below is exponential slow start, at or above is
+     *  linear congestion avoidance. The ceiling from
+     *  {@link #computeWindowCeiling(int, float, int, int, int)} is
+     *  {@code min(absMax, max(globalMax, initialWindowSize))} before any BDP term,
+     *  so a connection can never grow past that base. Initialising {@code ssthresh}
+     *  to the Tuner-managed {@code maxSlowStartWindow} therefore risks
+     *  {@code ssthresh > ceiling} whenever the Tuner has raised the slow-start cap
+     *  above the window ceiling — and then {@code window < ssthresh} is permanently
+     *  true, the deficit-multiplier recovery path in congestion avoidance never
+     *  runs, and every window change is governed by the slow-start branch alone.
+     *
+     *  <p>Both inputs are Tuner-tunable over overlapping ranges
+     *  ({@code maxWindowSize} 512-8192, {@code maxSlowStartWindow} 128-8192), so
+     *  nothing else maintains the {@code ssthresh <= ceiling} invariant; this is
+     *  where it is enforced. Clamping to the pre-BDP base rather than
+     *  {@link #getWindowCeiling()} keeps the constructor free of the bandwidth
+     *  estimator, which is not yet constructed at this point.
+     *
+     *  @param maxSlowStartWindow the Tuner-managed slow-start cap, in messages
+     * @param globalMaxWindow the Tuner-managed window ceiling floor
+     *         ({@code i2p.streaming.maxWindowSize}), in messages
+     * @param initialWindowSize the configured starting window, in messages
+     * @return the initial slow-start threshold in messages, in
+     *         {@code [1, maxSlowStartWindow]}
+     * @since 0.9.71+
+     */
+    static int initialSsthresh(int maxSlowStartWindow, int globalMaxWindow, int initialWindowSize) {
+        int cap = Math.max(1, maxSlowStartWindow);
+        int ceilingBase = Math.max(1, Math.max(globalMaxWindow, initialWindowSize));
+        return Math.min(cap, ceilingBase);
+    }
 
     /**
      * Next outbound packet sequence number.
@@ -3127,29 +3166,40 @@ class Connection {
         if (on != _isChoked) {
            _isChoked = on;
            if (_log.shouldWarn()) {_log.warn("Choked changed to " + on + " on " + this);}
-           if (!on) {
-               // Episode boundary for the persist WARN gate: once the remote
-               // unchokes us, a fresh persist episode in a later window may log.
-               _lastPersistWarnTime = 0;
-               // Restore the congestion window to the larger of the pre-choke
-               // value and the slow-start threshold so the connection doesn't
-               // have to crawl back from 1 through congestion avoidance.
-               int saved = _preChokeWindowSize;
-               _preChokeWindowSize = -1;
-               if (saved > 0) {
-                   int restored = Math.max(saved, _ssthresh);
-                   // A saved window above the current per-stream ceiling must
-                   // not jump the queue past what the pipe/heap allows now.
-                   int ceiling = getWindowCeiling();
-                   if (restored > ceiling) {restored = ceiling;}
-                   _options.setWindowSize(restored);
-                   if (_log.shouldInfo()) {
-                       _log.info("Restoring window to " + restored + " (was " + saved +
-                                 ", ssthresh " + _ssthresh + ") on unchoke for " + this);
-                   }
-               }
-               windowAdjusted();
-           }
+if (!on) {
+                // Episode boundary for the persist WARN gate: once the remote
+                // unchokes us, a fresh persist episode in a later window may log.
+                _lastPersistWarnTime = 0;
+                // Restore only what this connection actually demonstrated, not
+                // max(saved, ssthresh). ssthresh is an asymptotic target (it
+                // starts at maxSlowStartWindow), not a measure of what the path
+                // can carry, so folding it in reinflated even a window that had
+                // genuinely collapsed back up to the full ceiling on every
+                // unchoke. The remote chokes precisely because it is overloaded,
+                // so that burst lands on a path still in congestion and causes
+                // the loss that triggers the next cut - a choke/unchoke feedback
+                // loop, and a fixed-size burst regardless of the evidence. TCP
+                // avoids this because a zero-window event never lowers cwnd: it
+                // resumes at min(cwnd, rwnd), the window it had, not the one it
+                // wishes for. The anti-crawl intent of the old max(saved, ssthresh)
+                // is now much weaker a concern: growth after a cut is fast.
+                int saved = _preChokeWindowSize;
+                _preChokeWindowSize = -1;
+                if (saved > 0) {
+                    int ceiling = getWindowCeiling();
+                    int restored = restoredWindowOnUnchoke(saved, ceiling);
+                    _options.setWindowSize(restored);
+                    // The choke branch refreshes the cached pacing rate; the
+                    // restore path did not, leaving it describing the old window.
+                    updatePacingRate();
+                    if (_log.shouldInfo()) {
+                        _log.info("Restoring window to " + restored + " on unchoke for " + this +
+                                  " (pre-choke " + saved + ", ceiling " + ceiling +
+                                  ", ssthresh " + _ssthresh + ")");
+                    }
+                }
+                windowAdjusted();
+            }
         }
         if (on) {
             congestionOccurred();
@@ -3178,11 +3228,37 @@ class Connection {
     }
 
     /**
-     *  Is the other side choking us?
+     * Whether the other side is choking us.
      *  @return if choked
      *  @since 0.9.29
      */
     public boolean isChoked() {return _isChoked;}
+
+    /**
+     *  The window to restore when the remote unchokes us.
+     *
+     *  <p>Restores the pre-choke window and nothing more, capped at the current
+     *  per-stream ceiling so a window saved under a more generous ceiling cannot
+     *  jump the queue past what the pipe and heap allow now.
+     *
+     *  <p>The window deliberately does <em>not</em> consider {@code ssthresh}.
+     *  Folding it in (the old {@code max(saved, ssthresh)}) made every unchoke
+     *  restore the ceiling instead of the demonstrated window, because ssthresh
+     *  starts at {@code maxSlowStartWindow} and is an asymptotic growth target
+     *  rather than a capacity measurement. A connection whose window had genuinely
+     *  collapsed to a handful of packets would be reinflated to the full ceiling
+     *  on every unchoke, and since a remote only chokes when it is overloaded,
+     *  that fixed burst fed the loss that caused the next cut.
+     *
+     * @param saved the window captured when the choke began, always positive at
+     *        the call site
+     * @param ceiling the current per-stream window ceiling, in messages
+     * @return the window to restore, in {@code [1, ceiling]}
+     * @since 0.9.71+
+     */
+    static int restoredWindowOnUnchoke(int saved, int ceiling) {
+        return Math.max(1, Math.min(saved, Math.max(1, ceiling)));
+    }
 
     /** How many packets have we sent and the other side has ACKed?
      * @return Count of how many packets ACKed.
