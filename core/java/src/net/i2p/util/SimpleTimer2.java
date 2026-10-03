@@ -17,6 +17,12 @@ import net.i2p.I2PAppContext;
  *
  * All timer events should extend TimedEvent and use schedule()/cancel() directly.
  *
+ * A saturation watchdog samples this pool from a thread of its own and warns
+ * when every worker has stayed occupied with a backlog behind it: a
+ * ScheduledThreadPoolExecutor never grows past {@link #THREADS}, so two
+ * blocked events starve every periodic event on this timer without throwing
+ * anything or writing anything to the log.
+ *
  * @author zzz
  */
 public class SimpleTimer2 {
@@ -32,12 +38,49 @@ public class SimpleTimer2 {
 
     private static final int THREADS = 2;
 
+    /**
+     *  How often the saturation watchdog samples this pool. Long enough to be
+     *  free (four counter reads), short enough that a wedge is reported within
+     *  a couple of minutes instead of never.
+     *
+     *  @since 0.9.71+
+     */
+    static final int WATCHDOG_INTERVAL_MS = 30 * 1000;
+    /**
+     *  Consecutive saturated samples tolerated before a WARN. The pool is
+     *  briefly busy all the time; a pool that is still fully occupied with a
+     *  backlog after this many samples is wedged.
+     *
+     *  @since 0.9.71+
+     */
+    static final int WATCHDOG_SATURATION_SAMPLES = 3;
+    /**
+     *  Queue depth that turns full occupancy into a backlog rather than a
+     *  coincidence. With {@link #THREADS} workers, this means at least this
+     *  many events are waiting behind running ones. Not zero: the queue also
+     *  holds delayed events that are not due yet, so depth alone proves nothing.
+     *
+     *  @since 0.9.71+
+     */
+    static final int WATCHDOG_MIN_QUEUE = 3;
+    /**
+     *  Consecutive samples with no completed task before a WARN. Longer than
+     *  {@link #WATCHDOG_SATURATION_SAMPLES} so the broader, less specific signal
+     *  follows the narrow one rather than pre-empting it: a wedged pool reports
+     *  saturation first, and only reaches "nothing is running at all" if it stays
+     *  wedged twice as long.
+     *
+     *  @since 0.9.71+
+     */
+    static final int WATCHDOG_STALL_SAMPLES = 6;
+
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
     private final AtomicInteger _count = new AtomicInteger();
     private final I2PAppContext _context;
     private final Runnable _onShutdown = () -> stop(false);
     private final AtomicLong _completed = new AtomicLong();
+    private final SaturationWatchdog _watchdog;
 
     /**
      *  To be instantiated by the context.
@@ -78,6 +121,7 @@ public class SimpleTimer2 {
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
         context.addShutdownTask(_onShutdown);
+        _watchdog = new SaturationWatchdog();
     }
 
     /**
@@ -100,6 +144,8 @@ public class SimpleTimer2 {
     private void stop(boolean removeTask) {
         if (removeTask)
             _context.removeShutdownTask(_onShutdown);
+        // before the pool dies, so the watchdog cannot sample a torn-down executor
+        _watchdog.shutdown();
         _executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
         _executor.shutdownNow();
     }
@@ -128,6 +174,296 @@ public class SimpleTimer2 {
             rv.setDaemon(true);
             rv.setPriority(Thread.MAX_PRIORITY - 1);
             return rv;
+        }
+    }
+
+    /**
+     * What a single saturation-watchdog sample means. Package-visible so that
+     * SimpleTimer2WatchdogDecisionTest can pin the throttle edge without
+     * starting a thread or an executor.
+     *
+     * @since 0.9.71+
+     */
+    enum WatchdogDecision {
+        /** No signal in this sample, so any episode in progress is over. */
+        OK,
+        /** Signal present, but not yet actionable or already reported this episode. */
+        PENDING,
+        /** The single sample per episode that is allowed to log. */
+        REPORT
+    }
+
+    /**
+     * Decide what one saturation sample means.
+     *
+     * <p>The pool counts as saturated only when both halves hold: every worker
+     * is occupied ({@code activeCount >= poolSize}) <i>and</i> at least
+     * {@link #WATCHDOG_MIN_QUEUE} events are waiting behind them. Either half
+     * alone is noise - the queue also holds delayed events that are not due yet,
+     * and both workers being busy is ordinary whenever two events happen to run
+     * at once.
+     *
+     * <p>{@code consecutiveSaturatedSamples} counts the samples <i>before</i>
+     * this one, so a threshold of N reports on the (N+1)th consecutive
+     * saturated sample: "more than N samples", not "N". {@code episodeReported}
+     * is the throttle, which is what turns a permanently-wedged pool into one
+     * WARN instead of one every {@link #WATCHDOG_INTERVAL_MS}.
+     *
+     * @param activeCount executor active thread count
+     * @param poolSize executor pool size, zero once it is shut down
+     * @param queueSize executor queue depth
+     * @param consecutiveSaturatedSamples immediately preceding saturated samples
+     * @param threshold consecutive saturated samples tolerated before reporting
+     * @param episodeReported whether this episode has already been reported
+     * @return REPORT once per episode, OK when not saturated (ending the
+     *         episode), PENDING otherwise
+     * @since 0.9.71+
+     */
+    static WatchdogDecision evaluateSaturation(int activeCount, int poolSize, int queueSize,
+                                                int consecutiveSaturatedSamples, int threshold,
+                                                boolean episodeReported) {
+        if (poolSize <= 0 || activeCount < poolSize || queueSize < WATCHDOG_MIN_QUEUE)
+            return WatchdogDecision.OK;
+        if (consecutiveSaturatedSamples < threshold || episodeReported)
+            return WatchdogDecision.PENDING;
+        return WatchdogDecision.REPORT;
+    }
+
+    /**
+     * Decide what one "nothing finished" sample means.
+     *
+     * <p>This is the cheap form of "a periodic event stopped firing": the
+     * executor's own completed-task counter not advancing across samples means
+     * nothing this timer runs is finishing, regardless of what the pool size
+     * says. It deliberately does not track individual events - that would mean
+     * bookkeeping on every scheduling and every run.
+     *
+     * <p>An executor that has never completed a task is treated as idle, not
+     * wedged: a timer with nothing scheduled on it is not a failure, and
+     * warning about one would bury the real reports. A wedge that starts before
+     * the first completion is still caught by {@link #evaluateSaturation}.
+     *
+     * @param completed executor completed task count, now
+     * @param lastCompleted executor completed task count, at the previous sample
+     * @param consecutiveStalledSamples immediately preceding samples with no progress
+     * @param threshold such samples tolerated before reporting
+     * @param episodeReported whether this episode has already been reported
+     * @return REPORT once per episode, OK on progress or an idle timer (ending
+     *         the episode), PENDING otherwise
+     * @since 0.9.71+
+     */
+    static WatchdogDecision evaluateStall(long completed, long lastCompleted,
+                                          int consecutiveStalledSamples, int threshold,
+                                          boolean episodeReported) {
+        if (completed > lastCompleted || completed <= 0)
+            return WatchdogDecision.OK;
+        if (consecutiveStalledSamples < threshold || episodeReported)
+            return WatchdogDecision.PENDING;
+        return WatchdogDecision.REPORT;
+    }
+
+    /**
+     * Lower bound on how long a run of {@code samples} consecutive watchdog
+     * samples of the same thing spans: consecutive samples are at least one
+     * interval apart, so N samples cover at least N-1 intervals. The bound is
+     * deliberately low, since a sample can be late.
+     *
+     * @param samples number of consecutive samples of one episode
+     * @return conservative duration in ms, zero for fewer than two samples
+     * @since 0.9.71+
+     */
+    static long episodeForMs(int samples) {
+        return samples > 1 ? ((long) (samples - 1) * WATCHDOG_INTERVAL_MS) : 0;
+    }
+
+    /**
+     * Thread factory for the saturation watchdog. Mirrors
+     * {@link CustomThreadFactory}'s daemon flag and priority: the watchdog is
+     * scheduled just as reliably as the pool threads it watches, because its
+     * entire job is to report a pool that cannot report itself. The name is
+     * taken whole instead of generated so a thread dump shows the watchdog
+     * apart from the pool threads it monitors.
+     */
+    private static class WatchdogThreadFactory implements ThreadFactory {
+        private final String _name;
+
+        WatchdogThreadFactory(String name) {
+            _name = name;
+        }
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread rv = Executors.defaultThreadFactory().newThread(r);
+            rv.setName(_name);
+            rv.setDaemon(true);
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
+            return rv;
+        }
+    }
+
+    /**
+     * Samples this timer on its own daemon thread and reports a pool that has
+     * stopped keeping up.
+     *
+     * <p>It cannot run on the pool it watches: a wedged pool has no spare
+     * worker to run the watchdog on, which is the whole failure. It also does
+     * nothing but read counters, so no event running on this timer can delay
+     * it. Every sample is four counter reads and a few field writes - no
+     * allocation, no synchronization beyond the monitor it sleeps on - so it is
+     * free to leave running for the life of the router.
+     *
+     * <p>Everything below is touched only by the watchdog thread, except
+     * {@code _stopped}, which is guarded by the watchdog monitor.
+     */
+    private class SaturationWatchdog {
+
+        private int _saturatedSamples;
+        private boolean _saturationReported;
+        private long _saturatedCompleted;
+        private int _stalledSamples;
+        private boolean _stallReported;
+        private long _lastCompleted;
+        /** Guarded by this */
+        private boolean _stopped;
+
+        SaturationWatchdog() {
+            start();
+        }
+
+        /**
+         * Start the sampling thread, warning if the JVM will not run it - a
+         * watchdog that silently failed to start is the same invisible failure
+         * this class exists to prevent. No reference to the thread is kept: it
+         * runs until {@link #shutdown()}, and being a daemon it cannot hold up
+         * JVM exit either way.
+         */
+        private void start() {
+            try {
+                new WatchdogThreadFactory(_name + ".WD").newThread(this::run).start();
+            } catch (RuntimeException | OutOfMemoryError e) {
+                // SecurityManager, thread exhaustion, OOME on stack reservation
+                log().warn("Saturation watchdog could not start, timer saturation will " +
+                           "go unreported: " + e);
+            }
+        }
+
+        /**
+         * Stop sampling. Idempotent, cannot throw, and safe when
+         * {@link #start()} failed. The thread is a daemon, so it cannot hold up
+         * JVM exit even if this is never called.
+         */
+        void shutdown() {
+            synchronized (this) {
+                _stopped = true;
+                notifyAll();
+            }
+        }
+
+        /**
+         * Sample every {@link #WATCHDOG_INTERVAL_MS} until {@link #shutdown()}.
+         *
+         * <p>The stopped test and the wait share the monitor, so shutdown()
+         * cannot land between them and leave this thread parked for the rest
+         * of the interval - hence no interrupt is needed.
+         */
+        private void run() {
+            while (true) {
+                synchronized (this) {
+                    if (_stopped)
+                        return;
+                    try {
+                        wait(WATCHDOG_INTERVAL_MS);
+                    } catch (InterruptedException ie) {
+                        return;  // nothing interrupts this thread, but honor it anyway
+                    }
+                    if (_stopped)
+                        return;
+                }
+                try {
+                    sample();
+                } catch (RuntimeException re) {
+                    // a broken sample must not cost us every later sample too
+                    log().error("Watchdog sample failed", re);
+                }
+            }
+        }
+
+        /**
+         * Take one sample and act on it. All the executor counters are safe to
+         * read after shutdown, so a sample racing stop() degrades to reporting
+         * nothing rather than throwing.
+         */
+        private void sample() {
+            int active = _executor.getActiveCount();
+            int pool = _executor.getPoolSize();
+            int queued = _executor.getQueue().size();
+            // Cancelled events are removed as they are cancelled
+            // (setRemoveOnCancelPolicy), so the depth needs no purge() to be
+            // trustworthy - and purge() is O(queue).
+            long completed = _executor.getCompletedTaskCount();
+            checkSaturation(active, pool, queued, completed);
+            checkStall(completed);
+        }
+
+        /**
+         * Warn once per episode of a fully occupied pool with a backlog.
+         */
+        private void checkSaturation(int active, int pool, int queued, long completed) {
+            WatchdogDecision rv = evaluateSaturation(active, pool, queued, _saturatedSamples,
+                                                     WATCHDOG_SATURATION_SAMPLES, _saturationReported);
+            if (rv == WatchdogDecision.OK) {
+                if (_saturationReported)
+                    log().info("Timer saturation over: " + _name + " recovered after " +
+                               (episodeForMs(_saturatedSamples) / 1000) + "s");
+                _saturatedSamples = 0;
+                _saturationReported = false;
+                return;
+            }
+            if (_saturatedSamples == 0)
+                _saturatedCompleted = completed;  // start of this episode
+            _saturatedSamples++;
+            if (rv != WatchdogDecision.REPORT)
+                return;
+            _saturationReported = true;
+            log().warn("Timer pool saturated for at least " +
+                       (episodeForMs(_saturatedSamples) / 1000) + "s: " + _name +
+                       " active " + active + '/' + pool + ", " + queued +
+                       " events queued behind it, " + (completed - _saturatedCompleted) +
+                       " tasks completed during the episode - periodic events are not" +
+                       " firing, find the event blocking the timer");
+        }
+
+        /**
+         * Warn once per episode of a pool that completes nothing at all.
+         */
+        private void checkStall(long completed) {
+            WatchdogDecision rv = evaluateStall(completed, _lastCompleted, _stalledSamples,
+                                                WATCHDOG_STALL_SAMPLES, _stallReported);
+            _lastCompleted = completed;
+            if (rv == WatchdogDecision.OK) {
+                if (_stallReported)
+                    log().info("Timer stall over: " + _name + " is completing tasks again");
+                _stalledSamples = 0;
+                _stallReported = false;
+                return;
+            }
+            _stalledSamples++;
+            if (rv != WatchdogDecision.REPORT)
+                return;
+            _stallReported = true;
+            log().warn("No timer event completed for at least " +
+                       (episodeForMs(_stalledSamples) / 1000) + "s: " + _name +
+                       " completed " + completed + " tasks in total - the scheduler" +
+                       " is not running any event");
+        }
+
+        /**
+         * The timer log, looked up per message rather than cached: the router
+         * replaces its LogManager after start-up, and a cached Log would go
+         * quiet from then on. Only log paths pay for this, never a sample.
+         */
+        private Log log() {
+            return _context.logManager().getLog(SimpleTimer2.class);
         }
     }
 
