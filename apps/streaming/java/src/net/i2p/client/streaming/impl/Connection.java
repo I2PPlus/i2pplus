@@ -155,6 +155,13 @@ class Connection {
       *  when the connection object is reused. */
     private boolean _establishedResumeWarned;
     /**
+     *  Whether an immediate retransmit-timer fire has already been granted for the
+     *  current overdue head-of-line packet. Cleared as soon as the timer is no longer
+     *  overdue, so each new overdue period gets one immediate attempt. See
+     *  {@link #nextRetransmitDelay}.
+     */
+    private boolean _immediateRtoFired;
+    /**
      *  Fixed-point congestion-avoidance credit for the deterministic growth
      *  ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
      *  derived from accumulated ACK credit instead of a per-ACK random draw,
@@ -622,6 +629,57 @@ class Connection {
      * SYN and its ACK room to complete without a spurious retransmit.
      */
     private static final int SYN_RTO_HEADROOM_PCT = 150;
+
+    /**
+     *  Whether this connection has unacknowledged data it could be stuck behind.
+     *
+     *  <p>Read without {@link #_outboundPacketsLock}: the verdict is evaluated from a
+     *  timer as well as from the ACK path, and taking the send lock from the timer
+     *  invites the established ordering problem with the bandwidth estimator. The
+     *  cheap proxy answers the question the verdict cares about - has anything ever
+     *  got through, so that silence afterwards is meaningful - without locking.
+     *
+     *  @return true once forward progress has been made on this connection
+     */
+    private boolean hasOutstandingData() {
+        return _highestAckedThrough.get() >= 0;
+    }
+
+    /**
+     * Delay before the next retransmit-timer fire.
+     *
+     * <p>An overdue head-of-line packet is worth exactly one immediate attempt.
+     * Before this, every subsequent ACK re-armed the timer with {@code schedule(0)},
+     * so on a stalled connection each arriving ACK enqueued another immediate run.
+     * With a large population of stalled connections that is enough to keep a
+     * two-thread timer permanently saturated - and because the coalesce task shares
+     * that pool, every graph in the router stops recording at once. After the first
+     * immediate attempt the timer falls back to a full RTO, which still bounds
+     * recovery time without letting the queue grow per ACK.
+     *
+     * <p>Pure decision, extracted so the once-only rule can be pinned by tests.
+     *
+     * @param now current clock value in ms
+     * @param oldestLastSend send time of the oldest unacked packet, or 0 if none
+     * @param rto the connection's current RTO in ms
+     * @param immediateAlreadyFired true if an immediate fire already happened for
+     *        this overdue episode
+     * @return delay in ms; 0 requests an immediate fire
+     */
+    static int nextRetransmitDelay(long now, long oldestLastSend, long rto,
+                                   boolean immediateAlreadyFired) {
+        long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
+        long delay = Math.max(0, deadline - now);
+        if (delay > 0)
+            return (int) Math.min(Integer.MAX_VALUE, delay);
+        // Overdue. The first attempt fires at once; after that fall back to a full
+        // RTO so a flood of ACKs cannot each enqueue an immediate run. The floor of
+        // 1ms matters: returning 0 would mean "immediate", which is the very busy
+        // loop this replaces, so a degenerate zero RTO must still not spin.
+        if (immediateAlreadyFired)
+            return (int) Math.min(Integer.MAX_VALUE, Math.max(1L, rto));
+        return 0;
+    }
 
     /**
      * Compute the inter-SYN retransmit interval for an outbound connection, evidence-gated
@@ -1488,6 +1546,39 @@ class Connection {
     static StallState stallVerdict(long now, long lastProgressAt, double observedBps, double ratio,
                                    int samples, double baselineBps, double absFloorBps,
                                    long stallGraceMs) {
+        return stallVerdict(now, lastProgressAt, observedBps, ratio, samples, baselineBps,
+                            absFloorBps, stallGraceMs, true);
+    }
+
+    /**
+     * Decide the stall verdict for one window, told whether anything is actually in
+     * flight to be stalled on.
+     *
+     * <p>{@code outstandingData} is the guard against the false positive that made this
+     * detector harmful: a download that is simply waiting on a slow peer sends nothing,
+     * so nothing is acknowledged, so an ACK-only rule concludes the path is dead and
+     * marks the destination for tunnel rotation. The transfer was never broken; the
+     * churn it caused was. With nothing in flight there is nothing to be stuck behind.
+     *
+     * @param now clock value at the sample boundary
+     * @param lastProgressAt clock value of the last observed progress, or 0 for none
+     * @param observedBps goodput measured over the current sample window
+     * @param ratio fraction of baseline below which the link is throttled
+     * @param samples completed goodput samples backing the baseline
+     * @param baselineBps EWMA baseline, 0 if not yet established
+     * @param absFloorBps absolute floor capping the proportional floor
+     * @param stallGraceMs time with no bytes before a hard stall is reported
+     * @param outstandingData true when unacknowledged data is waiting on the wire
+     * @return the verdict; never null
+     */
+    static StallState stallVerdict(long now, long lastProgressAt, double observedBps, double ratio,
+                                   int samples, double baselineBps, double absFloorBps,
+                                   long stallGraceMs, boolean outstandingData) {
+        // Application-limited: nothing in flight, so no ACK is expected and a missing
+        // one says nothing about the path. Never STALLED, never rotated.
+        if (!outstandingData) {
+            return StallState.NONE;
+        }
         if (lastProgressAt > 0 && now - lastProgressAt >= stallGraceMs) {
             return StallState.STALLED;
         }
@@ -1666,7 +1757,8 @@ class Connection {
             }
             long now = _context.clock().now();
             reportStallState(stallVerdict(now, _lastProgressAt, 0, FLOOR_RATIO, _floorSamples,
-                                          _floorBaselineBps, FLOOR_ABSOLUTE_BPS, STALL_GRACE_MS));
+                                          _floorBaselineBps, FLOOR_ABSOLUTE_BPS, STALL_GRACE_MS,
+                                          Connection.this.hasOutstandingData()));
             schedule(FLOOR_SAMPLE_MS);
         }
     }
@@ -2462,11 +2554,16 @@ class Connection {
         if (doPushBack) {
             long now = _context.clock().now();
             int rto = _options.getRTO();
-            long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
-            pushBackDelay = (int) Math.max(0, deadline - now);
+            pushBackDelay = nextRetransmitDelay(now, oldestLastSend, rto, _immediateRtoFired);
             if (pushBackDelay == 0) {
+                // First immediate attempt for this overdue head-of-line packet.
+                // Record it so the next ACK does not ask for another one.
+                _immediateRtoFired = true;
                 _retransmitEvent.forceRescheduleNow();
             } else {
+                // Timer is no longer overdue: the episode is over, so the next
+                // genuine overdue period is again entitled to one immediate fire.
+                _immediateRtoFired = false;
                 _retransmitEvent.pushBackRTOBounded(pushBackDelay);
             }
             if (_log.shouldDebug()) {
@@ -4139,8 +4236,8 @@ if (!on) {
                 windowAdjusted();
             }
         }
-        /**
-         * Records a retransmit timer firing and detects stalls.
+    /**
+     * Records a retransmit timer firing and detects stalls.
          * If ackPackets() was called since the last retransmit, resets the
          * counter. Otherwise increments it; after 2 consecutive firings
          * without ACK progress, signals a tunnel rotation via
