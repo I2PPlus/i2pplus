@@ -470,8 +470,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Manages the autotune.config file — separate from router.config.
      *
      * <p>Stores tuner metadata (value, default, min, max, step) for each
-     * param. Actual config props that the router reads still go to
-     * router.config via each param's {@code applyValue()}.
+     * param, and is the only file the tuner persists to. Each param's
+     * {@code applyValue()} sets the runtime value in the live subsystem
+     * (streaming, transport, ...) and deliberately does not write
+     * router.config, so an auto-tuned value never outlives the tuning
+     * decision that produced it and never competes with an operator's
+     * router.config entry. The one deliberate router.config write is the
+     * one-time legacy cleanup in {@code purgeOldTunerProps()}, which
+     * deletes pre-autotune.config {@code tuner.*} keys and sets the
+     * migration marker.
      *
      * <p>Writes are throttled: values are marked dirty and flushed to
      * disk at most once per 5 minutes ({@link #save()}). Use
@@ -6877,7 +6884,6 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
             double lossRate = getStreamingLossRate(_context);
-            boolean windowsCongesting = !Double.isNaN(congWindowSize) && congWindowSize < 5;
 
             // Retransmit ratio (per-mille) from closed streams. Prefer the
             // byte-weighted stat (stream.rtxRatioBytes) for a bandwidth-overhead
@@ -6890,62 +6896,123 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             double rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
             if (Double.isNaN(rtxRatio5))
                 rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatio");
-
-            boolean retransmitting = (!Double.isNaN(rtxRatio) && rtxRatio > 200) ||
-                                     (!Double.isNaN(rtxRatio5) && rtxRatio5 > 160);
-            boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
-                                    (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
-
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
-            boolean dropping = isStreamLossy(lossRate);
-            // Lower threshold to 3000ms so connections on modest-latency paths
-            // (e.g. 3.5s RTT) are treated as slow and eligible for faster growth.
-            boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 3000;
-            boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
-            boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
-            boolean strongGrowth = (streamsSlow && windowsSmall) ||
-                                   (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20);
-
-            // Recovery floor: if below 50% of default, always increase back toward default
-            int recoveryFloor = Math.max(_min, _defaultValue / 2);
-            if (current < recoveryFloor && !congested)
-                return Math.min(_defaultValue, current + _step);
-
-            // Drops, congestion, or high retransmit ratio = slow growth (loss minimization)
-            if (dropping || congested || windowsCongesting || retransmitting)
-                return Math.max(recoveryFloor, current - _step);
-
-            // Network unhealthy = slow growth
-            if (!networkHealthy)
-                return Math.max(recoveryFloor, current - _step);
-
-            // Choking = decrease growth (too aggressive)
-            if (choking)
-                return Math.max(recoveryFloor, current - _step);
-
-            // Dead zone: hold within one step of default so a wobbling signal
-            // can't ping-pong the factor, but let a strong growth signal with a
-            // low retransmit ratio through. The old band was
-            // [recoveryFloor, default*2]; with range [1,4] and default 3 that
-            // covered the whole range, so every increase branch below was dead.
-            if (current >= _defaultValue - 1 && current <= _defaultValue + 1 &&
-                !dropping && !congested && !windowsCongesting && networkHealthy &&
-                !(strongGrowth && retransmitLow))
-                return current;
-
-            // Completed streams slow + windows small = increase growth (need faster ramp).
-            // Require a low retransmit ratio (hysteresis) so we don't grow into loss.
-            if (streamsSlow && windowsSmall && !dropping && !congested && !windowsCongesting && retransmitLow)
-                return Math.min(_max, current + _step);
-
-            // Large window at congestion + healthy network + no drops = increase growth.
-            // Require a low retransmit ratio (hysteresis) so we don't grow into loss.
-            if (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20 && networkHealthy && !dropping && !congested && !windowsCongesting && retransmitLow)
-                return Math.min(_max, current + _step);
-
-            return current;
+            return congestionAvoidanceGrowthTarget(current, _min, _max, _step, _defaultValue,
+                                                   buildSuccess, failLifetime, lossRate, lifetimeRTT,
+                                                   lifetimeWindowSize, chokeSize, congWindowSize,
+                                                   rtxRatio, rtxRatio5);
         }
+    }
+
+    /**
+     * Compute the target for {@code CongestionAvoidanceGrowthParam}.
+     *
+     * <p>Extracted as a static method for unit testing, matching
+     * {@link #maxSlowStartWindow}.
+     *
+     * @param current current runtime value
+     * @param min minimum allowed value
+     * @param max maximum allowed value
+     * @param step tuning step size
+     * @param defaultValue factory default value
+     * @param buildSuccess tunnel build success rate (0.0-1.0), or NaN if unknown
+     * @param failLifetime sendMessageFailureLifetime stat (ms), or NaN
+     * @param lossRate streaming retransmission rate (0.0-1.0), or NaN
+     * @param lifetimeRTT completed stream RTT (ms), or NaN
+     * @param lifetimeWindowSize final send window of closed streams, or NaN
+     * @param chokeSize choke-depth stat, or NaN
+     * @param congWindowSize window size at congestion, or NaN
+     * @param rtxRatio hourly retransmit ratio (per-mille), or NaN
+     * @param rtxRatio5 5-minute retransmit ratio (per-mille), or NaN
+     * @return target value clamped to [min, max]
+     * @since 0.9.71+
+     */
+    static int congestionAvoidanceGrowthTarget(int current, int min, int max, int step, int defaultValue,
+                                               double buildSuccess, double failLifetime, double lossRate,
+                                               double lifetimeRTT, double lifetimeWindowSize,
+                                               double chokeSize, double congWindowSize,
+                                               double rtxRatio, double rtxRatio5) {
+        boolean retransmitting = (!Double.isNaN(rtxRatio) && rtxRatio > 200) ||
+                                 (!Double.isNaN(rtxRatio5) && rtxRatio5 > 160);
+        boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
+                                (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
+
+        boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+        boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+        boolean dropping = isStreamLossy(lossRate);
+        // Lower threshold to 3000ms so connections on modest-latency paths
+        // (e.g. 3.5s RTT) are treated as slow and eligible for faster growth.
+        boolean streamsSlow = !Double.isNaN(lifetimeRTT) && lifetimeRTT > 3000;
+        boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
+        boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
+        boolean collapsed = windowsCongesting(congWindowSize);
+        boolean strongGrowth = (streamsSlow && windowsSmall) ||
+                               (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20);
+
+        // Recovery floor: if below 50% of default, always increase back toward default
+        int recoveryFloor = Math.max(min, defaultValue / 2);
+        if (current < recoveryFloor && !congested)
+            return Math.min(defaultValue, current + step);
+
+        // Below default: climb back toward the default. Evaluated BEFORE the
+        // dead zone, because that zone spans [default-1, default+1] — three of
+        // the four values in this range — so a factor that decays into it is
+        // pinned there. Both increase branches further down are gated on
+        // retransmitLow, a signal a struggling path cannot produce: the same
+        // loss that pushed the factor down keeps the retransmit ratio high, so
+        // the factor could never climb back and the halved growth rate became
+        // permanent. Gating only on the hard negatives still keeps a genuinely
+        // lossy path from climbing, while giving a merely noisy one a way back.
+        if (current < defaultValue && networkHealthy && !dropping && !congested &&
+            !collapsed && !retransmitting)
+            return Math.min(max, current + step);
+
+        // Drops, congestion, or high retransmit ratio = slow growth (loss minimization)
+        if (dropping || congested || collapsed || retransmitting)
+            return Math.max(recoveryFloor, current - step);
+
+        // Network unhealthy = slow growth
+        if (!networkHealthy)
+            return Math.max(recoveryFloor, current - step);
+
+        // Choking = decrease growth (too aggressive)
+        if (choking)
+            return Math.max(recoveryFloor, current - step);
+
+        // Dead zone: hold within one step of default so a wobbling signal
+        // can't ping-pong the factor, but let a strong growth signal with a
+        // low retransmit ratio through. The old band was
+        // [recoveryFloor, default*2]; with range [1,4] and default 3 that
+        // covered the whole range, so every increase branch below was dead.
+        if (current >= defaultValue - 1 && current <= defaultValue + 1 &&
+            !dropping && !congested && !collapsed && networkHealthy &&
+            !(strongGrowth && retransmitLow))
+            return current;
+
+        // Completed streams slow + windows small = increase growth (need faster ramp).
+        // Require a low retransmit ratio (hysteresis) so we don't grow into loss.
+        if (streamsSlow && windowsSmall && !dropping && !congested && !collapsed && retransmitLow)
+            return Math.min(max, current + step);
+
+        // Large window at congestion + healthy network + no drops = increase growth.
+        // Require a low retransmit ratio (hysteresis) so we don't grow into loss.
+        if (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20 && networkHealthy &&
+            !dropping && !congested && !collapsed && retransmitLow)
+            return Math.min(max, current + step);
+
+        return current;
+    }
+
+    /**
+     * Whether the congestion window at recent congestion events was too small to
+     * count as a real congestion signal — the shared "window collapsed" predicate
+     * for both streaming growth-factor targets, so the two cannot drift apart.
+     *
+     * @param congWindowSize window size at congestion stat, or NaN
+     * @return true if the window at congestion was below 5 messages
+     * @since 0.9.71+
+     */
+    private static boolean windowsCongesting(double congWindowSize) {
+        return !Double.isNaN(congWindowSize) && congWindowSize < 5;
     }
 
     /**
@@ -6987,84 +7054,117 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             int current = getRuntimeValue();
             // observed = stream.con.initialRTT.out (RTT, ms)
             // Cross-refs: buildSuccessRate (network health), sendMessageFailureLifetime (congestion),
-            //             sendDuplicateSize (drops!), lifetimeRTT (completed stream RTT),
-            //             lifetimeSendWindowSize (final window size at stream close),
-            //             chokeSizeBegin (choke pressure)
+            //             sendDuplicateSize (drops!), lifetimeSendWindowSize (final window size
+            //             at stream close), chokeSizeBegin (choke pressure)
             double buildSuccess = getBuildSuccessRate(_context);
             double failLifetime = getAdditionalStat(_context, "transport.sendMessageFailureLifetime");
             double lossRate = getStreamingLossRate(_context);
             double lifetimeWindowSize = getAdditionalStat(_context, "stream.con.lifetimeSendWindowSize");
             double chokeSize = getAdditionalStat(_context, "stream.chokeSizeBegin");
             double congWindowSize = getAdditionalStat(_context, "stream.con.windowSizeAtCongestion");
-            boolean windowsCongesting = !Double.isNaN(congWindowSize) && congWindowSize < 5;
-
-            // Retransmit ratio (per-mille) — hourly trend with 5-min recent
-            // catch-up so sustained loss is detected sooner.
             double rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatioBytes");
             if (Double.isNaN(rtxRatio))
                 rtxRatio = getAdditionalStatHourly(_context, "stream.rtxRatio");
             double rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatioBytes");
             if (Double.isNaN(rtxRatio5))
                 rtxRatio5 = getAdditionalStat5Min(_context, "stream.rtxRatio");
-            boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
-                                    (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
+            return slowStartGrowthTarget(current, _min, _max, _step, _defaultValue, observed,
+                                         buildSuccess, failLifetime, lossRate, lifetimeWindowSize,
+                                         chokeSize, congWindowSize, rtxRatio, rtxRatio5);
+        }
+    }
 
-            boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
-            boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
-            boolean dropping = isStreamLossy(lossRate);
-            // Use observed (initialRTT.out) as primary RTT for "streams slow"
-            // since that's the RTT new connections see — more relevant than
-            // lifetimeRTT for page-load connections. Lower threshold to 3000ms
-            // so 3-4s paths are treated as eligible for faster growth.
-            boolean streamsSlow = !Double.isNaN(observed) && observed > 3000;
-            boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
-            boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
-            boolean strongGrowth = (streamsSlow && windowsSmall) ||
-                                   (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20);
+    /**
+     * Compute the target for {@code SlowStartGrowthParam}.
+     *
+     * <p>Extracted as a static method for unit testing, matching
+     * {@link #congestionAvoidanceGrowthTarget}.
+     *
+     * @param current current runtime value
+     * @param min minimum allowed value
+     * @param max maximum allowed value
+     * @param step tuning step size
+     * @param defaultValue factory default value
+     * @param observed outbound RTT in ms (may be NaN)
+     * @param buildSuccess tunnel build success rate (0.0-1.0), or NaN if unknown
+     * @param failLifetime sendMessageFailureLifetime stat (ms), or NaN
+     * @param lossRate streaming retransmission rate (0.0-1.0), or NaN
+     * @param lifetimeWindowSize final send window of closed streams, or NaN
+     * @param chokeSize choke-depth stat, or NaN
+     * @param congWindowSize window size at congestion, or NaN
+     * @param rtxRatio hourly retransmit ratio (per-mille), or NaN
+     * @param rtxRatio5 5-minute retransmit ratio (per-mille), or NaN
+     * @return target value clamped to [min, max]
+     * @since 0.9.71+
+     */
+    static int slowStartGrowthTarget(int current, int min, int max, int step, int defaultValue,
+                                     double observed, double buildSuccess, double failLifetime, double lossRate,
+                                     double lifetimeWindowSize, double chokeSize, double congWindowSize,
+                                     double rtxRatio, double rtxRatio5) {
+        boolean retransmitLow = (!Double.isNaN(rtxRatio) && rtxRatio < 50) ||
+                                (!Double.isNaN(rtxRatio5) && rtxRatio5 < 40);
 
-            // Recovery floor: if below 50% of default, always increase back toward default
-            int recoveryFloor = Math.max(_min, _defaultValue / 2);
-            if (current < recoveryFloor && !congested)
-                return Math.min(_defaultValue, current + _step);
+        boolean networkHealthy = Double.isNaN(buildSuccess) || buildSuccess > 0.7;
+        boolean congested = !Double.isNaN(failLifetime) && failLifetime > 8000;
+        boolean dropping = isStreamLossy(lossRate);
+        // Use observed (initialRTT.out) as primary RTT for "streams slow"
+        // since that's the RTT new connections see — more relevant than
+        // lifetimeRTT for page-load connections. Lower threshold to 3000ms
+        // so 3-4s paths are treated as eligible for faster growth.
+        boolean streamsSlow = !Double.isNaN(observed) && observed > 3000;
+        boolean windowsSmall = !Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize < 4;
+        boolean choking = !Double.isNaN(chokeSize) && chokeSize > 5;
+        boolean collapsed = windowsCongesting(congWindowSize);
+        boolean strongGrowth = (streamsSlow && windowsSmall) ||
+                               (!Double.isNaN(lifetimeWindowSize) && lifetimeWindowSize > 20);
 
-            // Drops or congestion = slow ramp (loss minimization)
-            if (dropping || congested || windowsCongesting)
-                return Math.max(recoveryFloor, current - _step);
+        // Recovery floor: if below 50% of default, always increase back toward default
+        int recoveryFloor = Math.max(min, defaultValue / 2);
+        if (current < recoveryFloor && !congested)
+            return Math.min(defaultValue, current + step);
 
-            // Network unhealthy = slow ramp
-            if (!networkHealthy)
-                return Math.max(recoveryFloor, current - _step);
+        // Below default: climb back toward the default. Evaluated BEFORE the
+        // dead zone for the same reason as in
+        // {@link #congestionAvoidanceGrowthTarget}: the zone spans
+        // [default-1, default+1], three of the four values in this range, so
+        // the below-default branch below it would otherwise be unreachable for
+        // any factor sitting one step under the default.
+        if (current < defaultValue && networkHealthy && !dropping && !congested && !collapsed)
+            return Math.min(max, current + step);
 
-            // Choking = decrease ramp (too aggressive)
-            if (choking)
-                return Math.max(recoveryFloor, current - _step);
+        // Drops or congestion = slow ramp (loss minimization)
+        if (dropping || congested || collapsed)
+            return Math.max(recoveryFloor, current - step);
+
+        // Network unhealthy = slow ramp
+        if (!networkHealthy)
+            return Math.max(recoveryFloor, current - step);
+
+        // Choking = decrease ramp (too aggressive)
+        if (choking)
+            return Math.max(recoveryFloor, current - step);
 
             // Dead zone: hold within one step of default so a wobbling RTT can't
-            // ping-pong the factor, but let a strong growth signal with a low
-            // retransmit ratio (or a genuinely high RTT above default) through.
-            // The old band was [recoveryFloor, default*2]; with range [1,4] and
-            // default 3 that covered the whole range, so the increase and
-            // decrease branches below were both dead and the factor froze.
-            if (current >= _defaultValue - 1 && current <= _defaultValue + 1 &&
-                !dropping && !congested && !windowsCongesting && networkHealthy &&
-                !(strongGrowth && retransmitLow) &&
-                !(current > _defaultValue && observed > 8000))
-                return current;
-
-            // Completed streams slow + windows small = increase ramp (need faster ramp)
-            if (streamsSlow && windowsSmall && !dropping && !congested && !windowsCongesting && retransmitLow)
-                return Math.min(_max, current + _step);
-
-            // Below default: increase if healthy
-            if (current < _defaultValue && networkHealthy && !dropping && !congested && !windowsCongesting)
-                return Math.min(_max, current + _step);
-
-            // Above default: decrease if RTT is high OR network unhealthy
-            if (current > _defaultValue && (observed > 8000 || !networkHealthy))
-                return Math.max(recoveryFloor, current - _step);
-
+        // ping-pong the factor, but let a strong growth signal with a low
+        // retransmit ratio (or a genuinely high RTT above default) through.
+        // The old band was [recoveryFloor, default*2]; with range [1,4] and
+        // default 3 that covered the whole range, so the increase and
+        // decrease branches below were both dead and the factor froze.
+        if (current >= defaultValue - 1 && current <= defaultValue + 1 &&
+            !dropping && !congested && !collapsed && networkHealthy &&
+            !(strongGrowth && retransmitLow) &&
+            !(current > defaultValue && observed > 8000))
             return current;
-        }
+
+        // Completed streams slow + windows small = increase ramp (need faster ramp)
+        if (streamsSlow && windowsSmall && !dropping && !congested && !collapsed && retransmitLow)
+            return Math.min(max, current + step);
+
+        // Above default: decrease if RTT is high OR network unhealthy
+        if (current > defaultValue && (observed > 8000 || !networkHealthy))
+            return Math.max(recoveryFloor, current - step);
+
+        return current;
     }
 
     /**

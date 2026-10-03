@@ -34,7 +34,9 @@ public class TuningHelper extends HelperBase {
     public void setNonce(String nonce) { _nonce = nonce; }
 
     // human-readable labels for raw param names
-    private static final Map<String, String> DISPLAY_NAMES = new HashMap<>();
+    /** Param name to human label. Package-private so the conformance test can
+     *  verify the two maps stay in step; see {@link TuningHelperParamConformanceTest}. */
+    static final Map<String, String> DISPLAY_NAMES = new HashMap<>();
     static {
         DISPLAY_NAMES.put("ACK_FREQUENCY", _x("Acknowledgement Frequency"));
         DISPLAY_NAMES.put("DATA_MESSAGE_TIMEOUT", _x("Data Message Timeout"));
@@ -183,7 +185,9 @@ public class TuningHelper extends HelperBase {
     }
 
     // brief purpose descriptions (<=120 chars)
-    private static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<>();
+    /** Param name to console description. Package-visible for the same reason as
+     *  {@link #DISPLAY_NAMES}. */
+    static final Map<String, String> PARAM_DESCRIPTIONS = new HashMap<>();
     static {
         PARAM_DESCRIPTIONS.put("ACK_FREQUENCY", _x("Data packets between each ACK."));
         PARAM_DESCRIPTIONS.put("DATA_MESSAGE_TIMEOUT", _x("Time before a message is declared lost (ms)."));
@@ -283,8 +287,8 @@ public class TuningHelper extends HelperBase {
         PARAM_DESCRIPTIONS.put("udp.establish.maxQueuedOutbound", _x("Pending outbound handshake queue."));
         PARAM_DESCRIPTIONS.put("ntcp.maxWriteBufs", _x("Write buffer per NTCP connection."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.minResendDelay", _x("Min time between retransmissions (ms)."));
-        PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", _x("Congestion avoidance growth rate."));
-        PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", _x("Window multiplier per RTT during slow start."));
+        PARAM_DESCRIPTIONS.put("i2p.streaming.congestionAvoidanceGrowthRateFactor", _x("Window growth per RTT after slow start; higher recovers faster."));
+        PARAM_DESCRIPTIONS.put("i2p.streaming.slowStartGrowthRateFactor", _x("Window growth per ACK during slow start; higher ramps faster."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.minPacingRate", _x("Minimum send rate before pacing kicks in (KB/s)."));
         PARAM_DESCRIPTIONS.put("i2p.streaming.maxRtt", _x("Upper bound on RTT estimate (ms)."));
         PARAM_DESCRIPTIONS.put("CONNECT_TIMEOUT_MULTIPLIER", _x("Scales each client's connect timeout by network RTT (30-200%)."));
