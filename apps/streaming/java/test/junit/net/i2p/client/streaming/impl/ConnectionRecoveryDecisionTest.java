@@ -7,7 +7,7 @@ import org.junit.Test;
 /**
  * Tests the recovery-liveness backstop and retransmit pacing decisions.
  *
- * <p>{@link Connection#stuckLifetimeExceeded(int, int, long, long)} is the pure
+ * <p>{@link Connection#stuckLifetimeExceeded(long, long, long)} is the pure
  * predicate behind the hard liveness backstop that force-closes a dead
  * connection. The deadline is anchored at the oldest unacked packet's CREATION
  * (not its last transmission), so an established connection in resume mode —
@@ -27,38 +27,44 @@ public class ConnectionRecoveryDecisionTest {
     public void testAtBudgetBoundaryNotStuck() {
         long createdOn = 100_000;
         // exactly budget of lifetime -> not stuck (strict inequality)
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, createdOn + 6L * 30000, createdOn));
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, 280_000, 100_000));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, createdOn + 6L * 30000, createdOn));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, 280_000, 100_000));
     }
 
     /** A packet in flight beyond the worst-case budget is stuck. */
     @Test
     public void testBeyondBudgetIsStuck() {
-        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, 280_001, 100_000));
-        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, 300_000, 100_000));
+        assertTrue(Connection.stuckLifetimeExceeded(180_000, 280_001, 100_000));
+        assertTrue(Connection.stuckLifetimeExceeded(180_000, 300_000, 100_000));
     }
 
     /** A packet with any progress within the budget is not stuck. */
     @Test
     public void testWithinBudgetNotStuck() {
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, 179_999, 100_000));
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, 100_000, 100_000));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, 179_999, 100_000));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, 100_000, 100_000));
     }
 
     /** Never-sent or unknown packets are never declared stuck. */
     @Test
     public void testUnknownTimesNotStuck() {
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, 500_000, 0));
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, 500_000, -1));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, 500_000, 0));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, 500_000, -1));
     }
 
-    /** Degenerate configuration never triggers (protects against divide-by-zero-style configs). */
+    /**
+     * Degenerate configuration never triggers: a zero or negative budget disables the
+     * backstop rather than making it fire unconditionally.
+     *
+     * <p>The former {@code maxRto <= 0} cases are gone with the RTO term: the budget is
+     * now a single explicit wall-clock value, so there is no second dimension that
+     * could be zeroed by accident.
+     */
     @Test
     public void testDegenerateConfigNeverStuck() {
-        assertFalse(Connection.stuckLifetimeExceeded(0, 30000, 500_000, 100_000));
-        assertFalse(Connection.stuckLifetimeExceeded(-1, 30000, 500_000, 100_000));
-        assertFalse(Connection.stuckLifetimeExceeded(6, 0, 500_000, 100_000));
-        assertFalse(Connection.stuckLifetimeExceeded(6, -1, 500_000, 100_000));
+        assertFalse(Connection.stuckLifetimeExceeded(0, 500_000, 100_000));
+        assertFalse(Connection.stuckLifetimeExceeded(-1, 500_000, 100_000));
+        assertFalse(Connection.stuckLifetimeExceeded(Long.MIN_VALUE, 500_000, 100_000));
     }
 
     /** The comparison is exact-inequality so a live path on the boundary survives. */
@@ -66,8 +72,8 @@ public class ConnectionRecoveryDecisionTest {
     public void testLivePathOnBoundarySurvives() {
         long createdOn = 100_000;
         long budget = 6L * 30000;
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, createdOn + budget, createdOn));
-        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, createdOn + budget + 1, createdOn));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, createdOn + budget, createdOn));
+        assertTrue(Connection.stuckLifetimeExceeded(180_000, createdOn + budget + 1, createdOn));
     }
 
     /** Creation anchoring: frequent retransmissions (fresh lastSend) cannot
@@ -78,9 +84,9 @@ public class ConnectionRecoveryDecisionTest {
         long createdOn = 100_000;
         long now = 600_000;
         // Actively resent a moment ago, but created beyond the budget -> stuck.
-        assertTrue(Connection.stuckLifetimeExceeded(6, 30000, now, createdOn));
+        assertTrue(Connection.stuckLifetimeExceeded(180_000, now, createdOn));
         // Created recently -> not stuck even if last transmission was a while ago.
-        assertFalse(Connection.stuckLifetimeExceeded(6, 30000, now, now - 1_000));
+        assertFalse(Connection.stuckLifetimeExceeded(180_000, now, now - 1_000));
     }
 
     // ---- remoteSilentTooLong ----

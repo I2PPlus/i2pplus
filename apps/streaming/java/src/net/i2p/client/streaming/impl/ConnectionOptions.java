@@ -6,6 +6,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Hash;
@@ -57,6 +58,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private int _maxInitialMessageSize;
     /** Max resends. */
     private int _maxResends;
+    /** Wall-clock ms an established connection may hold an unacked packet; see PROP_STALL_GIVEUP_MS. */
+    private long _stallGiveupMs = DEFAULT_STALL_GIVEUP_MS;
     /** Inactivity timeout. */
     private int _inactivityTimeout;
     /** Inactivity action. */
@@ -151,6 +154,21 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
     /** Prop max rto. */
     static final String PROP_MAX_RTO = "i2p.streaming.maxRTO";
+
+    /**
+     *  How long an established connection may keep a packet in flight with no forward
+     *  progress before it is force-closed, in ms.
+     *
+     *  <p>Deliberately its own setting rather than a product of {@code maxResends} and
+     *  {@code maxRTO}. {@code maxResends} is the per-<em>packet</em> budget and governs
+     *  loss tolerance; multiplying it by an RTO cap produced a four-minute connection
+     *  lifetime as a side effect of a loss-tolerance knob. While the client tunnel pool
+     *  is short of healthy tunnels, every second a dead stream is held is a second it
+     *  occupies capacity that a live stream needs, and the resulting reconnects starve
+     *  the pool further. Ninety seconds still rides out several firings past the RTO
+     *  cap, so a genuinely transient loss survives.
+     */
+    static final String PROP_STALL_GIVEUP_MS = "i2p.streaming.stallGiveupMs";
 
     /**
      * Default initial RTO (ms) before any RTT measurement. Set to 9000 — accommodates
@@ -311,6 +329,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** Default maximum number of times a single message will be retransmitted */
     static final int DEFAULT_MAX_SENDS = 30;
+
+    /**
+     *  Default wall-clock budget for giving up on forward progress. See
+     *  {@link #PROP_STALL_GIVEUP_MS}.
+     */
+    static final long DEFAULT_STALL_GIVEUP_MS = 90000;
 
     /** Initial window size. */
     static int getInitialWindowSize() { return initialWindowSize; }
@@ -634,6 +658,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setResendDelay(opts.getResendDelay());
             setMaxMessageSize(opts.getMaxMessageSize());
             setMaxResends(opts.getMaxResends());
+            setStallGiveupMs(opts.getStallGiveupMs());
             setInactivityTimeout(opts.getInactivityTimeout());
             setInactivityAction(opts.getInactivityAction());
             setInboundBufferSize(opts.getInboundBufferSize());
@@ -709,6 +734,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         applyInt(opts, PROP_INITIAL_ACK_DELAY, defaultInitialAckDelay, onlyIfSet, this::setSendAckDelay);
         applyInt(opts, PROP_INITIAL_WINDOW_SIZE, initialWindowSize, onlyIfSet, this::setWindowSize);
         applyInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS, onlyIfSet, this::setMaxResends);
+        applyLong(opts, PROP_STALL_GIVEUP_MS, DEFAULT_STALL_GIVEUP_MS, onlyIfSet, this::setStallGiveupMs);
         applyInt(opts, PROP_INACTIVITY_TIMEOUT, defaultInactivityTimeout, onlyIfSet, this::setInactivityTimeout);
         applyInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION, onlyIfSet, this::setInactivityAction);
 
@@ -759,6 +785,23 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private void applyInt(Properties opts, String key, int def, boolean onlyIfSet, IntConsumer setter) {
         if (onlyIfSet && opts.getProperty(key) == null) return;
         setter.accept(getInt(opts, key, def));
+    }
+
+    /** Long-valued sibling of {@link #applyInt}, for budgets expressed in ms. */
+    private void applyLong(Properties opts, String key, long def, boolean onlyIfSet, LongConsumer setter) {
+        if (onlyIfSet && opts.getProperty(key) == null) return;
+        String raw = opts.getProperty(key);
+        if (raw == null) {
+            setter.accept(def);
+            return;
+        }
+        try {
+            setter.accept(Long.parseLong(raw.trim()));
+        } catch (NumberFormatException nfe) {
+            // A malformed value must not silently become zero, which would disable the
+            // backstop entirely; fall back to the documented default instead.
+            setter.accept(def);
+        }
     }
 
     /**
@@ -1110,6 +1153,21 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
 
     /** Maximum retries per message */
     public int getMaxResends() {return _maxResends;}
+
+    /**
+     *  Wall-clock ms an established connection may hold a packet in flight with no
+     *  forward progress before being force-closed.
+     *
+     *  @return the stall give-up budget in ms
+     *  @since 0.9.71+
+     */
+    public long getStallGiveupMs() {return _stallGiveupMs;}
+
+    /**
+     *  @param ms wall-clock budget in ms; negative or zero disables the backstop
+     *  @since 0.9.71+
+     */
+    public void setStallGiveupMs(long ms) {_stallGiveupMs = Math.max(ms, 0);}
     /**
      * Maximum retries per message.
      */
@@ -1317,6 +1375,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         buf.append(" ackDelay=").append(_ackDelay);
         buf.append(" cwin=").append(_windowSize);
         buf.append(" maxResends=").append(_maxResends);
+        buf.append(" stallGiveupMs=").append(_stallGiveupMs);
         buf.append("\n* writeTimeout=").append(getWriteTimeout());
         buf.append(" readTimeout=").append(getReadTimeout());
         if (_inactivityTimeout > 0) {buf.append(" inactivityTimeout=").append(_inactivityTimeout);}

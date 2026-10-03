@@ -162,6 +162,27 @@ class Connection {
      */
     private boolean _immediateRtoFired;
     /**
+     *  Whether the rising edge of a retransmit stall has already been logged for this
+     *  episode. Keeps the warning to one line per stall instead of one per timer firing;
+     *  cleared as soon as forward ACK progress resumes. See the retransmit timer.
+     */
+    private boolean _retransmitStallLogged;
+    /**
+     *  Clock value at which the current run of retransmit firings without forward ACK
+     *  progress began, or 0 when there is no such run. The stall verdict is measured
+     *  from here rather than from a count of firings, because RTO doubling makes a
+     *  count mean a different duration on every connection.
+     */
+    private long _retransmitStallSince;
+
+    /**
+     *  How long the retransmit timer must go without forward ACK progress before the
+     *  connection is called stalled. Matches {@link #STALL_GRACE_MS} so the timer-driven
+     *  and the goodput-driven detectors agree on what "stalled" means rather than one
+     *  firing on a condition the other considers normal.
+     */
+    private static final long RETRANSMIT_STALL_MS = 30000;
+    /**
      *  Fixed-point congestion-avoidance credit for the deterministic growth
      *  ratchet in {@code ConnectionPacketHandler.adjustWindow}. Increments are
      *  derived from accumulated ACK credit instead of a per-ACK random draw,
@@ -645,6 +666,36 @@ class Connection {
         return _highestAckedThrough.get() >= 0;
     }
 
+            /**
+     *  Decide whether the retransmit timer has gone long enough without forward ACK
+     *  progress to call it a stall.
+     *
+     *  <p>Time, not a count of firings. RTO doubles on every firing for an established
+     *  connection, so "two firings" is about three seconds early in a connection's life
+     *  and over a minute late in one that has been running - the same number meaning two
+     *  very different things, and always far too eager at the start. A duration has one
+     *  meaning.
+     *
+     *  <p>Requires an established session. Before the handshake completes there is no
+     *  forward ACK progress to be missing, so a connection still setting up cannot be
+     *  stalled; counting its ordinary SYN retransmissions produced a large volume of
+     *  warnings about connections that were never broken.
+     *
+     *  @param established true once any packet has been acknowledged
+     *  @param now current clock value in ms
+     *  @param stallSinceMs clock value at which the current no-progress run began, or 0
+     *  @param thresholdMs how long without progress counts as a stall
+     *  @return true only for an established connection idle past the threshold
+     *  @since 0.9.71+
+     */
+    static boolean isRetransmitStalledNow(boolean established, long now, long stallSinceMs,
+    long thresholdMs) {
+        if (!established || stallSinceMs <= 0) {
+            return false;
+        }
+        return now - stallSinceMs >= thresholdMs;
+    }
+
     /**
      * Delay before the next retransmit-timer fire.
      *
@@ -666,6 +717,24 @@ class Connection {
      *        this overdue episode
      * @return delay in ms; 0 requests an immediate fire
      */
+    /**
+     *  Whether this firing should produce a stall warning, given the latch state.
+     *
+     *  <p>The stall condition holds for as long as the path is stuck and the timer
+     *  keeps firing, so an unconditional warning emits once per RTO tick. That produced
+     *  over 90,000 identical lines in under an hour here, which is worse than no report
+     *  at all: it buries the lines that carry signal and trains the reader to skip the
+     *  class. One line per episode, and an INFO when it ends.
+     *
+     *  @param stallDetached true when this firing meets the stall condition
+     *  @param alreadyLogged true when this episode has already been reported
+     *  @return true only on the rising edge of a stall
+     *  @since 0.9.71+
+     */
+    static boolean shouldLogStallEdge(boolean stallDetached, boolean alreadyLogged) {
+        return stallDetached && !alreadyLogged;
+    }
+
     static int nextRetransmitDelay(long now, long oldestLastSend, long rto,
                                    boolean immediateAlreadyFired) {
         long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
@@ -1963,10 +2032,10 @@ class Connection {
      *         recovery is presumed dead
      * @since 0.9.71+
      */
-    static boolean stuckLifetimeExceeded(int maxResends, int maxRto, long now, long createdOn) {
-        if (maxResends <= 0 || maxRto <= 0 || createdOn <= 0)
+    static boolean stuckLifetimeExceeded(long budgetMs, long now, long createdOn) {
+        if (budgetMs <= 0 || createdOn <= 0)
             return false;
-        return now - createdOn > (long) maxResends * maxRto;
+        return now - createdOn > budgetMs;
     }
 
     /**
@@ -1983,8 +2052,8 @@ class Connection {
      * it, and its close is lost on the dead path back. This gives an established
      * connection in resume mode — which otherwise retransmits a budget-exhausted
      * head-of-line packet every RTO until the creation-anchored backstop
-     * ({@link #stuckLifetimeExceeded(int, int, long, long)}, default 30 sends *
-     * 30s maxRTO = 15 min) fires — a tighter wall-clock deadline so the
+     * ({@link #stuckLifetimeExceeded(long, long, long)}, default
+     * {@code i2p.streaming.stallGiveupMs} = 90s) fires — a tighter wall-clock deadline so the
      * application gets EOF within ~one inactivity window instead of hanging on a
      * zombie stream it can never resume.
      *
@@ -2026,7 +2095,7 @@ class Connection {
      * <p>The predicate requires a positive window and is silently disarmed by a
      * {@code <= 0} configured timeout, which would leave a dead path hanging
      * until the creation-anchored backstop
-     * ({@link #stuckLifetimeExceeded(int, int, long, long)}) — by default 30
+     * ({@link #stuckLifetimeExceeded(long, long, long)}) — by default 90s
      * resends * maxRTO ≈ 6 min. Floor the window at the protocol default (120s)
      * so a zombie stream still dies within ~one inactivity window; the bound is
      * deliberately never tightened below that.
@@ -3963,9 +4032,20 @@ if (!on) {
                 return;
             }
             if (stallDetected) {
-                if (_log.shouldWarn()) {
-                    _log.warn(Connection.this + " retransmit stall detected (" +
-                                _retransmitCount + " retransmits without ACK progress), rotating tunnel");
+                if (shouldLogStallEdge(true, _retransmitStallLogged)) {
+                    _retransmitStallLogged = true;
+                    if (_log.shouldWarn()) {
+                        _log.warn(Connection.this + " no forward ACK progress for "
+                                  + (getRetransmitStallAgeMs(_context.clock().now()) / 1000L)
+                                  + "s across " + _retransmitCount
+                                  + " retransmit firings; the tunnel is NOT being rotated"
+                                  + " - this is reported, not acted on");
+                    }
+                }
+            } else if (_retransmitStallLogged) {
+                _retransmitStallLogged = false;
+                if (_log.shouldInfo()) {
+                    _log.info(Connection.this + " forward ACK progress resumed");
                 }
             }
             if (_log.shouldDebug()) {
@@ -4246,15 +4326,25 @@ if (!on) {
          * @return true if a retransmit stall was detected
          * @since 0.9.71+
          */
-        synchronized boolean checkRetransmitStall() {
+synchronized boolean checkRetransmitStall() {
+            long now = _context.clock().now();
             if (_ackProgress) {
                 _retransmitCount = 0;
                 _ackProgress = false;
+                _retransmitStallSince = 0;
                 return false;
-            } else {
-                _retransmitCount++;
-                return _retransmitCount >= 2;
             }
+            _retransmitCount++;
+            if (_retransmitStallSince <= 0) {
+                _retransmitStallSince = now;
+            }
+            return isRetransmitStalledNow(_highestAckedThrough.get() >= 0, now,
+                                          _retransmitStallSince, RETRANSMIT_STALL_MS);
+        }
+
+        /** Ms since the current no-forward-progress run began, or 0 if none. */
+        synchronized long getRetransmitStallAgeMs(long now) {
+            return _retransmitStallSince <= 0 ? 0 : Math.max(0, now - _retransmitStallSince);
         }
 
         /**
@@ -4275,9 +4365,7 @@ if (!on) {
                 if (first == null) return false;
             }
             long now = _context.clock().now();
-            if (stuckLifetimeExceeded(_options.getMaxResends(),
-                                        ConnectionOptions.getMaxRTOStatic(),
-                                        now,
+            if (stuckLifetimeExceeded(_options.getStallGiveupMs(), now,
                                         first.getValue().getCreatedOn())) {
                 if (_log.shouldWarn()) {
                     _log.warn(Connection.this + " oldest unacked packet stuck without progress, forcing disconnect");
