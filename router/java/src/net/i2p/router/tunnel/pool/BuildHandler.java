@@ -612,6 +612,18 @@ public class BuildHandler implements Runnable {
     static final long BAN_INFLIGHT_THRESHOLD_MS = 60_000L;
 
     /**
+     * Minimum gap between banned-next-hop rejection warnings, and the number
+     * suppressed in between.
+     *
+     * <p>One line per rejection buried the real warnings: a starved pool can
+     * reject hundreds of builds a minute, all identical, which is exactly when
+     * the log is needed for something else.
+     */
+    private static final long BAN_DROP_WARN_INTERVAL_MS = 60_000L;
+    private volatile long _lastBanDropWarn;
+    private volatile int _banDropsSinceWarn;
+
+    /**
      *  Classify why a next-hop peer is banlisted, for the rejection log.
      *
      *  <p>Pure and static so the classification is testable without a banlist.
@@ -922,17 +934,28 @@ public class BuildHandler implements Runnable {
             return -1;
         }
         if (_context.banlist().isBanlisted(nextPeer)) {
+            _context.statManager().addRateData("tunnel.buildBanHit", 1);
             if (_log.shouldWarn()) {
                 // Report how long the banlist has held the peer. Old means the
                 // ban predates this request and peer selection handed out a peer
                 // the banlist already held; young means the ban landed during the
                 // build and the selection was correct. Those need different
                 // fixes, and the ban's duration class cannot tell them apart.
-                _log.warn("Dropping Tunnel Request -> Next peer ["
-                          + nextPeer.toBase64().substring(0,6) + "] is banned ("
-                          + banSeverity(_context.banlist().getBanAge(nextPeer)) + ")");
+                // The cause says which subsystem banned the peer, and the count
+                // says how many rejections were folded into this line.
+                long dropNow = _context.clock().now();
+                int suppressed = ++_banDropsSinceWarn;
+                if (dropNow - _lastBanDropWarn >= BAN_DROP_WARN_INTERVAL_MS) {
+                    _lastBanDropWarn = dropNow;
+                    _banDropsSinceWarn = 0;
+                    String cause = _context.banlist().getBanCause(nextPeer);
+                    _log.warn("Dropping Tunnel Request -> Next peer ["
+                              + nextPeer.toBase64().substring(0,6) + "] is banned ("
+                              + banSeverity(_context.banlist().getBanAge(nextPeer))
+                              + (cause != null ? ", cause=" + cause : "")
+                              + ")" + (suppressed > 1 ? " [" + suppressed + " rejections]" : ""));
+                }
             }
-            _context.statManager().addRateData("tunnel.buildBanHit", 1);
             countNextHopOutcome(NEXT_HOP_DROPPED, _log, _context.clock().now());
             if (from != null) {_context.commSystem().mayDisconnect(from);}
             return -1;

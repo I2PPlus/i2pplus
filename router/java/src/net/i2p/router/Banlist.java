@@ -1194,6 +1194,27 @@ public class Banlist {
     }
 
     /**
+     * Reason recorded when the peer was banlisted.
+     *
+     * <p>Diagnostic only. A rejected tunnel build says a peer was banned but not
+     * why, so a burst of rejections cannot be attributed to a cause; without it
+     * the only way to find out which subsystem is banning peers is to add
+     * temporary logging to each caller.
+     *
+     * @param peer the router hash to check
+     * @return the recorded cause code or reason, or null when the peer is not
+     *         currently banlisted or no cause was recorded
+     * @since 0.9.71+
+     */
+    public String getBanCause(Hash peer) {
+        if (peer == null) {return null;}
+        Entry entry = _entries.get(peer);
+        if (entry == null || entry.expireOn <= _context.clock().now()) {return null;}
+        if (entry.causeCode != null && !entry.causeCode.isEmpty()) {return entry.causeCode;}
+        return entry.cause;
+    }
+
+    /**
      *  Render banlist status as HTML.
      *
      *  @deprecated moved to router console

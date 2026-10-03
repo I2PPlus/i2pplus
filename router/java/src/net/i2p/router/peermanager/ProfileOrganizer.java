@@ -402,6 +402,12 @@ public class ProfileOrganizer {
         _context.statManager().createRateStat("peer.profilePlaceTime", "Time to sort peers into tiers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileReorgTime", "Time to reorganize peers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.peerBannedAtSelection",
+                "Banned peers rejected by the selection gates",
+                "Number of banned peers rejected in passesBasicGates during peer selection. "
+                        + "Compare with tunnel.buildBanHit: if that is materially larger, a selection "
+                        + "path is handing out banned peers, because every path funnels through "
+                        + "passesBasicGates.", RATES);
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
@@ -2883,7 +2889,13 @@ public class ProfileOrganizer {
         // Null-safe: _us is set by PeerManager's constructor, but a null here
         // must not turn a self-exclusion into an NPE on the hot path.
         if (_us != null && _us.equals(peer)) return false;
-        if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) return false;
+        if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) {
+            // Counted here because this is the one chokepoint every selection path
+            // funnels through. If tunnel.buildBanHit ever exceeds this materially,
+            // a path has stopped routing through these gates.
+            _context.statManager().addRateData("tunnel.peerBannedAtSelection", 1);
+            return false;
+        }
         // Ghost peers are rejected here rather than filtered after selection:
         // a candidate slot spent on a peer that only times out on builds is a
         // slot not spent on one that can complete, and a post-selection filter
