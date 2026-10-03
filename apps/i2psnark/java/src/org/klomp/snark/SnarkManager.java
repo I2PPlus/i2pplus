@@ -140,7 +140,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /** Max concurrent DHT lookup threads (zzzot lookups). @since 0.9.71+ */
     private static final int MAX_LOOKUP_CONCURRENCY = 8;
-    private static final long LOOKUP_STALE_MS = 10 * 60 * 1000;
+    /**
+     * Age past which a lookup torrent is swept. Package-visible so the boundary can be
+     * pinned by test rather than restated as a literal.
+     */
+    static final long LOOKUP_STALE_MS = 10 * 60 * 1000;
+    /** Marker in the display name of a torrent created by a metadata lookup. */
+    private static final String LOOKUP_NAME_PREFIX = "Lookup [";
+    /** Marker in the storage path of a torrent created by a metadata lookup. */
+    private static final String LOOKUP_PATH_MARKER = "zzzot-lookup";
     private final Semaphore _lookupSemaphore = new Semaphore(MAX_LOOKUP_CONCURRENCY, true);
     /** infohash → time (ms) when lookup was created, for stale cleanup. */
     private final Map<SHA1Hash, Long> _lookupCreationTimes = new ConcurrentHashMap<>(8);
@@ -4204,6 +4212,40 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *
      * @since 0.9.71+
      */
+    /**
+     *  Is this one of our own metadata-lookup torrents, as opposed to a user's?
+     *
+     *  <p>Pure decision, separated from {@link #cleanupStaleLookupTorrents()} so it can be
+     *  pinned by test: the sweep deletes torrents, and the only thing standing between a
+     *  user's download and that deletion is this identification.
+     *
+     *  @param name display name, or null if it could not be read
+     *  @param basePath storage base path, or null if unknown or not yet resolved
+     *  @return true if this is a lookup torrent
+     *  @since 0.9.71+
+     */
+    static boolean isLookupTorrent(String name, String basePath) {
+        if (name != null
+                && (name.startsWith(LOOKUP_NAME_PREFIX) || name.contains(LOOKUP_PATH_MARKER))) {
+            return true;
+        }
+        return basePath != null && basePath.contains(LOOKUP_PATH_MARKER);
+    }
+
+    /**
+     *  Should this lookup torrent be swept now?
+     *
+     *  @param name display name, or null if it could not be read
+     *  @param basePath storage base path, or null if unknown
+     *  @param createdAt when the lookup was created, in ms
+     *  @param now current wall-clock ms
+     *  @return true if it is one of ours and older than {@link #LOOKUP_STALE_MS}
+     *  @since 0.9.71+
+     */
+    static boolean isStaleLookup(String name, String basePath, long createdAt, long now) {
+        return isLookupTorrent(name, basePath) && (now - createdAt) > LOOKUP_STALE_MS;
+    }
+
     private void cleanupStaleLookupTorrents() {
         long now = System.currentTimeMillis();
         // Snapshot the map under its monitor, then decide staleness with the monitor
@@ -4220,22 +4262,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (Snark snark : candidates) {
             String name = null;
             try { name = snark.getName(); } catch (Exception ignore) { /* name unreadable; the storage-path check below can still identify our lookup */ }
-            boolean isLookup = (name != null && (name.startsWith("Lookup [") || name.contains("zzzot-lookup")));
-            if (!isLookup) {
+            // Resolving storage touches the filesystem, so only do it when the name alone
+            // has not already identified the torrent.
+            String basePath = null;
+            if (!isLookupTorrent(name, null)) {
                 try {
                     Storage st = snark.getStorage();
-                    if (st != null) {
-                        File base = st.getBase();
-                        if (base != null && base.getPath().contains("zzzot-lookup"))
-                            isLookup = true;
-                    }
+                    if (st != null && st.getBase() != null)
+                        basePath = st.getBase().getPath();
                 } catch (Exception ignore) { /* storage unreachable; nothing to clean for this torrent */ }
             }
-            if (isLookup) {
-                Long created = _lookupCreationTimes.get(new SHA1Hash(snark.getInfoHash()));
-                if (created != null && (now - created) > LOOKUP_STALE_MS) {
-                    stale.add(snark);
-                }
+            Long created = _lookupCreationTimes.get(new SHA1Hash(snark.getInfoHash()));
+            if (created != null && isStaleLookup(name, basePath, created, now)) {
+                stale.add(snark);
             }
         }
         if (stale.isEmpty()) return;
