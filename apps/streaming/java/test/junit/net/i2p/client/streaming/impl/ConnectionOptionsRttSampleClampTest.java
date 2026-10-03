@@ -69,11 +69,13 @@ public class ConnectionOptionsRttSampleClampTest {
      * RTT-sized gap).
      */
     @Test
-    public void testDoubleRTORespectsFloorGap() throws InterruptedException {
+    public void testDoubleRTORespectsFloorGap() {
         ConnectionOptions opts = new ConnectionOptions();
+        long[] now = { 1_000_000_000L };
+        opts._nanoTime = () -> now[0];
         opts.updateRTT(50);
         int first = opts.doubleRTO();
-        Thread.sleep(200);
+        now[0] += 200L * 1_000_000L;
         int second = opts.doubleRTO();
         assertEquals("doubling must be limited to once per floored gap, not once per RTT",
                      first, second);
@@ -86,8 +88,13 @@ public class ConnectionOptionsRttSampleClampTest {
      * timer DOWN to 12s exactly when recovery wants it growing.
      */
     @Test
-    public void testDoubleRTONeverShrinksAboveCap() throws InterruptedException {
+    public void testDoubleRTONeverShrinksTheRTO() {
         ConnectionOptions opts = new ConnectionOptions();
+        // Virtual clock: the gap guard is MIN_RTO_DOUBLE_GAP_MS (1s), so waiting
+        // it out for real made this one test cost 3.15s - the entire runtime of the
+        // class. The guard is exercised identically, just without the wall clock.
+        long[] now = { 1_000_000_000L };
+        opts._nanoTime = () -> now[0];
         // RTO = smoothed(500) + 4 * dev(7500) = 30500 -> clamped to maxResendDelay (30s)
         opts.loadFromCache(500, 7500, 8);
         int rto = opts.getRTO();
@@ -98,7 +105,7 @@ public class ConnectionOptionsRttSampleClampTest {
             assertTrue("backoff must never shrink the RTO: " + next + " < " + rto,
                        next >= rto);
             rto = next;
-            Thread.sleep(ConnectionOptions.MIN_RTO_DOUBLE_GAP_MS + 50);
+            now[0] += (ConnectionOptions.MIN_RTO_DOUBLE_GAP_MS + 50) * 1_000_000L;
         }
         assertTrue("RTO must stay in the hazard band, not fall to the cap",
                    rto > 12000);

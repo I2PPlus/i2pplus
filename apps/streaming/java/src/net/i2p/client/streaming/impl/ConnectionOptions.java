@@ -105,6 +105,15 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** Prevents RTO overshoot from rapid RetransmitEvent + ResendPacketEvent double-fires */
     private long _lastRtoDoubleTime;
 
+    /**
+     * Nanosecond time source for the RTO-doubling gap.
+     *
+     * <p>Package-visible and replaceable so the gap can be tested without burning
+     * real time: the guard is {@link #MIN_RTO_DOUBLE_GAP_MS} at minimum, so a
+     * test that exercises it honestly has to wait a second per iteration.
+     */
+    java.util.function.LongSupplier _nanoTime = System::nanoTime;
+
     /** Hybrid byte+packet buffer limit; default 1024 for optimal performance */
     private volatile int _maxPacketCount = 1024;
 
@@ -982,7 +991,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * @return the new RTO value in ms
      */
     synchronized int doubleRTO() {
-        long now = System.nanoTime();
+        long now = _nanoTime.getAsLong();
         long minGapMs = Math.max(_smoothedRtt, MIN_RTO_DOUBLE_GAP_MS);
         if (_lastRtoDoubleTime != 0 &&
             now - _lastRtoDoubleTime < minGapMs * 1_000_000L) {
