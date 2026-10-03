@@ -2856,16 +2856,18 @@ class Connection {
             if (_inputStream.getHighestBlockId() >= 0 && !getResetReceived()) {
                 // only send a RESET if we ever got a packet (and he didn't RESET us),
                 // otherwise don't waste crypto and session tags
-                if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting and sending RESET to " + getRemotePeerString() + " -> " +
-                              (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
-                }
+                // Throttled per condition rather than per peer: a departing peer can
+                // repeat this thousands of times an hour, and one line per occurrence
+                // buried everything else and drove log rotation. The reported line still
+                // names a peer and states how many were collapsed.
+                _log.warnThrottled("connHardDisconnectReset",
+                                   "Hard disconnecting and sending RESET to " + getRemotePeerString() + " -> " +
+                                   (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 sendReset();
             } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting from " + getRemotePeerString() + " -> " +
-                              (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
-                }
+                _log.warnThrottled("connHardDisconnect",
+                                   "Hard disconnecting from " + getRemotePeerString() + " -> " +
+                                   (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
             }
             _outputStream.streamErrorOccurred(new IOException("Hard disconnect"));
         }
