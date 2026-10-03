@@ -210,15 +210,23 @@ public class GraphStallDecisionTest {
 
     /** The grep-able prefix and single-line shape survive the rewrite. */
     @Test
-    public void testMessageKeepsPrefixAndStaysOnOneLine() {
+    public void testMessageKeepsPrefixAndUsesTheLogContinuationForm() {
         CauseTally neverWritten = new CauseTally(StaleCause.NEVER_WRITTEN);
         CauseTally unregistered = new CauseTally(StaleCause.UNREGISTERED);
         CauseTally writesStopped = new CauseTally(StaleCause.WRITES_STOPPED);
         neverWritten.record(120_000L, false);
         String msg = GraphGenerator.formatStaleness(25, neverWritten, unregistered, writesStopped);
         assertTrue("prefix must survive", msg.startsWith("RRD data stalled:"));
-        assertFalse("must be a single line", msg.contains("\n"));
         assertTrue("must say how many are stalled", msg.contains("1/25 graph listeners"));
+        // The per-cause tally is deliberately a second line, using the same
+        // continuation convention the rest of the router's multi-line log entries
+        // use ("* Gateway: ...", "* Peers: ..."), so it reads correctly in the
+        // log file rather than being crammed onto the summary line.
+        String[] lines = msg.split("\n");
+        for (int i = 1; i < lines.length; i++) {
+            assertTrue("continuation line must use the '* ' log prefix: " + lines[i],
+                       lines[i].startsWith("* "));
+        }
     }
 
     /** Counts are attributed per cause, and the total is their sum. */
@@ -317,10 +325,10 @@ public class GraphStallDecisionTest {
         String msg = GraphGenerator.formatStaleness(10, tallies.neverWritten, tallies.unregistered,
                                                     tallies.writesStopped);
         assertEquals("RRD data stalled: 5/10 graph listeners not writing within 2x their rate period"
-                     + " [coalesce_stalled=0,"
+                     + " \n* coalesce_stalled=0,"
                      + " never_written=1 (oldest 3600s since graphing began),"
                      + " unregistered=2 (oldest 300s since last write),"
-                     + " writes_stopped=2 (oldest 900s since last write)]", msg);
+                     + " writes_stopped=2 (oldest 900s since last write)", msg);
     }
 
     /**

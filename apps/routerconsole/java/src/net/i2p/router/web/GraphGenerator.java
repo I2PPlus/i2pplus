@@ -559,11 +559,11 @@ public class GraphGenerator implements Runnable, ClientApp {
         int stalled = neverWritten.count() + unregistered.count() + writesStopped.count()
                       + coalesceStalled.count();
         return "RRD data stalled: " + stalled + "/" + totalListeners
-               + " graph listeners not writing within 2x their rate period ["
+               + " graph listeners not writing within 2x their rate period \n* "
                + coalesceStalled.describe() + ", "
                + neverWritten.describe() + ", "
                + unregistered.describe() + ", "
-               + writesStopped.describe() + "]";
+               + writesStopped.describe();
     }
 
     /**
