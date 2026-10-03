@@ -1,6 +1,7 @@
 package net.i2p.util;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.RunnableScheduledFuture;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
@@ -73,6 +74,18 @@ public class SimpleTimer2 {
      *  @since 0.9.71+
      */
     static final int WATCHDOG_STALL_SAMPLES = 6;
+
+    /**
+     *  Consecutive samples that must show progress before a quiet episode is called
+     *  over.
+     *
+     *  <p>Without it a single completing task ends the episode, so a timer that finishes
+     *  something every few minutes reports the same condition on every threshold window
+     *  instead of once.
+     *
+     *  @since 0.9.71+
+     */
+    static final int WATCHDOG_RECOVERY_SAMPLES = 3;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -281,7 +294,26 @@ public class SimpleTimer2 {
     static WatchdogDecision evaluateStall(long completed, long lastCompleted,
                                           int consecutiveStalledSamples, int threshold,
                                           boolean episodeReported, long maxObservedGapMs) {
-        if (completed > lastCompleted || completed <= 0)
+        return evaluateStall(completed, lastCompleted, consecutiveStalledSamples, threshold,
+                             episodeReported, maxObservedGapMs, true);
+    }
+
+    /**
+     * Decide what one "nothing finished" sample means, given whether work was actually due.
+     *
+     * <p>Added parameter {@code workDue}: when nothing is due there is nothing to be
+     * late for, so the sample is {@link WatchdogDecision#OK} regardless of history. The
+     * calibration below then only judges timers that genuinely had work and did not run
+     * it, which is the case worth a report.
+     *
+     * @param workDue true when the timer had a task whose delay had elapsed
+     * @see #evaluateStall(long, long, int, int, boolean, long)
+     */
+    static WatchdogDecision evaluateStall(long completed, long lastCompleted,
+                                          int consecutiveStalledSamples, int threshold,
+                                          boolean episodeReported, long maxObservedGapMs,
+                                          boolean workDue) {
+        if (!workDue || completed > lastCompleted || completed <= 0)
             return WatchdogDecision.OK;
         if (consecutiveStalledSamples < threshold || episodeReported)
             return WatchdogDecision.PENDING;
@@ -361,6 +393,12 @@ public class SimpleTimer2 {
         private long _saturatedCompleted;
         private int _stalledSamples;
         private boolean _stallReported;
+        /** Consecutive samples that completed a task; recovery needs this many. */
+        private int _progressSamples;
+        /** Whether any task was due during the current quiet episode. */
+        private boolean _workDueThisEpisode;
+        /** Completion count when the current quiet episode began. */
+        private long _stallStartCompleted;
         private long _lastCompleted;
         /** Wall clock at which we last saw the completion count rise. */
         private long _lastProgressAt;
@@ -449,8 +487,34 @@ public class SimpleTimer2 {
             // (setRemoveOnCancelPolicy), so the depth needs no purge() to be
             // trustworthy - and purge() is O(queue).
             long completed = _executor.getCompletedTaskCount();
+            boolean workDue = isWorkDue();
             checkSaturation(active, pool, queued, completed);
-            checkStall(completed);
+            checkStall(completed, workDue);
+        }
+
+        /**
+         *  Is a task actually due on this timer right now?
+         *
+         *  <p>A pool that has completed nothing may be idle or wedged, and completion
+         *  counts cannot tell them apart - only this can. It is a property of the work
+         *  offered, not of the timer's history, so unlike a calibrated gap threshold it
+         *  cannot be tuned into uselessness by a timer that has always been quiet: a
+         *  streaming retransmission shard that simply has nothing to retransmit has no
+         *  due task and is correctly silent, while a shard with a due task and no
+         *  progress is the thing worth reporting.
+         *
+         *  @return true if the queue holds a task whose delay has already elapsed
+         */
+        private boolean isWorkDue() {
+            Runnable head = _executor.getQueue().peek();
+            if (head == null) {
+                return false;
+            }
+            if (head instanceof RunnableScheduledFuture) {
+                return ((RunnableScheduledFuture<?>) head).getDelay(TimeUnit.NANOSECONDS) <= 0;
+            }
+            // Unrecognised queue element: assume work exists rather than sit on a real stall.
+            return true;
         }
 
         /**
@@ -490,13 +554,24 @@ public class SimpleTimer2 {
          * <p>The bar is the timer's own longest observed gap, learned as the timer
          * comes and goes, rather than its mean interval. See {@link #evaluateStall}.
          */
-        private void checkStall(long completed) {
+        private void checkStall(long completed, boolean workDue) {
             long now = System.currentTimeMillis();
+            boolean progressed = (completed > _lastCompleted);
             WatchdogDecision rv = evaluateStall(completed, _lastCompleted, _stalledSamples,
                                                 WATCHDOG_STALL_SAMPLES, _stallReported,
-                                                _maxObservedGapMs);
+                                                _maxObservedGapMs, workDue);
+            _progressSamples = progressed ? _progressSamples + 1 : 0;
             _lastCompleted = completed;
+            if (workDue) {
+                _workDueThisEpisode = true;
+            }
             if (rv == WatchdogDecision.OK) {
+                // Recovery needs sustained progress, not one lucky sample. A timer that
+                // completes something every few minutes otherwise ends and restarts the
+                // episode each time, and one condition is reported over and over.
+                if (_progressSamples < WATCHDOG_RECOVERY_SAMPLES) {
+                    return;
+                }
                 if (_stallReported)
                     log().info("Timer stall over: " + _name + " is completing tasks again");
                 // This quiet period turned out to be survivable, so raise the bar
@@ -509,20 +584,40 @@ public class SimpleTimer2 {
                 _lastProgressAt = now;
                 _stalledSamples = 0;
                 _stallReported = false;
+                _progressSamples = 0;
+                _workDueThisEpisode = false;
                 return;
+            }
+            if (_stalledSamples == 0) {
+                _stallStartCompleted = _lastCompleted;
             }
             _stalledSamples++;
             if (rv != WatchdogDecision.REPORT)
                 return;
             _stallReported = true;
-            log().warn("No timer event completed for at least " +
-                       (episodeForMs(_stalledSamples) / 1000) + "s: " + _name +
-                       " completed " + completed + " tasks in total (longest gap it has" +
-                       " recovered from before " + _maxObservedGapMs / 1000 + "s) -" +
-                       " the scheduler is not running any event");
+            // The episode's own completion delta, not a lifetime total: a flat delta is
+            // idleness stated outright, where a lifetime count alone hides it.
+            long delta = completed - _stallStartCompleted;
+            String trend = "completed " + delta + " of " + completed
+                         + " tasks during the episode (" + (episodeForMs(_stalledSamples) / 1000)
+                         + "s, longest previous gap " + _maxObservedGapMs / 1000 + "s)";
+            String cause = _workDueThisEpisode
+                ? "a task was due and nothing ran it - the scheduler is not running its queue"
+                : "no task was due for the whole episode, so there was nothing to run";
+            // INFO when nothing was ever due: that is a quiet timer, not a fault, and
+            // saying so at WARN would train the reader to ignore the report that counts.
+            if (_workDueThisEpisode) {
+                log().warn("No timer event completed for at least "
+                           + (episodeForMs(_stalledSamples) / 1000) + "s: " + _name
+                           + " " + trend + " - " + cause);
+            } else {
+                log().info("No timer event completed for at least "
+                           + (episodeForMs(_stalledSamples) / 1000) + "s: " + _name
+                           + " " + trend + " - " + cause);
+            }
         }
 
-        /**
+/**
          * The timer log, looked up per message rather than cached: the router
          * replaces its LogManager after start-up, and a cached Log would go
          * quiet from then on. Only log paths pay for this, never a sample.
