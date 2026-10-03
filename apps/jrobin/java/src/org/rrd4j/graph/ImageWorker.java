@@ -387,22 +387,59 @@ public abstract class ImageWorker {
         for (int[] pos = path.getNextPath(); pos != null; pos = path.getNextPath()) {
             int start = pos[0], end = pos[1];
             int[] xDev = new int[end - start], yDev = new int[end - start];
-            int c = reduceVertices(x, y, start, end, false, xDev, yDev, 0);
-            if (c < 2) {
-                continue;
+            GeneralPath curve = smoothedRun(x, y, start, end, xDev, yDev, transitionWidth);
+            if (curve != null) {
+                g2d.draw(curve);
             }
-            int[] vx = java.util.Arrays.copyOf(xDev, c);
-            int[] vy = java.util.Arrays.copyOf(yDev, c);
-            // Anchor the run where the step renderer anchors it, so switching smoothing on does
-            // not shift the start of the trace to the right by a sample period.
-            vx[0] = runAnchorX(x, start);
-            MonotoneSpline.widenTransitions(vx, vy, transitionWidth);
-            GeneralPath curve = new GeneralPath();
-            curve.moveTo(vx[0], vy[0]);
-            MonotoneSpline.appendForward(curve, vx, vy,
-                    MonotoneSpline.tangents(toDouble(vx), toDouble(vy), 0, c));
-            g2d.draw(curve);
         }
+    }
+
+    /**
+     * Builds the smoothed curve through one gap-free run of samples: the run is reduced to
+     * step-collapsed vertices, anchored and widened, and then interpolated.
+     *
+     * <p>Extracted from {@link #drawPolylineSmooth} and {@link #fillPolygonSmooth}, which were
+     * identical up to the closing edges, so that a test can inspect the control points the renderer
+     * really emits. That has to be done here rather than on the rendered SVG, because the emitted
+     * path data is a compressed relative form whose numbers are not the control points.
+     *
+     * <p>A cubic Bezier stays inside the convex hull of its four control points, so a curve that
+     * keeps both control point y values inside the band of its own two endpoints cannot leave that
+     * band. {@code MonotoneSpline} is what guarantees it: every tangent is limited to at most three
+     * times the interval's secant, which bounds a control point's displacement from its endpoint by
+     * the distance between the two endpoints.
+     *
+     * @param x the sample x coordinates, one per sample
+     * @param y the sample y coordinates for this run
+     * @param start first sample index of the run, inclusive
+     * @param end one past the last sample index of the run, exclusive
+     * @param xDev scratch buffer for the reduced vertices, at least {@code end - start} long
+     * @param yDev scratch buffer for the reduced y coordinates, same length as {@code xDev}
+     * @param transitionWidth most width, in pixels, to give one sub-pixel transition
+     * @return the curve, or null when the run reduced to fewer than two vertices and so has
+     *         nothing to draw
+     * @since 0.9.71+
+     */
+    static GeneralPath smoothedRun(double[] x, double[] y, int start, int end, int[] xDev, int[] yDev,
+            int transitionWidth) {
+        int c = reduceVertices(x, y, start, end, false, xDev, yDev, 0);
+        if (c < 2) {
+            return null;
+        }
+        // Trimmed to the reduced length on purpose: MonotoneSpline.widenTransitions stops at two
+        // from the end, and that bound is what keeps it from reaching into the unused tail of the
+        // scratch buffer and moving a vertex that is not part of the run.
+        int[] vx = java.util.Arrays.copyOf(xDev, c);
+        int[] vy = java.util.Arrays.copyOf(yDev, c);
+        // Anchor the run where the step renderer anchors it, so switching smoothing on does
+        // not shift the start of the trace to the right by a sample period.
+        vx[0] = runAnchorX(x, start);
+        MonotoneSpline.widenTransitions(vx, vy, transitionWidth);
+        GeneralPath curve = new GeneralPath();
+        curve.moveTo(vx[0], vy[0]);
+        MonotoneSpline.appendForward(curve, vx, vy,
+                MonotoneSpline.tangents(toDouble(vx), toDouble(vy), 0, c));
+        return curve;
     }
 
     /**
@@ -429,22 +466,18 @@ public abstract class ImageWorker {
         for (int[] pos = path.getNextPath(); pos != null; pos = path.getNextPath()) {
             int start = pos[0], end = pos[1];
             int[] xDev = new int[end - start], yDev = new int[end - start];
-            int c = reduceVertices(x, yTop, start, end, false, xDev, yDev, 0);
-            if (c < 2) {
+            GeneralPath area = smoothedRun(x, yTop, start, end, xDev, yDev, transitionWidth);
+            if (area == null) {
                 continue;
             }
-            int[] vx = java.util.Arrays.copyOf(xDev, c);
-            int[] vy = java.util.Arrays.copyOf(yDev, c);
-            // Anchor the run where the step renderer anchors it: the closing corner of the
-            // outline uses the same column, so a smoothed area starts where its stepped twin does.
-            vx[0] = runAnchorX(x, start);
-            MonotoneSpline.widenTransitions(vx, vy, transitionWidth);
-            GeneralPath area = new GeneralPath();
-            area.moveTo(vx[0], vy[0]);
-            MonotoneSpline.appendForward(area, vx, vy,
-                    MonotoneSpline.tangents(toDouble(vx), toDouble(vy), 0, c));
-            area.lineTo(vx[c - 1], (int) yBottom);
-            area.lineTo(vx[0], (int) yBottom);
+            // The closing corners sit on the two columns the curve starts and ends on. The start is
+            // the run's anchor, so a smoothed area begins where its stepped twin does; the end is
+            // where every segment has delivered the path, and widening never moves a run's last
+            // vertex, so it is still that run's final column.
+            int left = runAnchorX(x, start);
+            int right = (int) area.getCurrentPoint().getX();
+            area.lineTo(right, (int) yBottom);
+            area.lineTo(left, (int) yBottom);
             area.closePath();
             g2d.fill(area);
             // The step renderer outlines the filled area by drawing the same polygon again, and
