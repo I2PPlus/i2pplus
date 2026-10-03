@@ -76,7 +76,7 @@ public class SimpleTimer2WatchdogDecisionTest {
         long last = 0;
         for (long count : completed) {
             WatchdogDecision rv = SimpleTimer2.evaluateStall(count, last, samples,
-                                                             STALL_THRESHOLD, reported);
+                                                             STALL_THRESHOLD, reported, 10_000L);
             last = count;
             if (rv == WatchdogDecision.OK) {
                 samples = 0;
@@ -238,7 +238,7 @@ public class SimpleTimer2WatchdogDecisionTest {
     /** Progress ends the episode immediately, however long it was. */
     @Test
     public void testProgressEndsStallEpisode() {
-        assertEquals(WatchdogDecision.OK, SimpleTimer2.evaluateStall(11, 10, 100, STALL_THRESHOLD, true));
+        assertEquals(WatchdogDecision.OK, SimpleTimer2.evaluateStall(11, 10, 100, STALL_THRESHOLD, true, 10_000L));
     }
 
     /**
@@ -248,7 +248,7 @@ public class SimpleTimer2WatchdogDecisionTest {
      */
     @Test
     public void testNeverRunExecutorIsNotStalled() {
-        assertEquals(WatchdogDecision.OK, SimpleTimer2.evaluateStall(0, 0, 100, STALL_THRESHOLD, false));
+        assertEquals(WatchdogDecision.OK, SimpleTimer2.evaluateStall(0, 0, 100, STALL_THRESHOLD, false, 10_000L));
     }
 
     /** No progress short of the threshold only accumulates the streak. */
@@ -257,13 +257,13 @@ public class SimpleTimer2WatchdogDecisionTest {
         for (int samples = 0; samples < STALL_THRESHOLD; samples++)
             assertEquals("sample " + samples + " is within the threshold",
                          WatchdogDecision.PENDING,
-                         SimpleTimer2.evaluateStall(10, 10, samples, STALL_THRESHOLD, false));
+                         SimpleTimer2.evaluateStall(10, 10, samples, STALL_THRESHOLD, false, 10_000L));
     }
 
     /** The stall threshold is exact, as the saturation threshold is. */
     @Test
     public void testStallReportedAtExactThreshold() {
-        assertEquals(WatchdogDecision.REPORT, SimpleTimer2.evaluateStall(10, 10, STALL_THRESHOLD, STALL_THRESHOLD, false));
+        assertEquals(WatchdogDecision.REPORT, SimpleTimer2.evaluateStall(10, 10, STALL_THRESHOLD, STALL_THRESHOLD, false, 10_000L));
     }
 
     /** A stall already reported in this episode is not reported again. */
@@ -271,7 +271,7 @@ public class SimpleTimer2WatchdogDecisionTest {
     public void testStallReportedOnceThenThrottled() {
         for (int samples = STALL_THRESHOLD; samples < STALL_THRESHOLD + 1000; samples++)
             assertEquals(WatchdogDecision.PENDING,
-                         SimpleTimer2.evaluateStall(10, 10, samples, STALL_THRESHOLD, true));
+                         SimpleTimer2.evaluateStall(10, 10, samples, STALL_THRESHOLD, true, 10_000L));
     }
 
     /** A long stall reports exactly once. */

@@ -83,12 +83,6 @@ public class SimpleTimer2 {
     private final SaturationWatchdog _watchdog;
 
     /**
-     *  When this timer was created, for the stall watchdog's mean-interval estimate.
-     *  @since 0.9.71+
-     */
-    private final long _createdAt = System.currentTimeMillis();
-
-    /**
      *  Schedules requested with a zero or negative delay since the last watchdog
      *  report. Counted rather than logged per event: an immediate reschedule is
      *  legitimate occasionally, but a connection whose head-of-line packet is
@@ -264,36 +258,45 @@ public class SimpleTimer2 {
      * warning about one would bury the real reports. A wedge that starts before
      * the first completion is still caught by {@link #evaluateSaturation}.
      *
+     * <p>The quiet period is calibrated against the timer's own worst observed gap
+     * rather than its mean interval. A mean is the wrong statistic here: a
+     * coalescing timer runs in dense bursts, so its mean interval is dominated by
+     * the busy stretches while the real gaps between bursts run far longer.
+     * Scaling the bar by a multiple of the mean therefore trips on healthy bursty
+     * timers, which trains the reader to ignore the one report that matters. The
+     * longest gap a timer has actually come back from is self-calibrating, and it
+     * reports only a quiet period that exceeds what that timer has done before.
+     *
      * @param completed executor completed task count, now
      * @param lastCompleted executor completed task count, at the previous sample
      * @param consecutiveStalledSamples immediately preceding samples with no progress
      * @param threshold such samples tolerated before reporting
      * @param episodeReported whether this episode has already been reported
+     * @param maxObservedGapMs longest quiet period this timer has previously come
+     *                          back from; zero when no baseline has been established
      * @return REPORT once per episode, OK on progress or an idle timer (ending
      *         the episode), PENDING otherwise
      * @since 0.9.71+
      */
     static WatchdogDecision evaluateStall(long completed, long lastCompleted,
                                           int consecutiveStalledSamples, int threshold,
-                                          boolean episodeReported) {
-        return evaluateStall(completed, lastCompleted, consecutiveStalledSamples, threshold,
-                             episodeReported, 0L);
-    }
-
-    static WatchdogDecision evaluateStall(long completed, long lastCompleted,
-                                          int consecutiveStalledSamples, int threshold,
-                                          boolean episodeReported, long meanIntervalMs) {
+                                          boolean episodeReported, long maxObservedGapMs) {
         if (completed > lastCompleted || completed <= 0)
             return WatchdogDecision.OK;
         if (consecutiveStalledSamples < threshold || episodeReported)
             return WatchdogDecision.PENDING;
-        // Scale the bar to the timer. A low-frequency timer (the retransmission
-        // shards) can legitimately go quiet for minutes; reporting it wedged is a
-        // false positive that trains the reader to ignore the one report that
-        // matters. Four mean intervals is long enough that only a timer which has
-        // genuinely stopped running its own cadence trips.
         long quietMs = (long) consecutiveStalledSamples * WATCHDOG_INTERVAL_MS;
-        if (quietMs < Math.max(WATCHDOG_STALL_SAMPLES * WATCHDOG_INTERVAL_MS, 4 * meanIntervalMs))
+        long floorMs = (long) threshold * WATCHDOG_INTERVAL_MS;
+        if (quietMs < floorMs)
+            return WatchdogDecision.PENDING;
+        // With no baseline there is nothing to judge against, and a quiet timer is
+        // indistinguishable from an idle one. Staying silent is the only safe answer.
+        if (maxObservedGapMs <= 0)
+            return WatchdogDecision.PENDING;
+        // Past this timer's own history. Twice the longest gap it has recovered from
+        // still counts as normal, which keeps ordinary jitter out while still
+        // reporting a timer that never comes back.
+        if (quietMs <= 2 * maxObservedGapMs)
             return WatchdogDecision.PENDING;
         return WatchdogDecision.REPORT;
     }
@@ -359,10 +362,19 @@ public class SimpleTimer2 {
         private int _stalledSamples;
         private boolean _stallReported;
         private long _lastCompleted;
+        /** Wall clock at which we last saw the completion count rise. */
+        private long _lastProgressAt;
+        /**
+         * Longest quiet period this timer has previously come back from.
+         * Grows only while the watchdog observes recovery, so it is a floor
+         * learned from the timer's own behaviour rather than a guess.
+         */
+        private long _maxObservedGapMs;
         /** Guarded by this */
         private boolean _stopped;
 
         SaturationWatchdog() {
+            _lastProgressAt = System.currentTimeMillis();
             start();
         }
 
@@ -474,15 +486,27 @@ public class SimpleTimer2 {
 
         /**
          * Warn once per episode of a pool that completes nothing at all.
+         *
+         * <p>The bar is the timer's own longest observed gap, learned as the timer
+         * comes and goes, rather than its mean interval. See {@link #evaluateStall}.
          */
         private void checkStall(long completed) {
+            long now = System.currentTimeMillis();
             WatchdogDecision rv = evaluateStall(completed, _lastCompleted, _stalledSamples,
                                                 WATCHDOG_STALL_SAMPLES, _stallReported,
-                                                meanIntervalMs(completed));
+                                                _maxObservedGapMs);
             _lastCompleted = completed;
             if (rv == WatchdogDecision.OK) {
                 if (_stallReported)
                     log().info("Timer stall over: " + _name + " is completing tasks again");
+                // This quiet period turned out to be survivable, so raise the bar
+                // to match: a timer with a known multi-minute lull must not be
+                // reported for reaching the same lull again.
+                long gap = now - _lastProgressAt;
+                if (gap > _maxObservedGapMs) {
+                    _maxObservedGapMs = gap;
+                }
+                _lastProgressAt = now;
                 _stalledSamples = 0;
                 _stallReported = false;
                 return;
@@ -493,25 +517,9 @@ public class SimpleTimer2 {
             _stallReported = true;
             log().warn("No timer event completed for at least " +
                        (episodeForMs(_stalledSamples) / 1000) + "s: " + _name +
-                       " completed " + completed + " tasks in total (mean interval " +
-                       meanIntervalMs(completed) + "ms) - the scheduler" +
-                       " is not running any event");
-        }
-
-        /**
-         * Mean interval between completed tasks over this timer's life, from the
-         * completion count and uptime. Zero when nothing has completed yet, which
-         * {@link #evaluateStall} treats as "do not judge the cadence".
-         *
-         * @param completed executor completed task count
-         * @return mean ms between completions, or 0 if unknown
-         */
-        private long meanIntervalMs(long completed) {
-            if (completed <= 0) {
-                return 0;
-            }
-            long uptime = System.currentTimeMillis() - _createdAt;
-            return uptime > 0 ? uptime / completed : 0;
+                       " completed " + completed + " tasks in total (longest gap it has" +
+                       " recovered from before " + _maxObservedGapMs / 1000 + "s) -" +
+                       " the scheduler is not running any event");
         }
 
         /**
