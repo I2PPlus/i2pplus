@@ -1320,30 +1320,39 @@ public final class SVGGraphics2D extends Graphics2D {
                     prevY = coords[1];
                     break;
                 case (PathIterator.SEG_QUADTO):
+                    // Every pair is relative to the current point, not to the previous
+                    // pair (SVG 1.1 8.3.1). Deriving the control point from the
+                    // already-relative first pair puts it somewhere else entirely.
                     b.append("q")
                             .append((int) (coords[0] - prevX))
                             .append(" ")
                             .append((int) (coords[1] - prevY))
                             .append(" ")
-                            .append((int) (coords[2] - coords[0]))
+                            .append((int) (coords[2] - prevX))
                             .append(" ")
-                            .append((int) (coords[3] - coords[1]));
+                            .append((int) (coords[3] - prevY));
                     prevX = coords[2];
                     prevY = coords[3];
                     break;
                 case (PathIterator.SEG_CUBICTO):
+                    // All three pairs are relative to the current point (SVG 1.1 8.3.1).
+                    // Chaining them off the previous pair shifted the control points and
+                    // desynchronised the running endpoint, so the error accumulated along
+                    // the whole curve: the trace came out short and never reached the far
+                    // edge of the plot. Line and curve commands share the relative form,
+                    // so only the curves were affected.
                     b.append("c")
                             .append((int) (coords[0] - prevX))
                             .append(" ")
                             .append((int) (coords[1] - prevY))
                             .append(" ")
-                            .append((int) (coords[2] - coords[0]))
+                            .append((int) (coords[2] - prevX))
                             .append(" ")
-                            .append((int) (coords[3] - coords[1]))
+                            .append((int) (coords[3] - prevY))
                             .append(" ")
-                            .append((int) (coords[4] - coords[2]))
+                            .append((int) (coords[4] - prevX))
                             .append(" ")
-                            .append((int) (coords[5] - coords[3]));
+                            .append((int) (coords[5] - prevY));
                     prevX = coords[4];
                     prevY = coords[5];
                     break;
