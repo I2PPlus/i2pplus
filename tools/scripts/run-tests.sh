@@ -380,7 +380,8 @@ case "${1:-all}" in
     susi_r=$(mktemp)
     sam_r=$(mktemp)
     p200_r=$(mktemp)
-    trap 'rm -f "$core_r" "$mini_r" "$stream_r" "$router_r" "$addr_r" "$i2pt_r" "$rcons_r" "$snark_r" "$susi_r" "$sam_r" "$p200_r"; rm -rf "${REPO_ROOT}/reports"' EXIT
+    jrob_r=$(mktemp)
+    trap 'rm -f "$core_r" "$mini_r" "$stream_r" "$router_r" "$addr_r" "$i2pt_r" "$rcons_r" "$snark_r" "$susi_r" "$sam_r" "$p200_r" "$jrob_r"; rm -rf "${REPO_ROOT}/reports"' EXIT
 
     run_test_bg core/java "$core_r"
     run_test_bg apps/ministreaming/java "$mini_r"
@@ -393,13 +394,14 @@ case "${1:-all}" in
     run_test_bg apps/susimail "$susi_r"
     run_test_bg apps/sam/java "$sam_r"
     run_test_bg apps/pack200/java "$p200_r"
+    run_test_bg apps/jrobin/java "$jrob_r"
 
     echo -e "${BOLD}Running test suites in parallel...${RESET}"
     wait
 
     # Print per-suite results and aggregate
     total_t=0; total_f=0; total_e=0
-    for pair in "Core:$core_r" "MiniStreaming:$mini_r" "Streaming:$stream_r" "Router:$router_r" "Addressbook:$addr_r" "I2PTunnel:$i2pt_r" "RouterConsole:$rcons_r" "I2PSnark:$snark_r" "Susimail:$susi_r" "SAM:$sam_r" "Pack200:$p200_r"; do
+    for pair in "Core:$core_r" "MiniStreaming:$mini_r" "Streaming:$stream_r" "Router:$router_r" "Addressbook:$addr_r" "I2PTunnel:$i2pt_r" "RouterConsole:$rcons_r" "I2PSnark:$snark_r" "Susimail:$susi_r" "SAM:$sam_r" "Pack200:$p200_r" "JRobin:$jrob_r"; do
       label="${pair%%:*}"
       rf="${pair#*:}"
       read -r t f e <<< "$(read_result "$rf")"

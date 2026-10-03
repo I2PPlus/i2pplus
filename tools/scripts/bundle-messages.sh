@@ -393,7 +393,11 @@ if [ "$NOCOVERAGE" = "0" ]; then
         LG="${LG#messages_}"
         [ "$LG" = "en" ] && continue
 
-        stats=$(msgfmt --statistics "$i" 2>&1)
+        # -o /dev/null is required, not cosmetic: msgfmt with no -o/-d writes its
+        # default output to ./messages.mo even when only --statistics is asked
+        # for. Run from the module directory (--dir ".") that dropped a compiled
+        # catalog into the source tree for every language in the glob.
+        stats=$(msgfmt --statistics -o /dev/null "$i" 2>&1)
         eval "$(echo "$stats" | sed 's/, */; /g' | awk -F'; ' '
         {
             t = 0; f = 0; u = 0
