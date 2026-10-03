@@ -177,6 +177,98 @@ public class Log {
     }
 
     /**
+     *  The repeat suppressor backing the {@code *Throttled} methods.
+     *
+     *  <p>Lazily created: most logging classes never throttle anything, and this class is
+     *  instantiated for every class that logs.
+     */
+    private volatile LogSuppressor _suppressor;
+
+    /**
+     *  Log a message at the given priority, collapsing repeats of the same condition.
+     *
+     *  <p>The first occurrence of {@code key} is always written. After that, an
+     *  occurrence is written once {@link LogSuppressor#DEFAULT_BURST} repeats have
+     *  accumulated or {@link LogSuppressor#DEFAULT_WINDOW_MS} have passed, and the line
+     *  then states how many were collapsed. Use this instead of a plain call when the
+     *  same condition can repeat thousands of times a minute: the volume hides other
+     *  messages and drives log rotation for no diagnostic gain.
+     *
+     *  @param priority the priority level
+     *  @param key stable identifier for the condition; must not vary per occurrence
+     * @param msg the message
+     *  @return true if the message was written, false if it was suppressed
+     *  @since 0.9.71+
+     */
+    public boolean throttled(int priority, String key, String msg) {
+        if (priority < _minPriority) {
+            return false;
+        }
+        LogSuppressor sup = _suppressor;
+        if (sup == null) {
+            sup = new LogSuppressor();
+            _suppressor = sup;
+        }
+        LogSuppressor.Decision d = sup.record(key);
+        if (!d.log) {
+            return false;
+        }
+        String out = (d.suppressed > 0)
+            ? msg + " (" + d.suppressed + " similar suppressed)"
+            : msg;
+        log(priority, out);
+        return true;
+    }
+
+    /**
+     *  Collapse repeats of a warning. See {@link #throttled}.
+     *
+     *  @param key stable identifier for the condition
+     *  @param msg the message
+     *  @return true if the message was written
+     *  @since 0.9.71+
+     */
+    public boolean warnThrottled(String key, String msg) {
+        return throttled(WARN, key, msg);
+    }
+
+    /**
+     *  Collapse repeats of an error. See {@link #throttled}.
+     *
+     *  @param key stable identifier for the condition
+     *  @param msg the message
+     *  @return true if the message was written
+     * @since 0.9.71+
+     */
+    public boolean errorThrottled(String key, String msg) {
+        return throttled(ERROR, key, msg);
+    }
+
+    /**
+     *  Collapse repeats of an info message. See {@link #throttled}.
+     *
+     *  @param key stable identifier for the condition
+     *  @param msg the message
+     *  @return true if the message was written
+     * @since 0.9.71+
+     */
+    public boolean infoThrottled(String key, String msg) {
+        return throttled(INFO, key, msg);
+    }
+
+    /**
+     *  Collapse repeats of a debug message. See {@link #throttled}.
+     *
+     *  @param key stable identifier for the condition
+     *  @param msg the message
+     *  @return true if the message was written
+     * @since 0.9.71+
+     */
+    public boolean debugThrottled(String key, String msg) {
+        return throttled(DEBUG, key, msg);
+    }
+
+    /**
      * Log a debug message.
      *
      * @param msg the message
