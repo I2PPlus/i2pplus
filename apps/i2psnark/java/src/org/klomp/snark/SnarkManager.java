@@ -35,7 +35,12 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
@@ -140,6 +145,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** infohash → time (ms) when lookup was created, for stale cleanup. */
     private final Map<SHA1Hash, Long> _lookupCreationTimes = new ConcurrentHashMap<>(8);
     private volatile boolean _staleLookupCleanupRunning;
+    /**
+     * Snark's own scheduler for periodic chores, deliberately not {@link SimpleTimer2}.
+     *
+     * <p>{@code SimpleTimer2} has two worker threads shared by every periodic event in
+     * the router, including the stats coalesce sweep. A Snark chore that contends for a
+     * lock therefore does not merely delay itself: consuming a worker there stops the
+     * coalesce sweep, which silently freezes every RRD graph. That is exactly what a
+     * stale-lookup cleanup blocked in {@code SnarkManager} did to this router.
+     *
+     * <p>Single-threaded, so overlapping cleanups cannot occur and the existing
+     * {@link #_staleLookupCleanupRunning} guard remains sufficient. The thread is a
+     * daemon and is not started until the first task is submitted.
+     *
+     * @since 0.9.71+
+     */
+    private final ScheduledExecutorService _snarkScheduler;
 
     private volatile boolean _randomizeStartupDelay = true;
     private volatile boolean _browserApiEnabled;
@@ -617,6 +638,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.9.6
      */
     public SnarkManager(I2PAppContext ctx, String ctxPath, String ctxName) {
+        ThreadFactory tf = r -> {
+            Thread t = new Thread(r, "SnarkScheduler");
+            t.setDaemon(true);
+            return t;
+        };
+        _snarkScheduler = Executors.newSingleThreadScheduledExecutor(tf);
         _snarks = new ConcurrentHashMap<>();
         _infoHashToSnark = new HashMap<>();
         _filteredBaseNameToSnark = new HashMap<>();
@@ -768,6 +795,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _monitor.interrupt();
         _connectionAcceptor.halt();
         _idleChecker.cancel();
+        _snarkScheduler.shutdownNow();
         stopAllTorrents(true);
         ClientAppManager cmgr = _context.clientAppManager();
         if ("i2psnark".equals(_contextName)) { // only if default instance
@@ -3798,31 +3826,54 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String magnetName = "Lookup [" + hex.substring(0, 8) + "]";
         Snark snark = null;
         boolean created = false;
-        synchronized (_snarks) {
-            Snark dup = getTorrentByInfoHash(infoHash);
-            if (dup != null) {
-                // Another lookup raced us - reuse it, don't create duplicate
-                snark = dup;
-            } else {
-                try {
-                    // updateStatus=false (don't persist), autoStart=true (bypass startup delay)
-                    snark = addMagnet(magnetName, infoHash, null, false, true, lookupDir, this);
-                    created = (snark != null);
-                    if (created) {
-                        _lookupCreationTimes.put(new SHA1Hash(infoHash), System.currentTimeMillis());
-                    }
-                } catch (Exception e) {
-                    _log.warn("lookupTorrentName addMagnet failed for " + hex, e);
+        // Deliberately not synchronized on _snarks here. addMagnet() creates the magnet
+        // and then starts the torrent, and starting one opens an I2P tunnel, which parks
+        // in I2PSessionImpl.connect for up to getTunnelBuildTimeout() minutes. Holding the
+        // torrent-map monitor across that parked every thread that touches _snarks -
+        // 126 zzzot lookup workers, the dir monitor, and both SimpleTimer workers. Losing
+        // both timer workers stops every periodic event on the shared timer, including
+        // the stats coalesce sweep, which is how a torrent lookup stalled all 25 graphs.
+        // Duplicate suppression does not rely on this wrapper: addMagnet() re-checks for
+        // an existing torrent under _snarks and returns null on a duplicate, publishing
+        // atomically, and starts the torrent outside its own critical section. The check
+        // below is only a fast path that avoids the call entirely.
+        Snark dup = getTorrentByInfoHash(infoHash);
+        if (dup != null) {
+            // Another lookup raced us - reuse it, don't create duplicate
+            snark = dup;
+        } else {
+            // Bound concurrent creations. Without this the herd would start one tunnel
+            // build per thread now that creation no longer serialises; the permit is
+            // held only across the create and released before the poll below acquires it
+            // again, so it cannot deadlock against the polling permit.
+            if (!_lookupSemaphore.tryAcquire()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("lookupTorrentName: " + MAX_LOOKUP_CONCURRENCY
+                        + " concurrent lookups in progress, rejecting " + hex);
+                }
+                try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
+                return null;
+            }
+            try {
+                // updateStatus=false (don't persist), autoStart=true (bypass startup delay)
+                snark = addMagnet(magnetName, infoHash, null, false, true, lookupDir, this);
+                created = (snark != null);
+                if (created) {
+                    _lookupCreationTimes.put(new SHA1Hash(infoHash), System.currentTimeMillis());
+                }
+            } catch (Exception e) {
+                _log.warn("lookupTorrentName addMagnet failed for " + hex, e);
+                FileUtil.rmdir(lookupDir, false);
+                return null;
+            } finally {
+                _lookupSemaphore.release();
+            }
+            if (snark == null) {
+                // addMagnet returned null (duplicate raced), try to get it
+                snark = getTorrentByInfoHash(infoHash);
+                if (snark == null) {
                     FileUtil.rmdir(lookupDir, false);
                     return null;
-                }
-                if (snark == null) {
-                    // addMagnet returned null (duplicate raced), try to get it
-                    snark = getTorrentByInfoHash(infoHash);
-                    if (snark == null) {
-                        FileUtil.rmdir(lookupDir, false);
-                        return null;
-                    }
                 }
             }
         }
@@ -4001,17 +4052,31 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         String hex = I2PSnarkUtil.toHex(infoHash);
         String magnetName = "Lookup [" + hex.substring(0, 8) + "]";
         boolean created = false;
-        synchronized (_snarks) {
-            Snark dup = getTorrentByInfoHash(infoHash);
-            if (dup == null) {
-                try {
-                    Snark snark = addMagnet(magnetName, infoHash, null, false, true, lookupDir, this);
-                    created = (snark != null);
-                } catch (Exception e) {
-                    _log.warn("lookupTorrentInfo addMagnet failed for " + hex, e);
-                    FileUtil.rmdir(lookupDir, false);
-                    return null;
+        // See lookupTorrentName: no lock is held across addMagnet(), because starting a
+        // torrent blocks on a tunnel build and the torrent-map monitor is contended by the
+        // router's timer workers as well as by zzzot's own lookup threads.
+        if (getTorrentByInfoHash(infoHash) == null) {
+            // Bound concurrent creations; released before the poll below re-acquires.
+            if (!_lookupSemaphore.tryAcquire()) {
+                if (_log.shouldWarn()) {
+                    _log.warn("lookupTorrentInfo: " + MAX_LOOKUP_CONCURRENCY
+                        + " concurrent lookups in progress, rejecting " + hex);
                 }
+                try { FileUtil.rmdir(lookupDir, false); } catch (Exception ignore) { /* best-effort temp dir cleanup; a leftover dir is swept by scheduleStaleLookupCleanup() */ }
+                return null;
+            }
+            try {
+                Snark snark = addMagnet(magnetName, infoHash, null, false, true, lookupDir, this);
+                created = (snark != null);
+                if (created) {
+                    _lookupCreationTimes.put(new SHA1Hash(infoHash), System.currentTimeMillis());
+                }
+            } catch (Exception e) {
+                _log.warn("lookupTorrentInfo addMagnet failed for " + hex, e);
+                FileUtil.rmdir(lookupDir, false);
+                return null;
+            } finally {
+                _lookupSemaphore.release();
             }
         }
         long end = System.currentTimeMillis() + timeoutMs;
@@ -4121,13 +4186,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private void scheduleStaleLookupCleanup() {
         if (_staleLookupCleanupRunning) return;
         _staleLookupCleanupRunning = true;
-        new SimpleTimer2.TimedEvent(SimpleTimer2.getInstance(), 60 * 1000) {
-            public void timeReached() {
-                _staleLookupCleanupRunning = false;
-                if (!_running) return;
-                cleanupStaleLookupTorrents();
-            }
-        };
+        try {
+            _snarkScheduler.schedule(() -> {
+                        _staleLookupCleanupRunning = false;
+                        if (!_running) return;
+                        cleanupStaleLookupTorrents();
+                    }, 60L * 1000, TimeUnit.MILLISECONDS);
+        } catch (RejectedExecutionException ree) {
+            // Already shut down, so there is nothing left to clean up after.
+            _staleLookupCleanupRunning = false;
+        }
     }
 
     /**
@@ -4138,27 +4206,35 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     private void cleanupStaleLookupTorrents() {
         long now = System.currentTimeMillis();
-        List<Snark> stale = new ArrayList<>(0);
+        // Snapshot the map under its monitor, then decide staleness with the monitor
+        // released. Deciding walks every torrent and reaches into its storage, so holding
+        // _snarks for it turned a periodic chore into something that could block every
+        // other user of the map - including both SimpleTimer workers, whose loss stops
+        // the router's stats coalesce sweep. Nothing here mutates the map, so the copy
+        // is all the lock is needed for.
+        List<Snark> candidates;
         synchronized (_snarks) {
-            for (Snark snark : _snarks.values()) {
-                String name = null;
-                try { name = snark.getName(); } catch (Exception ignore) { /* name unreadable; the storage-path check below can still identify our lookup */ }
-                boolean isLookup = (name != null && (name.startsWith("Lookup [") || name.contains("zzzot-lookup")));
-                if (!isLookup) {
-                    try {
-                        Storage st = snark.getStorage();
-                        if (st != null) {
-                            File base = st.getBase();
-                            if (base != null && base.getPath().contains("zzzot-lookup"))
-                                isLookup = true;
-                        }
-                    } catch (Exception ignore) { /* storage unreachable; nothing to clean for this torrent */ }
-                }
-                if (isLookup) {
-                    Long created = _lookupCreationTimes.get(new SHA1Hash(snark.getInfoHash()));
-                    if (created != null && (now - created) > LOOKUP_STALE_MS) {
-                        stale.add(snark);
+            candidates = new ArrayList<>(_snarks.values());
+        }
+        List<Snark> stale = new ArrayList<>(0);
+        for (Snark snark : candidates) {
+            String name = null;
+            try { name = snark.getName(); } catch (Exception ignore) { /* name unreadable; the storage-path check below can still identify our lookup */ }
+            boolean isLookup = (name != null && (name.startsWith("Lookup [") || name.contains("zzzot-lookup")));
+            if (!isLookup) {
+                try {
+                    Storage st = snark.getStorage();
+                    if (st != null) {
+                        File base = st.getBase();
+                        if (base != null && base.getPath().contains("zzzot-lookup"))
+                            isLookup = true;
                     }
+                } catch (Exception ignore) { /* storage unreachable; nothing to clean for this torrent */ }
+            }
+            if (isLookup) {
+                Long created = _lookupCreationTimes.get(new SHA1Hash(snark.getInfoHash()));
+                if (created != null && (now - created) > LOOKUP_STALE_MS) {
+                    stale.add(snark);
                 }
             }
         }
