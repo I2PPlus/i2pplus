@@ -1,80 +1,93 @@
 #!/bin/sh
 #
-# Check for UTF-8 problems in all files where they might appear
-# Also check all Java source files
-# Returns nonzero on failure
+# Check for UTF-8 problems in the files most likely to hold translated text,
+# and in every Java/Scala source file. Returns nonzero on failure.
 #
 # zzz 2010-12
 # public domain
 #
 
-cd "$(dirname "$0")/../.."
+# this script lives in tools/scripts/tests, so the repo root is three levels up
+cd "$(dirname "$0")/../../.." || exit 1
+
+if ! command -v iconv >/dev/null 2>&1; then
+  echo "iconv not found: install libc-bin (Debian/Ubuntu) or glibc-common (Fedora)." >&2
+  exit 1
+fi
 
 FAIL=0
+TOTAL=0
 
-# apps/routerconsole/jsp/ should only have UTF8 in help_xx.jsp
+# check <from> <to> <file>...
+#   iconv fails on anything it cannot round trip in the given encoding, which is
+#   how a mis-encoded file is spotted without caring what the text says.
+check() {
+  from="$1"
+  to="$2"
+  shift 2
+  for file in "$@"; do
+    TOTAL=$((TOTAL + 1))
+    if ! iconv -f "$from" -t "$to" "$file" >/dev/null 2>&1; then
+      echo "********* FAILED CHECK FOR $file *************"
+      FAIL=$((FAIL + 1))
+    fi
+  done
+}
 
-DIRS="\
-  apps/routerconsole/locale \
-  apps/routerconsole/locale-news \
-  apps/routerconsole/locale-countries \
-  apps/i2ptunnel/locale \
-  apps/i2ptunnel/locale-proxy \
-  apps/i2psnark/locale \
-  apps/ministreaming/locale \
-  apps/susidns/locale \
-  apps/susimail/locale \
-  apps/desktopgui/locale \
-  debian/po \
-  installer/resources/eepsite/docroot/help \
-  installer/resources/initialNews \
-  installer/resources/proxy \
-  installer/resources/readme \
-  apps/routerconsole/jsp \
-  apps/i2ptunnel/jsp \
-  apps/susidns/src/jsp"
+# Translations and packaged end-user text. apps/routerconsole/jsp should only
+# carry UTF-8 in help_xx.jsp.
+DIRS="
+  apps/routerconsole/locale
+  apps/routerconsole/locale-news
+  apps/routerconsole/locale-countries
+  apps/routerconsole/jsp
+  apps/i2ptunnel/locale
+  apps/i2ptunnel/locale-proxy
+  apps/i2ptunnel/jsp
+  apps/i2psnark/locale
+  apps/ministreaming/locale
+  apps/susidns/locale
+  apps/susidns/src/jsp
+  apps/susimail/locale
+  apps/desktopgui/locale
+  distro/debian/po
+  installer/resources/console/proxy
+  installer/resources/console/readme
+  installer/resources/eepsite/docroot/help
+  installer/resources/initialNews
+"
 
-for i in `find $DIRS -maxdepth 1 -type f`
-do
-  #echo "Checking $i ..."
-  iconv -f UTF8 -t UTF8 $i > /dev/null
-        if [ $? -ne 0 ]
-  then
-    echo "********* FAILED CHECK FOR $i *************"
-    FAIL=1
+# A listed directory that has moved is reported rather than skipped, so the list
+# cannot quietly stop covering a tree.
+for dir in $DIRS; do
+  if [ ! -d "$dir" ]; then
+    echo "MISSING  $dir"
+    FAIL=$((FAIL + 1))
+    continue
   fi
+  # No path in this repository contains whitespace, so plain word splitting is
+  # safe here and keeps the loop in this shell rather than a subshell.
+  # shellcheck disable=SC2086
+  check UTF-8 UTF-8 $(find "$dir" -maxdepth 1 -type f)
 done
 
 echo "> Checking all Java and Scala files ..."
-for i in `find . \( -name \*.java -o -name \*.scala \) -type f`
-do
-  #echo "Checking $i ..."
-  iconv -f UTF8 -t UTF8 $i > /dev/null
-  if [ $? -ne 0 ]
-  then
-    echo "********* FAILED CHECK FOR $i *************"
-    FAIL=1
-  fi
+# shellcheck disable=SC2046
+for file in $(find . \( -name '*.java' -o -name '*.scala' \) -type f); do
+  check UTF-8 UTF-8 "$file"
 done
 
-# Java properties files (when not using our DataHelper methods) must be ISO-8859-1
-# https://docs.oracle.com/javase/6/docs/api/java/util/Properties.html
+# Java properties files (where they are not read through DataHelper) must be
+# ISO-8859-1. https://docs.oracle.com/javase/6/docs/api/java/util/Properties.html
 echo "> Checking getopt properties files ..."
-for i in `find core/java/src/gnu/getopt -name \*.properties -type f`
-do
-  #echo "Checking $i ..."
-  iconv -f ISO-8859-1 -t ISO-8859-1 $i > /dev/null
-        if [ $? -ne 0 ]
-  then
-    echo "********* FAILED CHECK FOR $i *************"
-    FAIL=1
-  fi
+# shellcheck disable=SC2046
+for file in $(find core/java/src/gnu/getopt -name '*.properties' -type f); do
+  check ISO-8859-1 ISO-8859-1 "$file"
 done
 
-if [ "$FAIL" -ne 0 ]
-then
-  echo "******** At least one file failed check *********"
+if [ "$FAIL" -ne 0 ]; then
+  echo "******** ${FAIL} of ${TOTAL} checks failed ********"
 else
-  echo "> All files passed"
+  echo "> All ${TOTAL} files passed"
 fi
-exit $FAIL
+exit "$FAIL"

@@ -173,7 +173,8 @@ elif [ $(which certtool) ]; then :; else
   exit 1
 fi
 
-cd $(dirname $0)/../../installer/resources/certificates
+# this script lives in tools/scripts/tests, so the repo root is three levels up
+cd "$(dirname "$0")/../../../installer/resources/certificates" || exit 1
 
 for i in */*.crt; do
   echo "> Checking $i ..."
@@ -196,10 +197,13 @@ for i in */*.crt; do
   fi
 done
 
-if [ -n "$FAIL" ]; then
-  echo "! At least one file failed certificate validity check"
-else
-  echo "All files passed certificate validity check"
+# FAIL is a count, so compare it as a number. Testing [ -n "$FAIL" ] would be
+# true even for the initial 0, reporting a failure that never happened.
+if [ "$FAIL" -ne 0 ]; then
+  echo "! ${FAIL} file(s) failed the certificate validity check"
+  exit 1
 fi
 
-[ -n "$FAIL" ] && exit $FAIL
+echo "All files passed certificate validity check"
+exit 0
+

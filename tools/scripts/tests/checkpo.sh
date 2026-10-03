@@ -7,7 +7,8 @@
 # public domain
 #
 
-cd "$(dirname "$0")/../.."
+# this script lives in tools/scripts/tests, so the repo root is three levels up
+cd "$(dirname "$0")/../../.." || exit 1
 
 DIRS="
   core/locale \
@@ -23,7 +24,7 @@ DIRS="
   apps/susimail/locale \
   apps/desktopgui/locale \
   installer/resources/locale/po \
-  installer/resources/platform-specific/unix/locale-man \
+  installer/resources/platform-specific/unix/locale-man"
 
 FILES="installer/resources/platform-specific/unix/locale-man/man.pot"
 
