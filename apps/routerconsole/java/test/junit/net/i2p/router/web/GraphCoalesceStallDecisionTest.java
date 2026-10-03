@@ -230,4 +230,66 @@ public class GraphCoalesceStallDecisionTest {
     public void aFreshSweepIsNotStalledEvenLongAfterStartup() {
         assertFalse(GraphGenerator.isCoalesceStalledNow(true, 0L, NOW, NOW + 3_600_000L));
     }
+
+    /////////////// the rendered absence must never leak the -1 sentinel
+
+    @Test
+    public void aKnownSweepAgeIsRenderedInSeconds() {
+        assertEquals("300s", GraphGenerator.formatCoalesceSweepAbsence(300_000L, STARTED, NOW));
+    }
+
+    /**
+     * The exact nonsense this replaces: the accessor means "none ever" with -1, and
+     * interpolating it produced "has not completed for -1s".
+     */
+    @Test
+    public void theUnknownSentinelNeverReachesTheMessage() {
+        String s = GraphGenerator.formatCoalesceSweepAbsence(-1L, STARTED, NOW);
+        assertFalse("a negative duration is not a duration", s.startsWith("-"));
+        assertFalse(s.contains("-1s"));
+    }
+
+    @Test
+    public void theUnknownCaseIsLabelledAndBounded() {
+        String s = GraphGenerator.formatCoalesceSweepAbsence(-1L, STARTED, NOW);
+        assertTrue("the unknown case must say so", s.contains("none has ever run"));
+        assertTrue("and must quote the graphing window as a real bound", s.endsWith("s (none has ever run)"));
+        assertTrue(s.startsWith(String.valueOf((NOW - STARTED) / 1000L)));
+    }
+
+    @Test
+    public void aZeroAgeFallsBackRatherThanRenderingZero() {
+        // Age 0 means "just swept"; the stalled path cannot see it, but be safe.
+        assertTrue(GraphGenerator.formatCoalesceSweepAbsence(0L, STARTED, NOW).contains("s"));
+    }
+
+    @Test
+    public void aFutureStartedMsDoesNotRenderNegative() {
+        String s = GraphGenerator.formatCoalesceSweepAbsence(-1L, NOW + 60_000L, NOW);
+        assertFalse("a start time in the future must clamp, not go negative", s.startsWith("-"));
+    }
+
+    @Test
+    public void everyRenderedAbsenceStartsWithANonNegativeNumber() {
+        long[] ages = { -1L, 0L, 1L, 999L, 60_000L, 3_600_000L };
+        long[] starts = { STARTED, NOW, NOW + 10_000L };
+        for (long age : ages) {
+            for (long start : starts) {
+                String s = GraphGenerator.formatCoalesceSweepAbsence(age, start, NOW);
+                int i = 0;
+                while (i < s.length() && Character.isDigit(s.charAt(i)))
+                    i++;
+                assertTrue("must start with digits, got: " + s, i > 0);
+            }
+        }
+    }
+
+    @Test
+    public void theErrorOnlyFiresBeyondTheGracePeriod() {
+        // The cadence gate: inside the grace window a never-run sweep is not a fault.
+        assertFalse(GraphGenerator.isCoalesceStalledNow(false, -1L, STARTED,
+                                                          STARTED + GraphGenerator.COALESCE_STALL_GRACE_MS));
+        assertTrue(GraphGenerator.isCoalesceStalledNow(false, -1L, STARTED,
+                                                         STARTED + GraphGenerator.COALESCE_STALL_GRACE_MS + 1));
+    }
 }

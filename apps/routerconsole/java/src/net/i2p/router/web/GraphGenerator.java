@@ -641,9 +641,9 @@ public class GraphGenerator implements Runnable, ClientApp {
             // has to infer the mechanism; this line states it and points at the timer.
             if (coalesceStalled.count() > 0) {
                 _log.error("Stat coalesce sweep has not completed for "
-                           + coalesceSweepAgeSeconds(now)
-                           + "s, so no rate is being coalesced and every graph listener starves"
-                           + " regardless of its own state; check the router coalesce timer"
+                           + coalesceSweepAbsence(now)
+                           + "\n* No rate is being coalesced and every graph listener starves"
+                           + " regardless of its own state \n* Check the router coalesce timer"
                            + " (SimpleTimer2) rather than any listener");
             }
         }
@@ -712,19 +712,46 @@ public class GraphGenerator implements Runnable, ClientApp {
                                     _startedMs, now);
     }
 
-    /** Seconds since the last coalesce sweep, for the report. */
-    private long coalesceSweepAgeSeconds(long now) {
+    /**
+     *  How long the coalesce sweep has been absent, for the report.
+     *
+     *  <p>Always a real, non-negative figure: the caller only reaches this once the
+     *  absence has already exceeded the normal cadence, so any sentinel would be
+     *  meaningless noise in an operator-facing line. A sweep that has never run has no
+     *  age to quote, so the age of the graphing window is reported in its place and
+     *  labelled as such - a lower bound on the absence, and never the {@code -1} the
+     *  accessor uses to mean "none ever".
+     *
+     *  @param now current wall-clock ms
+     *  @return a human-readable duration that always starts with a non-negative number
+     */
+    private String coalesceSweepAbsence(long now) {
         StatManager sm = _context.statManager();
-        if (sm == null) {
-            return -1;
+        long age = sm == null ? -1 : sm.getCoalesceSweepAgeMs(now);
+        return formatCoalesceSweepAbsence(age, _startedMs, now);
+    }
+
+    /**
+     *  Render how long the coalesce sweep has been absent.
+     *
+     *  <p>Pure, so the sentinel handling can be pinned by test. The bug this exists to
+     *  prevent: the accessor reports an unknown age as {@code -1}, and an earlier
+     *  version interpolated that straight into the operator-facing ERROR, producing
+     *  the nonsensical {@code "has not completed for -1s"}. A negative duration is not
+     *  a duration. The unknown case is now reported as the age of the graphing window
+     *  and labelled, which is a real lower bound on the absence.
+     *
+     *  @param sweepAgeMs ms since the last completed sweep, or negative if none ever has
+     *  @param startedMs wall-clock ms when graphing began
+     *  @param now current wall-clock ms
+     *  @return a duration that always begins with a non-negative number of seconds
+     *  @since 0.9.71+
+     */
+    static String formatCoalesceSweepAbsence(long sweepAgeMs, long startedMs, long now) {
+        if (sweepAgeMs > 0) {
+            return (sweepAgeMs / 1000L) + "s";
         }
-        long age = sm.getCoalesceSweepAgeMs(now);
-        if (age > 0) {
-            return age / 1000L;
-        }
-        // Nothing has completed yet, so report how long graphing has been waiting for the
-        // first sweep. -1 reads as a fault; during the grace window this is not one.
-        return Math.max(0L, now - _startedMs) / 1000L;
+        return (Math.max(0L, now - startedMs) / 1000L) + "s (none has ever run)";
     }
 
     /**
