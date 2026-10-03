@@ -515,8 +515,7 @@ public class TranslationStatus {
             // only remap for the former.
             boolean remapIn = file.startsWith("installer/resources/locale/po/") ||
                               file.startsWith("installer/resources/platform-specific/unix/locale-man/");
-            // the readme is only translated by language, never by language and country
-            boolean noCountries = file.startsWith("installer/resources/console/readme/");
+            boolean noCountries = false;
             int dot = file.lastIndexOf(".");
             int slash = file.lastIndexOf("/");
             String pfx = file.substring(slash + 1, dot);
