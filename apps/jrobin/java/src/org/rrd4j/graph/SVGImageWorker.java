@@ -19,21 +19,35 @@ public class SVGImageWorker extends ImageWorker {
     /** Img height */
     private int imgHeight;
     private boolean glow;
+    private boolean smoothing;
 
     /*** Image width in pixels.
- @param width image width in pixels
+  @param width image width in pixels
      *  @param height image height in pixels */
     public SVGImageWorker(int width, int height) {
-        this.glow = false;
-        initGraphics(width, height);
+        this(width, height, false, false);
     }
 
     /*** Image width in pixels.
- @param width image width in pixels
+  @param width image width in pixels
      *  @param height image height in pixels
      *  @param glow whether to enable glow effect */
     public SVGImageWorker(int width, int height, boolean glow) {
+        this(width, height, glow, false);
+    }
+
+    /**
+     * Image width in pixels.
+     *
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param glow whether to enable glow effect
+     * @param smoothing whether plot paths hold curves, which are antialiased rather than crisp
+     * @since 0.9.71
+     */
+    public SVGImageWorker(int width, int height, boolean glow, boolean smoothing) {
         this.glow = glow;
+        this.smoothing = smoothing;
         initGraphics(width, height);
     }
     /**
@@ -45,6 +59,7 @@ public class SVGImageWorker extends ImageWorker {
         imgHeight = height;
         g2d = new SVGGraphics2D(imgWidth, imgHeight);
         g2d.setGlowEnabled(glow);
+        g2d.setSmoothingEnabled(smoothing);
         setG2d(g2d);
     }
     /**

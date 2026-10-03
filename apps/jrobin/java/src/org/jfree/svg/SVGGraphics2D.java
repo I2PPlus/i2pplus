@@ -239,6 +239,28 @@ public final class SVGGraphics2D extends Graphics2D {
     }
 
     /**
+     * When true, plot paths hold curves rather than axis-aligned segments, so the global
+     * {@code shape-rendering:crispEdges} rule is overridden for them. Curves drawn with
+     * crisp edges render aliased, which defeats the point of smoothing them.
+     *
+     * <p>Only paths are affected. In a graph body the grid and axes are emitted as {@code <line>}
+     * elements and the background as {@code <rect>}, so a path in the body is always plot data;
+     * paths inside {@code <clipPath>} are unaffected because shape rendering does not apply to
+     * clipping.
+     */
+    private boolean smoothingEnabled;
+
+    /**
+     * Enables or disables smoothing antialiasing for plot paths.
+     *
+     * @param enabled true when the plot paths contain curves
+     * @since 0.9.71
+     */
+    public void setSmoothingEnabled(boolean enabled) {
+        this.smoothingEnabled = enabled;
+    }
+
+    /**
      * The width of the SVG stroke to use when the user supplies a BasicStroke with a width of 0.0
      * (in this case the Java specification says "If width is set to 0.0f, the stroke is rendered as
      * the thinnest possible line for the target device and the antialias hint setting.")
@@ -3060,6 +3082,10 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append(".s13{font-size:13px}")
                 .append(".s14{font-size:14px}")
                 .append("#date{font-style:italic}");
+        if (this.smoothingEnabled) {
+            // Same specificity as the line,path,rect rule above, so source order decides.
+            defs.append("path{shape-rendering:geometricPrecision}");
+        }
         appendThemeCSSDefs(theme, defs);
         defs.append("</style></defs>");
         svg.append(defs);

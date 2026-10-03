@@ -96,6 +96,59 @@
     </condition>
   </target>
 
+  <!-- unit tests -->
+  <target name="compileTest" depends="compile">
+    <property name="junit.home" value="../../../tools/test/junit"/>
+    <property name="hamcrest.home" value="../../../tools/test/hamcrest"/>
+    <mkdir dir="${build.dir}"/>
+    <mkdir dir="${build.dir}/testobj"/>
+    <javac
+      srcdir="./test/junit"
+      debug="true" deprecation="on" source="${javac.version}" target="${javac.version}"
+      release="${javac.release}"
+      includeAntRuntime="false"
+      encoding="UTF-8"
+      destdir="${build.dir}/testobj">
+      <compilerarg line="${javac.compilerargs}"/>
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="junit.test" depends="compileTest">
+    <property name="junit.reports.dir" value="${java.io.tmpdir}/build-i2p/reports"/>
+    <mkdir dir="${junit.reports.dir}/jrobin/junit"/>
+    <mkdir dir="${java.io.tmpdir}/build-i2p/junit-tmp"/>
+    <junit fork="yes" maxmemory="384M" tempdir="${java.io.tmpdir}/build-i2p/junit-tmp" timeout="15000">
+      <classpath>
+        <pathelement location="${build.dir}/obj"/>
+        <pathelement location="${build.dir}/testobj"/>
+        <pathelement location="${junit.home}/junit4.jar"/>
+        <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+      </classpath>
+      <formatter type="xml"/>
+      <batchtest todir="${junit.reports.dir}/jrobin/junit">
+        <fileset dir="./test/junit" includes="**/*Test.java"/>
+      </batchtest>
+    </junit>
+  </target>
+
+  <target name="junit.report">
+    <junitreport todir="${java.io.tmpdir}/build-i2p/reports/apps/jrobin/html/junit">
+      <fileset dir="${java.io.tmpdir}/build-i2p/reports/jrobin/junit">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${java.io.tmpdir}/build-i2p/reports/apps/jrobin/html/junit"/>
+    </junitreport>
+  </target>
+
+  <target name="test" depends="junit.test"/>
+  <!-- end unit tests -->
+
   <target name="javadoc">
     <mkdir dir="${build.dir}"/>
     <mkdir dir="${build.dir}/javadoc"/>
@@ -113,6 +166,7 @@
   </target>
   <target name="cleandep" depends="clean">
   </target>
+  <target name="fulltest" depends="cleandep, test"/>
   <target name="distclean" depends="clean">
   </target>
 </project>

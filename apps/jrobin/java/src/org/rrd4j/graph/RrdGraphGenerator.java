@@ -331,7 +331,12 @@ class RrdGraphGenerator {
         worker.setAntiAliasing(gdef.antiAliasing);
         worker.clip(im.xorigin, im.yorigin - gdef.height - 1, gdef.width, gdef.height + 2);
         double areaZero = mapper.ytr((im.minval > 0.0) ? im.minval : Math.min(im.maxval, 0.0));
-        double[] x = gdef.downsampler == null ? xtr(dproc.getTimestamps()) : null;
+        boolean smooth = gdef.smoothing;
+        // The doubled xtr/ytr pair exists to force a staircase, which leaves every value change on
+        // a zero-width edge. Smoothing needs one point per sample so transitions have room.
+        double[] x = gdef.downsampler == null
+                ? (smooth ? xtrDistinct(dproc.getTimestamps()) : xtr(dproc.getTimestamps()))
+                : null;
         double[] lastY = null;
         // draw line, area and stack
         for (PlotElement plotElement : gdef.plotElements) {
@@ -341,17 +346,27 @@ class RrdGraphGenerator {
                 if (gdef.downsampler != null) {
                     DownSampler.DataSet set =
                             gdef.downsampler.downsize(dproc.getTimestamps(), source.getValues());
-                    x = xtr(set.timestamps);
-                    y = ytr(set.values);
+                    x = smooth ? xtrDistinct(set.timestamps) : xtr(set.timestamps);
+                    y = smooth ? ytrDistinct(set.values) : ytr(set.values);
                 } else {
-                    y = ytr(source.getValues());
+                    y = smooth ? ytrDistinct(source.getValues()) : ytr(source.getValues());
                 }
                 if (Line.class.isAssignableFrom(source.getClass())) {
-                    worker.drawPolyline(x, y, source.color, ((Line) source).stroke);
+                    if (smooth) {
+                        worker.drawPolylineSmooth(x, y, source.color, ((Line) source).stroke);
+                    } else {
+                        worker.drawPolyline(x, y, source.color, ((Line) source).stroke);
+                    }
                 } else if (Area.class.isAssignableFrom(source.getClass())) {
                     if (source.parent == null) {
-                        worker.fillPolygon(x, areaZero, y, source.color);
+                        // Flat baseline, so the smoothed outline provably cannot fold over.
+                        if (smooth) {
+                            worker.fillPolygonSmooth(x, areaZero, y, source.color);
+                        } else {
+                            worker.fillPolygon(x, areaZero, y, source.color);
+                        }
                     } else {
+                        // Stacked band: left as steps, see RrdGraphDef.setSmoothing.
                         worker.fillPolygon(x, lastY, y, source.color);
                         worker.drawPolyline(x, lastY, source.getParentColor(),
                                 RrdGraphConstants.TICK_STROKE);
@@ -361,9 +376,13 @@ class RrdGraphGenerator {
                     float width = stack.getParentLineWidth();
                     if (width >= 0F) {
                         // line
-                        worker.drawPolyline(x, y, stack.color, new BasicStroke(width));
+                        if (smooth) {
+                            worker.drawPolylineSmooth(x, y, stack.color, new BasicStroke(width));
+                        } else {
+                            worker.drawPolyline(x, y, stack.color, new BasicStroke(width));
+                        }
                     } else {
-                        // area
+                        // Stacked area: left as steps, see RrdGraphDef.setSmoothing.
                         worker.fillPolygon(x, lastY, y, stack.color);
                         worker.drawPolyline(x, lastY, stack.getParentColor(),
                                 RrdGraphConstants.TICK_STROKE);
@@ -930,6 +949,27 @@ class RrdGraphGenerator {
         }
         return timestampsDev;
     }
+
+    /**
+     * Converts timestamps to pixel x with one point per sample.
+     *
+     * <p>{@link #xtr(long[])} deliberately writes each sample's x twice so that the polyline is
+     * forced into a staircase: a horizontal run to each sample, then a vertical jump to the next.
+     * That is what gives the plots their stepped look, but it also means every value change lands
+     * on a zero-width edge, leaving no horizontal room for a curve to cross. The smoothed
+     * renderer needs the undoubled positions so a transition spans the pixels between samples.
+     *
+     * @param timestamps sample timestamps
+     * @return one pixel x per timestamp
+     * @since 0.9.71
+     */
+    private double[] xtrDistinct(long[] timestamps) {
+        double[] x = new double[timestamps.length];
+        for (int i = 0; i < timestamps.length; i++) {
+            x[i] = mapper.xtr(timestamps[i]);
+        }
+        return x;
+    }
     /**
      * Ytr
      */
@@ -947,5 +987,24 @@ class RrdGraphGenerator {
             }
         }
         return valuesDev;
+    }
+
+    /**
+     * Converts values to pixel y with one point per sample.
+     *
+     * <p>The undoubled counterpart of {@link #ytr(double[])}; see {@link #xtrDistinct(long[])} for
+     * why the doubled form exists and why the smoothed renderer must not use it. Gaps stay NaN so
+     * {@link PathIterator} still splits the series where the data does.
+     *
+     * @param values sample values, possibly containing NaN
+     * @return one pixel y per value
+     * @since 0.9.71
+     */
+    private double[] ytrDistinct(double[] values) {
+        double[] y = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            y[i] = Double.isNaN(values[i]) ? Double.NaN : mapper.ytr(values[i]);
+        }
+        return y;
     }
 }

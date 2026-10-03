@@ -8,8 +8,14 @@ sourceSets {
             srcDir 'java/src'
         }
     }
+    test {
+        java {
+            srcDir 'java/test/junit'
+        }
+    }
 }
 
 dependencies {
     api project(':core')
+    testImplementation 'junit:junit:4.13.2'
 }

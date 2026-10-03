@@ -119,6 +119,11 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     boolean antiAliasing = false;
     /** Whether to enable text anti-aliasing. */
     boolean textAntiAliasing = false;
+    /**
+     * Whether to draw plot lines and areas as smoothed bezier curves rather than steps.
+     * Off by default, which preserves the staircase rendering.
+     */
+    boolean smoothing = false;
     /** Path to the output image file, or '-' for in-memory only. */
     String filename = RrdGraphConstants.IN_MEMORY_IMAGE;
     /** Start and end timestamps for the graph (seconds since epoch). */
@@ -1920,6 +1925,32 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      */
     public void setTextAntiAliasing(boolean textAntiAliasing) {
         this.textAntiAliasing = textAntiAliasing;
+    }
+
+    /**
+     * Controls whether plot lines and areas are drawn as smoothed bezier curves instead of
+     * steps.
+     *
+     * <p>Off by default. When enabled, each transition between values is eased into a curve while
+     * stretches of unchanged data are left as straight lines, so a graph reads as a trend rather
+     * than a staircase. Areas are only smoothed when their lower boundary is the graph baseline;
+     * a stacked area keeps the step rendering, because the interpolation is not additive across
+     * a change in direction and so a stacked band's two curves cannot be guaranteed to stay
+     * ordered.
+     *
+     * @param smoothing true to draw smoothed curves, false to draw steps (default)
+     * @since 0.9.71
+     */
+    public void setSmoothing(boolean smoothing) {
+        this.smoothing = smoothing;
+    }
+
+    /**
+     * @return true if plot lines and areas are drawn as smoothed curves
+     * @since 0.9.71
+     */
+    public boolean isSmoothing() {
+        return smoothing;
     }
 
     /**
