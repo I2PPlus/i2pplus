@@ -377,7 +377,16 @@ public class GraphGenerator implements Runnable, ClientApp {
          *  the data path still looks healthy. The meaningful age is time since the last
          *  write.
          */
-        WRITES_STOPPED
+        WRITES_STOPPED,
+        /**
+         *  The coalesce sweep itself is not running, so no rate is being asked to
+         *  coalesce and every listener starves at once. This outranks every other
+         *  cause: it is the only one that explains a whole table stopping together,
+         *  and it is invisible from inside the stats package because the symptom is
+         *  that the coalesce task is queued behind other work and never executes.
+         *  The fix is never in a listener.
+         */
+        COALESCE_STALLED
     }
 
     /**
@@ -461,11 +470,20 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @param now current wall-clock ms
      *  @param startedMs wall-clock ms when graphing began
      *  @param ratePeriod the rate's period in ms
+     *  @param coalesceStalled true when the coalesce sweep has not run recently enough to
+     *        have fed these rates; see {@link net.i2p.stat.StatManager#getCoalesceSweepAgeMs(long)}
      *  @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
      *  @since 0.9.71+
      */
     static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
                                         long now, long startedMs, long ratePeriod) {
+        return classifyStaleness(detached, registered, lastUpdateSuccess, now, startedMs,
+                                 ratePeriod, false);
+    }
+
+    static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
+                                        long now, long startedMs, long ratePeriod,
+                                        boolean coalesceStalled) {
         // A detached listener is rebuilt by reviveDetachedListeners() on this same tick, so
         // counting it here would report a fault that is already being handled.
         if (detached) {
@@ -476,6 +494,13 @@ public class GraphGenerator implements Runnable, ClientApp {
         // No age threshold applies - the fault exists the moment the registration is lost.
         if (!registered) {
             return StaleCause.UNREGISTERED;
+        }
+        // Outranks the write ages, and is checked before them for that reason: if the
+        // sweep is not running then nothing can write, whatever this listener's own
+        // history says. Attributing a table-wide stoppage to a per-listener cause is
+        // what sends an operator hunting in the wrong subsystem.
+        if (coalesceStalled) {
+            return StaleCause.COALESCE_STALLED;
         }
         long lag = staleAge(now, startedMs, lastUpdateSuccess);
         // Strictly greater: at exactly 2x the period the next sample is still merely due.
@@ -524,9 +549,18 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     static String formatStaleness(int totalListeners, CauseTally neverWritten,
                                   CauseTally unregistered, CauseTally writesStopped) {
-        int stalled = neverWritten.count() + unregistered.count() + writesStopped.count();
+        return formatStaleness(totalListeners, neverWritten, unregistered, writesStopped,
+                               new CauseTally(StaleCause.COALESCE_STALLED));
+    }
+
+    static String formatStaleness(int totalListeners, CauseTally neverWritten,
+                                  CauseTally unregistered, CauseTally writesStopped,
+                                  CauseTally coalesceStalled) {
+        int stalled = neverWritten.count() + unregistered.count() + writesStopped.count()
+                      + coalesceStalled.count();
         return "RRD data stalled: " + stalled + "/" + totalListeners
                + " graph listeners not writing within 2x their rate period ["
+               + coalesceStalled.describe() + ", "
                + neverWritten.describe() + ", "
                + unregistered.describe() + ", "
                + writesStopped.describe() + "]";
@@ -550,10 +584,18 @@ public class GraphGenerator implements Runnable, ClientApp {
         CauseTally neverWritten = new CauseTally(StaleCause.NEVER_WRITTEN);
         CauseTally unregistered = new CauseTally(StaleCause.UNREGISTERED);
         CauseTally writesStopped = new CauseTally(StaleCause.WRITES_STOPPED);
+        CauseTally coalesceStalled = new CauseTally(StaleCause.COALESCE_STALLED);
+        // Asked of the StatManager rather than inferred per listener: the sweep runs on
+        // the shared coalesce timer, so when that timer is saturated every listener starves
+        // together and no per-listener evidence can tell that apart from N simultaneous
+        // faults. This watchdog runs on its own scheduler, so it still reports while the
+        // timer it is watching is wedged.
+        boolean sweepStalled = isCoalesceStalled(now);
         for (GraphListener lsnr : _listeners) {
             long lastOk = lsnr.getLastUpdateSuccess();
             StaleCause cause = classifyStaleness(lsnr.isDetached(), lsnr.isRegistered(), lastOk,
-                                                 now, _startedMs, lsnr.getRate().getPeriod());
+                                                 now, _startedMs, lsnr.getRate().getPeriod(),
+                                                 sweepStalled);
             if (cause == StaleCause.OK) {
                 continue;
             }
@@ -565,13 +607,17 @@ public class GraphGenerator implements Runnable, ClientApp {
                 case UNREGISTERED:
                     tally = unregistered;
                     break;
+                case COALESCE_STALLED:
+                    tally = coalesceStalled;
+                    break;
                 default:
                     tally = writesStopped;
                     break;
             }
             tally.record(staleAge(now, _startedMs, lastOk), lastOk > 0);
         }
-        int stalled = neverWritten.count() + unregistered.count() + writesStopped.count();
+        int stalled = neverWritten.count() + unregistered.count() + writesStopped.count()
+                      + coalesceStalled.count();
         if (stalled <= 0) {
             // Announce the end of a stall, once. The ERROR that opened it says only
             // that data stopped; without this the operator sees the error followed by
@@ -585,11 +631,100 @@ public class GraphGenerator implements Runnable, ClientApp {
             }
             return;
         }
-        String msg = formatStaleness(_listeners.size(), neverWritten, unregistered, writesStopped);
+        String msg = formatStaleness(_listeners.size(), neverWritten, unregistered, writesStopped,
+                                  coalesceStalled);
         if (_stallThrottle.allow(now, stalled, REPORT_REPEAT_MS)) {
             _stallReported = true;
             _log.error(msg);
+            // Named separately, and first, because it is the only cause whose remedy is
+            // not in this subsystem. An operator reading the tally line sees counts and
+            // has to infer the mechanism; this line states it and points at the timer.
+            if (coalesceStalled.count() > 0) {
+                _log.error("Stat coalesce sweep has not completed for "
+                           + coalesceSweepAgeSeconds(now)
+                           + "s, so no rate is being coalesced and every graph listener starves"
+                           + " regardless of its own state; check the router coalesce timer"
+                           + " (SimpleTimer2) rather than any listener");
+            }
         }
+    }
+
+    /**
+     *  Whether the coalesce sweep has missed enough cycles that no rate can be recording.
+     *
+     *  <p>Pure threshold test, separated from the manager lookup so it can be pinned by
+     *  unit tests. A sweep is considered stalled once it is older than twice the shortest
+     *  rate period: the coalesce timer runs every 50s and the shortest period is one
+     *  minute, so two missed sweeps is already unambiguous.
+     *
+     *  @param sweepAgeMs ms since the last completed sweep, or -1 if none ever has
+     *  @return true when the sweep is stalled
+     *  @since 0.9.71+
+     */
+    static boolean isCoalesceSweepStalled(long sweepAgeMs) {
+        return sweepAgeMs < 0 || sweepAgeMs > 2 * MIN_STALENESS_PERIOD_MS;
+    }
+
+    /**
+     *  Grace period before a coalesce sweep that has never run counts as a stall.
+     *
+     *  <p>One coalesce interval ({@code Router.COALESCE_TIME}, 50s) plus one shortest
+     *  rate period, rounded up to two staleness periods.
+     *
+     *  @since 0.9.71+
+     */
+    static final long COALESCE_STALL_GRACE_MS = 2 * MIN_STALENESS_PERIOD_MS;
+
+    /**
+     *  Whether the shared coalesce sweep should be reported as stalled right now.
+     *
+     *  <p>Separate from {@link #isCoalesceSweepStalled(long)} so the start-up window can
+     *  be pinned by tests. Until a sweep has ever completed its age is reported as -1,
+     *  meaning "none ever", which that function quite correctly calls stalled. At
+     *  start-up, though, that is not a fault - it is a sweep that has not come round yet,
+     *  because the coalesce timer only fires every {@code Router.COALESCE_TIME}. Judging
+     *  it as stalled made every boot log an ERROR naming the coalesce timer as the fault
+     *  within seconds of start-up, and pointed the operator at the one subsystem the
+     *  evidence could not implicate.
+     *
+     *  @param everSwept whether any sweep has completed since graphing began
+     *  @param sweepAgeMs ms since the last completed sweep, or -1 if none ever has
+     *  @param startedMs wall-clock ms when graphing began
+     *  @param now current wall-clock ms
+     *  @return true only once a sweep should have come round and has not
+     *  @since 0.9.71+
+     */
+    static boolean isCoalesceStalledNow(boolean everSwept, long sweepAgeMs,
+                                        long startedMs, long now) {
+        if (!everSwept) {
+            return now - startedMs > COALESCE_STALL_GRACE_MS;
+        }
+        return isCoalesceSweepStalled(sweepAgeMs);
+    }
+
+    /** Whether the coalesce sweep is currently stalled, per {@link #isCoalesceStalledNow}. */
+    private boolean isCoalesceStalled(long now) {
+        StatManager sm = _context.statManager();
+        if (sm == null) {
+            return false;
+        }
+        return isCoalesceStalledNow(sm.hasCoalesced(), sm.getCoalesceSweepAgeMs(now),
+                                    _startedMs, now);
+    }
+
+    /** Seconds since the last coalesce sweep, for the report. */
+    private long coalesceSweepAgeSeconds(long now) {
+        StatManager sm = _context.statManager();
+        if (sm == null) {
+            return -1;
+        }
+        long age = sm.getCoalesceSweepAgeMs(now);
+        if (age > 0) {
+            return age / 1000L;
+        }
+        // Nothing has completed yet, so report how long graphing has been waiting for the
+        // first sweep. -1 reads as a fault; during the grace window this is not one.
+        return Math.max(0L, now - _startedMs) / 1000L;
     }
 
     /**

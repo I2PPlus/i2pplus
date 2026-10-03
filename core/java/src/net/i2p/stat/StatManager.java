@@ -49,6 +49,25 @@ public class StatManager {
     private final AtomicLong _coalesceFailures = new AtomicLong();
 
     /**
+     * Clock value of the last completed coalesce sweep, or 0 if none has run.
+     *
+     * <p>This is a heartbeat for the whole stat subsystem. The sweep runs on the
+     * shared coalesce timer, so it can stop without any exception: the task is
+     * simply queued behind other work and never runs. Nothing inside the stats
+     * package can detect its own non-execution, so an observer outside it needs
+     * this to tell "a rate failed to coalesce" apart from "no rate was asked to
+     * coalesce at all". {@code GraphGenerator}'s health watchdog reads it, from a
+     * scheduler independent of the timer that could be wedged.
+     */
+    private volatile long _lastCoalesceSweepAt;
+
+    /**
+     * Number of completed coalesce sweeps, used by tests and by the watchdog to
+     * distinguish "never ran" from "ran once then stopped".
+     */
+    private final AtomicLong _coalesceSweeps = new AtomicLong();
+
+    /**
      * Log one coalesce-failure line per this many failures. The first is always
      * logged; after that a stat failing every cycle would otherwise emit one ERROR
      * per coalesce period for the life of the router.
@@ -331,6 +350,39 @@ public class StatManager {
                                     stat.getFirstCoalesceFailureCause());
             }
         }
+        // Publish the heartbeat last, so an observer that sees a fresh value knows
+        // the whole sweep completed and not merely that it started.
+        _coalesceSweeps.incrementAndGet();
+        _lastCoalesceSweepAt = _context.clock().now();
+    }
+
+    /**
+     * How long ago the last coalesce sweep completed, or -1 if none ever has.
+     *
+     * <p>Callers use this to distinguish a rate that will not coalesce from a
+     * coalesce task that is not running. A sweep older than a few rate periods
+     * means the latter, which no counter inside this package can report.
+     *
+     * @param now current clock value in ms
+     * @return ms since the last completed sweep, or -1 if there has never been one
+     * @since 0.9.71+
+     */
+    public long getCoalesceSweepAgeMs(long now) {
+        long last = _lastCoalesceSweepAt;
+        if (last <= 0)
+            return -1;
+        long age = now - last;
+        return age > 0 ? age : 0;
+    }
+
+    /**
+     * Whether any coalesce sweep has ever completed.
+     *
+     * @return true if at least one sweep has completed
+     * @since 0.9.71+
+     */
+    public boolean hasCoalesced() {
+        return _coalesceSweeps.get() > 0;
     }
 
     /**

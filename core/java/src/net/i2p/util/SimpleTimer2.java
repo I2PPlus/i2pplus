@@ -83,6 +83,27 @@ public class SimpleTimer2 {
     private final SaturationWatchdog _watchdog;
 
     /**
+     *  When this timer was created, for the stall watchdog's mean-interval estimate.
+     *  @since 0.9.71+
+     */
+    private final long _createdAt = System.currentTimeMillis();
+
+    /**
+     *  Schedules requested with a zero or negative delay since the last watchdog
+     *  report. Counted rather than logged per event: an immediate reschedule is
+     *  legitimate occasionally, but a connection whose head-of-line packet is
+     *  already older than one RTO asks for one on <em>every</em> ACK, and a
+     *  population of those will bury a two-thread pool. The count is what tells the
+     *  saturation report the queue is being flooded by immediate reschedules rather
+     *  than by ordinary periodic work.
+     *
+     *  <p>Incremented only on the zero-delay path, so the steady-state cost is nil.
+     *
+     *  @since 0.9.71+
+     */
+    private final AtomicLong _immediateReschedules = new AtomicLong();
+
+    /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
      *
@@ -255,9 +276,24 @@ public class SimpleTimer2 {
     static WatchdogDecision evaluateStall(long completed, long lastCompleted,
                                           int consecutiveStalledSamples, int threshold,
                                           boolean episodeReported) {
+        return evaluateStall(completed, lastCompleted, consecutiveStalledSamples, threshold,
+                             episodeReported, 0L);
+    }
+
+    static WatchdogDecision evaluateStall(long completed, long lastCompleted,
+                                          int consecutiveStalledSamples, int threshold,
+                                          boolean episodeReported, long meanIntervalMs) {
         if (completed > lastCompleted || completed <= 0)
             return WatchdogDecision.OK;
         if (consecutiveStalledSamples < threshold || episodeReported)
+            return WatchdogDecision.PENDING;
+        // Scale the bar to the timer. A low-frequency timer (the retransmission
+        // shards) can legitimately go quiet for minutes; reporting it wedged is a
+        // false positive that trains the reader to ignore the one report that
+        // matters. Four mean intervals is long enough that only a timer which has
+        // genuinely stopped running its own cadence trips.
+        long quietMs = (long) consecutiveStalledSamples * WATCHDOG_INTERVAL_MS;
+        if (quietMs < Math.max(WATCHDOG_STALL_SAMPLES * WATCHDOG_INTERVAL_MS, 4 * meanIntervalMs))
             return WatchdogDecision.PENDING;
         return WatchdogDecision.REPORT;
     }
@@ -429,8 +465,11 @@ public class SimpleTimer2 {
                        (episodeForMs(_saturatedSamples) / 1000) + "s: " + _name +
                        " active " + active + '/' + pool + ", " + queued +
                        " events queued behind it, " + (completed - _saturatedCompleted) +
-                       " tasks completed during the episode - periodic events are not" +
-                       " firing, find the event blocking the timer");
+                       " tasks completed during the episode, " +
+                       _immediateReschedules.getAndSet(0) +
+                       " immediate reschedules requested - periodic events are not" +
+                       " firing; a high immediate count means something is re-arming itself" +
+                       " on every event rather than waiting");
         }
 
         /**
@@ -438,7 +477,8 @@ public class SimpleTimer2 {
          */
         private void checkStall(long completed) {
             WatchdogDecision rv = evaluateStall(completed, _lastCompleted, _stalledSamples,
-                                                WATCHDOG_STALL_SAMPLES, _stallReported);
+                                                WATCHDOG_STALL_SAMPLES, _stallReported,
+                                                meanIntervalMs(completed));
             _lastCompleted = completed;
             if (rv == WatchdogDecision.OK) {
                 if (_stallReported)
@@ -453,8 +493,25 @@ public class SimpleTimer2 {
             _stallReported = true;
             log().warn("No timer event completed for at least " +
                        (episodeForMs(_stalledSamples) / 1000) + "s: " + _name +
-                       " completed " + completed + " tasks in total - the scheduler" +
+                       " completed " + completed + " tasks in total (mean interval " +
+                       meanIntervalMs(completed) + "ms) - the scheduler" +
                        " is not running any event");
+        }
+
+        /**
+         * Mean interval between completed tasks over this timer's life, from the
+         * completion count and uptime. Zero when nothing has completed yet, which
+         * {@link #evaluateStall} treats as "do not judge the cadence".
+         *
+         * @param completed executor completed task count
+         * @return mean ms between completions, or 0 if unknown
+         */
+        private long meanIntervalMs(long completed) {
+            if (completed <= 0) {
+                return 0;
+            }
+            long uptime = System.currentTimeMillis() - _createdAt;
+            return uptime > 0 ? uptime / completed : 0;
         }
 
         /**
@@ -468,6 +525,12 @@ public class SimpleTimer2 {
     }
 
     private ScheduledFuture<?> schedule(TimedEvent t, long timeoutMs) {
+        // Only the pathological path is counted, so a healthy timer pays nothing.
+        // This is what distinguishes "the queue is full of periodic work" from
+        // "the queue is full of immediate reschedules", which is the difference
+        // between a busy router and a wedged one.
+        if (timeoutMs <= 0)
+            _immediateReschedules.incrementAndGet();
         return _executor.schedule(t, timeoutMs, TimeUnit.MILLISECONDS);
     }
 

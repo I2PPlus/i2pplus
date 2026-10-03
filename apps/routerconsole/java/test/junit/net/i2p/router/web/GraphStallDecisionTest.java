@@ -317,7 +317,8 @@ public class GraphStallDecisionTest {
         String msg = GraphGenerator.formatStaleness(10, tallies.neverWritten, tallies.unregistered,
                                                     tallies.writesStopped);
         assertEquals("RRD data stalled: 5/10 graph listeners not writing within 2x their rate period"
-                     + " [never_written=1 (oldest 3600s since graphing began),"
+                     + " [coalesce_stalled=0,"
+                     + " never_written=1 (oldest 3600s since graphing began),"
                      + " unregistered=2 (oldest 300s since last write),"
                      + " writes_stopped=2 (oldest 900s since last write)]", msg);
     }
