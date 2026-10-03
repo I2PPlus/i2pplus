@@ -59,6 +59,10 @@ public class GraphGenerator implements Runnable, ClientApp {
     private ScheduledExecutorService _scheduler;
     private static final String NAME = "GraphGen";
 
+    /** Emit a liveness heartbeat every N sync ticks (~27min at the 90s period). */
+    private static final int HEARTBEAT_TICKS = 20;
+    private int _ticks;
+
     /**
      * GraphGenerator.
      */
@@ -141,6 +145,16 @@ public class GraphGenerator implements Runnable, ClientApp {
             deleteOldRRDs();
         }
         RrdNioBackendFactory.setSyncPoolSize(syncThreads);
+        // Reported because the RRD backends share one scratch buffer file, which
+        // is only safe while flushes are serialised - and rrd4j snapshots the
+        // pool size into a static singleton at class-init, so this call only wins
+        // if nothing touched rrd4j first. Worth seeing rather than assuming.
+        if (_log.shouldInfo()) {
+            _log.info("RRD4J sync pool requested=" + syncThreads + " effective="
+                      + RrdNioBackendFactory.getSyncPoolSize() + " period="
+                      + RrdNioBackendFactory.getSyncPeriod() + "s backend="
+                      + RrdBackendFactory.getDefaultFactory().getClass().getSimpleName());
+        }
         RrdNioBackendFactory.setThreadFactory(r -> {
             Thread t = new Thread(r, "RRD4JSync");
             t.setDaemon(true);
@@ -176,6 +190,14 @@ public class GraphGenerator implements Runnable, ClientApp {
             }
             specsHolder[0] = adjustDatabases(specsHolder[0]);
             reviveDetachedListeners();
+            if (_log.shouldDebug() && (++_ticks % HEARTBEAT_TICKS) == 0) {
+                int detached = 0;
+                for (GraphListener lsnr : _listeners) {
+                    if (lsnr.isDetached()) {detached++;}
+                }
+                _log.debug("graph heartbeat: tick " + _ticks + ", listeners=" + _listeners.size()
+                           + " detached=" + detached + " running=" + _isRunning);
+            }
         } catch (Exception e) {
             _log.error("Failed to sync RRD4J stats to disk", e);
         }

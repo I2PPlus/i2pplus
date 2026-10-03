@@ -100,6 +100,20 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     /** Path to the single temporary file used to buffer all stat files data sequentially. */
     private Path tempBufferFilePath;
 
+    /**
+     * Serializes flushes across every backend instance.
+     *
+     * <p>All backends stage their pending segments in one shared scratch file, so
+     * two concurrent flushes corrupt each other: one truncates the file while the
+     * other is still mapping its segments out of it. The usual protection is a
+     * single-threaded sync pool, but rrd4j snapshots the pool size into a static
+     * singleton when the pool class initializes, so the setting only takes effect
+     * if it happens before anything else touches rrd4j - otherwise the pool keeps
+     * its default size and the invariant breaks with no error. Taking the lock
+     * here makes the invariant hold by construction rather than by ordering.
+     */
+    private static final Object FLUSH_LOCK = new Object();
+
     /** FileChannel to write and read stats data from the single temp buffer file. */
     private FileChannel tempBufferFileChannel;
 
@@ -177,10 +191,18 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
                 // alive across transient I/O trouble; the data is not lost
                 // because the next flush re-copies the temp buffer.
                 final String rrdPath = getPath();
+                final long[] flushes = { 0 };
                 Runnable syncRunnable =
                         () -> {
                             try {
                                 flushBufferedStatFiles();
+                                // Heartbeat: proves the scheduled task is still
+                                // being rescheduled, which a frozen .jrb mtime
+                                // cannot distinguish from a task that stopped.
+                                long done = ++flushes[0];
+                                if ((done % 10) == 0) {
+                                    RrdLog.debug("flush ok for " + rrdPath + " (count=" + done + ")");
+                                }
                             } catch (Throwable t) {
                                 RrdLog.error(
                                         "RRD4J flush failed for " + rrdPath
@@ -335,26 +357,29 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
                 || tempBufferFilePath == null) {
             return;
         }
-        try {
-            for (StatFileSegment segment : bufferedStatSegments) {
-                try (FileChannel readChannel =
-                        FileChannel.open(tempBufferFilePath, StandardOpenOption.READ)) {
-                    MappedByteBuffer mappedSegment =
-                            readChannel.map(
-                                    FileChannel.MapMode.READ_ONLY, segment.offset, segment.length);
-                    byteBuffer.position((int) segment.targetFileOffset);
-                    byteBuffer.put(mappedSegment);
+        // Hold the cross-instance lock for the whole read-then-truncate sequence.
+        synchronized (FLUSH_LOCK) {
+            try {
+                for (StatFileSegment segment : bufferedStatSegments) {
+                    try (FileChannel readChannel =
+                            FileChannel.open(tempBufferFilePath, StandardOpenOption.READ)) {
+                        MappedByteBuffer mappedSegment =
+                                readChannel.map(
+                                        FileChannel.MapMode.READ_ONLY, segment.offset, segment.length);
+                        byteBuffer.position((int) segment.targetFileOffset);
+                        byteBuffer.put(mappedSegment);
+                    }
                 }
+                byteBuffer.force();
+
+                // Clear temp buffer file and reset state
+                tempBufferFileChannel.truncate(0);
+                tempBufferFileChannel.force(false);
+                bufferedStatSegments.clear();
+
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to flush buffered stat files", e);
             }
-            byteBuffer.force();
-
-            // Clear temp buffer file and reset state
-            tempBufferFileChannel.truncate(0);
-            tempBufferFileChannel.force(false);
-            bufferedStatSegments.clear();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to flush buffered stat files", e);
         }
     }
 
