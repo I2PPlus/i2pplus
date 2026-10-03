@@ -167,7 +167,27 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
         try {
             if (!readOnly && threadPool != null) {
-                Runnable syncRunnable = this::flushBufferedStatFiles;
+                // The task must not let anything escape. scheduleWithFixedDelay
+                // cancels every future execution as soon as the task throws, and
+                // flushBufferedStatFiles() rethrows IOException as an unchecked
+                // RuntimeException, so a single failed flush would silently and
+                // permanently end all later ones: the main file would keep its
+                // last pre-flush contents and every reader would serve stale
+                // data with no error anywhere. Swallowing here keeps the schedule
+                // alive across transient I/O trouble; the data is not lost
+                // because the next flush re-copies the temp buffer.
+                final String rrdPath = getPath();
+                Runnable syncRunnable =
+                        () -> {
+                            try {
+                                flushBufferedStatFiles();
+                            } catch (Throwable t) {
+                                RrdLog.error(
+                                        "RRD4J flush failed for " + rrdPath
+                                                + "; the flush schedule stays active and will retry",
+                                        t);
+                            }
+                        };
                 syncRunnableHandle =
                         threadPool.scheduleWithFixedDelay(
                                 syncRunnable, syncPeriod, syncPeriod, TimeUnit.SECONDS);

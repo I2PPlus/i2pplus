@@ -30,6 +30,7 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import org.rrd4j.core.RrdBackendFactory;
+import org.rrd4j.core.RrdLog;
 import org.rrd4j.core.RrdNioBackendFactory;
 
 /**
@@ -66,7 +67,29 @@ public class GraphGenerator implements Runnable, ClientApp {
         _log = _context.logManager().getLog(getClass());
         _listeners = new CopyOnWriteArrayList<>();
         _sem = new Semaphore(MAX_CONCURRENT_RENDER, true);
+        installRrdLogging();
         _context.addShutdownTask(new Shutdown());
+    }
+
+    /**
+     * Route rrd4j diagnostics into the router log.
+     *
+     * <p>The vendored rrd4j in apps/jrobin is built without a classpath, so it
+     * cannot log through I2P itself and ships with all of its own logging
+     * stripped. That is why a permanently cancelled flush schedule produced no
+     * output at all: the .jrb files simply stopped changing. This installs the
+     * bridge so that failure is visible from now on.
+     */
+    private void installRrdLogging() {
+        RrdLog.setDelegate((severity, message, cause) -> {
+            if ("error".equals(severity)) {
+                _log.error("rrd4j: " + message, cause);
+            } else if ("warn".equals(severity)) {
+                _log.warn("rrd4j: " + message, cause);
+            } else if (_log.shouldDebug()) {
+                _log.debug("rrd4j: " + message);
+            }
+        });
     }
 
     /**
