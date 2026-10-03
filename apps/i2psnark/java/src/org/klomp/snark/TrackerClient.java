@@ -79,6 +79,7 @@ public class TrackerClient implements Runnable {
     private static final String NOT_REGISTERED_2 = "torrent not found"; // diftracker
     private static final String NOT_REGISTERED_3 = "torrent unauthorised"; // vuze
     private static final String ERROR_GOT_HTML = "received html (invalid response)"; // fake return
+
     /** BEP 48 scrape path segment */
     private static final String SCRAPE = "scrape";
 
@@ -771,6 +772,39 @@ public class TrackerClient implements Runnable {
         }
     }
 
+
+    /**
+     *  Lower-cases a tracker problem message for prefix matching.
+     *
+     *  <p>Never null: several {@link IOException} subtypes return a null
+     *  {@code getMessage()}, and the announce loop calls this on the result directly.
+     *  Letting that NPE escape would abort the announce for every remaining tracker
+     *  because of one malformed response from the first one.
+     *
+     *  @param trackerProblem message from the exception, may be null
+     *  @return lower-cased message, or the empty string when there was none
+     *  @since 0.9.71+
+     */
+    static String normalizeTrackerProblem(String trackerProblem) {
+        return trackerProblem == null ? "" : trackerProblem.toLowerCase(Locale.US);
+    }
+
+    /**
+     *  Whether a tracker problem means this tracker will never accept the torrent,
+     *  as opposed to a transient failure worth retrying.
+     *
+     *  @param trackerProblem message already passed through
+     *                        {@link #normalizeTrackerProblem}, never null
+     *  @return true if the tracker is rejecting the torrent outright
+     *  @since 0.9.71+
+     */
+    static boolean isRegistrationFailure(String trackerProblem) {
+        return trackerProblem.startsWith(NOT_REGISTERED)
+                || trackerProblem.startsWith(NOT_REGISTERED_2)
+                || trackerProblem.startsWith(NOT_REGISTERED_3)
+                || trackerProblem.startsWith(ERROR_GOT_HTML);
+    }
+
     /**
      * Whether the configured backup trackers should be consulted for a
      * trackerless torrent on this announce cycle.
@@ -958,16 +992,17 @@ public class TrackerClient implements Runnable {
                     }
                 } catch (IOException ioe) {
                     // Probably not fatal (if it doesn't last too long...)
+                    // The cause belongs in the log: without it a read timeout, a
+                    // refused connection and "no tunnel available" are all just
+                    // "Error communicating with tracker", which is no help at all
+                    // when the failure is that every tracker is failing at once.
                     if (_log.shouldWarn()) {
                         _log.warn("Error communicating with tracker [" +
-                                  I2PSnarkUtil.trackerB32ToHostname(tr.announce) + "]");
+                                  I2PSnarkUtil.trackerB32ToHostname(tr.announce) + "]: " + ioe);
                     }
                     tr.trackerProblems = ioe.getMessage();
-                    String tplc = tr.trackerProblems.toLowerCase(Locale.US);
-                    if (tplc.startsWith(NOT_REGISTERED)
-                            || tplc.startsWith(NOT_REGISTERED_2)
-                            || tplc.startsWith(NOT_REGISTERED_3)
-                            || tplc.startsWith(ERROR_GOT_HTML)) {
+                    String tplc = normalizeTrackerProblem(tr.trackerProblems);
+                    if (isRegistrationFailure(tplc)) {
                         // Give a guy some time to register it if using opentrackers too
                         if (tr.registerFails++ > MAX_REGISTER_FAILS
                                 || !completed /* no use retrying if we aren't seeding */
