@@ -6,7 +6,9 @@ import net.i2p.data.DataHelper;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicLong;
 
 import java.nio.charset.StandardCharsets;
 /** Coordinates a moving rate over various periods. */
@@ -22,6 +24,17 @@ public class RateStat {
 
     /** Actual rate objects for this statistic. */
     protected final Rate[] _rates;
+    /**
+     * How many per-rate {@link Rate#coalesce()} calls have thrown. A rate that
+     * throws is skipped, never propagated: see {@link #coalesceStats()}.
+     */
+    private final AtomicLong _coalesceFailures = new AtomicLong();
+    /**
+     * Identity of the first rate that failed to coalesce, and its cause, so the
+     * log names which period of which stat is broken instead of only counting.
+     */
+    private volatile String _firstFailurePeriod;
+    private volatile Throwable _firstFailureCause;
 
     /**
      * Unique name of the statistic.
@@ -49,6 +62,97 @@ public class RateStat {
         }
     }
 
+    /**
+     * Constructor taking pre-built rates, for tests that need a rate which throws.
+     *
+     * <p>The public constructor cannot express this because it always builds working
+     * rates, and a {@code Rate} cannot be made to fail without a fault injected into
+     * it. The isolation in {@link #coalesceStats()} is only worth anything if it can
+     * be shown to hold when a rate really does throw.
+     *
+     * @param name unique name of the statistic
+     * @param description simple description of the statistic
+     * @param group used to group statistics together
+     * @param rates the rates to coalesce, must not be empty
+     * @throws IllegalArgumentException if rates is empty
+     */
+    RateStat(String name, String description, String group, Rate[] rates) {
+        _statName = name;
+        _description = description;
+        _groupName = group;
+        if (rates.length == 0) throw new IllegalArgumentException();
+        _rates = rates;
+        for (Rate r : _rates) r.setRateStat(this);
+    }
+
+/**
+     * Route coalesced samples for every rate in this stat through {@code delivery}
+     * instead of calling the summary listener inline.
+     *
+     * <p>Set by {@link StatManager} immediately after construction. A setter rather
+     * than a constructor argument so the public constructor signature — and its
+     * callers — are unaffected.
+     *
+     * @param delivery the shared delivery queue, or null for inline delivery
+     * @since 0.9.71+
+     */
+    void setSampleDelivery(RateSampleDelivery delivery) {
+        for (Rate r : _rates) r.setSampleDelivery(delivery);
+    }
+
+    /**
+     * Sum of the per-rate coalesce skip counts; see {@link Rate#getCoalesceSkips()}.
+     *
+     * @return total coalesce skips across this stat's rates
+     * @since 0.9.71+
+     */
+    long getCoalesceSkips() {
+        long total = 0;
+        for (Rate r : _rates) total += r.getCoalesceSkips();
+        return total;
+    }
+
+    /**
+     * Sum of the per-rate successful coalesce counts; see {@link Rate#getCoalesceCount()}.
+     *
+     * @return total coalesces across this stat's rates
+     * @since 0.9.71+
+     */
+    public long getCoalesceCount() {
+        long total = 0;
+        for (Rate r : _rates) total += r.getCoalesceCount();
+        return total;
+    }
+
+    /**
+     * Sum of the per-rate backlog collapse counts; see
+     * {@link Rate#getCoalesceBacklogCollapses()}.
+     *
+     * @return total backlog collapses across this stat's rates
+     * @since 0.9.71+
+     */
+    long getCoalesceBacklogCollapses() {
+        long total = 0;
+        for (Rate r : _rates) total += r.getCoalesceBacklogCollapses();
+        return total;
+    }
+
+    /**
+     * Retained coalesced samples for backfill, oldest first.
+     *
+     * <p>Read from the shortest-period rate ({@code _rates[0]}, periods being held
+     * in ascending order) because that is the rate whose steps its RRD stores, and
+     * therefore the one a listener writing history has to replay.
+     *
+     * @param max the most samples to return, clamped by the rate's ring
+     * @return an immutable list of at most {@code max} samples, oldest first,
+     *         never null
+     * @since 0.9.71+
+     */
+    public List<Rate.CoalescedSample> getRecentSamples(int max) {
+        return _rates[0].getRecentSamples(max);
+    }
+
 /**
  * Update all of the rates for the various periods with the given value.
  *
@@ -70,9 +174,61 @@ public void addData(long value) {
         for (Rate r : _rates) r.addData(value);
     }
 
-    /** Coalesces all the stats. */
+    /**
+     * Coalesce every period's rate, isolating each one.
+     *
+     * <p>A rate that throws must not stop its siblings. {@link StatManager} walks
+     * every stat in one pass on the coalesce timer, so an exception escaping here
+     * would abandon every stat later in that pass: their rates would silently stop
+     * coalescing, their listeners would stop receiving samples, and their graphs
+     * would freeze with nothing logged anywhere - which is exactly the failure this
+     * method exists to make impossible.
+     *
+     * <p>The first failure is remembered with the period that produced it, so
+     * {@link StatManager} can name the offending stat rather than only counting
+     * anonymous failures.
+     */
     public void coalesceStats() {
-        for (Rate r : _rates) r.coalesce();
+        for (Rate r : _rates) {
+            try {
+                r.coalesce();
+            } catch (Throwable t) {
+                if (_coalesceFailures.incrementAndGet() == 1) {
+                    _firstFailurePeriod = Long.toString(r.getPeriod());
+                    _firstFailureCause = t;
+                }
+            }
+        }
+    }
+
+    /**
+     * Number of per-rate coalesce calls that have thrown since construction.
+     *
+     * @return the running failure count
+     * @since 0.9.71+
+     */
+    long getCoalesceFailures() {
+        return _coalesceFailures.get();
+    }
+
+    /**
+     * The period of the first rate that failed to coalesce, or null if none has.
+     *
+     * @return the failing rate's period in ms, or null
+     * @since 0.9.71+
+     */
+    String getFirstCoalesceFailurePeriod() {
+        return _firstFailurePeriod;
+    }
+
+    /**
+     * The cause of the first coalesce failure, for the log line.
+     *
+     * @return the first failure's throwable, or null
+     * @since 0.9.71+
+     */
+    Throwable getFirstCoalesceFailureCause() {
+        return _firstFailureCause;
     }
 
     /**
