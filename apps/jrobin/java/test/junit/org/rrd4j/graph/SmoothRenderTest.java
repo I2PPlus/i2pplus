@@ -205,12 +205,25 @@ public class SmoothRenderTest {
             if ("Z".equals(cmd) || "z".equals(cmd)) {
                 continue;
             }
-            int pairs = ("C".equals(cmd) || "c".equals(cmd)) ? 3 : 1;
-            for (int k = 0; k < pairs; k++) {
-                x += Double.parseDouble(toks.get(i++));
-                i++;
-                xs.add(x);
+            if ("C".equals(cmd) || "c".equals(cmd)) {
+                // Only the third pair of a cubic is the endpoint; the first two are control
+                // points, which the curve visits but which do not move the current point.
+                // Advancing on every pair walks a fictitious path that is longer than the
+                // curve and disagrees with the stepped renderer by an increasing amount.
+                for (int k = 0; k < 3; k++) {
+                    double dx = Double.parseDouble(toks.get(i++));
+                    i++;
+                    if (k == 2) {
+                        x += dx;
+                    }
+                    xs.add(x);
+                }
+                continue;
             }
+            double dx = Double.parseDouble(toks.get(i++));
+            i++;
+            x += dx;
+            xs.add(x);
         }
         return xs;
     }
