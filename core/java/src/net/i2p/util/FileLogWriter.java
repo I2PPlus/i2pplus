@@ -63,6 +63,31 @@ class FileLogWriter extends LogWriter {
     }
 
     /**
+     * Whether the group can traverse (search) an existing directory. Group
+     * execute on the directory is what allows a group-readable file inside it to
+     * be opened, so this is the check that decides whether group-readable log
+     * files are actually reachable.
+     *
+     * @param dir the directory to test
+     * @return true if the group has execute/search permission, or if permissions
+     *         cannot be determined
+     */
+    static boolean isGroupTraversable(File dir) {
+        if (!SecureFileOutputStream.canSetPerms() || !SecureDirectory.isNotWindows)
+            return true;    // cannot tell; do not emit a spurious warning
+        try {
+            java.nio.file.attribute.PosixFileAttributes attrs =
+                java.nio.file.Files.readAttributes(dir.toPath(),
+                    java.nio.file.attribute.PosixFileAttributes.class,
+                    java.nio.file.LinkOption.NOFOLLOW_LINKS);
+            return attrs.permissions().contains(
+                java.nio.file.attribute.PosixFilePermission.GROUP_EXECUTE);
+        } catch (Exception e) {
+            return true;    // cannot tell; do not emit a spurious warning
+        }
+    }
+
+    /**
      * Write the record and its formatted text, using the record's priority.
      */
     @Override
@@ -148,20 +173,34 @@ class FileLogWriter extends LogWriter {
         File f = getNextFile();
         _currentFile = f;
         _numBytesInCurrentFile = 0;
+        // Read the group-readable setting BEFORE creating the parent directory:
+        // the directory's mode is fixed at creation, so a setting read afterwards
+        // could only ever reach the file, leaving the parent at 700 and the
+        // group-readable file unreachable behind it (a group cannot read a file it
+        // cannot traverse). Read once here and used for both parent and file.
+        _groupReadable = _manager.getContext().getBooleanProperty(LogManager.PROP_GROUP_READABLE);
         File parent = f.getParentFile();
         if (parent != null) {
             if (!parent.exists()) {
-                File sd = new SecureDirectory(parent.getAbsolutePath());
+                File sd = new SecureDirectory(parent.getAbsolutePath(), _groupReadable);
                 boolean ok = sd.mkdirs();
                 if (!ok) {
                     System.err.println("Unable to create the parent directory: " + parent.getAbsolutePath());
                 }
+            } else if (_groupReadable && !isGroupTraversable(parent)) {
+                // Pre-existing directory that the router did not create. Widening
+                // it here would silently change the mode of a directory the
+                // operator owns (logger.logFileName may point anywhere), so report
+                // the exact fix instead — otherwise group-readable logs look
+                // configured but remain unreadable to the group.
+                System.err.println("Group-readable logs requested (" + LogManager.PROP_GROUP_READABLE +
+                    "=true) but the log directory is not group-traversable: " + parent.getAbsolutePath() +
+                    " -- run: chmod g+x " + parent.getAbsolutePath());
             }
             if (!parent.isDirectory()) {
                 System.err.println("Cannot put the logs in a subdirectory of a plain file: " + f.getAbsolutePath());
             }
         }
-        _groupReadable = _manager.getContext().getBooleanProperty(LogManager.PROP_GROUP_READABLE);
         closeWriter(old, true);
         if (_manager.shouldGzip()) (new File(f.getPath() + ".gz")).delete();
         try {
