@@ -27,6 +27,8 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import org.rrd4j.core.FetchData;
+import org.rrd4j.core.RrdDb;
 import org.rrd4j.core.RrdException;
 import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
@@ -78,12 +80,29 @@ class GraphRenderer {
     private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
 
     private static final boolean IS_WIN = SystemVersion.isWindows();
+    private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
+    /**
+     *  Keep the historical zero-floored y-axis even when the window's data lives in a
+     *  narrow band far from zero. Off by default, so the data-driven floor applies.
+     *
+     *  @since 0.9.71+
+     */
+    private static final String PROP_ZERO_BASE = "routerconsole.graphZeroBase";
     private static final String PROP_FONT_MONO = "routerconsole.graphFont.unit";
     private static final String PROP_FONT_LEGEND = "routerconsole.graphFont.legend";
     private static final String PROP_FONT_TITLE = "routerconsole.graphFont.title";
     private static final int SIZE_MONO = 10;
     private static final int SIZE_LEGEND = 11;
     private static final int SIZE_TITLE = 12;
+    /**
+     *  Headroom left under the data minimum, as a fraction of the window's data range.
+     *
+     *  <p>Proportional rather than absolute, so it behaves the same for a rate that
+     *  hovers around 0.05 and one that sits at 100,000.
+     *
+     *  @since 0.9.71+
+     */
+    private static final double AXIS_FLOOR_MARGIN = 0.1d;
     private static final Stroke GRID_STROKE =
             new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
     private static final Pattern CAMEL_CASE_PATTERN = Pattern.compile("(?<=[a-z])([A-Z])");
@@ -179,11 +198,16 @@ class GraphRenderer {
         GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
                 showEvents, periodCount, endp, showCredit, lsnr2, titleOverride, showRestarts);
         RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
-        configureDownsampler(def, cfg.periodCount);
+        configureDownsampler(def, cfg);
         configureTimeZone(def, cfg.useUtc);
         applyTheme(def, cfg);
         configureFonts(def, cfg);
         configureBaseAndDecimals(cfg);
+        // The y-axis floor is the one range setting that depends on the data, so the
+        // window is scanned here and only the floor is set: rrd4j derives the ceiling
+        // and rounds the ticks itself.
+        resolveAxisRange(cfg);
+        def.setMinValue(axisFloor(cfg.dataMin, cfg.dataMax, cfg.forceZero));
         configureTitle(def, cfg);
         configureDataSources(def, cfg);
         configureLegend(def, cfg);
@@ -214,6 +238,10 @@ class GraphRenderer {
         long start = end - (period * periodCount);
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
         boolean useUtc = _context.getBooleanProperty("routerconsole.graphUtc");
+        // Opt-in: default off keeps the staircase rendering
+        boolean smooth = _context.getBooleanProperty(PROP_SMOOTH);
+        // Opt-in: default off lets the y-axis follow the data instead of zero
+        boolean forceZero = _context.getBooleanProperty(PROP_ZERO_BASE);
         String lang = Messages.getLanguage(_context);
         if (lang == null) {
             lang = "en";
@@ -237,18 +265,39 @@ class GraphRenderer {
                 .rate(_listener.getRate())
                 .lsnr2(lsnr2)
                 .useUtc(useUtc)
+                .smooth(smooth)
+                .forceZero(forceZero)
                 .lang(lang)
                 .listener(_listener)
                 .build();
     }
 
-    private void configureDownsampler(RrdGraphDef def, int periodCount) {
-        if (periodCount >= 10080) {
-            def.setDownsampler(new LargestTriangleThreeBucketsTime(100));
-        } else if (periodCount >= 2880) {
-            def.setDownsampler(new LargestTriangleThreeBucketsTime(200));
-        } else if (periodCount >= 1440) {
-            def.setDownsampler(new LargestTriangleThreeBucketsTime(500));
+    /**
+     * Caps how many points are plotted so that each has room to be drawn.
+     *
+     * <p>Without a cap the renderer is handed roughly one point per pixel, and once points are
+     * closer together than a pixel a value change falls inside a single column with no width to
+     * draw across. That is what the window-size thresholds used to guard: they keyed off the
+     * number of periods with fixed bucket counts, which did not track the graph width, so a narrow
+     * graph still ended up with sub-pixel points.
+     *
+     * <p>The cap is derived from the width instead, and only applied when smoothing is on, so the
+     * default rendering is untouched.
+     *
+     * @param def the graph definition
+     * @param cfg the render configuration
+     */
+    private void configureDownsampler(RrdGraphDef def, GraphRenderConfig cfg) {
+        if (!cfg.smooth) {
+            return;
+        }
+        // The processed series is about min(periods, width) points long, so compare against that
+        // rather than the period count alone. Half a pixel per point is the point at which
+        // transitions stop being interpolatable, so aim for two pixels and keep a margin.
+        int plotted = Math.min(cfg.periodCount, cfg.width);
+        int budget = Math.max(2, cfg.width / 2);
+        if (plotted > budget) {
+            def.setDownsampler(new LargestTriangleThreeBucketsTime(budget));
         }
     }
 
@@ -284,7 +333,6 @@ class GraphRenderer {
         def.setFont(RrdGraphDef.FONTTAG_UNIT, cfg.small);
         def.setFont(RrdGraphDef.FONTTAG_LEGEND, cfg.legend);
         def.setFont(RrdGraphDef.FONTTAG_TITLE, cfg.title);
-        def.setMinValue(0d);
     }
 
     private void configureBaseAndDecimals(GraphRenderConfig cfg) {
@@ -323,6 +371,163 @@ class GraphRenderer {
         }
 
         cfg.numberFormat = cfg.noDecimalPlace ? "%.0f" : cfg.singleDecimalPlace ? "%.1f%s" : "%.2f%s";
+    }
+
+    /**
+     * Choose the y-axis floor for a window, so a series that lives in a narrow band far
+     * from zero is not flattened against a zero baseline.
+     *
+     * <p>Only the floor is ever returned. The ceiling and the tick rounding are left to
+     * rrd4j, which snaps the floor down to cover any value that does not fit and
+     * otherwise rounds both ends to its own idea of a sensible label value.
+     *
+     * <p>Pure, so the decision can be unit tested without a router, an RRD or a clock.
+     *
+     * @param dataMin  smallest finite value in the window, NaN if none
+     * @param dataMax  largest finite value in the window, NaN if none
+     * @param forceZero true to keep the historical zero-floored axis
+     * @return the floor to pass to RrdGraphDef.setMinValue
+     * @since 0.9.71+
+     */
+    static double axisFloor(double dataMin, double dataMax, boolean forceZero) {
+        if (forceZero || !Double.isFinite(dataMin) || !Double.isFinite(dataMax)) {
+            return 0;
+        }
+        // A flat window has no range to scale, and a window reaching below zero is
+        // measured against its own sign - both keep the historical axis.
+        if (dataMin >= dataMax || dataMin < 0) {
+            return 0;
+        }
+        double floor = dataMin - (dataMax - dataMin) * AXIS_FLOOR_MARGIN;
+        if (!Double.isFinite(floor) || floor < 0) {
+            return 0;
+        }
+        return floor;
+    }
+
+    /**
+     *  Measure the window's data range so {@link #axisFloor} has something to scale.
+     *
+     *  <p>The values cannot be taken off the definition before the graph is built: rrd4j
+     *  only computes them internally, while rendering, out of the datasource it is about
+     *  to plot. So this reads the same window from the listener's already-open RRD - the
+     *  read {@link RrdGraph} performs a moment later anyway - and reduces it in one pass.
+     *  An archive that lives in memory (the default) makes that a linear scan of one
+     *  primitive array with nothing allocated per point.
+     *
+     *  <p>Skipped entirely when a floor could not take effect anyway: {@code forceZero}
+     *  asks for the historical axis, and {@link #usesMrtgScaling} means rrd4j rebuilds
+     *  the range itself. Neither case can benefit from the read.
+     *
+     *  @param cfg the render configuration, whose range fields are filled in
+     * @since 0.9.71+
+     */
+    private void resolveAxisRange(GraphRenderConfig cfg) {
+        cfg.dataMin = Double.NaN;
+        cfg.dataMax = Double.NaN;
+        if (cfg.forceZero || usesMrtgScaling(cfg)) {
+            return;
+        }
+        long start = cfg.start / 1000;
+        long end = cfg.end / 1000;
+        // Events graphs plot the event count rather than the stat itself, matching the
+        // datasource configureDataSources() picks for cfg.plotName.
+        GraphListener lsnr = cfg.listener;
+        accumulateRange(cfg, fetchWindow(lsnr, cfg.showEvents ? lsnr.getEventName() : lsnr.getName(),
+                start, end));
+        GraphListener lsnr2 = cfg.lsnr2;
+        if (lsnr2 != null) {
+            accumulateRange(cfg, fetchWindow(lsnr2, lsnr2.getName(), start, end));
+        }
+    }
+
+    /**
+     *  Read one datasource over the render window.
+     *
+     *  @param lsnr the listener holding the RRD, or null
+     *  @param dsName datasource to read
+     *  @param startSec window start, in seconds
+     *  @param endSec window end, in seconds
+     *  @return the archived values, or null if they could not be read
+     * @since 0.9.71+
+     */
+    private double[] fetchWindow(GraphListener lsnr, String dsName, long startSec, long endSec) {
+        if (lsnr == null || dsName == null) {
+            return null;
+        }
+        RrdDb db = lsnr.getData();
+        if (db == null || db.isClosed()) {
+            return null;
+        }
+        try {
+            FetchData data = db.createFetchRequest(GraphListener.CF, startSec, endSec).fetchData();
+            return data.getValues(dsName);
+        } catch (IOException | RuntimeException e) {
+            // Benign, and worth no more than a debug line: without a range the axis
+            // simply falls back to the zero floor this whole change replaces.
+            if (_log.shouldDebug()) {
+                _log.debug("Error reading the window range of " + dsName, e);
+            }
+            return null;
+        }
+    }
+
+    /**
+     *  Fold one series into the running range, ignoring missing and infinite points.
+     *
+     *  <p>One pass over a primitive array: no boxing, no sorting, nothing allocated per
+     *  point. Two comparisons per value, so the cost is a fraction of the read itself.
+     *
+     *  @param cfg the render configuration, updated in place
+     *  @param values archived values, or null if unavailable
+     * @since 0.9.71+
+     */
+    private static void accumulateRange(GraphRenderConfig cfg, double[] values) {
+        if (values == null) {
+            return;
+        }
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+        for (double v : values) {
+            if (!Double.isFinite(v)) {
+                continue;
+            }
+            if (v < min) {
+                min = v;
+            }
+            if (v > max) {
+                max = v;
+            }
+        }
+        if (Double.isInfinite(max)) {
+            return;
+        }
+        if (Double.isNaN(cfg.dataMin) || min < cfg.dataMin) {
+            cfg.dataMin = min;
+        }
+        if (Double.isNaN(cfg.dataMax) || max > cfg.dataMax) {
+            cfg.dataMax = max;
+        }
+    }
+
+    /**
+     *  Whether rrd4j scales the value axis itself, ignoring a floor set on the definition.
+     *
+     *  <p>With {@link RrdGraphDef#setAltYMrtg(boolean)} on, rrd4j's MRTG range expansion
+     *  rebuilds the y range from the maximum alone and pins the floor at zero, so a floor
+     *  set on the definition cannot move it. Small graphs turn the option off, which is why
+     *  they are the ones the data-driven floor helps.
+     *
+     *  <p>Mirrors the decision in {@link #configureGridAndRendering} so the two cannot
+     *  drift apart, and is only read after {@link #configureBaseAndDecimals} has filled in
+     *  {@code noDecimalPlace}.
+     *
+     *  @param cfg the render configuration
+     *  @return true if rrd4j overwrites the range, so {@link #axisFloor} cannot take effect
+     *  @since 0.9.71+
+     */
+    private static boolean usesMrtgScaling(GraphRenderConfig cfg) {
+        return !cfg.noDecimalPlace && cfg.width >= 400 && cfg.height >= 200;
     }
 
     /**
@@ -561,12 +766,13 @@ class GraphRenderer {
         }
         def.setAntiAliasing(false);
         def.setTextAntiAliasing(true);
+        def.setSmoothing(cfg.smooth);
         def.setGridStroke(GRID_STROKE);
         def.setWidth(cfg.width);
         def.setHeight(cfg.height);
         def.setLazy(true);
         def.setPoolUsed(true);
-        def.setAltYMrtg(!cfg.noDecimalPlace);
+        def.setAltYMrtg(usesMrtgScaling(cfg));
         if (cfg.width < 400 || cfg.height < 200) {
             def.setNoMinorGrid(true);
             def.setAltYMrtg(false);
@@ -584,7 +790,8 @@ class GraphRenderer {
         RrdGraph graph;
         try {
             graph = new RrdGraph(def, new SVGImageWorker(0, 0,
-                    _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow")));
+                    _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow"),
+                    cfg.smooth));
         } catch (NullPointerException npe) {
             _log.error("Error rendering graph (not disabling — transient)", npe);
             throw new IOException("Error rendering graph", npe);
@@ -847,6 +1054,9 @@ out.write(graph.getRrdGraphInfo().getBytes());
         final Rate rate;
         final GraphListener lsnr2;
         final boolean useUtc;
+        final boolean smooth;
+        /** True to keep the historical zero-floored y-axis ({@link #PROP_ZERO_BASE}). */
+        final boolean forceZero;
         final String lang;
         final GraphListener listener;
 
@@ -874,6 +1084,10 @@ out.write(graph.getRrdGraphInfo().getBytes());
         String path2;
         String[] dsNames2;
         int linewidth;
+        /** Smallest finite value in the plotted window, NaN until resolved. */
+        double dataMin;
+        /** Largest finite value in the plotted window, NaN until resolved. */
+        double dataMax;
 
         private GraphRenderConfig(Builder b) {
             this.start = b.start;
@@ -893,6 +1107,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             this.rate = b.rate;
             this.lsnr2 = b.lsnr2;
             this.useUtc = b.useUtc;
+            this.smooth = b.smooth;
+            this.forceZero = b.forceZero;
             // Derived here so every legend/signature path prints a
             // consistent date suffix, never a literal "null"
             this.timeLabel = b.useUtc ? " UTC" : "";
@@ -922,6 +1138,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             Rate rate;
             GraphListener lsnr2;
             boolean useUtc;
+            boolean smooth;
+            boolean forceZero;
             String lang;
             GraphListener listener;
 
@@ -942,6 +1160,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             Builder rate(Rate v) { rate = v; return this; }
             Builder lsnr2(GraphListener v) { lsnr2 = v; return this; }
             Builder useUtc(boolean v) { useUtc = v; return this; }
+            Builder smooth(boolean v) { smooth = v; return this; }
+            Builder forceZero(boolean v) { forceZero = v; return this; }
             Builder lang(String v) { lang = v; return this; }
             Builder listener(GraphListener v) { listener = v; return this; }
 

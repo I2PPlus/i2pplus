@@ -911,8 +911,14 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
+        <!-- GraphListener initializes rrd4j types in its static fields, so any test that
+             touches it needs jrobin.jar even when it only calls a static helper. -->
+        <pathelement location="${jrobin.java.build.dir}/jrobin.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
+        <!-- Checked in rather than taken from the jetty package dir, which does not
+             assemble it; tests that touch servlet types cannot compile without it. -->
+        <pathelement location="../../../apps/jetty/jettylib/javax.servlet.jar"/>
       </classpath>
     </javac>
   </target>
@@ -930,8 +936,11 @@
         <pathelement location="${core.java.build.dir}/i2p.jar"/>
         <pathelement location="${core.java.build.dir}/i2ptest.jar"/>
         <pathelement location="${router.java.build.dir}/router.jar"/>
+        <!-- See the note in compileTest: GraphListener's static init needs rrd4j types. -->
+        <pathelement location="${jrobin.java.build.dir}/jrobin.jar"/>
         <pathelement location="${junit.home}/junit4.jar"/>
         <pathelement location="${hamcrest.home}/hamcrest-core.jar"/>
+        <pathelement location="../../../apps/jetty/jettylib/javax.servlet.jar"/>
       </classpath>
       <formatter type="xml"/>
       <batchtest todir="${junit.reports.dir}/routerconsole/junit">

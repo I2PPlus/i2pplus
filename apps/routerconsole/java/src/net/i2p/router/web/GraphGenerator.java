@@ -25,6 +25,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.StatManager;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
@@ -57,10 +58,66 @@ public class GraphGenerator implements Runnable, ClientApp {
     private final Semaphore _sem;
     private volatile boolean _isRunning;
     private ScheduledExecutorService _scheduler;
+    /** Health watchdog scheduler, separate from {@link #_scheduler} so a stuck
+     *  sync task cannot stop the thing that is meant to notice it is stuck. */
+    private volatile ScheduledExecutorService _healthScheduler;
+    /** Guards the watchdog against being scheduled twice; see {@link #startHealthWatchdog()}. */
+    private boolean _healthStarted;
+    /**
+     *  Whether this instance configured the shared RRD backend factory.
+     *
+     *  <p>{@code RrdBackendFactory.getDefaultFactory()} is a process-wide singleton, so
+     *  closing it from a {@link Shutdown} that never configured it would pull the
+     *  backend out from under every other graph listener still recording. Set at the
+     *  point this instance calls {@code setSyncPoolSize}, which is the only place it
+     *  takes responsibility for the shared configuration.
+     *
+     *  @see #closeBackendFactory()
+     */
+    private volatile boolean _ownsBackendFactory;
+    /** Throttles the stall report so the watchdog and the sync task cannot double-log it. */
+    private final ReportThrottle _stallThrottle = new ReportThrottle();
+    /** Throttles the ledger-drift report independently of the stall report. */
+    private final ReportThrottle _driftThrottle = new ReportThrottle();
+    /**
+     * Set when a stall or drift report is logged, so the matching recovery line is
+     * emitted exactly once when the condition clears. Without it a healthy router
+     * would log a recovery on every watchdog tick, and a router that never stalled
+     * would log one at all.
+     */
+    private boolean _stallReported;
+    private boolean _driftReported;
+    /** Coalesce delta across all tracked listeners at the previous watchdog tick. */
+    private long _lastCoalesceSum;
+    /** Consecutive watchdog ticks on which no tracked rate coalesced at all. */
+    private int _coalesceStalledTicks;
     private static final String NAME = "GraphGen";
 
     /** Emit a liveness heartbeat every N sync ticks (~27min at the 90s period). */
     private static final int HEARTBEAT_TICKS = 20;
+    /**
+     *  Watchdog period.
+     *
+     *  <p>Short enough that the next occurrence of a silently dead data path names its
+     *  own cause while somebody is still looking at the log, and long enough that a
+     *  healthy router does no measurable work. Deliberately separate from the 90s sync
+     *  task: a fault severe enough to wedge that task is exactly the fault the watchdog
+     *  exists to report, so sharing a thread would hide the symptom it is looking for.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int HEALTH_INTERVAL_MS = 10_000;
+    /** Longest gap between coalesces on any tracked rate before "the rates stopped". */
+    private static final long COALESCE_STALL_MS = 120_000L;
+    /** {@link #COALESCE_STALL_MS} expressed in watchdog ticks. */
+    private static final int COALESCE_STALL_TICKS = (int) (COALESCE_STALL_MS / HEALTH_INTERVAL_MS);
+    /** Upper bound on how many retained samples one backfill is asked for. */
+    static final int MAX_BACKFILL_STEPS = 8;
+    /** Repeat period for a report whose numbers have not changed. @since 0.9.71+ */
+    private static final long REPORT_REPEAT_MS = 120_000L;
+    /** Wall-clock time when graph generation started; lets the never-yet-written staleness
+     *  test distinguish an empty startup window from a genuinely stalled writer. */
+    private final long _startedMs = System.currentTimeMillis();
     private int _ticks;
 
     /**
@@ -110,6 +167,23 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     @Override
     public void run() {
+        try {
+            runGenerator();
+        } catch (Throwable t) {
+            // Registration happens partway through, so a failure before that point leaves the app
+            // unregistered and the console reports graphing as unavailable with nothing in the log
+            // to explain it. Make that state explicit instead of letting the thread die quietly.
+            _isRunning = false;
+            _log.error("Graph generation failed to start - "
+                       + "graphs will be unavailable until restart", t);
+            setDisabled();
+        }
+    }
+
+    /**
+     * Body of {@link #run()}, separated so any failure before the app registers itself is logged.
+     */
+    private void runGenerator() {
         // JRobin 1.5.9 crashes these JVMs
         if (SystemVersion.isApache() /* Harmony */ || SystemVersion.isGNU()) /* JamVM or gij */ {
             _log.logAlways(Log.WARN, "Graphing not supported with this JVM: " +
@@ -145,6 +219,9 @@ public class GraphGenerator implements Runnable, ClientApp {
             deleteOldRRDs();
         }
         RrdNioBackendFactory.setSyncPoolSize(syncThreads);
+        // Configuring the shared singleton is what makes this instance responsible for
+        // it at shutdown; see _ownsBackendFactory.
+        _ownsBackendFactory = true;
         // Reported because the RRD backends share one scratch buffer file, which
         // is only safe while flushes are serialised - and rrd4j snapshots the
         // pool size into a static singleton at class-init, so this call only wins
@@ -161,6 +238,10 @@ public class GraphGenerator implements Runnable, ClientApp {
             return t;
         });
         _context.clientAppManager().register(this);
+        if (_log.shouldInfo()) {
+            _log.info("Graph generation registered; persistent=" + isPersistent
+                      + " listeners=" + _listeners.size());
+        }
         _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
             Thread t = new Thread(r, "StatWriter");
             t.setDaemon(true);
@@ -173,6 +254,65 @@ public class GraphGenerator implements Runnable, ClientApp {
             _scheduler.scheduleAtFixedRate(() -> syncSpecsHolder(specsHolder), 0, 90, TimeUnit.SECONDS);
         } catch (Exception e) {
             _log.error("Failed to sync RRD4J stats to disk", e);
+        }
+        startHealthWatchdog();
+    }
+
+    /**
+     *  Start the 10s health watchdog, at most once.
+     *
+     *  <p>Idempotent on purpose: {@code runGenerator()} is the only caller and runs
+     *  once, but a second scheduler would mean two threads applying the heal ladder to
+     *  the same listeners concurrently, which is how a REOPEN ends up racing a REBUILD
+     *  into a half-closed handle. Guarded here rather than trusted to the caller.
+     *
+     *  @since 0.9.71+
+     */
+    private synchronized void startHealthWatchdog() {
+        if (_healthStarted) {
+            return;
+        }
+        _healthStarted = true;
+        _healthScheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "RRDHealth");
+            t.setDaemon(true);
+            t.setPriority(Thread.MIN_PRIORITY);
+            return t;
+        });
+        try {
+            _healthScheduler.scheduleAtFixedRate(this::healthCheck, HEALTH_INTERVAL_MS,
+                                                HEALTH_INTERVAL_MS, TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            _log.error("Failed to start the RRD health watchdog", e);
+            stopHealthWatchdog();
+        }
+    }
+
+    /**
+     *  Stop the health watchdog if one was started.
+     *
+     *  <p>Never called from a watchdog task: a scheduler that awaits its own
+     *  termination from inside a task cannot terminate, and the bounded wait would
+     *  become an unbounded stall.
+     *
+     *  @since 0.9.71+
+     */
+    private synchronized void stopHealthWatchdog() {
+        ScheduledExecutorService health = _healthScheduler;
+        _healthScheduler = null;
+        _healthStarted = false;
+        if (health == null) {
+            return;
+        }
+        health.shutdown(); // Disable new tasks, let the running tick finish
+        try {
+            if (!health.awaitTermination(10, TimeUnit.SECONDS)) {
+                health.shutdownNow(); // Force if not terminated in time
+                health.awaitTermination(5, TimeUnit.SECONDS);
+            }
+        } catch (InterruptedException e) {
+            health.shutdownNow();
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -198,46 +338,707 @@ public class GraphGenerator implements Runnable, ClientApp {
                 _log.debug("graph heartbeat: tick " + _ticks + ", listeners=" + _listeners.size()
                            + " detached=" + detached + " running=" + _isRunning);
             }
-        } catch (Exception e) {
-            _log.error("Failed to sync RRD4J stats to disk", e);
+            // Health check: silently stopping the data path leaves the .jrb files
+            // frozen, which only shows up as graphs going stale many minutes later. Log it
+            // the moment writes stop so the next occurrence is explained instead of masked.
+            reportWriteStaleness();
+        } catch (Throwable t) {
+            // Throwable incl. Error: an escape silences a fixed-rate scheduled task forever.
+            _log.error("Failed to sync RRD4J stats to disk", t);
         }
     }
 
     /**
-     *  Re-create any listener whose database was closed after repeated write
-     *  failures, so a transient I/O error cannot silently retire a graph for the
+     * Why a graph listener is not producing RRD writes.
+     *
+     * <p>The three non-OK values are distinct faults with distinct fixes, so the
+     * staleness report names them individually: a single "nothing is being written"
+     * count cannot tell an operator which one to go and fix.
+     *
+     * @since 0.9.71+
+     */
+    enum StaleCause {
+        /** Not stalled: attached, registered, and writing within 2x its rate period. */
+        OK,
+        /**
+         *  Attached and registered, but no write has ever succeeded. The meaningful age is
+         *  how long the listener instance has existed, since there is no earlier write to
+         *  measure back from.
+         */
+        NEVER_WRITTEN,
+        /**
+         *  Attached to an open RRD, but the Rate no longer points at this listener, so it
+         *  can never be notified again. Recording is dead with no write error, no detach
+         *  and no exception: the state a newer listener's registration leaves behind.
+         */
+        UNREGISTERED,
+        /**
+         *  Attached, registered, and written to before: writes stopped while every part of
+         *  the data path still looks healthy. The meaningful age is time since the last
+         *  write.
+         */
+        WRITES_STOPPED
+    }
+
+    /**
+     *  Floor applied to a rate's period when deciding whether its listener is stale.
+     *
+     *  <p>Sub-minute rates can legitimately go minutes between coalesces, and 2x a few
+     *  hundred milliseconds would flag them from their first tick onwards.
+     *
+     *  @since 0.9.71+
+     */
+    static final long MIN_STALENESS_PERIOD_MS = 60000L;
+
+    /**
+     *  Count and oldest age for one {@link StaleCause}.
+     *
+     *  <p>Deliberately free of router context and of synchronization: a tally is built
+     *  and read entirely within the single-threaded sync task, and keeping it plain lets
+     *  the report wording be unit tested without a running router.
+     *
+     *  @since 0.9.71+
+     */
+    static final class CauseTally {
+        private final StaleCause _cause;
+        private int _count;
+        /** Largest age recorded, in ms. */
+        private long _ageMs;
+        /** Whether {@link #_ageMs} is measured from the last write rather than from graphing start. */
+        private boolean _sinceLastWrite;
+
+        /** @param cause the cause this tally counts */
+        CauseTally(StaleCause cause) {
+            _cause = cause;
+        }
+
+        /**
+         *  Add one listener to this tally.
+         *
+         *  @param ageMs age from {@link GraphGenerator#staleAge}
+         *  @param sinceLastWrite true if measured from the last successful write
+         */
+        void record(long ageMs, boolean sinceLastWrite) {
+            _count++;
+            if (ageMs > _ageMs) {
+                _ageMs = ageMs;
+                _sinceLastWrite = sinceLastWrite;
+            }
+        }
+
+        /** @return number of listeners attributed to this cause */
+        int count() { return _count; }
+
+        /**
+         *  Render this cause for the log line.
+         *
+         *  @return {@code cause=count} when empty, otherwise {@code cause=count (oldest Ns origin)}
+         */
+        String describe() {
+            String name = _cause.name().toLowerCase();
+            if (_count <= 0) {
+                return name + "=0";
+            }
+            return name + "=" + _count + " (oldest " + (_ageMs / 1000) + "s "
+                   + staleAgeOrigin(_sinceLastWrite) + ")";
+        }
+    }
+
+    /** Origin wording for an age measured from the last successful write. @since 0.9.71+ */
+    private static final String staleAgeSinceLastWrite = "since last write";
+    /** Origin wording for an age measured from graphing start. @since 0.9.71+ */
+    private static final String staleAgeSinceStart = "since graphing began";
+
+    /**
+     *  Decide whether a listener is stalled, and why.
+     *
+     *  <p>Pure decision logic, split out of the sync task so the thresholds can be pinned
+     *  by unit tests without a router or an RRD file.
+     *
+     *  @param detached {@link GraphListener#isDetached()} - the RRD is closed
+     *  @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
+     *  @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
+     *  @param now current wall-clock ms
+     *  @param startedMs wall-clock ms when graphing began
+     *  @param ratePeriod the rate's period in ms
+     *  @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
+     *  @since 0.9.71+
+     */
+    static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
+                                        long now, long startedMs, long ratePeriod) {
+        // A detached listener is rebuilt by reviveDetachedListeners() on this same tick, so
+        // counting it here would report a fault that is already being handled.
+        if (detached) {
+            return StaleCause.OK;
+        }
+        // Tested before the write ages because it outranks them: an unregistered listener
+        // cannot write no matter what its history looks like, and re-arming is the fix.
+        // No age threshold applies - the fault exists the moment the registration is lost.
+        if (!registered) {
+            return StaleCause.UNREGISTERED;
+        }
+        long lag = staleAge(now, startedMs, lastUpdateSuccess);
+        // Strictly greater: at exactly 2x the period the next sample is still merely due.
+        if (lag <= 2 * Math.max(ratePeriod, MIN_STALENESS_PERIOD_MS)) {
+            return StaleCause.OK;
+        }
+        return lastUpdateSuccess > 0 ? StaleCause.WRITES_STOPPED : StaleCause.NEVER_WRITTEN;
+    }
+
+    /**
+     *  Age of a listener's data path, measured from whichever origin exists.
+     *
+     *  @param now current wall-clock ms
+     *  @param startedMs wall-clock ms when graphing began
+     *  @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
+     *  @return ms since the last write, or ms since graphing began when nothing was ever written
+     *  @since 0.9.71+
+     */
+    static long staleAge(long now, long startedMs, long lastUpdateSuccess) {
+        return lastUpdateSuccess > 0 ? now - lastUpdateSuccess : Math.max(0, now - startedMs);
+    }
+
+    /**
+     *  Wording for a {@link #staleAge} value: which event the age is measured from.
+     *
+     *  @param sinceLastWrite true if a successful write has ever happened
+     *  @return the origin to quote alongside the age
+     *  @since 0.9.71+
+     */
+    static String staleAgeOrigin(boolean sinceLastWrite) {
+        return sinceLastWrite ? staleAgeSinceLastWrite : staleAgeSinceStart;
+    }
+
+    /**
+     *  Compose the write-stall log line.
+     *
+     *  <p>Pure: a function of the three tallies, so both the wording and the count
+     *  attribution can be unit tested without a router.
+     *
+     *  @param totalListeners number of listeners being tracked
+     *  @param neverWritten tally for {@link StaleCause#NEVER_WRITTEN}
+     *  @param unregistered tally for {@link StaleCause#UNREGISTERED}
+     *  @param writesStopped tally for {@link StaleCause#WRITES_STOPPED}
+     *  @return a single-line message beginning "RRD data stalled:"
+     *  @since 0.9.71+
+     */
+    static String formatStaleness(int totalListeners, CauseTally neverWritten,
+                                  CauseTally unregistered, CauseTally writesStopped) {
+        int stalled = neverWritten.count() + unregistered.count() + writesStopped.count();
+        return "RRD data stalled: " + stalled + "/" + totalListeners
+               + " graph listeners not writing within 2x their rate period ["
+               + neverWritten.describe() + ", "
+               + unregistered.describe() + ", "
+               + writesStopped.describe() + "]";
+    }
+
+    /**
+     *  Loud failure for a silently stalled data path: logs an ERROR when any attached
+     *  listener is not recording, naming the cause per listener class rather than
+     *  reporting one ambiguous count.
+     *
+     *  <p>Called from both the 90s sync task and the 10s watchdog, so the report is
+     *  throttled on its own numbers rather than on which task happened to run: an
+     *  unchanged stall is repeated every {@link #REPORT_REPEAT_MS}, a changed one
+     *  immediately, and the first occurrence is never throttled at all.
+     *
+     *  <p>A single INFO follows once the stall clears, so the ERROR has a visible
+     *  ending rather than being indistinguishable from a router still losing data.
+     */
+    private void reportWriteStaleness() {
+        long now = System.currentTimeMillis();
+        CauseTally neverWritten = new CauseTally(StaleCause.NEVER_WRITTEN);
+        CauseTally unregistered = new CauseTally(StaleCause.UNREGISTERED);
+        CauseTally writesStopped = new CauseTally(StaleCause.WRITES_STOPPED);
+        for (GraphListener lsnr : _listeners) {
+            long lastOk = lsnr.getLastUpdateSuccess();
+            StaleCause cause = classifyStaleness(lsnr.isDetached(), lsnr.isRegistered(), lastOk,
+                                                 now, _startedMs, lsnr.getRate().getPeriod());
+            if (cause == StaleCause.OK) {
+                continue;
+            }
+            CauseTally tally;
+            switch (cause) {
+                case NEVER_WRITTEN:
+                    tally = neverWritten;
+                    break;
+                case UNREGISTERED:
+                    tally = unregistered;
+                    break;
+                default:
+                    tally = writesStopped;
+                    break;
+            }
+            tally.record(staleAge(now, _startedMs, lastOk), lastOk > 0);
+        }
+        int stalled = neverWritten.count() + unregistered.count() + writesStopped.count();
+        if (stalled <= 0) {
+            // Announce the end of a stall, once. The ERROR that opened it says only
+            // that data stopped; without this the operator sees the error followed by
+            // silence and cannot tell a repaired router from one still losing data.
+            if (_stallReported) {
+                _stallReported = false;
+                if (_log.shouldInfo()) {
+                    _log.info("RRD data stalled: recovered, all " + _listeners.size()
+                              + " graph listeners recording");
+                }
+            }
+            return;
+        }
+        String msg = formatStaleness(_listeners.size(), neverWritten, unregistered, writesStopped);
+        if (_stallThrottle.allow(now, stalled, REPORT_REPEAT_MS)) {
+            _stallReported = true;
+            _log.error(msg);
+        }
+    }
+
+    /**
+     *  Does a configured rate need a listener rebuilt?
+     *
+     *  <p>Three distinct faults, each of which leaves the rate unrecorded for the rest of
+     *  the router's life while every observable state still reads healthy: the RRD was
+     *  closed after repeated write failures ({@code detached}), the map lost its listener
+     *  ({@code mapped} false), or a newer listener took the Rate's single registration so
+     *  this one can never be called again ({@code registered} false).
+     *
+     *  @param mapped false if the rate has no listener entry at all
+     *  @param detached true if the listener's RRD is closed
+     *  @param registered true if the Rate still points at the listener
+     *  @return true if the rate needs a new listener
+     *  @since 0.9.71+
+     */
+    static boolean needsRevive(boolean mapped, boolean detached, boolean registered) {
+        return !mapped || detached || !registered;
+    }
+
+    /**
+     *  Re-create any listener that has stopped recording, so neither a transient write
+     *  failure nor a lost Rate registration can silently retire a graph for the
      *  remaining life of the router.
      *
-     *  GraphListener detaches on MAX_CONSECUTIVE_ERRORS but stays in the rate-to-
-     *  listener map, so it is never rebuilt by adjustDatabases(): that only adds
-     *  rates missing from the old spec. This runs on the same tick as the spec
+     *  <p>A detached listener stays in the rate-to-listener map, so it is never rebuilt
+     *  by adjustDatabases(): that only adds rates missing from the old spec. The same
+     *  holds for a listener that kept its open RRD but lost the registration, and for a
+     *  rate whose mapping lost its listener. This runs on the same tick as the spec
      *  sync, reusing the existing scheduled task rather than adding a thread.
      *
      *  @since 0.9.71+
      */
     private void reviveDetachedListeners() {
         for (Map.Entry<Rate, GraphListener> entry : _listenerByRate.entrySet()) {
+            Rate rate = entry.getKey();
             GraphListener lsnr = entry.getValue();
-            if (lsnr == null || !lsnr.isDetached()) {
+            if (!needsRevive(lsnr != null,
+                             lsnr != null && lsnr.isDetached(),
+                             lsnr != null && lsnr.isRegistered())) {
                 continue;
             }
-            Rate rate = entry.getKey();
-            if (_log.shouldWarn()) {
-                _log.warn("Re-attaching RRD listener for " + rate.getRateStat().getName() +
-                          '.' + rate.getPeriod());
+            rebuildListener(rate, lsnr, "re-attach");
+        }
+    }
+
+    /**
+     *  Replace a listener for a rate, releasing the old one first.
+     *
+     *  <p>Shared with the health watchdog's REBUILD step so there is exactly one
+     *  definition of what retiring a listener means: the old handle is released before
+     *  the replacement re-opens the same file, and the stale entry leaves the listener
+     *  list so it keeps counting only what actually records.
+     *
+     *  @param rate the rate to record
+     *  @param lsnr the listener being replaced, or null if the map lost it
+     *  @param why short reason for the log line
+     *  @return true if a replacement listener is now recording
+     *  @since 0.9.71+
+     */
+    private boolean rebuildListener(Rate rate, GraphListener lsnr, String why) {
+        if (_log.shouldWarn()) {
+            _log.warn("Rebuilding RRD listener (" + why + ") for " + rateName(rate));
+        }
+        if (lsnr != null) {
+            // stopListening() leaves the registration alone unless this instance still
+            // owns it, so this cannot silence a listener we are not replacing.
+            lsnr.stopListening();
+            _listeners.remove(lsnr);
+        }
+        // Re-open the existing database file rather than creating a new one,
+        // which preserves the recorded history.
+        return addDb(rate);
+    }
+
+    /**
+     *  Name a rate for a log line, tolerating a Rate with no stat behind it.
+     *
+     *  @param rate the rate
+     *  @return the rate's stat name and period
+     */
+    private static String rateName(Rate rate) {
+        if (rate == null) {
+            return "?";
+        }
+        RateStat rs = rate.getRateStat();
+        return (rs != null ? rs.getName() : "?") + '.' + rate.getPeriod();
+    }
+
+    /**
+     *  What the watchdog may do about one rate's listener.
+     *
+     *  <p>Ordered by cost, and the order is the whole point: every rung keeps more of
+     *  the existing recording than the one above it.
+     *
+     *  @since 0.9.71+
+     */
+    enum HealAction {
+        /** Healthy, or nothing worth doing. */
+        NONE,
+        /**
+         *  The Rate no longer points at this listener but the listener itself is fine.
+         *
+         *  <p>Never returned: a lost registration is repaired by REBUILD, which also
+         *  covers a listener that was never attached in the first place. Re-pointing the
+         *  Rate at a listener another instance may have claimed would make two listeners
+         *  fight over one registration, so the constant is kept for the ladder's shape
+         *  and is deliberately not a rung.
+         */
+        REARM,
+        /** The handle is closed but the listener, registration and file all survive. */
+        REOPEN,
+        /** Coalesces produced steps this listener never stored, and they are still retained. */
+        BACKFILL,
+        /** Nothing usable is left; build a fresh listener from the same file. */
+        REBUILD
+    }
+
+    /**
+     *  Cheapest action that can restore recording for one rate.
+     *
+     *  <p>Pure decision logic, ordered cheapest first, so the cost ordering is pinned by
+     *  unit tests rather than by reading the ladder at the call site.
+     *
+     *  <p>The first row is also the spec-churn guard: a listener that is mapped, attached
+     *  and registered can only ever reach BACKFILL or NONE, never REOPEN or REBUILD, so
+     *  re-reading a changed {@code stat.summaries} string cannot close and reopen a
+     *  healthy RRD.
+     *
+     *  @param mapped false when the rate has no listener entry
+     *  @param detached true when the listener's RRD is closed
+     *  @param registered true when the Rate still points at the listener
+     *  @param writable true when the handle can still take a write (not closed)
+     *  @param backfillable true when the rate still retains unstored samples
+     *  @return the action to take, cheapest first
+     *  @since 0.9.71+
+     */
+    static HealAction chooseHeal(boolean mapped, boolean detached, boolean registered,
+                                 boolean writable, boolean backfillable) {
+        if (!mapped || detached || !registered) {
+            return HealAction.REBUILD;
+        }
+        if (!writable) {
+            return HealAction.REOPEN;
+        }
+        if (backfillable) {
+            return HealAction.BACKFILL;
+        }
+        return HealAction.NONE;
+    }
+
+    /**
+     *  How many retained samples one backfill attempt should ask for.
+     *
+     *  <p>Bounded by the drift, since asking for more steps than are missing wastes a
+     *  list copy every tick, and capped at {@link #MAX_BACKFILL_STEPS} so a listener
+     *  that fell thousands of steps behind does not ask for a list that long - the
+     *  accessor's own clamp would discard the excess anyway, and the excess is exactly
+     *  the part that is permanently gone.
+     *
+     *  @param drift coalesces minus stored steps
+     *  @return number of retained samples to request, never below one
+     *  @since 0.9.71+
+     */
+    static int backfillWindow(long drift) {
+        return (int) Math.min(Math.max(drift, 1L), MAX_BACKFILL_STEPS);
+    }
+
+    /**
+     *  Why coalesces are turning into samples that never reach a listener.
+     *
+     *  @since 0.9.71+
+     */
+    enum DriftCause {
+        /** The counters say the data path is fine; the loss is in the write itself. */
+        WRITE_PATH,
+        /** Samples are queuing and the oldest has been waiting longer than a tick. */
+        DELIVERY_BACKED_UP,
+        /** The queue hit its hard cap, so samples were evicted outright. */
+        DELIVERY_OVERRUN,
+        /** No tracked rate coalesced at all, so nothing is being produced to lose. */
+        COALESCING_STOPPED;
+
+        /** @return the wording to put in the report for this mechanism */
+        String describe() {
+            switch (this) {
+                case DELIVERY_BACKED_UP:
+                    return "Delivery queue backed up (consumer not draining)";
+                case DELIVERY_OVERRUN:
+                    return "Delivery queue overran its capacity (samples evicted)";
+                case COALESCING_STOPPED:
+                    return "No tracked rate coalesced (coalesce path stopped)";
+                default:
+                    return "Write path (delivery drained, step still not stored)";
             }
-            // Re-open the existing database file rather than creating a new one,
-            // which preserves the recorded history.
-            addDb(rate);
+        }
+    }
+
+    /**
+     *  Name the mechanism behind positive ledger drift.
+     *
+     *  <p>These are the three candidates that were indistinguishable from the console
+     *  during the incident this exists for: a coalesce that never happened, a sample
+     *  that queued and never drained, and a sample that arrived and was not written.
+     *  Each has a different fix, so the report has to pick one.
+     *
+     *  <p>Pure, so the mapping from counters to mechanism is unit tested without a
+     *  router, a StatManager or a clock.
+     *
+     *  @param pending samples waiting for delivery
+     *  @param oldestPendingMs age of the oldest waiting sample
+     *  @param overruns samples evicted at the queue's hard cap
+     *  @param coalesceAdvancing whether any tracked rate coalesced recently
+     *  @return the most specific cause the counters support
+     *  @since 0.9.71+
+     */
+    static DriftCause classifyDrift(int pending, long oldestPendingMs, long overruns,
+                                    boolean coalesceAdvancing) {
+        if (overruns > 0) {
+            return DriftCause.DELIVERY_OVERRUN;
+        }
+        if (pending > 0 && oldestPendingMs > HEALTH_INTERVAL_MS) {
+            return DriftCause.DELIVERY_BACKED_UP;
+        }
+        if (!coalesceAdvancing) {
+            return DriftCause.COALESCING_STOPPED;
+        }
+        return DriftCause.WRITE_PATH;
+    }
+
+    /**
+     *  Compose the ledger-drift log line.
+     *
+     *  <p>Pure and single-line, so the wording and the six StatManager counters can be
+     *  asserted in a unit test. The counters are the point of the line: an operator
+     *  reading "pending climbing with oldest-pending-age climbing" knows the consumer is
+     *  wedged, "pending zero with a flat coalesce count" knows the rate stopped
+     *  coalescing, and a climbing skip count points at the coalesce early return.
+     *
+     *  @param totalListeners listeners being tracked
+     *  @param drifters number of listeners with positive drift
+     *  @param maxDrift largest positive drift
+     *  @param permanentSteps steps proven beyond the retained-sample ring
+     *  @param healedSteps steps backfilled since the previous report
+     *  @param rebuilt listeners rebuilt this tick
+     *  @param reopened listeners reopened this tick
+     *  @param coalesced coalesce delta across the tracked listeners
+     *  @param mechanism the named cause from {@link #classifyDrift}
+     *  @param overruns StatManager sample overruns
+     *  @param superseded StatManager same-step supersessions
+     *  @param pending StatManager delivery queue depth
+     *  @param oldestPendingMs StatManager age of the oldest queued sample
+     *  @param backlogCollapses StatManager coalesce backlog collapses
+     *  @param coalesceSkips StatManager coalesce skips
+     *  @return a single-line message beginning "RRD ledger drift:"
+     *  @since 0.9.71+
+     */
+    static String formatLedgerDrift(int totalListeners, int drifters, long maxDrift, long permanentSteps,
+                                    long healedSteps, int rebuilt, int reopened, long coalesced,
+                                    DriftCause mechanism, long overruns, long superseded, int pending,
+                                    long oldestPendingMs, long backlogCollapses, long coalesceSkips) {
+        return "RRD ledger drift: " + drifters + "/" + totalListeners
+               + " listeners have coalesced steps they never stored (max " + maxDrift
+               + ", permanent " + permanentSteps + ", backfilled " + healedSteps
+               + ") [mechanism=" + mechanism.describe()
+               + ", rebuilt=" + rebuilt + ", reopened=" + reopened + ", coalesced=" + coalesced
+               + ", overruns=" + overruns + ", superseded=" + superseded
+               + ", pending=" + pending + ", oldest_pending_ms=" + oldestPendingMs
+               + ", backlog_collapses=" + backlogCollapses + ", coalesce_skips=" + coalesceSkips + ']';
+    }
+
+    /**
+     *  One watchdog tick: report a stalled data path, then apply the heal ladder.
+     *
+     *  <p>Holds no lock across I/O and does no RRD work itself beyond the backfill the
+     *  ladder asks for. Wrapped in a Throwable catch because an escaping exception
+     *  silences a fixed-rate scheduled task permanently, which would remove the very
+     *  watchdog that is supposed to notice the data path dying.
+     */
+    private void healthCheck() {
+        try {
+            if (!_isRunning) {
+                return;
+            }
+            // Same diagnosis the 90s sync task produces, so a stall is named within one
+            // watchdog period instead of one sync period.
+            reportWriteStaleness();
+            applyHealLadder();
+        } catch (Throwable t) {
+            _log.error("RRD health watchdog failed", t);
+        }
+    }
+
+    /**
+     *  Walk every listener, heal what can be healed, and report what could not be.
+     *
+     *  <p>Iterates {@link #_listeners} rather than the rate map so that "mapped" is a
+     *  real question: a listener that is alive but has lost its map entry is exactly the
+     *  REBUILD case the ladder exists for, and iterating the map would never see it.
+     *  The map's own dead entries are handled by {@link #reviveDetachedListeners()}.
+     *
+     *  <p>The ledger reports at WARN, not ERROR, because it describes drift the ladder
+     *  has usually already repaired, and a single INFO marks its clearing.
+     */
+    private void applyHealLadder() {
+        int drifters = 0, rebuilt = 0, reopened = 0;
+        long maxDrift = 0, permanentSteps = 0, healedSteps = 0, coalesced = 0;
+        for (GraphListener lsnr : _listeners) {
+            Rate rate = lsnr.getRate();
+            if (rate == null) {
+                continue;
+            }
+            long drift = lsnr.getCoalesceDrift();
+            coalesced += lsnr.getCoalesceDelta();
+            switch (chooseHeal(_listenerByRate.containsKey(rate), lsnr.isDetached(),
+                               lsnr.isRegistered(), lsnr.isWritable(), drift > 0)) {
+                case REBUILD:
+                    if (rebuildListener(rate, lsnr, "watchdog")) {
+                        rebuilt++;
+                    }
+                    break;
+                case REOPEN:
+                    if (lsnr.reopen()) {
+                        reopened++;
+                    }
+                    break;
+                case BACKFILL: {
+                    List<Rate.CoalescedSample> retained = rate.getRecentSamples(backfillWindow(drift));
+                    if (GraphListener.recoverable(lsnr.getLastStoredTimeMs(), retained)) {
+                        healedSteps += lsnr.backfill(retained);
+                    } else {
+                        // Everything the Rate still remembers is already stored, so the
+                        // missing steps are older than the ring: charge them once here
+                        // rather than asking again on every one of these ticks.
+                        lsnr.chargePermanentLoss(lsnr.getCoalesceDelta());
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+            if (drift > 0) {
+                drifters++;
+                maxDrift = Math.max(maxDrift, drift);
+                // Read after the ladder has run, so a step charged as permanently lost
+                // on this very tick is in the figure this tick reports.
+                permanentSteps += lsnr.getUnrecoverableSteps();
+            }
+        }
+        if (drifters <= 0) {
+            _coalesceStalledTicks = 0;
+            _lastCoalesceSum = coalesced;
+            if (_driftReported) {
+                _driftReported = false;
+                if (_log.shouldInfo()) {
+                    _log.info("RRD ledger drift: cleared, coalesced and stored step counts agree"
+                              + " across " + _listeners.size() + " graph listeners");
+                }
+            }
+            return;
+        }
+        boolean coalesceAdvancing = noteCoalesceProgress(coalesced);
+        long now = System.currentTimeMillis();
+        StatManager sm = _context.statManager();
+        DriftCause mechanism = classifyDrift(sm.getSamplePending(), sm.getSampleOldestPendingAgeMs(),
+                                             sm.getSampleOverruns(), coalesceAdvancing);
+        // Keyed on the numbers an operator reads, so a growing backlog still reports and
+        // an unchanged one does not re-log every ten seconds forever.
+        long signature = drifters * 31L + maxDrift * 7L + permanentSteps;
+        if (_driftThrottle.allow(now, signature, REPORT_REPEAT_MS)) {
+            _driftReported = true;
+            // WARN, not ERROR: this fires on drift the ladder has usually already
+            // repaired, and the message carries healedSteps/rebuilt/reopened/coalesced.
+            // An ERROR that says "everything was fixed" teaches operators to ignore
+            // ERROR, which is how the real stall report above stops being read.
+            // Still visible because this class is explicitly configured at DEBUG.
+            _log.warn(formatLedgerDrift(_listeners.size(), drifters, maxDrift, permanentSteps,
+                                        healedSteps, rebuilt, reopened, coalesced, mechanism,
+                                        sm.getSampleOverruns(), sm.getSampleSuperseded(),
+                                        sm.getSamplePending(), sm.getSampleOldestPendingAgeMs(),
+                                        sm.getCoalesceBacklogCollapses(), sm.getCoalesceSkips()));
+        }
+    }
+
+    /**
+     *  Track whether the tracked rates are still coalescing at all.
+     *
+     *  <p>Tested over a window rather than a single tick: a 60s rate coalesces on one
+     *  tick in six, so comparing against the previous tick alone would report "the rates
+     *  stopped" five times out of six.
+     *
+     *  <p>Not synchronized, and deliberately so: only the single watchdog thread ever
+     *  calls it, whereas {@link #stop()} holds this instance's monitor across a bounded
+     *  scheduler shutdown wait. Synchronizing here would let a shutdown stall the
+     *  watchdog for the length of that wait.
+     *
+     *  @param coalesced coalesce delta summed across the tracked listeners
+     *  @return true if some rate coalesced within {@link #COALESCE_STALL_MS}
+     */
+    private boolean noteCoalesceProgress(long coalesced) {
+        if (coalesced > _lastCoalesceSum) {
+            _lastCoalesceSum = coalesced;
+            _coalesceStalledTicks = 0;
+        } else if (_coalesceStalledTicks < COALESCE_STALL_TICKS) {
+            _coalesceStalledTicks++;
+        }
+        return _coalesceStalledTicks < COALESCE_STALL_TICKS;
+    }
+
+    /**
+     *  Decide whether a repeated report is due, and remember the decision.
+     *
+     *  <p>Pure enough to unit test and free of router context, so the "first report is
+     *  never throttled, a changed one is never delayed, an unchanged one repeats on a
+     *  timer" rule is pinned by tests rather than by reading the caller.
+     *
+     *  @since 0.9.71+
+     */
+    static final class ReportThrottle {
+        private long _lastMs;
+        private long _lastSignature;
+
+        /**
+         *  @param now current wall-clock ms
+         *  @param signature value identifying the state being reported
+         *  @param minIntervalMs shortest gap between two identical reports
+         *  @return true if the caller should log now
+         */
+        synchronized boolean allow(long now, long signature, long minIntervalMs) {
+            if (signature != _lastSignature || now - _lastMs >= minIntervalMs) {
+                _lastSignature = signature;
+                _lastMs = now;
+                return true;
+            }
+            return false;
         }
     }
 
     /**
      * stop.
+     *
+     * <p>The watchdog goes first: it is the task that would notice the sync task
+     * hanging, so it has to be shut down before the thing it watches, not after.
      */
     public synchronized void stop() {
         _isRunning = false;
         _context.clientAppManager().unregister(this);
+        stopHealthWatchdog();
         if (_scheduler != null) {
             _scheduler.shutdown(); // Disable new tasks, let running finish
             try {
@@ -374,15 +1175,32 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      *  Start tracking a rate by creating a new GraphListener for it.
      *
+     *  <p>Single choke point for every listener creation, so it is also where "one live
+     *  listener per rate" is enforced. Both the 90s sync task and the 10s watchdog can
+     *  decide to rebuild the same rate within one interval; without this the second
+     *  rebuild would register a second listener on the rate, orphan the first into the
+     *  listener list, and leave an attached-but-never-called listener accumulating one
+     *  per tick - which is precisely the fault the ladder exists to remove.
+     *
      *  @param r the rate to track
+     *  @return true if a new listener was created and is recording
      */
-    private void addDb(Rate r) {
+    private boolean addDb(Rate r) {
+        if (r == null) {
+            return false;
+        }
+        GraphListener existing = _listenerByRate.get(r);
+        if (existing != null && !existing.isDetached()) {
+            // Someone already rebuilt this rate while this rebuild was in flight.
+            return false;
+        }
         GraphListener lsnr = new GraphListener(r);
         boolean success = lsnr.startListening();
         if (success) {
             _listeners.add(lsnr);
             _listenerByRate.put(r, lsnr);
         } else {_log.error("Failed to add RRD for rate " + r.getRateStat().getName() + '.' + r.getPeriod());}
+        return success;
     }
 
     /**
@@ -696,17 +1514,53 @@ GraphListener lsnr = _listenerByRate.get(rate);
     private class Shutdown implements Runnable {
         /**
          *  Close all persistent RRDs and clean up.
+         *
+         *  <p>Ordered: watchdog, sync task, listeners, backend factory. The factory is
+         *  last because closing it while a listener still holds a handle leaves that
+         *  handle half-closed, and it is only closed at all by the instance that
+         *  configured it.
          */
         @Override
         public void run() {
+            // setDisabled() clears the running flag and stops both schedulers, watchdog
+            // first, so no tick can be in flight while the listeners are being closed.
             setDisabled();
             for (GraphListener lsnr : _listeners) {lsnr.stopListening();} // FIXME could cause exceptions if rendering?
             _listeners.clear();
+            // The map has to go too, not just the list. A sync tick still in flight walks
+            // _listenerByRate, and a stale mapping would make it re-open the RRDs that were
+            // just closed - after the backend factory is closed below - leaving half-closed
+            // backends behind. A mapping that outlived the shutdown also serves a detached
+            // listener to getXML(), which dereferences its closed database.
+            _listenerByRate.clear();
             stop();
-            // Stops the sync thread pool in NIO; noop if not persistent, we set num threads to zero in run() above
-            try {RrdBackendFactory.getDefaultFactory().close();}
-            catch (IOException ioe) { /* ignored */ }
+            closeBackendFactory();
         }
+    }
+
+    /**
+     *  Close the shared RRD backend factory, but only if this instance configured it.
+     *
+     *  <p>{@code RrdBackendFactory.getDefaultFactory()} is a singleton, so a second
+     *  {@link GraphGenerator} shutting down after the one that configured it would
+     *  otherwise stop the flush pool out from under every listener still recording.
+     *
+     *  @since 0.9.71+
+     */
+    private void closeBackendFactory() {
+        if (!_ownsBackendFactory) {
+            if (_log.shouldInfo()) {
+                _log.info("Skipping RRD backend factory close: this GraphGenerator instance "
+                          + Integer.toHexString(System.identityHashCode(this))
+                          + " did not configure it");
+            }
+            return;
+        }
+        // Cleared first so a second shutdown cannot close it again.
+        _ownsBackendFactory = false;
+        // Stops the sync thread pool in NIO; noop if not persistent, we set num threads to zero in run() above
+        try {RrdBackendFactory.getDefaultFactory().close();}
+        catch (IOException ioe) { /* ignored */ }
     }
 
 }

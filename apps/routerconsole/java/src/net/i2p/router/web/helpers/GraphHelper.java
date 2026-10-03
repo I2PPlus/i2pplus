@@ -34,6 +34,7 @@ public class GraphHelper extends FormHandler {
     private boolean _graphHideLegend;
     private boolean _graphHideRestarts;
     private boolean _graphGlow;
+    private boolean _graphSmooth;
     private boolean _useUtc;
     private String _stat;
     private int _end;
@@ -45,6 +46,7 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_HIDE_LEGEND = "routerconsole.graphHideLegend";
     private static final String PROP_HIDE_RESTARTS = "routerconsole.graphHideRestarts";
     private static final String PROP_GLOW = "routerconsole.graphGlow";
+    private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
     private static final String PROP_UTC = "routerconsole.graphUtc";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
@@ -82,6 +84,7 @@ public class GraphHelper extends FormHandler {
                                                    Boolean.toString(DEFAULT_HIDE_RESTARTS)));
         _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
+        _graphSmooth = _context.getBooleanProperty(PROP_SMOOTH);
         _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
 
     }
@@ -101,7 +104,26 @@ public class GraphHelper extends FormHandler {
 
     /** @return the configured graph refresh delay, in seconds */
     public int getRefreshValue() {
-        return _refreshDelaySeconds;
+        return effectiveRefresh(_refreshDelaySeconds, GraphGenerator.isDisabled(_context));
+    }
+
+    /**
+     * The auto-refresh delay a page render should actually use.
+     *
+     * <p>Refreshing is pointless while graph generation is unavailable, and hammering a console
+     * that cannot render is worse than showing nothing, so the delay is suppressed for that one
+     * render. It is deliberately not persisted: graph generation can come back, and writing the
+     * suppression into the config made it permanent, so once graphing had been unavailable for any
+     * reason the graphs page would freeze on its first paint and never refresh again, even after
+     * the router had recovered.
+     *
+     * @param saved the configured delay in seconds
+     * @param graphingDisabled whether graph generation is currently unavailable
+     * @return the delay to use for this render, or -1 to suppress refreshing
+     * @since 0.9.71
+     */
+    static int effectiveRefresh(int saved, boolean graphingDisabled) {
+        return graphingDisabled ? -1 : saved;
     }
 
     /**
@@ -172,6 +194,7 @@ public class GraphHelper extends FormHandler {
 
     /** @since 0.9.70+ */
     public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
+    public void setGraphSmooth(String foo) {_graphSmooth = !"false".equals(foo);}
 
     /** @since 0.9.70+ */
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
@@ -541,7 +564,15 @@ public class GraphHelper extends FormHandler {
         }
         buf.append(">")
            .append(_t("Add a glow effect to graph lines"))
-           .append("</label><input type=hidden name=graphGlow value=false></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
+           .append("</label><input type=hidden name=graphGlow value=false></span><br><span class=nowrap hidden>\n<b>")
+           .append(_t("Smooth lines"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphSmooth");
+        if (_graphSmooth) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Use bezier curves to plot graphs"))
+           .append("</label><input type=hidden name=graphSmooth value=false></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
            .append(_t("Select Stats"))
            .append("</a> <input type=submit class=accept value=\"")
            .append(_t("Save settings and redraw graphs"))
@@ -566,9 +597,6 @@ public class GraphHelper extends FormHandler {
                                     System.getProperty("os.arch") + ' ' +
                                     System.getProperty("os.version"));
             addFormNotice("Check logs for more information.");
-            if (_context.getProperty(PROP_REFRESH, 0) >= 0) {
-                _context.router().saveConfig(PROP_REFRESH, "-1");
-            }
         }
         return super.getAllMessages();
     }
@@ -598,6 +626,7 @@ public class GraphHelper extends FormHandler {
                                                    Boolean.toString(DEFAULT_HIDE_RESTARTS))) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
+            _graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
             _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
@@ -610,6 +639,7 @@ public class GraphHelper extends FormHandler {
             changes.put(PROP_HIDE_RESTARTS, Boolean.toString(_graphHideRestarts));
             changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             changes.put(PROP_GLOW, Boolean.toString(_graphGlow));
+            changes.put(PROP_SMOOTH, Boolean.toString(_graphSmooth));
             changes.put(PROP_UTC, Boolean.toString(_useUtc));
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);

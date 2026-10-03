@@ -3311,7 +3311,7 @@ span#newtab{margin-top:4px}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
 .tunneldisplay .tunnel_peer{margin:0;min-width:80px}
 .tunneldisplay .tunnel_peer.tunnel_local{min-width:100px}
-.warning h3{font-size:11.5pt}#webappconfiguration .h3navlinks a{padding-top:9px}
+.warning h3{font-size:11.5pt}
 #advancedconfig a{padding:6px 5px 8px 17px}
 #advancedconfig a::after{margin:-2px -5px -2px -5px}
 #applinks a::after,#sitelinks a::after{margin-left:11px}
@@ -3331,6 +3331,7 @@ span#newtab{margin-top:4px}
 #floodfills th:first-child,#floodfills td:first-child{padding-right:3px;width:58px}
 #fullhistory{margin-top:-14px;text-align:right}
 #graphdisplay{margin-top:5px}
+#graphinfo a{margin-top:2px}
 #help .confignav{padding:0;position:sticky;top:-2px;z-index:999;will-change:transform}
 #help .tab,#help .tab2{margin-top:-1px;font-size:90%}
 #help h2{font-size:14pt}
@@ -3388,6 +3389,7 @@ span#newtab{margin-top:4px}
 #tunnels h3 a::after{margin:-8px -8px -8px 0;padding:9px 8px 9px 16px}
 #tunnels .tab,#tunnels .tab2{min-width:180px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
+#webappconfiguration .h3navlinks a{padding-top:9px}
 }
 
 @media (min-width:1600px){
