@@ -378,6 +378,39 @@ public interface RrdGraphConstants {
     /** Stroke used to draw grid */
     Stroke GRID_STROKE = new BasicStroke(1);
 
+    /**
+     * Dash pattern for series lines when a graph carries more than one: one pixel of
+     * ink, one pixel of gap. With {@link BasicStroke#CAP_ROUND} each dash renders as a
+     * round dot, so overlapping series stay separable by texture as well as by colour -
+     * which matters because two series of similar hue are indistinguishable where they
+     * cross, and because the console can print these graphs in a single ink colour.
+     *
+     * <p>A solid line remains correct for a single-series graph, where there is nothing
+     * to tell apart and the dashes would only add noise.
+     *
+     * @see RrdGraphGenerator#multilineStroke(float)
+     * @since 0.9.71
+     */
+    float[] MULTILINE_DASH = { 1f, 1f };
+
+    /**
+     * The stroke a series line should use, given how many line series the graph draws.
+     *
+     * @param lineCount number of line-type series in the graph
+     * @param width requested line width
+     * @return a dotted round-capped stroke for a multi-series graph, plain otherwise
+     * @since 0.9.71
+     */
+    static Stroke multilineStroke(int lineCount, float width) {
+        if (lineCount < 2) {
+            return new BasicStroke(width);
+        }
+        // Round caps and joins: the point of the dash pattern is a row of dots, and a
+        // butt cap would draw each one as a 1px rectangle instead.
+        return new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                               10f, MULTILINE_DASH, 0f);
+    }
+
     /** Stroke used to draw ticks */
     Stroke TICK_STROKE = new BasicStroke(0);
 

@@ -151,6 +151,27 @@ class RrdGraphGenerator {
         }
     }
     /**
+     * Counts the line-type series in a graph, which is what decides whether the lines
+     * are drawn solid or dotted.
+     *
+     * <p>Stacked areas and their parent outline are excluded: a stack is one quantity
+     * split into bands, not several independent series, and dotting its outline would
+     * read as though the bands were separate measurements.
+     *
+     * @param plotElements the graph's plot elements, may be null
+     * @return number of {@link Line} series, zero for an empty or null list
+     * @since 0.9.71
+     */
+    static int countLineSeries(java.util.List<PlotElement> plotElements) {
+        if (plotElements == null) {return 0;}
+        int count = 0;
+        for (PlotElement plotElement : plotElements) {
+            if (plotElement instanceof Line) {count++;}
+        }
+        return count;
+    }
+
+    /**
      * Draw rules and spans
      */
 
@@ -338,6 +359,9 @@ class RrdGraphGenerator {
                 ? (smooth ? xtrDistinct(dproc.getTimestamps()) : xtr(dproc.getTimestamps()))
                 : null;
         double[] lastY = null;
+        // Counted once: it decides the stroke for every series, and walking the element
+        // list again inside the loop would be quadratic in the number of series.
+        int lineCount = countLineSeries(gdef.plotElements);
         // draw line, area and stack
         for (PlotElement plotElement : gdef.plotElements) {
             if (plotElement instanceof SourcedPlotElement) {
@@ -352,10 +376,14 @@ class RrdGraphGenerator {
                     y = smooth ? ytrDistinct(source.getValues()) : ytr(source.getValues());
                 }
                 if (Line.class.isAssignableFrom(source.getClass())) {
+                    // Multi-series graphs get a dotted line so crossing series are told
+                    // apart by texture as well as colour; a lone series stays solid.
+                    Stroke lineStroke = RrdGraphConstants.multilineStroke(lineCount,
+                            ((Line) source).stroke.getLineWidth());
                     if (smooth) {
-                        worker.drawPolylineSmooth(x, y, source.color, ((Line) source).stroke);
+                        worker.drawPolylineSmooth(x, y, source.color, lineStroke);
                     } else {
-                        worker.drawPolyline(x, y, source.color, ((Line) source).stroke);
+                        worker.drawPolyline(x, y, source.color, lineStroke);
                     }
                 } else if (Area.class.isAssignableFrom(source.getClass())) {
                     if (source.parent == null) {
@@ -376,10 +404,11 @@ class RrdGraphGenerator {
                     float width = stack.getParentLineWidth();
                     if (width >= 0F) {
                         // line
+                        Stroke stackStroke = RrdGraphConstants.multilineStroke(lineCount, width);
                         if (smooth) {
-                            worker.drawPolylineSmooth(x, y, stack.color, new BasicStroke(width));
+                            worker.drawPolylineSmooth(x, y, stack.color, stackStroke);
                         } else {
-                            worker.drawPolyline(x, y, stack.color, new BasicStroke(width));
+                            worker.drawPolyline(x, y, stack.color, stackStroke);
                         }
                     } else {
                         // Stacked area: left as steps, see RrdGraphDef.setSmoothing.
