@@ -762,7 +762,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     case GOTDATE:
                         wasOpening = true;
                         try {_stateLock.wait((long) 10*1000);}
-                        catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+                        catch (InterruptedException ie) {throw new I2PSessionException("Interrupted waiting for the session to open", ie);}
                         break;
                     case CLOSING:
                         throw new I2PSessionException("Close in progress...");
@@ -891,7 +891,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 }
             }
 
-        } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+        } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted connecting the session to the router", ie);}
         catch (UnknownHostException uhe) {
             throw new I2PSessionException(getPrefix() + " -> Cannot connect to Router on " + _hostname + ':' + _portNum, uhe);
         } catch (IOException ioe) {
@@ -1329,7 +1329,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                             _stateLock.wait((long) 5*1000);
                             continue;
                         } catch (InterruptedException ie) {
-                            throw new I2PSessionException("Interrupted", ie);
+                            throw new I2PSessionException("Interrupted waiting for the destination to be published", ie);
                         }
 
                     case OPEN:
@@ -1371,7 +1371,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                 if (!_queue.offer(message, MAX_SEND_WAIT)) {
                     throw new I2PSessionException("Timed out waiting while write queue was full");
                 }
-            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted sending a message to the router", ie);}
         } else {
             ClientWriterRunner writer = _writer;
             if (writer == null) {throw new I2PSessionException("Already closed or not open");}
@@ -1894,7 +1894,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     waiter.wait(maxWait);
                     rv = waiter.destination;
                 }
-            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted waiting for the destination to appear", ie);}
         } finally {_pendingLookups.remove(waiter);}
         return rv;
     }
@@ -2006,7 +2006,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
                     waiter.wait(maxWait);
                     return waiter;
                 }
-            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+            } catch (InterruptedException ie) {throw new I2PSessionException("Interrupted waiting for the connection to be accepted", ie);}
         } finally {_pendingLookups.remove(waiter);}
     }
 
@@ -2165,7 +2165,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
         sendMessage_unchecked(new GetBandwidthLimitsMessage());
         try {synchronized (_bwReceivedLock) {_bwReceivedLock.wait((long) 5*1000);}}
-        catch (InterruptedException ie) {throw new I2PSessionException("Interrupted", ie);}
+        catch (InterruptedException ie) {throw new I2PSessionException("Interrupted waiting for bandwidth limits from the router", ie);}
         return _bwLimits;
     }
 

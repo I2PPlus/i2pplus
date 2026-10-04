@@ -285,9 +285,64 @@ public class I2PSocketManagerFactory {
         try {
             return createManager(myPrivateKeyStream, i2cpHost, i2cpPort, opts, true, filter);
         } catch (I2PSessionException ise) {
-            getLog().error("Error creating session for socket manager -> " + ise.getMessage());
+            // An interrupt here is nearly always self-inflicted: callers such as
+            // TrackerClient interrupt their own worker threads when stopping them.
+            // That is an orderly shutdown, not a fault, so it must not sit at ERROR
+            // in the log we watch for real failures.
+            String msg = describeSessionFailure(ise, Thread.currentThread().getName());
+            Log log = getLog();
+            if (isSessionInterrupt(ise)) {
+                if (log.shouldWarn()) {log.warn(msg);}
+            } else if (log.shouldError()) {
+                log.error(msg);
+            }
             return null;
         }
+    }
+
+    /**
+     *  Whether a session failure was just an interrupt.
+     *
+     *  <p>Distinguishes "we asked this thread to stop" from a genuine fault, which
+     *  is what decides WARN versus ERROR at the call site.
+     *
+     *  @param ise the session failure, may be null
+     *  @return true if the cause was an {@link InterruptedException}
+     *  @since 0.9.71+
+     */
+    static boolean isSessionInterrupt(I2PSessionException ise) {
+        return ise != null && ise.getCause() instanceof InterruptedException;
+    }
+
+    /**
+     *  Renders a session-creation failure with enough identity to act on: which
+     *  thread was doing the work, which stage of session setup was interrupted,
+     *  and the exception type rather than only its message.
+     *
+     *  @param ise the failure, may be null
+     *  @param threadName name of the thread that was creating the manager
+     *  @return a single-line description naming the thread and the cause
+     *  @since 0.9.71+
+     */
+    static String describeSessionFailure(I2PSessionException ise, String threadName) {
+        StringBuilder sb = new StringBuilder(96);
+        sb.append(isSessionInterrupt(ise) ? "Socket manager session creation interrupted on ["
+                                          : "Error creating session for socket manager on [");
+        sb.append(threadName).append(']');
+        if (ise == null) {
+            return sb.append(" -> no exception given").toString();
+        }
+        String msg = ise.getMessage();
+        sb.append(" -> ").append(msg == null || msg.isEmpty() ? ise.toString() : msg);
+        if (!isSessionInterrupt(ise)) {
+            // The cause is what distinguishes a refused router connection from a
+            // protocol error; the message alone rarely does.
+            Throwable cause = ise.getCause();
+            if (cause != null) {
+                sb.append(" (").append(cause).append(')');
+            }
+        }
+        return sb.toString();
     }
 
     /**
