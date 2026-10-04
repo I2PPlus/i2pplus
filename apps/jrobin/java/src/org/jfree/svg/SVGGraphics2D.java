@@ -417,6 +417,11 @@ public final class SVGGraphics2D extends Graphics2D {
         this.fileSuffix = parent.fileSuffix;
         this.imageElements = parent.imageElements;
         this.zeroStrokeWidth = parent.zeroStrokeWidth;
+        // Without this a copy falls back to sniffing the SVG for a background colour to
+        // guess the theme, and a line-only graph has no fill to sniff: it was detected as
+        // CLASSIC and rendered with the wrong text and series colours. create() copies
+        // through here, so the theme has to travel with every field it travels with.
+        this.themeName = parent.themeName;
     }
 
     /**
@@ -712,6 +717,7 @@ public final class SVGGraphics2D extends Graphics2D {
     @Override
     public Graphics create() {
         SVGGraphics2D copy = new SVGGraphics2D(this);
+        copy.themeName = this.themeName;
         copy.setRenderingHints(getRenderingHints());
         copy.setTransform(getTransform());
         copy.setClip(getClip());
@@ -2706,34 +2712,39 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param svg the SVG content to scan.
      * @return the detected {@link Theme}.
      */
-    private static final String THEME_MARKER_PREFIX = "i2pgraph-theme:";
+    /**
+     * Console theme supplied by the caller, or null to infer it from the SVG.
+     *
+     * <p>The inference reads the area fill colour, which only a filled-area graph emits, so
+     * a line-only graph (a combined multi-series plot) has nothing to read and used to be
+     * detected as CLASSIC, losing its gradient and themed text. The caller already knows
+     * the theme, so it is passed rather than guessed.
+     */
+    private String themeName;
+
+    /**
+     * Set the console theme, overriding inference from the SVG content.
+     *
+     * @param name one of DARK, LIGHT, MIDNIGHT or CLASSIC; null restores inference
+     */
+    public void setThemeName(String name) {
+        this.themeName = name;
+    }
 
     private Theme detectTheme(String svg) {
-        // Explicit marker first. The colour sniffing below only works when the graph draws
-        // a filled area, so a line-only graph (a combined multi-series plot) used to be
-        // misdetected as CLASSIC and lost its gradient and themed text.
-        int marker = svg.indexOf(THEME_MARKER_PREFIX);
-        if (marker != -1) {
-            int start = marker + THEME_MARKER_PREFIX.length();
-            // The marker lives inside an XML comment, so it ends at "-->" and not at the
-            // next tag; whichever comes first wins.
-            int end = svg.indexOf("-->", start);
-            int lt = svg.indexOf('<', start);
-            if (lt != -1 && (end == -1 || lt < end)) {
-                end = lt;
-            }
-            if (end == -1) {
-                end = svg.length();
-            }
-            String name = svg.substring(start, end).trim();
+        if (themeName != null) {
             for (Theme t : Theme.values()) {
-                if (t.name().equalsIgnoreCase(name)) {
+                if (t.name().equalsIgnoreCase(themeName)) {
                     return t;
                 }
             }
-            // Unrecognised marker: fall through to the colour sniff rather than claiming
-            // CLASSIC, so a malformed marker can never darken a working graph.
         }
+        // Fall back to sniffing when the caller did not say. This only works when the graph
+        // draws a filled area, so a line-only graph (a combined multi-series plot) used to be
+        // misdetected as CLASSIC and lost its gradient and themed text. Nothing is written
+        // into the SVG to carry the theme: an earlier attempt embedded it as a comment and
+        // it showed up in the legend, and injecting it into the finished markup is too late
+        // because this runs while the SVG is being built.
         if (svg.indexOf("rgb(0,72,8)") != -1) {
             return Theme.DARK;
         } else if (svg.indexOf("rgb(100,160,200)") != -1) {
@@ -2814,9 +2825,20 @@ public final class SVGGraphics2D extends Graphics2D {
     private String postProcessSvg(String svgRaw) {
         Theme theme = detectTheme(svgRaw);
 
+        // --- Axis tagging, first, before anything destructive runs ---
+        // The axis container lines are identified by stroke-width:5 and re-tagged as
+        // class="axis", where the theme's .axis rule supplies the real stroke. This has to
+        // happen before the structural normalisation below: that step collapses adjacent
+        // stroke groups with a regex that deletes everything between them, and it keys on
+        // style="stroke:". While the axis still carries a stroke style it is a candidate for
+        // being deleted, so whether it survived depended on what the neighbouring groups
+        // happened to look like - the axis appeared on some graphs and not others with
+        // identical settings. Tagged first, it carries no stroke style and is untouchable.
+        String s = svgRaw.replaceAll(" style=\"stroke-width:5[^\"]*\"", " class=\"axis\"");
+
         // --- Common value normalizations ---
-        String s =
-                svgRaw.replace(";fill-opacity:1", "")
+        s = s
+                .replace(";fill-opacity:1", "")
                         .replace("stroke-dasharray:1.0,1.0", "stroke-dasharray:1,1")
                         .replace("stroke-dasharray:1.0,3.0", "stroke-dasharray:1,3")
                         .replace("<g >", "<g>")
@@ -2865,7 +2887,6 @@ public final class SVGGraphics2D extends Graphics2D {
                 .replace("stroke-opacity:.86;stroke-linecap:square", "stroke-linecap:square")
                 .replace(");stroke-linecap:square", ");stroke-linecap:square;fill:none")
                 .replace("stroke-width:3.0", "stroke-width:3;fill:none")
-                .replaceAll(" style=\"stroke-width:5.*?\"", " class=\"axis\"")
                 .replace(
                         "stroke:rgb(100,200,160);stroke-linecap:square",
                         "stroke:#64c8a0cc;stroke-linecap:square;fill:none")

@@ -365,7 +365,7 @@ public class GraphHelper extends FormHandler {
             Rate r = primary.getRate();
             // Two placeholders only: _t has no three-argument form, and a third "{2}"
             // would be emitted literally.
-            String displayName = _t(GraphGroups.titleOf(groupId)) + " (" + members.size() + ")";
+            String displayName = GraphGroups.displayPrefixOf(groupId) + _t(GraphGroups.titleOf(groupId)) + " (" + members.size() + ")";
             String title = _t("{0} for {1}", displayName,
                               DataHelper.formatDuration2(_periodCount * r.getPeriod()));
             title = title.replace("&nbsp;", "");
@@ -450,7 +450,7 @@ public class GraphHelper extends FormHandler {
             }
             period = members.get(0).getRate().getPeriod();
             name = _stat;
-            displayName = _t(GraphGroups.titleOf(_stat)) + " (" + members.size() + ")";
+            displayName = GraphGroups.displayPrefixOf(_stat) + _t(GraphGroups.titleOf(_stat)) + " (" + members.size() + ")";
         } else {
             Set<Rate> rates = ss.parseSpecs(_stat);
             if (rates.size() != 1) {

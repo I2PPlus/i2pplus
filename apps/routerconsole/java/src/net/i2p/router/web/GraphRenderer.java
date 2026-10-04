@@ -48,13 +48,7 @@ class GraphRenderer {
     private final I2PAppContext _context;
     private static final String PROP_THEME_NAME = "routerconsole.theme";
 
-    /**
-     * Prefix of the marker comment that tells the SVG writer which console theme is in
-     * force. Matched by {@code SVGGraphics2D.detectTheme()}.
-     *
-     * @since 0.9.71+
-     */
-    public static final String THEME_MARKER_PREFIX = "i2pgraph-theme:";
+
     private static final String DEFAULT_THEME = "dark";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final Color BACK_COLOR = new Color(255, 255, 255);
@@ -80,6 +74,12 @@ class GraphRenderer {
     private static final Color AREA_COLOR_DARK = new Color(0, 72, 8, 220);
     private static final Color AREA_COLOR_MIDNIGHT = new Color(0, 72, 160, 200);
     private static final Color AREA_COLOR_NEUTRAL = new Color(128, 128, 128, 128);
+    /** Hue for the second series: yellow, far round the wheel from the green primary. */
+    private static final float SECOND_SERIES_HUE = 60f;
+
+    /** How much to raise saturation in {@link #electric}. */
+    private static final float ELECTRIC_SATURATION = 1.45f;
+
     private static final Color LINE_COLOR = new Color(0, 30, 110, 255);
     private static final Color LINE_COLOR_DARK = new Color(100, 200, 160);
     private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
@@ -775,7 +775,7 @@ class GraphRenderer {
         }
         def.datasource(cfg.plotName, cfg.path, cfg.plotName, GraphListener.CF, cfg.listener.getBackendFactory());
         if (cfg.allLines) {
-            def.line(cfg.plotName, seriesColor(cfg, 0), cfg.descr + "\\l", lineWidth(cfg));
+            def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l", lineWidth(cfg));
         } else {
             configureArea(def, cfg);
         }
@@ -889,7 +889,7 @@ class GraphRenderer {
             String descr = _t(lsnr.getRate().getRateStat().getDescription());
             def.datasource(plotName, lsnr.getData().getPath(), plotName,
                            GraphListener.CF, lsnr.getBackendFactory());
-            Color color = cfg.allLines ? seriesColor(cfg, i + 1) : legacySecondColor(cfg);
+            Color color = extraSeriesColor(cfg.theme, cfg.allLines, i);
             def.line(plotName, color, descr + "\\l", lineWidth(cfg));
             if (summary) {
                 // Distinct ids: configureLegend already defines min/max/avg/last on the
@@ -949,25 +949,121 @@ class GraphRenderer {
      * @param index 0-based series position
      * @return the series colour for the active theme
      */
-    private Color seriesColor(GraphRenderConfig cfg, int index) {
-        Color[] palette = cfg.theme.equals("midnight") ? SERIES_COLORS_MIDNIGHT
-                         : cfg.theme.equals("dark") ? SERIES_COLORS_DARK : SERIES_COLORS;
-        return palette[index % palette.length];
+    /**
+     * A more vivid version of a colour: same hue, same brightness, saturation raised.
+     *
+     * <p>Done in HSB rather than by scaling RGB so the boost cannot wash the colour out -
+     * scaling channels moves a colour toward white or black, which changes how light or
+     * dark it reads rather than how vivid.
+     *
+     * @param base the colour to intensify
+     * @return the same hue and brightness at higher saturation
+     */
+    static Color electric(Color base) {
+        float[] hsb = toHSB(base);
+        return fromHSB(hsb[0], Math.min(1f, hsb[1] * ELECTRIC_SATURATION), hsb[2]);
+    }
+
+    /** Hue, saturation and brightness of a colour, each in 0..1. */
+    private static float[] toHSB(Color color) {
+        float[] hsb = new float[3];
+        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
+        return hsb;
     }
 
     /**
-     * The colour for the second series of a legacy two-series graph.
+     * A colour from hue, saturation and brightness, keeping the source alpha.
      *
-     * @return the theme's original second-series colour, unchanged since before grouping
+     * <p>Alpha matters here: the dark palette draws series semi-transparent so overlapping
+     * lines both stay visible, and rebuilding the colour without it would make every line
+     * opaque and hide the series behind it.
      */
-    private Color legacySecondColor(GraphRenderConfig cfg) {
-        if (cfg.theme.equals("midnight")) {
+    private static Color fromHSB(float hue, float saturation, float brightness) {
+        return new Color(Color.HSBtoRGB(hue, saturation, brightness), true);
+    }
+
+    /**
+     * A colour at a given hue, keeping the source saturation and brightness.
+     *
+     * <p>Keeping saturation and brightness is what makes a second series read as the same
+     * kind of line in a different colour, rather than as a differently-weighted
+     * measurement. Rotating the hue alone is enough to separate it from the first series
+     * without either line looking heavier than the other.
+     *
+     * @param base the colour whose saturation and brightness to keep
+     * @param hueDegrees target hue in degrees, 0 red through 60 yellow, 120 green
+     * @return the source colour rotated to the target hue
+     */
+    static Color rotateHue(Color base, float hueDegrees) {
+        float[] hsb = toHSB(base);
+        return fromHSB(hueDegrees / 360f, hsb[1], hsb[2]);
+    }
+
+    /**
+     * The colour for an extra series of a multi-series graph.
+     *
+     * <p>The first extra takes the same colour a two-series graph has always given its
+     * second line, so combining a pair of stats looks identical to plotting them one at a
+     * time: the same chart should not change colour because it was grouped. Only a third
+     * series and beyond reach for the palette, where there is no legacy colour to match.
+     *
+     * @param theme console theme name
+     * @param allLines whether the primary is drawn as a line rather than a filled area
+     * @param extraIndex zero-based position among the extra series
+     * @return the colour for that series
+     */
+    static Color extraSeriesColor(String theme, boolean allLines, int extraIndex) {
+        if (!allLines || extraIndex == 0) {
+            return secondSeriesColor(theme);
+        }
+        return paletteColor(theme, extraIndex);
+    }
+
+    /**
+     * The second series: the primary's hue rotated onto yellow.
+     *
+     * <p>Yellow sits far enough round the wheel from the green primary to stay separable
+     * where two lines cross, while holding the primary's saturation and brightness so the
+     * pair still reads as two lines of equal weight.
+     */
+    private static Color secondSeriesColor(String theme) {
+        // Vividised first, exactly as the primary is, so the pair keeps the same
+        // saturation and brightness and neither line reads as the heavier one.
+        return rotateHue(electric(primaryBase(theme)), SECOND_SERIES_HUE);
+    }
+
+    /**
+     * The un-vividised colour a theme's first line is built from. The legacy line colours
+     * and the first palette entry share their RGB per theme, so this is the primary for
+     * either rendering path.
+     */
+    private static Color primaryBase(String theme) {
+        if (theme.equals("midnight")) {
             return LINE_COLOR_MIDNIGHT;
         }
-        if (cfg.theme.equals("dark")) {
+        if (theme.equals("dark")) {
             return LINE_COLOR_DARK;
         }
         return LINE_COLOR;
+    }
+
+    /**
+     * A colour from the theme's series palette, vividised so every series reads clearly
+     * against the dark graph background.
+     *
+     * @param theme console theme name
+     * @param index zero-based palette position, wrapped
+     * @return the palette colour
+     */
+    /** Package-visible accessor so tests can compare a series against the primary. */
+    static Color paletteColorForTest(String theme) {
+        return paletteColor(theme, 0);
+    }
+
+    private static Color paletteColor(String theme, int index) {
+        Color[] palette = theme.equals("midnight") ? SERIES_COLORS_MIDNIGHT
+                         : theme.equals("dark") ? SERIES_COLORS_DARK : SERIES_COLORS;
+        return electric(palette[index % palette.length]);
     }
 
     private void configureRestartMarkers(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -991,10 +1087,6 @@ class GraphRenderer {
     }
 
     private void configureCommentsAndSignature(RrdGraphDef def, GraphRenderConfig cfg) {
-        // SVGGraphics2D infers the console theme by sniffing the SVG for the area fill
-        // colour, which a line-only graph never emits; without this marker a grouped graph
-        // is detected as CLASSIC, loses its gradient, and its text loses the themed fill.
-        def.comment(THEME_MARKER_PREFIX + cfg.theme);
         if (!cfg.hideLegend) {
             // Small vertical space (\s advances by small leading only) to
             // separate the date line from the legend rows above it
@@ -1049,7 +1141,7 @@ class GraphRenderer {
         try {
             graph = new RrdGraph(def, new SVGImageWorker(0, 0,
                     _context.getBooleanPropertyDefaultTrue("routerconsole.graphGlow"),
-                    cfg.smooth));
+                    cfg.smooth, cfg.theme));
         } catch (NullPointerException npe) {
             _log.error("Error rendering graph (not disabling — transient)", npe);
             throw new IOException("Error rendering graph", npe);

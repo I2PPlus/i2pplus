@@ -1452,8 +1452,12 @@ public class GraphGenerator implements Runnable, ClientApp {
         if (end < 0) {end = 0;}
 GraphListener lsnr = _listenerByRate.get(rate);
         if (lsnr != null && !lsnr.isDetached()) {
-            lsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-            end, showCredit, (GraphListener) null, null, showRestarts);
+            // Drawn as a dotted line rather than a filled area, so a single stat looks
+            // the same as the same stat plotted beside another. An area under a lone line
+            // carries no extra information and made one-stat and two-stat graphs read as
+            // different kinds of chart.
+            lsnr.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                    periodCount, end, showCredit, Collections.emptyList(), null, showRestarts);
             return true;
         }
         // A detached listener would throw from renderGraph, which propagates out
@@ -1608,12 +1612,19 @@ GraphListener lsnr = _listenerByRate.get(rate);
         else if (width <= 0) {width = DEFAULT_X;}
         if (height > MAX_Y) {height = MAX_Y;}
         else if (height <= 0) {height = DEFAULT_Y;}
+        // Sent and received are independent quantities - neither contains the other - so
+        // both are drawn as lines. A fill between them would read as "the rest of",
+        // which is not a relationship these two have. Two lines render dotted, which
+        // keeps them separable where they cross, and the colours are the same ones every
+        // other multi-series graph uses because this goes down the same path.
+        List<GraphListener> rxSeries = Collections.singletonList(rxLsnr);
         if (hideTitle) {
-            txLsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, rxLsnr, null, showRestarts);
+            txLsnr.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                    periodCount, end, showCredit, rxSeries, null, showRestarts);
         } else {
-            txLsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                             end, showCredit, rxLsnr, "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"), showRestarts);
+            txLsnr.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                    periodCount, end, showCredit, rxSeries,
+                                    "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"), showRestarts);
         }
         return true;
     }
@@ -1692,7 +1703,15 @@ GraphListener lsnr = _listenerByRate.get(rate);
             return false;
         }
         GraphListener primary = members.remove(0);
-        String title = _t(primary.getRate().getRateStat().getDescription());
+        // The group's own name, not the primary stat's description: a combined graph is
+        // titled by what its members have in common, and a stat description reads as
+        // "Number of <one member>", which is both wrong for a group and not the name the
+        // graphs page lists it under.
+        String title = GraphGroups.displayPrefixOf(groupId) + _t(GraphGroups.titleOf(groupId));
+        // Every series is a dotted line, including a single-stat graph and a single-member
+        // group. A filled area under a lone line carries no extra information, and mixing
+        // filled and line rendering made one-stat and multi-stat graphs read as different
+        // kinds of chart rather than as the same chart at different sizes.
         primary.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                 periodCount, end, showCredit, members, title, showRestarts);
         return true;

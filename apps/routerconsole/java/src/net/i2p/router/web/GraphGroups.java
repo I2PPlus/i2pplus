@@ -57,12 +57,17 @@ public final class GraphGroups {
         g.put("peerCaps", Arrays.asList(
                 "router.fastPeers", "router.highCapacityPeers", "router.integratedPeers"));
 
-        // Peer profile counts, all fed from ProfileOrganizer's in-memory profile store.
-        // peer.storedProfileCount is the on-disk subset: a gauge of what survives a
-        // restart, published by ProfilePersistenceHelper.
-        g.put("peerProfiles", Arrays.asList(
-                "peer.profileCount", "peer.storedProfileCount", "peer.activeProfileCount",
-                "peer.qualityPeerCount", "peer.fastPeerCount", "peer.highCapPeerCount"));
+        // Profiles held in RAM against those written to disk. Same unit, and the on-disk
+        // count is published by ProfilePersistenceHelper as a gauge of what survives a
+        // restart.
+        g.put("peerStoredProfiles", Arrays.asList(
+                "peer.profileCount", "peer.storedProfileCount"));
+
+        // Tier membership. The fast line is the union of both tiers rather than fast
+        // alone, so it covers high-capacity as well; peer.fastPeerCount is fast only and
+        // stays an individual graph.
+        g.put("peerProfilesByTier", Arrays.asList(
+                "peer.fastOrHighCapProfileCount", "peer.highCapPeerCount"));
 
         // NTCP pumper loop rates. Both are per second as of the idle-rate normalisation;
         // before that the idle series published a raw five-second count and could not share
@@ -76,12 +81,14 @@ public final class GraphGroups {
                 "jobQueue.jobWait", "jobQueue.loadRecoveryTime"));
 
         // Job queue depth, all counts of jobs waiting or running.
-        g.put("jobDepth", Arrays.asList(
-                "jobQueue.queuedJobs", "jobQueue.readyJobs",
-                "jobQueue.runnerCount", "jobQueue.testJobCount"));
+        // TestJob is deliberately absent: it is a synthetic workload rather than real
+        // queue depth, and on an idle router it dwarfs the scheduled and active counts,
+        // flattening both against the baseline.
+        g.put("jobQueueDepth", Arrays.asList(
+                "jobQueue.queuedJobs", "jobQueue.readyJobs"));
 
         // Why the queue throttled: event counters, each a running total. Kept apart from
-        // jobDepth because those are levels and these are cumulative events, and reading a
+        // jobQueueDepth because those are levels and these are cumulative events, and reading a
         // level and an event count off one axis invites a comparison that does not hold.
         g.put("jobLoadEvents", Arrays.asList(
                 "jobQueue.runnerScaleUp", "jobQueue.runnerScaleDown", "jobQueue.scaleRollback",
@@ -164,27 +171,92 @@ public final class GraphGroups {
         GROUPS = Collections.unmodifiableMap(g);
 
         Map<String, String> t = new LinkedHashMap<>();
-        t.put("peerCaps", "Peer capabilities");
-        t.put("peerProfiles", "Peer profiles");
-        t.put("ntcpPumper", "NTCP pumper loops");
-        t.put("jobTiming", "Job queue timing");
-        t.put("jobDepth", "Job queue depth");
-        t.put("jobLoadEvents", "Job queue load events");
-        t.put("buildReject", "Tunnel build rejections");
-        t.put("netDbLookupTime", "NetDb lookup time");
-        t.put("udpRto", "UDP retransmission timeouts");
-        t.put("tunerCpu", "Transport CPU by stage");
-        t.put("tunnelCaches", "Tunnel caches");
-        t.put("codelDrop", "CoDel drop delay by priority");
-        t.put("cryptoPoolUsed", "Precalculated keys used");
-        t.put("cryptoPoolEmpty", "Key pool empty");
-        t.put("bwLimiterDelay", "Bandwidth limiter delay");
-        t.put("bwLimiterPending", "Bandwidth limiter pending");
-        t.put("i2ptunnelThreads", "I2CP threads");
-        t.put("leaseSetLookupTime", "Remote LeaseSet lookup time");
-        t.put("i2cpDrops", "Messages dropped by cause");
-        t.put("i2ptunnelServerTime", "I2PTunnel server setup time");
+        t.put("peerCaps", "Capabilities");
+        t.put("peerStoredProfiles", "Stored Profiles");
+        t.put("peerProfilesByTier", "Profile Tiers");
+        t.put("ntcpPumper", "Pumper Loops");
+        t.put("jobTiming", "Queue Timing");
+        t.put("jobQueueDepth", "Scheduled Jobs");
+        t.put("jobLoadEvents", "Load Events");
+        t.put("buildReject", "Build Rejections");
+        t.put("netDbLookupTime", "Lookup Time");
+        t.put("udpRto", "UDP Retransmission Timeouts");
+        t.put("tunerCpu", "CPU by Stage");
+        t.put("tunnelCaches", "Caches");
+        t.put("codelDrop", "CoDel Drop Delay by Priority");
+        t.put("cryptoPoolUsed", "Precalculated Keys Used");
+        t.put("cryptoPoolEmpty", "Key Pool Empty");
+        t.put("bwLimiterDelay", "Limiter Delay");
+        t.put("bwLimiterPending", "Limiter Pending");
+        t.put("i2ptunnelThreads", "Threads");
+        t.put("leaseSetLookupTime", "Remote LeaseSet Lookup Time");
+        t.put("i2cpDrops", "Messages Dropped by Cause");
+        t.put("i2ptunnelServerTime", "Server Setup Time");
         TITLES = Collections.unmodifiableMap(t);
+    }
+
+    /**
+     * Subsystem each group belongs to, used to build the {@code [Subsystem] } prefix
+     * that makes the graph list sort by area.
+     *
+     * <p>Deliberately untranslated and kept out of {@link #TITLES}: a title is a
+     * translation <i>key</i> ({@link net.i2p.util.Translate} returns the key for English
+     * and falls back to it when a bundle lookup misses), so folding a prefix into the
+     * title would silently untranslate every group in every locale. A prefix is also
+     * only useful for sorting if it is stable, which a translated string is not.
+     */
+    private static final Map<String, String> SUBSYSTEMS;
+
+    static {
+        Map<String, String> subsystems = new LinkedHashMap<>();
+        subsystems.put("peerCaps", "Peers");
+        subsystems.put("peerStoredProfiles", "Peers");
+        subsystems.put("peerProfilesByTier", "Peers");
+        subsystems.put("ntcpPumper", "NTCP");
+        subsystems.put("jobTiming", "Jobs");
+        subsystems.put("jobQueueDepth", "Jobs");
+        subsystems.put("jobLoadEvents", "Jobs");
+        subsystems.put("buildReject", "Tunnel");
+        subsystems.put("netDbLookupTime", "NetDb");
+        subsystems.put("leaseSetLookupTime", "NetDb");
+        subsystems.put("udpRto", "Transport");
+        subsystems.put("tunerCpu", "Transport");
+        subsystems.put("codelDrop", "Transport");
+        subsystems.put("tunnelCaches", "Tunnel");
+        subsystems.put("cryptoPoolUsed", "Crypto");
+        subsystems.put("cryptoPoolEmpty", "Crypto");
+        subsystems.put("bwLimiterDelay", "Bandwidth");
+        subsystems.put("bwLimiterPending", "Bandwidth");
+        subsystems.put("i2ptunnelThreads", "I2CP");
+        subsystems.put("i2cpDrops", "Router");
+        subsystems.put("i2ptunnelServerTime", "I2PTunnel");
+        SUBSYSTEMS = Collections.unmodifiableMap(subsystems);
+    }
+
+    /**
+     * The sort prefix for a group, ready to prepend to a title.
+     *
+     * <p>Untranslated by design, see {@link #SUBSYSTEMS}.
+     *
+     * @param groupId a group id, or null
+     * @return {@code "[Peers] "} including the trailing space, or the empty string
+     *         when the group has no subsystem or the id is unknown
+     * @since 0.9.71+
+     */
+    public static String displayPrefixOf(String groupId) {
+        String sub = groupId != null ? SUBSYSTEMS.get(groupId) : null;
+        return sub != null ? '[' + sub + "] " : "";
+    }
+
+    /**
+     * The subsystem a group belongs to.
+     *
+     * @param groupId a group id, or null
+     * @return the subsystem name, or null when the group has none
+     * @since 0.9.71+
+     */
+    public static String subsystemOf(String groupId) {
+        return groupId != null ? SUBSYSTEMS.get(groupId) : null;
     }
 
     /**
@@ -326,11 +398,11 @@ public final class GraphGroups {
     public static Set<String> suppressedStats(Set<String> enabledStats, boolean combine, boolean showEvents) {
         Set<String> rv = new LinkedHashSet<>();
         for (Map.Entry<String, String> e : combinedRepresentatives(enabledStats, combine, showEvents).entrySet()) {
-            for (String member : enabledMembers(e.getKey(), enabledStats)) {
-                if (!member.equals(e.getValue())) {
-                    rv.add(member);
-                }
-            }
+            // Every member is covered, the representative included. Leaving the
+            // representative out drew its series twice: once inside the group plot and
+            // again as its own single-stat graph, so combining a group added a graph
+            // instead of replacing the ones it merged.
+            rv.addAll(enabledMembers(e.getKey(), enabledStats));
         }
         return rv;
     }

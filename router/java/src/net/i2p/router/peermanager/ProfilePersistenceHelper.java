@@ -105,7 +105,7 @@ class ProfilePersistenceHelper {
         _context = ctx;
         _log = ctx.logManager().getLog(ProfilePersistenceHelper.class);
         _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
-                "Number of peer profiles stored on disk", "Peers", RATES);
+                "Stored on disk", "Peers", RATES);
         String dir = _context.getProperty(PROP_PEER_PROFILE_DIR, DEFAULT_PEER_PROFILE_DIR);
         _profileDir = new SecureDirectory(_context.getRouterDir(), dir);
         if (!_profileDir.exists()) {_profileDir.mkdirs();}

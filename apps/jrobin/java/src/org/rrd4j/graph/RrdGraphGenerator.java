@@ -16,6 +16,15 @@ import org.rrd4j.data.DataProcessor;
  */
 class RrdGraphGenerator {
 
+    /**
+     * Width the axis container lines are drawn with, chosen so the SVG post-processor
+     * tags them {@code class="axis"}. Not the width the user sees: the theme's
+     * {@code .axis} rule sets that.
+     *
+     * @since 0.9.71
+     */
+    static final float AXIS_STROKE_WIDTH = 5f;
+
     private static final double[] SENSIBLE_VALUES = {
         1000.0, 900.0, 800.0, 750.0, 700.0, 600.0, 500.0, 400.0, 300.0, 250.0, 200.0, 125.0, 100.0,
         90.0, 80.0, 75.0, 70.0, 60.0, 50.0, 40.0, 30.0, 25.0, 20.0, 10.0, 9.0, 8.0, 7.0, 6.0, 5.0,
@@ -150,27 +159,6 @@ class RrdGraphGenerator {
             worker.setTextAntiAliasing(false);
         }
     }
-    /**
-     * Counts the line-type series in a graph, which is what decides whether the lines
-     * are drawn solid or dotted.
-     *
-     * <p>Stacked areas and their parent outline are excluded: a stack is one quantity
-     * split into bands, not several independent series, and dotting its outline would
-     * read as though the bands were separate measurements.
-     *
-     * @param plotElements the graph's plot elements, may be null
-     * @return number of {@link Line} series, zero for an empty or null list
-     * @since 0.9.71
-     */
-    static int countLineSeries(java.util.List<PlotElement> plotElements) {
-        if (plotElements == null) {return 0;}
-        int count = 0;
-        for (PlotElement plotElement : plotElements) {
-            if (plotElement instanceof Line) {count++;}
-        }
-        return count;
-    }
-
     /**
      * Draw rules and spans
      */
@@ -359,9 +347,6 @@ class RrdGraphGenerator {
                 ? (smooth ? xtrDistinct(dproc.getTimestamps()) : xtr(dproc.getTimestamps()))
                 : null;
         double[] lastY = null;
-        // Counted once: it decides the stroke for every series, and walking the element
-        // list again inside the loop would be quadratic in the number of series.
-        int lineCount = countLineSeries(gdef.plotElements);
         // draw line, area and stack
         for (PlotElement plotElement : gdef.plotElements) {
             if (plotElement instanceof SourcedPlotElement) {
@@ -376,11 +361,11 @@ class RrdGraphGenerator {
                     y = smooth ? ytrDistinct(source.getValues()) : ytr(source.getValues());
                 }
                 if (Line.class.isAssignableFrom(source.getClass())) {
-                    // Multi-series graphs get a dotted line so crossing series are told
-                    // apart by texture as well as colour; a lone series stays solid.
-                    Stroke lineStroke = RrdGraphConstants.multilineStroke(lineCount,
-                            ((Line) source).stroke.getLineWidth(),
-                            RrdGraphConstants.MULTILINE_DASH_SERIES);
+                    // Every series is dotted, so a graph looks the same whether it plots one
+                    // stat or several, and overlapping series are separable by texture as
+                    // well as by colour.
+                    Stroke lineStroke = RrdGraphConstants.seriesStroke(
+                            ((Line) source).stroke.getLineWidth());
                     if (smooth) {
                         worker.drawPolylineSmooth(x, y, source.color, lineStroke);
                     } else {
@@ -405,7 +390,7 @@ class RrdGraphGenerator {
                     float width = stack.getParentLineWidth();
                     if (width >= 0F) {
                         // line
-                        Stroke stackStroke = RrdGraphConstants.multilineStroke(lineCount, width);
+                        Stroke stackStroke = RrdGraphConstants.seriesStroke(width);
                         if (smooth) {
                             worker.drawPolylineSmooth(x, y, stack.color, stackStroke);
                         } else {
@@ -439,6 +424,9 @@ class RrdGraphGenerator {
             Paint yaxisColor = gdef.getColor(ElementsNames.yaxis);
             Paint arrowColor = gdef.getColor(ElementsNames.arrow);
             Stroke stroke = new BasicStroke(1);
+            // Recognised by SVGGraphics2D, which rewrites a stroke-width:5 line into
+            // class="axis" and lets the theme's .axis rule set the visible width.
+            Stroke axisStroke = new BasicStroke(AXIS_STROKE_WIDTH);
             worker.drawLine(
                     im.xorigin + im.xsize,
                     im.yorigin,
@@ -453,20 +441,27 @@ class RrdGraphGenerator {
                     im.yorigin - im.ysize,
                     gridColor,
                     stroke);
+            // The two container lines are drawn at AXIS_STROKE_WIDTH so the SVG
+            // post-processor recognises them as the axis and tags them class="axis",
+            // where the theme supplies the real stroke. At the default width they stayed
+            // generic style="stroke:..." groups, and the normalising regexes that collapse
+            // adjacent stroke groups dropped them whenever a neighbouring group happened to
+            // have a matching shape - which is why the axis appeared on some graphs and not
+            // others with identical settings.
             worker.drawLine(
                     im.xorigin - 4,
                     im.yorigin,
                     im.xorigin + im.xsize + 4,
                     im.yorigin,
                     xaxisColor,
-                    stroke);
+                    axisStroke);
             worker.drawLine(
                     im.xorigin,
                     im.yorigin + 4,
                     im.xorigin,
                     im.yorigin - im.ysize - 4,
                     yaxisColor,
-                    stroke);
+                    axisStroke);
 
             // I2P skip arrowheads if transparent
             if (((Color) arrowColor).getAlpha() == 0) return;

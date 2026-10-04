@@ -379,58 +379,34 @@ public interface RrdGraphConstants {
     Stroke GRID_STROKE = new BasicStroke(1);
 
     /**
-     * Dash pattern for series lines when a graph carries more than one: one pixel of
-     * ink, one pixel of gap. With {@link BasicStroke#CAP_ROUND} each dash renders as a
-     * round dot, so overlapping series stay separable by texture as well as by colour -
-     * which matters because two series of similar hue are indistinguishable where they
-     * cross, and because the console can print these graphs in a single ink colour.
+     * Ink length of one dot in a series line, in device pixels.
      *
-     * <p>A solid line remains correct for a single-series graph, where there is nothing
-     * to tell apart and the dashes would only add noise.
-     *
-     * @see RrdGraphGenerator#multilineStroke(float)
      * @since 0.9.71
      */
-    float[] MULTILINE_DASH = { 1f, 1f };
+    float SERIES_DOT = 1f;
 
     /**
-     * Dash pattern for multi-series data lines: a short dot then a three-unit gap.
+     * The stroke every plotted series is drawn with: a row of round dots.
      *
-     * <p>Separate from {@link #MULTILINE_DASH} on purpose. Equal on/off values ({1,1}) pack
-     * the dots so tightly that at a 1.5px stroke the line reads as a solid blur, losing the
-     * texture separation the dash exists to provide. Stacked plots keep the original
-     * pattern; only the overlaid-series lines use this one.
-     */
-    float[] MULTILINE_DASH_SERIES = { 1f, 3f };
-
-    /**
-     * The stroke a series line should use, given how many line series the graph draws.
+     * <p>Applied to single-series graphs as well as multi-series ones, so a graph looks
+     * the same whether it plots one stat or several. Overlapping series also stay
+     * separable by texture and not only by colour.
      *
-     * @param lineCount number of line-type series in the graph
-     * @param width requested line width
-     * @return a dotted round-capped stroke for a multi-series graph, plain otherwise
+     * <p>The gap is derived from the stroke width rather than fixed, because a round cap
+     * extends each dot by half the width on <i>both</i> ends. With a one-on-one-off pattern
+     * a 1.5px line puts 2.5px of ink into a 2px period, so consecutive dots overlap and the
+     * line renders solid - dotted in the markup and not on screen. The gap has to exceed
+     * the width for the dots to stay separate at any weight; twice the width is the
+     * tightest that still leaves a visible space.
+     *
+     * @param width requested line width in pixels
+     * @return a dotted, round-capped stroke whose dots are visibly separate
      * @since 0.9.71
      */
-    static Stroke multilineStroke(int lineCount, float width) {
-        return multilineStroke(lineCount, width, MULTILINE_DASH);
-    }
-
-    /**
-     * Stroke used for an overlaid multi-series line.
-     *
-     * @param lineCount number of line series on the graph
-     * @param width stroke width
-     * @param dash dash pattern to apply once the graph is known to be multi-series
-     * @return a solid stroke for a lone series, otherwise a rounded dash
-     */
-    static Stroke multilineStroke(int lineCount, float width, float[] dash) {
-        if (lineCount < 2) {
-            return new BasicStroke(width);
-        }
-        // Round caps and joins: the point of the dash pattern is a row of dots, and a
-        // butt cap would draw each one as a 1px rectangle instead.
-        return new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
-                               10f, dash, 0f);
+    static Stroke seriesStroke(float width) {
+        return new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f,
+                               new float[] { SERIES_DOT, Math.max(SERIES_DOT * 2f, width * 2f) },
+                               0f);
     }
 
     /** Stroke used to draw ticks */

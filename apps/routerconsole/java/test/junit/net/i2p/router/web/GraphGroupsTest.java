@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,20 +76,45 @@ public class GraphGroupsTest {
         assertTrue(GraphGroups.combinedRepresentatives(null, true, false).isEmpty());
     }
 
-    /////////////// the representative keeps one, the rest are suppressed
+    /////////////// combining replaces the member graphs, all of them
 
     @Test
-    public void oneRepresentativeSurvivesAndTheRestAreCovered() {
+    public void everyMemberIsCoveredOnceCombined() {
         Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers", "router.integratedPeers");
         Map<String, String> reps = GraphGroups.combinedRepresentatives(enabled, true, false);
         assertEquals(1, reps.size());
         String rep = reps.get("peerCaps");
         assertEquals("router.fastPeers", rep);
         Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
-        assertEquals(2, covered.size());
+        assertEquals("a combined plot replaces one graph, it does not add one", 3, covered.size());
         assertTrue(covered.contains("router.highCapacityPeers"));
         assertTrue(covered.contains("router.integratedPeers"));
-        assertFalse("the representative is still drawn, as the group plot", covered.contains(rep));
+        // The representative is inside the group plot too. Leaving it out drew the same
+        // series twice, once merged and once on its own.
+        assertTrue("the representative must not also render on its own",
+                   covered.contains(rep));
+    }
+
+    /**
+     * Every enabled member of a combined group disappears, so the graphs page shows one
+     * graph per group rather than one group graph plus its members.
+     */
+    @Test
+    public void combiningReducesTheNumberOfGraphs() {
+        Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers");
+        assertTrue(GraphGroups.shouldCombine(
+            GraphGroups.enabledMembers("peerCaps", enabled), true, false));
+        Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
+        assertEquals("nothing from the group may survive as its own graph",
+                     enabled.size(), covered.size());
+        assertFalse("a combined group must leave nothing to draw individually",
+                    retained(enabled, covered).iterator().hasNext());
+    }
+
+    private static Set<String> retained(Set<String> enabled, Set<String> covered) {
+        Set<String> out = new LinkedHashSet<>(enabled);
+        out.removeAll(covered);
+        return out;
     }
 
     @Test
@@ -120,10 +147,11 @@ public class GraphGroupsTest {
         // Each entry: every member must be a count, a duration, or a rate, and all members
         // of one group must agree. Verified against the declaring code, not the names.
         assertUnitsAgree("peerCaps", "peers");
-        assertUnitsAgree("peerProfiles", "profiles");
+        assertUnitsAgree("peerStoredProfiles", "profiles");
+        assertUnitsAgree("peerProfilesByTier", "profiles");
         assertUnitsAgree("ntcpPumper", "loops/s");
         assertUnitsAgree("jobTiming", "ms");
-        assertUnitsAgree("jobDepth", "count");
+        assertUnitsAgree("jobQueueDepth", "count");
         assertUnitsAgree("jobLoadEvents", "count");
         assertUnitsAgree("buildReject", "count");
         assertUnitsAgree("netDbLookupTime", "ms");
@@ -251,8 +279,13 @@ public class GraphGroupsTest {
 
     @Test
     public void theCapKeepsTheFirstMembersInLegendOrder() {
-        List<String> members = GraphGroups.members("peerProfiles");
-        List<String> capped = GraphGroups.enabledMembers("peerProfiles", on(members.toArray(new String[0])));
+        // tunerCpu, not peerProfiles: peerProfiles used to be the convenient over-cap
+        // group, but it was split when the nested stored-profiles pair was pulled out of
+        // it, so it no longer exercises the cap.
+        List<String> members = GraphGroups.members("tunerCpu");
+        assertTrue("this test needs a group larger than the cap",
+                   members.size() > GraphGroups.MAX_SERIES);
+        List<String> capped = GraphGroups.enabledMembers("tunerCpu", on(members.toArray(new String[0])));
         assertEquals(members.subList(0, GraphGroups.MAX_SERIES), capped);
     }
 
@@ -284,6 +317,114 @@ public class GraphGroupsTest {
     }
 
     @Test
+    public void jobQueueDepthHoldsOnlyWaitingWork() {
+        // Two exclusions, two reasons. TestJob is a synthetic workload and on an idle
+        // router dwarfs the real counts, flattening them against the baseline. runnerCount
+        // is thread occupancy rather than queue depth, so it answers a different question
+        // and reading the two off one axis invites a comparison that does not hold.
+        List<String> depth = GraphGroups.members("jobQueueDepth");
+        assertFalse(depth.contains("jobQueue.testJobCount"));
+        assertFalse(depth.contains("jobQueue.runnerCount"));
+        assertTrue(depth.contains("jobQueue.queuedJobs"));
+        assertTrue(depth.contains("jobQueue.readyJobs"));
+        assertNull(GraphGroups.groupOf("jobQueue.testJobCount"));
+        assertNull(GraphGroups.groupOf("jobQueue.runnerCount"));
+    }
+
+    // ---- subsystem prefix ----
+
+    @Test
+    public void everyGroupHasASubsystemPrefix() {
+        for (String id : GraphGroups.groupIds()) {
+            assertNotNull(id + " has no subsystem", GraphGroups.subsystemOf(id));
+            assertTrue(id + " has an empty prefix", GraphGroups.displayPrefixOf(id).length() > 3);
+        }
+    }
+
+    @Test
+    public void thePrefixIsBracketedWithATrailingSpace() {
+        assertEquals("[Peers] ", GraphGroups.displayPrefixOf("peerStoredProfiles"));
+        assertEquals("[Peers] ", GraphGroups.displayPrefixOf("peerProfilesByTier"));
+        assertEquals("[Jobs] ", GraphGroups.displayPrefixOf("jobQueueDepth"));
+    }
+
+    /** An unknown id must not produce a stray "[null]" on screen. */
+    @Test
+    public void anUnknownGroupHasNoPrefix() {
+        assertEquals("", GraphGroups.displayPrefixOf("noSuchGroup"));
+        assertEquals("", GraphGroups.displayPrefixOf(null));
+        assertNull(GraphGroups.subsystemOf("noSuchGroup"));
+    }
+
+
+    /**
+     * A title must not repeat the subsystem the prefix already carries: "[NTCP] NTCP
+     * Pumper loops" says NTCP twice, and "[Tunnel] Tunnel build rejections" likewise.
+     */
+    @Test
+    public void noTitleRepeatsItsOwnSubsystem() {
+        for (String id : GraphGroups.groupIds()) {
+            String subsystem = GraphGroups.subsystemOf(id);
+            String title = GraphGroups.titleOf(id);
+            assertNotNull(id + " has no subsystem", subsystem);
+            assertFalse(id + " repeats its subsystem: " + subsystem + " / " + title,
+                        title.toLowerCase(Locale.US).startsWith(subsystem.toLowerCase(Locale.US)));
+        }
+    }
+
+    /** Titles are Title Case, so a combined graph reads as a label rather than a sentence. */
+    @Test
+    public void titlesAreTitleCase() {
+        for (String id : GraphGroups.groupIds()) {
+            String title = GraphGroups.titleOf(id);
+            for (String word : title.split(" ")) {
+                if (word.isEmpty() || !Character.isLetter(word.charAt(0))) {continue;}
+                // Acronyms and product names keep their own casing, and a short word
+                // joining two nouns stays lower case: "CPU by Stage", not "CPU By Stage".
+                if (word.equals("NTCP") || word.equals("CoDel") || word.equals("UDP")
+                        || word.equals("CPU") || word.equals("LeaseSet")) {continue;}
+                if (word.length() <= 2 && !word.equals("I2P")) {continue;}
+                assertTrue(id + ": " + word + " is not capitalised",
+                           Character.isUpperCase(word.charAt(0)));
+            }
+        }
+    }
+
+    /** The examples that prompted the rename. */
+    @Test
+    public void theKnownTitlesReadAsLabels() {
+        assertEquals("Pumper Loops", GraphGroups.titleOf("ntcpPumper"));
+        assertEquals("Build Rejections", GraphGroups.titleOf("buildReject"));
+        assertEquals("Queue Timing", GraphGroups.titleOf("jobTiming"));
+    }
+
+    /**
+     * The prefix is never translated, so the bracket and the space survive intact.
+     * That is what keeps the sort order stable in every locale.
+     */
+    @Test
+    public void thePrefixIsUntranslatedAscii() {
+        String prefix = GraphGroups.displayPrefixOf("peerStoredProfiles");
+        assertTrue("must open with a bracket", prefix.startsWith("["));
+        assertTrue("must close with a bracket and space", prefix.endsWith("] "));
+        for (char c : prefix.toCharArray()) {
+            assertTrue("non-ASCII in a sort prefix: " + c, c < 128);
+        }
+    }
+
+    /**
+     * The title itself must stay a translation key, so no prefix may be folded into it.
+     */
+    @Test
+    public void titlesCarryNoPrefix() {
+        for (String id : GraphGroups.groupIds()) {
+            String title = GraphGroups.titleOf(id);
+            assertFalse(id + " title has a prefix baked in: " + title,
+                        title.startsWith("["));
+        }
+    }
+
+    @Test
     public void aStatIsNeverInMoreThanOneGroup() {
         // crypto.EDHUsed and crypto.EDHEmpty are deliberately in separate groups: a drained
         // pool and a dry pool are different conditions, not two series of one measure.
@@ -309,6 +450,10 @@ public class GraphGroupsTest {
         assertEquals(2, reps.size());
         assertTrue(reps.containsKey("peerCaps"));
         assertTrue(reps.containsKey("ntcpPumper"));
-        assertEquals(2, GraphGroups.suppressedStats(enabled, true, false).size());
+        // Two groups of two: every member of both is covered, so four individual graphs
+        // give way to the two group plots.
+        Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
+        assertEquals(4, covered.size());
+        assertEquals("two group plots replace four member graphs", 2, covered.size() / 2);
     }
 }

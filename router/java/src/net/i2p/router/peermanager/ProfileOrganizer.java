@@ -408,7 +408,7 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("tunnel.peerBannedAtSelection",
                 "Banned peers rejected by the selection gates", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
-        _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.profileCount", "Stored in RAM", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
         // peer.fastPeerCount and router.fastPeers (CoalesceStatsEvent) are fed from the same
@@ -417,6 +417,12 @@ public class ProfileOrganizer {
         // selections. Never place both members of a pair in one combined graph: they would
         // plot on top of each other.
         _context.statManager().createRequiredRateStat("peer.highCapPeerCount", "Number of high-capacity peers", "Peers", RATES);
+        // The union of the two tiers. A peer can be both fast and high-capacity, so neither
+        // count contains the other and the sum over-counts; this is what the "Fast" series
+        // in the profile-tier graph has to be for the high-capacity line to be a true subset
+        // of it rather than merely a smaller number.
+        _context.statManager().createRequiredRateStat("peer.fastOrHighCapProfileCount",
+                "Number of fast or high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
     }
 
@@ -1476,6 +1482,31 @@ public class ProfileOrganizer {
         return true;
     }
 
+    /**
+     *  Peers in either the fast or the high-capacity tier, counting each peer once.
+     *
+     *  <p>A peer can be both, so neither tier contains the other and adding the two
+     *  counts over-reports. This is the number the profile-tier graph needs for its
+     *  high-capacity line to be a true subset of the fast line, rather than merely a
+     *  smaller number that happens to be plotted beside it.
+     *
+     *  <p>Walks the smaller tier and probes the larger, so the cost is
+     *  {@code O(min(fast, highCap))} once per coalesce rather than a full merge.
+     *
+     *  @return size of the union of the two tiers
+     *  @since 0.9.71+
+     */
+    int fastOrHighCapCount() {
+        Map<Hash, PeerProfile> smaller = _fastPeers.size() <= _highCapacityPeers.size()
+                                       ? _fastPeers : _highCapacityPeers;
+        Map<Hash, PeerProfile> larger = smaller == _fastPeers ? _highCapacityPeers : _fastPeers;
+        int overlap = 0;
+        for (Hash peer : smaller.keySet()) {
+            if (larger.containsKey(peer)) {overlap++;}
+        }
+        return _fastPeers.size() + _highCapacityPeers.size() - overlap;
+    }
+
     void reorganize(boolean shouldCoalesce) {
         final long now = _context.clock().now();
         final long start = System.currentTimeMillis();
@@ -1631,8 +1662,16 @@ public class ProfileOrganizer {
             long total = System.currentTimeMillis() - start;
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
+            // peer.profileCount was created but never fed, so it read zero everywhere:
+            // the stored-profiles graph plotted a flat line, and the console sidebar
+            // divides by it to show the active share, which therefore always showed as
+            // unavailable. Same value as peer.activeProfileCount, which is the in-RAM
+            // profile count at this point in the reorganisation.
+            _context.statManager().addRateData("peer.profileCount", profileCount, 0);
             _context.statManager().addRateData("peer.fastPeerCount", _fastPeers.size(), 0);
             _context.statManager().addRateData("peer.highCapPeerCount", _highCapacityPeers.size(), 0);
+            _context.statManager().addRateData("peer.fastOrHighCapProfileCount",
+                    fastOrHighCapCount(), 0);
             _context.statManager().addRateData("peer.qualityPeerCount", qualityCount, 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
