@@ -497,6 +497,56 @@ class EventPumper implements Runnable {
     }
 
     /**
+     * Convert a raw window counter into a per-second rate.
+     *
+     * Both pumper loop stats describe rates ("loops/s"), so both must be divided by
+     * the window length. Reporting the raw idle count instead made that series read
+     * about five times too large on the five-second window, which also made it
+     * uncomparable with the total-loop series it is meant to be read against.
+     *
+     * @param count events observed across the window
+     * @param elapsedSeconds window length in seconds, coerced to at least 1
+     * @return the per-second rate, truncated toward zero
+     * @since 0.9.71+
+     */
+    static int perSecond(int count, int elapsedSeconds) {
+        return count / (elapsedSeconds > 0 ? elapsedSeconds : 1);
+    }
+
+    /**
+     * Whole seconds in a window, floored at 1 so a clock that has not advanced cannot
+     * divide by zero and report an inflated rate.
+     *
+     * @param elapsedMs window length in milliseconds
+     * @return window length in seconds, never below 1
+     * @since 0.9.71+
+     */
+    static int elapsedSeconds(long elapsedMs) {
+        int secs = (int) (elapsedMs / 1000);
+        return secs > 0 ? secs : 1;
+    }
+
+    /**
+     * Publish both pumper loop rates, normalised by the same window.
+     *
+     * Both stats are documented as a rate, so both are divided here rather than at the
+     * call site. Publishing them from one place is deliberate: the original defect was a
+     * raw idle count published beside a normalised total, which no test of either helper
+     * alone could catch, because the error lived in which value reached the stat manager.
+     *
+     * @param publish receives the stat name and its per-second value
+     * @param loopCount total iterations observed across the window
+     * @param idleLoopCount no-work iterations observed across the window
+     * @param elapsedSeconds window length in seconds
+     * @since 0.9.71+
+     */
+    static void publishLoopRates(java.util.function.BiConsumer<String, Long> publish,
+                                 int loopCount, int idleLoopCount, int elapsedSeconds) {
+        publish.accept("ntcp.pumperLoopsPerSecond", (long) perSecond(loopCount, elapsedSeconds));
+        publish.accept("ntcp.pumperIdleLoops", (long) perSecond(idleLoopCount, elapsedSeconds));
+    }
+
+    /**
      * Record pumper loop statistics for each 5-second window: total loops per second
      * and the idle-loop count used by the Tuner to derive an idle ratio. Also scales
      * _currentDelay to curb busy-spinning: raise it quickly when the loop rate stays
@@ -511,12 +561,10 @@ class EventPumper implements Runnable {
      */
     private void updateLoopRateStats(int loopCountSinceLastRate, int idleLoopCountSinceLastRate,
                                      long lastLoopRateUpdate, long now) {
-        long elapsedMs = now - lastLoopRateUpdate;
-        int elapsedSeconds = (int) (elapsedMs / 1000);
-        if (elapsedSeconds <= 0) elapsedSeconds = 1;
-        int loopsPerSecond = loopCountSinceLastRate / elapsedSeconds;
-        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopsPerSecond);
-        _context.statManager().addRateData("ntcp.pumperIdleLoops", idleLoopCountSinceLastRate);
+        int elapsedSeconds = elapsedSeconds(now - lastLoopRateUpdate);
+        int loopsPerSecond = perSecond(loopCountSinceLastRate, elapsedSeconds);
+        publishLoopRates((name, value) -> _context.statManager().addRateData(name, value),
+                         loopCountSinceLastRate, idleLoopCountSinceLastRate, elapsedSeconds);
         if (loopsPerSecond > 1000 && _currentDelay < SELECTOR_MAX_DELAY) {
             long step = Math.min(50, (loopsPerSecond - 1000) / 2000 + 5);
             _currentDelay = Math.min(_currentDelay + step, SELECTOR_MAX_DELAY);

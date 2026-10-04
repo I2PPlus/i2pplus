@@ -99,7 +99,7 @@ public class InNetMessagePool implements Service {
         _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool", RATES);
         _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "Notification latency for dropped messages (ms)", "InNetPool", RATES);
         _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", RATES);
-        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "Frequency of DbLookup response drops", "InNetPool", RATES);
+        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "DbLookup response messages dropped as invalid or duplicate", "InNetPool", RATES);
         if (!DISPATCH_DIRECT) {
             _context.statManager().createRequiredRateStat("inNetPool.dataQueueSize", "Inbound tunnel data message queue depth", "InNetPool", RATES);
             _context.statManager().createRequiredRateStat("inNetPool.gatewayQueueSize", "Inbound tunnel gateway message queue depth", "InNetPool", RATES);
@@ -233,6 +233,7 @@ public class InNetMessagePool implements Service {
                       invalidReason.substring(0, 1).toUpperCase() + invalidReason.substring(1));
         }
         _context.statManager().addRateData("inNetPool.dropped", 1);
+        _context.statManager().addRateData("inNetPool.droppedDbLookupResponseMessage", 1);
         if (!invalidReason.contains("expire")) {
             _context.statManager().addRateData("inNetPool.duplicate", 1);
         }

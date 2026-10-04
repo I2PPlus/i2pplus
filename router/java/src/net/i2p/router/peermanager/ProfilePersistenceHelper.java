@@ -23,6 +23,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
@@ -66,6 +67,28 @@ class ProfilePersistenceHelper {
     /** Last known number of profile files on disk, from the most recent load or purge */
     private volatile int _storedProfileCount;
 
+    private static final String STAT_STORED_PROFILES = "peer.storedProfileCount";
+    private static final long[] RATES = {
+        RateConstants.ONE_MINUTE,
+        RateConstants.FIVE_MINUTES,
+        RateConstants.TEN_MINUTES,
+        RateConstants.ONE_HOUR
+    };
+
+    /**
+     * Record the number of profile files on disk and publish it for graphing.
+     *
+     * Every path that recomputes the count routes through here rather than
+     * assigning the field directly, so the graphed gauge cannot drift from the
+     * value the store actually holds.
+     *
+     * @param count number of profile files currently on disk
+     */
+    private void setStoredProfileCount(int count) {
+        _storedProfileCount = count;
+        _context.statManager().addRateData(STAT_STORED_PROFILES, count, 0L);
+    }
+
     /**
      * Last known number of profile files on disk, from the most recent load,
      * stale-profile cleanup, or purge.
@@ -81,6 +104,8 @@ class ProfilePersistenceHelper {
     public ProfilePersistenceHelper(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(ProfilePersistenceHelper.class);
+        _context.statManager().createRequiredRateStat(STAT_STORED_PROFILES,
+                "Number of peer profiles stored on disk", "Peers", RATES);
         String dir = _context.getProperty(PROP_PEER_PROFILE_DIR, DEFAULT_PEER_PROFILE_DIR);
         _profileDir = new SecureDirectory(_context.getRouterDir(), dir);
         if (!_profileDir.exists()) {_profileDir.mkdirs();}
@@ -283,7 +308,7 @@ class ProfilePersistenceHelper {
             cutoff = start - 14*24*60*60*1000;  // 14 days default
         }
         List<File> files = selectFiles();
-        _storedProfileCount = files.size();
+        setStoredProfileCount(files.size());
 
         // Determine deletion threshold
         // If under the limit, be conservative (3 weeks) to preserve historical data.
@@ -389,7 +414,7 @@ class ProfilePersistenceHelper {
         if (_log.shouldWarn() && i > 0) {
             _log.warn("Deleted " + i + " STALE peer profiles");
         }
-        _storedProfileCount = files.size() - i;
+        setStoredProfileCount(files.size() - i);
         return i;
     }
 
@@ -628,7 +653,7 @@ class ProfilePersistenceHelper {
     public void purgeExcessProfiles(Set<Hash> keepPeers, int maxProfiles) {
         List<File> files = selectFiles();
         if (files.size() <= maxProfiles || keepPeers == null) {
-            _storedProfileCount = files.size();
+            setStoredProfileCount(files.size());
             return; // within limit
         }
 
@@ -687,7 +712,7 @@ class ProfilePersistenceHelper {
         // Delete Tier 3 and Tier 2 first
         int overage = files.size() - maxProfiles;
         if (overage <= 0) {
-            _storedProfileCount = files.size() - deleted;
+            setStoredProfileCount(files.size() - deleted);
             return;
         }
 
@@ -716,7 +741,7 @@ class ProfilePersistenceHelper {
         if (_log.shouldInfo() && toDelete > 0) {
             _log.info("Purged " + toDelete + " stale profile files from disk");
         }
-        _storedProfileCount = files.size() - deleted - toDelete;
+        setStoredProfileCount(files.size() - deleted - toDelete);
     }
 
     // Helper class
