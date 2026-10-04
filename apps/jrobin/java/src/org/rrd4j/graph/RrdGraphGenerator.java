@@ -379,7 +379,8 @@ class RrdGraphGenerator {
                     // Multi-series graphs get a dotted line so crossing series are told
                     // apart by texture as well as colour; a lone series stays solid.
                     Stroke lineStroke = RrdGraphConstants.multilineStroke(lineCount,
-                            ((Line) source).stroke.getLineWidth());
+                            ((Line) source).stroke.getLineWidth(),
+                            RrdGraphConstants.MULTILINE_DASH_SERIES);
                     if (smooth) {
                         worker.drawPolylineSmooth(x, y, source.color, lineStroke);
                     } else {

@@ -2706,7 +2706,34 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param svg the SVG content to scan.
      * @return the detected {@link Theme}.
      */
+    private static final String THEME_MARKER_PREFIX = "i2pgraph-theme:";
+
     private Theme detectTheme(String svg) {
+        // Explicit marker first. The colour sniffing below only works when the graph draws
+        // a filled area, so a line-only graph (a combined multi-series plot) used to be
+        // misdetected as CLASSIC and lost its gradient and themed text.
+        int marker = svg.indexOf(THEME_MARKER_PREFIX);
+        if (marker != -1) {
+            int start = marker + THEME_MARKER_PREFIX.length();
+            // The marker lives inside an XML comment, so it ends at "-->" and not at the
+            // next tag; whichever comes first wins.
+            int end = svg.indexOf("-->", start);
+            int lt = svg.indexOf('<', start);
+            if (lt != -1 && (end == -1 || lt < end)) {
+                end = lt;
+            }
+            if (end == -1) {
+                end = svg.length();
+            }
+            String name = svg.substring(start, end).trim();
+            for (Theme t : Theme.values()) {
+                if (t.name().equalsIgnoreCase(name)) {
+                    return t;
+                }
+            }
+            // Unrecognised marker: fall through to the colour sniff rather than claiming
+            // CLASSIC, so a malformed marker can never darken a working graph.
+        }
         if (svg.indexOf("rgb(0,72,8)") != -1) {
             return Theme.DARK;
         } else if (svg.indexOf("rgb(100,160,200)") != -1) {
@@ -2791,6 +2818,7 @@ public final class SVGGraphics2D extends Graphics2D {
         String s =
                 svgRaw.replace(";fill-opacity:1", "")
                         .replace("stroke-dasharray:1.0,1.0", "stroke-dasharray:1,1")
+                        .replace("stroke-dasharray:1.0,3.0", "stroke-dasharray:1,3")
                         .replace("<g >", "<g>")
                         .replace(":0.", ":.")
                         .replace(";\"", "\"")
@@ -2857,6 +2885,12 @@ public final class SVGGraphics2D extends Graphics2D {
                 .replace(
                         ";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1\"",
                         "\" class=\"dash\"")
+                // Multi-series lines carry their own colour and alpha, so they must not be
+                // folded into .dash, which forces opacity to .2. This class carries only the
+                // cap, join and spacing, leaving the inline stroke-opacity in place.
+                .replace(
+                        ";stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,3;fill:none\"",
+                        "\" class=\"dmulti\"")
                 .replace("style=\"stroke:rgb(220,16,48);fill:none\"", "class=\"restart\"")
                 .replace(" L ", "L");
 
@@ -3081,6 +3115,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 .append(".bold,.sans.s12 text,.sans.s13 text,.sans.s14 text{font-weight:700}")
                 .append(
                         ".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
+                .append(".dmulti{stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,3}")
                 .append(".line{stroke-opacity:.2;stroke-linecap:square}")
                 .append(".mono{font-family:FiraCode,monospace;font-weight:500}")
                 .append(".restart{stroke:#dc1030}")

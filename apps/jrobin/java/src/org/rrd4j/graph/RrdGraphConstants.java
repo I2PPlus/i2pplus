@@ -394,6 +394,16 @@ public interface RrdGraphConstants {
     float[] MULTILINE_DASH = { 1f, 1f };
 
     /**
+     * Dash pattern for multi-series data lines: a short dot then a three-unit gap.
+     *
+     * <p>Separate from {@link #MULTILINE_DASH} on purpose. Equal on/off values ({1,1}) pack
+     * the dots so tightly that at a 1.5px stroke the line reads as a solid blur, losing the
+     * texture separation the dash exists to provide. Stacked plots keep the original
+     * pattern; only the overlaid-series lines use this one.
+     */
+    float[] MULTILINE_DASH_SERIES = { 1f, 3f };
+
+    /**
      * The stroke a series line should use, given how many line series the graph draws.
      *
      * @param lineCount number of line-type series in the graph
@@ -402,13 +412,25 @@ public interface RrdGraphConstants {
      * @since 0.9.71
      */
     static Stroke multilineStroke(int lineCount, float width) {
+        return multilineStroke(lineCount, width, MULTILINE_DASH);
+    }
+
+    /**
+     * Stroke used for an overlaid multi-series line.
+     *
+     * @param lineCount number of line series on the graph
+     * @param width stroke width
+     * @param dash dash pattern to apply once the graph is known to be multi-series
+     * @return a solid stroke for a lone series, otherwise a rounded dash
+     */
+    static Stroke multilineStroke(int lineCount, float width, float[] dash) {
         if (lineCount < 2) {
             return new BasicStroke(width);
         }
         // Round caps and joins: the point of the dash pattern is a row of dots, and a
         // butt cap would draw each one as a 1px rectangle instead.
         return new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
-                               10f, MULTILINE_DASH, 0f);
+                               10f, dash, 0f);
     }
 
     /** Stroke used to draw ticks */
