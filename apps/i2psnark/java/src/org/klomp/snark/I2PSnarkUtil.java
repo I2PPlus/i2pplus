@@ -1786,14 +1786,26 @@ public class I2PSnarkUtil implements DisconnectListener {
      * @param initialSize buffer size
      * @param maxSize fails if greater
      * @param ih the torrent's info hash
-     * @return null on error or if the torrent has no destination
+     * <p>When the torrent has no destination of its own - which is every torrent while
+     * {@link #getMultiDest()} is off, the default - the fetch goes over the shared
+     * session instead. Returning null here is what silently disabled every HTTP tracker
+     * announce: all of the default open trackers are http, and each one failed
+     * immediately with "No response from", leaving a magnet with no working peer source
+     * at all. Fetching over the shared session is exactly what the single-destination
+     * configuration already means.
+     *
+     * @return null on error
      * @since 0.9.71+
      */
     public byte[] get(
             String url, boolean rewrite, int retries, int initialSize, int maxSize, byte[] ih) {
         TorrentDest td = getTorrentDest(ih);
         if (td == null) {
-            return null;
+            if (_log.shouldDebug()) {
+                _log.debug("No dedicated destination for this torrent; fetching ["
+                           + url + "] over the shared session");
+            }
+            return get(url, rewrite, retries, initialSize, maxSize);
         }
         I2PSocketManager mgr = td.getSocketManager();
         if (_log.shouldDebug()) {

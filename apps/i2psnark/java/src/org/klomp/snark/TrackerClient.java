@@ -146,6 +146,13 @@ public class TrackerClient implements Runnable {
     private static final int DELAY_RAND = 6 * 1000;
     private static final int MAX_REGISTER_FAILS = 15; // * INITIAL_SLEEP = 15m to register
     private static final int INITIAL_SLEEP = 90 * 1000;
+
+    /**
+     * First-announce delay for a torrent with no metainfo (a magnet, including every
+     * zzzot name lookup). Short enough that a lookup budget is not spent asleep, long
+     * enough that a batch of magnets added at once still does not announce in lockstep.
+     */
+    static final int MAGNET_INITIAL_SLEEP = 3 * 1000;
     private static final int MAX_CONSEC_FAILS = 10; // slow down after this
     /**
      *  Global cap on tracker HTTP requests in flight across ALL torrents, so
@@ -492,10 +499,14 @@ public class TrackerClient implements Runnable {
             }
             if (!_initialized) {
                 _initialized = true;
-                // Spread first rounds across a full initial-sleep window so a
-                // batch start (router restart, many torrents added together)
-                // does not fire every announce at once.
-                long delay = _util.getContext().random().nextInt(INITIAL_SLEEP);
+                // Spread first rounds so a batch start (router restart, many torrents
+                // added together) does not fire every announce at once. A magnet has no
+                // metainfo, which is the lookup case, and there the whole point is to
+                // hear from someone immediately - a lookup budget is far shorter than
+                // INITIAL_SLEEP, so spending up to 90s here means never announcing at all.
+                long delay = initialAnnounceDelayMs(snark.getMetaInfo() != null,
+                                                    _util.getContext().random().nextInt(INITIAL_SLEEP),
+                                                    _util.getContext().random().nextInt(MAGNET_INITIAL_SLEEP));
                 try {
                     Thread.sleep(delay);
                 } catch (InterruptedException ie) { /* ignored */ }
@@ -604,8 +615,14 @@ public class TrackerClient implements Runnable {
             }
         }
 
-        // backup trackers if DHT needs bootstrapping
-        if (trackers.isEmpty() && (meta == null || !meta.isPrivate())) {
+        // Backup trackers, used when the DHT needs bootstrapping and - when the primary
+        // trackers are reachable - as a different transport to try after a fruitless
+        // round. getBackupTrackers() returns the open-tracker list, which is already in
+        // `trackers`, so it only contributes anything when `trackers` is empty; the
+        // default UDP tracker is what makes this list non-empty in the default
+        // configuration, and it was previously unreachable because it was only added
+        // inside the trackers.isEmpty() branch.
+        if (meta == null || !meta.isPrivate()) {
             List<String> tlist = _util.getBackupTrackers();
             for (int i = 0; i < tlist.size(); i++) {
                 String url = tlist.get(i);
@@ -614,9 +631,14 @@ public class TrackerClient implements Runnable {
                 if (_log.shouldDebug())
                     _log.debug("Backup announce: [" + url + "] for [InfoHash " + infoHash + "]");
             }
-            if (backupTrackers.isEmpty()) {
-                backupTrackers.add(new TCTracker(SnarkManager.DEFAULT_BACKUP_TRACKER, false));
-            } else if (backupTrackers.size() > 1) {
+            // Always reachable, whatever the open-tracker list holds. UDP needs no
+            // per-torrent destination, so it still answers when the http trackers
+            // cannot, which is precisely the case that left magnets with no source.
+            if (_log.shouldDebug())
+                _log.debug("Default backup announce: [" + SnarkManager.DEFAULT_BACKUP_TRACKER
+                           + "] for [InfoHash " + infoHash + "]");
+            backupTrackers.add(new TCTracker(SnarkManager.DEFAULT_BACKUP_TRACKER, false));
+            if (backupTrackers.size() > 1) {
                 Collections.shuffle(backupTrackers, _util.getContext().random());
             }
         }
@@ -697,14 +719,20 @@ public class TrackerClient implements Runnable {
 
                 int oldSeenPeers = snark.getTrackerSeenPeers();
                 int maxSeenPeers = 0;
+                int peersFromPrimaries = 0;
+                // Started before the tracker round, not after it. The DHT fetch is the
+                // other peer source and each tracker announce can block for a minute, so
+                // queuing it behind all of them meant a magnet waited for every tracker
+                // to fail before DHT was even asked.
+                fetchPeersFromDHT();
                 if (!trackers.isEmpty()) {
-                    maxSeenPeers = getPeersFromTrackers(trackers);
+                    peersFromPrimaries = getPeersFromTrackers(trackers);
+                    maxSeenPeers = peersFromPrimaries;
                     // fast update for UI at startup
                     if (maxSeenPeers > oldSeenPeers) snark.setTrackerSeenPeers(maxSeenPeers);
                 }
                 int p = getPeersFromPEX();
                 if (p > maxSeenPeers) maxSeenPeers = p;
-                fetchPeersFromDHT();
                 p = _dhtPeersSeen;
                 if (p > maxSeenPeers) {
                     maxSeenPeers = p;
@@ -714,12 +742,16 @@ public class TrackerClient implements Runnable {
                 // backup: while downloading a trackerless torrent, always
                 // consult the configured trackers regardless of DHT size;
                 // for seeds, only fall back when the DHT still needs bootstrapping
+                boolean wantMorePeers = coordinator.needOutboundPeers();
                 if (needBackupTrackers(
                         !trackers.isEmpty(),
                         !backupTrackers.isEmpty(),
                         dht != null,
                         dht != null ? dht.size() : 0,
-                        coordinator.needOutboundPeers())) {
+                        wantMorePeers)
+                        || shouldTryFallbackTrackers(peersFromPrimaries,
+                                                     !backupTrackers.isEmpty(),
+                                                     wantMorePeers)) {
                     p = getPeersFromTrackers(backupTrackers);
                     if (p > maxSeenPeers) maxSeenPeers = p;
                 }
@@ -826,6 +858,43 @@ public class TrackerClient implements Runnable {
      * @return true to query the backup trackers
      * @since 0.9.71+
      */
+    /**
+     *  Delay before a torrent's first announce.
+     *
+     *  <p>Pure decision, separated so the magnet case can be pinned by test: the spread
+     *  exists to protect the trackers from a thundering herd, and that concern does not
+     *  apply to a single lookup, which is actively waiting for an answer.
+     *
+     *  @param hasMeta true once the torrent has its metainfo
+     *  @param fullSpread random value in [0, INITIAL_SLEEP)
+     *  @param magnetSpread random value in [0, MAGNET_INITIAL_SLEEP)
+     *  @return ms to wait before the first announce
+     *  @since 0.9.71+
+     */
+    static long initialAnnounceDelayMs(boolean hasMeta, int fullSpread, int magnetSpread) {
+        return hasMeta ? fullSpread : magnetSpread;
+    }
+
+    /**
+     *  Should the fallback trackers be tried after a round that produced no peers?
+     *
+     *  <p>{@link #needBackupTrackers} deliberately refuses to consult backups while a
+     *  primary tracker is configured, which is right for a download that is already
+     *  finding peers but leaves a magnet with nothing: every announce failed and the
+     *  next cycle is 90s away. A different transport is the only remaining option, and
+     *  the caller has already paid for the round that failed.
+     *
+     *  @param peersFromPrimaries peers returned by the primary trackers this cycle
+     *  @param haveBackup whether any fallback tracker is configured
+     *  @param downloading whether the torrent still wants peers
+     *  @return true if the fallback round should run
+     *  @since 0.9.71+
+     */
+    static boolean shouldTryFallbackTrackers(int peersFromPrimaries, boolean haveBackup,
+                                             boolean downloading) {
+        return haveBackup && downloading && peersFromPrimaries <= 0;
+    }
+
     static boolean needBackupTrackers(
             boolean havePrimary,
             boolean haveBackup,
