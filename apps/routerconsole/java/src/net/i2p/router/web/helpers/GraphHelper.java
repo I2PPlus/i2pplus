@@ -5,6 +5,7 @@ import static net.i2p.router.web.GraphConstants.*;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -13,6 +14,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.GraphGenerator;
+import net.i2p.router.web.GraphGroups;
 import net.i2p.router.web.GraphListener;
 import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
@@ -35,6 +37,7 @@ public class GraphHelper extends FormHandler {
     private boolean _graphHideRestarts;
     private boolean _graphGlow;
     private boolean _graphSmooth;
+    private boolean _graphCombine;
     private boolean _useUtc;
     private String _stat;
     private int _end;
@@ -47,6 +50,7 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_HIDE_RESTARTS = "routerconsole.graphHideRestarts";
     private static final String PROP_GLOW = "routerconsole.graphGlow";
     private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
+    private static final String PROP_COMBINE = "routerconsole.graphCombine";
     private static final String PROP_UTC = "routerconsole.graphUtc";
     private static final int DEFAULT_REFRESH = 1*60;
     private static final int DEFAULT_PERIODS = 60;
@@ -85,6 +89,7 @@ public class GraphHelper extends FormHandler {
         _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
         _graphSmooth = _context.getBooleanProperty(PROP_SMOOTH);
+        _graphCombine = _context.getBooleanProperty(PROP_COMBINE);
         _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
 
     }
@@ -196,6 +201,9 @@ public class GraphHelper extends FormHandler {
     public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
     public void setGraphSmooth(String foo) {_graphSmooth = !"false".equals(foo);}
 
+    /** @since 0.9.71+ */
+    public void setGraphCombine(String foo) {_graphCombine = !"false".equals(foo);}
+
     /** @since 0.9.70+ */
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
 
@@ -272,6 +280,13 @@ public class GraphHelper extends FormHandler {
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
 
+        // Enabled stats, and those a combined graph already covers.
+        Set<String> enabledStats = new HashSet<>();
+        for (GraphListener lsnr : ordered) {
+            enabledStats.add(lsnr.getRate().getRateStat().getName());
+        }
+        Set<String> covered = GraphGroups.suppressedStats(enabledStats, _graphCombine, _showEvents);
+
         // Iterate excluding bw.sendRate or bw.recvRate if combined graph is shown
         for (GraphListener lsnr : ordered) {
             Rate r = lsnr.getRate();
@@ -279,6 +294,10 @@ public class GraphHelper extends FormHandler {
             if (combined &&
                 ("bw.sendRate".equals(rName) || "bw.recvRate".equals(rName))) {
                 // Skip individual tx/rx graphs if combined is shown
+                continue;
+            }
+            // The group's combined plot already carries these.
+            if (covered.contains(rName)) {
                 continue;
             }
             String title = _t("{0} for {1}", rName, DataHelper.formatDuration2(_periodCount * r.getPeriod()));
@@ -313,7 +332,76 @@ public class GraphHelper extends FormHandler {
                .append(title)
                .append("\"></a></span>\n");
         }
+
+        buf.append(renderGroupTiles(enabledStats, hideLegend, hideRestarts, now));
         return buf.toString();
+    }
+
+    /**
+     *  Emit one tile per active group, each plotting its members as overlaid lines.
+     *
+     *  <p>A group appears only when at least two members are enabled and carry data, so
+     *  enabling a single stat is never silently turned into a combined plot.
+     *
+     *  @return markup for every qualifying group, empty when none qualify
+     *  @since 0.9.71+
+     */
+    private String renderGroupTiles(Set<String> enabledStats, boolean hideLegend,
+                                    boolean hideRestarts, long now) {
+        if (!_graphCombine || _showEvents) {
+            return "";
+        }
+        GraphGenerator ss = GraphGenerator.instance(_context);
+        if (ss == null) {
+            return "";
+        }
+        StringBuilder out = new StringBuilder(512);
+        for (String groupId : GraphGroups.groupIds()) {
+            List<GraphListener> members = ss.getGroupListeners(groupId, enabledStats);
+            if (members.size() < 2) {
+                continue;
+            }
+            GraphListener primary = members.get(0);
+            Rate r = primary.getRate();
+            // Two placeholders only: _t has no three-argument form, and a third "{2}"
+            // would be emitted literally.
+            String displayName = _t(GraphGroups.titleOf(groupId)) + " (" + members.size() + ")";
+            String title = _t("{0} for {1}", displayName,
+                              DataHelper.formatDuration2(_periodCount * r.getPeriod()));
+            title = title.replace("&nbsp;", "");
+            out.append("<span class=graphContainer><a href=\"").append(GRAPH_HREF)
+               .append(groupId)
+               .append(AMP).append("c=").append(3 * _periodCount)
+               .append(AMP).append("w=1000").append(AMP).append("h=280")
+               .append("\">");
+            out.append("<img class=statimage border=0 src=\"").append(STAT_PARAM)
+               .append(groupId)
+               .append(AMP).append("period=").append(r.getPeriod())
+               .append(PERIOD_COUNT_PARAM).append(_periodCount)
+               .append(WIDTH_PARAM).append(_width)
+               .append(HEIGHT_PARAM).append(hideLegend ? _height : _height - 26)
+               .append(HIDE_LEGEND_PARAM).append(hideLegend)
+               .append(HIDE_RESTARTS_PARAM).append(hideRestarts)
+               .append(TIME_PARAM).append(now)
+               .append("\" alt=\"").append(title).append("\" title=\"").append(title)
+               .append("\"></a></span>\n");
+        }
+        return out.toString();
+    }
+
+    /**
+     * The stat names the user has switched on for graphing.
+     *
+     * @param ss the graph generator
+     * @return enabled stat names, without period suffixes
+     * @since 0.9.71+
+     */
+    private static Set<String> enabledStatNames(GraphGenerator ss) {
+        Set<String> names = new HashSet<>();
+        for (GraphListener lsnr : ss.getListeners()) {
+            names.add(lsnr.getRate().getRateStat().getName());
+        }
+        return names;
     }
 
     /** @return the number of configured graph listeners, or 0 if graphs are disabled */
@@ -348,6 +436,21 @@ public class GraphHelper extends FormHandler {
             period = 60000;
             name = _stat;
             displayName = "[" + _t("Router") + "] " + _t("Bandwidth Usage");
+        } else if (GraphGroups.groupIds().contains(_stat)) {
+            // A group id is not a stat, so it never reaches parseSpecs. Resolve it here or
+            // the click-through page would report the group as "not enabled for graphing".
+            if (!_graphCombine) {
+                buf.append("<p class=infohelp>").append(_t("Graph combining is not enabled")).append("</p>");
+                return buf.toString();
+            }
+            List<GraphListener> members = ss.getGroupListeners(_stat, enabledStatNames(ss));
+            if (members.size() < 2) {
+                buf.append("<p class=infohelp>").append(_t("Not enough stats enabled to combine")).append("</p>");
+                return buf.toString();
+            }
+            period = members.get(0).getRate().getPeriod();
+            name = _stat;
+            displayName = _t(GraphGroups.titleOf(_stat)) + " (" + members.size() + ")";
         } else {
             Set<Rate> rates = ss.parseSpecs(_stat);
             if (rates.size() != 1) {
@@ -564,7 +667,7 @@ public class GraphHelper extends FormHandler {
         }
         buf.append(">")
            .append(_t("Add a glow effect to graph lines"))
-           .append("</label><input type=hidden name=graphGlow value=false></span><br><span class=nowrap hidden>\n<b>")
+           .append("</label><input type=hidden name=graphGlow value=false></span><br><span class=nowrap>\n<b>")
            .append(_t("Smooth lines"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphSmooth");
         if (_graphSmooth) {
@@ -572,7 +675,16 @@ public class GraphHelper extends FormHandler {
         }
         buf.append(">")
            .append(_t("Use bezier curves to plot graphs"))
-           .append("</label><input type=hidden name=graphSmooth value=false></span>\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
+           .append("</label><input type=hidden name=graphSmooth value=false></span><br><span class=nowrap>\n<b>")
+           .append(_t("Combine graphs"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphCombine");
+        if (_graphCombine) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Merge related graphs into a plot"))
+           .append("</label><input type=hidden name=graphCombine value=false></span><br>")
+           .append("\n</div>\n</td></tr>\n</table>\n<hr>\n<div class=formaction id=graphing><a class=fakebutton href=/configstats>")
            .append(_t("Select Stats"))
            .append("</a> <input type=submit class=accept value=\"")
            .append(_t("Save settings and redraw graphs"))
@@ -626,8 +738,9 @@ public class GraphHelper extends FormHandler {
                                                    Boolean.toString(DEFAULT_HIDE_RESTARTS))) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
-            _graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
-            _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
+_graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
+             _graphCombine != _context.getBooleanProperty(PROP_COMBINE) ||
+             _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
@@ -640,6 +753,7 @@ public class GraphHelper extends FormHandler {
             changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             changes.put(PROP_GLOW, Boolean.toString(_graphGlow));
             changes.put(PROP_SMOOTH, Boolean.toString(_graphSmooth));
+            changes.put(PROP_COMBINE, Boolean.toString(_graphCombine));
             changes.put(PROP_UTC, Boolean.toString(_useUtc));
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
             _context.router().saveConfig(changes, null);
