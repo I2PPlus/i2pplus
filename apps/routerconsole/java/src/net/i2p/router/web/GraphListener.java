@@ -826,7 +826,7 @@ public class GraphListener implements RateSummaryListener {
                            boolean hideTitle, boolean showEvents, int periodCount,
                            int end, boolean showCredit) throws IOException {
         renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                   end, showCredit, null, null, true);
+                   end, showCredit, (GraphListener) null, null, true);
     }
 
     /**
@@ -846,6 +846,48 @@ public class GraphListener implements RateSummaryListener {
         }
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
                          end, showCredit, lsnr2, titleOverride, showRestarts);
+    }
+
+    /**
+     *  Render this stat with any number of extra series overlaid as lines.
+     *
+     *  <p>Every series shares one axis, so the caller must supply stats that measure the
+     *  same thing; see {@link GraphGroups} for the sanctioned groupings.
+     *
+     *  @param extras extra series in legend order, or null for none
+     *  @param titleOverride If non-null, overrides the title
+     *  @since 0.9.71+
+     */
+    public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                           boolean hideTitle, boolean showEvents, int periodCount,
+                            int end, boolean showCredit, List<GraphListener> extras, String titleOverride,
+                            boolean showRestarts) throws IOException {
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
+        _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                         end, showCredit, extras, titleOverride, showRestarts);
+    }
+
+    /**
+     *  Render this stat with any number of extra series, every series drawn as a line.
+     *
+     *  <p>Identical to {@link #renderGraph(OutputStream, int, int, boolean, boolean, boolean,
+     *  boolean, int, int, boolean, List, String, boolean)} except that the primary is a line
+     *  rather than a filled area, so no member of the group is hidden behind another.
+     *
+     *  @param extras extra series in legend order, or null for none
+     *  @since 0.9.71+
+     */
+    public void renderGraphLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                                boolean hideTitle, boolean showEvents, int periodCount,
+                                int end, boolean showCredit, List<GraphListener> extras, String titleOverride,
+                                boolean showRestarts) throws IOException {
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
+        _renderer.renderLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                              end, showCredit, extras, titleOverride, showRestarts);
     }
 
     /**

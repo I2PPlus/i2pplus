@@ -47,6 +47,14 @@ class GraphRenderer {
     private final GraphListener _listener;
     private final I2PAppContext _context;
     private static final String PROP_THEME_NAME = "routerconsole.theme";
+
+    /**
+     * Prefix of the marker comment that tells the SVG writer which console theme is in
+     * force. Matched by {@code SVGGraphics2D.detectTheme()}.
+     *
+     * @since 0.9.71+
+     */
+    public static final String THEME_MARKER_PREFIX = "i2pgraph-theme:";
     private static final String DEFAULT_THEME = "dark";
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
     private static final Color BACK_COLOR = new Color(255, 255, 255);
@@ -75,6 +83,45 @@ class GraphRenderer {
     private static final Color LINE_COLOR = new Color(0, 30, 110, 255);
     private static final Color LINE_COLOR_DARK = new Color(100, 200, 160);
     private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
+
+    /**
+     * Alpha applied to series lines on the dark themes: 0xAA, roughly two thirds opaque.
+     *
+     * <p>Fully opaque neon on a dark background reads as harsh, and when two lines cross
+     * the one underneath disappears. Two thirds keeps a line bright enough to lead the eye
+     * while leaving the crossing series visible through it. Only the stroke and the legend
+     * swatch are affected: rrd4j draws legend text in {@code ElementsNames.font}, not in
+     * the series colour.
+     */
+    private static final int SERIES_ALPHA_DARK = 0xAA;
+
+    /**
+     * Series colours for combined graphs, in series order.
+     *
+     * <p>Index 0 is each theme's existing single-series line colour, so a combined graph
+     * opens in a shade the eye already knows from every other graph on the page. The rest
+     * are tonal rotations of that theme's hue rather than an unrelated rainbow: the historic
+     * colours were chosen to sit correctly against their own background, and a fixed set of
+     * bright hues would clash with two of the three themes.
+     *
+     * <p>The two-series bandwidth graph does not use these at all; it keeps the exact
+     * colours it shipped with.
+     */
+    private static final Color[] SERIES_COLORS = {
+        new Color(0, 30, 110, 255), new Color(190, 50, 40, 255), new Color(0, 110, 130, 255),
+        new Color(170, 115, 0, 255), new Color(25, 115, 65, 255), new Color(125, 35, 120, 255)
+    };
+    private static final Color[] SERIES_COLORS_DARK = {
+        new Color(100, 200, 160, SERIES_ALPHA_DARK), new Color(255, 150, 90, SERIES_ALPHA_DARK),
+        new Color(130, 215, 255, SERIES_ALPHA_DARK), new Color(240, 225, 120, SERIES_ALPHA_DARK),
+        new Color(205, 130, 235, SERIES_ALPHA_DARK), new Color(120, 245, 205, SERIES_ALPHA_DARK)
+    };
+    private static final Color[] SERIES_COLORS_MIDNIGHT = {
+        new Color(128, 180, 212, SERIES_ALPHA_DARK), new Color(255, 165, 140, SERIES_ALPHA_DARK),
+        new Color(150, 230, 190, SERIES_ALPHA_DARK), new Color(240, 220, 130, SERIES_ALPHA_DARK),
+        new Color(200, 160, 240, SERIES_ALPHA_DARK), new Color(130, 225, 225, SERIES_ALPHA_DARK)
+    };
+
     private static final Color ARROW_COLOR_DARK = new Color(0, 0, 0, 0);
     private static final Color RESTART_BAR_COLOR = new Color(223, 13, 13, 255);
     private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
@@ -167,7 +214,7 @@ class GraphRenderer {
                 periodCount,
                 endp,
                 showCredit,
-                null,
+                (java.util.List<GraphListener>) null,
                 null,
                 true);
     }
@@ -196,7 +243,9 @@ class GraphRenderer {
             boolean showRestarts)
             throws IOException {
         GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
-                showEvents, periodCount, endp, showCredit, lsnr2, titleOverride, showRestarts);
+                showEvents, periodCount, endp, showCredit,
+                (lsnr2 != null ? java.util.Collections.singletonList(lsnr2) : null),
+                titleOverride, showRestarts);
         RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
         configureDownsampler(def, cfg);
         configureTimeZone(def, cfg.useUtc);
@@ -211,9 +260,89 @@ class GraphRenderer {
         configureTitle(def, cfg);
         configureDataSources(def, cfg);
         configureLegend(def, cfg);
-        if (cfg.lsnr2 != null) {
-            configureSecondDataSource(def, cfg);
-        }
+        configureExtraDataSources(def, cfg);
+        configureRestartMarkers(def, cfg);
+        configureCommentsAndSignature(def, cfg);
+        configureGridAndRendering(def, cfg);
+        renderGraph(def, out, cfg);
+    }
+
+    /**
+     * Render a graph with any number of extra series overlaid.
+     *
+     * <p>All series share one axis, so they must measure the same thing; see
+     * {@link GraphGroups} for the groupings that satisfy this. The primary series is drawn
+     * first and supplies the axis range; each extra is drawn as a line, never an area, and
+     * is named in the legend.
+     *
+     * @param out where the SVG is written
+     * @param extras extra series in legend order, or null or empty for none
+     * @param titleOverride title to draw, or null for the primary stat description
+     * @throws IOException if the graph cannot be produced
+     * @since 0.9.71+
+     */
+    public void render(
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int endp,
+            boolean showCredit,
+            List<GraphListener> extras,
+            String titleOverride,
+            boolean showRestarts)
+            throws IOException {
+        GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
+                showEvents, periodCount, endp, showCredit, extras, titleOverride, showRestarts);
+        RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
+        configureDownsampler(def, cfg);
+        configureTimeZone(def, cfg.useUtc);
+        applyTheme(def, cfg);
+        configureFonts(def, cfg);
+        configureBaseAndDecimals(cfg);
+        resolveAxisRange(cfg);
+        def.setMinValue(axisFloor(cfg.dataMin, cfg.dataMax, cfg.forceZero));
+        configureTitle(def, cfg);
+        configureDataSources(def, cfg);
+        configureLegend(def, cfg);
+        configureExtraDataSources(def, cfg);
+        configureRestartMarkers(def, cfg);
+        configureCommentsAndSignature(def, cfg);
+        configureGridAndRendering(def, cfg);
+        renderGraph(def, out, cfg);
+    }
+
+    /**
+     * Render a graph with every series, including the primary, drawn as a line.
+     *
+     * <p>Used for combined graphs. Filling the primary would put a solid block behind the
+     * other series and hide any that cross it, which defeats the point of overlaying them.
+     *
+     * @see #render(OutputStream, int, int, boolean, boolean, boolean, boolean, int, int, boolean, List, String, boolean)
+     * @since 0.9.71+
+     */
+    public void renderLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                            boolean hideTitle, boolean showEvents, int periodCount, int endp,
+                            boolean showCredit, List<GraphListener> extras, String titleOverride,
+                            boolean showRestarts) throws IOException {
+        GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
+                showEvents, periodCount, endp, showCredit, extras, titleOverride, showRestarts, true);
+        RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
+        configureDownsampler(def, cfg);
+        configureTimeZone(def, cfg.useUtc);
+        applyTheme(def, cfg);
+        configureFonts(def, cfg);
+        configureBaseAndDecimals(cfg);
+        resolveAxisRange(cfg);
+        def.setMinValue(axisFloor(cfg.dataMin, cfg.dataMax, cfg.forceZero));
+        configureTitle(def, cfg);
+        configureDataSources(def, cfg);
+        configureLegend(def, cfg);
+        configureExtraDataSources(def, cfg);
         configureRestartMarkers(def, cfg);
         configureCommentsAndSignature(def, cfg);
         configureGridAndRendering(def, cfg);
@@ -225,7 +354,18 @@ class GraphRenderer {
      */
     private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
             boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
-            boolean showCredit, GraphListener lsnr2, String titleOverride, boolean showRestarts) {
+            boolean showCredit, List<GraphListener> extras, String titleOverride, boolean showRestarts) {
+        return buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                                 endp, showCredit, extras, titleOverride, showRestarts, false);
+    }
+
+    /**
+     * @param allLines draw the primary as a line rather than a filled area
+     */
+    private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
+            boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
+            boolean showCredit, List<GraphListener> extras, String titleOverride, boolean showRestarts,
+            boolean allLines) {
         long begin = System.currentTimeMillis();
         long end = Math.min(_listener.now(), begin - GraphListener.GRAPH_END_OFFSET_SECONDS * 1000);
         long period = _listener.getRate().getPeriod();
@@ -263,7 +403,8 @@ class GraphRenderer {
                 .showRestarts(showRestarts)
                 .titleOverride(titleOverride)
                 .rate(_listener.getRate())
-                .lsnr2(lsnr2)
+                .extras(extras)
+                .allLines(allLines)
                 .useUtc(useUtc)
                 .smooth(smooth)
                 .forceZero(forceZero)
@@ -435,9 +576,10 @@ class GraphRenderer {
         GraphListener lsnr = cfg.listener;
         accumulateRange(cfg, fetchWindow(lsnr, cfg.showEvents ? lsnr.getEventName() : lsnr.getName(),
                 start, end));
-        GraphListener lsnr2 = cfg.lsnr2;
-        if (lsnr2 != null) {
-            accumulateRange(cfg, fetchWindow(lsnr2, lsnr2.getName(), start, end));
+        if (cfg.extras != null) {
+            for (GraphListener extra : cfg.extras) {
+                accumulateRange(cfg, fetchWindow(extra, extra.getName(), start, end));
+            }
         }
     }
 
@@ -632,7 +774,11 @@ class GraphRenderer {
             cfg.descr = _t(cfg.rate.getRateStat().getDescription());
         }
         def.datasource(cfg.plotName, cfg.path, cfg.plotName, GraphListener.CF, cfg.listener.getBackendFactory());
-        configureArea(def, cfg);
+        if (cfg.allLines) {
+            def.line(cfg.plotName, seriesColor(cfg, 0), cfg.descr + "\\l", lineWidth(cfg));
+        } else {
+            configureArea(def, cfg);
+        }
     }
 
     private void configureArea(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -676,44 +822,152 @@ class GraphRenderer {
         }
     }
 
-    private void configureSecondDataSource(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
-        try {
-            cfg.dsNames2 = cfg.lsnr2.getData().getDsNames();
-        } catch (IOException ioe) {
-            throw new IOException("Failed to get second datasource names", ioe);
+    /**
+     * Declare and plot every extra series of a combined graph.
+     *
+     * <p>Each member becomes its own datasource drawn as a line, never an area, with a
+     * per-series colour and its description in the legend. Areas are reserved for the
+     * primary series: filling several overlaid series hides whichever one is behind.
+     *
+     * <p>The max/min/avg/now summary block is emitted for the first extra series only when
+     * there are exactly two, matching the long-standing combined-bandwidth graph. With more
+     * series that block would add four legend lines per series and bury the plot.
+     */
+    /**
+     * Render a combined graph of several stats as overlaid lines.
+     *
+     * <p>Every series shares one axis, so the caller is responsible for supplying members
+     * that measure the same thing; see {@link GraphGroups}. Each member is drawn as a line
+     * rather than an area and is named in the legend.
+     *
+     * @param out where the SVG is written
+     * @param width pixels
+     * @param height pixels
+     * @param hideLegend suppress the legend and its summary block
+     * @param hideGrid suppress the grid lines
+     * @param hideTitle suppress the title
+     * @param showEvents unused; event mode is not supported for combined graphs
+     * @param periodCount how many periods to plot
+     * @param end latest sample, in milliseconds
+     * @param showCredit include the credit line
+     * @param primary the series drawn first; also supplies the axis range
+     * @param extras the remaining series, in legend order
+     * @param titleOverride title to draw, or null for the stat description
+     * @param showRestarts draw restart markers
+     * @return true if a graph was written
+     * @throws IOException if the graph cannot be produced
+     * @since 0.9.71+
+     */
+    public boolean renderGroup(OutputStream out, int width, int height, boolean hideLegend,
+                               boolean hideGrid, boolean hideTitle, boolean showEvents,
+                               int periodCount, int end, boolean showCredit,
+                               GraphListener primary, List<GraphListener> extras,
+                               String titleOverride, boolean showRestarts) throws IOException {
+        if (primary == null) {
+            throw new IOException("No primary datasource for combined graph");
         }
-        cfg.plotName2 = cfg.dsNames2[0];
-        cfg.path2 = cfg.lsnr2.getData().getPath();
-        cfg.descr2 = _t(cfg.lsnr2.getRate().getRateStat().getDescription());
-        def.datasource(cfg.plotName2, cfg.path2, cfg.plotName2, GraphListener.CF, cfg.lsnr2.getBackendFactory());
-        cfg.linewidth = 2;
-        if (cfg.width == 250 && cfg.height == 50 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid) {
-            cfg.linewidth = 3;
-        } else if (cfg.periodCount >= 720 || (cfg.periodCount >= 480 && cfg.width <= 600)) {
-            cfg.linewidth = 1;
-        }
-        if (cfg.theme.equals("midnight")) {
-            def.line(cfg.plotName2, LINE_COLOR_MIDNIGHT, cfg.descr2 + "\\l", cfg.linewidth);
-        } else if (cfg.theme.equals("dark")) {
-            def.line(cfg.plotName2, LINE_COLOR_DARK, cfg.descr2 + "\\l", cfg.linewidth);
-        } else {
-            def.line(cfg.plotName2, LINE_COLOR, cfg.descr2 + "\\l", cfg.linewidth);
-        }
+        render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+               periodCount, end, showCredit, extras, titleOverride, showRestarts);
+        return true;
+    }
 
-        if (!cfg.hideLegend) {
-            Variable var = new Variable.MAX();
-            def.datasource("max2", cfg.plotName2, var);
-            def.gprint("max2", " " + _t("Max") + ": " + cfg.numberFormat + " ");
-            var = new Variable.MIN();
-            def.datasource("min2", cfg.plotName2, var);
-            def.gprint("min2", " " + _t("Min") + ": " + cfg.numberFormat + " ");
-            var = new Variable.AVERAGE();
-            def.datasource("avg2", cfg.plotName2, var);
-            def.gprint("avg2", " " + _t("Avg") + ": " + cfg.numberFormat + " ");
-            var = new Variable.LAST();
-            def.datasource("last2", cfg.plotName2, var);
-            def.gprint("last2", " " + _t("Now") + ": " + cfg.numberFormat + "\\l");
+    private void configureExtraDataSources(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
+        List<GraphListener> extras = cfg.extras;
+        if (extras == null || extras.isEmpty()) {
+            return;
         }
+        boolean summary = extras.size() == 1 && !cfg.hideLegend;
+        for (int i = 0; i < extras.size(); i++) {
+            GraphListener lsnr = extras.get(i);
+            String[] dsNames;
+            try {
+                dsNames = lsnr.getData().getDsNames();
+            } catch (IOException ioe) {
+                throw new IOException("Failed to get datasource names for " + lsnr.getName(), ioe);
+            }
+            String plotName = dsNames[0];
+            String descr = _t(lsnr.getRate().getRateStat().getDescription());
+            def.datasource(plotName, lsnr.getData().getPath(), plotName,
+                           GraphListener.CF, lsnr.getBackendFactory());
+            Color color = cfg.allLines ? seriesColor(cfg, i + 1) : legacySecondColor(cfg);
+            def.line(plotName, color, descr + "\\l", lineWidth(cfg));
+            if (summary) {
+                // Distinct ids: configureLegend already defines min/max/avg/last on the
+                // primary, and a graph definition cannot declare the same id twice.
+                addSummaryPrints(def, plotName, Integer.toString(i + 1), cfg.numberFormat);
+            }
+        }
+    }
+
+    /** Emit the max/min/avg/now legend block for one series. */
+    private void addSummaryPrints(RrdGraphDef def, String plotName, String suffix, String numberFormat) {
+        Variable var = new Variable.MAX();
+        def.datasource("max" + suffix, plotName, var);
+        def.gprint("max" + suffix, " " + _t("Max") + ": " + numberFormat + " ");
+        var = new Variable.MIN();
+        def.datasource("min" + suffix, plotName, var);
+        def.gprint("min" + suffix, " " + _t("Min") + ": " + numberFormat + " ");
+        var = new Variable.AVERAGE();
+        def.datasource("avg" + suffix, plotName, var);
+        def.gprint("avg" + suffix, " " + _t("Avg") + ": " + numberFormat + " ");
+        var = new Variable.LAST();
+        def.datasource("last" + suffix, plotName, var);
+        def.gprint("last" + suffix, " " + _t("Now") + ": " + numberFormat + "\\l");
+    }
+
+    /**
+     * Stroke width for a plotted series.
+     *
+     * <p>Grouped graphs stack up to six lines on one axis and are drawn thinner, 1.5, so
+     * they stay separable and the dense case does not fill in. Legacy graphs keep the
+     * widths they always used.
+     *
+     * @param cfg the render configuration
+     * @return stroke width in pixels
+     */
+    private float lineWidth(GraphRenderConfig cfg) {
+        if (cfg.allLines) {
+            return 1.5F;
+        }
+        if (cfg.width == 250 && cfg.height == 50 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid) {
+            return 3F;
+        }
+        if (cfg.periodCount >= 720 || (cfg.periodCount >= 480 && cfg.width <= 600)) {
+            return 1F;
+        }
+        return 2F;
+    }
+
+    /**
+     * The colour for the nth series of a grouped graph.
+     *
+     * <p>Only for the new multi-line graphs. The two-series bandwidth graph predates
+     * grouping and keeps the exact colour it always shipped with, so switching combining on
+     * cannot alter a graph people already know.
+     *
+     * @param cfg the render configuration
+     * @param index 0-based series position
+     * @return the series colour for the active theme
+     */
+    private Color seriesColor(GraphRenderConfig cfg, int index) {
+        Color[] palette = cfg.theme.equals("midnight") ? SERIES_COLORS_MIDNIGHT
+                         : cfg.theme.equals("dark") ? SERIES_COLORS_DARK : SERIES_COLORS;
+        return palette[index % palette.length];
+    }
+
+    /**
+     * The colour for the second series of a legacy two-series graph.
+     *
+     * @return the theme's original second-series colour, unchanged since before grouping
+     */
+    private Color legacySecondColor(GraphRenderConfig cfg) {
+        if (cfg.theme.equals("midnight")) {
+            return LINE_COLOR_MIDNIGHT;
+        }
+        if (cfg.theme.equals("dark")) {
+            return LINE_COLOR_DARK;
+        }
+        return LINE_COLOR;
     }
 
     private void configureRestartMarkers(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -737,6 +991,10 @@ class GraphRenderer {
     }
 
     private void configureCommentsAndSignature(RrdGraphDef def, GraphRenderConfig cfg) {
+        // SVGGraphics2D infers the console theme by sniffing the SVG for the area fill
+        // colour, which a line-only graph never emits; without this marker a grouped graph
+        // is detected as CLASSIC, loses its gradient, and its text loses the themed fill.
+        def.comment(THEME_MARKER_PREFIX + cfg.theme);
         if (!cfg.hideLegend) {
             // Small vertical space (\s advances by small leading only) to
             // separate the date line from the legend rows above it
@@ -1052,7 +1310,15 @@ out.write(graph.getRrdGraphInfo().getBytes());
         final boolean showRestarts;
         final String titleOverride;
         final Rate rate;
-        final GraphListener lsnr2;
+        /** Extra series of a combined graph, in legend order; empty for a single-stat graph. */
+        final List<GraphListener> extras;
+
+        /**
+         * Draw the primary series as a line rather than a filled area. Set for combined
+         * graphs: a filled primary hides whichever series crosses it, so every member of a
+         * group is drawn the same way.
+         */
+        final boolean allLines;
         final boolean useUtc;
         final boolean smooth;
         /** True to keep the historical zero-floored y-axis ({@link #PROP_ZERO_BASE}). */
@@ -1105,7 +1371,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             this.showRestarts = b.showRestarts;
             this.titleOverride = b.titleOverride;
             this.rate = b.rate;
-            this.lsnr2 = b.lsnr2;
+            this.extras = b.extras;
+            this.allLines = b.allLines;
             this.useUtc = b.useUtc;
             this.smooth = b.smooth;
             this.forceZero = b.forceZero;
@@ -1136,7 +1403,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             boolean showRestarts;
             String titleOverride;
             Rate rate;
-            GraphListener lsnr2;
+            List<GraphListener> extras;
+            boolean allLines;
             boolean useUtc;
             boolean smooth;
             boolean forceZero;
@@ -1158,7 +1426,28 @@ out.write(graph.getRrdGraphInfo().getBytes());
             Builder showRestarts(boolean v) { showRestarts = v; return this; }
             Builder titleOverride(String v) { titleOverride = v; return this; }
             Builder rate(Rate v) { rate = v; return this; }
-            Builder lsnr2(GraphListener v) { lsnr2 = v; return this; }
+/**
+             * @param v extra series to plot on the same graph, or null/empty for none
+             * @return this builder
+             * @since 0.9.71+
+             */
+            Builder extras(List<GraphListener> v) { extras = v; return this; }
+
+            /**
+             * @param v true to draw the primary as a line instead of a filled area
+             * @return this builder
+             * @since 0.9.71+
+             */
+            Builder allLines(boolean v) { allLines = v; return this; }
+
+            /**
+             * @param v single extra series to plot on the same graph, or null
+             * @return this builder
+             */
+            Builder lsnr2(GraphListener v) {
+                extras = (v == null) ? null : java.util.Collections.singletonList(v);
+                return this;
+            }
             Builder useUtc(boolean v) { useUtc = v; return this; }
             Builder smooth(boolean v) { smooth = v; return this; }
             Builder forceZero(boolean v) { forceZero = v; return this; }

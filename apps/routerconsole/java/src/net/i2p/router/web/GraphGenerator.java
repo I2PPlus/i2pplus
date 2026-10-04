@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -1451,7 +1453,7 @@ public class GraphGenerator implements Runnable, ClientApp {
 GraphListener lsnr = _listenerByRate.get(rate);
         if (lsnr != null && !lsnr.isDetached()) {
             lsnr.renderGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-            end, showCredit, null, null, showRestarts);
+            end, showCredit, (GraphListener) null, null, showRestarts);
             return true;
         }
         // A detached listener would throw from renderGraph, which propagates out
@@ -1642,6 +1644,58 @@ GraphListener lsnr = _listenerByRate.get(rate);
             } catch (NumberFormatException nfe) { /* ignored */ }
         }
         return rv;
+    }
+
+    /**
+     *  Collect the listeners for the enabled members of a graph group.
+     *
+     *  <p>Members are returned in the group's legend order, not in listener order, so the
+     *  colours and legend entries stay put as stats are enabled and disabled. Members whose
+     *  RRD has not been created yet are skipped: a stat that has never been sampled has no
+     *  series to draw, and including it would silently stretch the axis to zero.
+     *
+     *  @param groupId a group id from {@link GraphGroups}
+     *  @param enabledStats stat names enabled by the user, without period suffixes
+     *  @return the members that have data, in legend order; empty when fewer than two
+     *  @since 0.9.71+
+     */
+    public List<GraphListener> getGroupListeners(String groupId, Set<String> enabledStats) {
+        List<GraphListener> found = new ArrayList<>(GraphGroups.MAX_SERIES);
+        Map<String, GraphListener> byName = new HashMap<>();
+        for (GraphListener lsnr : getListeners()) {
+            byName.put(lsnr.getRate().getRateStat().getName(), lsnr);
+        }
+        for (String stat : GraphGroups.enabledMembers(groupId, enabledStats)) {
+            GraphListener lsnr = byName.get(stat);
+            if (lsnr != null) {
+                found.add(lsnr);
+            }
+        }
+        return found;
+    }
+
+    /**
+     *  Render a combined graph for one group.
+     *
+     *  @param groupId a group id from {@link GraphGroups}
+     *  @param enabledStats stat names enabled by the user, without period suffixes
+     *  @return true if a graph was written; false when the group had too few usable members
+     *  @since 0.9.71+
+     */
+    public boolean renderGroupedGraph(OutputStream out, String groupId, Set<String> enabledStats,
+                                      int width, int height, boolean hideLegend, boolean hideGrid,
+                                      boolean hideTitle, boolean showEvents, int periodCount,
+                                      int end, boolean showCredit, boolean showRestarts)
+                                      throws IOException {
+        List<GraphListener> members = getGroupListeners(groupId, enabledStats);
+        if (members.size() < 2) {
+            return false;
+        }
+        GraphListener primary = members.remove(0);
+        String title = _t(primary.getRate().getRateStat().getDescription());
+        primary.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                periodCount, end, showCredit, members, title, showRestarts);
+        return true;
     }
 
     /**
