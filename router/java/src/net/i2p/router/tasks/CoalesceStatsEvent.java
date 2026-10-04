@@ -91,6 +91,9 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("router.activeSendPeers", _x("Peers sent to in the last minute"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.bannedPeers", _x("Total peers in our banlist"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.cpuLoad", _x("CPU load average of the JVM"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        // router.fastPeers and peer.fastPeerCount (ProfileOrganizer) read the same _fastPeers set,
+        // as do router.highCapacityPeers and peer.highCapPeerCount. Both stats are kept so
+        // neither /configstats entry disappears; keep the pair out of any one combined graph.
         sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
@@ -99,9 +102,14 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("router.gcPauseTime", _x("Time spent paused in GC (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", RateConstants.TUNNEL_RATES);
-        String legend = "";
-        if (_maxMemory < Long.MAX_VALUE) {legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';}
-        sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { RateConstants.ONE_MINUTE });
+        // Describe the stat itself; the JVM ceiling is secondary detail. Using the ceiling
+        // as the whole description left the stat unexplained on /configstats, and left it
+        // blank entirely when the ceiling was unknown.
+        String memDesc = _x("Memory used by the JVM");
+        if (_maxMemory < Long.MAX_VALUE) {
+            memDesc += " (" + _x("maximum") + ' ' + DataHelper.formatSize(_maxMemory) + "B)";
+        }
+        sm.createRequiredRateStat("router.memoryUsed", memDesc, "Router", new long[] { RateConstants.ONE_MINUTE });
     }
 
     /**

@@ -582,7 +582,7 @@ public class BuildExecutor implements Runnable {
         int maxConcurrentBuilds = getMaxConcurrentBuilds();
         _currentlyBuildingMap = new ConcurrentHashMap<>(maxConcurrentBuilds);
         _recentlyBuildingMap = new ConcurrentHashMap<>(4 * maxConcurrentBuilds);
-        _context.statManager().createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failure frequency (can't contact 1st hop)", "Tunnels", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failures (can't contact 1st hop)", "Tunnels", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels [Participating]", RATES);

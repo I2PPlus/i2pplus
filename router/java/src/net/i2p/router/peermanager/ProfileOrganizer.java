@@ -402,16 +402,20 @@ public class ProfileOrganizer {
         _context.statManager().createRateStat("peer.profilePlaceTime", "Time to sort peers into tiers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileReorgTime", "Time to reorganize peers (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profileThresholdTime", "Time to determine tier thresholds (ms)", "Peers", RATES);
+        // Counted here rather than in TunnelBuildEvent because every selection path
+        // funnels through passesBasicGates. Compare with tunnel.buildBanHit: if this is
+        // materially larger, a selection path is handing out banned peers.
         _context.statManager().createRequiredRateStat("tunnel.peerBannedAtSelection",
-                "Banned peers rejected by the selection gates",
-                "Number of banned peers rejected in passesBasicGates during peer selection. "
-                        + "Compare with tunnel.buildBanHit: if that is materially larger, a selection "
-                        + "path is handing out banned peers, because every path funnels through "
-                        + "passesBasicGates.", RATES);
+                "Banned peers rejected by the selection gates", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.failedLookupRate", "NetDb Lookup failure rate", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.profileCount", "Number of peer profiles in memory", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
+        // peer.fastPeerCount and router.fastPeers (CoalesceStatsEvent) are fed from the same
+        // _fastPeers set, as are peer.highCapPeerCount and router.highCapacityPeers. Both are
+        // kept because each appears on /configstats and dropping one would break saved graph
+        // selections. Never place both members of a pair in one combined graph: they would
+        // plot on top of each other.
         _context.statManager().createRequiredRateStat("peer.highCapPeerCount", "Number of high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
     }
