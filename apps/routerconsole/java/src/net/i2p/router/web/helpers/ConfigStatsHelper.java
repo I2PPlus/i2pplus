@@ -152,6 +152,64 @@ public class ConfigStatsHelper extends HelperBase {
      */
     public String getCurrentStatName() { return _currentStatName; }
     /**
+     * Get the display label for the current stat.
+     *
+     * @return the label shown beside the checkbox
+     * @since 0.9.71+
+     */
+    public String getCurrentStatLabel() { return statLabel(_currentStatName); }
+    /**
+     * The short name shown beside a stat's checkbox on the configstats page.
+     *
+     * <p>An ordinary stat name is a dotted subsystem path such as
+     * {@code tunnel.buildTimeout}, and the subsystem is dropped because the section
+     * header already states it. A pool's rates are named for the tunnel instead:
+     * {@code [harry.i2p] InBps}. The first dot there sits inside the name, and cutting
+     * at it turned four different services into four identical "i2p] InBps" labels.
+     * A prefix carrying a bracket or a space is therefore a name rather than a
+     * subsystem, and is shown whole.
+     *
+     * @param statName the stat name, or null
+     * @return the display label, never null; null yields the empty string
+     * @since 0.9.71+
+     */
+    static String statLabel(String statName) {
+        if (statName == null) {
+            return "";
+        }
+        int dot = statName.indexOf('.');
+        if (dot > 0) {
+            String prefix = statName.substring(0, dot);
+            if (prefix.indexOf('[') >= 0 || prefix.indexOf(' ') >= 0) {
+                return statName;
+            }
+            statName = statName.substring(dot + 1);
+        }
+        return abbreviate(statName);
+    }
+
+    /**
+     * Shorten a stat name to what fits beside its checkbox.
+     *
+     * <p>The rules are ordered rather than alphabetical: {@code receive} rewrites to
+     * {@code RX}, which the later {@code RXBps} rule expands again to {@code ReceiveBps},
+     * so the chain may not be reordered. Every rule names a stat actually seen on the
+     * page. The dotted rules only ever see a name whose subsystem prefix was dropped, a
+     * pool name with a dot in it having been returned whole by {@link #statLabel}.
+     *
+     * @param label a stat name, with any subsystem prefix already removed
+     * @return the abbreviated label, never null
+     */
+    private static String abbreviate(String label) {
+        return label.replace("participating", "part").replace("Exploratory", "Expl")
+                    .replace("Received", "RX")
+                    .replace("con.", "").replace("garlic.decryptFail", "garlic.DecryptFail")
+                    .replace(".data", ".Data").replace(".drop", ".Drop").replace(".delay", ".Delay")
+                    .replace(".new", ".New").replace(".in", ".In").replace(".out", ".Out")
+                    .replace("receive", "RX").replace("RXBps", "ReceiveBps")
+                    .replace(".full", ".Full").replace(".size", ".Size").replace(".dups", ".Dups");
+    }
+    /**
      * Get the current graph name.
      *
      * @return the current graph name

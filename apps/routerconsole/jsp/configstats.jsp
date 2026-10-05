@@ -38,18 +38,7 @@
 %>
 <input hidden type=checkbox class=optbox id="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked<%} %>>
 <label for="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
-<%
-    int dot = statshelper.getCurrentStatName().indexOf(".");
-    String truncated = statshelper.getCurrentStatName().substring(dot + 1);
-    truncated = truncated.replace("participating", "part").replace("Exploratory", "Expl").replace("Received", "RX")
-                         .replace("con.", "").replace("garlic.decryptFail", "garlic.DecryptFail")
-                         .replace(".data", ".Data").replace(".drop", ".Drop").replace(".delay", ".Delay")
-                         .replace(".new", ".New").replace(".in", ".In").replace(".out", ".Out")
-                         .replace("Received", "RX").replace("receive", "RX").replace("RXBps", "ReceiveBps")
-                         .replace(".full", ".Full").replace(".size", ".Size").replace(".dups", ".Dups");
-%>
-
-<div class=stattograph><b><%=truncated%></b><br><span class=statdesc><%=statshelper.getCurrentStatDescription()%></span></div>
+<div class=stattograph><b><%=statshelper.getCurrentStatLabel()%></b><br><span class=statdesc><%=statshelper.getCurrentStatDescription()%></span></div>
 </label>
 <%
         } // end iterating over all stats
