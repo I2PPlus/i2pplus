@@ -1,5 +1,6 @@
 package net.i2p.router.peermanager;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,6 +23,11 @@ public class ProfileOrganizerTierUnionTest {
      * The union cardinality, computed the way {@code fastOrHighCapCount} does: walk the
      * smaller set and count membership in the larger.
      */
+    /** Java 8 has no Set.of(); the project compiles at source 8. */
+    private static Set<String> setOf(String... values) {
+        return new HashSet<>(Arrays.asList(values));
+    }
+
     private static int union(int fastSize, int highCapSize, int overlap) {
         return fastSize + highCapSize - overlap;
     }
@@ -90,19 +96,19 @@ public class ProfileOrganizerTierUnionTest {
 
     @Test
     public void walkingTheSmallerSetFindsTheSameOverlap() {
-        Set<String> fast = new HashSet<>(Set.of("a", "b", "c", "d"));
-        Set<String> highCap = new HashSet<>(Set.of("c", "d", "e"));
+        Set<String> fast = setOf("a", "b", "c", "d");
+        Set<String> highCap = setOf("c", "d", "e");
         assertEquals(5, unionOf(fast, highCap));
     }
 
     /** Whichever tier is walked, the answer must be the same. */
     @Test
     public void theResultDoesNotDependOnWhichTierIsWalked() {
-        Set<String> fast = new HashSet<>(Set.of("a", "b", "c"));
-        Set<String> highCap = new HashSet<>(Set.of("a", "b", "c", "d", "e", "f"));
+        Set<String> fast = setOf("a", "b", "c");
+        Set<String> highCap = setOf("a", "b", "c", "d", "e", "f");
         // 3 <= 6, so the small set is walked; swap the sizes to walk the other one.
-        Set<String> wide = new HashSet<>(Set.of("a", "b", "c"));
-        Set<String> narrow = new HashSet<>(Set.of("a", "b", "c", "d", "e", "f"));
+        Set<String> wide = setOf("a", "b", "c");
+        Set<String> narrow = setOf("a", "b", "c", "d", "e", "f");
         assertEquals(unionOf(fast, highCap), unionOf(narrow, wide));
     }
 }
