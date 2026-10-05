@@ -74,14 +74,36 @@ public class SeriesDashTest {
         }
     }
 
-    /** A nonsense value must not produce an invisible or unbounded pattern. */
+    /** A negative length is nonsense rather than a request, so it keeps the default. */
     @Test
-    public void aNonPositiveDotFallsBackToTheDefault() {
-        for (float bad : new float[] { 0f, -1f, -100f }) {
+    public void aNegativeDotFallsBackToTheDefault() {
+        for (float bad : new float[] { -1f, -100f }) {
             float[] d = dash(2, 1.5f, bad);
             assertEquals(RrdGraphConstants.SERIES_DOT, d[0], 0.001f);
             assertTrue(d[1] > 1.5f);
         }
+    }
+
+    /**
+     * Zero dot ink is the override for "no pattern": the line is drawn solid whatever
+     * else the pair says, for any number of series.
+     */
+    @Test
+    public void aZeroDotDrawsASolidLine() {
+        assertNull(dash(2, 1.5f, 0f));
+        assertNull(dash(6, 3f, 0f));
+        assertNull("a gap beside a zero dot changes nothing", dash(2, 1f, 0f, 5f));
+    }
+
+    /** The request must survive the graph def, which is where a theme's value lands. */
+    @Test
+    public void aZeroDotSurvivesTheGraphDef() {
+        RrdGraphDef def = new RrdGraphDef();
+        def.setSeriesDash(0f);
+        assertEquals(0f, def.getSeriesDash(), 0f);
+        def.setSeriesDash(-1f);
+        assertEquals("a negative value is ignored, not applied",
+                     0f, def.getSeriesDash(), 0f);
     }
 
     // ---- an explicit gap, as a CSS "--graph_dash:1 3" pair states ----

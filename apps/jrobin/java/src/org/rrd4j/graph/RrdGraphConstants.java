@@ -405,15 +405,19 @@ public interface RrdGraphConstants {
      *
      * @param seriesCount how many independently plotted series the graph carries
      * @param width requested line width in pixels
-     * @param dashLength ink length of one dot; values at or below zero fall back to
-     *                   {@link #SERIES_DOT}
+     * @param dashLength ink length of one dot; zero draws a solid line, and negative
+     *                   values fall back to {@link #SERIES_DOT}
      * @param dashGap space after the dot, as a CSS {@code --graph_dash} pair would state it.
      *                Values at or below zero, or too small to keep the dots apart, fall
      *                back to the derived gap.
-     * @return a solid stroke for a lone series, otherwise round dots
+     * @return a solid stroke for a lone series or a zero dot length, otherwise round dots
      * @since 0.9.71
      */
     static Stroke seriesStroke(int seriesCount, float width, float dashLength, float dashGap) {
+        // A zero dot length is a theme asking for no pattern at all: a solid line.
+        if (dashLength == 0f) {
+            return new BasicStroke(width);
+        }
         if (seriesCount < 2) {
             return new BasicStroke(width);
         }

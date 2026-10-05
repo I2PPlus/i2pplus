@@ -211,6 +211,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Ink length of one dot in a series line, for
      * {@link RrdGraphConstants#COLOR_SERIES_DASH}. Kept out of {@link #colors} so that
      * array stays a {@code Paint[]} for the ten colour indices it has always held.
+     * Zero, as a theme's {@code --graph_dash:0} states, draws solid instead.
      */
     private float seriesDash = RrdGraphConstants.SERIES_DOT;
 
@@ -224,17 +225,20 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Set the dash length used when a graph carries more than one series.
      *
-     * @param dashLength ink length in pixels; values at or below zero are ignored
+     * <p>Zero is a request for a solid line, the way a theme says "no pattern here".
+     * A negative length is nonsense rather than a request, so it is ignored.
+     *
+     * @param dashLength ink length in pixels; zero draws solid, negatives are ignored
      * @since 0.9.71
      */
     public void setSeriesDash(float dashLength) {
-        if (dashLength > 0f) {
+        if (dashLength >= 0f) {
             this.seriesDash = dashLength;
         }
     }
 
     /**
-     * @return the dash length this graph draws series lines with
+     * @return the dash length this graph draws series lines with, zero for a solid line
      * @since 0.9.71
      */
     public float getSeriesDash() {return seriesDash;}
