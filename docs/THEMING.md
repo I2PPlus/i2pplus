@@ -417,13 +417,39 @@ rename touched three places, all of which must agree or the bars go unpainted:
 no fallback in the `var()` call, so a theme that overrode the variable to nothing would leave
 those bars unpainted rather than falling back — keep the `shared.css` declaration.
 
-### What is not themeable
+### Everything else on a graph
 
-Only the two plot colours and the dash pattern. Gridlines, major gridlines, axis rules, tick
-labels, the canvas and the frame are still chosen in code per theme — in a tile that size
-they are structural rather than decorative. The wide sidebar sparkline is deliberately a
-neutral grey rather than `--graph_path_1`, because it carries no legend and its colour must
-not read as a first plot.
+The two plot colours and the dash pattern are the core of a tile, but they are not all of it.
+Text, the axis rules and both grids are themeable too, each with a built-in value per theme
+behind whatever the stylesheet says:
+
+```css
+:root{
+--graph_font:#c9ceff;        /* labels, legend, title     */
+--graph_axis:#c9ceff;        /* the two axis rules        */
+--graph_grid:#20408040;      /* minor gridlines           */
+--graph_mgrid:#ff20c070;     /* major gridlines           */
+--graph_grid_dash:1 3;       /* minor gridline dot pattern */
+--graph_mgrid_dash:0;        /* solid major gridlines     */
+}
+```
+
+`--graph_font` covers every glyph on the tile: axis labels, tick labels, the legend and the
+title. `--graph_grid_dash` and `--graph_mgrid_dash` take the same dot-and-gap form as
+`--graph_dash` and go through the same length rules, so a value too tight to keep the dots
+apart is dropped rather than drawn solid. The two grids are dashed independently, which is
+what lets a theme read its major divisions without weakening its minor ones.
+
+On a tile too small for a grid to register, the minor grid is dropped and the major one kept
+— that is a size decision made in the renderer, and it holds for every theme.
+
+A tile smaller still, the wide sidebar sparkline, is deliberately a neutral grey rather than
+`--graph_path_1`, because it carries no legend and its colour must not read as a first plot.
+
+### What is still not themeable
+
+The canvas, the frame, the arrow and the plot background stay in code per theme — in a tile
+that size they are structural rather than decorative.
 
 ---
 
