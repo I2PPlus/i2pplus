@@ -6,17 +6,17 @@
 @import url(../shared.css);
 
 :root{
---graph_line_1:#4488ff;
---graph_line_2:#44aa88;
---graph_path_1:#4488ff80;
---graph_path_2:#44aa8880;
---graph_dash:1;
+--graph_line_1:#4488ffaa;
+--graph_line_2:#16c599aa;
+--graph_path_1:#4488ff60;
+--graph_path_2:#16c59940;
+--graph_dash:0;
 --graph_font:#33333f;
 --graph_axis:#33333f;
---graph_grid:#50505032;
---graph_mgrid:#ff5b5b6e;
---graph_grid_dash:0;
---graph_mgrid_dash:0;
+--graph_grid:#ff5b5b33;
+--graph_mgrid:#ff5b5b66;
+--graph_grid_dash:1;
+--graph_mgrid_dash:1;
 --tier:linear-gradient(180deg,#fff,#dbecff);
 --isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
 --isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
@@ -291,7 +291,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
 #sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center;background:none;padding:3px 0;line-height:16px;vertical-align:middle;text-align:center;user-select:none}
-#sidebar #localtunnelsActive span{display:inline-block;font-size:95%;font-weight:600;text-transform:lowercase;vertical-align:sub;margin:1px 5px;line-height:16px;width:auto;letter-spacing:3px}
+#sidebar #localtunnelsActive span{display:inline-block;font-size:95%;font-weight:600;text-transform:lowercase;vertical-align:text-top;margin:1px 4px;line-height:16px;width:fit-content;letter-spacing:1px}
 #sidebar #localtunnelsActive span.count_0{display:none}
 #sidebar #localtunnelsActive img{width:16px;height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
 #sidebar #localtunnelSummary{margin:-12px auto -6px}
@@ -2986,6 +2986,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 #debug #tx_summary button{top:7.5px!important}
 #error500 #sidebar img[src$="i2plogo.png"]{margin-top:-1px;margin-left:-3px;width:232px}
 #externali2cp .nowrap::before,#externali2cp td label::before,#netconfig label::before,#reseedconfig .nowrap::before{min-height:48px}
+#graph_single #graphinfo a{margin-top:-9px}
 h3#bwlimiter a{margin-top:-8px}
 h3#pconfig.expanded,h3#restartrouter,p#tunnelconfig{margin-bottom:-15px}
 h3#pconfig:not(.expanded){margin-bottom:0}

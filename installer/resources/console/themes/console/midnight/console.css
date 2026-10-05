@@ -10,10 +10,10 @@
 
 :root{
 --graph_line_1:#ff550080;
---graph_line_2:#88008880;
---graph_path_1:#ff550030;
---graph_path_2:#88008850;
---graph_dash:1;
+--graph_line_2:#dd00dd60;
+--graph_path_1:#dd440030;
+--graph_path_2:#bb00bb50;
+--graph_dash:0;
 --graph_font:#c9ceff;
 --graph_axis:#c9ceff;
 --graph_grid:#c9ceff20;

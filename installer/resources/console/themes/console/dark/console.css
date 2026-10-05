@@ -8,10 +8,10 @@
 @import url(../images/itooplus.css);
 
 :root{
---graph_line_1:#37c88e99;
---graph_line_2:#c8c83799;
---graph_path_1:#00480840;
---graph_path_2:#c8c83740;
+--graph_line_1:#37c88e80;
+--graph_line_2:#c8c83780;
+--graph_path_1:#2ec23e40;
+--graph_path_2:#ffef0040;
 --graph_dash:0;
 --graph_font:#f4f4be;
 --graph_axis:#f4f4be;

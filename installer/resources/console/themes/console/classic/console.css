@@ -6,11 +6,11 @@
 @import url(../shared.css);
 
 :root{
---graph_line_1:#4488ff;
---graph_line_2:#44aa88;
---graph_path_1:#4488ff80;
---graph_path_2:#44aa8880;
---graph_dash:1;
+--graph_line_1:#4488ffdd;
+--graph_line_2:#33dd66dd;
+--graph_path_1:#4488ff60;
+--graph_path_2:#44ff8860;
+--graph_dash:0;
 --graph_font:#33333f;
 --graph_axis:#33333f;
 --graph_grid:#50505032;
