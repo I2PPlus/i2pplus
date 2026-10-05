@@ -169,13 +169,36 @@ public class GraphThemeColorsTest {
         assertEquals(1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
     }
 
-    /** Zero or absurd dash lengths would break the dot pattern, so they are rejected. */
+    /** An absurd dash length would break the dot pattern, so it is rejected. */
     @Test
     public void anOutOfRangeDashFallsBack() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:0;--graph_path_1:#0f9;}");
+        writeTheme("dark", ":root{--graph_dash:5000;--graph_path_1:#0f9;}");
         assertEquals(1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
-        writeTheme("midnight", ":root{--graph_dash:5000;}");
+        writeTheme("midnight", ":root{--graph_dash:-2;}");
         assertEquals(1f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
+    }
+
+    /** Zero dot ink is the override for "no pattern": the reader reports it as asked. */
+    @Test
+    public void aZeroDashLengthAsksForASolidLine() throws IOException {
+        writeTheme("dark", ":root{--graph_dash:0;}");
+        assertEquals(0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
+        assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
+
+        writeTheme("midnight", ":root{--graph_dash:0 3;}");
+        assertEquals("a gap beside a zero dot changes nothing",
+                     0f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
+
+        writeTheme("light", ":root{--graph_dash:0,3;}");
+        assertEquals(0f, GraphThemeColors.dashLength(themeDir, "light"), 0.001f);
+    }
+
+    /** A zero gap after a real dot derives the gap; it is not a solid-line request. */
+    @Test
+    public void aZeroGapAfterADotIsNotASolidRequest() throws IOException {
+        writeTheme("dark", ":root{--graph_dash:1 0;}");
+        assertEquals(1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
+        assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
     }
 
     // ---- the dash pair ----
@@ -238,8 +261,10 @@ public class GraphThemeColorsTest {
 
     @Test
     public void anOutOfRangeDashValueFallsBack() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:0 3;}");
-        assertEquals(1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
+        writeTheme("dark", ":root{--graph_dash:100 3;}");
+        assertEquals("an absurd dot length is rejected, pair and all",
+                     1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
+        assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
 
         writeTheme("midnight", ":root{--graph_dash:1 -3;}");
         assertEquals("a negative gap is dropped, leaving the pair's dot",

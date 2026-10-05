@@ -1134,14 +1134,18 @@ out.write(graph.getRrdGraphInfo().getBytes());
      *
      * <p>A theme may state only the dot length, in which case jrobin derives the gap from
      * the stroke width. When it states a gap too, that value is used unless it would merge
-     * the dots, which is decided in {@code RrdGraphConstants.minimumDashGap}.
+     * the dots, which is decided in {@code RrdGraphConstants.minimumDashGap}. A dot length
+     * of zero, from {@code --graph_dash:0}, asks for a solid line and leaves no gap to set.
      *
      * @since 0.9.71+
      */
     private static void applyDash(RrdGraphDef def, GraphRenderConfig cfg) {
         File dir = GraphThemeColors.installedThemeDir();
-        def.setSeriesDash(GraphThemeColors.dashLength(dir, cfg.theme));
-        def.setSeriesDashGap(GraphThemeColors.dashGap(dir, cfg.theme));
+        float dot = GraphThemeColors.dashLength(dir, cfg.theme);
+        def.setSeriesDash(dot);
+        if (dot > 0f) {
+            def.setSeriesDashGap(GraphThemeColors.dashGap(dir, cfg.theme));
+        }
     }
 
     private static void applyTheme(RrdGraphDef def, GraphRenderConfig cfg) {

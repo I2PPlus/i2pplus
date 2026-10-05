@@ -62,7 +62,7 @@ public final class GraphThemeColors {
      */
     public static final String THEME_SUBDIR = "docs/themes/console";
 
-    /** Dash length, in pixels, of the multi-plot dot pattern. */
+    /** Dash length, in pixels, of the multi-plot dot pattern; zero asks for a solid line. */
     public static final String VAR_DASH = "--graph_dash";
 
     private static final String VAR_LINE_PREFIX = "--graph_line_";
@@ -248,11 +248,13 @@ public final class GraphThemeColors {
      *   --graph_dash:1        a 1px dot, gap derived from the line width
      *   --graph_dash:1 3      a 1px dot followed by 3px of space
      *   --graph_dash:1,3      the same, for a comma-separated habit
+     *   --graph_dash:0        no pattern at all: a solid line
+     *   --graph_dash:0 3      the same; a gap needs a dot to follow it
      * </pre>
      *
      * @param themeDir the directory holding {@code <theme>/console.css} trees
      * @param theme the console theme name
-     * @return the dot length in pixels, never zero
+     * @return the dot length in pixels, or zero when the stylesheet asked for a solid line
      */
     public static float dashLength(File themeDir, String theme) {
         return dash(themeDir, theme)[0];
@@ -279,7 +281,8 @@ public final class GraphThemeColors {
     /**
      * Parse {@code --graph_dash} into a dot length and a stated gap.
      *
-     * @return {@code {dot, gap}}, with gap zero meaning "derive it"; never null
+     * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
+     *         zero meaning "derive it"; never null
      */
     private static float[] dash(File themeDir, String theme) {
         float[] fallback = { DEFAULT_DASH[themeIndex(theme)], 0f };
@@ -288,7 +291,8 @@ public final class GraphThemeColors {
         float[] parsed = parseDashList(v);
         if (parsed == null || parsed.length == 0) {return fallback;}
         float dot = parsed[0];
-        if (!(dot > 0f) || dot >= 64f || Float.isNaN(dot)) {return fallback;}
+        // Zero is a request rather than a typo: no dot ink at all is a solid line.
+        if (dot < 0f || dot >= 64f || Float.isNaN(dot)) {return fallback;}
         float gap = parsed.length > 1 ? parsed[1] : 0f;
         if (Float.isNaN(gap) || gap < 0f || gap >= 256f) {gap = 0f;}
         return new float[] { dot, gap };

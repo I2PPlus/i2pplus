@@ -337,7 +337,13 @@ they cross. `--graph_dash` is the length of one dot, or a CSS dash pair:
 --graph_dash:1;      /* 1px dot, gap derived from the line width */
 --graph_dash:1 3;    /* 1px dot, then 3px of space   */
 --graph_dash:1,3;    /* identical; comma or space    */
+--graph_dash:0;      /* no dots at all: solid lines  */
+--graph_dash:0 3;    /* the same; a gap needs a dot to follow it */
 ```
+
+A dot length of zero is the way to turn the pattern off: both lines are drawn solid.
+A zero *gap* does not do that — `--graph_dash:1 0` keeps the dots and simply lets the
+gap be derived, because the pair's second value is only spacing.
 
 Comma and space are interchangeable. A stated gap is honoured only when it leaves the dots
 visibly separate: with round caps each dot lays down `dot + width` of ink, so the gap has to
