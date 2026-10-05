@@ -147,6 +147,39 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  @param target the CoDel target delay in ms
      *  @param interval the CoDel interval in ms
      */
+    /**
+     * Description for a queue's mean delay stat.
+     *
+     * <p>Names the queue because several queues publish the same measure: OBGW and
+     * UDP-Sender both come through here, and IBGW, UDP-Receiver and UDP-MessageReceiver
+     * register theirs by hand. A single shared description left five graphs in the list
+     * called "Average queue delay (ms)", indistinguishable from one another.
+     *
+     * @param queueName the queue's short name, as used in its stat names
+     * @return the description
+     * @since 0.9.71+
+     */
+    public static String delayDescription(String queueName) {
+        return "Average queue delay in " + queueName + " (ms)";
+    }
+
+    /**
+     * Description for a queue's per-priority drop-delay stat.
+     *
+     * <p>Names the queue as well as the priority, for the same reason: without it
+     * {@code codel.OBGW.drop.0} and {@code codel.UDP-Sender.drop.0} were two graphs with
+     * the same name.
+     *
+     * @param queueName the queue's short name, as used in its stat names
+     * @param priority the CoDel priority band
+     * @return the description
+     * @since 0.9.71+
+     */
+    public static String dropDescription(String queueName, int priority) {
+        return "Queue delay (ms) of dropped items in " + queueName + " at priority ["
+               + priority + "]";
+    }
+
     public CoDelPriorityBlockingQueue(I2PAppContext ctx, String name, int initialCapacity, int target, int interval) {
         super(ctx, name, initialCapacity);
         _target = target;
@@ -154,10 +187,11 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
         STAT_DROP = ("codel." + name + ".drop.").intern();
         STAT_DELAY = ("codel." + name + ".delay").intern();
         for (int i = 0; i < PRIORITIES.length; i++) {
-            ctx.statManager().createRequiredRateStat(STAT_DROP + PRIORITIES[i], "Queue delay (ms) of dropped items with priority [" +
-            PRIORITIES[i] + "]", "Router [CoDel]", CODEL_RATES);
+            ctx.statManager().createRequiredRateStat(STAT_DROP + PRIORITIES[i],
+                dropDescription(name, PRIORITIES[i]), "Router [CoDel]", CODEL_RATES);
         }
-        ctx.statManager().createRequiredRateStat(STAT_DELAY, "Average queue delay (ms)", "Router [CoDel]", CODEL_RATES);
+        ctx.statManager().createRequiredRateStat(STAT_DELAY, delayDescription(name),
+            "Router [CoDel]", CODEL_RATES);
         _id = __id.incrementAndGet();
         expungeStaleInstances();
         INSTANCES.add(new WeakReference<>(this));

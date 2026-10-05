@@ -62,6 +62,7 @@ import net.i2p.util.OrderedProperties;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import net.i2p.router.util.CoDelPriorityBlockingQueue;
 
 /** SSU/SSU2 transport implementation with UDP endpoint management and packet dispatch. */
 public class UDPTransport extends TransportImpl {
@@ -451,8 +452,10 @@ public class UDPTransport extends TransportImpl {
         _context.statManager().createRateStat("udp.inboundIPv6Conn", "Inbound IPv6 UDP Connection", "Transport [UDP]", RATES);
         _context.statManager().createRateStat("udp.proactiveReestablish", "Time session was idle for when we proactively reestablished it", "Transport [UDP]", RATES);
         // Required rate stats for tuner cross-refs (CoDel queue delay/drop stats)
-        _context.statManager().createRequiredRateStat("codel.UDP-Receiver.delay", "Average queue delay (ms)", "Transport [UDP]", RATES);
-        _context.statManager().createRequiredRateStat("codel.UDP-Sender.delay", "Average queue delay (ms)", "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("codel.UDP-Receiver.delay",
+            CoDelPriorityBlockingQueue.delayDescription("UDP-Receiver"), "Transport [UDP]", RATES);
+        _context.statManager().createRequiredRateStat("codel.UDP-Sender.delay",
+            CoDelPriorityBlockingQueue.delayDescription("UDP-Sender"), "Transport [UDP]", RATES);
         _context.statManager().createRequiredRateStat("codel.UDP-Sender.drop", "Queue delay of dropped items (ms)", "Transport [UDP]", RATES);
         // Aggregate transport stats for tuner visibility
         _context.statManager().createRequiredRateStat("udp.avgSendWindow", "Average send window (CWIN) across peers (bytes)", "Transport [UDP]", RATES);

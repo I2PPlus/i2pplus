@@ -17,6 +17,7 @@ import net.i2p.util.HexDump;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.router.util.CoDelPriorityBlockingQueue;
 
 /**
  * Pull fully completed fragments off the {@link InboundMessageFragments} queue,
@@ -56,7 +57,9 @@ class MessageReceiver {
         _completeMessages = new CoDelBlockingQueue<>(ctx, "UDP-MessageReceiver", qsize);
         _context.statManager().createRequiredRateStat("udp.inboundExpired", "Number of inbound messages expired before receipt", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRequiredRateStat("udp.msgRx.queueSize", "UDP message receiver queue depth", "Transport [UDP]", UDPTransport.RATES);
-        _context.statManager().createRequiredRateStat("codel.UDP-MessageReceiver.delay", "Average queue delay (ms)", "Transport [UDP]", UDPTransport.RATES);
+        _context.statManager().createRequiredRateStat("codel.UDP-MessageReceiver.delay",
+            CoDelPriorityBlockingQueue.delayDescription("UDP-MessageReceiver"),
+            "Transport [UDP]", UDPTransport.RATES);
         _alive = true;
     }
 
