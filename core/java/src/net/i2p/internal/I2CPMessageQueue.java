@@ -37,13 +37,33 @@ public abstract class I2CPMessageQueue implements Closeable {
      */
     public abstract boolean offer(I2CPMessage msg, long timeout) throws InterruptedException;
 
-    /**
-     *  Receive a message, nonblocking.
+/**
+     *  Receive a message, non-blocking.
      *  Unused for now.
      *
      *  @return message or null if none available
      */
     public abstract I2CPMessage poll();
+
+    /**
+     *  How many messages are waiting to be received, for diagnostics.
+     *
+     *  <p>A queue that stays non-empty means the client is not draining it, which is the
+     *  reason {@link #offer(I2CPMessage)} fails and the only explanation for a client that
+     *  has stopped answering.
+     *
+     *  @return messages waiting to be received
+     *  @since 0.9.71+
+     */
+    public abstract int pending();
+
+    /**
+     *  How many more messages this queue will accept, for diagnostics.
+     *
+     *  @return remaining capacity; {@link Integer#MAX_VALUE} when unbounded
+     *  @since 0.9.71+
+     */
+    public abstract int remainingCapacity();
 
     /**
      *  Send a message, blocking until space is available.

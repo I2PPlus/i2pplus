@@ -3,6 +3,9 @@ package net.i2p.internal;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.i2cp.I2CPMessage;
@@ -12,7 +15,7 @@ import net.i2p.util.Log;
 
 /**
  * Fetches messages off an In-JVM queue, zero-copy.
- * Uses a shared dispatcher thread instead of one thread per instance.
+ * Uses a shared dispatcher pool instead of one thread per instance.
  *
  * @author zzz
  * @since 0.8.3
@@ -20,8 +23,20 @@ import net.i2p.util.Log;
 public class QueuedI2CPMessageReader extends I2CPMessageReader {
     private final I2CPMessageQueue in;
     private volatile boolean registered;
+    /**
+     *  Set while a worker is serving this reader.
+     *
+     *  <p>I2CP messages for one session are order-dependent, so exactly one worker may
+     *  touch a reader at a time. Correctness would otherwise rest on the ready queue never
+     *  holding two entries for the same reader; claiming it before serving turns that into
+     *  something the code enforces rather than something registration order has to uphold.
+     */
+    private final AtomicBoolean _claimed = new AtomicBoolean();
 
     private static final InternalI2CPDispatcher DISPATCHER = new InternalI2CPDispatcher();
+
+    /** Messages one worker takes from a reader before requeueing it. */
+    static final int MAX_DRAIN_PER_PASS = 32;
 
     /**
      * Creates a new instance of this QueuedMessageReader and registers with the shared dispatcher.
@@ -33,12 +48,16 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     }
 
     /**
-     * Register with the shared dispatcher.
+     * Register with the shared dispatcher. Idempotent: a second call must not put a
+     * duplicate entry in the ready queue, which would let two workers serve this
+     * reader concurrently and deliver its messages out of order.
      */
     @Override
     public void startReading() {
-        DISPATCHER.register(this);
-        registered = true;
+        if (!registered) {
+            registered = true;
+            DISPATCHER.register(this);
+        }
     }
 
     /**
@@ -53,7 +72,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     }
 
     /**
-     * Non-blocking poll + dispatch. Called by the shared dispatcher thread.
+     * Non-blocking poll + dispatch. Called by a dispatcher worker.
      * @return true if a message was processed
      */
     boolean processOnce() {
@@ -78,54 +97,206 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     }
 
     /**
-     * Shared dispatcher that multiplexes all internal I2CP message readers
-     * on a single daemon thread. Cycles through registered readers with
-     * non-blocking poll, sleeping briefly when all queues are idle.
+     *  Drain at most maxMessages, then return even if the queue is not empty.
+     *
+     *  <p>The bound is what stops one backed-up client from starving every other in-JVM
+     *  client. Workers are pooled, so a reader that only returns once its queue is empty
+     *  lets a payload flood hold a worker indefinitely while unrelated clients' queues
+     *  back up until the router refuses to send to them at all. A full return value
+     *  means more may be waiting, and the caller requeues the reader to continue.
+     *
+     *  @param maxMessages most messages to handle in this call
+     *  @return messages handled; equal to maxMessages when the queue was not drained
+     *  @since 0.9.71+
+     */
+    int drainOnce(int maxMessages) {
+        int handled = 0;
+        while (handled < maxMessages && processOnce()) {
+            handled++;
+        }
+        return handled;
+    }
+
+    /**
+     *  Take exclusive ownership of this reader for the calling worker.
+     *
+     *  @return false when another worker already owns it, or it stopped reading
+     *  @since 0.9.71+
+     */
+    private boolean claim() {return _claimed.compareAndSet(false, true);}
+
+    /**
+     *  Give up ownership after a pass.
+     *
+     *  @return true when the reader is still reading and may have messages left
+     *  @since 0.9.71+
+     */
+    private boolean release() {
+        _claimed.set(false);
+        return registered;
+    }
+
+    /** Name for diagnostics; identifies the session without depending on its internals. */
+    String describe() {
+        String lsnr = _listener == null ? "none" : _listener.getClass().getSimpleName();
+        return lsnr + '@' + Integer.toHexString(System.identityHashCode(this));
+    }
+
+    /**
+     * Shared dispatcher pool that multiplexes all internal I2CP message readers.
+     *
+     * <p>One worker is always present while any reader is registered. It polls the ready
+     * queue round-robin and drains a bounded batch from each reader before handing it
+     * back, so no client can monopolise the pool. Further workers are started only while
+     * there is a backlog to serve and retire again once it clears, so the idle cost is a
+     * single worker however many clients are connected.
+     *
+     * <p>The pool never falls to zero workers while a reader is registered. Nothing wakes
+     * a pool that has gone to sleep, so a reader stranded without one would sit on a queue
+     * nobody drains until it filled, at which point the router starts failing to send to
+     * that client. {@link #register} and {@link #workerStopped} both run under this
+     * monitor, so a registration can never land between a worker's decision to exit and
+     * its departure.
      */
     private static class InternalI2CPDispatcher implements Runnable {
         private final Set<QueuedI2CPMessageReader> readers =
             Collections.newSetFromMap(new ConcurrentHashMap<QueuedI2CPMessageReader, Boolean>());
-        private volatile Thread dispatcherThread;
-        private static final long IDLE_SLEEP_MS = 5;
+        /** Readers waiting to be served. FIFO, so clients are served in turn. */
+        private final LinkedBlockingQueue<QueuedI2CPMessageReader> ready = new LinkedBlockingQueue<>();
+        /** Live workers, plus workers that have decided to exit but not yet decremented. */
+        private int liveThreads;
+        /** Thread name counter; prefix plus digits stays within the 12-char convention. */
+        private int threadCount;
 
-        void register(QueuedI2CPMessageReader reader) {
+        /** Idle poll interval, which is also the latency floor for a queued message. */
+        static final long IDLE_POLL_MS = 5;
+        /**
+         *  Ceiling on concurrent workers, started on demand rather than up front.
+         *
+         *  <p>Only reached while several clients are backed up at once; at that point one
+         *  worker per client would be unbounded, and 8 concurrent workers is already far
+         *  more than the queue drain rate needs.
+         */
+        static final int MAX_WORKERS = 8;
+        /** A pass slower than this means a client's message handler is blocking the pool. */
+        static final long SLOW_PASS_WARN_MS = 2000;
+
+        /**
+         *  Add a reader and make sure something will serve it.
+         *
+         *  @param reader the reader to serve
+         */
+        synchronized void register(QueuedI2CPMessageReader reader) {
             readers.add(reader);
-            startIfNeeded();
+            ready.offer(reader);
+            if (liveThreads < 1) {startWorker();}
         }
 
+        /**
+         *  Stop serving a reader. No monitor: {@link #readers} is concurrent, and a
+         *  worker re-checks membership before requeueing, so an entry left in the ready
+         *  queue is skipped rather than served.
+         *
+         *  @param reader the reader to drop
+         */
         void unregister(QueuedI2CPMessageReader reader) {
             readers.remove(reader);
         }
 
-        private synchronized void startIfNeeded() {
-            if (dispatcherThread == null) {
-                dispatcherThread = new I2PThread(this, "I2CPDispatch", true);
-                dispatcherThread.start();
-            }
+        /**
+         *  Add a worker when the ready backlog is deeper than the pool can serve serially.
+         */
+        synchronized void grow() {
+            if (liveThreads < MAX_WORKERS && ready.size() > liveThreads) {startWorker();}
         }
+
+        /** Start one worker. Caller must hold the monitor. */
+        private void startWorker() {
+            liveThreads++;
+            new I2PThread(this, "I2CPDisp." + threadCount++, true).start();
+        }
+
+        /** Whether any reader is registered, and so whether the pool must stay up. */
+        private synchronized boolean hasReaders() {
+            return !readers.isEmpty();
+        }
+
+        /** Whether this worker can retire, keeping at least one for the registered readers. */
+        private synchronized boolean isSurplus() {
+            return liveThreads > 1;
+        }
+
+/**
+     *  Account for a worker leaving, whatever the reason, and uphold the invariant
+     *  that a registered reader always has a worker. The check and the restart happen
+     *  in one critical section so a concurrent registration cannot be missed.
+         */
+    private synchronized void workerStopped() {
+        liveThreads--;
+        if (liveThreads >= 1 || readers.isEmpty()) {return;}
+        // Unreachable while register() and this method share this monitor: register starts
+        // a worker whenever the count is zero. Restarted rather than reported, because a
+        // reader with no worker can never be served again, and nothing here is worth
+        // risking that over: this is the recovery path, so it must not depend on a log
+        // lookup or anything else that can fail on its own.
+        startWorker();
+    }
 
         @Override
         public void run() {
-            while (true) {
-                boolean didWork = false;
-                for (QueuedI2CPMessageReader reader : readers) {
-                    while (reader.processOnce()) {
-                        didWork = true;
+            try {
+                while (hasReaders()) {
+                    QueuedI2CPMessageReader reader = ready.poll(IDLE_POLL_MS, TimeUnit.MILLISECONDS);
+                    if (reader == null) {
+                        // Nothing to do: retire if another worker can cover the readers.
+                        if (isSurplus()) break;
+                        continue;
                     }
-                }
-                if (!didWork) {
-                    if (readers.isEmpty()) {
-                        break;
-                    }
+                    if (!reader.claim()) continue;
+                    int handled = 0;
+                    long started = System.currentTimeMillis();
                     try {
-                        Thread.sleep(IDLE_SLEEP_MS);
-                    } catch (InterruptedException ie) {
-                        Thread.currentThread().interrupt();
-                        break;
+                        handled = reader.drainOnce(QueuedI2CPMessageReader.MAX_DRAIN_PER_PASS);
+                    } finally {
+                        // readError/disconnected inside the drain may have stopped reading.
+                        boolean more = reader.release();
+                        if (more) {
+                            // Always requeue, not only after a full pass: a reader whose
+                            // queue was empty when it was served has to come back to be
+                            // served again, or a message that arrives a moment later is
+                            // never noticed and its queue fills for good. Going to the
+                            // back of the FIFO is what keeps that fair.
+                            ready.offer(reader);
+                            // Only a full pass means real backlog worth another worker;
+                            // requeueing alone must not grow the pool on an idle system.
+                            if (handled == QueuedI2CPMessageReader.MAX_DRAIN_PER_PASS) {grow();}
+                        }
                     }
+                    warnIfSlowPass(reader, started);
                 }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+            } finally {
+                workerStopped();
             }
-            dispatcherThread = null;
+        }
+
+        /**
+         *  Warn when one pass over a reader took long enough to look like a blocked
+         *  handler. The stall that matters here is invisible from the router side: the
+         *  client simply stops draining its queue until the queue is full.
+         *
+         *  @param reader the reader that was served
+         *  @param startedMs wall-clock ms the pass began
+         */
+        private static void warnIfSlowPass(QueuedI2CPMessageReader reader, long startedMs) {
+            long elapsed = System.currentTimeMillis() - startedMs;
+            if (elapsed <= SLOW_PASS_WARN_MS) return;
+            Log log = I2PAppContext.getGlobalContext().logManager().getLog(QueuedI2CPMessageReader.class);
+            if (log.shouldWarn()) {
+                log.warn("I2CP dispatch pass for " + reader.describe() + " took " + elapsed
+                         + "ms; a client message handler is blocking the I2CP pool");
+            }
         }
     }
 }
