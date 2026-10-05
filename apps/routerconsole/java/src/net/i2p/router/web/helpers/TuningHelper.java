@@ -573,7 +573,7 @@ public class TuningHelper extends HelperBase {
             int dev = values[i] - defaultValue;
             int bh = (int)((double) Math.abs(dev) / maxDev * halfH);
             if (bh < 1 && dev != 0) bh = 1;
-            String color = "var(--graphbar)";
+            String color = "var(--tunerGraph)";
             int barY = (dev >= 0) ? midY - bh : midY;
             sb.append("<rect x=\"").append(bx).append("\" y=\"").append(barY)
               .append("\" width=\"").append(barW).append("\" height=\"").append(Math.max(1, bh))
