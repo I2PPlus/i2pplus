@@ -184,7 +184,14 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     double base = DEFAULT_BASE;
     /** Whether to use logarithmic y-axis scaling. */
     boolean logarithmic = false;
-    /** Array of Paint colors for standard graph elements indexed by ElementsNames. */
+    /**
+     * Paint for standard graph elements indexed by {@link ElementsNames}.
+     *
+     * @since 0.9.71 the array also has an eleventh slot,
+     * {@link RrdGraphConstants#COLOR_SERIES_DASH}, which holds a {@link Float} dash
+     * length rather than a colour. Widening to an Object array keeps the long-standing
+     * Paint[] contract for every colour index, so the field is left typed as it was.
+     */
     private final Paint[] colors =
             new Paint[] {
                 DEFAULT_CANVAS_COLOR,
@@ -199,6 +206,58 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
                 DEFAULT_XAXIS_COLOR,
                 DEFAULT_YAXIS_COLOR
             };
+
+    /**
+     * Ink length of one dot in a series line, for
+     * {@link RrdGraphConstants#COLOR_SERIES_DASH}. Kept out of {@link #colors} so that
+     * array stays a {@code Paint[]} for the ten colour indices it has always held.
+     */
+    private float seriesDash = RrdGraphConstants.SERIES_DOT;
+
+    /**
+     * Stated space after each dot, or zero to derive it from the stroke width.
+     *
+     * @since 0.9.71
+     */
+    private float seriesDashGap;
+
+    /**
+     * Set the dash length used when a graph carries more than one series.
+     *
+     * @param dashLength ink length in pixels; values at or below zero are ignored
+     * @since 0.9.71
+     */
+    public void setSeriesDash(float dashLength) {
+        if (dashLength > 0f) {
+            this.seriesDash = dashLength;
+        }
+    }
+
+    /**
+     * @return the dash length this graph draws series lines with
+     * @since 0.9.71
+     */
+    public float getSeriesDash() {return seriesDash;}
+
+    /**
+     * Set the space drawn after each dot in a dotted series line.
+     *
+     * <p>This is the second half of a CSS {@code --graph_dash:1 3} pair. A value that
+     * would let the dots merge is raised to the minimum by the renderer rather than
+     * honoured, so a theme cannot accidentally turn a dotted line into a solid one.
+     *
+     * @param dashGap space in pixels after the dot; zero or less derives it instead
+     * @since 0.9.71
+     */
+    public void setSeriesDashGap(float dashGap) {
+        this.seriesDashGap = dashGap > 0f ? dashGap : 0f;
+    }
+
+    /**
+     * @return the stated gap, or zero when the renderer should derive it
+     * @since 0.9.71
+     */
+    public float getSeriesDashGap() {return seriesDashGap;}
     /** Whether to suppress the legend. */
     boolean noLegend = false;
     /** Whether to render only the graph (height &lt; 64). */

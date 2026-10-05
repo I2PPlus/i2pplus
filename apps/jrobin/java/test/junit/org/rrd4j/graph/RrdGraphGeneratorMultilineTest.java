@@ -19,13 +19,22 @@ import static org.junit.Assert.*;
 public class RrdGraphGeneratorMultilineTest {
 
     private static Stroke stroke(float width) {
-        return RrdGraphConstants.seriesStroke(width);
+        return RrdGraphConstants.seriesStroke(2, width);
+    }
+
+    /** A lone series is solid: there is nothing for dots to separate it from. */
+    @Test
+    public void aLoneSeriesIsSolid() {
+        assertNull(((BasicStroke) RrdGraphConstants.seriesStroke(1, 1f)).getDashArray());
+        assertNull(((BasicStroke) RrdGraphConstants.seriesStroke(0, 1f)).getDashArray());
     }
 
     @Test
-    public void everySeriesIsDotted() {
-        assertNotNull("a single series is dotted too, for a consistent look",
-                      ((BasicStroke) stroke(1f)).getDashArray());
+    public void twoOrMoreSeriesAreDotted() {
+        for (int n = 2; n <= 6; n++) {
+            assertNotNull("series count " + n + " must be dotted",
+                          ((BasicStroke) RrdGraphConstants.seriesStroke(n, 1f)).getDashArray());
+        }
     }
 
     @Test
@@ -39,6 +48,10 @@ public class RrdGraphGeneratorMultilineTest {
      * ink is 2.5px in a 2px period and consecutive dots overlap: dotted in the markup,
      * solid on screen. The gap has to clear the width.
      */
+    @Test
+    public void aSolidLoneSeriesKeepsItsWidth() {
+        assertEquals(1.5f, ((BasicStroke) RrdGraphConstants.seriesStroke(1, 1.5f)).getLineWidth(), 0f);
+    }
     @Test
     public void theGapClearsTheStrokeWidthSoDotsStaySeparate() {
         for (float w : new float[] { 1f, 1.5f, 2f, 3f, 5f }) {
@@ -77,6 +90,6 @@ public class RrdGraphGeneratorMultilineTest {
 
     @Test
     public void aVeryThinLineStillRoundsItsCaps() {
-        assertEquals(BasicStroke.CAP_ROUND, ((BasicStroke) stroke(0.5f)).getEndCap());
+        assertEquals(BasicStroke.CAP_ROUND, ((BasicStroke) RrdGraphConstants.seriesStroke(2, 0.5f)).getEndCap());
     }
 }

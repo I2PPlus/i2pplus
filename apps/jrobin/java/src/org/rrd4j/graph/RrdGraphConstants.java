@@ -129,6 +129,8 @@ public interface RrdGraphConstants {
     /** Index of the yaxis color. Used in {@link RrdGraphDef#setColor(int, java.awt.Paint)} */
     int COLOR_YAXIS = 10;
 
+
+
     /** Default first day of the week (obtained from the default locale) */
     int FIRST_DAY_OF_WEEK = Calendar.getInstance(Locale.getDefault()).getFirstDayOfWeek();
 
@@ -386,11 +388,13 @@ public interface RrdGraphConstants {
     float SERIES_DOT = 1f;
 
     /**
-     * The stroke every plotted series is drawn with: a row of round dots.
+     * The stroke a plotted series is drawn with.
      *
-     * <p>Applied to single-series graphs as well as multi-series ones, so a graph looks
-     * the same whether it plots one stat or several. Overlapping series also stay
-     * separable by texture and not only by colour.
+     * <p>A graph carrying more than one series draws dotted; a graph with a single series
+     * draws solid. Dots are what separate two overlapping series, and a lone series has
+     * nothing to be separated from - dashing it only adds noise and makes the line look
+     * broken. Dots also help where two series of similar hue cross, which colour alone
+     * does not resolve.
      *
      * <p>The gap is derived from the stroke width rather than fixed, because a round cap
      * extends each dot by half the width on <i>both</i> ends. With a one-on-one-off pattern
@@ -399,15 +403,71 @@ public interface RrdGraphConstants {
      * the width for the dots to stay separate at any weight; twice the width is the
      * tightest that still leaves a visible space.
      *
+     * @param seriesCount how many independently plotted series the graph carries
      * @param width requested line width in pixels
-     * @return a dotted, round-capped stroke whose dots are visibly separate
+     * @param dashLength ink length of one dot; values at or below zero fall back to
+     *                   {@link #SERIES_DOT}
+     * @param dashGap space after the dot, as a CSS {@code --graph_dash} pair would state it.
+     *                Values at or below zero, or too small to keep the dots apart, fall
+     *                back to the derived gap.
+     * @return a solid stroke for a lone series, otherwise round dots
      * @since 0.9.71
      */
-    static Stroke seriesStroke(float width) {
+    static Stroke seriesStroke(int seriesCount, float width, float dashLength, float dashGap) {
+        if (seriesCount < 2) {
+            return new BasicStroke(width);
+        }
+        float dot = dashLength > 0f ? dashLength : SERIES_DOT;
+        float minimum = minimumDashGap(dot, width);
+        // A stated gap is honoured only when it leaves the dots visibly separate; asking
+        // for a tighter one gets the minimum rather than a solid line from a dotted
+        // definition.
+        float gap = dashGap >= minimum ? dashGap : minimum;
         return new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f,
-                               new float[] { SERIES_DOT, Math.max(SERIES_DOT * 2f, width * 2f) },
+                               new float[] { dot, gap },
                                0f);
     }
+
+    /**
+     * The smallest gap that keeps consecutive dots from touching at the given stroke width.
+     *
+     * <p>A round cap extends each dash by half the width on both ends, so one dot lays down
+     * {@code dot + width} of ink. Dots stay separate while the period exceeds that, which
+     * makes {@code width} the hard limit; twice the width is the tightest value that still
+     * leaves a space you can see at small sizes.
+     *
+     * @param dot ink length of one dot
+     * @param width stroke width
+     * @return the gap to use when a theme states none
+     * @since 0.9.71
+     */
+    static float minimumDashGap(float dot, float width) {
+        return Math.max(dot * 2f, width * 2f);
+    }
+
+    /**
+     * As {@link #seriesStroke(int, float, float, float)}, at the default dot length and a
+     * derived gap.
+     *
+     * @param seriesCount how many independently plotted series the graph carries
+     * @param width requested line width in pixels
+     * @return a solid stroke for a lone series, otherwise round dots
+     */
+    static Stroke seriesStroke(int seriesCount, float width, float dashLength) {
+        return seriesStroke(seriesCount, width, dashLength, 0f);
+    }
+
+    /**
+     * As {@link #seriesStroke(int, float, float)}, at the default dot length.
+     *
+     * @param seriesCount how many independently plotted series the graph carries
+     * @param width requested line width in pixels
+     * @return a solid stroke for a lone series, otherwise round dots
+     */
+    static Stroke seriesStroke(int seriesCount, float width) {
+        return seriesStroke(seriesCount, width, SERIES_DOT);
+    }
+
 
     /** Stroke used to draw ticks */
     Stroke TICK_STROKE = new BasicStroke(0);

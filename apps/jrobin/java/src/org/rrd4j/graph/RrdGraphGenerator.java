@@ -160,6 +160,28 @@ class RrdGraphGenerator {
         }
     }
     /**
+     * Counts the independently plotted series in a graph, which decides whether the lines
+     * are drawn solid or dotted.
+     *
+     * <p>Counts {@link Line} and {@link Area} together. An area counts because it is drawn
+     * with an outline, so a graph made of a filled total plus a subset line has two lines
+     * on it and the subset must be dotted to match. {@link Stack} stays excluded: a stack is
+     * one quantity split into bands, not several series.
+     *
+     * @param plotElements the graph's plot elements, may be null
+     * @return number of plotted series, zero for an empty or null list
+     * @since 0.9.71
+     */
+    static int countPlottedSeries(java.util.List<PlotElement> plotElements) {
+        if (plotElements == null) {return 0;}
+        int count = 0;
+        for (PlotElement plotElement : plotElements) {
+            if (plotElement instanceof Line || plotElement instanceof Area) {count++;}
+        }
+        return count;
+    }
+
+    /**
      * Draw rules and spans
      */
 
@@ -347,6 +369,13 @@ class RrdGraphGenerator {
                 ? (smooth ? xtrDistinct(dproc.getTimestamps()) : xtr(dproc.getTimestamps()))
                 : null;
         double[] lastY = null;
+        // Counted once: it decides the stroke for every series, and walking the element
+        // list again inside the loop would be quadratic in the number of series.
+        int seriesCount = countPlottedSeries(gdef.plotElements);
+        // Dot length and gap are themeable; an unstated or too-tight gap falls back to the
+        // minimum that keeps the dots apart, computed per stroke width below.
+        float dashLength = gdef.getSeriesDash();
+        float dashGap = gdef.getSeriesDashGap();
         // draw line, area and stack
         for (PlotElement plotElement : gdef.plotElements) {
             if (plotElement instanceof SourcedPlotElement) {
@@ -361,11 +390,10 @@ class RrdGraphGenerator {
                     y = smooth ? ytrDistinct(source.getValues()) : ytr(source.getValues());
                 }
                 if (Line.class.isAssignableFrom(source.getClass())) {
-                    // Every series is dotted, so a graph looks the same whether it plots one
-                    // stat or several, and overlapping series are separable by texture as
-                    // well as by colour.
-                    Stroke lineStroke = RrdGraphConstants.seriesStroke(
-                            ((Line) source).stroke.getLineWidth());
+                    // Dotted only when something else shares the axis; a lone series
+                    // stays solid, since dashes on it are noise rather than information.
+                    Stroke lineStroke = RrdGraphConstants.seriesStroke(seriesCount,
+                            ((Line) source).stroke.getLineWidth(), dashLength, dashGap);
                     if (smooth) {
                         worker.drawPolylineSmooth(x, y, source.color, lineStroke);
                     } else {
@@ -390,7 +418,7 @@ class RrdGraphGenerator {
                     float width = stack.getParentLineWidth();
                     if (width >= 0F) {
                         // line
-                        Stroke stackStroke = RrdGraphConstants.seriesStroke(width);
+                        Stroke stackStroke = RrdGraphConstants.seriesStroke(seriesCount, width, dashLength, dashGap);
                         if (smooth) {
                             worker.drawPolylineSmooth(x, y, stack.color, stackStroke);
                         } else {
