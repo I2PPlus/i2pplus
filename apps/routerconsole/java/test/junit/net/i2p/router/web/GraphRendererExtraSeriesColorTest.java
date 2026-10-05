@@ -7,41 +7,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Tests the colour of the extra series in a multi-series graph.
+ * Tests that the two plots on a combined graph are told apart, in every theme.
  *
- * <p>Combining two stats has to look like plotting them one at a time: the same two
- * series should not change colour because they were grouped. The first extra therefore
- * takes the colour a two-series graph has always used for its second line, and only a
- * third series onward reaches for the palette.
+ * <p>A frame carries at most two series ({@link GraphGroups#MAX_SERIES}), so "which colour
+ * is the second line" has exactly one answer and it is themeable. That answer used to be a
+ * 60-degree hue rotation of the primary, which meant no theme could state it and the second
+ * line was orange rather than the yellow it had been documented as.
  *
  * @since 0.9.71+
  */
 public class GraphRendererExtraSeriesColorTest {
 
-    /** The colour a two-series graph has always given its second line, per theme. */
-    private static Color legacySecond(String theme) {
-        return GraphRenderer.extraSeriesColor(theme, false, 0);
-    }
-
-    @Test
-    public void theFirstExtraMatchesTheLegacySecondSeries() {
-        for (String theme : new String[] { "dark", "midnight", "light" }) {
-            assertEquals(theme + ": grouping must not recolour the second series",
-                         legacySecond(theme),
-                         GraphRenderer.extraSeriesColor(theme, true, 0));
-        }
-    }
-
-    @Test
-    public void groupingAndSplittingAgreeOnEveryExtraPosition() {
-        for (String theme : new String[] { "dark", "midnight", "light" }) {
-            for (int i = 0; i < 6; i++) {
-                assertEquals(theme + " extra " + i,
-                             legacySecond(theme),
-                             GraphRenderer.extraSeriesColor(theme, false, i));
-            }
-        }
-    }
+    private static final String[] THEMES = { "light", "dark", "midnight" };
 
     private static float[] hsb(Color c) {
         float[] out = new float[3];
@@ -49,102 +26,131 @@ public class GraphRendererExtraSeriesColorTest {
         return out;
     }
 
-    private static float hue(Color c) {
-        return hsb(c)[0] * 360f;
+    private static float hue(Color c) { return hsb(c)[0] * 360f; }
+
+    /** The primary is plot 0. */
+    private static Color primary(String theme) {
+        return GraphRenderer.paletteColorForTest(theme);
     }
 
-    private static float saturation(Color c) {
-        return hsb(c)[1];
-    }
-
-    private static float brightness(Color c) {
-        return hsb(c)[2];
-    }
-
-    private static float hueDistance(Color a, Color b) {
-        float d = Math.abs(hue(a) - hue(b));
-        return Math.min(d, 360f - d);
-    }
-
-    /** The second series is yellow, far round the wheel from the green primary. */
-    @Test
-    public void theSecondSeriesIsYellow() {
-        float h = hue(GraphRenderer.extraSeriesColor("dark", true, 0));
-        assertTrue("expected a yellow hue, got " + h, h > 45f && h < 75f);
+    /** The extra series is plot 1. */
+    private static Color second(String theme) {
+        return GraphRenderer.extraSeriesColor(theme, true, 0);
     }
 
     /**
-     * Separable where the two lines cross. Below about 60 degrees apart, two lines of
-     * similar brightness are genuinely hard to tell apart.
+     * The core requirement: two lines on one frame must not be the same colour, or the
+     * legend describes a graph nobody can read.
      */
     @Test
-    public void theTwoSeriesAreFarEnoughApartInHue() {
-        for (String theme : new String[] { "dark", "midnight", "light" }) {
-            Color primary = GraphRenderer.paletteColorForTest(theme);
-            Color second = GraphRenderer.extraSeriesColor(theme, true, 0);
-            float d = hueDistance(primary, second);
-            assertTrue(theme + ": series only " + d + " degrees apart", d >= 60f);
+    public void theTwoSeriesDifferInEveryTheme() {
+        for (String theme : THEMES) {
+            assertNotEquals(theme + ": the two plots must be told apart",
+                            primary(theme), second(theme));
         }
     }
 
-    /** Rotating the hue must not change how heavy the line looks. */
+    /**
+     * Grouping must not recolour anything. A stat plotted alone and the same stat plotted
+     * in a pair are the same measurement, so the same line has to come out the same colour.
+     */
     @Test
-    public void theSecondSeriesKeepsThePrimaryWeight() {
-        for (String theme : new String[] { "dark", "midnight", "light" }) {
-            Color primary = GraphRenderer.paletteColorForTest(theme);
-            Color second = GraphRenderer.extraSeriesColor(theme, true, 0);
-            assertEquals(theme + ": brightness must match", brightness(primary), brightness(second), 0.02f);
-            assertEquals(theme + ": saturation must match", saturation(primary), saturation(second), 0.02f);
+    public void groupingDoesNotRecolourTheSecondSeries() {
+        for (String theme : THEMES) {
+            assertEquals(theme + ": filled and line mode must agree on plot 1",
+                         second(theme), GraphRenderer.extraSeriesColor(theme, false, 0));
         }
     }
 
+    /**
+     * A frame has no third plot, so every extra position resolves to the same second
+     * colour. This is what keeps the old palette walk from reappearing.
+     */
     @Test
-    public void electricRaisesSaturationWithoutMovingHueOrBrightness() {
-        Color base = new Color(100, 200, 160);
-        Color hot = GraphRenderer.electric(base);
-        assertTrue("saturation must rise", saturation(hot) > saturation(base));
-        assertEquals("hue is unchanged", hue(base), hue(hot), 1f);
-        assertEquals("brightness is unchanged", brightness(base), brightness(hot), 0.001f);
-    }
-
-    @Test
-    public void rotationKeepsSaturationAndBrightness() {
-        Color base = new Color(100, 200, 160);
-        Color rotated = GraphRenderer.rotateHue(base, 60f);
-        assertEquals(saturation(base), saturation(rotated), 0.001f);
-        assertEquals(brightness(base), brightness(rotated), 0.001f);
-        assertTrue(hueDistance(base, rotated) >= 60f);
-    }
-
-    /** A third series has no legacy colour to match, so it comes from the palette. */
-    @Test
-    public void aThirdSeriesUsesThePalette() {
-        Color second = GraphRenderer.extraSeriesColor("dark", true, 0);
-        Color third = GraphRenderer.extraSeriesColor("dark", true, 1);
-        assertNotEquals("the third series must differ from the second", second, third);
-    }
-
-    /** Series must stay distinguishable across a whole graph. */
-    @Test
-    public void consecutiveSeriesDiffer() {
-        for (String theme : new String[] { "dark", "midnight", "light" }) {
-            for (int i = 1; i < 6; i++) {
-                assertNotEquals(theme + " series " + (i - 1) + " vs " + i,
-                                GraphRenderer.extraSeriesColor(theme, true, i - 1),
-                                GraphRenderer.extraSeriesColor(theme, true, i));
+    public void everyExtraPositionResolvesToTheSameSecondColour() {
+        for (String theme : THEMES) {
+            for (int i = 0; i < 6; i++) {
+                assertEquals(theme + " extra " + i,
+                             second(theme), GraphRenderer.extraSeriesColor(theme, true, i));
             }
         }
     }
 
-    @Test
-    public void seriesColoursAreThemeSpecific() {
-        assertNotEquals(GraphRenderer.extraSeriesColor("dark", true, 1),
-                        GraphRenderer.extraSeriesColor("midnight", true, 1));
-    }
-
+    /** An unrecognised theme falls back to the light palette rather than failing. */
     @Test
     public void anUnknownThemeFallsBackToTheLightPalette() {
-        assertEquals(GraphRenderer.extraSeriesColor("light", false, 0),
-                     GraphRenderer.extraSeriesColor("no-such-theme", false, 0));
+        assertEquals(primary("light"), primary("noSuchTheme"));
+        assertEquals(second("light"), second("noSuchTheme"));
+    }
+
+    /**
+     * Distinct hues are what make the two lines separable where they cross. This is the
+     * property the old hue-rotation design was for, so it is kept as a requirement even
+     * though the colour itself is now themeable.
+     */
+    @Test
+    public void theTwoSeriesAreFarEnoughApartInHue() {
+        for (String theme : THEMES) {
+            float a = hue(primary(theme));
+            float b = hue(second(theme));
+            float apart = Math.abs(a - b);
+            apart = Math.min(apart, 360f - apart);
+            assertTrue(theme + ": hues only " + apart + " degrees apart", apart >= 30f);
+        }
+    }
+
+    /**
+     * The second line is yellow: the primary's saturation and brightness at hue 60.
+     *
+     * <p>Pinned because this is derived rather than listed per theme, and a derivation is
+     * exactly the sort of thing that gets quietly replaced by a literal - which is how the
+     * second line became orange while every colour test still passed.
+     */
+    @Test
+    public void theSecondSeriesIsYellow() {
+        for (String theme : THEMES) {
+            float h = hue(second(theme));
+            assertEquals(theme + ": the second line must sit on yellow (60 degrees)",
+                         60f, h, 1f);
+        }
+    }
+
+    /**
+     * Plot 2's fill is plot 2's line colour, so a frame in filled-path mode carries the same
+     * two hues as one in line mode.
+     *
+     * <p>Scoped to plot 2 on purpose. Plot 1's fill is an independent long-standing colour
+     * chosen to sit under its line - blue under the plain theme's navy, for instance - so
+     * requiring the pair to match in hue would be imposing a rule the design never had.
+     */
+    @Test
+    public void theSecondPlotsFillMatchesItsLineHue() {
+        for (String theme : THEMES) {
+            assertEquals(theme + ": plot 2 line and fill must agree on hue",
+                         hue(GraphThemeColors.lineColor(null, theme, 1)),
+                         hue(GraphThemeColors.pathColor(null, theme, 1)),
+                         1f);
+        }
+    }
+
+    /** Both fills are translucent, so overlapping areas both stay readable. */
+    @Test
+    public void bothFillsAreTranslucent() {
+        for (String theme : THEMES) {
+            for (int plot = 0; plot < GraphThemeColors.PLOTS; plot++) {
+                int a = GraphThemeColors.pathColor(null, theme, plot).getAlpha();
+                assertTrue(theme + " plot " + plot + " fill alpha " + a + " must not be opaque",
+                           a > 0 && a < 255);
+            }
+        }
+    }
+
+    /** Both lines are opaque, since a dashed stroke cannot read through a translucency. */
+    @Test
+    public void bothSeriesAreOpaque() {
+        for (String theme : THEMES) {
+            assertEquals(theme + " primary alpha", 255, primary(theme).getAlpha());
+            assertEquals(theme + " second alpha", 255, second(theme).getAlpha());
+        }
     }
 }

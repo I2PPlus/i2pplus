@@ -1,5 +1,6 @@
 package net.i2p.router.web;
 
+import java.io.File;
 import static net.i2p.router.web.GraphConstants.*;
 
 import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
@@ -70,19 +71,28 @@ class GraphRenderer {
     private static final Color AXIS_COLOR_MIDNIGHT = new Color(201, 206, 255, 200);
     private static final Color FRAME_COLOR = new Color(0, 0, 0, 0);
     private static final Color FRAME_COLOR_DARK = new Color(0, 0, 0, 0);
-    private static final Color AREA_COLOR = new Color(100, 160, 200, 200);
-    private static final Color AREA_COLOR_DARK = new Color(0, 72, 8, 220);
-    private static final Color AREA_COLOR_MIDNIGHT = new Color(0, 72, 160, 200);
-    private static final Color AREA_COLOR_NEUTRAL = new Color(128, 128, 128, 128);
-    /** Hue for the second series: yellow, far round the wheel from the green primary. */
-    private static final float SECOND_SERIES_HUE = 60f;
 
+    /**
+     * Fill for the wide, chrome-less sidebar sparkline.
+     *
+     * <p>Neutral on purpose: that tile carries no legend and no labels, so its colour must
+     * not read as a first plot from the themed palette.
+     */
+    private static final Color SPARKLINE_AREA_COLOR = new Color(128, 128, 128, 128);
+
+    /**
+     * Line width over a filled path. Thinner than the plain line mode so the outline
+     * reads as an edge to the fill rather than competing with it.
+     *
+     * @since 0.9.71+
+     */
+    private static final float FILLED_LINE_WIDTH = 1f;
+
+    /** Whether to render every series as a filled path under a thin line. @since 0.9.71+ */
+    private static final String PROP_FILL = "routerconsole.graphFill";
     /** How much to raise saturation in {@link #electric}. */
     private static final float ELECTRIC_SATURATION = 1.45f;
 
-    private static final Color LINE_COLOR = new Color(0, 30, 110, 255);
-    private static final Color LINE_COLOR_DARK = new Color(100, 200, 160);
-    private static final Color LINE_COLOR_MIDNIGHT = new Color(128, 180, 212);
 
     /**
      * Alpha applied to series lines on the dark themes: 0xAA, roughly two thirds opaque.
@@ -107,20 +117,6 @@ class GraphRenderer {
      * <p>The two-series bandwidth graph does not use these at all; it keeps the exact
      * colours it shipped with.
      */
-    private static final Color[] SERIES_COLORS = {
-        new Color(0, 30, 110, 255), new Color(190, 50, 40, 255), new Color(0, 110, 130, 255),
-        new Color(170, 115, 0, 255), new Color(25, 115, 65, 255), new Color(125, 35, 120, 255)
-    };
-    private static final Color[] SERIES_COLORS_DARK = {
-        new Color(100, 200, 160, SERIES_ALPHA_DARK), new Color(255, 150, 90, SERIES_ALPHA_DARK),
-        new Color(130, 215, 255, SERIES_ALPHA_DARK), new Color(240, 225, 120, SERIES_ALPHA_DARK),
-        new Color(205, 130, 235, SERIES_ALPHA_DARK), new Color(120, 245, 205, SERIES_ALPHA_DARK)
-    };
-    private static final Color[] SERIES_COLORS_MIDNIGHT = {
-        new Color(128, 180, 212, SERIES_ALPHA_DARK), new Color(255, 165, 140, SERIES_ALPHA_DARK),
-        new Color(150, 230, 190, SERIES_ALPHA_DARK), new Color(240, 220, 130, SERIES_ALPHA_DARK),
-        new Color(200, 160, 240, SERIES_ALPHA_DARK), new Color(130, 225, 225, SERIES_ALPHA_DARK)
-    };
 
     private static final Color ARROW_COLOR_DARK = new Color(0, 0, 0, 0);
     private static final Color RESTART_BAR_COLOR = new Color(223, 13, 13, 255);
@@ -405,6 +401,7 @@ class GraphRenderer {
                 .rate(_listener.getRate())
                 .extras(extras)
                 .allLines(allLines)
+                .fillSeries(_context.getBooleanProperty(PROP_FILL))
                 .useUtc(useUtc)
                 .smooth(smooth)
                 .forceZero(forceZero)
@@ -774,34 +771,39 @@ class GraphRenderer {
             cfg.descr = _t(cfg.rate.getRateStat().getDescription());
         }
         def.datasource(cfg.plotName, cfg.path, cfg.plotName, GraphListener.CF, cfg.listener.getBackendFactory());
-        if (cfg.allLines) {
+        if (cfg.fillSeries) {
+            // Filled-path mode: a translucent area with a thin solid line on top, so the
+            // outline still reads where the series crosses another one. Only the line
+            // carries the legend: a legend row is emitted per plot element that has one, so
+            // giving both the same text put the series name in the legend twice.
+            def.area(cfg.plotName, plotPathColor(cfg.theme, 0));
+            def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l",
+                     FILLED_LINE_WIDTH);
+        } else if (cfg.allLines) {
             def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l", lineWidth(cfg));
         } else {
             configureArea(def, cfg);
         }
     }
 
+    /**
+     * Draw the primary as a filled area, which is how a single-value graph has always
+     * been rendered.
+     *
+     * <p>The one exception is the wide, chrome-less sparkline used in the sidebar, which
+     * stays a neutral grey: it is drawn small and unlabelled, so it takes a colour from
+     * neither the theme nor the plot palette and must not imply a second series.
+     */
     private void configureArea(RrdGraphDef def, GraphRenderConfig cfg) {
         if (cfg.width == 2000 && cfg.height == 160 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid) {
-            def.area(cfg.plotName, AREA_COLOR_NEUTRAL);
-        } else if (cfg.theme.equals("dark")) {
-            if (!cfg.descr.isEmpty()) {
-                def.area(cfg.plotName, AREA_COLOR_DARK, cfg.descr + "\\l");
-            } else {
-                def.area(cfg.plotName, AREA_COLOR_DARK);
-            }
-        } else if (cfg.theme.equals("midnight")) {
-            if (!cfg.descr.isEmpty()) {
-                def.area(cfg.plotName, AREA_COLOR_MIDNIGHT, cfg.descr + "\\l");
-            } else {
-                def.area(cfg.plotName, AREA_COLOR_MIDNIGHT);
-            }
+            def.area(cfg.plotName, SPARKLINE_AREA_COLOR);
+            return;
+        }
+        Color fill = plotPathColor(cfg.theme, 0);
+        if (!cfg.descr.isEmpty()) {
+            def.area(cfg.plotName, fill, cfg.descr + "\\l");
         } else {
-            if (!cfg.descr.isEmpty()) {
-                def.area(cfg.plotName, AREA_COLOR, cfg.descr + "\\l");
-            } else {
-                def.area(cfg.plotName, AREA_COLOR);
-            }
+            def.area(cfg.plotName, fill);
         }
     }
 
@@ -890,7 +892,13 @@ class GraphRenderer {
             def.datasource(plotName, lsnr.getData().getPath(), plotName,
                            GraphListener.CF, lsnr.getBackendFactory());
             Color color = extraSeriesColor(cfg.theme, cfg.allLines, i);
-            def.line(plotName, color, descr + "\\l", lineWidth(cfg));
+            if (cfg.fillSeries) {
+                // Legend on the line only; see configureDataSources.
+                def.area(plotName, plotPathColor(cfg.theme, Math.max(1, i)));
+                def.line(plotName, color, descr + "\\l", FILLED_LINE_WIDTH);
+            } else {
+                def.line(plotName, color, descr + "\\l", lineWidth(cfg));
+            }
             if (summary) {
                 // Distinct ids: configureLegend already defines min/max/avg/last on the
                 // primary, and a graph definition cannot declare the same id twice.
@@ -982,30 +990,13 @@ class GraphRenderer {
         return new Color(Color.HSBtoRGB(hue, saturation, brightness), true);
     }
 
-    /**
-     * A colour at a given hue, keeping the source saturation and brightness.
-     *
-     * <p>Keeping saturation and brightness is what makes a second series read as the same
-     * kind of line in a different colour, rather than as a differently-weighted
-     * measurement. Rotating the hue alone is enough to separate it from the first series
-     * without either line looking heavier than the other.
-     *
-     * @param base the colour whose saturation and brightness to keep
-     * @param hueDegrees target hue in degrees, 0 red through 60 yellow, 120 green
-     * @return the source colour rotated to the target hue
-     */
-    static Color rotateHue(Color base, float hueDegrees) {
-        float[] hsb = toHSB(base);
-        return fromHSB(hueDegrees / 360f, hsb[1], hsb[2]);
-    }
 
     /**
-     * The colour for an extra series of a multi-series graph.
+     * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
      *
-     * <p>The first extra takes the same colour a two-series graph has always given its
-     * second line, so combining a pair of stats looks identical to plotting them one at a
-     * time: the same chart should not change colour because it was grouped. Only a third
-     * series and beyond reach for the palette, where there is no legacy colour to match.
+     * <p>No hue rotation and no palette walk any more. A frame carries at most two plots
+     * ({@link GraphGroups#MAX_SERIES}), so "which colour is the extra series" has exactly
+     * one answer and it is a themeable one.
      *
      * @param theme console theme name
      * @param allLines whether the primary is drawn as a line rather than a filled area
@@ -1013,57 +1004,39 @@ class GraphRenderer {
      * @return the colour for that series
      */
     static Color extraSeriesColor(String theme, boolean allLines, int extraIndex) {
-        if (!allLines || extraIndex == 0) {
-            return secondSeriesColor(theme);
-        }
-        return paletteColor(theme, extraIndex);
+        return paletteColor(theme, Math.max(1, extraIndex));
     }
 
-    /**
-     * The second series: the primary's hue rotated onto yellow.
-     *
-     * <p>Yellow sits far enough round the wheel from the green primary to stay separable
-     * where two lines cross, while holding the primary's saturation and brightness so the
-     * pair still reads as two lines of equal weight.
-     */
-    private static Color secondSeriesColor(String theme) {
-        // Vividised first, exactly as the primary is, so the pair keeps the same
-        // saturation and brightness and neither line reads as the heavier one.
-        return rotateHue(electric(primaryBase(theme)), SECOND_SERIES_HUE);
-    }
 
     /**
-     * The un-vividised colour a theme's first line is built from. The legacy line colours
-     * and the first palette entry share their RGB per theme, so this is the primary for
-     * either rendering path.
-     */
-    private static Color primaryBase(String theme) {
-        if (theme.equals("midnight")) {
-            return LINE_COLOR_MIDNIGHT;
-        }
-        if (theme.equals("dark")) {
-            return LINE_COLOR_DARK;
-        }
-        return LINE_COLOR;
-    }
-
-    /**
-     * A colour from the theme's series palette, vividised so every series reads clearly
-     * against the dark graph background.
+     * The stroke colour for a plot on a frame, from the theme's CSS variables or the
+     * built-in palette.
      *
      * @param theme console theme name
-     * @param index zero-based palette position, wrapped
-     * @return the palette colour
+     * @param plot the plot ordinal; a frame carries at most two
+     * @return the colour, never null
+     * @since 0.9.71+
      */
+    private static Color paletteColor(String theme, int plot) {
+        return GraphThemeColors.lineColor(GraphThemeColors.installedThemeDir(), theme, plot);
+    }
+
+    /**
+     * The fill colour for a plot on a frame, from the theme's CSS variables or the
+     * built-in palette.
+     *
+     * @param theme console theme name
+     * @param plot the plot ordinal; a frame carries at most two
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    private static Color plotPathColor(String theme, int plot) {
+        return GraphThemeColors.pathColor(GraphThemeColors.installedThemeDir(), theme, plot);
+    }
+
     /** Package-visible accessor so tests can compare a series against the primary. */
     static Color paletteColorForTest(String theme) {
         return paletteColor(theme, 0);
-    }
-
-    private static Color paletteColor(String theme, int index) {
-        Color[] palette = theme.equals("midnight") ? SERIES_COLORS_MIDNIGHT
-                         : theme.equals("dark") ? SERIES_COLORS_DARK : SERIES_COLORS;
-        return electric(palette[index % palette.length]);
     }
 
     private void configureRestartMarkers(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -1156,7 +1129,23 @@ out.write(graph.getRrdGraphInfo().getBytes());
      *  Apply the theme-specific colors to the graph definition.
      *  Extracted from render() to keep that method manageable.
      */
+    /**
+     * Hand the theme's dot pattern to the renderer.
+     *
+     * <p>A theme may state only the dot length, in which case jrobin derives the gap from
+     * the stroke width. When it states a gap too, that value is used unless it would merge
+     * the dots, which is decided in {@code RrdGraphConstants.minimumDashGap}.
+     *
+     * @since 0.9.71+
+     */
+    private static void applyDash(RrdGraphDef def, GraphRenderConfig cfg) {
+        File dir = GraphThemeColors.installedThemeDir();
+        def.setSeriesDash(GraphThemeColors.dashLength(dir, cfg.theme));
+        def.setSeriesDashGap(GraphThemeColors.dashGap(dir, cfg.theme));
+    }
+
     private static void applyTheme(RrdGraphDef def, GraphRenderConfig cfg) {
+        applyDash(def, cfg);
         // sidebar minigraph
         if ((cfg.width == 250 && cfg.height == 50 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid)
                 || (cfg.width == 2000 && cfg.height == 160 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid)) {
@@ -1411,6 +1400,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
          * group is drawn the same way.
          */
         final boolean allLines;
+        /** Render every series as a translucent filled path under a thin line. @since 0.9.71+ */
+        final boolean fillSeries;
         final boolean useUtc;
         final boolean smooth;
         /** True to keep the historical zero-floored y-axis ({@link #PROP_ZERO_BASE}). */
@@ -1431,7 +1422,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
         SimpleDateFormat legendSdf;
         /** Date suffix for the legend/signature; " UTC" when rendering in UTC.
          *  Derived from useUtc here so every path prints a consistent label,
-         *  never a literal "null". */
+         *  never a literal "null".
+         */
         String timeLabel;
         String plotName;
         String descr;
@@ -1465,6 +1457,7 @@ out.write(graph.getRrdGraphInfo().getBytes());
             this.rate = b.rate;
             this.extras = b.extras;
             this.allLines = b.allLines;
+            this.fillSeries = b.fillSeries;
             this.useUtc = b.useUtc;
             this.smooth = b.smooth;
             this.forceZero = b.forceZero;
@@ -1497,6 +1490,7 @@ out.write(graph.getRrdGraphInfo().getBytes());
             Rate rate;
             List<GraphListener> extras;
             boolean allLines;
+            boolean fillSeries;
             boolean useUtc;
             boolean smooth;
             boolean forceZero;
@@ -1518,7 +1512,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             Builder showRestarts(boolean v) { showRestarts = v; return this; }
             Builder titleOverride(String v) { titleOverride = v; return this; }
             Builder rate(Rate v) { rate = v; return this; }
-/**
+
+            /**
              * @param v extra series to plot on the same graph, or null/empty for none
              * @return this builder
              * @since 0.9.71+
@@ -1531,6 +1526,13 @@ out.write(graph.getRrdGraphInfo().getBytes());
              * @since 0.9.71+
              */
             Builder allLines(boolean v) { allLines = v; return this; }
+
+            /**
+             * @param v render every series as a filled path under a thin line
+             * @return this builder
+             * @since 0.9.71+
+             */
+            Builder fillSeries(boolean v) { fillSeries = v; return this; }
 
             /**
              * @param v single extra series to plot on the same graph, or null
