@@ -350,15 +350,15 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
     }
 
-    /**
+/**
      * Why a graph listener is not producing RRD writes.
-     *
-     * <p>The three non-OK values are distinct faults with distinct fixes, so the
-     * staleness report names them individually: a single "nothing is being written"
-     * count cannot tell an operator which one to go and fix.
-     *
-     * @since 0.9.71+
-     */
+ *
+ * <p>The non-OK values are distinct faults with distinct fixes, so the staleness
+ * report names them individually: a single "nothing is being written" count
+ * cannot tell an operator which one to go and fix.
+ *
+ * @since 0.9.71+
+ */
     enum StaleCause {
         /** Not stalled: attached, registered, and writing within 2x its rate period. */
         OK,
@@ -368,6 +368,15 @@ public class GraphGenerator implements Runnable, ClientApp {
          *  measure back from.
          */
         NEVER_WRITTEN,
+        /**
+         *  Attached, registered, and no write, but the rate itself has not coalesced since
+         *  the listener attached, so there was never a sample to write. Nothing is being
+         *  lost and nothing is broken, which is why this is separated from
+         *  {@link #NEVER_WRITTEN}: a rate nobody updates is idle by definition, and
+         *  reporting it as a data-path fault produces an ERROR that repeats forever and
+         *  describes no action an operator can take.
+         */
+        RATE_IDLE,
         /**
          *  Attached to an open RRD, but the Rate no longer points at this listener, so it
          *  can never be notified again. Recording is dead with no write error, no detach
@@ -388,7 +397,15 @@ public class GraphGenerator implements Runnable, ClientApp {
          *  that the coalesce task is queued behind other work and never executes.
          *  The fix is never in a listener.
          */
-        COALESCE_STALLED
+        COALESCE_STALLED;
+
+        /**
+         *  Whether this cause is a fault that loses recorded data.
+         *
+         *  <p>Everything except {@link #OK} and {@link #RATE_IDLE}: an idle rate records
+         *  nothing because nothing is happening, not because recording is broken.
+         */
+        boolean isFault() {return this != OK && this != RATE_IDLE;}
     }
 
     /**
@@ -417,6 +434,9 @@ public class GraphGenerator implements Runnable, ClientApp {
         private long _ageMs;
         /** Whether {@link #_ageMs} is measured from the last write rather than from graphing start. */
         private boolean _sinceLastWrite;
+        /** Names of the listeners in this tally, bounded by {@link #MAX_NAMED}. */
+        private final List<String> _names = new ArrayList<>(4);
+        private int _unnamed;
 
         /** @param cause the cause this tally counts */
         CauseTally(StaleCause cause) {
@@ -430,15 +450,55 @@ public class GraphGenerator implements Runnable, ClientApp {
          *  @param sinceLastWrite true if measured from the last successful write
          */
         void record(long ageMs, boolean sinceLastWrite) {
+            record(ageMs, sinceLastWrite, null);
+        }
+
+        /**
+         *  Add one listener to this tally, naming it.
+         *
+         *  <p>The name is what makes the report actionable: a count of stalled listeners
+         *  with no names leaves the operator to diff every rate on the page against the
+         *  graphs, which is exactly the work the report exists to save.
+         *
+         *  @param ageMs age from {@link GraphGenerator#staleAge}
+         *  @param sinceLastWrite true if measured from the last successful write
+         *  @param name the listener's stat name, or null when not known
+         */
+        void record(long ageMs, boolean sinceLastWrite, String name) {
             _count++;
             if (ageMs > _ageMs) {
                 _ageMs = ageMs;
                 _sinceLastWrite = sinceLastWrite;
             }
+            if (name == null) {
+                _unnamed++;
+            } else if (_names.size() < MAX_NAMED) {
+                _names.add(name);
+            } else {
+                _unnamed++;
+            }
         }
 
         /** @return number of listeners attributed to this cause */
         int count() { return _count; }
+
+        /**
+         *  Render the names recorded for this cause, or an empty string when none were.
+         *
+         *  @return the trailing "name[, name]" clause, without a leading separator
+         */
+        String names() {
+            if (_names.isEmpty()) {return "";}
+            StringBuilder buf = new StringBuilder();
+            for (String name : _names) {
+                if (buf.length() > 0) {buf.append(", ");}
+                buf.append(name);
+            }
+            if (_unnamed > 0) {
+                buf.append(_names.size() == 1 ? " and " : " and ").append(_unnamed).append(" more");
+            }
+            return buf.toString();
+        }
 
         /**
          *  Render this cause for the log line.
@@ -450,15 +510,27 @@ public class GraphGenerator implements Runnable, ClientApp {
             if (_count <= 0) {
                 return name + "=0";
             }
+            String listed = names();
             return name + "=" + _count + " (oldest " + (_ageMs / 1000) + "s "
-                   + staleAgeOrigin(_sinceLastWrite) + ")";
+                   + staleAgeOrigin(_sinceLastWrite) + ")"
+                   + (listed.isEmpty() ? "" : ": " + listed);
         }
     }
 
+    /** Most listener names a single tally will list before summarising the rest as a count. */
+    static final int MAX_NAMED = 5;
+
     /** Origin wording for an age measured from the last successful write. @since 0.9.71+ */
     private static final String staleAgeSinceLastWrite = "since last write";
-    /** Origin wording for an age measured from graphing start. @since 0.9.71+ */
-    private static final String staleAgeSinceStart = "since graphing began";
+    /**
+     *  Origin wording for an age with no earlier write to measure back from.
+     *
+     *  <p>The listener's own attach time, not the router's graphing start: only the
+     *  listener knows how long it has had the chance to write.
+     *
+     *  @since 0.9.71+
+     */
+    private static final String staleAgeSinceLastWriteAttach = "since the listener attached";
 
     /**
      *  Decide whether a listener is stalled, and why.
@@ -533,7 +605,27 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @since 0.9.71+
      */
     static String staleAgeOrigin(boolean sinceLastWrite) {
-        return sinceLastWrite ? staleAgeSinceLastWrite : staleAgeSinceStart;
+        return sinceLastWrite ? staleAgeSinceLastWrite : staleAgeSinceLastWriteAttach;
+    }
+
+    /**
+     *  Split "has never written" into a broken data path and a rate with nothing to say.
+     *
+     *  <p>A listener that has never written looks identical whether its RRD writes are
+     *  failing or its rate has simply never coalesced. Only the first loses data. Coalesce
+     *  count settles it: the rate handed the listener a sample to write, or it did not.
+     *  Without this split, a stat nothing in the router ever updates produces an ERROR
+     *  every reporting interval for the life of the process, naming a fault that has no fix.
+     *
+     *  @param cause classification from {@link #classifyStaleness}
+     *  @param coalesceDelta times the rate coalesced since the listener attached
+     *  @return {@link StaleCause#RATE_IDLE} for a never-written listener whose rate has not
+     *          coalesced, otherwise cause unchanged
+     *  @since 0.9.71+
+     */
+    static StaleCause refineForIdleRate(StaleCause cause, long coalesceDelta) {
+        if (cause != StaleCause.NEVER_WRITTEN || coalesceDelta > 0) {return cause;}
+        return StaleCause.RATE_IDLE;
     }
 
     /**
@@ -584,6 +676,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     private void reportWriteStaleness() {
         long now = System.currentTimeMillis();
         CauseTally neverWritten = new CauseTally(StaleCause.NEVER_WRITTEN);
+        CauseTally rateIdle = new CauseTally(StaleCause.RATE_IDLE);
         CauseTally unregistered = new CauseTally(StaleCause.UNREGISTERED);
         CauseTally writesStopped = new CauseTally(StaleCause.WRITES_STOPPED);
         CauseTally coalesceStalled = new CauseTally(StaleCause.COALESCE_STALLED);
@@ -595,16 +688,24 @@ public class GraphGenerator implements Runnable, ClientApp {
         boolean sweepStalled = isCoalesceStalled(now);
         for (GraphListener lsnr : _listeners) {
             long lastOk = lsnr.getLastUpdateSuccess();
+            // A listener's own attach time is its age origin, not the graphing session's:
+            // a listener created seconds ago has had no chance to write yet, and charging
+            // it the age of the whole session flags every rebuild as a stall.
+            long attached = lsnr.getAttachedMs() > 0 ? lsnr.getAttachedMs() : _startedMs;
             StaleCause cause = classifyStaleness(lsnr.isDetached(), lsnr.isRegistered(), lastOk,
-                                                 now, _startedMs, lsnr.getRate().getPeriod(),
+                                                 now, attached, lsnr.getRate().getPeriod(),
                                                  sweepStalled);
             if (cause == StaleCause.OK) {
                 continue;
             }
+            cause = refineForIdleRate(cause, lsnr.getCoalesceDelta());
             CauseTally tally;
             switch (cause) {
                 case NEVER_WRITTEN:
                     tally = neverWritten;
+                    break;
+                case RATE_IDLE:
+                    tally = rateIdle;
                     break;
                 case UNREGISTERED:
                     tally = unregistered;
@@ -616,7 +717,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                     tally = writesStopped;
                     break;
             }
-            tally.record(staleAge(now, _startedMs, lastOk), lastOk > 0);
+            tally.record(staleAge(now, attached, lastOk), lastOk > 0, lsnr.getName());
         }
         int stalled = neverWritten.count() + unregistered.count() + writesStopped.count()
                       + coalesceStalled.count();
@@ -635,6 +736,12 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
         String msg = formatStaleness(_listeners.size(), neverWritten, unregistered, writesStopped,
                                   coalesceStalled);
+        if (rateIdle.count() > 0) {
+            // Appended, not counted in the headline: a rate nothing updates is idle, not
+            // broken, but the operator still needs to see which ones are holding the
+            // remaining "never written" graphs empty.
+            msg += "\n* " + rateIdle.describe() + " (rate not updated since attach, nothing lost)";
+        }
         if (_stallThrottle.allow(now, stalled, REPORT_REPEAT_MS)) {
             _stallReported = true;
             _log.error(msg);

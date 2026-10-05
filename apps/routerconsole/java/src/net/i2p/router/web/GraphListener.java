@@ -78,6 +78,18 @@ public class GraphListener implements RateSummaryListener {
     private volatile int _consecutiveErrors;
     /** Wall-clock ms of the last successful RRD write, or 0 if none has succeeded. */
     private volatile long _lastUpdateSuccess;
+    /**
+     *  Wall-clock ms when this listener took its Rate registration, or 0 if never.
+     *
+     *  <p>The origin for how long a listener that has never written has had the chance
+     *  to write. Measured from the router's graphing start instead, a listener created a
+     *  second ago inherits the age of the whole graphing session and is reported as
+     *  stalled before it has ever had a period to coalesce, so every rebuild and every
+     *  on-demand graph would trip the error.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile long _attachedMs;
     /** Total successful RRD writes. */
     private volatile long _updateCount;
     /** Wall-clock ms of the newest step stored, live or backfilled; 0 if none. */
@@ -120,6 +132,14 @@ public class GraphListener implements RateSummaryListener {
 
     /** When the most recent RRD write succeeded, or 0 if none has. */
     long getLastUpdateSuccess() { return _lastUpdateSuccess; }
+
+    /**
+     *  When this listener attached, the origin for a never-written listener's age.
+     *
+     *  @return wall-clock ms when the listener took its Rate registration, or 0 if never
+     *  @since 0.9.71+
+     */
+    long getAttachedMs() { return _attachedMs; }
 
     /** Number of successful RRD writes since startup. */
     long getUpdateCount() { return _updateCount; }
@@ -572,6 +592,7 @@ public class GraphListener implements RateSummaryListener {
      *  @return success
      */
     public boolean startListening() {
+        _attachedMs = System.currentTimeMillis();
         _coalesceBaseline = _rate.getCoalesceCount();
         _updateBaseline = _updateCount;
         if (!openRdd()) {

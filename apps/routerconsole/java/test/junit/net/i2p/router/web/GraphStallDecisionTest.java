@@ -84,8 +84,8 @@ public class GraphStallDecisionTest {
     }
 
     /**
-     *  Never written since graphing began is its own cause, and the age that matters is the
-     *  instance age. Until 2x the period has elapsed since graphing began there is nothing to
+     *  Never written since the listener attached is its own cause, and the age that matters is the
+     *  instance age. Until 2x the period has elapsed since the listener attached there is nothing to
      *  judge, so a startup window is not mistaken for a stall.
      */
     @Test
@@ -154,7 +154,88 @@ public class GraphStallDecisionTest {
     @Test
     public void testStaleAgeOriginWording() {
         assertEquals("since last write", GraphGenerator.staleAgeOrigin(true));
-        assertEquals("since graphing began", GraphGenerator.staleAgeOrigin(false));
+        assertEquals("since the listener attached", GraphGenerator.staleAgeOrigin(false));
+    }
+
+    ///////////// refineForIdleRate
+
+    /**
+     *  A rate that never coalesced since attach had no sample to write, so nothing is lost.
+     *
+     *  <p>This is the split that stops the false alarm: a stat nothing in the router ever
+     *  updates produced a permanent, unfixable ERROR claiming its graphs were stalled.
+     */
+    @Test
+    public void testIdleRateIsNotAFault() {
+        assertEquals(StaleCause.RATE_IDLE,
+                     GraphGenerator.refineForIdleRate(StaleCause.NEVER_WRITTEN, 0L));
+    }
+
+    /** Once the rate has coalesced there was a sample to write, so the write path is at fault. */
+    @Test
+    public void testFedRateThatNeverWroteIsStillAFault() {
+        assertEquals(StaleCause.NEVER_WRITTEN,
+                     GraphGenerator.refineForIdleRate(StaleCause.NEVER_WRITTEN, 1L));
+    }
+
+    /** Refinement only ever touches a never-written listener. */
+    @Test
+    public void testRefinementLeavesOtherCausesAlone() {
+        assertEquals(StaleCause.WRITES_STOPPED,
+                     GraphGenerator.refineForIdleRate(StaleCause.WRITES_STOPPED, 0L));
+        assertEquals(StaleCause.UNREGISTERED,
+                     GraphGenerator.refineForIdleRate(StaleCause.UNREGISTERED, 0L));
+        assertEquals(StaleCause.COALESCE_STALLED,
+                     GraphGenerator.refineForIdleRate(StaleCause.COALESCE_STALLED, 0L));
+        assertEquals(StaleCause.OK, GraphGenerator.refineForIdleRate(StaleCause.OK, 0L));
+    }
+
+    /** An idle rate records nothing because nothing is happening, so it is not a fault. */
+    @Test
+    public void testIsFaultExcludesIdleRate() {
+        assertFalse(StaleCause.RATE_IDLE.isFault());
+        assertFalse(StaleCause.OK.isFault());
+        assertTrue(StaleCause.NEVER_WRITTEN.isFault());
+        assertTrue(StaleCause.WRITES_STOPPED.isFault());
+        assertTrue(StaleCause.UNREGISTERED.isFault());
+        assertTrue(StaleCause.COALESCE_STALLED.isFault());
+    }
+
+    ///////////// CauseTally names
+
+    /**
+     *  A count with no names leaves the operator to match every rate on the page against
+     *  the stalled graphs by hand, which is the work the report exists to save.
+     */
+    @Test
+    public void testNamedTallyListsTheOffendingStats() {
+        CauseTally tally = new CauseTally(StaleCause.NEVER_WRITTEN);
+        tally.record(120_000L, false, "bw.sendRate");
+        tally.record(600_000L, false, "tunnel.lifetime");
+        assertEquals(2, tally.count());
+        assertEquals("bw.sendRate, tunnel.lifetime", tally.names());
+        assertEquals("never_written=2 (oldest 600s since the listener attached):"
+                     + " bw.sendRate, tunnel.lifetime", tally.describe());
+    }
+
+    /** Past a handful of names, the rest are summarised rather than left to guesswork. */
+    @Test
+    public void testNamedTallyTruncatesLongLists() {
+        CauseTally tally = new CauseTally(StaleCause.WRITES_STOPPED);
+        for (int i = 0; i < GraphGenerator.MAX_NAMED + 3; i++) {
+            tally.record(1000L * (i + 1), true, "stat" + i);
+        }
+        assertEquals(GraphGenerator.MAX_NAMED + 3, tally.count());
+        assertEquals("stat0, stat1, stat2, stat3, stat4 and 3 more", tally.names());
+    }
+
+    /** An unnamed tally keeps the original wording, so nothing is appended for its own sake. */
+    @Test
+    public void testUnnamedTallyIsUnchanged() {
+        CauseTally tally = new CauseTally(StaleCause.NEVER_WRITTEN);
+        tally.record(900_000L, true);
+        assertEquals("", tally.names());
+        assertEquals("never_written=1 (oldest 900s since last write)", tally.describe());
     }
 
     ///////////// ownsRegistration
@@ -262,7 +343,7 @@ public class GraphStallDecisionTest {
         CauseTally writesStopped = new CauseTally(StaleCause.WRITES_STOPPED);
         neverWritten.record(1_830_000L, false);
         String msg = GraphGenerator.formatStaleness(25, neverWritten, unregistered, writesStopped);
-        assertTrue(msg, msg.contains("never_written=1 (oldest 1830s since graphing began)"));
+        assertTrue(msg, msg.contains("never_written=1 (oldest 1830s since the listener attached)"));
     }
 
     /** Writes that stopped are quoted with the real write age. */
@@ -326,7 +407,7 @@ public class GraphStallDecisionTest {
                                                     tallies.writesStopped);
         assertEquals("RRD data stalled: 5/10 graph listeners not writing within 2x their rate period"
                      + " \n* coalesce_stalled=0,"
-                     + " never_written=1 (oldest 3600s since graphing began),"
+                     + " never_written=1 (oldest 3600s since the listener attached),"
                      + " unregistered=2 (oldest 300s since last write),"
                      + " writes_stopped=2 (oldest 900s since last write)", msg);
     }
