@@ -266,18 +266,158 @@ Theme resources at `/themes/console/<theme>/images/thumbnail.png`, `favicon.svg`
 
 ## Graph Color Integration
 
-`GraphRenderer.java` reads `routerconsole.theme` to select graph color schemes:
+Graph images — the RRD plots on `graphs.jsp` — take four themeable colours: a stroke and a
+fill for each of the two lines a tile can carry. They also take the dot pattern that
+separates two lines sharing an axis. Declare them in your theme's `console.css`:
 
-```java
-String theme = _context.getProperty("routerconsole.theme", "dark");
-if (theme.equals("midnight")) {
-    /* purple tones */
-} else if (theme.equals("dark")) {
-    /* orange tones */
-} else {
-    /* light/classic tones */
+```css
+:root{
+--graph_line_1:#37c88e;   /* stroke of the first line   */
+--graph_line_2:#ff6710;   /* stroke of the second line  */
+--graph_path_1:#004808dc; /* fill under the first line  */
+--graph_path_2:#64c8a0dc; /* fill under the second line */
+--graph_dash:1;           /* dot pattern, see below     */
 }
 ```
+
+### Why two lines, and why four colours
+
+**A graph tile draws at most two lines.** Three are too close together to tell apart at tile
+size. Combined graphs therefore hold two stats at most (`GraphGroups.MAX_SERIES`), and any
+member past that limit gets a graph of its own rather than being squeezed in or dropped.
+
+**Each of those two lines can be drawn three ways:**
+
+| Mode                          | Drawn as                       |
+| ----------------------------- | ------------------------------ |
+| default, single stat          | a filled area                 |
+| line mode                     | a stroke                      |
+| filled paths (`graphFill`)    | a filled area plus a thin stroke |
+
+So one line needs a colour for its stroke *and* a colour for its fill, and with two lines
+that is four values: `--graph_line_1` and `--graph_line_2` for the strokes,
+`--graph_path_1` and `--graph_path_2` for the fills. A given mode uses a subset, but every
+one of the four is read by some mode, which is why all four exist.
+
+Note that the two are independent: `--graph_line_1` may be a saturated green while
+`--graph_path_1` is a dark translucent version of it. Choosing them separately is the point,
+because the fill sits under the line rather than being it.
+
+**The two-line limit is enforced above jrobin.** jrobin itself will draw any number of lines;
+the cap lives in the console's group registry, and `GraphThemeColors` clamps a plot ordinal
+past the second onto slot 2 rather than throwing. So a third line, should one ever appear,
+would collide on colour with the second — a visible bug rather than a crash. `GraphGroupsTest`
+fails the build if any group exceeds the limit, so that has to be fixed before it can happen.
+
+### Colour syntax
+
+Any CSS colour is accepted, because the value is handed to `SvgColor.parse()`:
+
+| Form                       | Example                |
+| -------------------------- | ---------------------- |
+| 3-digit hex                | `#0f9`                 |
+| 4-digit hex (hex + alpha)  | `#ee9d`                |
+| 6-digit hex                | `#00ff99`              |
+| 8-digit hex (hex + alpha)  | `#00ff9980`            |
+| `rgb()` / `rgba()`         | `rgba(0,255,153,.5)`   |
+| percent channels and alpha | `rgb(0%,100%,60%)`     |
+
+Shorthand digits are doubled, per CSS, so `#ee9d` is `#eeee99dd` — not `#e9d9`.
+
+**Alpha belongs in the value.** There is deliberately no `--graph_path_alpha`: a second
+variable holding half of one colour is a second thing to forget when changing it. Write
+`#64c8a05a` or `rgba(100,200,160,.35)` and both halves travel together.
+
+### The dot pattern
+
+When two lines share an axis the second is drawn dotted, so the two stay separable where
+they cross. `--graph_dash` is the length of one dot, or a CSS dash pair:
+
+```css
+--graph_dash:1;      /* 1px dot, gap derived from the line width */
+--graph_dash:1 3;    /* 1px dot, then 3px of space   */
+--graph_dash:1,3;    /* identical; comma or space    */
+```
+
+Comma and space are interchangeable. A stated gap is honoured only when it leaves the dots
+visibly separate: with round caps each dot lays down `dot + width` of ink, so the gap has to
+be at least `max(dot × 2, width × 2)` or consecutive dots merge and a "dotted" line renders
+solid. A tighter request is raised to that floor rather than obeyed, so a theme cannot
+break the pattern by accident. The bare-length form is the safe default, since a theme that
+does not care about spacing cannot get it wrong.
+
+Lists longer than two values are refused, not truncated. CSS would cycle an odd-length
+`stroke-dasharray` to make it even, but the floor above is stated for one dot and one gap,
+and dropping the tail would render something the stylesheet never asked for.
+
+### Where the values are read, and why server-side
+
+Unlike the minigraph, which resolves `--minigraph_*` in the browser with
+`getComputedStyle`, graph colours are read by the **server**, in `GraphThemeColors.java`.
+A graph is served as `<img src="/viewstat.jsp?stat=...">`, which makes the SVG an isolated
+document: page CSS does not reach inside it and page custom properties are invisible to it.
+Declaring the variables in the SVG itself would only let a user edit a file they cannot
+reach, so `GraphThemeColors` parses the theme's own `console.css` and hands the resolved
+values to the renderer.
+
+Consequences worth knowing:
+
+- The stylesheet is re-read when its last-modified timestamp changes, so **editing a theme and
+  refreshing the page is enough** to see the new colours - no router restart, matching how the
+  minigraph behaves.
+- It is also re-read every 30 seconds regardless. That is the fallback for a filesystem that
+  does not maintain last-modified reliably - a network mount, a container overlay - or whose
+  timestamps are too coarse to distinguish two saves in the same second. A periodic read is
+  what makes the update "more or less realtime" rather than dependent on the clock the
+  filesystem keeps.
+- A warm lookup costs one `stat()`, not a re-read. The re-read is coalesced: the tiles of one
+  page share it, so a page of twenty graphs reads the file once rather than twenty times.
+- A stylesheet missing when first asked about is remembered as missing, but re-checked on
+  every lookup, so a theme deployed after startup still takes effect.
+
+Note that none of this involves the browser's copy of the stylesheet. The colours are resolved
+on the router, which reads the theme file itself; how the browser caches the same file for the
+rest of the page is a separate question.
+- Any slot a theme omits, or states something unparseable in, falls back to the built-in
+  value on its own. One bad declaration costs one colour, not the graph.
+
+### Defaults live in two places, on purpose
+
+The same values appear in `GraphThemeColors.java` and in every theme's `console.css`. The
+CSS copy exists so a theme author can *find* them; the code copy is the fallback for when no
+stylesheet can be read, which is the normal case in a source checkout where the theme lives
+under `installer/`. `GraphThemeColorsTest` asserts the two agree for every shipped theme, so
+editing one without the other fails the build rather than the console.
+
+### The tuning-page history bar is a different mechanism
+
+The tuning page (`tuning.jsp`) draws a small inline diverging bar chart of a parameter's
+recent values against its default. That one is **not** an RRD image and does not go through
+jrobin: `TuningHelper` emits the `<svg>` inline and paints the bars with
+`fill="var(--tunerGraph)"`, which the browser resolves like any other custom property.
+
+It was named `--graphbar` until it was renamed to **`--tunerGraph`**, because `--graphbar`
+read as though it coloured the graph images above when it only ever coloured this bar. The
+rename touched three places, all of which must agree or the bars go unpainted:
+
+| Location                                                            | Role                                  |
+| ------------------------------------------------------------------- | ------------------------------------- |
+| `themes/console/shared.css`                                         | base value, `#292`, for every theme  |
+| `themes/console/dark/console.css`                                   | dark override, `#f60`                 |
+| `themes/console/light/console.css`                                  | light override, `#78a`                |
+| `helpers/TuningHelper.java` (`var(--tunerGraph)`)                   | the consumer                          |
+
+`midnight` and `classic` do not override it and take the `shared.css` base. Note there is
+no fallback in the `var()` call, so a theme that overrode the variable to nothing would leave
+those bars unpainted rather than falling back — keep the `shared.css` declaration.
+
+### What is not themeable
+
+Only the two plot colours and the dash pattern. Gridlines, major gridlines, axis rules, tick
+labels, the canvas and the frame are still chosen in code per theme — in a tile that size
+they are structural rather than decorative. The wide sidebar sparkline is deliberately a
+neutral grey rather than `--graph_path_1`, because it carries no legend and its colour must
+not read as a first plot.
 
 ---
 
@@ -345,6 +485,23 @@ a { color: var(--a); }
 a:hover { color: var(--hover); }
 /* ... */
 ```
+
+Graph plot colours are optional — a theme that omits them gets the built-in defaults for
+that theme — but shipping them keeps the plots discoverable to whoever edits the theme next.
+Copy the block from an existing theme and adjust:
+
+```css
+:root{
+--graph_line_1:#37c8a0;   /* copy the values from a theme you like, then vary them */
+--graph_line_2:#f09060;
+--graph_path_1:#0a4a20b0;
+--graph_path_2:#64c8a0b0;
+--graph_dash:1;
+}
+```
+
+Keep `--graph_line_1` and `--graph_line_2` visibly different: they are the only thing
+distinguishing two lines that share an axis. See [Graph Color Integration](#graph-color-integration).
 
 ### Step 4: Create theme images
 
