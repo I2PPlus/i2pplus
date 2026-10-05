@@ -2822,6 +2822,28 @@ public final class SVGGraphics2D extends Graphics2D {
      * @param svgRaw the raw SVG string from the rendering pipeline.
      * @return the fully post-processed SVG string.
      */
+
+    /**
+     * Retag the axis container lines so the theme's {@code .axis} rule supplies their stroke.
+     *
+     * <p>Package-visible and static so the rule can be tested against the exact markup the
+     * serialiser produces, at every position the stroke width can occupy. Three separate
+     * defects lived in this one line: it was written for a {@code <g>} when the axis arrives
+     * as a bare {@code <line>}; it assumed the width led the style attribute; and its
+     * terminator consumed the closing quote when the width came last.
+     *
+     * @param svg the generated SVG
+     * @return the SVG with the axis lines tagged
+     */
+    static String tagAxis(String svg) {
+        // The width may appear anywhere in the style, first or last. Only a zero fractional
+        // tail belongs to the marker: 5 and 5.0 are it, while 50 and 5.5 are different
+        // widths and must not be tagged.
+        return svg.replaceAll(
+                "<line ([^>]*?)style=\"[^\"]*stroke-width:5(?:\\.0+)?(?![0-9.])[^\"]*\"",
+                "<line $1class=\"axis\"");
+    }
+
     private String postProcessSvg(String svgRaw) {
         Theme theme = detectTheme(svgRaw);
 
@@ -2834,7 +2856,25 @@ public final class SVGGraphics2D extends Graphics2D {
         // being deleted, so whether it survived depended on what the neighbouring groups
         // happened to look like - the axis appeared on some graphs and not others with
         // identical settings. Tagged first, it carries no stroke style and is untouchable.
-        String s = svgRaw.replaceAll(" style=\"stroke-width:5[^\"]*\"", " class=\"axis\"");
+        //
+        // The axis arrives as a BARE <line> element carrying the marker width in its own
+        // style attribute, not wrapped in a <g>:
+        //     <line x1=".." y1=".." x2=".." y2=".." style="stroke-width:5.0;stroke:rgb(..)"/>
+        // so the pattern has to match that element. An earlier version of this matched
+        // <g style="...stroke-width:5...">, which never occurs - it silently tagged nothing
+        // and left every axis drawn at the full 5px marker width.
+        //
+        // The width may sit anywhere in the style attribute, first or last, and may carry a
+        // fractional tail. Only a lookahead pins the value: an earlier version required a
+        // [;"] terminator, which consumed the closing quote when the width was the last
+        // property in the style and then failed to find the quote it still expected. The
+        // axis went untagged whenever the surrounding style happened to serialise that way,
+        // which is why it tracked graph size rather than anything about the axis.
+        //
+        // Only a zero fractional tail belongs to the marker: 5 and 5.0 are it, while 50 and
+        // 5.5 are different widths. Only the axis is drawn at this width; gridlines and
+        // rules are 1px and ticks are 0.
+        String s = tagAxis(svgRaw);
 
         // --- Common value normalizations ---
         s = s
@@ -2881,6 +2921,7 @@ public final class SVGGraphics2D extends Graphics2D {
                 break;
         }
 
+        // --- Common class assignments and structural normalizations ---
         // --- Common class assignments and structural normalizations ---
         s = s.replaceAll("/></g><g (style=\"stroke:.*?\").*?</g>", " $1/></g>")
                 .replace("stroke-linecap:square;fill:none", "stroke-linecap:square")
@@ -2961,10 +3002,7 @@ public final class SVGGraphics2D extends Graphics2D {
                                 " class=\"dash major\"")
                         .replace("fill:rgb(0,0,0);fill-opacity:0\"", "opacity:0\"")
                         .replace("style=\"fill:rgb(0,0,0);fill-opacity:.75\"", "class=\"bg\"")
-                        .replace(
-                                "style=\"stroke:rgb(244,244,190);stroke-opacity:.78\"",
-                                "class=\"axis\"")
-                        .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be30");
+                                .replace("stroke:#f4f4be;stroke-opacity:.2", "stroke:#f4f4be30");
                 break;
             case MIDNIGHT:
                 s = s.replace(".axis{", ".axis{stroke:#a6b3e8;")
@@ -3129,6 +3167,9 @@ public final class SVGGraphics2D extends Graphics2D {
                         "<style>text{font-weight:600;text-rendering:optimizeLegibility;white-space:pre}")
                 .append(
                         "line,path,rect{shape-rendering:crispEdges;vector-effect:non-scaling-stroke}")
+                // Solid, deliberately: the axis lines are the graph's bounding box, so a
+                // translucent rule reads as a smudge rather than an edge. The colours
+                // injected per theme above carry no alpha for the same reason.
                 .append(".axis{stroke-width:")
                 .append(axisStrokeWidth)
                 .append(";stroke-linecap:round}")
