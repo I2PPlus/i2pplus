@@ -4,7 +4,7 @@
 
     <property name="src" value="."/>
     <property name="build" value="${build.dir}"/>
-    <property name="dist.dir" value="dist"/>
+    <property name="dist.dir" value="${java.io.tmpdir}/build-i2p/apps/jrobin/java/src/org/jfree/svg/dist"/>
     <property name="dist" location="${dist.dir}"/>
     <property name="jar" value="jfreeSVG.jar"/>
     <property name="javadoc" value="javadoc"/>

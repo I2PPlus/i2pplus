@@ -5,9 +5,9 @@
   <property name="build.dir" value="${build.root}apps/susidns/src/build"/>
 
   <property name="...build.dir" value="${build.root}build"/>
-  <property name="addressbook.build.dir" value="../../addressbook/build"/>
-  <property name="addressbook.dist.dir" value="../../addressbook/dist"/>
-  <property name="core.java.build.dir" value="../../../core/java/build"/>
+  <property name="addressbook.build.dir" value="${build.root}apps/addressbook/build"/>
+  <property name="addressbook.dist.dir" value="${build.root}apps/addressbook/dist"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
   <property name="...build.dir" value="${...build.dir}"/>
   <property name="addressbook.build.dir" value="${addressbook.build.dir}"/>

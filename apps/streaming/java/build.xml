@@ -5,8 +5,8 @@
   <property name="build.dir" value="${build.root}apps/streaming/java/build"/>
 
   <property name="...build.dir" value="${build.root}build"/>
-  <property name="core.java.build.dir" value="../../../core/java/build"/>
-  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
+  <property name="ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
 
   <property name="...build.dir" value="${...build.dir}"/>
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>

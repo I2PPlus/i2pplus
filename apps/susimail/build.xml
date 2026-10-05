@@ -7,10 +7,11 @@
       <pathelement location="../../tools/ant-contrib.jar"/>
     </classpath>
   </taskdef>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/susimail/build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}apps/susimail/build"/>
   <property name="classes.dir" value="${build.dir}/classes"/>
 
-  <property name="core.java.build.dir" value="../../core/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="jetty.pkg.dir" value="../jetty/jettylib"/>

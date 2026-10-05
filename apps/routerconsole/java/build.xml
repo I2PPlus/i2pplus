@@ -12,16 +12,16 @@
   <property name="jsp.build.dir" value="${build.root}apps/routerconsole/jsp"/>
 
   <property name="...build.dir" value="${build.root}build"/>
-  <property name="core.java.build.dir" value="../../../core/java/build"/>
-  <property name="desktopgui.build.dir" value="../../desktopgui/build"/>
-  <property name="desktopgui.dist.dir" value="../../desktopgui/dist"/>
-  <property name="i2ptunnel.java.build.dir" value="../../i2ptunnel/java/build"/>
-  <property name="jrobin.java.build.dir" value="../../jrobin/java/build"/>
-  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
-  <property name="router.java.build.dir" value="../../../router/java/build"/>
-  <property name="sam.java.build.dir" value="../../sam/java/build"/>
-  <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
-  <property name="systray.java.build.dir" value="../../systray/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
+  <property name="desktopgui.build.dir" value="${build.root}apps/desktopgui/build"/>
+  <property name="desktopgui.dist.dir" value="${build.root}apps/desktopgui/dist"/>
+  <property name="i2ptunnel.java.build.dir" value="${build.root}apps/i2ptunnel/java/build"/>
+  <property name="jrobin.java.build.dir" value="${build.root}apps/jrobin/java/build"/>
+  <property name="ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
+  <property name="router.java.build.dir" value="${build.root}router/java/build"/>
+  <property name="sam.java.build.dir" value="${build.root}apps/sam/java/build"/>
+  <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
+  <property name="systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
   <property name="jetty.pkg.dir" value="../../jetty/jettylib"/>
 
   <property name="...build.dir" value="${...build.dir}"/>

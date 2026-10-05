@@ -2,7 +2,7 @@
 <project basedir="." default="all" name="pack200">
   <available file="git" property="git.available"/>
   <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/pack200/java/build"/>
-  <property name="dist.dir" value="dist"/>
+  <property name="dist.dir" value="${java.io.tmpdir}/build-i2p/apps/pack200/java/dist"/>
   <property name="src" value="src"/>
   <property name="build" value="${build.dir}"/>
   <property name="jar" value="pack200.jar"/>

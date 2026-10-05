@@ -2207,12 +2207,10 @@
       <!-- Comprehensive Gradle cleanup for distclean -->
       <delete dir=".gradle" quiet="true"/>
       <delete dir="tools/gradle/wrapper/.gradle" quiet="true"/>
+      <!-- Module build dirs anywhere in the tree: contents and the dirs themselves.
+           tools/build holds source, node_modules is third-party. -->
       <delete includeEmptyDirs="true" quiet="true">
-        <fileset dir="." includes="**/build" excludes="tools/build,tools/build/**,**/node_modules/**"/>
-        <fileset dir="apps" includes="**/build"/>
-        <fileset dir="core" includes="**/build"/>
-        <fileset dir="router" includes="**/build"/>
-        <fileset dir="installer" includes="**/build"/>
+        <fileset dir="." includes="**/build,**/build/**" excludes="tools/build,tools/build/**,**/node_modules/**"/>
       </delete>
       <!-- Clean Gradle user home if it exists in project directory -->
       <delete dir="~/.gradle/caches/${user.name}" quiet="true" failonerror="false"/>

@@ -1,12 +1,13 @@
 <?xml version="1.0"?>
 <project name="addressbook" default="all" basedir=".">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/addressbook/build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}apps/addressbook/build"/>
 
-  <property name="core.java.build.dir" value="../../core/java/build"/>
-  <property name="ministreaming.java.build.dir" value="../../ministreaming/java/build"/>
-  <property name="router.java.build.dir" value="../../router/java/build"/>
-  <property name="streaming.java.build.dir" value="../../streaming/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
+  <property name="ministreaming.java.build.dir" value="${build.root}apps/ministreaming/java/build"/>
+  <property name="router.java.build.dir" value="${build.root}router/java/build"/>
+  <property name="streaming.java.build.dir" value="${build.root}apps/streaming/java/build"/>
 
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="ministreaming.java.build.dir" value="${ministreaming.java.build.dir}"/>

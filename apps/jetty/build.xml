@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="jetty">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/jetty/build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}apps/jetty/build"/>
   <property name="jetty.pkg.dir" value="./jettylib"/>
 
-  <property name="core.java.build.dir" value="../../core/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
 
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
 

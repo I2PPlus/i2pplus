@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="all" name="desktopgui">
   <available file="git" property="git.available"/>
-  <property name="build.dir" value="${java.io.tmpdir}/build-i2p/apps/desktopgui/build"/>
+  <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
+  <property name="build.dir" value="${build.root}apps/desktopgui/build"/>
 
-  <property name="core.java.build.dir" value="../../core/java/build"/>
-  <property name="router.java.build.dir" value="../../router/java/build"/>
-  <property name="systray.java.build.dir" value="../systray/java/build"/>
+  <property name="core.java.build.dir" value="${build.root}core/java/build"/>
+  <property name="router.java.build.dir" value="${build.root}router/java/build"/>
+  <property name="systray.java.build.dir" value="${build.root}apps/systray/java/build"/>
 
   <property name="core.java.build.dir" value="${core.java.build.dir}"/>
   <property name="router.java.build.dir" value="${router.java.build.dir}"/>
@@ -13,7 +14,7 @@
 
   <property name="src" value="src"/>
   <property name="build" value="${build.dir}"/>
-  <property name="dist.dir" value="dist"/>
+  <property name="dist.dir" value="${build.root}apps/desktopgui/dist"/>
   <property name="dist" location="${dist.dir}"/>
   <property name="jar" value="desktopgui.jar"/>
   <property name="javadoc" value="javadoc"/>
