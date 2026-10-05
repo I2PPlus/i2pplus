@@ -128,13 +128,29 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     /**
      *  Give up ownership after a pass.
      *
-     *  @return true when the reader is still reading and may have messages left
+     *  <p>Reports only that the reader is still registered, which is not the same as having
+     *  more to send: the dispatcher decides what to reoffer from the pass result and
+     *  {@link #needsService}.
+     *
+     *  @return true when the reader is still reading
      *  @since 0.9.71+
      */
     private boolean release() {
         _claimed.set(false);
         return registered;
     }
+
+    /**
+     *  Whether this reader is still reading and has messages waiting for a worker.
+     *
+     *  <p>This is the question the dispatcher's idle tick asks. It is deliberately not the
+     *  same as {@link #release}: release reports only that the reader is still registered,
+     *  which says nothing about whether its queue holds anything.
+     *
+     *  @return true when a worker should serve this reader now
+     *  @since 0.9.71+
+     */
+    boolean needsService() {return registered && in.pending() > 0;}
 
     /** Name for diagnostics; identifies the session without depending on its internals. */
     String describe() {
@@ -145,11 +161,16 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     /**
      * Shared dispatcher pool that multiplexes all internal I2CP message readers.
      *
-     * <p>One worker is always present while any reader is registered. It polls the ready
-     * queue round-robin and drains a bounded batch from each reader before handing it
-     * back, so no client can monopolise the pool. Further workers are started only while
-     * there is a backlog to serve and retire again once it clears, so the idle cost is a
-     * single worker however many clients are connected.
+* <p>The ready queue holds readers that have work: one arrives at registration, is handed
+     * back after a pass that filled its budget, and is picked up again by the idle tick if a
+     * message turns up for it later. A reader that drained is left out, so on an idle system the
+     * queue empties, {@link #IDLE_POLL_MS} actually parks a worker instead of timing out against
+     * a queue the workers keep refilling themselves, and surplus workers can retire. The idle cost
+     * is therefore a single worker however many clients are connected.
+     *
+     * <p>Reoffering after a full pass goes to the back of the queue, so a client with a backlog
+     * cannot monopolise the pool. Readers picked up by the idle tick are offered in no particular
+     * order, which only matters when several become ready in the same tick.
      *
      * <p>The pool never falls to zero workers while a reader is registered. Nothing wakes
      * a pool that has gone to sleep, so a reader stranded without one would sit on a queue
@@ -161,14 +182,19 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
     private static class InternalI2CPDispatcher implements Runnable {
         private final Set<QueuedI2CPMessageReader> readers =
             Collections.newSetFromMap(new ConcurrentHashMap<QueuedI2CPMessageReader, Boolean>());
-        /** Readers waiting to be served. FIFO, so clients are served in turn. */
+        /** Readers waiting to be served. Requeued readers go to the back, so no client monopolises it. */
         private final LinkedBlockingQueue<QueuedI2CPMessageReader> ready = new LinkedBlockingQueue<>();
         /** Live workers, plus workers that have decided to exit but not yet decremented. */
         private int liveThreads;
+        /** When the last retirement happened, to shed one worker per idle tick. */
+        private long lastRetireMs;
         /** Thread name counter; prefix plus digits stays within the 12-char convention. */
         private int threadCount;
 
-        /** Idle poll interval, which is also the latency floor for a queued message. */
+        /**
+         * Idle poll interval, which is also the latency floor for a queued message, and the
+         * spacing between retirement of surplus workers.
+         */
         static final long IDLE_POLL_MS = 5;
         /**
          *  Ceiling on concurrent workers, started on demand rather than up front.
@@ -226,13 +252,51 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
             return liveThreads > 1;
         }
 
+        /**
+         *  Reserve a retirement slot for the calling worker, shedding at most one worker
+         *  per idle tick.
+         *
+         *  <p>Every parked worker notices the same idle moment, so a plain surplus check would
+         *  let all of them decide to leave before any of them is counted, collapsing the pool
+         *  to zero and restarting it. Spacing the retirements by one tick steps the pool down
+         *  to the single worker the design promises instead. The count is decremented here,
+         *  under the monitor, so the caller must not decrement it again.
+         *
+         *  @return true if the caller is surplus and must exit
+         */
+        private synchronized boolean mayRetire() {
+            if (!isSurplus()) {return false;}
+            long now = System.currentTimeMillis();
+            if (now - lastRetireMs < IDLE_POLL_MS) {return false;}
+            lastRetireMs = now;
+            liveThreads--;
+            return true;
+        }
+
+        /**
+         *  Offer every registered reader that has messages waiting.
+         *
+         *  <p>A reader whose queue was drained is not requeued by the worker that served it,
+         *  so this is how a message arriving afterwards is still noticed. Called once per
+         *  idle tick, which bounds the cost to one pass over the registered readers per
+         *  {@link #IDLE_POLL_MS} - the latency floor a queued message already had.
+         */
+        private void offerPendingReaders() {
+            for (QueuedI2CPMessageReader reader : readers) {
+                if (reader.needsService()) {ready.offer(reader);}
+            }
+        }
+
 /**
      *  Account for a worker leaving, whatever the reason, and uphold the invariant
      *  that a registered reader always has a worker. The check and the restart happen
      *  in one critical section so a concurrent registration cannot be missed.
+         *
+         *  @param alreadyCounted true when the worker reserved its retirement slot in
+         *                       {@link #mayRetire} and so must not be counted again
          */
-    private synchronized void workerStopped() {
-        liveThreads--;
+    private synchronized void workerStopped(boolean alreadyCounted) {
+        if (!alreadyCounted) {liveThreads--;}
         if (liveThreads >= 1 || readers.isEmpty()) {return;}
         // Unreachable while register() and this method share this monitor: register starts
         // a worker whenever the count is zero. Restarted rather than reported, because a
@@ -244,12 +308,19 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
 
         @Override
         public void run() {
+            boolean retired = false;
             try {
                 while (hasReaders()) {
                     QueuedI2CPMessageReader reader = ready.poll(IDLE_POLL_MS, TimeUnit.MILLISECONDS);
                     if (reader == null) {
-                        // Nothing to do: retire if another worker can cover the readers.
-                        if (isSurplus()) break;
+                        // Nothing queued. Because the ready queue holds only readers that have
+                        // work, this is the tick on which a reader that drained earlier is
+                        // picked up again if something has arrived for it since.
+                        offerPendingReaders();
+                        if (mayRetire()) {
+                            retired = true;
+                            break;
+                        }
                         continue;
                     }
                     if (!reader.claim()) continue;
@@ -258,18 +329,19 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
                     try {
                         handled = reader.drainOnce(QueuedI2CPMessageReader.MAX_DRAIN_PER_PASS);
                     } finally {
-                        // readError/disconnected inside the drain may have stopped reading.
-                        boolean more = reader.release();
-                        if (more) {
-                            // Always requeue, not only after a full pass: a reader whose
-                            // queue was empty when it was served has to come back to be
-                            // served again, or a message that arrives a moment later is
-                            // never noticed and its queue fills for good. Going to the
-                            // back of the FIFO is what keeps that fair.
+                        boolean stillReading = reader.release();
+                        if (stillReading && handled == QueuedI2CPMessageReader.MAX_DRAIN_PER_PASS) {
+                            // A full pass means the queue was not drained, so hand the reader
+                            // straight back and add a worker for the backlog.
+                            //
+                            // A reader that drained is deliberately not requeued: it has
+                            // nothing to give, and reoffering it here is what kept the ready
+                            // queue permanently non-empty, so poll never parked, no worker
+                            // ever saw a surplus pool, and every idle worker spun on
+                            // poll/drain/offer instead. The idle tick above covers the case
+                            // this gives up, which is a message arriving after the drain.
                             ready.offer(reader);
-                            // Only a full pass means real backlog worth another worker;
-                            // requeueing alone must not grow the pool on an idle system.
-                            if (handled == QueuedI2CPMessageReader.MAX_DRAIN_PER_PASS) {grow();}
+                            grow();
                         }
                     }
                     warnIfSlowPass(reader, started);
@@ -277,7 +349,7 @@ public class QueuedI2CPMessageReader extends I2CPMessageReader {
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             } finally {
-                workerStopped();
+                workerStopped(retired);
             }
         }
 

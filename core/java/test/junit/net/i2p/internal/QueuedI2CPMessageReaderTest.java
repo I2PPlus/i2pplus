@@ -185,6 +185,90 @@ public class QueuedI2CPMessageReaderTest {
         }
     }
 
+    /**
+     *  A message that arrives after the reader's queue was drained must still be delivered.
+     *
+     *  <p>This is the case the requeue policy has to keep working. A worker that drained a
+     *  reader's queue finds nothing left to serve, so the reader leaves the ready queue and
+     *  only comes back when the idle tick sees that a message arrived for it. If that path
+     *  were missing, the message would sit on the queue until it filled for good, which is the
+     *  original failure this pool was written to prevent.
+     *
+     *  <p>The wait before filling is longer than the poll interval, so the reader has been
+     *  through at least one idle tick with an empty queue before the message appears.
+     */
+    @Test
+    public void testMessageArrivingAfterADrainIsStillDelivered() {
+        StubQueue queue = new StubQueue();
+        CountingListener lsnr = new CountingListener();
+        QueuedI2CPMessageReader reader = new QueuedI2CPMessageReader(queue, lsnr);
+        reader.startReading();
+        try {
+            // Registered with an empty queue, so the first passes drain nothing and the
+            // reader drops out of the ready queue.
+            sleep(200);
+            assertEquals("nothing should have been delivered from an empty queue",
+                         0, lsnr.received.get());
+            queue.fill(3, 0);
+            assertTrue("a message arriving after a drain was never delivered",
+                       lsnr.await(3, TIMEOUT));
+        } finally {
+            reader.stopReading();
+        }
+    }
+
+    /**
+     *  The same late arrival, repeated, to catch a reader that is served once and then
+     *  silently stops being picked up.
+     *
+     *  <p>One cycle can pass by luck: the worker may still be holding the reader from the
+     *  initial registration when the message arrives. Repeating it drives the reader through
+     *  the drain, the idle tick and a fresh arrival many times over.
+     */
+    @Test
+    public void testRepeatedLateArrivalsKeepBeingDelivered() {
+        StubQueue queue = new StubQueue();
+        CountingListener lsnr = new CountingListener();
+        QueuedI2CPMessageReader reader = new QueuedI2CPMessageReader(queue, lsnr);
+        reader.startReading();
+        try {
+            for (int cycle = 0; cycle < 25; cycle++) {
+                sleep(40);
+                queue.fill(2, 0);
+                assertTrue("late arrival missed on cycle " + cycle, lsnr.await(2, TIMEOUT));
+            }
+        } finally {
+            reader.stopReading();
+        }
+    }
+
+    /**
+     *  One idle reader must not hide another that has work.
+     *
+     *  <p>The idle tick walks every registered reader, so a reader whose queue stays empty
+     *  cannot crowd out one that has just been given something to do.
+     */
+    @Test
+    public void testIdleReaderDoesNotMaskAReaderWithWork() {
+        StubQueue idleQueue = new StubQueue();
+        QueuedI2CPMessageReader idleReader =
+            new QueuedI2CPMessageReader(idleQueue, new CountingListener());
+        StubQueue busyQueue = new StubQueue();
+        CountingListener busy = new CountingListener();
+        QueuedI2CPMessageReader busyReader = new QueuedI2CPMessageReader(busyQueue, busy);
+
+        idleReader.startReading();
+        busyReader.startReading();
+        try {
+            sleep(200);
+            busyQueue.fill(5, 0);
+            assertTrue("an idle reader masked a reader with work", busy.await(5, TIMEOUT));
+        } finally {
+            idleReader.stopReading();
+            busyReader.stopReading();
+        }
+    }
+
     private static void sleep(long ms) {
         try {
             Thread.sleep(ms);
