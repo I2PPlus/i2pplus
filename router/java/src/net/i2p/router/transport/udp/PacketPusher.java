@@ -90,10 +90,12 @@ class PacketPusher implements Runnable {
                         send(packet);
                     }
                 } else {
-                    // getNextVolley only returns empty once the pool is shutting down, so
-                    // this is nearly dead code. Do not leave a bare yield here though: on an
-                    // idle host the scheduler hands the thread straight back, which costs a
-                    // whole core, and an interruptible sleep keeps shutdown responsive.
+                    // Not dead code, despite what the old comment here said. getNextVolley
+                    // returns null on shutdown, and also when a round allocated states that
+                    // pushed no fragments because they were all already acked - a transient
+                    // case. A bare yield spins on it: the scheduler hands the thread straight
+                    // back on an idle host, which costs a whole core. Back off briefly, and
+                    // keep it interruptible so shutdown stays responsive.
                     try {
                         Thread.sleep(IDLE_BACKOFF_MS);
                     } catch (InterruptedException ie) {

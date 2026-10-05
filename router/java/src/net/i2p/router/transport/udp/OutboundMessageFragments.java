@@ -214,12 +214,22 @@ class OutboundMessageFragments {
     }
 
     /**
-     * Fetch all the packets for a message volley, blocking until there is a
-     * message which can be fully transmitted (or the transport is shut down).
+     * Fetch all the packets for a message volley.
      *
-     * NOT thread-safe. Called by the PacketPusher thread only.
+     * <p>Blocks while no peer can send, then gives up after at most {@link #MAX_WAIT}
+     * rather than waiting indefinitely, so this returns even when nothing became sendable.
      *
-     * @return null only on shutdown
+     * <p>NOT thread-safe. Called by the PacketPusher thread only.
+     *
+     * <p>If this is ever changed to retry internally instead of returning null, it must
+     * also break on thread interruption. Shutdown interrupts the pusher, and once that
+     * interrupt has been consumed every later wait returns immediately, which would turn
+     * the retry into a spin - the bug {@link #foldSendDelay} documents.
+     *
+     * @return the packets to send, or null when there is nothing to send. Null does not
+     *         mean shutdown: a round can allocate states whose fragments are all already
+     *         acked, leaving {@link #preparePackets} with nothing to push, and that case
+     *         is transient. Callers must treat null as "retry later" and must not spin.
      */
     public List<UDPPacket> getNextVolley() {
         PeerState peer = null;
@@ -338,8 +348,15 @@ class OutboundMessageFragments {
         }
     }
 
-    /**
-     *  @return null if state or peer is null
+/**
+ *  Build the packets for one volley.
+ *
+ *  @param states the states a peer offered, never null here
+ *  @param peer the peer they belong to
+ *  @return the packets to send, or null when there is nothing to send: null states
+ *         or peer, or every offered state pushed no fragment because all of its
+ *         fragments are already acked. The last case is transient, which is why
+ *         {@link #getNextVolley} can return null without being shut down.
      */
     private List<UDPPacket> preparePackets(List<OutboundMessageState> states, PeerState peer) {
         if (states == null || peer == null) {
