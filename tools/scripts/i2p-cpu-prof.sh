@@ -46,7 +46,7 @@
 # the output.
 #
 # Requires: bash, awk, and at least one of jcmd / jstack from the JDK that runs
-# the router. Optional: jstat, jfr, top, getconf. Missing tools are reported,
+# the router. Optional: getconf, nproc, stat, date. Missing tools are reported,
 # not fatal.
 
 set -uo pipefail
@@ -166,12 +166,46 @@ pick() {
     fi
 }
 JCMD=$(pick jcmd)
-JSTAT=$(pick jstat)
+
+# Run the JDK tools as the account that owns the JVM, which is what
+# i2p-diag-dump.sh does too. Two separate reasons, and the second is the one that
+# is easy to miss: attach is refused outright across accounts, and JFR writes the
+# recording as the *target process*, so a root-run jcmd still creates the .jfr as
+# the router's account - which cannot write inside a root-owned capture directory.
+# Running the tools as the owner fixes both. The account is never recorded in the
+# output; it is only ever used for the sudo and the chown below.
+TARGET_OWNER=""
+JCMD_MODE="direct"
+if [ "$(id -u)" = "0" ]; then
+    TARGET_OWNER=$(stat -c %U "/proc/$PID" 2>/dev/null)
+    if [ -n "$TARGET_OWNER" ] && [ "$TARGET_OWNER" != "root" ]; then
+        # The recording is written by the target JVM process, not by jcmd, so the
+        # capture directory has to be writable by the router's account either way.
+        chown "$TARGET_OWNER" "$DEST" 2>/dev/null \
+            && note "capture dir owned by the router account so JFR can write there"
+        # Probe sudo once. A root jcmd already attaches fine, so if switching
+        # accounts is not permitted here, fall back to running it as root rather
+        # than losing the thread dumps that were working before.
+        if sudo -n -u "$TARGET_OWNER" true 2>/dev/null; then
+            JCMD_MODE="sudo"
+        else
+            note "cannot run tools as the router's account; jcmd stays as root"
+        fi
+    fi
+fi
+
+jcmd_() {
+    if [ "$JCMD_MODE" = "sudo" ]; then
+        sudo -n -u "$TARGET_OWNER" "$JCMD" "$PID" "$@"
+    else
+        "$JCMD" "$PID" "$@"
+    fi
+}
 
 # Only the JDK tools are gated on privilege; the /proc accounting is not, so
 # note the shortfall once and carry on rather than aborting a partial capture.
 ATTACH_OK=1
-if [ -n "$JCMD" ] && "$JCMD" "$PID" VM.version >/dev/null 2>&1; then
+if [ -n "$JCMD" ] && jcmd_ VM.version >/dev/null 2>&1; then
     :
 elif [ "$(id -u)" = "0" ]; then
     note "jcmd attach refused even as root; is $JCMD the wrong JDK for this JVM?"
@@ -201,9 +235,9 @@ fi
 } > "$DEST/00-env.txt"
 
 if [ "$ATTACH_OK" = "1" ]; then
-    try "$DEST/01-vm-version.txt"  "$JCMD" "$PID" VM.version
-    try "$DEST/02-vm-flags.txt"    "$JCMD" "$PID" VM.flags
-    try "$DEST/03-vm-uptime.txt"   "$JCMD" "$PID" VM.uptime
+    try "$DEST/01-vm-version.txt"  jcmd_ VM.version
+    try "$DEST/02-vm-flags.txt"    jcmd_ VM.flags
+    try "$DEST/03-vm-uptime.txt"   jcmd_ VM.uptime
 fi
 
 # ---------------------------------------------- 2. per-thread CPU accounting
@@ -255,19 +289,27 @@ snapshot > "$DEST/.snap-a"
 
 # The thread dumps and the JFR window share the accounting window so that the
 # frames in 40-hot-stacks.txt belong to the threads ranked in the summary.
-[ "$ATTACH_OK" = "1" ] && "$JCMD" "$PID" Thread.print > "$DEST/20-threads-pre.txt" 2>/dev/null \
+[ "$ATTACH_OK" = "1" ] && jcmd_ Thread.print > "$DEST/20-threads-pre.txt" 2>/dev/null \
     || note "Thread.print unavailable"
 
 JFRNAME="i2pcpu$$"
 JFRACTIVE=""
 if [ "$JFRSECS" -gt 0 ] && [ "$ATTACH_OK" = "1" ]; then
-    if try "$DEST/.jfr-start.txt" "$JCMD" "$PID" JFR.start \
-            name="$JFRNAME" settings=profile duration="${JFRSECS}s" \
-            filename="$DEST/30-profile.jfr"; then
+    # Success has to be read out of jcmd's output, not its exit code: jcmd exits 0
+    # even when the command it ran failed, so a refused JFR.start looks like a
+    # success here and the capture then reports a missing file with no reason.
+    # Keep the output; it is the only thing that says why. The wording has changed
+    # between JDKs ("Started recording" on 25, "Recording started" on older), so
+    # accept either rather than reporting a working recording as broken.
+    jcmd_ JFR.start name="$JFRNAME" settings=profile duration="${JFRSECS}s" \
+        filename="$DEST/30-profile.jfr" > "$DEST/30-jfr-start.txt" 2>&1
+    if grep -qiE 'started recording|recording started' "$DEST/30-jfr-start.txt" 2>/dev/null; then
         JFRACTIVE=1
         note "JFR recording for ${JFRSECS}s"
     else
-        note "JFR.start failed; continuing without it"
+        note "JFR.start did not take; reason in 30-jfr-start.txt:"
+        head -3 "$DEST/30-jfr-start.txt" 2>/dev/null | sed 's/^/          /'
+        note "continuing without a recording; thread dumps still carry the frames"
     fi
 fi
 
@@ -280,7 +322,7 @@ while [ "$i" -le "$DUMPS" ]; do
     ELAPSED=$(( ELAPSED + DUMPSPAUSE ))
     if [ "$ATTACH_OK" = "1" ]; then
         n=$(printf '%02d' $(( 20 + i )))
-        "$JCMD" "$PID" Thread.print > "$DEST/$n-threads.txt" 2>/dev/null \
+        jcmd_ Thread.print > "$DEST/$n-threads.txt" 2>/dev/null \
             || note "Thread.print $i unavailable"
     fi
     i=$(( i + 1 ))
@@ -296,22 +338,21 @@ REMAIN=$(( WINDOW - ELAPSED ))
 snapshot > "$DEST/.snap-b"
 
 if [ -n "$JFRACTIVE" ]; then
-    "$JCMD" "$PID" JFR.check > "$DEST/31-jfr-check.txt" 2>/dev/null
-    "$JCMD" "$PID" JFR.stop name="$JFRNAME" > "$DEST/32-jfr-stop.txt" 2>/dev/null
+    jcmd_ JFR.check > "$DEST/31-jfr-check.txt" 2>/dev/null
+    jcmd_ JFR.stop name="$JFRNAME" > "$DEST/32-jfr-stop.txt" 2>/dev/null
     # stop should flush the recording to the filename given at start, but it
     # does not always; dump is the belt-and-braces way to force the bytes out
     # before giving up, and it costs nothing if stop already worked.
     if [ ! -s "$DEST/30-profile.jfr" ]; then
-        "$JCMD" "$PID" JFR.dump name="$JFRNAME" filename="$DEST/30-profile.jfr" \
+        jcmd_ JFR.dump name="$JFRNAME" filename="$DEST/30-profile.jfr" \
             > "$DEST/33-jfr-dump.txt" 2>/dev/null
     fi
     if [ -s "$DEST/30-profile.jfr" ]; then
         note "JFR: $(du -h "$DEST/30-profile.jfr" | cut -f1)"
     else
-        note "JFR recording produced no file; see 31/32-jfr-*.txt"
+        note "JFR recording produced no file; see 30/31/32/33-jfr-*.txt"
     fi
 fi
-rm -f "$DEST/.jfr-start.txt"
 
 # Percent-of-one-core per thread, then rolled up by thread name. The aggregate
 # matters more than the per-thread number: a pool of eight dispatchers at 28%
@@ -396,16 +437,30 @@ fi
 
 # A CPU spike that is really GC pressure shows up here rather than in any
 # thread's Java frames, so keep GC cadence next to the thread ranking.
+#
+# Sampled with jcmd rather than jstat on purpose. jstat reads the JVM's perfdata
+# channel, which this router does not publish: it runs -XX:+PerfDisableSharedMem,
+# so there is no hsperfdata file and every jstat attach fails with
+# PerfDataBuffer regardless of privilege. GC.heap_info goes over the attach
+# mechanism, which does work, and its used/committed pair across samples is
+# enough to tell real GC pressure from ordinary allocation churn.
 if [ "$ATTACH_OK" = "1" ]; then
-    if [ -n "$JSTAT" ]; then
-        try "$DEST/50-jstat-gcutil.txt" "$JSTAT" -gcutil "$PID" 2000 3
-    else
-        note "jstat unavailable; skipping GC sampling"
+    : > "$DEST/50-gc-samples.txt"
+    gcsample=1
+    while [ "$gcsample" -le 3 ]; do
+        {
+            printf '\n=== sample %d at %s\n' "$gcsample" "$(date -u +%H:%M:%SZ)"
+            jcmd_ GC.heap_info 2>&1 | grep -viE '^$|attached|^\s*[0-9]+:'
+        } >> "$DEST/50-gc-samples.txt"
+        [ "$gcsample" -lt 3 ] && sleep 2
+        gcsample=$(( gcsample + 1 ))
+    done
+    if ! grep -qi 'garbage-first\|heap' "$DEST/50-gc-samples.txt" 2>/dev/null; then
+        note "GC.heap_info unavailable; no GC cadence captured"
     fi
-    try "$DEST/51-gc-heap.txt" "$JCMD" "$PID" GC.heap_info
     # Compiler threads burn real CPU during a rebuild-heavy period; if the
     # ranking below is dominated by them the fix is build flags, not router code.
-    try "$DEST/52-compilation.txt" "$JCMD" "$PID" Compiler.queue
+    try "$DEST/52-compilation.txt" jcmd_ Compiler.queue
 fi
 
 # ------------------------------------------------------- 5. router log tail
@@ -478,9 +533,12 @@ rm -f "$DEST/.snap-a" "$DEST/.snap-b" "$DEST/.agg" "$DEST/.total" \
     echo "  10-perthread-cpu.txt          CPU by thread name, % of one core"
     echo "  11-perthread-cpu-detail.txt   the same per OS tid"
     echo "  20-threads*.txt               full thread dumps from inside the window"
+    echo "  30-jfr-start.txt             what JFR.start said, kept for diagnosis"
     echo "  30-profile.jfr               JFR recording, if it was started"
+    echo "  31..33-jfr-*.txt             JFR check/stop/dump output, for diagnosis"
     echo "  40-hot-stacks.txt            frames for the top $TOPN threads only"
-    echo "  50..52-gc-*.txt              GC cadence, heap, compiler queue"
+    echo "  50-gc-samples.txt            GC.heap_info sampled across the window"
+    echo "  52-compilation.txt           JIT compiler queue"
     echo "  60-log-tail.txt              tail of the newest router log, if readable"
     echo
     echo "This capture is read-only and attached no debugger; the router was never"
