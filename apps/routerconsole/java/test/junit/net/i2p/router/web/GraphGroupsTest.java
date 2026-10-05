@@ -38,7 +38,7 @@ public class GraphGroupsTest {
 
     @Test
     public void nothingIsCombinedWithoutTheOptIn() {
-        Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers", "router.integratedPeers");
+        Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers");
         assertTrue(GraphGroups.combinedRepresentatives(enabled, false, false).isEmpty());
         assertTrue("no stat may be suppressed when combining is off",
                    GraphGroups.suppressedStats(enabled, false, false).isEmpty());
@@ -55,17 +55,17 @@ public class GraphGroupsTest {
     @Test
     public void twoMembersAreEnoughToCombine() {
         assertTrue(GraphGroups.shouldCombine(
-            GraphGroups.enabledMembers("peerCaps", on("router.fastPeers", "router.integratedPeers")),
+            GraphGroups.enabledMembers("peerCaps", on("router.fastPeers", "router.highCapacityPeers")),
             true, false));
     }
 
     @Test
     public void eventsModeIsNeverCombined() {
         // Events change what a datasource means, so the same-axis guarantee does not hold.
-        List<String> members = GraphGroups.enabledMembers("peerCaps", on("router.fastPeers", "router.integratedPeers"));
+        List<String> members = GraphGroups.enabledMembers("peerCaps", on("router.fastPeers", "router.highCapacityPeers"));
         assertFalse(GraphGroups.shouldCombine(members, true, true));
         assertTrue(GraphGroups.combinedRepresentatives(
-            on("router.fastPeers", "router.integratedPeers"), true, true).isEmpty());
+            on("router.fastPeers", "router.highCapacityPeers"), true, true).isEmpty());
     }
 
     @Test
@@ -80,15 +80,14 @@ public class GraphGroupsTest {
 
     @Test
     public void everyMemberIsCoveredOnceCombined() {
-        Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers", "router.integratedPeers");
+        Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers");
         Map<String, String> reps = GraphGroups.combinedRepresentatives(enabled, true, false);
         assertEquals(1, reps.size());
         String rep = reps.get("peerCaps");
         assertEquals("router.fastPeers", rep);
         Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
-        assertEquals("a combined plot replaces one graph, it does not add one", 3, covered.size());
+        assertEquals("a combined plot replaces one graph, it does not add one", 2, covered.size());
         assertTrue(covered.contains("router.highCapacityPeers"));
-        assertTrue(covered.contains("router.integratedPeers"));
         // The representative is inside the group plot too. Leaving it out drew the same
         // series twice, once merged and once on its own.
         assertTrue("the representative must not also render on its own",
@@ -123,24 +122,87 @@ public class GraphGroupsTest {
         // switched them on, so a colour and a legend entry stay on the same stat as
         // toggles come and go. A tile that jumped would move the primary series, and with
         // it the axis range.
-        Map<String, String> integratedFirst = GraphGroups.combinedRepresentatives(
-            on("router.integratedPeers", "router.fastPeers"), true, false);
-        assertEquals("router.fastPeers", integratedFirst.get("peerCaps"));
+        Map<String, String> highCapFirstReversed = GraphGroups.combinedRepresentatives(
+            on("router.highCapacityPeers", "router.fastPeers"), true, false);
+        assertEquals("router.fastPeers", highCapFirstReversed.get("peerCaps"));
         Map<String, String> highCapFirst = GraphGroups.combinedRepresentatives(
             on("router.highCapacityPeers", "router.fastPeers"), true, false);
         assertEquals("router.fastPeers", highCapFirst.get("peerCaps"));
     }
 
     @Test
-    public void theRepresentativeIsTheFirstEnabledMemberInGroupOrder() {
-        // With the leading member off, the next enabled one takes the tile, so enabling a
-        // stat never leaves the group without a graph.
+    public void aLoneMemberKeepsItsOwnGraphInsteadOfCombining() {
+        // Every group now holds exactly two members, so "the leading member is off and the
+        // next one takes the tile" is no longer reachable. What remains worth pinning is
+        // that a single enabled member does NOT collapse into a group plot: combining
+        // replaces N graphs with one, so with one member there is nothing to gain and the
+        // stat keeps its own tile.
         Map<String, String> reps = GraphGroups.combinedRepresentatives(
-            on("router.highCapacityPeers", "router.integratedPeers"), true, false);
-        assertEquals("router.highCapacityPeers", reps.get("peerCaps"));
+            on("router.highCapacityPeers"), true, false);
+        assertNull("one member must not form a group plot", reps.get("peerCaps"));
+        assertTrue(GraphGroups.suppressedStats(on("router.highCapacityPeers"), true, false).isEmpty());
+        // Both enabled does combine, and takes the first in group order.
+        Map<String, String> both = GraphGroups.combinedRepresentatives(
+            on("router.fastPeers", "router.highCapacityPeers"), true, false);
+        assertEquals("router.fastPeers", both.get("peerCaps"));
     }
 
     /////////////// unit discipline
+
+    /**
+     * No frame may combine more than {@link GraphGroups#MAX_SERIES} values.
+     *
+     * <p>This is the contract that lets the plot palette shrink to two hues and a single
+     * dash pattern. Without it a third line silently reuses the first line's colour, so
+     * the graph reads as having fewer series than it draws.
+     */
+    @Test
+    public void noGroupExceedsSeriesBudget() {
+        for (String id : GraphGroups.groupIds()) {
+            int n = GraphGroups.members(id).size();
+            assertTrue("group " + id + " has " + n + " series, budget is "
+                       + GraphGroups.MAX_SERIES, n <= GraphGroups.MAX_SERIES);
+        }
+    }
+
+    /** A stat may only be claimed by one group, or it would be plotted twice. */
+    @Test
+    public void noStatAppearsInTwoGroups() {
+        Map<String, String> owner = new LinkedHashMap<>();
+        for (String id : GraphGroups.groupIds()) {
+            for (String stat : GraphGroups.members(id)) {
+                String prev = owner.put(stat, id);
+                assertNull("stat " + stat + " is in both " + prev + " and " + id, prev);
+            }
+        }
+    }
+
+    /**
+     * A group with no title or subsystem renders as an unprefixed, unlabelled frame and
+     * sorts nowhere in the graph list.
+     */
+    @Test
+    public void everyGroupHasTitleAndSubsystem() {
+        // titleOf falls back to the id, so compare the key sets rather than null-checking.
+        assertTrue("titles do not cover the group registry", GraphGroups.allGroupsTitled());
+        for (String id : GraphGroups.groupIds()) {
+            assertFalse("no title for group " + id, id.equals(GraphGroups.titleOf(id)));
+            assertFalse("blank title for group " + id,
+                        GraphGroups.titleOf(id).trim().isEmpty());
+            assertNotNull("no subsystem for group " + id, GraphGroups.subsystemOf(id));
+            assertFalse("blank subsystem for group " + id,
+                        GraphGroups.subsystemOf(id).trim().isEmpty());
+        }
+    }
+
+    /**
+     * Tuner CPU is deliberately not grouped: each pool is idle most of the time, so a
+     * ten-line frame would be nine flat lines and one spike.
+     */
+    @Test
+    public void tunerCpuIsNotGrouped() {
+        assertTrue(GraphGroups.members("tunerCpu").isEmpty());
+    }
 
     @Test
     public void noGroupMixesUnits() {
@@ -153,19 +215,21 @@ public class GraphGroupsTest {
         assertUnitsAgree("jobTiming", "ms");
         assertUnitsAgree("jobQueueDepth", "count");
         assertUnitsAgree("jobLoadEvents", "count");
-        assertUnitsAgree("buildReject", "count");
+        assertUnitsAgree("buildRejectReceived", "count");
+        assertUnitsAgree("buildRejectBanned", "count");
         assertUnitsAgree("netDbLookupTime", "ms");
         assertUnitsAgree("udpRto", "ms");
-        assertUnitsAgree("tunerCpu", "pct of one core");
         assertUnitsAgree("tunnelCaches", "entries");
         assertUnitsAgree("codelDrop", "ms");
         assertUnitsAgree("cryptoPoolUsed", "events");
         assertUnitsAgree("cryptoPoolEmpty", "events");
         assertUnitsAgree("bwLimiterDelay", "ms");
         assertUnitsAgree("bwLimiterPending", "requests");
-        assertUnitsAgree("i2ptunnelThreads", "threads");
+        assertUnitsAgree("i2ptunnelClientThreads", "threads");
+        assertUnitsAgree("i2ptunnelServerThreads", "threads");
         assertUnitsAgree("leaseSetLookupTime", "ms");
-        assertUnitsAgree("i2cpDrops", "events");
+        assertUnitsAgree("inNetPoolDrops", "events");
+        assertUnitsAgree("clientDrops", "events");
         assertUnitsAgree("i2ptunnelServerTime", "ms");
     }
 
@@ -251,42 +315,33 @@ public class GraphGroupsTest {
     /////////////// series cap
 
     @Test
-    public void seriesAreCappedForLegibility() {
-        assertEquals(6, GraphGroups.MAX_SERIES);
-        // tunerCpu is the group that exceeds the cap, which is what makes the cap testable.
-        List<String> all = GraphGroups.members("tunerCpu");
-        assertTrue("expected a group larger than the cap", all.size() > GraphGroups.MAX_SERIES);
-        List<String> capped = GraphGroups.enabledMembers("tunerCpu", on(all.toArray(new String[0])));
-        assertEquals(GraphGroups.MAX_SERIES, capped.size());
-    }
-
-    @Test
-    public void membersBeyondTheCapStillGetTheirOwnGraph() {
-        // The cap limits one plot, it must not silently discard stats from the page.
-        List<String> all = GraphGroups.members("tunerCpu");
-        Set<String> enabled = on(all.toArray(new String[0]));
-        List<String> plotted = GraphGroups.enabledMembers("tunerCpu", enabled);
-        Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
-        for (String stat : all) {
-            if (plotted.contains(stat)) {
-                assertTrue(stat + " is plotted so must be covered", covered.contains(stat)
-                           || plotted.get(0).equals(stat));
-            } else {
-                assertFalse(stat + " is past the cap so must render alone", covered.contains(stat));
-            }
+    public void theCapIsTwoAndEveryGroupFitsUnderIt() {
+        // The budget is now a contract rather than an active truncation: no group exceeds
+        // it, so enabledMembers' cap branch is unreachable and the plot palette only needs
+        // two hues. noGroupExceedsSeriesBudget asserts the fit across every group.
+        assertEquals(2, GraphGroups.MAX_SERIES);
+        for (String id : GraphGroups.groupIds()) {
+            assertTrue(id + " exceeds the cap", GraphGroups.members(id).size() <= 2);
+            // A group within budget is returned whole, never truncated.
+            List<String> members = GraphGroups.members(id);
+            assertEquals(members,
+                GraphGroups.enabledMembers(id, on(members.toArray(new String[0]))));
         }
     }
 
     @Test
-    public void theCapKeepsTheFirstMembersInLegendOrder() {
-        // tunerCpu, not peerProfiles: peerProfiles used to be the convenient over-cap
-        // group, but it was split when the nested stored-profiles pair was pulled out of
-        // it, so it no longer exercises the cap.
-        List<String> members = GraphGroups.members("tunerCpu");
-        assertTrue("this test needs a group larger than the cap",
-                   members.size() > GraphGroups.MAX_SERIES);
-        List<String> capped = GraphGroups.enabledMembers("tunerCpu", on(members.toArray(new String[0])));
-        assertEquals(members.subList(0, GraphGroups.MAX_SERIES), capped);
+    public void everyMemberOfAGroupRendersOrIsCovered() {
+        // Combined or not, no stat may vanish: members beyond a frame still get a graph.
+        for (String id : GraphGroups.groupIds()) {
+            List<String> members = GraphGroups.members(id);
+            Set<String> enabled = on(members.toArray(new String[0]));
+            List<String> plotted = GraphGroups.enabledMembers(id, enabled);
+            Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
+            for (String stat : members) {
+                boolean shown = plotted.contains(stat) || covered.contains(stat);
+                assertTrue(stat + " in group " + id + " would not render at all", shown);
+            }
+        }
     }
 
     @Test
@@ -394,7 +449,8 @@ public class GraphGroupsTest {
     @Test
     public void theKnownTitlesReadAsLabels() {
         assertEquals("Pumper Loops", GraphGroups.titleOf("ntcpPumper"));
-        assertEquals("Build Rejections", GraphGroups.titleOf("buildReject"));
+        assertEquals("Build Rejections Received", GraphGroups.titleOf("buildRejectReceived"));
+        assertEquals("Builds Refused as Banned", GraphGroups.titleOf("buildRejectBanned"));
         assertEquals("Queue Timing", GraphGroups.titleOf("jobTiming"));
     }
 
@@ -428,8 +484,11 @@ public class GraphGroupsTest {
     public void aStatIsNeverInMoreThanOneGroup() {
         // crypto.EDHUsed and crypto.EDHEmpty are deliberately in separate groups: a drained
         // pool and a dry pool are different conditions, not two series of one measure.
-        assertEquals("cryptoPoolUsed", GraphGroups.groupOf("crypto.EDHUsed"));
-        assertEquals("cryptoPoolEmpty", GraphGroups.groupOf("crypto.EDHEmpty"));
+        assertEquals("cryptoPoolUsed", GraphGroups.groupOf("crypto.MLKEMUsed"));
+        assertEquals("cryptoPoolEmpty", GraphGroups.groupOf("crypto.XDHEmpty"));
+        // EDH is legacy ElGamal and was dropped from both frames, so it has no group.
+        assertNull(GraphGroups.groupOf("crypto.EDHUsed"));
+        assertNull(GraphGroups.groupOf("crypto.EDHEmpty"));
         // Same for the two bandwidth-limiter pairs.
         assertEquals("bwLimiterDelay", GraphGroups.groupOf("bwLimiter.inboundDelayedTime"));
         assertEquals("bwLimiterPending", GraphGroups.groupOf("bwLimiter.pendingInboundRequests"));
@@ -438,13 +497,13 @@ public class GraphGroupsTest {
     @Test
     public void suppressionMatchesOnlyTheRepresentative() {
         assertTrue(GraphGroups.isSuppressed("router.fastPeers", "router.fastPeers"));
-        assertFalse(GraphGroups.isSuppressed("router.integratedPeers", "router.fastPeers"));
+        assertFalse(GraphGroups.isSuppressed("router.highCapacityPeers", "router.fastPeers"));
         assertFalse(GraphGroups.isSuppressed("router.fastPeers", null));
     }
 
     @Test
     public void twoGroupsCanCombineAtOnce() {
-        Set<String> enabled = on("router.fastPeers", "router.integratedPeers",
+        Set<String> enabled = on("router.fastPeers", "router.highCapacityPeers",
                                  "ntcp.pumperLoopsPerSecond", "ntcp.pumperIdleLoops");
         Map<String, String> reps = GraphGroups.combinedRepresentatives(enabled, true, false);
         assertEquals(2, reps.size());

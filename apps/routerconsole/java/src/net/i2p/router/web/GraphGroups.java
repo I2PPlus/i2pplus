@@ -32,10 +32,14 @@ public final class GraphGroups {
     public static final String PROP_COMBINE = "routerconsole.graphCombine";
 
     /**
-     * Most series drawn on one plot. Past this the lines are too close to tell apart in a
-     * small tile, and more than six distinct colours stop being reliably distinguishable.
+     * Most series drawn on one plot.
+     *
+     * <p>Every group is now at or under {@link #MAX_SERIES}: no frame combines more than
+     * two, because a tile is too small to read a third line and two hues are all the
+     * palette needs. This stays as a hard cap so a group added later cannot silently
+     * exceed it, and {@code GraphGroupsTest} asserts the current groups all comply.
      */
-    public static final int MAX_SERIES = 6;
+    public static final int MAX_SERIES = 2;
 
     /**
      * Display name per group. A combined plot shows several stats, so naming it after the
@@ -51,11 +55,13 @@ public final class GraphGroups {
         Map<String, List<String>> g = new LinkedHashMap<>();
 
         // Peer capability counts. All are gauges of a peer set sampled once a minute:
-        // ProfileOrganizer's fast/high-capacity tiers plus the floodfill set from
-        // peerManager. Deliberately excludes activePeers (a live connection count on a
-        // different clock) and knownPeers (netdb size, several times larger).
+        // ProfileOrganizer's fast and high-capacity tiers. Deliberately excludes
+        // activePeers (a live connection count on a different clock) and knownPeers
+        // (netdb size, several times larger). router.integratedPeers, the floodfill
+        // set, stays on its own graph: it is a membership count rather than a capability
+        // tier, and pairing it with the two tiers made the frame answer two questions.
         g.put("peerCaps", Arrays.asList(
-                "router.fastPeers", "router.highCapacityPeers", "router.integratedPeers"));
+                "router.fastPeers", "router.highCapacityPeers"));
 
         // Profiles held in RAM against those written to disk. Same unit, and the on-disk
         // count is published by ProfilePersistenceHelper as a gauge of what survives a
@@ -75,10 +81,12 @@ public final class GraphGroups {
         g.put("ntcpPumper", Arrays.asList(
                 "ntcp.pumperLoopsPerSecond", "ntcp.pumperIdleLoops"));
 
-        // Job queue timings, all milliseconds.
+        // Job queue execution timings, all milliseconds. Lag and wait are queueing measures
+        // rather than execution ones, and loadRecoveryTime is a recovery trigger, so
+        // each of those stays on its own graph; this frame contrasts a normal job
+        // against one that took over a second.
         g.put("jobTiming", Arrays.asList(
-                "jobQueue.jobLag", "jobQueue.jobRun", "jobQueue.jobRunSlow",
-                "jobQueue.jobWait", "jobQueue.loadRecoveryTime"));
+                "jobQueue.jobRun", "jobQueue.jobRunSlow"));
 
         // Job queue depth, all counts of jobs waiting or running.
         // TestJob is deliberately absent: it is a synthetic workload rather than real
@@ -87,57 +95,66 @@ public final class GraphGroups {
         g.put("jobQueueDepth", Arrays.asList(
                 "jobQueue.queuedJobs", "jobQueue.readyJobs"));
 
-        // Why the queue throttled: event counters, each a running total. Kept apart from
+        // Why the runner scaled: event counters, each a running total. Kept apart from
         // jobQueueDepth because those are levels and these are cumulative events, and reading a
         // level and an event count off one axis invites a comparison that does not hold.
+        // scaleRollback is a distinct failure signal and stays on its own graph, as does
+        // droppedJobs. testJobHardLimit is gone from the console entirely: it counts
+        // TestJob, the synthetic workload already excluded from jobQueueDepth.
         g.put("jobLoadEvents", Arrays.asList(
-                "jobQueue.runnerScaleUp", "jobQueue.runnerScaleDown", "jobQueue.scaleRollback",
-                "jobQueue.testJobHardLimit", "jobQueue.droppedJobs"));
+                "jobQueue.runnerScaleUp", "jobQueue.runnerScaleDown"));
 
-        // Tunnel build rejections, all counts of builds refused for a given reason.
-        g.put("buildReject", Arrays.asList(
-                "tunnel.rejectHopThrottle", "tunnel.receiveRejectionProbabalistic",
-                "tunnel.receiveRejectionTransient", "tunnel.buildBanHit",
-                "tunnel.buildBanFiltered", "tunnel.buildDupId"));
+        // Tunnel build rejections we received from a peer: probabalistic (the peer shed
+        // load by design) against transient (an overload it did not expect). Both are
+        // counters of the same event seen from the far end of the build.
+        g.put("buildRejectReceived", Arrays.asList(
+                "tunnel.receiveRejectionProbabalistic", "tunnel.receiveRejectionTransient"));
+
+        // Tunnel builds we refused locally because the next hop is banned. Distinct from
+        // buildRejectReceived in direction and cause, so the two are separate frames.
+        g.put("buildRejectBanned", Arrays.asList(
+                "tunnel.buildBanHit", "tunnel.buildBanFiltered"));
 
         // NetDb lookup durations, both milliseconds.
         g.put("netDbLookupTime", Arrays.asList("netDb.successTime", "netDb.failedTime"));
 
-        // UDP retransmission timeouts, all milliseconds.
+        // Note: tunnel.rejectHopThrottle (a per-hop throttle applied by this router) and
+        // tunnel.buildDupId (a duplicate build ID) are refused for reasons that are
+        // neither a received rejection nor a ban, so each stays on its own graph.
+
+        // UDP retransmission timeouts, all milliseconds. congestedRTO is the value used
+        // after congestion and is a regime of its own; it stays on its own graph rather
+        // than being averaged in with the steady-state figures.
         g.put("udpRto", Arrays.asList(
-                "udp.avgRTO", "udp.avgEffectiveRTO", "udp.congestedRTO"));
+                "udp.avgRTO", "udp.avgEffectiveRTO"));
 
-        // Tuner CPU time per transport worker pool, every one reported as a percentage of
-        // a single core. Ten members, so this is the group the series cap actually bites
-        // on: the first six plot together and the remainder stay as their own graphs
-        // rather than being dropped.
-        g.put("tunerCpu", Arrays.asList(
-                "tuner.stageCpu.NTCPPumper", "tuner.stageCpu.NTCPReader",
-                "tuner.stageCpu.NTCPTXFinis", "tuner.stageCpu.NTCPWriter",
-                "tuner.stageCpu.UDMMsgRX", "tuner.stageCpu.UDPEstab",
-                "tuner.stageCpu.UDPPktHandler", "tuner.stageCpu.UDPPktPusher",
-                "tuner.stageCpu.UDPReceiver", "tuner.stageCpu.UDPSender"));
+        // Tuner CPU time per transport worker pool is deliberately NOT grouped. Each
+        // pool is a percentage of a single core and only one or two are ever hot at
+        // once, so a ten-line frame would be nine flat lines and one spike; ten
+        // individual graphs answer "which pool" directly.
 
-        // Cache occupancy, all gauges of entries held. Read together they show which cache
-        // is growing against its ceiling.
+        // Inbound against outbound gateway cache occupancy. Both are gauges of entries
+        // held against the same ceiling, so the pair shows which direction is filling.
+        // The participants/participatingConfig pair and the outbound endpoint cache each
+        // stay on their own graphs.
         g.put("tunnelCaches", Arrays.asList(
-                "tunnel.cache.participants", "tunnel.cache.participatingConfig",
-                "tunnel.cache.inboundGateways", "tunnel.cache.outboundGateways",
-                "tunnel.cache.outboundEndpoints"));
+                "tunnel.cache.inboundGateways", "tunnel.cache.outboundGateways"));
 
-        // CoDel drop delay per priority band: the same measure at six priorities, so one
-        // plot shows which band is being dropped and when.
+        // CoDel drop delay for the two highest-priority bands. Lower CoDel priority
+        // numbers are the more urgent queues, so a drop at 0 or 100 is the one worth
+        // reading together; bands 200-500 rarely drop and each stays on its own graph.
         g.put("codelDrop", Arrays.asList(
-                "codel.OBGW.drop.0", "codel.OBGW.drop.100", "codel.OBGW.drop.200",
-                "codel.OBGW.drop.300", "codel.OBGW.drop.400", "codel.OBGW.drop.500"));
+                "codel.OBGW.drop.0", "codel.OBGW.drop.100"));
 
         // Precalculated key pool consumption per algorithm, all event counters. Read apart
         // from the empty counts on purpose: these say the pool is being drained, those say
-        // it ran dry, and a drained pool is healthy while a dry one is not.
+        // it ran dry, and a drained pool is healthy while a dry one is not. ML-KEM and
+        // XDH are the live algorithms and share the frame; EDH is legacy ElGamal and
+        // each EDH counter stays on its own graph.
         g.put("cryptoPoolUsed", Arrays.asList(
-                "crypto.EDHUsed", "crypto.MLKEMUsed", "crypto.XDHUsed"));
+                "crypto.MLKEMUsed", "crypto.XDHUsed"));
         g.put("cryptoPoolEmpty", Arrays.asList(
-                "crypto.EDHEmpty", "crypto.MLKEMEmpty", "crypto.XDHEmpty"));
+                "crypto.MLKEMEmpty", "crypto.XDHEmpty"));
 
         // Bandwidth limiter queueing delay, both directions, both milliseconds.
         g.put("bwLimiterDelay", Arrays.asList(
@@ -147,21 +164,30 @@ public final class GraphGroups {
         g.put("bwLimiterPending", Arrays.asList(
                 "bwLimiter.pendingInboundRequests", "bwLimiter.pendingOutboundRequests"));
 
-        // I2CP thread accounting, all thread counts. Mixes the configured maxima with the
-        // live counts on purpose: the gap between the two is the growth headroom.
-        g.put("i2ptunnelThreads", Arrays.asList(
-                "i2ptunnel.clientRunner.activeThreads", "i2ptunnel.clientRunner.threads",
+        // I2CP thread accounting, split by side. Each frame mixes the configured maximum
+        // with the live count on purpose: the gap between the two is the growth headroom.
+        // Client and server are separate pools, so they get separate frames rather than
+        // one four-line comparison.
+        g.put("i2ptunnelClientThreads", Arrays.asList(
+                "i2ptunnel.clientRunner.activeThreads", "i2ptunnel.clientRunner.threads"));
+        g.put("i2ptunnelServerThreads", Arrays.asList(
                 "i2ptunnel.serverHandler.active", "i2ptunnel.serverHandler.threads"));
 
         // Remote LeaseSet lookup time, split by outcome.
         g.put("leaseSetLookupTime", Arrays.asList(
                 "client.leaseSetFoundRemoteTime", "client.leaseSetFailedRemoteTime"));
 
-        // Messages dropped for any reason, one series per cause. All event counters.
-        g.put("i2cpDrops", Arrays.asList(
-                "inNetPool.dropped", "inNetPool.duplicate",
-                "inNetPool.droppedDbLookupResponseMessage", "client.dispatchNoACK",
-                "client.requestLeaseSetDropped", "client.writerQueueFull"));
+        // Messages dropped on the inbound pool path: a message we had to drop against
+        // one that arrived twice. Both are counters of the same inbound event.
+        g.put("inNetPoolDrops", Arrays.asList(
+                "inNetPool.dropped", "inNetPool.duplicate"));
+
+        // Messages the client side had to drop: a LeaseSet request it refused, and a
+        // resend that needed no ACK. writerQueueFull is a backpressure signal rather
+        // than a rejection and stays on its own graph, as does the dbLookup response
+        // drop on the inbound side.
+        g.put("clientDrops", Arrays.asList(
+                "client.dispatchNoACK", "client.requestLeaseSetDropped"));
 
         // I2PTunnel server socket setup time, both milliseconds.
         g.put("i2ptunnelServerTime", Arrays.asList(
@@ -178,19 +204,21 @@ public final class GraphGroups {
         t.put("jobTiming", "Queue Timing");
         t.put("jobQueueDepth", "Scheduled Jobs");
         t.put("jobLoadEvents", "Load Events");
-        t.put("buildReject", "Build Rejections");
+        t.put("buildRejectReceived", "Build Rejections Received");
+        t.put("buildRejectBanned", "Builds Refused as Banned");
         t.put("netDbLookupTime", "Lookup Time");
         t.put("udpRto", "UDP Retransmission Timeouts");
-        t.put("tunerCpu", "CPU by Stage");
         t.put("tunnelCaches", "Caches");
         t.put("codelDrop", "CoDel Drop Delay by Priority");
         t.put("cryptoPoolUsed", "Precalculated Keys Used");
         t.put("cryptoPoolEmpty", "Key Pool Empty");
         t.put("bwLimiterDelay", "Limiter Delay");
         t.put("bwLimiterPending", "Limiter Pending");
-        t.put("i2ptunnelThreads", "Threads");
+        t.put("i2ptunnelClientThreads", "Client Threads");
+        t.put("i2ptunnelServerThreads", "Server Threads");
         t.put("leaseSetLookupTime", "Remote LeaseSet Lookup Time");
-        t.put("i2cpDrops", "Messages Dropped by Cause");
+        t.put("inNetPoolDrops", "Inbound Pool Messages");
+        t.put("clientDrops", "Client Messages Dropped");
         t.put("i2ptunnelServerTime", "Server Setup Time");
         TITLES = Collections.unmodifiableMap(t);
     }
@@ -216,19 +244,21 @@ public final class GraphGroups {
         subsystems.put("jobTiming", "Jobs");
         subsystems.put("jobQueueDepth", "Jobs");
         subsystems.put("jobLoadEvents", "Jobs");
-        subsystems.put("buildReject", "Tunnel");
+        subsystems.put("buildRejectReceived", "Tunnel");
+        subsystems.put("buildRejectBanned", "Tunnel");
         subsystems.put("netDbLookupTime", "NetDb");
         subsystems.put("leaseSetLookupTime", "NetDb");
         subsystems.put("udpRto", "Transport");
-        subsystems.put("tunerCpu", "Transport");
         subsystems.put("codelDrop", "Transport");
         subsystems.put("tunnelCaches", "Tunnel");
         subsystems.put("cryptoPoolUsed", "Crypto");
         subsystems.put("cryptoPoolEmpty", "Crypto");
         subsystems.put("bwLimiterDelay", "Bandwidth");
         subsystems.put("bwLimiterPending", "Bandwidth");
-        subsystems.put("i2ptunnelThreads", "I2CP");
-        subsystems.put("i2cpDrops", "Router");
+        subsystems.put("i2ptunnelClientThreads", "I2CP");
+        subsystems.put("i2ptunnelServerThreads", "I2CP");
+        subsystems.put("inNetPoolDrops", "Router");
+        subsystems.put("clientDrops", "Router");
         subsystems.put("i2ptunnelServerTime", "I2PTunnel");
         SUBSYSTEMS = Collections.unmodifiableMap(subsystems);
     }

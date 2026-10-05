@@ -37,6 +37,7 @@ public class GraphHelper extends FormHandler {
     private boolean _graphHideRestarts;
     private boolean _graphGlow;
     private boolean _graphSmooth;
+    private boolean _graphFill;
     private boolean _graphCombine;
     private boolean _useUtc;
     private String _stat;
@@ -50,6 +51,7 @@ public class GraphHelper extends FormHandler {
     private static final String PROP_HIDE_RESTARTS = "routerconsole.graphHideRestarts";
     private static final String PROP_GLOW = "routerconsole.graphGlow";
     private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
+    private static final String PROP_FILL = "routerconsole.graphFill";
     private static final String PROP_COMBINE = "routerconsole.graphCombine";
     private static final String PROP_UTC = "routerconsole.graphUtc";
     private static final int DEFAULT_REFRESH = 1*60;
@@ -89,6 +91,7 @@ public class GraphHelper extends FormHandler {
         _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
         _graphSmooth = _context.getBooleanProperty(PROP_SMOOTH);
+        _graphFill = _context.getBooleanProperty(PROP_FILL);
         _graphCombine = _context.getBooleanProperty(PROP_COMBINE);
         _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
 
@@ -200,6 +203,7 @@ public class GraphHelper extends FormHandler {
     /** @since 0.9.70+ */
     public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
     public void setGraphSmooth(String foo) {_graphSmooth = !"false".equals(foo);}
+    public void setGraphFill(String foo) {_graphFill = !"false".equals(foo);}
 
     /** @since 0.9.71+ */
     public void setGraphCombine(String foo) {_graphCombine = !"false".equals(foo);}
@@ -322,10 +326,10 @@ public class GraphHelper extends FormHandler {
                .append(AMP).append("period=").append(r.getPeriod())
                .append(PERIOD_COUNT_PARAM).append(_periodCount)
                .append(WIDTH_PARAM).append(_width)
-                .append(HEIGHT_PARAM).append(_height)
-                .append(HIDE_LEGEND_PARAM).append(hideLegend)
-                .append(HIDE_RESTARTS_PARAM).append(hideRestarts)
-                .append(TIME_PARAM).append(now)
+               .append(HEIGHT_PARAM).append(_height)
+               .append(HIDE_LEGEND_PARAM).append(hideLegend)
+               .append(HIDE_RESTARTS_PARAM).append(hideRestarts)
+               .append(TIME_PARAM).append(now)
                .append("\" alt=\"")
                .append(title)
                .append("\" title=\"")
@@ -373,8 +377,8 @@ public class GraphHelper extends FormHandler {
                .append(groupId)
                .append(AMP).append("c=").append(3 * _periodCount)
                .append(AMP).append("w=1000").append(AMP).append("h=280")
-               .append("\">");
-            out.append("<img class=statimage border=0 src=\"").append(STAT_PARAM)
+               .append("\">")
+               .append("<img class=statimage border=0 src=\"").append(STAT_PARAM)
                .append(groupId)
                .append(AMP).append("period=").append(r.getPeriod())
                .append(PERIOD_COUNT_PARAM).append(_periodCount)
@@ -480,9 +484,9 @@ public class GraphHelper extends FormHandler {
            .append(AMP).append("end=").append(_end)
            .append(WIDTH_PARAM).append(_width)
            .append(HEIGHT_PARAM).append(_height)
-             .append(HIDE_LEGEND_PARAM).append(_hideLegend)
-             .append(HIDE_RESTARTS_PARAM).append(_graphHideRestarts)
-             .append(TIME_PARAM).append(now)
+           .append(HIDE_LEGEND_PARAM).append(_hideLegend)
+           .append(HIDE_RESTARTS_PARAM).append(_graphHideRestarts)
+           .append(TIME_PARAM).append(now)
            .append("\"></a></span>\n</div>\n<p id=graphopts>\n");
 
         if (_width < MAX_X && _height < MAX_Y) {
@@ -630,14 +634,14 @@ public class GraphHelper extends FormHandler {
             buf.append(HelperBase.CHECKED);
         }
         buf.append(">")
-            .append(_t("Do not show legend on graphs"))
-            .append("</label><input type=hidden name=hideLegend value=false></span><br><span class=\"nowrap")
-            .append(hideLegend ? " disabled\"" : "\"")
-            .append(" title=\"")
-            .append(_t("Disabled while legend is hidden"))
-            .append("\">\n<b>")
-            .append(_t("Hide restarts"))
-            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=hideRestarts");
+           .append(_t("Do not show legend on graphs"))
+           .append("</label><input type=hidden name=hideLegend value=false></span><br><span class=\"nowrap")
+           .append(hideLegend ? " disabled\"" : "\"")
+           .append(" title=\"")
+           .append(_t("Disabled while legend is hidden"))
+           .append("\">\n<b>")
+           .append(_t("Hide restarts"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=hideRestarts");
         if (_graphHideRestarts) {
             buf.append(HelperBase.CHECKED);
         }
@@ -652,7 +656,7 @@ public class GraphHelper extends FormHandler {
         buf.append(">")
            .append(_t("Store graph data on disk"))
            .append("</label><input type=hidden name=persistent value=false></span><br><span class=nowrap>\n<b>")
-.append(_t("UTC time"))
+           .append(_t("UTC time"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=useUtc");
         if (_useUtc) {
             buf.append(HelperBase.CHECKED);
@@ -676,6 +680,14 @@ public class GraphHelper extends FormHandler {
         buf.append(">")
            .append(_t("Use bezier curves to plot graphs"))
            .append("</label><input type=hidden name=graphSmooth value=false></span><br><span class=nowrap>\n<b>")
+           .append(_t("Filled paths"))
+           .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphFill");
+        if (_graphFill) {
+            buf.append(HelperBase.CHECKED);
+        }
+        buf.append(">")
+           .append(_t("Use filled areas for graphs"))
+           .append("</label><input type=hidden name=graphFill value=false></span><br><span class=nowrap>\n<b>")
            .append(_t("Combine graphs"))
            .append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=graphCombine");
         if (_graphCombine) {
@@ -719,8 +731,9 @@ public class GraphHelper extends FormHandler {
      */
     @Override
     protected void processForm() {
-        if ("Save".equals(_action))
+        if ("Save".equals(_action)) {
             saveSettings();
+        }
     }
 
     /**
@@ -735,12 +748,13 @@ public class GraphHelper extends FormHandler {
             _showEvents != _context.getBooleanProperty(PROP_EVENTS) ||
             _graphHideLegend != _context.getProperty(PROP_HIDE_LEGEND, DEFAULT_HIDE_LEGEND) ||
             _graphHideRestarts != Boolean.parseBoolean(_context.getProperty(PROP_HIDE_RESTARTS,
-                                                   Boolean.toString(DEFAULT_HIDE_RESTARTS))) ||
+                                                       Boolean.toString(DEFAULT_HIDE_RESTARTS))) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
-_graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
-             _graphCombine != _context.getBooleanProperty(PROP_COMBINE) ||
-             _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
+            _graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
+            _graphFill != _context.getBooleanProperty(PROP_FILL) ||
+            _graphCombine != _context.getBooleanProperty(PROP_COMBINE) ||
+            _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {
             Map<String, String> changes = new HashMap<>();
             changes.put(PROP_X, Integer.toString(_width));
             changes.put(PROP_Y, Integer.toString(_height));
@@ -753,6 +767,7 @@ _graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
             changes.put(GraphListener.PROP_PERSISTENT, Boolean.toString(_persistent));
             changes.put(PROP_GLOW, Boolean.toString(_graphGlow));
             changes.put(PROP_SMOOTH, Boolean.toString(_graphSmooth));
+            changes.put(PROP_FILL, Boolean.toString(_graphFill));
             changes.put(PROP_COMBINE, Boolean.toString(_graphCombine));
             changes.put(PROP_UTC, Boolean.toString(_useUtc));
             boolean warn = _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
