@@ -3028,10 +3028,13 @@ public final class SVGGraphics2D extends Graphics2D {
     }
 
     /**
-     * Consolidates consecutive SVG {@code <line>} elements with the same CSS class into shared
-     * {@code <g>} groups. For example, 47 consecutive {@code <line class="dash minor"/>} elements
+     * Consolidates consecutive SVG {@code <line>} elements that share a CSS class into a shared
+     * {@code <g>} group. For example, 47 consecutive {@code <line class="dash minor"/>} elements
      * become a single {@code <g class="dash minor">} wrapper. Text consolidation is handled by
      * the existing font class extraction and text merge steps in {@code postProcessSvg}.
+     *
+     * <p>Each run is split wherever the class changes, so a line never inherits a class it was
+     * not drawn with. See {@link #groupLineRun(String)} for why that matters.
      *
      * @param svg the post-processed SVG content.
      * @return the SVG with consolidated line groups.
@@ -3040,24 +3043,87 @@ public final class SVGGraphics2D extends Graphics2D {
         Matcher m = LINE_RUN_PATTERN.matcher(svg);
         StringBuffer out = new StringBuffer(svg.length());
         while (m.find()) {
-            String run = m.group(0);
-            Matcher cm = LINE_CLASS_PATTERN.matcher(run);
-            if (cm.find()) {
-                String cssClass = cm.group(1);
-                String stripped = LINE_CLASS_PATTERN.matcher(run).replaceAll("");
-                m.appendReplacement(out, "<g class=\"" + cssClass + "\">" + stripped + "</g>");
-            }
+            m.appendReplacement(out, Matcher.quoteReplacement(groupLineRun(m.group(0))));
         }
         m.appendTail(out);
         return out.toString();
     }
 
     /**
+     * Groups one run of consecutive self-closing {@code <line>} elements, breaking the run into
+     * sub-runs at every class change and wrapping each classed sub-run in a {@code <g>} of that
+     * class. Sub-runs carrying no class are emitted unchanged.
+     *
+     * <p>This used to take the <em>first</em> class in the run, strip every line's own class and
+     * wrap the whole run in it. The axis container lines are tagged {@code class="axis"} by
+     * {@link #tagAxis(String)} and drawn straight after the value-axis gridlines, so a classed
+     * gridline landing in front of them with no intervening {@code <text>} - which is what the
+     * MRTG-style value axis does, since it draws each label and its gridline together - handed
+     * the whole run to the gridline's class, and the axis was restyled as a dashed gridline
+     * instead of the solid bounding box. Splitting at the class boundary keeps each line's own
+     * class, so the outcome no longer depends on the order elements happen to serialise in.
+     *
+     * @param run a run of one or more adjacent {@code <line .../>} elements
+     * @return the run with same-class groups collapsed; never null
+     * @since 0.9.71+
+     */
+    static String groupLineRun(String run) {
+        Matcher lm = LINE_ELEMENT_PATTERN.matcher(run);
+        StringBuilder out = new StringBuilder(run.length() + 32);
+        StringBuilder sub = new StringBuilder();
+        String subClass = null;
+        while (lm.find()) {
+            String line = lm.group();
+            Matcher cm = LINE_CLASS_PATTERN.matcher(line);
+            String cls = cm.find() ? cm.group(1) : null;
+            if (sub.length() > 0 && (subClass == null ? cls != null : !subClass.equals(cls))) {
+                out.append(wrapLineSubrun(subClass, sub));
+                sub.setLength(0);
+            }
+            subClass = cls;
+            sub.append(line);
+        }
+        if (sub.length() > 0) {
+            out.append(wrapLineSubrun(subClass, sub));
+        }
+        return out.toString();
+    }
+
+    /**
+     * Wraps one same-class sub-run in a group of that class, or emits it untouched when it
+     * carries no class - an unclassed sub-run would gain nothing from an empty wrapper.
+     *
+     * @param cssClass the class shared by every line in {@code lines}, or null for none
+     * @param lines the sub-run's lines, in document order
+     * @return the wrapped or unchanged sub-run; never null
+     * @since 0.9.71+
+     */
+    private static String wrapLineSubrun(String cssClass, CharSequence lines) {
+        if (cssClass == null) {
+            return lines.toString();
+        }
+        String stripped = LINE_CLASS_PATTERN.matcher(lines).replaceAll("");
+        return "<g class=\"" + cssClass + "\">" + stripped + "</g>";
+    }
+
+    /**
+     * Matches a single self-closing {@code <line>} element with its trailing whitespace. The
+     * building block of {@link #LINE_RUN_PATTERN}; splitting a run needs the elements one by one
+     * so each one's class can be read.
+     */
+    private static final String LINE_ELEMENT_REGEX = "<line[^/]*/>\\s*";
+
+    /**
+     * Matches one self-closing {@code <line>} element, used to walk a run element by element.
+     */
+    private static final Pattern LINE_ELEMENT_PATTERN = Pattern.compile(LINE_ELEMENT_REGEX);
+
+    /**
      * Matches consecutive runs of self-closing {@code <line>} elements. A run is one or more
      * {@code <line .../>} elements with no other element types between them.
      */
     private static final Pattern LINE_RUN_PATTERN =
-            Pattern.compile("(?:<line[^/]*/>\\s*)+");
+            Pattern.compile("(?:" + LINE_ELEMENT_REGEX + ")+");
 
     /**
      * Extracts the CSS class name from a {@code class="..."} attribute within a line run.
