@@ -1,11 +1,16 @@
 package net.i2p.router.web;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
+import java.awt.Paint;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -65,6 +70,24 @@ public final class GraphThemeColors {
     /** Dash length, in pixels, of the multi-plot dot pattern; zero asks for a solid line. */
     public static final String VAR_DASH = "--graph_dash";
 
+    /** Text colour: axis labels, tick labels, the legend and the title. */
+    public static final String VAR_FONT = "--graph_font";
+
+    /** The two axis rules. */
+    public static final String VAR_AXIS = "--graph_axis";
+
+    /** The minor gridlines. */
+    public static final String VAR_GRID = "--graph_grid";
+
+    /** The major gridlines. */
+    public static final String VAR_MGRID = "--graph_mgrid";
+
+    /** Dot length for the minor gridlines; zero asks for solid gridlines. */
+    public static final String VAR_GRID_DASH = "--graph_grid_dash";
+
+    /** Dot length for the major gridlines; zero asks for solid gridlines. */
+    public static final String VAR_MGRID_DASH = "--graph_mgrid_dash";
+
     private static final String VAR_LINE_PREFIX = "--graph_line_";
     private static final String VAR_PATH_PREFIX = "--graph_path_";
 
@@ -74,6 +97,14 @@ public final class GraphThemeColors {
     /** Matches one custom property declaration, anywhere in the stylesheet. */
     private static final Pattern DECL =
         Pattern.compile("--([A-Za-z0-9_-]+)\\s*:\\s*([^;}]+)");
+
+    /** The gradient function a fill variable may use; matched case-insensitively. */
+    private static final String LINEAR_GRADIENT = "linear-gradient(";
+
+    /** A gradient's leading direction, which an area under a series does not paint. */
+    private static final Pattern GRADIENT_DIRECTION =
+        Pattern.compile("to\\s+(?:top|bottom|left|right)|\\d+(?:\\.\\d+)?deg",
+                         Pattern.CASE_INSENSITIVE);
 
     /** theme directory plus theme name to its parsed declarations. */
     private static final Map<String, Entry> CACHE = new ConcurrentHashMap<>();
@@ -96,7 +127,7 @@ public final class GraphThemeColors {
     static long maxCacheAgeMs = 30_000L;
 
     /**
-     * A parsed stylesheet and the timestamp it was parsed from.
+     * A theme's parsed declarations and the timestamps they were parsed from.
      *
      * <p>The timestamp is what makes a theme edit visible without a restart. The minigraph
      * picks up a CSS change on page refresh because the browser re-reads the stylesheet;
@@ -114,97 +145,118 @@ public final class GraphThemeColors {
             this.variables = variables;
         }
 
-        /** Whether this entry may still be served, given the file's stamp and the clock. */
+        /** Whether this entry may still be served, given the files' stamps and the clock. */
         boolean usable(long modified, long now) {
             return this.modified == modified && now - this.parsedAt < maxCacheAgeMs;
         }
     }
 
     /**
-     * The colour each theme's first line is built from, before vividising.
+     * The stroke for each theme and plot: a literal mirror of the {@code --graph_line_*}
+     * values the shipped stylesheets declare.
      *
-     * <p>These are the long-standing primary line colours. The second line is not listed
-     * because it is derived from the first: see {@link #SECOND_PLOT_HUE}.
+     * <p>Listed rather than derived, because the variables are the canonical statement of a
+     * theme's palette. A derivation cannot also be canonical: a stylesheet may declare any
+     * colour it likes, and a frame drawn with no stylesheet has to come out the same as the
+     * same frame drawn with one.
+     *
+     * <p>Light, classic and midnight plot the two inks their minigraphs plot, so a frame on a
+     * console page reads as the same two series as the sparklines beside it. Dark states its
+     * own pair.
      */
-    private static final Color[] PRIMARY_BASE = {
-        new Color(0, 30, 110, 255),
-        new Color(100, 200, 160),
-        new Color(128, 180, 212),
+    private static final Color[][] PLOT_LINE = {
+        { new Color(0x44, 0x88, 0xff), new Color(0x44, 0xaa, 0x88) },  // light, classic
+        { new Color(0x37, 0xc8, 0x8e, 0x99), new Color(0xc8, 0xc8, 0x37, 0x99) },  // dark
+        { new Color(0xff, 0x55, 0x00, 0x80), new Color(0x88, 0x00, 0x88, 0x80) },  // midnight
     };
 
     /**
-     * Opacity of a plot fill, as a fraction of full: 50%.
+     * The fill for each theme and plot: a literal mirror of the {@code --graph_path_*}
+     * values the shipped stylesheets declare, alpha included.
      *
-     * <p>A frame can carry two fills, and they overlap wherever the series cross. At the
-     * 78-86% the fills used to carry, the overlap was so nearly opaque that neither series
-     * read through it - the shape you most want to see was the one you could not. Half
-     * keeps each fill clearly present on its own while letting the other show through.
+     * <p>The fills are translucent because a frame carries two of them and they overlap
+     * wherever the series cross. At the 78-86% the fills used to carry, the crossing was so
+     * nearly opaque that neither series read through it - the shape you most want to see was
+     * the one you could not.
      *
-     * <p>One knob for both plots, so the pair cannot drift apart.
+     * <p>Alpha is the theme's own rather than one value for all of them, and no more than that:
+     * light and classic ask for half, dark a quarter, midnight a little under a fifth on the
+     * first fill and a little under a third on the second. Midnight's canvas is the darkest of
+     * the four, so the same translucency there reads stronger than it does on a light page, and
+     * a dark fill drawn on top of it barely reads at all.
      */
-    private static final int PATH_ALPHA = 128;
-
-    /** The fill under the first line, per theme; the alpha comes from {@link #PATH_ALPHA}. */
-    private static final Color[] PRIMARY_FILL = {
-        new Color(100, 160, 200),
-        new Color(0, 72, 8),
-        new Color(0, 72, 160),
+    private static final Color[][] PLOT_FILL = {
+        { new Color(0x44, 0x88, 0xff, 0x80), new Color(0x44, 0xaa, 0x88, 0x80) },
+        { new Color(0x00, 0x48, 0x08, 0x40), new Color(0xc8, 0xc8, 0x37, 0x40) },
+        { new Color(0xff, 0x55, 0x00, 0x30), new Color(0x88, 0x00, 0x88, 0x50) },
     };
 
     /**
-     * Absolute hue, in degrees, for the second plot: 60 is yellow.
-     *
-     * <p>The second line is the primary's saturation and brightness at this fixed hue, so
-     * the pair reads as two lines of equal weight rather than one line and a highlight.
-     * This is derived rather than listed per theme because a theme that changed only its
-     * primary would otherwise silently get an unrelated second colour.
-     */
-    private static final float SECOND_PLOT_HUE = 60f;
-
-    /**
-     * Built-in stroke for a plot.
+     * Built-in stroke for a plot, from {@link #PLOT_LINE}.
      *
      * @param themeIdx 0 for plain, 1 for dark, 2 for midnight
      * @param plot the plot ordinal
-     * @return the final colour, already vividised
+     * @return the theme's stroke for that plot
      */
     private static Color defaultLine(int themeIdx, int plot) {
-        Color primary = GraphRenderer.electric(PRIMARY_BASE[themeIdx]);
-        return plot <= 0 ? primary : rotateHue(primary, SECOND_PLOT_HUE);
+        return PLOT_LINE[themeIdx][clampPlot(plot)];
     }
 
     /**
-     * Built-in fill for a plot.
+     * Built-in fill for a plot, from {@link #PLOT_FILL}.
      *
      * @param themeIdx 0 for plain, 1 for dark, 2 for midnight
      * @param plot the plot ordinal
-     * @return the final colour
+     * @return the theme's fill for that plot, alpha included
      */
     private static Color defaultPath(int themeIdx, int plot) {
-        if (plot <= 0) {return withPathAlpha(PRIMARY_FILL[themeIdx]);}
-        Color c = rotateHue(GraphRenderer.electric(PRIMARY_BASE[themeIdx]), SECOND_PLOT_HUE);
-        return withPathAlpha(c);
+        return PLOT_FILL[themeIdx][clampPlot(plot)];
     }
 
-    /** Apply {@link #PATH_ALPHA}, discarding whatever alpha the source colour carried. */
-    private static Color withPathAlpha(Color c) {
-        return new Color(c.getRed(), c.getGreen(), c.getBlue(), PATH_ALPHA);
-    }
+    /** Series dash on-length per theme; dark draws its series solid, the rest dotted. */
+    private static final float[] DEFAULT_DASH = { 1f, 0f, 1f };
 
     /**
-     * Rebuild a colour at a fixed hue, keeping saturation and brightness.
+     * Minor gridline dot and gap per theme.
      *
-     * <p>Absolute rather than relative, which is what makes {@link #SECOND_PLOT_HUE} mean
-     * "yellow" for every theme regardless of what its primary happens to be.
+     * <p>Light and classic draw them solid; dark and midnight dash them, so a gridline reads
+     * as texture behind the series rather than as a rule competing with them.
      */
-    private static Color rotateHue(Color base, float hueDegrees) {
-        float[] hsb = java.awt.Color.RGBtoHSB(base.getRed(), base.getGreen(), base.getBlue(), null);
-        int rgb = java.awt.Color.HSBtoRGB(hueDegrees / 360f, hsb[1], hsb[2]);
-        return new Color(rgb | (base.getAlpha() << 24), true);
-    }
+    private static final float[][] GRID_DASH_DEFAULT = {
+        { 0f, 0f }, { 1f, 2f }, { 1f, 3f },
+    };
 
-    /** Dash on-length per theme; 1px everywhere so far, but a theme may widen it. */
-    private static final float[] DEFAULT_DASH = { 1f, 1f, 1f };
+    /** Major gridline dot and gap per theme; the same pattern as the minor grid's. */
+    private static final float[][] MGRID_DASH_DEFAULT = {
+        { 0f, 0f }, { 1f, 2f }, { 1f, 3f },
+    };
+
+    /** Text colour per theme, each matching the ink its page draws with. */
+    private static final Color[] FONT_DEFAULT = {
+        new Color(51, 51, 63), new Color(244, 244, 190), new Color(201, 206, 255),
+    };
+
+    /** Axis rule colour per theme, matching the text that sits on it. */
+    private static final Color[] AXIS_DEFAULT = {
+        new Color(51, 51, 63), new Color(244, 244, 190), new Color(201, 206, 255),
+    };
+
+    /** Minor gridline colour per theme, faint enough to sit behind the series. */
+    private static final Color[] GRID_DEFAULT = {
+        new Color(80, 80, 80, 0x32), new Color(244, 244, 190, 0x1e),
+        new Color(201, 206, 255, 0x20),
+    };
+
+    /**
+     * Major gridline colour per theme, the one a theme wants read as a division.
+     *
+     * <p>Light picks a hue of its own to mark the division; dark and midnight keep the ink
+     * of their minor grid and give it twice the weight, which is the whole of the difference.
+     */
+    private static final Color[] MGRID_DEFAULT = {
+        new Color(0xff, 0x5b, 0x5b, 0x6e), new Color(0xc8, 0xc8, 0x00, 0x32),
+        new Color(201, 206, 255, 0x40),
+    };
 
     /** Longest dash array accepted: one dot and one gap. */
     private static final int MAX_DASH_VALUES = 2;
@@ -229,15 +281,51 @@ public final class GraphThemeColors {
     /**
      * The fill colour for a plot on a frame.
      *
+     * <p>A {@code linear-gradient()} declaration has no single colour, so its first stop is
+     * reported here: that is the ink the fill is made of. {@link #pathPaint} returns the whole
+     * wash.
+     *
      * @param themeDir the directory holding {@code <theme>/console.css} trees
      * @param theme the console theme name
      * @param plot the plot ordinal, 0 for the first path and 1 for the second
      * @return the colour, never null; falls back to the built-in value
      */
     public static Color pathColor(File themeDir, String theme, int plot) {
-        String var = VAR_PATH_PREFIX + (plot + 1);
-        Color declared = declared(themeDir, theme, var);
-        return declared != null ? declared : defaultPath(themeIndex(theme), clampPlot(plot));
+        String var = VAR_PATH_PREFIX + (clampPlot(plot) + 1);
+        Color declared = declaredInk(variables(themeDir, theme).get(var));
+        return declared != null ? declared : defaultPath(themeIndex(theme), plot);
+    }
+
+    /**
+     * The fill for a plot as something to paint with: a colour, or a vertical gradient.
+ *
+     * <p>A gradient needs a length to span, and the area under a series is a vertical wash,
+     * so the frame's height is the caller's to supply. Only the CSS default direction - top
+     * to bottom, which is what the minigraph's own fill variables use - is painted; a stated
+     * direction this class cannot honour is treated as no opinion rather than a guess, and
+     * the fill comes out as its ink.
+     *
+     * <p>Two stops is what a {@link GradientPaint} takes, so a third in a declaration is not
+     * painted; the wash runs between the first two.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @param plot the plot ordinal, 0 for the first path and 1 for the second
+     * @param frameHeight the height of the frame in pixels, which a gradient spans
+     * @return the fill paint, never null; falls back to the built-in colour
+     * @since 0.9.71+
+     */
+    public static Paint pathPaint(File themeDir, String theme, int plot, int frameHeight) {
+        String var = VAR_PATH_PREFIX + (clampPlot(plot) + 1);
+        List<Color> stops = gradientStops(variables(themeDir, theme).get(var));
+        if (stops != null && stops.size() > 1) {
+            // A gradient whose endpoints coincide would be rejected as a zero-length span,
+            // and a frame is always at least one pixel tall.
+            double span = Math.max(1d, frameHeight);
+            return new GradientPaint(new Point2D.Double(0, 0), stops.get(0),
+                                     new Point2D.Double(0, span), stops.get(1));
+        }
+        return pathColor(themeDir, theme, plot);
     }
 
     /**
@@ -279,23 +367,146 @@ public final class GraphThemeColors {
     }
 
     /**
+     * One frame element's colour: the theme's, or the built-in one for that theme.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @param var the custom property the element reads
+     * @param defaults the built-in colour per theme, indexed by {@link #themeIndex}
+     * @return the colour, never null
+     */
+    private static Color element(File themeDir, String theme, String var, Color[] defaults) {
+        String v = variables(themeDir, theme).get(var);
+        Color declared = v != null ? SvgColor.parse(v) : null;
+        return declared != null ? declared : defaults[themeIndex(theme)];
+    }
+
+    /**
+     * The text colour: axis labels, tick labels, the legend and the title.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color fontColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_FONT, FONT_DEFAULT);
+    }
+
+    /**
+     * The axis rule colour.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color axisColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_AXIS, AXIS_DEFAULT);
+    }
+
+    /**
+     * The minor gridline colour.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color gridColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_GRID, GRID_DEFAULT);
+    }
+
+    /**
+     * The major gridline colour.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color mgridColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_MGRID, MGRID_DEFAULT);
+    }
+
+    /**
+     * Dot length for the minor gridlines, or zero for solid ones.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the dot length in pixels
+     * @since 0.9.71+
+     */
+    public static float gridDash(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_GRID_DASH, GRID_DASH_DEFAULT[themeIndex(theme)])[0];
+    }
+
+    /**
+     * The space after each minor gridline dot, or zero to derive it from the stroke width.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the stated gap in pixels, or zero to derive one
+     * @since 0.9.71+
+     */
+    public static float gridDashGap(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_GRID_DASH, GRID_DASH_DEFAULT[themeIndex(theme)])[1];
+    }
+
+    /**
+     * Dot length for the major gridlines, or zero for solid ones.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the dot length in pixels
+     * @since 0.9.71+
+     */
+    public static float mgridDash(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_MGRID_DASH, MGRID_DASH_DEFAULT[themeIndex(theme)])[0];
+    }
+
+    /**
+     * The space after each major gridline dot, or zero to derive it.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the stated gap in pixels, or zero to derive one
+     * @since 0.9.71+
+     */
+    public static float mgridDashGap(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_MGRID_DASH, MGRID_DASH_DEFAULT[themeIndex(theme)])[1];
+    }
+
+    /**
+     * Parse a dash variable into a dot length and a stated gap.
+     *
+     * @param fallback the theme's built-in {@code {dot, gap}}, used when the variable is
+     *                 absent or unusable
+     * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
+     *         zero meaning "derive it"; never null
+     */
+    private static float[] dash(File themeDir, String theme, String var, float[] fallback) {
+        String v = variables(themeDir, theme).get(var);
+        if (v == null) {return fallback.clone();}
+        float[] parsed = parseDashList(v);
+        if (parsed == null || parsed.length == 0) {return fallback.clone();}
+        float dot = parsed[0];
+        // Zero is a request rather than a typo: no dot ink at all is a solid line.
+        if (dot < 0f || dot >= 64f || Float.isNaN(dot)) {return fallback.clone();}
+        float gap = parsed.length > 1 ? parsed[1] : 0f;
+        if (Float.isNaN(gap) || gap < 0f || gap >= 256f) {gap = 0f;}
+        return new float[] { dot, gap };
+    }
+
+    /**
      * Parse {@code --graph_dash} into a dot length and a stated gap.
      *
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
      *         zero meaning "derive it"; never null
      */
     private static float[] dash(File themeDir, String theme) {
-        float[] fallback = { DEFAULT_DASH[themeIndex(theme)], 0f };
-        String v = variables(themeDir, theme).get(VAR_DASH);
-        if (v == null) {return fallback;}
-        float[] parsed = parseDashList(v);
-        if (parsed == null || parsed.length == 0) {return fallback;}
-        float dot = parsed[0];
-        // Zero is a request rather than a typo: no dot ink at all is a solid line.
-        if (dot < 0f || dot >= 64f || Float.isNaN(dot)) {return fallback;}
-        float gap = parsed.length > 1 ? parsed[1] : 0f;
-        if (Float.isNaN(gap) || gap < 0f || gap >= 256f) {gap = 0f;}
-        return new float[] { dot, gap };
+        return dash(themeDir, theme, VAR_DASH,
+                    new float[] { DEFAULT_DASH[themeIndex(theme)], 0f });
     }
 
     /**
@@ -340,6 +551,48 @@ public final class GraphThemeColors {
     }
 
     /**
+     * The ink a declaration names: a colour, or the first stop of a gradient.
+     *
+     * <p>A gradient is a wash rather than a colour, so a caller that wants one colour - a
+     * legend swatch, an alpha check - gets the ink the wash is made of.
+     */
+    private static Color declaredInk(String value) {
+        if (value == null) {return null;}
+        List<Color> stops = gradientStops(value);
+        return stops != null ? stops.get(0) : SvgColor.parse(value);
+    }
+
+    /**
+     * The colour stops of a {@code linear-gradient()} declaration, in the order written.
+     *
+     * <p>A leading direction is skipped rather than obeyed: an area under a series is a
+     * vertical wash, so only the endpoints say anything, and a direction this class cannot
+     * paint is a no-op rather than a guess. A stop's stated position is dropped for the same
+     * reason - it moves where the middle of the wash sits, not which inks it is between.
+     *
+     * @return the stops, or null when the value is not a gradient this class paints
+     */
+    private static List<Color> gradientStops(String value) {
+        if (value == null) {return null;}
+        String text = value.trim();
+        if (!text.regionMatches(true, 0, LINEAR_GRADIENT, 0,
+                                LINEAR_GRADIENT.length())) {return null;}
+        int close = text.lastIndexOf(')');
+        if (close < LINEAR_GRADIENT.length()) {return null;}
+        List<Color> stops = new ArrayList<>();
+        for (String stop : text.substring(LINEAR_GRADIENT.length(), close).split(",")) {
+            String term = stop.trim();
+            if (term.isEmpty() || GRADIENT_DIRECTION.matcher(term).matches()) {continue;}
+            Color c = SvgColor.parse(term.split("\\s+")[0]);
+            // One unusable stop makes the whole declaration unusable: a wash with a hole in it
+            // would render as something the stylesheet never asked for.
+            if (c == null) {return null;}
+            stops.add(c);
+        }
+        return stops.isEmpty() ? null : stops;
+    }
+
+    /**
      * The directory the console is installed into, taken from the running context.
      *
      * @return the theme directory, or null when there is no context (unit tests, shutdown)
@@ -373,13 +626,13 @@ public final class GraphThemeColors {
      *
      * @param themeDir the directory holding {@code <theme>/console.css} trees
      * @param theme the console theme name
-     * @return the declarations, empty when there is no stylesheet
+     * @return the declarations, empty when the stylesheets are absent
      */
     private static Map<String, String> variables(File themeDir, String theme) {
         String key = (themeDir != null ? themeDir.getAbsolutePath() : "")
                      + '\u0000' + (theme != null ? theme : "");
         File css = themeFile(themeDir, theme);
-        long modified = (css != null && css.isFile()) ? css.lastModified() : NO_FILE;
+        long modified = stamp(css);
         long now = System.currentTimeMillis();
         Entry cached = CACHE.get(key);
         if (cached != null && cached.usable(modified, now)) {return cached.variables;}
@@ -391,6 +644,15 @@ public final class GraphThemeColors {
         Map<String, String> parsed = parse(css);
         CACHE.put(key, new Entry(modified, now, parsed));
         return parsed;
+    }
+
+    /**
+     * Read a file's stamp, treating an absent file as its own cacheable state.
+     *
+     * @return the last-modified time, or {@link #NO_FILE}
+     */
+    private static long stamp(File file) {
+        return (file != null && file.isFile()) ? file.lastModified() : NO_FILE;
     }
 
     /**

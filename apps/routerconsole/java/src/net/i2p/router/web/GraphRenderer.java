@@ -8,6 +8,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.Paint;
 import java.awt.Stroke;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,6 +35,7 @@ import org.rrd4j.core.RrdException;
 import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
 import org.rrd4j.graph.RrdGraph;
+import org.rrd4j.graph.RrdGraphConstants;
 import org.rrd4j.graph.RrdGraphDef;
 import org.rrd4j.graph.SVGImageWorker;
 
@@ -56,19 +58,7 @@ class GraphRenderer {
     private static final Color BACK_COLOR_DARK = new Color(0, 0, 0, 192);
     private static final Color SHADEA_COLOR = new Color(255, 255, 255);
     private static final Color SHADEB_COLOR = new Color(255, 255, 255);
-    private static final Color GRID_COLOR = new Color(80, 80, 80, 50);
-    private static final Color GRID_COLOR_DARK = new Color(244, 244, 190, 50);
-    private static final Color GRID_COLOR_DARK2 = new Color(244, 244, 190, 30);
-    private static final Color GRID_COLOR_MIDNIGHT = new Color(201, 206, 255, 50);
     private static final Color GRID_COLOR_HIDDEN = new Color(0, 0, 0, 0);
-    private static final Color MGRID_COLOR = new Color(255, 91, 91, 110);
-    private static final Color MGRID_COLOR_DARK = new Color(200, 200, 0, 50);
-    private static final Color MGRID_COLOR_MIDNIGHT = new Color(240, 32, 192, 110);
-    private static final Color FONT_COLOR = new Color(51, 51, 63);
-    private static final Color FONT_COLOR_DARK = new Color(244, 244, 190);
-    private static final Color FONT_COLOR_MIDNIGHT = new Color(201, 206, 255);
-    private static final Color AXIS_COLOR_DARK = new Color(244, 244, 190, 200);
-    private static final Color AXIS_COLOR_MIDNIGHT = new Color(201, 206, 255, 200);
     private static final Color FRAME_COLOR = new Color(0, 0, 0, 0);
     private static final Color FRAME_COLOR_DARK = new Color(0, 0, 0, 0);
 
@@ -90,8 +80,6 @@ class GraphRenderer {
 
     /** Whether to render every series as a filled path under a thin line. @since 0.9.71+ */
     private static final String PROP_FILL = "routerconsole.graphFill";
-    /** How much to raise saturation in {@link #electric}. */
-    private static final float ELECTRIC_SATURATION = 1.45f;
 
 
     /**
@@ -776,7 +764,7 @@ class GraphRenderer {
             // outline still reads where the series crosses another one. Only the line
             // carries the legend: a legend row is emitted per plot element that has one, so
             // giving both the same text put the series name in the legend twice.
-            def.area(cfg.plotName, plotPathColor(cfg.theme, 0));
+            def.area(cfg.plotName, plotPathPaint(cfg.theme, 0, cfg.height));
             def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l",
                      FILLED_LINE_WIDTH);
         } else if (cfg.allLines) {
@@ -799,7 +787,7 @@ class GraphRenderer {
             def.area(cfg.plotName, SPARKLINE_AREA_COLOR);
             return;
         }
-        Color fill = plotPathColor(cfg.theme, 0);
+        Paint fill = plotPathPaint(cfg.theme, 0, cfg.height);
         if (!cfg.descr.isEmpty()) {
             def.area(cfg.plotName, fill, cfg.descr + "\\l");
         } else {
@@ -895,7 +883,7 @@ class GraphRenderer {
             Color color = extraSeriesColor(cfg.theme, cfg.allLines, i);
             if (cfg.fillSeries) {
                 // Legend on the line only; see configureDataSources.
-                def.area(plotName, plotPathColor(cfg.theme, Math.max(1, i)));
+                def.area(plotName, plotPathPaint(cfg.theme, Math.max(1, i), cfg.height));
                 def.line(plotName, color, descr + "\\l", FILLED_LINE_WIDTH);
             } else {
                 def.line(plotName, color, descr + "\\l", lineWidth(cfg));
@@ -948,52 +936,11 @@ class GraphRenderer {
     }
 
     /**
-     * The colour for the nth series of a grouped graph.
-     *
-     * <p>Only for the new multi-line graphs. The two-series bandwidth graph predates
-     * grouping and keeps the exact colour it always shipped with, so switching combining on
-     * cannot alter a graph people already know.
-     *
-     * @param cfg the render configuration
-     * @param index 0-based series position
-     * @return the series colour for the active theme
-     */
-    /**
-     * A more vivid version of a colour: same hue, same brightness, saturation raised.
-     *
-     * <p>Done in HSB rather than by scaling RGB so the boost cannot wash the colour out -
-     * scaling channels moves a colour toward white or black, which changes how light or
-     * dark it reads rather than how vivid.
-     *
-     * @param base the colour to intensify
-     * @return the same hue and brightness at higher saturation
-     */
-    static Color electric(Color base) {
-        float[] hsb = toHSB(base);
-        return fromHSB(hsb[0], Math.min(1f, hsb[1] * ELECTRIC_SATURATION), hsb[2]);
-    }
-
-    /** Hue, saturation and brightness of a colour, each in 0..1. */
-    private static float[] toHSB(Color color) {
-        float[] hsb = new float[3];
-        Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsb);
-        return hsb;
-    }
-
-    /**
-     * A colour from hue, saturation and brightness, keeping the source alpha.
-     *
-     * <p>Alpha matters here: the dark palette draws series semi-transparent so overlapping
-     * lines both stay visible, and rebuilding the colour without it would make every line
-     * opaque and hide the series behind it.
-     */
-    private static Color fromHSB(float hue, float saturation, float brightness) {
-        return new Color(Color.HSBtoRGB(hue, saturation, brightness), true);
-    }
-
-
-    /**
      * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
+     *
+     * <p>Only for the multi-line graphs, and only up to two plots. The two-series bandwidth
+     * graph predates grouping and keeps the exact colour it always shipped with, so switching
+     * combining on cannot alter a graph people already know.
      *
      * <p>No hue rotation and no palette walk any more. A frame carries at most two plots
      * ({@link GraphGroups#MAX_SERIES}), so "which colour is the extra series" has exactly
@@ -1023,16 +970,18 @@ class GraphRenderer {
     }
 
     /**
-     * The fill colour for a plot on a frame, from the theme's CSS variables or the
-     * built-in palette.
+     * The fill for a plot as something to paint with: the theme's colour, or a gradient
+     * between two of them.
      *
      * @param theme console theme name
      * @param plot the plot ordinal; a frame carries at most two
-     * @return the colour, never null
+     * @param frameHeight the frame's height in pixels, which a gradient spans
+     * @return the paint, never null
      * @since 0.9.71+
      */
-    private static Color plotPathColor(String theme, int plot) {
-        return GraphThemeColors.pathColor(GraphThemeColors.installedThemeDir(), theme, plot);
+    private static Paint plotPathPaint(String theme, int plot, int frameHeight) {
+        return GraphThemeColors.pathPaint(GraphThemeColors.installedThemeDir(), theme, plot,
+                                          frameHeight);
     }
 
     /** Package-visible accessor so tests can compare a series against the primary. */
@@ -1127,10 +1076,6 @@ out.write(graph.getRrdGraphInfo().getBytes());
     }
 
     /**
-     *  Apply the theme-specific colors to the graph definition.
-     *  Extracted from render() to keep that method manageable.
-     */
-    /**
      * Hand the theme's dot pattern to the renderer.
      *
      * <p>A theme may state only the dot length, in which case jrobin derives the gap from
@@ -1149,8 +1094,24 @@ out.write(graph.getRrdGraphInfo().getBytes());
         }
     }
 
+    /**
+     * Apply the theme-specific colours to the graph definition.
+ *
+     * <p>Every one of them is the theme's to state, with a built-in value per theme behind it,
+     * so a frame reads as part of the page it is drawn on.
+     */
     private static void applyTheme(RrdGraphDef def, GraphRenderConfig cfg) {
         applyDash(def, cfg);
+        File dir = GraphThemeColors.installedThemeDir();
+        Color font = GraphThemeColors.fontColor(dir, cfg.theme);
+        Color axis = GraphThemeColors.axisColor(dir, cfg.theme);
+        Color grid = GraphThemeColors.gridColor(dir, cfg.theme);
+        Color mgrid = GraphThemeColors.mgridColor(dir, cfg.theme);
+        def.setGridStroke(gridStroke(GraphThemeColors.gridDash(dir, cfg.theme),
+                                     GraphThemeColors.gridDashGap(dir, cfg.theme)));
+        def.setMajorGridStroke(gridStroke(GraphThemeColors.mgridDash(dir, cfg.theme),
+                                          GraphThemeColors.mgridDashGap(dir, cfg.theme)));
+        def.setColor(ElementsNames.font, font);
         // sidebar minigraph
         if ((cfg.width == 250 && cfg.height == 50 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid)
                 || (cfg.width == 2000 && cfg.height == 160 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid)) {
@@ -1158,53 +1119,57 @@ out.write(graph.getRrdGraphInfo().getBytes());
             def.setColor(ElementsNames.yaxis, TRANSPARENT);
             def.setColor(ElementsNames.frame, TRANSPARENT);
         // Override defaults (dark themes)
-        } else if (cfg.theme.equals("midnight")) {
-            def.setColor(ElementsNames.font, FONT_COLOR_MIDNIGHT);
-            def.setColor(ElementsNames.xaxis, AXIS_COLOR_MIDNIGHT);
-            def.setColor(ElementsNames.yaxis, AXIS_COLOR_MIDNIGHT);
-        } else if (cfg.theme.equals("dark")) {
-            def.setColor(ElementsNames.font, FONT_COLOR_DARK);
-            def.setColor(ElementsNames.xaxis, AXIS_COLOR_DARK);
-            def.setColor(ElementsNames.yaxis, AXIS_COLOR_DARK);
+        } else {
+            def.setColor(ElementsNames.xaxis, axis);
+            def.setColor(ElementsNames.yaxis, axis);
         }
-        if (cfg.theme.equals("midnight") || cfg.theme.equals("dark")) {
+        if (isDarkTheme(cfg.theme)) {
             def.setColor(ElementsNames.back, BACK_COLOR_DARK);
             def.setColor(ElementsNames.canvas, TRANSPARENT);
         } else {
             def.setColor(ElementsNames.back, BACK_COLOR);
         }
-        if (cfg.theme.equals("midnight") || cfg.theme.equals("dark")) {
+        if (isDarkTheme(cfg.theme)) {
             def.setColor(ElementsNames.shadea, TRANSPARENT);
             def.setColor(ElementsNames.shadeb, TRANSPARENT);
-            if (cfg.theme.equals("dark")) {
-                def.setColor(ElementsNames.grid, GRID_COLOR_DARK2);
-                def.setColor(ElementsNames.mgrid, MGRID_COLOR_DARK);
-            } else if (cfg.theme.equals("midnight")) {
-                def.setColor(ElementsNames.grid, GRID_COLOR_MIDNIGHT);
-                def.setColor(ElementsNames.mgrid, MGRID_COLOR_MIDNIGHT);
-            }
+            def.setColor(ElementsNames.grid, grid);
+            def.setColor(ElementsNames.mgrid, mgrid);
             def.setColor(ElementsNames.frame, FRAME_COLOR_DARK);
             def.setColor(ElementsNames.arrow, ARROW_COLOR_DARK);
         } else {
             // Override defaults (light themes)
             def.setColor(ElementsNames.shadea, SHADEA_COLOR);
             def.setColor(ElementsNames.shadeb, SHADEB_COLOR);
-            def.setColor(ElementsNames.grid, GRID_COLOR);
-            def.setColor(ElementsNames.mgrid, MGRID_COLOR);
-            def.setColor(ElementsNames.font, FONT_COLOR);
+            def.setColor(ElementsNames.grid, grid);
+            def.setColor(ElementsNames.mgrid, mgrid);
             def.setColor(ElementsNames.frame, FRAME_COLOR);
         }
 
         if (cfg.width < 400 || cfg.height < 200 || cfg.periodCount < 120) {
+            // Too small for a grid to register: the minor grid goes and the labelled lines
+            // are left, which on the dark themes take the minor gridlines' colour rather
+            // than the major grid's. That asymmetry is the shipped behaviour and is kept
+            // deliberately - changing it altered how every small tile on the console looked.
             def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
-            if (cfg.theme.equals("midnight")) {
-                def.setColor(ElementsNames.mgrid, GRID_COLOR_MIDNIGHT);
-            } else if (cfg.theme.equals("dark")) {
-                def.setColor(ElementsNames.mgrid, GRID_COLOR_DARK);
-            } else {
-                def.setColor(ElementsNames.mgrid, GRID_COLOR);
-            }
+            def.setColor(ElementsNames.mgrid,
+                         isDarkTheme(cfg.theme) ? grid : mgrid);
         }
+    }
+
+    /**
+     * The stroke gridlines are drawn with, from a theme's stated dot and gap.
+     *
+     * @param dot ink length of one dot; zero asks for solid gridlines
+     * @param gap space after the dot, or zero to derive it from the stroke width
+     * @return the stroke
+     */
+    private static Stroke gridStroke(float dot, float gap) {
+        return RrdGraphConstants.gridStroke(1f, dot, gap);
+    }
+
+    /** Whether a theme draws on a dark canvas, which most of these colours depend on. */
+    private static boolean isDarkTheme(String theme) {
+        return "midnight".equals(theme) || "dark".equals(theme);
     }
 
     /**

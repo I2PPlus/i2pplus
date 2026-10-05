@@ -100,18 +100,20 @@ public class GraphRendererExtraSeriesColorTest {
     }
 
     /**
-     * The second line is yellow: the primary's saturation and brightness at hue 60.
+     * The extra series is the theme's own second ink, declared rather than derived.
      *
-     * <p>Pinned because this is derived rather than listed per theme, and a derivation is
-     * exactly the sort of thing that gets quietly replaced by a literal - which is how the
-     * second line became orange while every colour test still passed.
+     * <p>This used to pin a 60-degree rotation of the primary, because that is what the
+     * palettes were: the first plot turned into the second. They are declared now - each
+     * theme's two lines are the two inks its minigraph plots - so no single hue describes
+     * them. What still has to hold is that the renderer asks for plot 1 rather than working
+     * one out: that is the wiring this pins, and the declarations themselves are pinned by
+     * {@code GraphThemeColorsTest}.
      */
     @Test
-    public void theSecondSeriesIsYellow() {
+    public void theSecondSeriesIsTheThemesSecondPlot() {
         for (String theme : THEMES) {
-            float h = hue(second(theme));
-            assertEquals(theme + ": the second line must sit on yellow (60 degrees)",
-                         60f, h, 1f);
+            assertEquals(theme + ": the extra series is the theme's second plot",
+                         GraphThemeColors.lineColor(null, theme, 1), second(theme));
         }
     }
 
