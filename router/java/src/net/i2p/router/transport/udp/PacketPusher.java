@@ -42,9 +42,17 @@ class PacketPusher implements Runnable {
         _endpoints = (endpoints instanceof CopyOnWriteArrayList) ? endpoints : new CopyOnWriteArrayList<>(endpoints);
     }
 
+    /** Idle backoff, used only if the fragment pool ever comes back empty while alive. */
+    private static final long IDLE_BACKOFF_MS = 10;
+
     /**
      * Starts the packet pusher thread.
      * This method is synchronized to prevent concurrent startups/shutdowns.
+     *
+     * <p>Left at {@link Thread#NORM_PRIORITY}, which is what {@link I2PThread} sets. This
+     * was the only router thread at MAX_PRIORITY, so when the pool had nothing to send its
+     * spin preempted every other router thread; a local inefficiency became a router-wide
+     * latency problem.
      */
     public synchronized void startup() {
         if (_alive) {
@@ -52,7 +60,6 @@ class PacketPusher implements Runnable {
         }
         _alive = true;
         I2PThread t = new I2PThread(this, "UDPPktPusher", true);
-        t.setPriority(Thread.MAX_PRIORITY);
         _thread = t;
         t.start();
     }
@@ -83,8 +90,16 @@ class PacketPusher implements Runnable {
                         send(packet);
                     }
                 } else {
-                    // Sleep briefly or yield if no packets to reduce CPU usage (depends on getNextVolley blocking)
-                    Thread.yield();
+                    // getNextVolley only returns empty once the pool is shutting down, so
+                    // this is nearly dead code. Do not leave a bare yield here though: on an
+                    // idle host the scheduler hands the thread straight back, which costs a
+                    // whole core, and an interruptible sleep keeps shutdown responsive.
+                    try {
+                        Thread.sleep(IDLE_BACKOFF_MS);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
                 }
             } catch (RuntimeException e) {
                 _log.error("SSU Output Queue Error", e);

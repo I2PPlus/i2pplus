@@ -46,6 +46,13 @@ class OutboundMessageFragments {
      */
     static final int MAX_VOLLEYS = 10;
     private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
+    /**
+     *  Floor on any wait taken here.
+     *
+     *  <p>A round that allocated nothing has to cost a bounded wait. It used to cost none:
+     *  see {@link #foldSendDelay}.
+     */
+    static final int MIN_WAIT_MS = 10;
     /** Counter for periodic aggregate stat emission */
     private int _statEmitCounter;
 
@@ -263,10 +270,7 @@ class OutboundMessageFragments {
             }
 
             // Track the soonest time this peer will be ready
-            int delay = p.getNextDelay(now);
-            if (delay < nextSendDelay) {
-                nextSendDelay = delay;
-            }
+            nextSendDelay = foldSendDelay(nextSendDelay, p.getNextDelay(now));
 
             // If we've gone through all peers, wait or retry
             if (peersProcessed >= _activePeers.size()) {
@@ -277,13 +281,20 @@ class OutboundMessageFragments {
                 }
 
                 if (nextSendDelay > 0) {
-                    int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
+                    int toWait = roundWaitMs(nextSendDelay);
                     waitForMessages(toWait);
                     peersProcessed = 0;
                     nextSendDelay = Integer.MAX_VALUE;
                 } else {
-                    // Reset for next round
+                    // Defensive: foldSendDelay floors every reported delay at MIN_WAIT_MS,
+                    // so a round that reached a peer cannot land here with zero. Reached
+                    // only if the list changed under us mid-round. Still take the floor,
+                    // because the alternative - reset the index and carry straight on -
+                    // is a flat spin through peers that have nothing to give.
                     _peerIndex = 0;
+                    peersProcessed = 0;
+                    nextSendDelay = Integer.MAX_VALUE;
+                    waitForMessages(MIN_WAIT_MS);
                 }
                 // Emit aggregate transport stats every full round-robin cycle
                 if (++_statEmitCounter >= 10) {
@@ -447,6 +458,44 @@ class OutboundMessageFragments {
         }
 
         return rv;
+    }
+
+/**
+ *  Fold one peer's reported delay into the smallest delay seen so far this round.
+ *
+ *  <p>A peer reports {@code 0} to mean it wants a prompt retry: its retransmit timer has
+ *  elapsed, or it is holding a message past its lifetime and should be failed out. That is a
+ *  reason to retry soon, not a reason not to wait.
+ *
+ *  <p>Folding {@code 0} in literally is what made this loop burn a core. The round minimum
+ *  started at {@link Integer#MAX_VALUE} and was only ever lowered, so a single peer reporting
+ *  {@code 0} pinned it there for everyone. The end-of-round test is {@code nextSendDelay > 0},
+ *  which then failed and took the branch that re-scanned the same peers with no blocking at
+ *  all, once per iteration, for as long as that peer stayed in that state.
+ *
+ *  @param runningMin smallest delay seen so far this round
+ *  @param reportedDelay what this peer reported
+ *  @return the updated minimum, never below {@link #MIN_WAIT_MS} and never zero
+ *  @since 0.9.71+
+ */
+    static int foldSendDelay(int runningMin, int reportedDelay) {
+        if (reportedDelay <= 0) {return Math.min(runningMin, MIN_WAIT_MS);}
+        return Math.min(runningMin, reportedDelay);
+    }
+
+    /**
+     *  How long to block after a full round allocated nothing.
+     *
+     *  <p>Always at least {@link #MIN_WAIT_MS}, so a round that produced nothing cannot turn
+     *  into a spin, and never more than {@link #MAX_WAIT}, so one peer reporting a long delay
+     *  cannot stall the pool.
+     *
+     *  @param roundMin result of folding every peer's delay this round
+     *  @return milliseconds to block
+     *  @since 0.9.71+
+ */
+    static int roundWaitMs(int roundMin) {
+        return Math.min(Math.max(roundMin, MIN_WAIT_MS), MAX_WAIT);
     }
 
 private void waitForMessages() {
