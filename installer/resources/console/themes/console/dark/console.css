@@ -8,7 +8,12 @@
 @import url(../images/itooplus.css);
 
 :root{
---graphbar:#f60;
+--graph_line_1:#37c88e;
+--graph_line_2:#c8c837;
+--graph_path_1:#004808aa;
+--graph_path_2:#c8c83755;
+--graph_dash:1;
+--tunerGraph:#f60;
 --tier:linear-gradient(180deg,#397,#021);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);

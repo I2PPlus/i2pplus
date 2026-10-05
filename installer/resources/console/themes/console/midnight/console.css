@@ -9,6 +9,11 @@
 @import url(../shared.css);
 
 :root{
+--graph_line_1:#5aa6d4;
+--graph_line_2:#d4d45a;
+--graph_path_1:#0048a080;
+--graph_path_2:#d4d45a80;
+--graph_dash:1;
 --box:linear-gradient(180deg,#020020,#000);
 --btn_sidebar:linear-gradient(90deg,#0000,rgba(96,0,96,.1),#0000),linear-gradient(180deg,#322d52,#1e1b31 50%,#141221 50%,#0a0910);
 --label_hover:var(--btn_hover_radial),linear-gradient(180deg,#1e0b28 50%,#0a030d 50%);

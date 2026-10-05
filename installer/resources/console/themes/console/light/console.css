@@ -6,13 +6,18 @@
 @import url(../shared.css);
 
 :root{
+--graph_line_1:#001e6e;
+--graph_line_2:#6e6e00;
+--graph_path_1:#64a0c880;
+--graph_path_2:#6e6e0080;
+--graph_dash:1;
 --tier:linear-gradient(180deg,#fff,#dbecff);
 --isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
 --isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
 --isG:linear-gradient(135deg,#711 18%,#0000 18%);
---graphbar:#78a;
+--tunerGraph:#78a;
 --minigraph_glow_alpha:.3;
 --minigraph_glow_alpha_combined:.3;
 --minigraph_glow_blur:6;
