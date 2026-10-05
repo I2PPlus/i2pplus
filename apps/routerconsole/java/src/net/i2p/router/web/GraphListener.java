@@ -24,6 +24,8 @@ import org.rrd4j.core.FetchRequest;
 import org.rrd4j.core.FetchData;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  *  Creates and updates the in-memory or on-disk RRD database,
@@ -575,6 +577,49 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
+     *  Datasource id to the stat it records, so a log line can name the stat rather than
+     *  the 20-character munge JRobin requires.
+     *
+     *  <p>Bounded by the distinct stat-and-period pairs ever graphed - one entry each,
+     *  replaced in place when a listener is rebuilt - so it holds no per-rebuild state.
+     *
+     *  @since 0.9.71+
+     */
+    private static final ConcurrentMap<String, String> STAT_NAMES = new ConcurrentHashMap<String, String>();
+
+    /**
+     *  Record which stat a datasource id stands for.
+     *
+     *  <p>Called when a listener opens its RRD, which is the only place the id is minted.
+     *
+     *  @param id the 20-character datasource id from {@link #createName}
+     *  @param statName the stat name and period the id was minted from
+     *  @since 0.9.71+
+     */
+    static void registerName(String id, String statName) {
+        if (id != null && statName != null) {
+            STAT_NAMES.put(id, statName);
+        }
+    }
+
+    /**
+     *  Translate a datasource id back to the stat it records.
+     *
+     *  <p>The ids are a hash of the stat name, so they cannot be inverted - a log line
+     *  quoting one names nothing an operator can look up. Pass every id a human reads
+     *  through here.
+     *
+     *  @param id the datasource id
+     *  @return the registered stat name, or {@code id} itself when nothing registered it
+     *          (an unknown id is still worth logging)
+     *  @since 0.9.71+
+     */
+    static String statName(String id) {
+        String name = id != null ? STAT_NAMES.get(id) : null;
+        return name != null ? name : id;
+    }
+
+    /**
      * Retrieve the tracked rate.
      *
      * @return the rate instance
@@ -643,6 +688,8 @@ public class GraphListener implements RateSummaryListener {
         String baseName = (rs != null ? rs.getName() : "?") + "." + period;
         _name = createName(_context, baseName);
         _eventName = createName(_context, baseName + ".events");
+        registerName(_name, baseName);
+        registerName(_eventName, baseName + ".events");
         File rrdFile = null;
         RrdDb db = null;
         boolean existing = false;

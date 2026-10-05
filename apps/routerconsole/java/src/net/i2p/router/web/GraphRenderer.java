@@ -885,7 +885,8 @@ class GraphRenderer {
             try {
                 dsNames = lsnr.getData().getDsNames();
             } catch (IOException ioe) {
-                throw new IOException("Failed to get datasource names for " + lsnr.getName(), ioe);
+                throw new IOException("Failed to get datasource names for "
+                                      + GraphListener.statName(lsnr.getName()), ioe);
             }
             String plotName = dsNames[0];
             String descr = _t(lsnr.getRate().getRateStat().getDescription());

@@ -717,7 +717,8 @@ public class GraphGenerator implements Runnable, ClientApp {
                     tally = writesStopped;
                     break;
             }
-            tally.record(staleAge(now, attached, lastOk), lastOk > 0, lsnr.getName());
+            tally.record(staleAge(now, attached, lastOk), lastOk > 0,
+                         GraphListener.statName(lsnr.getName()));
         }
         int stalled = neverWritten.count() + unregistered.count() + writesStopped.count()
                       + coalesceStalled.count();
