@@ -159,7 +159,7 @@ class ValueAxis extends Axis {
             int y = mapper.ytr(gridstep * i);
             if (y >= im.yorigin - im.ysize && y <= im.yorigin) {
                 if (i % labfact == 0) {
-                    worker.drawLine(x0, y, x1, y, mGridColor, gdef.gridStroke);
+                    worker.drawLine(x0, y, x1, y, mGridColor, gdef.majorGridStroke);
                 } else if (!(gdef.noMinorGrid)) {
                     worker.drawLine(x0, y, x1, y, gridColor, gdef.gridStroke);
                 }

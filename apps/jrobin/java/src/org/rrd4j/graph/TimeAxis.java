@@ -150,7 +150,7 @@ class TimeAxis extends Axis {
                 if (status == 0) {
                     long time = calendar.getTime().getTime() / 1000L;
                     int x = mapper.xtr(time);
-                    worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
+                    worker.drawLine(x, y0, x, y1, color, gdef.majorGridStroke);
                 }
                 findNextTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
             }

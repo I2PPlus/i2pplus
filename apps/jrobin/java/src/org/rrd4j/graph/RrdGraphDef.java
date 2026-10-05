@@ -298,6 +298,12 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     boolean showSignature = true;
     /** Stroke used to draw grid lines. */
     Stroke gridStroke = GRID_STROKE;
+    /**
+     * Stroke used to draw the major grid lines, which a theme may dash differently.
+     *
+     * @since 0.9.71
+     */
+    Stroke majorGridStroke = GRID_STROKE;
     /** Stroke used to draw tick marks. */
     Stroke tickStroke = TICK_STROKE;
     /** Optional downsampler for improved visual representation. */
@@ -2100,6 +2106,18 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      */
     public void setGridStroke(Stroke gridStroke) {
         this.gridStroke = gridStroke;
+    }
+
+    /**
+     * Set the stroke used to draw the major grid lines.
+     *
+     * <p>Separate from the minor gridlines' stroke, so the two can carry different patterns.
+     *
+     * @param majorGridStroke a {@link java.awt.Stroke} object, or null for the solid default
+     * @since 0.9.71
+     */
+    public void setMajorGridStroke(Stroke majorGridStroke) {
+        this.majorGridStroke = majorGridStroke != null ? majorGridStroke : GRID_STROKE;
     }
 
     /**

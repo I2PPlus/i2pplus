@@ -433,6 +433,30 @@ public interface RrdGraphConstants {
     }
 
     /**
+     * The stroke a gridline is drawn with.
+     *
+     * <p>A zero dot length is a theme asking for solid gridlines, which is what they have
+     * always been; anything else is a dot-and-gap pattern, with the gap raised to
+     * {@link #minimumDashGap} when a theme states one too small to keep the dots apart.
+     *
+     * @param width requested stroke width in pixels
+     * @param dashLength ink length of one dot; zero draws a solid line
+     * @param dashGap space after the dot, or zero to derive it
+     * @return the stroke to draw gridlines with
+     * @since 0.9.71
+     */
+    static Stroke gridStroke(float width, float dashLength, float dashGap) {
+        if (dashLength <= 0f) {
+            return new BasicStroke(width);
+        }
+        float minimum = minimumDashGap(dashLength, width);
+        float gap = dashGap >= minimum ? dashGap : minimum;
+        return new BasicStroke(width, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10f,
+                               new float[] { dashLength, gap },
+                               0f);
+    }
+
+    /**
      * The smallest gap that keeps consecutive dots from touching at the given stroke width.
      *
      * <p>A round cap extends each dash by half the width on both ends, so one dot lays down
