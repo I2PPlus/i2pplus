@@ -583,12 +583,12 @@ public class BuildExecutor implements Runnable {
         _currentlyBuildingMap = new ConcurrentHashMap<>(maxConcurrentBuilds);
         _recentlyBuildingMap = new ConcurrentHashMap<>(4 * maxConcurrentBuilds);
         _context.statManager().createRequiredRateStat("tunnel.buildFailFirstHop", "OB tunnel build failures (can't contact 1st hop)", "Tunnels", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to our build request", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for rejection (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for success (ms)", "Tunnels [Participating]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to our build request", "Tunnels [Exploratory]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for rejection (ms)", "Tunnels [Exploratory]", RATES);
-        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for success (ms)", "Tunnels [Exploratory]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to a client tunnel build request", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for a client tunnel build rejection (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for a successful client tunnel build (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to an exploratory tunnel build request", "Tunnels [Exploratory]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for an exploratory tunnel build rejection (ms)", "Tunnels [Exploratory]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for a successful exploratory tunnel build (ms)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);

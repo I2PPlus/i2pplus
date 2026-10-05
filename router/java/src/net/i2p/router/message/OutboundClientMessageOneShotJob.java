@@ -275,7 +275,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
     /** Called once at router startup. */
     public static void init(RouterContext ctx) {
         ctx.statManager().createFrequencyStat("client.sendMessageFailFrequency", "How often client fails to send a message", "ClientMessages", RATES);
-        ctx.statManager().createRateStat("client.dispatchNoACK", "Repeated message sends to a peer (no ACK required)", "ClientMessages", RATES);
+        ctx.statManager().createRateStat("client.dispatchNoACK", "Messages sent without requesting an acknowledgement", "ClientMessages", RATES);
         ctx.statManager().createRateStat("client.dispatchNoTunnels", "How long after startup we run out of local tunnels to send/receive with", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.dispatchSendTime", "Time taken by the Dispatch job", "ClientMessages", RATES);
         ctx.statManager().createRequiredRateStat("client.dispatchTime", "Time to dispatch the message (since we started)", "ClientMessages", RATES);
