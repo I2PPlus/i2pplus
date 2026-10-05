@@ -20,9 +20,10 @@
 
     boolean fakeBw = "bw.combined".equals(stat);
     // A group id is not a stat, so resolve it against the registry before looking for a
-    // Rate. Only groups the user has actually switched on may be drawn.
+    // Rate. Generated In/Out pairs are ids too, and are resolved the same way. Only
+    // groups the user has actually switched on may be drawn.
     boolean isGroup = false;
-    if (!fakeBw && GraphGroups.groupIds().contains(stat)) {
+    if (!fakeBw && (GraphGroups.groupIds().contains(stat) || GraphGroups.isPairId(stat))) {
         if (!ctx.getBooleanProperty(GraphGroups.PROP_COMBINE)) {
             response.sendError(403, "Graph combining is not enabled"); return;
         }

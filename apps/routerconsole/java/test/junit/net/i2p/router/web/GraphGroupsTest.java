@@ -220,6 +220,7 @@ public class GraphGroupsTest {
         assertUnitsAgree("netDbLookupTime", "ms");
         assertUnitsAgree("udpRto", "ms");
         assertUnitsAgree("tunnelCaches", "entries");
+        assertUnitsAgree("participatingBw", "B/s");
         assertUnitsAgree("codelDrop", "ms");
         assertUnitsAgree("cryptoPoolUsed", "events");
         assertUnitsAgree("cryptoPoolEmpty", "events");
@@ -514,5 +515,100 @@ public class GraphGroupsTest {
         Set<String> covered = GraphGroups.suppressedStats(enabled, true, false);
         assertEquals(4, covered.size());
         assertEquals("two group plots replace four member graphs", 2, covered.size() / 2);
+    }
+
+    /////////////// generated In/Out pairs
+
+    /** Both halves of a pool's rates are one question: how much it is carrying. */
+    @Test
+    public void bothHalvesOfAPoolFormAPair() {
+        Set<String> enabled = on("[skank.i2p] InBps", "[skank.i2p] OutBps");
+        assertEquals(Collections.singleton("pair:[skank.i2p]"),
+                     GraphGroups.pairGroupIds(enabled));
+        assertTrue(GraphGroups.isPairId("pair:[skank.i2p]"));
+        assertFalse(GraphGroups.isPairId("peerCaps"));
+        assertFalse(GraphGroups.isPairId(null));
+        assertFalse(GraphGroups.isPairId("pair:"));
+    }
+
+    /** One direction switched on is one graph, never a half-empty frame. */
+    @Test
+    public void halfAPoolIsNotAPair() {
+        Set<String> half = on("[skank.i2p] InBps");
+        assertTrue(GraphGroups.pairGroupIds(half).isEmpty());
+        assertEquals(GraphGroups.groupIds().size(), GraphGroups.allGroupIds(half).size());
+        assertTrue(GraphGroups.combinedRepresentatives(half, true, false).isEmpty());
+        assertTrue(GraphGroups.suppressedStats(half, true, false).isEmpty());
+    }
+
+    /** A pair id spells out its own two rates, in the legend order every group uses. */
+    @Test
+    public void aPairIdDescribesItself() {
+        assertEquals(Arrays.asList("[skank.i2p] InBps", "[skank.i2p] OutBps"),
+                     GraphGroups.members("pair:[skank.i2p]"));
+        assertEquals(Arrays.asList("noproxy InBps", "noproxy OutBps"),
+                     GraphGroups.members("pair:noproxy"));
+        assertTrue(GraphGroups.members("pair:").isEmpty());
+        assertEquals(Collections.emptyList(), GraphGroups.members("noSuchGroup"));
+    }
+
+    /** The enabled set decides which halves are drawn, in legend order regardless. */
+    @Test
+    public void aPairHonoursTheEnabledSet() {
+        Set<String> both = on("[skank.i2p] OutBps", "[skank.i2p] InBps");
+        assertEquals(Arrays.asList("[skank.i2p] InBps", "[skank.i2p] OutBps"),
+                     GraphGroups.enabledMembers("pair:[skank.i2p]", both));
+        assertTrue(GraphGroups.enabledMembers("pair:[skank.i2p]", on("[skank.i2p] InBps"))
+                    .equals(Collections.singletonList("[skank.i2p] InBps")));
+    }
+
+    /** Pairs sort and title with the service graphs, named after the pool itself. */
+    @Test
+    public void aPairSortsWithTheServiceGraphs() {
+        assertEquals("Service", GraphGroups.subsystemOf("pair:[skank.i2p]"));
+        assertEquals("[Service] ", GraphGroups.displayPrefixOf("pair:[skank.i2p]"));
+        assertEquals("skank.i2p", GraphGroups.titleOf("pair:[skank.i2p]"));
+        assertEquals("Purokishi", GraphGroups.titleOf("pair:[Purokishi]"));
+        assertEquals("update.skank", GraphGroups.titleOf("pair:[update.skank]"));
+    }
+
+    /** Generated ids live beside the registry, never inside it. */
+    @Test
+    public void noRegistryGroupIsAPair() {
+        for (String id : GraphGroups.groupIds()) {
+            assertFalse(id + " claims to be a generated pair", GraphGroups.isPairId(id));
+        }
+        Set<String> all = GraphGroups.allGroupIds(on("[skank.i2p] InBps", "[skank.i2p] OutBps"));
+        assertTrue(all.containsAll(GraphGroups.groupIds()));
+        assertTrue(all.contains("pair:[skank.i2p]"));
+        assertEquals(GraphGroups.groupIds().size() + 1, all.size());
+        assertEquals(GraphGroups.groupIds().size(), GraphGroups.allGroupIds(null).size());
+    }
+
+    /** The pair obeys the same opt-in, minimum-size and event-mode gates as any group. */
+    @Test
+    public void aPairCombinesOnlyWhenBothHalvesAreEnabled() {
+        Set<String> both = on("[skank.i2p] InBps", "[skank.i2p] OutBps");
+        Map<String, String> reps = GraphGroups.combinedRepresentatives(both, true, false);
+        assertTrue(reps.containsKey("pair:[skank.i2p]"));
+        assertEquals(2, GraphGroups.suppressedStats(both, true, false).size());
+        assertTrue(GraphGroups.combinedRepresentatives(both, false, false).isEmpty());
+        assertTrue(GraphGroups.combinedRepresentatives(both, true, true).isEmpty());
+    }
+
+    /**
+     * The participating rates are a declared group, so they pair with each other rather
+     * than generating an id of their own.
+     */
+    @Test
+    public void participatingBandwidthIsOneFrameAndNotAPair() {
+        assertUnitsAgree("participatingBw", "B/s");
+        assertEquals(2, GraphGroups.members("participatingBw").size());
+        assertEquals("tunnel.participating InBps",
+                     GraphGroups.members("participatingBw").get(0));
+        assertEquals("tunnel.participating OutBps",
+                     GraphGroups.members("participatingBw").get(1));
+        assertTrue(GraphGroups.pairGroupIds(on("tunnel.participating InBps",
+                                               "tunnel.participating OutBps")).isEmpty());
     }
 }

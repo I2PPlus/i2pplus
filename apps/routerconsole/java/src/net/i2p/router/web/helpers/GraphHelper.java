@@ -360,7 +360,10 @@ public class GraphHelper extends FormHandler {
             return "";
         }
         StringBuilder out = new StringBuilder(512);
-        for (String groupId : GraphGroups.groupIds()) {
+        // allGroupIds, not groupIds: the In/Out pairs a pool's rates form are generated
+        // from the enabled set rather than declared, and they tile exactly like a
+        // registry group does.
+        for (String groupId : GraphGroups.allGroupIds(enabledStats)) {
             List<GraphListener> members = ss.getGroupListeners(groupId, enabledStats);
             if (members.size() < 2) {
                 continue;
@@ -373,13 +376,16 @@ public class GraphHelper extends FormHandler {
             String title = _t("{0} for {1}", displayName,
                               DataHelper.formatDuration2(_periodCount * r.getPeriod()));
             title = title.replace("&nbsp;", "");
+            // A generated pair id carries the pool's name verbatim, and that name may
+            // hold spaces; registry ids never do.
+            String encId = groupId.replace(" ", "%20");
             out.append("<span class=graphContainer><a href=\"").append(GRAPH_HREF)
-               .append(groupId)
+               .append(encId)
                .append(AMP).append("c=").append(3 * _periodCount)
                .append(AMP).append("w=1000").append(AMP).append("h=280")
                .append("\">")
                .append("<img class=statimage border=0 src=\"").append(STAT_PARAM)
-               .append(groupId)
+               .append(encId)
                .append(AMP).append("period=").append(r.getPeriod())
                .append(PERIOD_COUNT_PARAM).append(_periodCount)
                .append(WIDTH_PARAM).append(_width)
@@ -440,7 +446,7 @@ public class GraphHelper extends FormHandler {
             period = 60000;
             name = _stat;
             displayName = "[" + _t("Router") + "] " + _t("Bandwidth Usage");
-        } else if (GraphGroups.groupIds().contains(_stat)) {
+        } else if (GraphGroups.groupIds().contains(_stat) || GraphGroups.isPairId(_stat)) {
             // A group id is not a stat, so it never reaches parseSpecs. Resolve it here or
             // the click-through page would report the group as "not enabled for graphing".
             if (!_graphCombine) {

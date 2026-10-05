@@ -8,6 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Registry of graph groupings: sets of stats that answer the same question and share a
@@ -40,6 +41,33 @@ public final class GraphGroups {
      * exceed it, and {@code GraphGroupsTest} asserts the current groups all comply.
      */
     public static final int MAX_SERIES = 2;
+
+    /**
+     * Marker at the head of a group id built from an In/Out bandwidth pair rather than
+     * declared in the registry.
+     *
+     * <p>Pool names come from configuration, so the two rates a pool publishes cannot be
+     * listed in advance: an HTTP proxy is only there if the user named it one. The marker
+     * keeps such an id recognisable, and keeps {@link #members} from treating an arbitrary
+     * string as a group.
+     *
+     * <p>Not a plausible stat prefix: rate names are dotted subsystem paths
+     * ({@code netDb.successTime}) or, for pools, bracketed.
+     */
+    private static final String PAIR_PREFIX = "pair:";
+
+    /** Suffix of a pool's inbound rate, as built by TunnelPool. */
+    private static final String IN_SUFFIX = " InBps";
+
+    /** Suffix of a pool's outbound rate, as built by TunnelPool. */
+    private static final String OUT_SUFFIX = " OutBps";
+
+    /**
+     * Subsystem a generated pair sorts under. A pool's rates answer how much traffic that
+     * service is carrying, so they sort with the other service graphs rather than under
+     * the tunnel jobs.
+     */
+    private static final String PAIR_SUBSYSTEM = "Service";
 
     /**
      * Display name per group. A combined plot shows several stats, so naming it after the
@@ -140,6 +168,12 @@ public final class GraphGroups {
         g.put("tunnelCaches", Arrays.asList(
                 "tunnel.cache.inboundGateways", "tunnel.cache.outboundGateways"));
 
+        // The two directions of participating tunnel bandwidth, both bytes per second read
+        // off the same pools. Apart they say nothing about the load we are carrying for
+        // others: one direction is half the story and the pair is the question.
+        g.put("participatingBw", Arrays.asList(
+                "tunnel.participating InBps", "tunnel.participating OutBps"));
+
         // CoDel drop delay for the two highest-priority bands. Lower CoDel priority
         // numbers are the more urgent queues, so a drop at 0 or 100 is the one worth
         // reading together; bands 200-500 rarely drop and each stays on its own graph.
@@ -209,6 +243,7 @@ public final class GraphGroups {
         t.put("netDbLookupTime", "Lookup Time");
         t.put("udpRto", "UDP Retransmission Timeouts");
         t.put("tunnelCaches", "Caches");
+        t.put("participatingBw", "Participating Bandwidth");
         t.put("codelDrop", "CoDel Drop Delay by Priority");
         t.put("cryptoPoolUsed", "Precalculated Keys Used");
         t.put("cryptoPoolEmpty", "Key Pool Empty");
@@ -251,6 +286,7 @@ public final class GraphGroups {
         subsystems.put("udpRto", "Transport");
         subsystems.put("codelDrop", "Transport");
         subsystems.put("tunnelCaches", "Tunnel");
+        subsystems.put("participatingBw", "Tunnel");
         subsystems.put("cryptoPoolUsed", "Crypto");
         subsystems.put("cryptoPoolEmpty", "Crypto");
         subsystems.put("bwLimiterDelay", "Bandwidth");
@@ -274,30 +310,55 @@ public final class GraphGroups {
      * @since 0.9.71+
      */
     public static String displayPrefixOf(String groupId) {
-        String sub = groupId != null ? SUBSYSTEMS.get(groupId) : null;
+        String sub = subsystemOf(groupId);
         return sub != null ? '[' + sub + "] " : "";
     }
 
     /**
      * The subsystem a group belongs to.
      *
+     * <p>A generated In/Out pair is not in {@link #SUBSYSTEMS}; it is a pool rate and
+     * answers "how much is this service carrying", so it sorts with the other service
+     * graphs under the pool subsystem.
+     *
      * @param groupId a group id, or null
      * @return the subsystem name, or null when the group has none
      * @since 0.9.71+
      */
     public static String subsystemOf(String groupId) {
-        return groupId != null ? SUBSYSTEMS.get(groupId) : null;
+        if (groupId == null) {
+            return null;
+        }
+        String sub = SUBSYSTEMS.get(groupId);
+        if (sub != null) {
+            return sub;
+        }
+        return isPairId(groupId) ? PAIR_SUBSYSTEM : null;
     }
 
     /**
      * The display name of a group, for use as a combined graph title.
+     *
+     * <p>A generated pair is named after the directionless half the two rates share, with
+     * the brackets a pool name carries dropped: {@code [skank.i2p]} is already a name, and
+     * nesting it inside the title's own brackets reads as markup.
      *
      * @param groupId a group id
      * @return the title, never null; an unknown id yields the id itself
      */
     public static String titleOf(String groupId) {
         String t = TITLES.get(groupId);
-        return t != null ? t : groupId;
+        if (t != null) {
+            return t;
+        }
+        if (isPairId(groupId)) {
+            String key = keyOfPairId(groupId);
+            if (key.length() > 1 && key.charAt(0) == '[' && key.charAt(key.length() - 1) == ']') {
+                return key.substring(1, key.length() - 1);
+            }
+            return key;
+        }
+        return groupId;
     }
 
     /**
@@ -317,12 +378,134 @@ public final class GraphGroups {
      */
     public static List<String> members(String groupId) {
         List<String> m = GROUPS.get(groupId);
-        return m != null ? m : Collections.<String>emptyList();
+        if (m != null) {
+            return m;
+        }
+        // Inbound first, so the pair's legend order matches every other group's and the
+        // representative never swaps sides as the enabled set changes.
+        if (isPairId(groupId)) {
+            String key = keyOfPairId(groupId);
+            if (!key.isEmpty()) {
+                return Arrays.asList(key + IN_SUFFIX, key + OUT_SUFFIX);
+            }
+        }
+        return Collections.emptyList();
     }
 
     /** @return every known group id, in display order */
     public static Set<String> groupIds() {
         return Collections.unmodifiableSet(GROUPS.keySet());
+    }
+
+    /**
+     * Whether an id names a generated In/Out pair rather than a registry group.
+     *
+     * @param groupId a group id, or null
+     * @return true for a generated pair id
+     * @since 0.9.71+
+     */
+    public static boolean isPairId(String groupId) {
+        return groupId != null && groupId.length() > PAIR_PREFIX.length()
+                && groupId.startsWith(PAIR_PREFIX);
+    }
+
+    /**
+     * The directionless name the two rates of a pair share.
+     *
+     * @param statName a stat name such as {@code [skank.i2p] InBps}
+     * @return the shared name, brackets included, or null when the stat is not half of a
+     *         bandwidth pair
+     * @since 0.9.71+
+     */
+    public static String pairKeyOf(String statName) {
+        String suffix = suffixOf(statName);
+        if (suffix == null) {
+            return null;
+        }
+        String key = statName.substring(0, statName.length() - suffix.length());
+        return key.isEmpty() ? null : key;
+    }
+
+    /**
+     * The other half of a bandwidth pair, spelled exactly as a stat name.
+     *
+     * @param statName a stat name such as {@code [skank.i2p] InBps}
+     * @return the counterpart's full stat name, or null when the stat is not half of a
+     *         bandwidth pair
+     * @since 0.9.71+
+     */
+    public static String counterpartOf(String statName) {
+        String suffix = suffixOf(statName);
+        if (suffix == null) {
+            return null;
+        }
+        return statName.substring(0, statName.length() - suffix.length())
+                + (IN_SUFFIX.equals(suffix) ? OUT_SUFFIX : IN_SUFFIX);
+    }
+
+    /**
+     * The In/Out pairs the enabled stats form.
+     *
+     * <p>Only pairs the user has switched on both halves of are returned: a group id for a
+     * half-enabled pair would render as an empty tile, and pairing must never turn a single
+     * enabled stat into a combined plot. Stats the registry already claims are skipped, so
+     * a declared group and a generated one can never cover the same rate.
+     *
+     * @param enabledStats stat names enabled by the user, without period suffixes;
+     *                     null yields no pairs
+     * @return the pair ids, in name order; never null
+     * @since 0.9.71+
+     */
+    public static Set<String> pairGroupIds(Set<String> enabledStats) {
+        Set<String> rv = new TreeSet<>();
+        if (enabledStats == null) {
+            return rv;
+        }
+        for (String stat : enabledStats) {
+            if (groupOf(stat) != null) {
+                continue;
+            }
+            String key = pairKeyOf(stat);
+            if (key == null) {
+                continue;
+            }
+            String other = counterpartOf(stat);
+            if (other != null && enabledStats.contains(other)) {
+                rv.add(PAIR_PREFIX + key);
+            }
+        }
+        return rv;
+    }
+
+    /**
+     * Every group id that may render for an enabled set: the registry, plus the In/Out
+     * pairs those stats form.
+     *
+     * @param enabledStats stat names enabled by the user; may be null
+     * @return group ids in display order; never null
+     * @since 0.9.71+
+     */
+    public static Set<String> allGroupIds(Set<String> enabledStats) {
+        Set<String> rv = new LinkedHashSet<>(GROUPS.keySet());
+        rv.addAll(pairGroupIds(enabledStats));
+        return rv;
+    }
+
+    private static String keyOfPairId(String groupId) {
+        return groupId.substring(PAIR_PREFIX.length());
+    }
+
+    private static String suffixOf(String statName) {
+        if (statName == null) {
+            return null;
+        }
+        if (statName.endsWith(IN_SUFFIX)) {
+            return IN_SUFFIX;
+        }
+        if (statName.endsWith(OUT_SUFFIX)) {
+            return OUT_SUFFIX;
+        }
+        return null;
     }
 
     /**
@@ -407,7 +590,7 @@ public final class GraphGroups {
         if (!combine || showEvents || enabledStats == null) {
             return rv;
         }
-        for (String groupId : GROUPS.keySet()) {
+        for (String groupId : allGroupIds(enabledStats)) {
             List<String> on = enabledMembers(groupId, enabledStats);
             if (on.size() >= 2) {
                 rv.put(groupId, on.get(0));
