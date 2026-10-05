@@ -50,7 +50,7 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
         _elg2 = new Elligator2(ctx);
         ctx.statManager().createRequiredRateStat("crypto.EDHUsed", "EDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        ctx.statManager().createRequiredRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        ctx.statManager().createRequiredRateStat("crypto.EDHEmpty", "EDH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
         long maxMemory = SystemVersion.getMaxMemory();

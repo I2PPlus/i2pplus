@@ -59,7 +59,7 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
         ctx.statManager().createRequiredRateStat("crypto.XDHUsed", "XDH keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        ctx.statManager().createRequiredRateStat("crypto.XDHEmpty", "XDH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Initial dynamic sizing — start at midpoint for headroom
         computeTargetSizes();

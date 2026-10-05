@@ -60,7 +60,7 @@ public class MLKEMKeyFactory extends I2PThread implements KeyFactory {
         _type = type;
         _log = ctx.logManager().getLog(MLKEMKeyFactory.class);
         ctx.statManager().createRequiredRateStat("crypto.MLKEMUsed", "MLKEM keys consumed from precalc pool", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
-        ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "Queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        ctx.statManager().createRequiredRateStat("crypto.MLKEMEmpty", "MLKEM queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
 
         // Scale precomputation with available memory and cores.
         // MLKEM-768 keypair is ~3.5KB so even 1000 keys is <4MB.
