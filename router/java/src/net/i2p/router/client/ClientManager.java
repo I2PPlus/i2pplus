@@ -126,6 +126,7 @@ class ClientManager {
         _ctx.statManager().createRequiredRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRequiredRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRequiredRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
+        _ctx.statManager().createRequiredRateStat("client.internalQueueFull", "I2CP in-JVM queue overflow drops", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
         _ctx.statManager().createRequiredRateStat("i2cp.internalQueueSize", "I2CP internal queue capacity", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
     }
 

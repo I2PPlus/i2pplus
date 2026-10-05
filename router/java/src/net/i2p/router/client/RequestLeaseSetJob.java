@@ -39,6 +39,13 @@ class RequestLeaseSetJob extends JobImpl {
 
     private static final long DEFAULT_MAX_FUDGE = 5L*1000;
     private static final String PROP_MAX_FUDGE = "router.requestLeaseSetMaxFudge";
+    /**
+     *  Property overriding {@link #DEFAULT_SEND_WAIT}: ms to wait for the client to drain
+     *  its I2CP queue before failing the LeaseSet request.
+     *
+     *  @since 0.9.71+
+     */
+    static final String PROP_SEND_WAIT = "router.requestLeaseSetSendWait";
     private static final long TEN_MINUTES_MS = 10L * 60 * 1000;
     // Maximum future time for lease expiration: the hardcoded 10-minute lease
     // ceiling plus a small clock fudge, so requested leases never extend past
@@ -48,6 +55,17 @@ class RequestLeaseSetJob extends JobImpl {
     private static final long CLOCK_FUDGE_FACTOR = 30L * 1000;
     /** Jitter added to timeout to spread thundering-herd retries. */
     private static final long TIMEOUT_JITTER_MS = 2000;
+    /**
+     *  Default wait for the client to make room in its I2CP queue before giving up.
+     *
+     *  <p>Deliberately far shorter than the request timeout this failure would otherwise
+     *  cost: a client that is draining at all has usually freed a slot within a few
+     *  dispatcher passes, and a client that is wedged should be failed quickly so the
+     *  caller can rebuild rather than left holding a request that cannot succeed.
+     *
+     *  @since 0.9.71+
+     */
+    static final long DEFAULT_SEND_WAIT = 1000;
     public RequestLeaseSetJob(RouterContext ctx, ClientConnectionRunner runner, LeaseRequestState state) {
         super(ctx);
         _log = ctx.logManager().getLog(RequestLeaseSetJob.class);
@@ -210,13 +228,17 @@ class RequestLeaseSetJob extends JobImpl {
         }
 
         try {
-            _runner.doSend(msg);
+            // Wait briefly rather than drop: the client only has to read one more message,
+            // and losing the request costs the full request timeout plus a tunnel rebuild.
+            long waitMs = getContext().getProperty(PROP_SEND_WAIT, DEFAULT_SEND_WAIT);
+            _runner.doSendWait(msg, waitMs);
             if (_log.shouldInfo())
                 _log.info("LeaseSet request sent to client, scheduling timeout check for " + _requestState);
             getContext().jobQueue().addJob(new CheckLeaseRequestStatus());
         } catch (I2CPMessageException ime) {
             getContext().statManager().addRateData("client.requestLeaseSetDropped", 1);
-            _log.error("Error sending I2CP message requesting the LeaseSet", ime);
+            _log.error("Error sending I2CP message requesting the LeaseSet: " + ime.getMessage()
+                       + " (" + ime + ")", ime);
             failEarlyRequest("Error sending I2CP message");
         }
     }

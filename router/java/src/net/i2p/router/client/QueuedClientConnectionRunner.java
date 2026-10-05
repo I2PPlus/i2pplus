@@ -63,8 +63,46 @@ class QueuedClientConnectionRunner extends ClientConnectionRunner {
      */
     @Override
     void doSend(I2CPMessage msg) throws I2CPMessageException {
-        boolean success = queue.offer(msg);
-        if (!success) {throw new I2CPMessageException("I2CP write to queue failed");}
+        if (!queue.offer(msg)) {throw queueFull();}
+    }
+
+    /**
+     *  Send the I2CPMessage, giving the client's queue up to timeoutMs to make room.
+     *
+     *  <p>The in-JVM dispatcher drains this queue every few milliseconds, so a full queue
+     *  means the client is briefly behind rather than gone. Refusing the message outright
+     *  costs far more than the wait does: a dropped LeaseSet request spends a whole request
+     *  timing out and then rebuilds the tunnel, for a message that would have been handed
+     *  over milliseconds later.
+     *
+     *  @param msg the message to send
+     *  @param timeoutMs how long to wait for space in the client's queue
+     *  @throws I2CPMessageException if the queue is still full after the wait, or on other errors
+     */
+    @Override
+    void doSendWait(I2CPMessage msg, long timeoutMs) throws I2CPMessageException {
+        boolean success;
+        try {
+            success = queue.offer(msg, timeoutMs);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+            throw new I2CPMessageException("Interrupted waiting for I2CP queue space");
+        }
+        if (!success) {throw queueFull();}
+    }
+
+    /**
+     *  The error for a client that is not draining its I2CP queue.
+     *
+     *  <p>Names the client's side of the queue rather than saying only that a write
+     *  failed, because that is the fact the operator needs: the router's own writer is
+     *  healthy and the client is the side that has stopped reading.
+     */
+    private I2CPMessageException queueFull() {
+        _context.statManager().addRateData("client.internalQueueFull", 1);
+        return new I2CPMessageException("Client is not draining its I2CP queue ("
+                                        + queue.pending() + " pending, "
+                                        + queue.remainingCapacity() + " slots free)");
     }
 
     /**

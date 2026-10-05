@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,6 +27,9 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.After;
 import org.junit.Before;
@@ -45,9 +49,12 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2cp.CreateLeaseSet2Message;
+import net.i2p.data.i2cp.I2CPMessage;
+import net.i2p.data.i2cp.RequestVariableLeaseSetMessage;
 import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.data.i2cp.SessionId;
 import net.i2p.data.i2cp.SessionStatusMessage;
+import net.i2p.internal.I2CPMessageQueue;
 import net.i2p.router.ClientManagerFacade;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.Job;
@@ -116,6 +123,10 @@ public class LeaseRequestFailureTest {
         when(_ctx.getProperty(anyString(), anyInt())).thenReturn(0);
         when(_ctx.getProperty(anyString(), anyLong())).thenReturn(0L);
         when(_ctx.getProperty(anyString(), anyString())).thenReturn(null);
+        // The generic long stub above returns 0, which would mean "do not wait at all" and
+        // defeat the point of these two tests. Give the queue wait its real default.
+        when(_ctx.getProperty(eq(RequestLeaseSetJob.PROP_SEND_WAIT), anyLong()))
+                .thenReturn(RequestLeaseSetJob.DEFAULT_SEND_WAIT);
         // Real pool: TimedEvent.schedule() reaches SimpleTimer2's private
         // schedule() through a synthetic accessor, which a mock cannot
         // intercept. Scheduled events are far-future or tied to jobs that
@@ -193,6 +204,74 @@ public class LeaseRequestFailureTest {
         assertEquals(1, countOf(onFailed));
         assertNull(_runner.getLeaseRequest(dest.calculateHash()));
         assertFalse(_runner.getIsDead());
+    }
+
+    /**
+     * A client whose I2CP queue is momentarily full must still get the request.
+     *
+     * <p>The production symptom was the opposite: the queue was full, the router refused
+     * the LeaseSet request outright, and the request was then written off as a 61s
+     * timeout followed by a tunnel rebuild. The queue is drained every few milliseconds,
+     * so waiting briefly keeps the request and costs a fraction of the drop.
+     */
+    @Test
+    public void fullClientQueueDoesNotLoseTheRequest() throws Exception {
+        Destination dest = createDestination();
+        StubI2CPMessageQueue queue = new StubI2CPMessageQueue(2);
+        QueuedClientConnectionRunner queued =
+                new QueuedClientConnectionRunner(_ctx, _cm, queue);
+        assertEquals(SessionStatusMessage.STATUS_CREATED,
+                queued.sessionEstablished(new SessionConfig(dest)));
+        queued.setSessionId(dest.calculateHash(), new SessionId(9));
+        // fill the client's queue to its limit
+        queue.blockingOffer();
+        queue.blockingOffer();
+
+        Job onFailed = namedJob("onFailed");
+        queued.requestLeaseSet(dest.calculateHash(), createLeaseSet(dest), EXPIRATION_MS,
+                null, onFailed);
+        RequestLeaseSetJob job = lastRequestJob();
+        // the client drains while the job is waiting to hand the message over
+        Thread drain = new Thread(queue::drainOne);
+        drain.setDaemon(true);
+        drain.start();
+        job.runJob();
+        drain.join(10_000L);
+
+        assertEquals("LeaseSet request was dropped instead of waiting for queue space",
+                     1, queue.leaseSetRequests());
+        assertEquals(0, countOf(onFailed));
+        assertNotNull(queued.getLeaseRequest(dest.calculateHash()));
+    }
+
+    /**
+     * A client that never drains must still be failed promptly rather than hanging the
+     * job queue thread for the whole request timeout.
+     */
+    @Test
+    public void wedgedClientFailsWithoutLosingTheRequestSlot() throws Exception {
+        Destination dest = createDestination();
+        StubI2CPMessageQueue queue = new StubI2CPMessageQueue(1);
+        QueuedClientConnectionRunner queued =
+                new QueuedClientConnectionRunner(_ctx, _cm, queue);
+        assertEquals(SessionStatusMessage.STATUS_CREATED,
+                queued.sessionEstablished(new SessionConfig(dest)));
+        queued.setSessionId(dest.calculateHash(), new SessionId(9));
+        queue.blockingOffer();
+
+        Job onFailed = namedJob("onFailed");
+        queued.requestLeaseSet(dest.calculateHash(), createLeaseSet(dest), EXPIRATION_MS,
+                null, onFailed);
+        RequestLeaseSetJob job = lastRequestJob();
+
+        long start = System.currentTimeMillis();
+        job.runJob();
+        long elapsed = System.currentTimeMillis() - start;
+
+        assertEquals(1, countOf(onFailed));
+        assertNull(queued.getLeaseRequest(dest.calculateHash()));
+        assertTrue("blocking on a wedged client must stay far below the request timeout, took "
+                   + elapsed + "ms", elapsed < RequestLeaseSetJob.DEFAULT_SEND_WAIT * 10);
     }
 
     /**
@@ -392,5 +471,64 @@ public class LeaseRequestFailureTest {
             }
         }
         file.delete();
+    }
+
+    /**
+     * A bounded router-to-client queue whose client drains on demand.
+     *
+     * <p>Stands in for the in-JVM side of a client that has stopped reading: the queue is
+     * full, so {@code offer} fails, and the request has to survive a brief wait rather than
+     * be discarded.
+     */
+    private static class StubI2CPMessageQueue extends I2CPMessageQueue {
+        private final LinkedBlockingQueue<I2CPMessage> _out;
+        private final AtomicInteger _leaseSetRequests = new AtomicInteger();
+
+        StubI2CPMessageQueue(int capacity) {
+            _out = new LinkedBlockingQueue<>(capacity);
+        }
+
+        /** Occupy one slot. */
+        void blockingOffer() {
+            _out.offer(new SessionStatusMessage());
+        }
+
+        /** The client reads one message, freeing a slot for the router. */
+        void drainOne() {
+            _out.poll();
+        }
+
+        /** @return how many LeaseSet requests the router managed to hand over */
+        int leaseSetRequests() {return _leaseSetRequests.get();}
+
+        @Override
+        public boolean offer(I2CPMessage msg) {return record(msg, _out.offer(msg));}
+
+        @Override
+        public boolean offer(I2CPMessage msg, long timeout) throws InterruptedException {
+            return record(msg, _out.offer(msg, timeout, TimeUnit.MILLISECONDS));
+        }
+
+        private boolean record(I2CPMessage msg, boolean accepted) {
+            if (accepted && msg instanceof RequestVariableLeaseSetMessage) {
+                _leaseSetRequests.incrementAndGet();
+            }
+            return accepted;
+        }
+
+        @Override
+        public I2CPMessage poll() {return _out.poll();}
+
+        @Override
+        public int pending() {return _out.size();}
+
+        @Override
+        public int remainingCapacity() {return _out.remainingCapacity();}
+
+        @Override
+        public void put(I2CPMessage msg) throws InterruptedException {_out.put(msg);}
+
+        @Override
+        public I2CPMessage take() throws InterruptedException {return _out.take();}
     }
 }

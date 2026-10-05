@@ -52,6 +52,20 @@ class I2CPMessageQueueImpl extends I2CPMessageQueue {
     public I2CPMessage poll() {return _in.poll();}
 
     /**
+     *  @return messages waiting to be received
+     *  @since 0.9.71+
+     */
+    @Override
+    public int pending() {return _in.size();}
+
+    /**
+     *  @return how many more messages will be accepted; {@link Integer#MAX_VALUE} when unbounded
+     *  @since 0.9.71+
+     */
+    @Override
+    public int remainingCapacity() {return _out.remainingCapacity();}
+
+    /**
      *  Send a message, blocking until space is available
      */
     public void put(I2CPMessage msg) throws InterruptedException {_out.put(msg);}

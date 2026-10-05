@@ -1286,6 +1286,23 @@ class ClientConnectionRunner {
     }
 
     /**
+     *  Send a message, allowing the transport up to timeoutMs to accept it.
+     *
+     *  <p>For messages whose loss costs more than a short wait. The default is
+     *  {@link #doSend}: a socket-backed runner hands the message to a writer thread
+     *  that buffers it regardless, so there is nothing to wait for here. Subclasses
+     *  that write straight into a bounded queue override this.
+     *
+     *  @param msg the message to send
+     *  @param timeoutMs how long to wait for the transport to accept the message
+     *  @throws I2CPMessageException if the message could not be sent
+     *  @since 0.9.71+
+     */
+    void doSendWait(I2CPMessage msg, long timeoutMs) throws I2CPMessageException {
+        doSend(msg);
+    }
+
+    /**
      *  Get the next message id.
      *
      *  @return the next id
