@@ -176,7 +176,11 @@ fi
 # --- 9. Dominator tree (via jhat if available) ---
 if [ -n "$HPROF_SRC" ] && [ -f "$HPROF_SRC" ] && [ -s "$HPROF_SRC" ]; then
     JHAT=""
-    for c in "$JAVA_HOME/bin/jhat" /usr/bin/jhat /usr/lib/jvm/*/bin/jhat; do
+    # JAVA_HOME is often unset (notably under sudo, which scrubs the
+    # environment), and this script runs with `set -u`, so referencing it
+    # unguarded aborted the whole report right here. Default it to a path that
+    # cannot exist and let the /usr candidates below do the real work.
+    for c in "${JAVA_HOME:-/nonexistent}/bin/jhat" /usr/bin/jhat /usr/lib/jvm/*/bin/jhat; do
         [ -x "$c" ] && { JHAT="$c"; break; }
     done
 
