@@ -6,11 +6,17 @@
 @import url(../shared.css);
 
 :root{
---graph_line_1:#001e6e;
---graph_line_2:#6e6e00;
---graph_path_1:#64a0c880;
---graph_path_2:#6e6e0080;
+--graph_line_1:#4488ff;
+--graph_line_2:#44aa88;
+--graph_path_1:#4488ff80;
+--graph_path_2:#44aa8880;
 --graph_dash:1;
+--graph_font:#33333f;
+--graph_axis:#33333f;
+--graph_grid:#50505032;
+--graph_mgrid:#ff5b5b6e;
+--graph_grid_dash:0;
+--graph_mgrid_dash:0;
 --bgpos_info:no-repeat 15px center/28px;
 --grid:repeating-linear-gradient(90deg,#0000 15px,rgba(120,120,255,.5) 16px,#0000 16px,#0000 30px),repeating-linear-gradient(to top,#0000 11px,rgba(120,120,255,.5) 12px,rgba(255,255,255,0) 12px,rgba(255,255,255,0) 24px);
 --pre:repeating-linear-gradient(180deg,#7878ff33,#d2d2ff66 1px,#d2d2ff66 19px,#7878ff33 19px,#f0f0ff66 20px,#f0f0ff66 40px);

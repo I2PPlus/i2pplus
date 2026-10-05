@@ -9,11 +9,17 @@
 @import url(../shared.css);
 
 :root{
---graph_line_1:#5aa6d4;
---graph_line_2:#d4d45a;
---graph_path_1:#0048a080;
---graph_path_2:#d4d45a80;
+--graph_line_1:#ff550080;
+--graph_line_2:#88008880;
+--graph_path_1:#ff550030;
+--graph_path_2:#88008850;
 --graph_dash:1;
+--graph_font:#c9ceff;
+--graph_axis:#c9ceff;
+--graph_grid:#c9ceff20;
+--graph_mgrid:#c9ceff40;
+--graph_grid_dash:1 3;
+--graph_mgrid_dash:1 3;
 --box:linear-gradient(180deg,#020020,#000);
 --btn_sidebar:linear-gradient(90deg,#0000,rgba(96,0,96,.1),#0000),linear-gradient(180deg,#322d52,#1e1b31 50%,#141221 50%,#0a0910);
 --label_hover:var(--btn_hover_radial),linear-gradient(180deg,#1e0b28 50%,#0a030d 50%);
@@ -656,7 +662,7 @@ p#upnpconfig,p#ipchange,p#ipv6config,p#tcpconfig,p#confignotes,p#defaultswork{ma
 /* graphs */
 #graphing{margin:-10px 0 0;padding-top:1px;border-left:0;border-right:0}
 form[action="graphs"]{margin-top:-11px;margin-bottom:10px;padding:10px 10px 0;border:var(--border_inner);background:var(--panel)}
-.graphspanel{padding:0;margin:15px 0 -15px 0;width:100%;text-align:center;overflow:auto;background:none}
+.graphspanel{padding:0;margin:15px 0 -15px 0;width:100%;display:block;text-align:center;overflow:auto;background:none}
 .graphspanel a{font-size:0}
 .graphspanel a img{max-width:100%;text-align:center;opacity:.9;transition:ease border .1s}
 .graphspanel a img:hover{box-shadow:var(--highlight),inset 0 0 2px 1px var(--ink_btn_active);background:#000;opacity:1;cursor:zoom-in;transition:ease border .2s}
