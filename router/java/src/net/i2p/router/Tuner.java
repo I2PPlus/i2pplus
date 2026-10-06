@@ -8,6 +8,7 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -123,8 +124,10 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final ThreadMXBean _threadMXBean = ManagementFactory.getThreadMXBean();
     /** Per-stage CPU state, updated each cycle by {@link #sampleStageCpu()}. */
     private final Map<String, StageCpu> _stageCpu = new HashMap<String, StageCpu>();
-    /** Cumulative CPU ns per thread id, from the previous sample cycle. */
-    private final Map<Long, Long> _threadCpuPrev = new HashMap<Long, Long>();
+    /** Per-thread stage and previous CPU time, keyed by thread id. */
+    private final ThreadCpuTable _threadCpu = new ThreadCpuTable();
+    /** Scratch buffer for the name lookups that resolve newly seen threads. */
+    private long[] _unseenThreadIds = new long[16];
     /** Wall clock of the previous CPU sample cycle. */
     private long _lastCpuSampleMs;
 
@@ -147,38 +150,44 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         long now = System.currentTimeMillis();
         if (_lastCpuSampleMs > 0) {
             long wallMs = now - _lastCpuSampleMs;
+            // The MXBean allocates a fresh id array per call, so ids are enumerated once
+            // per cycle and everything keyed off them lives in the table's own
+            // primitive arrays.
             long[] ids = _threadMXBean.getAllThreadIds();
-            ThreadInfo[] infos = _threadMXBean.getThreadInfo(ids, 0);
-            Set<Long> live = new HashSet<Long>();
-            for (int i = 0; i < ids.length; i++) {
+            int count = ids.length;
+            _threadCpu.beginCycle(ids, count);
+            resolveThreadNames(ids, count);
+            for (int i = 0; i < count; i++) {
                 long id = ids[i];
-                live.add(Long.valueOf(id));
-                ThreadInfo info = infos[i];
-                if (info == null) continue;
-                String name = info.getThreadName();
-                if (name == null) continue;
+                // A thread outside the tracked stages is never attributed, so
+                // its CPU time is never read.
+                int stage = _threadCpu.stageOf(id);
+                if (stage < 0) continue;
                 long cpu = _threadMXBean.getThreadCpuTime(id);
                 if (cpu < 0) continue;
-                Long prev = _threadCpuPrev.get(Long.valueOf(id));
-                _threadCpuPrev.put(Long.valueOf(id), Long.valueOf(cpu));
-                if (prev == null) continue;
-                double cores = (cpu - prev.longValue()) / 1e9 / (wallMs / 1000.0);
+                long prev = _threadCpu.cpuOf(id);
+                _threadCpu.setCpu(id, cpu);
+                if (prev < 0) continue;
+                long delta = cpu - prev;
+                if (delta < 0) {
+                    // The counter ran backwards, which means this id has been
+                    // handed to a different thread: drop the cached stage so
+                    // the name is read again instead of trusted.
+                    _threadCpu.setStage(id, ThreadCpuTable.UNRESOLVED);
+                    continue;
+                }
+                double cores = delta / 1e9 / (wallMs / 1000.0);
                 if (cores <= 0) continue;
                 double pct = Math.min(1000.0, cores * 100.0);
-                for (String stage : CPU_STAGES) {
-                    if (name.startsWith(stage)) {
-                        StageCpu sc = _stageCpu.get(stage);
-                        if (sc == null) {
-                            sc = new StageCpu(stage);
-                            _stageCpu.put(stage, sc);
-                        }
-                        sc.sum += pct;
-                        _context.statManager().addRateData(STAGE_STAT_PREFIX + stage, Math.round(pct));
-                        break;
-                    }
+                String stageName = CPU_STAGES[stage];
+                StageCpu sc = _stageCpu.get(stageName);
+                if (sc == null) {
+                    sc = new StageCpu(stageName);
+                    _stageCpu.put(stageName, sc);
                 }
+                sc.sum += pct;
+                _context.statManager().addRateData(STAGE_STAT_PREFIX + stageName, Math.round(pct));
             }
-            _threadCpuPrev.keySet().retainAll(live);
             for (StageCpu sc : _stageCpu.values()) {
                 sc.coresPct = sc.sum;
                 sc.sum = 0;
@@ -190,6 +199,242 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
         _lastCpuSampleMs = now;
+    }
+
+    /**
+     * Stage a thread belongs to, by name.  First match in {@link #CPU_STAGES}
+     * order wins, and it is the prefix, not the full name, that names the stat
+     * and the {@link StageCpu} entry.
+     *
+     * @param threadName a live thread's name, never null
+     * @return index into {@link #CPU_STAGES}, or {@link ThreadCpuTable#NO_STAGE}
+     * @since 0.9.71+
+     */
+    static int stageFor(String threadName) {
+        for (int i = 0; i < CPU_STAGES.length; i++) {
+            if (threadName.startsWith(CPU_STAGES[i]))
+                return i;
+        }
+        return ThreadCpuTable.NO_STAGE;
+    }
+
+    /**
+     * Read the names of threads this cycle has not classified yet.
+     *
+     * <p>Caching a thread id's stage is sound because a running thread is never
+     * renamed: every {@code setName} call in the router sits inside a thread
+     * factory, before the thread starts.  An id whose CPU counter ran backwards
+     * is a reused id and is reset to {@link ThreadCpuTable#UNRESOLVED} by
+     * {@link #sampleStageCpu()}, so its name is read again rather than trusted.
+     */
+    private void resolveThreadNames(long[] ids, int count) {
+        int unseen = 0;
+        for (int i = 0; i < count; i++) {
+            if (_threadCpu.stageOf(ids[i]) == ThreadCpuTable.UNRESOLVED) {
+                if (unseen == _unseenThreadIds.length)
+                    _unseenThreadIds = new long[_unseenThreadIds.length * 2];
+                _unseenThreadIds[unseen++] = ids[i];
+            }
+        }
+        if (unseen == 0) return;
+        // Pass only the filled prefix: _unseenThreadIds grows to the high-water
+        // mark and never shrinks, so passing it whole makes every cycle call into
+        // the thread bean once per stale slot as well.
+        long[] unseenIds = (unseen == _unseenThreadIds.length)
+                           ? _unseenThreadIds
+                           : Arrays.copyOf(_unseenThreadIds, unseen);
+        ThreadInfo[] infos = _threadMXBean.getThreadInfo(unseenIds, 0);
+        for (int i = 0; i < unseen; i++) {
+            long id = _unseenThreadIds[i];
+            ThreadInfo info = infos[i];
+            String name = (info != null) ? info.getThreadName() : null;
+            _threadCpu.setStage(id, (name != null) ? stageFor(name) : ThreadCpuTable.NO_STAGE);
+        }
+    }
+
+    /**
+     * Thread-id keyed sample state for {@link #sampleStageCpu()}: per live
+     * thread, which {@link #CPU_STAGES} entry its name matched and the CPU
+     * nanoseconds recorded at the previous sample.
+     *
+     * <p>Open addressed with linear probing.  Entries are never deleted one by
+     * one: a cycle republishes the still-live ids into a spare table and swaps
+     * it in, so a dead thread's stage and baseline leave together.
+     */
+    static final class ThreadCpuTable {
+        /** Name read, and it matches no {@link #CPU_STAGES} prefix. */
+        static final int NO_STAGE = -1;
+        /** Name not read yet; needs a {@link ThreadInfo} lookup next cycle. */
+        static final int UNRESOLVED = -2;
+        /** No CPU baseline recorded for this id yet. */
+        static final long NO_CPU = -1L;
+        /** Empty slot marker; no live thread is reported with id 0. */
+        private static final long EMPTY = 0L;
+
+        /** Live generation of the table. */
+        private Slots _live = new Slots(64);
+        /** Scratch the next cycle fills before it becomes the live generation. */
+        private Slots _spare = new Slots(64);
+
+        /**
+         * One generation of the table: parallel arrays probed by the same index,
+         * keyed by thread id so no id is ever boxed.
+         */
+        private static final class Slots {
+            /** Thread id per slot, {@link ThreadCpuTable#EMPTY} when free. */
+            long[] ids;
+            /** CPU ns at the previous sample, {@link ThreadCpuTable#NO_CPU} when none. */
+            long[] cpu;
+            /** {@link #CPU_STAGES} index, {@link ThreadCpuTable#UNRESOLVED} when unknown. */
+            byte[] stage;
+            /** Capacity minus one, so a probe wraps with a mask instead of a modulo. */
+            int mask;
+            /** Entries in use. */
+            int size;
+
+            Slots(int capacity) {
+                int cap = 64;
+                while (cap < capacity * 2) cap <<= 1;
+                ids = new long[cap];
+                cpu = new long[cap];
+                stage = new byte[cap];
+                mask = cap - 1;
+                size = 0;
+            }
+
+            void clear() {
+                Arrays.fill(ids, EMPTY);
+                Arrays.fill(cpu, NO_CPU);
+                Arrays.fill(stage, (byte) UNRESOLVED);
+                size = 0;
+            }
+
+            /** Slot holding {@code id}, or -1 when it is absent. */
+            int index(long id) {
+                int idx = hash(id) & mask;
+                while (ids[idx] != EMPTY) {
+                    if (ids[idx] == id) return idx;
+                    idx = (idx + 1) & mask;
+                }
+                return -1;
+            }
+
+            int insert(long id, int stageVal, long cpuNs) {
+                if ((size + 1) * 2 > ids.length) rehash();
+                int idx = hash(id) & mask;
+                while (ids[idx] != EMPTY)
+                    idx = (idx + 1) & mask;
+                ids[idx] = id;
+                stage[idx] = (byte) stageVal;
+                cpu[idx] = cpuNs;
+                size++;
+                return idx;
+            }
+
+            private void rehash() {
+                long[] oldIds = ids;
+                byte[] oldStage = stage;
+                long[] oldCpu = cpu;
+                int cap = ids.length;
+                ids = new long[cap * 2];
+                cpu = new long[cap * 2];
+                stage = new byte[cap * 2];
+                mask = ids.length - 1;
+                size = 0;
+                for (int i = 0; i < cap; i++) {
+                    if (oldIds[i] != EMPTY)
+                        insert(oldIds[i], oldStage[i], oldCpu[i]);
+                }
+            }
+        }
+
+        /**
+         * Start a sample cycle: carry stage and CPU baseline forward for the
+         * given live thread ids and make them the table's contents.
+         *
+         *  <p>An id the previous generation did not hold enters
+         *  {@link #UNRESOLVED} with {@link #NO_CPU}; an id no longer reported
+         *  drops out.  A reused id whose predecessor was still live one cycle
+         *  ago does carry a stale entry forward — {@link #sampleStageCpu()} spots
+         *  it as a backwards CPU counter and resets the stage.
+         *
+         *  @param ids   live thread ids from the MXBean
+         *  @param count number of valid entries in {@code ids}
+         */
+        void beginCycle(long[] ids, int count) {
+            Slots live = _live;
+            _spare.clear();
+            for (int i = 0; i < count; i++) {
+                long id = ids[i];
+                int idx = live.index(id);
+                if (idx < 0)
+                    _spare.insert(id, UNRESOLVED, NO_CPU);
+                else
+                    _spare.insert(id, live.stage[idx], live.cpu[idx]);
+            }
+            _live = _spare;
+            _spare = live;
+        }
+
+        /**
+         * Stage recorded for a thread id.
+         *
+         * @param id thread id
+         * @return index into {@link #CPU_STAGES}, or {@link #NO_STAGE} /
+         *         {@link #UNRESOLVED}
+         */
+        int stageOf(long id) {
+            int idx = _live.index(id);
+            return (idx < 0) ? UNRESOLVED : _live.stage[idx];
+        }
+
+        /**
+         * Record the stage a thread id belongs to.
+         *
+         * @param id    thread id
+         * @param stage {@link #CPU_STAGES} index, {@link #NO_STAGE} or
+         *              {@link #UNRESOLVED}
+         */
+        void setStage(long id, int stage) {
+            Slots live = _live;
+            int idx = live.index(id);
+            if (idx < 0)
+                live.insert(id, stage, NO_CPU);
+            else
+                live.stage[idx] = (byte) stage;
+        }
+
+        /**
+         * CPU nanoseconds recorded at the previous sample.
+         *
+         * @param id thread id
+         * @return the baseline, or {@link #NO_CPU} when there is none
+         */
+        long cpuOf(long id) {
+            int idx = _live.index(id);
+            return (idx < 0) ? NO_CPU : _live.cpu[idx];
+        }
+
+        /**
+         * Record the CPU nanoseconds for this sample.
+         *
+         * @param id  thread id
+         * @param cpu nanoseconds, as returned by the MXBean
+         */
+        void setCpu(long id, long cpu) {
+            int idx = _live.index(id);
+            if (idx >= 0)
+                _live.cpu[idx] = cpu;
+        }
+
+        /** Number of live threads currently tracked. */
+        int size() { return _live.size; }
+
+        private static int hash(long id) {
+            int h = (int) (id ^ (id >>> 32));
+            h *= 0x9E3779B1;
+            return h ^ (h >>> 16);
+        }
     }
 
     /**
@@ -1238,8 +1483,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 BaseParam bp = (BaseParam) param;
                 int factory = bp._factoryDefault;
                 int prev = bp.getRuntimeValue();
-                bp._autotune.setProperty(bp._name + ".value", String.valueOf(factory));
-                bp._autotune.setProperty(bp._name + ".default", String.valueOf(factory));
+                bp._autotune.setProperty(bp._keyValue, String.valueOf(factory));
+                bp._autotune.setProperty(bp._keyDefault, String.valueOf(factory));
                 bp.applyValue(factory);
                 bp._defaultValue = factory;
                 bp._autoTuning = true;
@@ -1447,6 +1692,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         protected final String _subsystem;
         /** Config key prefix for property lookups. */
         protected final String _propPrefix;
+        /**
+         * autotune.config keys for this param's range and persisted state.
+         * Built once because the name is final while the range refresh runs
+         * every cycle.
+         *
+         * @since 0.9.71+
+         */
+        private final String _keyMin;
+        private final String _keyMax;
+        private final String _keyStep;
+        private final String _keyValue;
+        private final String _keyDefault;
         /** Default minimum value from code or config. */
         protected final int _defaultMin;
         /** Default maximum value from code or config. */
@@ -1560,6 +1817,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _description = description;
             _subsystem = subsystem;
             _propPrefix = PROP_PREFIX + name + ".";
+            _keyMin = name + ".min";
+            _keyMax = name + ".max";
+            _keyStep = name + ".step";
+            _keyValue = name + ".value";
+            _keyDefault = name + ".default";
             _statName = statName;
             _defaultMin = defaultMin;
             _defaultMax = defaultMax;
@@ -1581,9 +1843,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             } else {
                 _factoryDefault = getRuntimeValue();
             }
-            String defaultKey = name + ".default";
-            String valueKey = name + ".value";
-            String existingDefault = _autotune.getProperty(defaultKey);
+            String existingDefault = _autotune.getProperty(_keyDefault);
             boolean changed = false;
             boolean defaultHealed = false;
             if (existingDefault == null) {
@@ -1591,8 +1851,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 // persisted default would be, so the invariant min <= default <= max
                 // holds even when hardware scales the range above the code default.
                 _defaultValue = Math.max(_min, Math.min(_max, _factoryDefault));
-                _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
-                _autotune.setProperty(valueKey, String.valueOf(_defaultValue));
+                _autotune.setProperty(_keyDefault, String.valueOf(_defaultValue));
+                _autotune.setProperty(_keyValue, String.valueOf(_defaultValue));
                 changed = true;
             } else {
                 try {_defaultValue = Integer.parseInt(existingDefault);}
@@ -1620,13 +1880,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 try {parsedExisting = Integer.parseInt(existingDefault);}
                 catch (NumberFormatException nfe) {parsedExisting = _defaultValue;}
                 if (_defaultValue != parsedExisting) {
-                    _autotune.setProperty(defaultKey, String.valueOf(_defaultValue));
+                    _autotune.setProperty(_keyDefault, String.valueOf(_defaultValue));
                     changed = true;
                 }
             }
             // Read persisted tuned value (clamped to current range) — catches stale
             // autotune.config values from before code changes (e.g. max lowered 512→20)
-            int raw = _autotune.getInt(valueKey, _defaultValue);
+            int raw = _autotune.getInt(_keyValue, _defaultValue);
             int initial = Math.max(_min, Math.min(_max, raw));
             // Heal stale persisted value up to the new default when the default itself
             // was healed. A param removed then re-added (e.g. MaxSendWindow) leaves a
@@ -1638,7 +1898,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 initial = _defaultValue;
                 if (_log.shouldWarn())
                     _log.warn(_name + " persisted value " + prev + " healed up to default " + initial);
-                _autotune.setProperty(valueKey, String.valueOf(initial));
+                _autotune.setProperty(_keyValue, String.valueOf(initial));
                 changed = true;
             }
             _initialValue = initial;
@@ -1648,7 +1908,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 if (_log.shouldWarn())
                     _log.warn(_name + " persisted value " + raw + " clamped to " + _initialValue +
                               " (range " + _min + "-" + _max + ")");
-                _autotune.setProperty(valueKey, String.valueOf(_initialValue));
+                _autotune.setProperty(_keyValue, String.valueOf(_initialValue));
                 changed = true;
             }
             if (changed)
@@ -1770,13 +2030,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.70+
          */
         public void refreshRanges(RouterContext ctx) {
-            String name = _name;
             int floor = getDefaultMin(ctx);
             int ceil = getDefaultMax(ctx);
             int step = getDefaultStep(ctx);
-            _min = _autotune.getInt(name + ".min", floor);
-            _max = _autotune.getInt(name + ".max", ceil);
-            _step = _autotune.getInt(name + ".step", step);
+            _min = _autotune.getInt(_keyMin, floor);
+            _max = _autotune.getInt(_keyMax, ceil);
+            _step = _autotune.getInt(_keyStep, step);
             // Clamp loaded ranges to effective defaults (enforce setter constraints)
             // Prevents stale autotune.config values from exceeding actual setter limits
             _min = Math.max(floor, _min);
@@ -1787,13 +2046,13 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
             // Clamp persisted value to new range — prevents stale autotune.config
             // values from exceeding caps after code changes (e.g. max lowered)
-            int val = _autotune.getInt(_name + ".value", _defaultValue);
+            int val = _autotune.getInt(_keyValue, _defaultValue);
             if (val < _min || val > _max) {
                 int clamped = Math.max(_min, Math.min(_max, val));
                 if (_log.shouldInfo())
                     _log.info(_name + " persisted value " + val + " clamped to " + clamped +
                               " (range " + _min + "-" + _max + ")");
-                _autotune.setProperty(_name + ".value", String.valueOf(clamped));
+                _autotune.setProperty(_keyValue, String.valueOf(clamped));
             }
         }
 
@@ -1816,7 +2075,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *  @since 0.9.70+
          */
         public void refreshDefault(RouterContext ctx) {
-            int persistedDefault = _autotune.getInt(_name + ".default", _factoryDefault);
+            int persistedDefault = _autotune.getInt(_keyDefault, _factoryDefault);
             // Only accept the persisted default if it matches the factory default.
             // A mismatch indicates stale persistence from a previous code version,
             // and overriding _defaultValue would break auto-revert below.
@@ -1847,7 +2106,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @since 0.9.70+
          */
         protected void persistValue(RouterContext ctx, int value) {
-            _autotune.setProperty(_name + ".value", String.valueOf(value));
+            _autotune.setProperty(_keyValue, String.valueOf(value));
         }
 
         /**
@@ -12107,6 +12366,24 @@ protected int computeTarget(double observed) {
 
     /** Tracks overall router health score for adaptive tuning decisions. */
     static class SystemHealth {
+        /**
+         * Floor applied to each factor before the composite is computed.
+         *
+         * <p>The composite is a weighted geometric mean, so its factors
+         * multiply: one factor that saturates at 0.0 drives the product — and
+         * therefore the health shown on the tuning page — to exactly 0% no
+         * matter how healthy the rest of the router is.  That 0% is also below
+         * {@code BaseParam.DEGRADED_THRESHOLD}, so a score pinned there silently
+         * freezes every auto-tuned param at its factory default, which makes the
+         * page read "Degraded (0%)" and stops tuning without any hint why.
+         * Flooring keeps one saturated factor worth only its own weight share
+         * while the all-bad worst case still sits well under the degraded
+         * threshold, so the safety behaviour is preserved.
+         *
+         * @since 0.9.71+
+         */
+        static final double MIN_FACTOR_SCORE = 0.05;
+
         private final RouterContext _ctx;
         private double _score = Double.NaN;
         private final long _uptime;
@@ -12121,30 +12398,48 @@ protected int computeTarget(double observed) {
         /** Computed score. */
         double getScore() { return _score; }
 
+        /**
+         * Weighted geometric mean of the available factors.
+         *
+         * <p>NaN factors mean "insufficient data" and are skipped along with
+         * their weights, so the remaining weights are renormalized to 1.0.
+         * Every participating factor is floored at {@link #MIN_FACTOR_SCORE}
+         * first — without that floor a single saturated factor zeroes the
+         * aggregate and the score stops discriminating between bad and
+         * catastrophic.
+         *
+         * @param factors per-factor scores in [0,1]; NaN for no data
+         * @param weights matching per-factor weights, summing to 1.0
+         * @return the composite score in [0,1], or 1.0 if no factor has data
+         * @see #MIN_FACTOR_SCORE
+         * @since 0.9.71+
+         */
+        static double compositeScore(double[] factors, double[] weights) {
+            double product = 1.0;
+            double weightSum = 0;
+            for (int i = 0; i < factors.length; i++) {
+                double factor = factors[i];
+                if (Double.isNaN(factor)) continue;
+                double weight = weights[i];
+                product *= Math.pow(Math.max(MIN_FACTOR_SCORE, factor), weight);
+                weightSum += weight;
+            }
+            return (weightSum > 0) ? Math.pow(product, 1.0 / weightSum) : 1.0;
+        }
+
         private void compute() {
             // Defer assessment during startup — too few events = unreliable
             if (_uptime < STARTUP_GRACE_MS) {
                 _score = Double.NaN;
                 return;
             }
-            double jobLagScore = scoreJobLag();
-            double buildScore = scoreBuildSuccess();
-            double sendFailScore = scoreSendFailure();
-            double buildStormScore = scoreBuildStorms();
-            double latencyScore = scoreLatency();
-            double ghostScore = scoreGhostPeers();
-
-            // Weighted geometric mean — skip NaN factors (insufficient data).
-            // Renormalize weights so the total is 1.0 across available factors.
-            double total = 1.0;
-            double weightSum = 0;
-            if (!Double.isNaN(jobLagScore))     { total *= Math.pow(jobLagScore, 0.20);     weightSum += 0.20; }
-            if (!Double.isNaN(buildScore))      { total *= Math.pow(buildScore, 0.15);      weightSum += 0.15; }
-            if (!Double.isNaN(sendFailScore))   { total *= Math.pow(sendFailScore, 0.15);   weightSum += 0.15; }
-            if (!Double.isNaN(buildStormScore)) { total *= Math.pow(buildStormScore, 0.10); weightSum += 0.10; }
-            if (!Double.isNaN(latencyScore))    { total *= Math.pow(latencyScore, 0.30);    weightSum += 0.30; }
-            if (!Double.isNaN(ghostScore))      { total *= Math.pow(ghostScore, 0.10);      weightSum += 0.10; }
-            _score = (weightSum > 0) ? Math.pow(total, 1.0 / weightSum) : 1.0;
+            double[] factors = {
+                scoreJobLag(), scoreBuildSuccess(), scoreSendFailure(),
+                scoreBuildStorms(), scoreLatency(), scoreGhostPeers()
+            };
+            // jobLag, buildSuccess, sendFailure, buildStorms, latency, ghosts
+            double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
+            _score = compositeScore(factors, weights);
         }
 
         /**
@@ -12364,8 +12659,19 @@ protected int computeTarget(double observed) {
         }
 
         /**
-         * Message send latency (transport.sendProcessingTime).
-         * <100ms = 1.0, >500ms = degraded, >5000ms = 0.0
+         * Message send latency: how long an outbound message waits in the
+         * transport send queue ({@code transport.sendProcessingTime}).
+         * ≤1s → 1.0, 4s → 0.5, ≥10s → 0.0.
+         *
+         * <p>Anchored on what the router itself treats as normal versus
+         * congested: {@code RouterThrottleImpl} documents ~25ms for NTCP and
+         * ~1000ms for SSU as ordinary (SSU includes ack time and can be much
+         * more than RTT), and starts refusing participating tunnel requests once
+         * the smoothed average passes {@code maxProcessingTime} — 2000ms, 3000ms
+         * on slow systems.  {@code BuildExecutor} likewise backs builds off above
+         * a 2000ms average.  The old mapping reached 0.0 at 5000ms, only 2.5×
+         * the router's own congestion gate, so a plain SSU router sitting at its
+         * documented average scored 0.5 and one with slow acks scored 0.0.
          */
         private double scoreLatency() {
             RateStat rs = _ctx.statManager().getRate("transport.sendProcessingTime");
@@ -12373,25 +12679,46 @@ protected int computeTarget(double observed) {
             Rate rate = rs.getRate(STAT_PERIOD);
             if (rate == null || rate.getLastEventCount() < 3) return Double.NaN;
             double avg = rate.getAverageValue();
-            if (avg <= 100) return 1.0;
-            if (avg <= 1000) return 1.0 - 0.5 * (avg - 100) / 900;
-            return clamp(0.5 - 0.5 * (avg - 1000) / 4000);
+            if (avg <= 1000) return 1.0;
+            if (avg <= 4000) return 1.0 - 0.5 * (avg - 1000) / 3000;
+            return clamp(0.5 - 0.5 * (avg - 4000) / 6000);
         }
 
+        /** Share of the fast or high-capacity tier that ghost exclusions may consume
+         *  before the factor starts to bite, and the share at which it bottoms out. */
+        static final double GHOST_TIER_FREE = 0.10;
+        static final double GHOST_TIER_ZERO = 0.25;
+
         /**
-         * Ghost peer count: many ghosts indicate widespread unreachability.
-         * 0 ghosts → 1.0, 20+ ghosts → 0.0.  A high ghost count is a
-         * strong signal that the router is selecting peers that cannot
-         * respond, which drives build failures and wastes tunnel slots.
+         * Ghost exclusions as a fraction of the fast or high-capacity tier — the
+         * pool tunnel builds actually draw from.  Up to
+         * {@link #GHOST_TIER_FREE} of the tier excluded is free; the factor then
+         * ramps to 0.0 at {@link #GHOST_TIER_ZERO}.
+         *
+         * <p>Fraction, not absolute count: marks accrue routinely (a few per
+         * minute against multi-minute cooldowns), expire on their own, and clear
+         * the moment the peer answers, so any fixed count threshold fires on every
+         * healthy router — which is what pinned the composite to 0%. Scaling by the
+         * tier keeps a large router free while still catching the case that
+         * matters, where exclusions consume enough of the preferred pool to starve
+         * selection.
+         *
+         * <p>Numerator and denominator must cover the same population: the count is
+         * tier-matched, because dividing an all-tier ghost count by a tier size
+         * would overstate whenever the tier is smaller than the ghost population.
+         *
+         * @return the ghost health factor in [0,1], or NaN if the tier is unknown
          */
         private double scoreGhostPeers() {
             TunnelManagerFacade mgr = _ctx.tunnelManager();
             if (mgr == null) return Double.NaN;
             GhostPeerManager ghostMgr = mgr.getGhostPeerManager();
             if (ghostMgr == null) return Double.NaN;
-            int count = ghostMgr.getGhostCount();
-            // 0→1.0, 20→0.0
-            return clamp(1.0 - (count / 20.0));
+            int tier = _ctx.profileOrganizer().getFastOrHighCapCount();
+            if (tier <= 0) return Double.NaN;
+            double ratio = (double) ghostMgr.getFastOrHighCapGhostCount() / tier;
+            if (ratio <= GHOST_TIER_FREE) return 1.0;
+            return clamp(1.0 - (ratio - GHOST_TIER_FREE) / (GHOST_TIER_ZERO - GHOST_TIER_FREE));
         }
 
         /**

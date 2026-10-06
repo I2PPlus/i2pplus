@@ -206,12 +206,57 @@ public class TunerTest {
 
     @Test
     public void testScoreLatencyFormula() {
-        // Tuner.scoreLatency: <=100ms → 1.0; 100-1000ms → 1.0 - 0.5*(avg-100)/900; >1000ms → 0.5 - 0.5*(avg-1000)/4000
-        assertEquals(1.0, clamp01(1.0 - 0.5 * ((100.0 - 100) / 900.0)), 0.001);
-        assertEquals(0.778, clamp01(1.0 - 0.5 * ((500.0 - 100) / 900.0)), 0.01);
-        // midpoint of 100-1000 range at avg=550: 1.0 - 0.5*450/900 = 0.75
-        assertEquals(0.75, clamp01(1.0 - 0.5 * ((550.0 - 100) / 900.0)), 0.01);
-        assertEquals(0.5, clamp01(1.0 - 0.5 * ((1000.0 - 100) / 900.0)), 0.001);
+        // Tuner.scoreLatency: <=1000ms → 1.0; 1000-4000ms → 1.0 - 0.5*(avg-1000)/3000; >4000ms → 0.5 - 0.5*(avg-4000)/6000
+        assertEquals(1.0, clamp01(1.0 - 0.5 * ((1000.0 - 1000) / 3000.0)), 0.001);
+        assertEquals(0.917, clamp01(1.0 - 0.5 * ((1500.0 - 1000) / 3000.0)), 0.01);
+        // midpoint of the 1000-4000 range at avg=2500: 1.0 - 0.5*1500/3000 = 0.75
+        assertEquals(0.75, clamp01(1.0 - 0.5 * ((2500.0 - 1000) / 3000.0)), 0.01);
+        assertEquals(0.5, clamp01(0.5 - 0.5 * ((4000.0 - 4000) / 6000.0)), 0.001);
+        // the SSU-documented ~1s average must read as healthy, not 0.5
+        assertEquals(1.0, clamp01(1.0 - 0.5 * ((1000.0 - 1000) / 3000.0)), 0.001);
+    }
+
+    @Test
+    public void testScoreGhostPeersFormula() {
+        // Tuner.scoreGhostPeers: fraction of the fast-or-highcap tier. Free up to
+        // GHOST_TIER_FREE, then linear to 0.0 at GHOST_TIER_ZERO. Boundaries are
+        // derived from those constants so this pins the mapping, not a copy of it.
+        final int tier = 400;
+        final double free = Tuner.SystemHealth.GHOST_TIER_FREE;
+        final double zero = Tuner.SystemHealth.GHOST_TIER_ZERO;
+        assertEquals("no exclusions is free", 1.0, ghostTierScore(0, tier), 0.001);
+        assertEquals("expected churn below the free band is free",
+                     1.0, ghostTierScore((int) (tier * free / 2), tier), 0.001);
+        assertEquals("exactly at the free band is still free",
+                     1.0, ghostTierScore((int) (tier * free), tier), 0.001);
+        assertEquals("halfway between the bands scores 0.5", 0.5,
+                     ghostTierScore((int) (tier * (free + zero) / 2), tier), 0.001);
+        assertEquals("a quarter of the tier gone is zero",
+                     0.0, ghostTierScore((int) (tier * zero), tier), 0.001);
+        assertEquals("past the zero point stays zero",
+                     0.0, ghostTierScore((int) (tier * zero * 2), tier), 0.001);
+    }
+
+    @Test
+    public void testScoreGhostPeersIsTierRelativeNotAbsolute() {
+        // The same absolute ghost count must not be penalised on a router whose
+        // preferred tier is large, but must bite on one whose tier is small.
+        assertTrue("40 ghosts in a 4000-peer tier is free", ghostTierScore(40, 4000) > 0.99);
+        assertTrue("40 ghosts in a 100-peer tier is a quarter gone",
+                   ghostTierScore(40, 100) < 0.01);
+    }
+
+    /**
+     * Mirrors Tuner.SystemHealth.scoreGhostPeers' ratio mapping, taking the band
+     * constants from Tuner rather than repeating them, so a change to either
+     * constant fails here instead of being silently mirrored away.
+     */
+    private static double ghostTierScore(int ghostsInTier, int tierSize) {
+        final double free = Tuner.SystemHealth.GHOST_TIER_FREE;
+        final double zero = Tuner.SystemHealth.GHOST_TIER_ZERO;
+        double ratio = (double) ghostsInTier / tierSize;
+        if (ratio <= free) return 1.0;
+        return clamp01(1.0 - (ratio - free) / (zero - free));
     }
 
     @Test
@@ -574,7 +619,59 @@ public class TunerTest {
 
     @Test
     public void testCompositeScoreAllNaNReturnsHealthy() {
-        assertEquals(1.0, 1.0, 0.001);
+        double[] factors = { Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN, Double.NaN };
+        double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
+        assertEquals(1.0, Tuner.SystemHealth.compositeScore(factors, weights), 0.001);
+    }
+
+    @Test
+    public void testCompositeScoreRenormalizesSkippedFactors() {
+        // only jobLag (0.20) and buildSuccess (0.15) have data; weights renormalize to 0.35
+        double[] factors = { 0.5, 1.0, Double.NaN, Double.NaN, Double.NaN, Double.NaN };
+        double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
+        // (0.5^0.20 * 1.0^0.15)^(1/0.35) = 0.5^(0.20/0.35) ≈ 0.671
+        assertEquals(0.671, Tuner.SystemHealth.compositeScore(factors, weights), 0.01);
+    }
+
+    /**
+     * A saturated factor must not zero the aggregate: with the old unfloored
+     * geometric mean one 0.0 factor pinned health to "Degraded (0%)" forever.
+     */
+    @Test
+    public void testCompositeScoreZeroFactorIsFlooredNotFatal() {
+        double floor = Tuner.SystemHealth.MIN_FACTOR_SCORE;
+        double[] factors = { 1.0, 1.0, 1.0, 1.0, 0.0, 1.0 };
+        double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
+        double score = Tuner.SystemHealth.compositeScore(factors, weights);
+        // Only the saturated factor is floored and it carries weight 0.30, so the
+        // aggregate is floor^0.30 rather than the floor itself. The unfloored
+        // geometric mean of these same inputs is exactly 0.
+        assertEquals("saturated factor must contribute the floor at its own weight",
+                     Math.pow(floor, weights[4]), score, 0.001);
+        assertTrue("a saturated factor must not collapse the aggregate to zero", score > 0.0);
+    }
+
+    @Test
+    public void testCompositeScoreHealthyFactorsScoreHealthy() {
+        double[] factors = { 0.95, 0.80, 1.0, 0.80, 0.95, 0.90 };
+        double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
+        assertTrue("plausible healthy factors should read as healthy",
+                   Tuner.SystemHealth.compositeScore(factors, weights) >= 0.8);
+    }
+
+    @Test
+    public void testCompositeScoreStillDiscriminates() {
+        double[] weights = { 0.20, 0.15, 0.15, 0.10, 0.30, 0.10 };
+        double good = Tuner.SystemHealth.compositeScore(
+            new double[] { 0.9, 0.9, 0.9, 0.9, 0.9, 0.9 }, weights);
+        double bad = Tuner.SystemHealth.compositeScore(
+            new double[] { 0.4, 0.4, 0.4, 0.4, 0.4, 0.4 }, weights);
+        double worst = Tuner.SystemHealth.compositeScore(
+            new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }, weights);
+        assertEquals(0.9, good, 0.001);
+        assertEquals(0.4, bad, 0.001);
+        assertEquals(Tuner.SystemHealth.MIN_FACTOR_SCORE, worst, 0.001);
+        assertTrue("scores must remain ordered", good > bad && bad > worst);
     }
 
     // =====================================================================
