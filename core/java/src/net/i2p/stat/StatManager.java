@@ -135,8 +135,51 @@ public class StatManager {
      * @since 0.8.7
      */
     public void createRequiredFrequencyStat(String name, String description, String group, long[] periods) {
-        if (_frequencyStats.containsKey(name)) return;
-        _frequencyStats.putIfAbsent(name, new FrequencyStat(name, description, group, periods));
+        _frequencyStats.computeIfAbsent(name,
+            n -> new FrequencyStat(n, description, group, periods));
+    }
+
+    /**
+     * Resolve a frequency stat by name, creating it if it does not exist yet, and
+     * return the handle to it.
+     *
+     * <p>Lets a caller on a repeated event stop re-resolving the name. The handle
+     * stays valid until {@link #removeFrequencyStat} or {@link #shutdown}; there is
+     * deliberately no handle-invalidation step, because dropping one would cost the
+     * very lookup it was meant to remove.
+     *
+     * @param name unique name of the statistic
+     * @param description simple description of the statistic, used only if the
+     *                    stat has to be created
+     * @param group used to group statistics together
+     * @param periods array of period lengths (in milliseconds)
+     * @return the stat for {@code name}, never null
+     * @since 0.9.71+
+     */
+    public FrequencyStat getOrCreateFrequencyStat(String name, String description, String group, long[] periods) {
+        FrequencyStat fs = _frequencyStats.get(name);
+        if (fs != null)
+            return fs;
+        createRequiredFrequencyStat(name, description, group, periods);
+        // The map holds no null values, so the stat is either already there or was
+        // just built.
+        FrequencyStat created = _frequencyStats.get(name);
+        if (created != null)
+            return created;
+        throw new IllegalStateException("frequency stat vanished during creation: " + name);
+    }
+
+    /**
+     * Remove a frequency stat by name.
+     *
+     * <p>Any handle previously returned by {@link #getOrCreateFrequencyStat} is
+     * orphaned by this and must not be used again.
+     *
+     * @param name the stat name to remove
+     * @since 0.9.71+
+     */
+    public void removeFrequencyStat(String name) {
+        _frequencyStats.remove(name);
     }
 
     /**
@@ -164,10 +207,51 @@ public class StatManager {
      * @since 0.8.7
      */
     public void createRequiredRateStat(String name, String description, String group, long[] periods) {
-        if (_rateStats.containsKey(name)) return;
-        RateStat rs = new RateStat(name, description, group, periods);
-        rs.setSampleDelivery(_delivery);
-        _rateStats.putIfAbsent(name, rs);
+        _rateStats.computeIfAbsent(name, n -> {
+            RateStat rs = new RateStat(n, description, group, periods);
+            rs.setSampleDelivery(_delivery);
+            return rs;
+        });
+    }
+
+    /**
+     * Resolve a rate stat by name, creating it if it does not exist yet, and return
+     * the handle to it.
+     *
+     * <p>Lets a caller reporting the same stat repeatedly avoid the string-keyed
+     * map lookup that {@link #addRateData(String, long)} pays on every call.
+     * Resolution is check-then-act, not a single
+     * {@link java.util.concurrent.ConcurrentMap#computeIfAbsent}: the creation
+     * itself goes through {@link #createRequiredRateStat}, which does use
+     * {@code computeIfAbsent}, so concurrent callers may both attempt it but
+     * exactly one stat is built and the delivery queue is attached before that
+     * stat is published. The handle is therefore usable the instant this
+     * returns.
+     *
+     * <p>The handle is not invalidated when the stat is removed: a stale handle
+     * keeps updating an orphaned stat, which is inert rather than harmful, and
+     * detecting that would cost the lookup this exists to remove. It is valid
+     * until {@link #removeRateStat} or {@link #shutdown}.
+     *
+     * @param name unique name of the statistic
+     * @param description simple description of the statistic, used only if the
+     *                    stat has to be created
+     * @param group used to group statistics together
+     * @param periods array of period lengths (in milliseconds)
+     * @return the stat for {@code name}, or null if this manager is not collecting
+     *         it and it does not already exist
+     * @since 0.9.71+
+     */
+    public RateStat getOrCreateRateStat(String name, String description, String group, long[] periods) {
+        RateStat rs = _rateStats.get(name);
+        if (rs != null)
+            return rs;
+        if (ignoreStat(name))
+            return null;
+        createRequiredRateStat(name, description, group, periods);
+        // The map holds no null values, so the stat is either already there or was
+        // just built.
+        return _rateStats.get(name);
     }
 
     /**
@@ -264,6 +348,9 @@ public class StatManager {
 
     /**
      * Remove a rate stat by name.
+     *
+     * <p>Any handle previously returned by {@link #getOrCreateRateStat} is
+     * orphaned by this and must not be used again.
      *
      * @param name the stat name to remove
      */

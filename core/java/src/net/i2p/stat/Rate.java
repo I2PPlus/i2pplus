@@ -93,8 +93,17 @@ public class Rate {
      * would only hold references longer without ever being read.
      */
     private static final int RECENT_SAMPLE_RING = 8;
-    private volatile float _currentTotalValue;
-    private volatile int _currentEventCount;
+
+    /*
+     * Field visibility is split three ways. The four per-event fields are plain:
+     * every writer (addData, coalesce, load) holds this monitor and the fields
+     * are private, so their getters take it too - trading a barrier on every
+     * event for one uncontended acquisition by the reader. The per-period fields
+     * below stay volatile so that polled readers such as getLastEventCount()
+     * remain lock-free.
+     */
+    private float _currentTotalValue;
+    private int _currentEventCount;
     private volatile int _currentTotalEventTime;
     private volatile float _lastTotalValue;
     private volatile int _lastEventCount;
@@ -102,8 +111,8 @@ public class Rate {
     private volatile float _extremeTotalValue;
     private volatile int _extremeEventCount;
     private volatile int _extremeTotalEventTime;
-    private volatile float _lifetimeTotalValue;
-    private volatile long _lifetimeEventCount;
+    private float _lifetimeTotalValue;
+    private long _lifetimeEventCount;
     private volatile long _lifetimeTotalEventTime;
     /**
      * Volatile because the registering thread (console startup) writes it with the
@@ -308,13 +317,21 @@ public class Rate {
             _recentCount++;
     }
 
-    /** In current (partial) period, what is the total value acrued through all events? */
-    public double getCurrentTotalValue() {
+    /**
+     * In current (partial) period, what is the total value acrued through all events?
+     *
+     * @return the current period's total value
+     */
+    public synchronized double getCurrentTotalValue() {
         return _currentTotalValue;
     }
 
-    /** In current (partial) period, how many events have occurred? */
-    public long getCurrentEventCount() {
+    /**
+     * In current (partial) period, how many events have occurred?
+     *
+     * @return the current period's event count
+     */
+    public synchronized long getCurrentEventCount() {
         return _currentEventCount;
     }
 
@@ -357,13 +374,21 @@ public class Rate {
         return _extremeTotalEventTime;
     }
 
-    /** Since rate creation, what was the total value acrued through all events? */
-    public double getLifetimeTotalValue() {
+    /**
+     * Since rate creation, what was the total value acrued through all events?
+     *
+     * @return the lifetime total value
+     */
+    public synchronized double getLifetimeTotalValue() {
         return _lifetimeTotalValue;
     }
 
-    /** Since rate creation, how many events have occurred? */
-    public long getLifetimeEventCount() {
+    /**
+     * Since rate creation, how many events have occurred?
+     *
+     * @return the lifetime event count
+     */
+    public synchronized long getLifetimeEventCount() {
         return _lifetimeEventCount;
     }
 
