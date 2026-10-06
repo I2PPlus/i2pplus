@@ -2290,20 +2290,19 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Like DataHelper.toHexString but ensures no loss of leading zero bytes
+     * Lower-case hex, two chars per byte, leading zero bytes preserved.
      *
+     * <p>Delegates to {@link DataHelper#toString(byte[])}, which is the canonical
+     * formatter and differs from {@link DataHelper#toHexString(byte[])} in exactly
+     * the way info hashes need: it emits the zero bytes that a BigInteger-backed
+     * conversion drops, so the output length is always {@code 2 * b.length}.
+     *
+     * @param b non-null bytes to render
+     * @return hex string of length 2 * b.length
      * @since 0.8.4
      */
     public static String toHex(byte[] b) {
-        StringBuilder buf = new StringBuilder(40);
-        for (int i = 0; i < b.length; i++) {
-            int bi = b[i] & 0xff;
-            if (bi < 16) {
-                buf.append('0');
-            }
-            buf.append(Integer.toHexString(bi));
-        }
-        return buf.toString();
+        return DataHelper.toString(b);
     }
 
     /**

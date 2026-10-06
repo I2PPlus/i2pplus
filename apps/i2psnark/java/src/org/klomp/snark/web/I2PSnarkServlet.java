@@ -72,34 +72,12 @@ import org.klomp.snark.comments.CommentSet;
 import org.klomp.snark.dht.DHT;
 
 /**
- * Web interface servlet for I2PSnark torrent management.
- *
- * <p>This servlet provides the complete web-based user interface for I2PSnark,
- * allowing users to manage their torrents through a browser. It handles:
- * <ul>
- * <li>Torrent listing and status display</li>
- * <li>Adding torrents from files, URLs, or magnet links</li>
- * <li>Torrent creation from local files</li>
- * <li>Peer management and connection monitoring</li>
- * <li>Bandwidth configuration and statistics</li>
- * <li>DHT and tracker status</li>
- * <li>Comments and ratings system</li>
- * <li>File browsing and downloading</li>
- * <li>Configuration management</li>
- * <li>Theme and localization support</li>
- * </ul>
- *
- * <p>The servlet has been refactored to eliminate Jetty-specific dependencies
- * and works with standard servlet containers.</p>
- *
- * <p>Security features include:
- * </p>
- * <ul>
- * <li>CSRF protection via nonces</li>
- * <li>Content Security Policy headers</li>
- * <li>Input validation and sanitization</li>
- * <li>Secure file handling</li>
- * </ul>
+ * Web interface servlet for I2PSnark torrent management: torrent listing and
+ * status, adding torrents by file/URL/magnet, torrent creation, peer and
+ * bandwidth management, DHT and tracker status, comments, file browsing and
+ * download, configuration, and theme/locale support. Works with standard
+ * servlet containers; CSRF protection is via nonces plus an Origin check on
+ * POST, and all pages carry a Content Security Policy.
  *
  * @since 0.1.0
  */
@@ -331,8 +309,6 @@ public class I2PSnarkServlet extends BasicServlet {
         String cpath = getServletContext().getContextPath();
         _contextPath = cpath.isEmpty() ? "/" : cpath;
         _contextName = cpath.isEmpty() ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
-        // set once here - render methods previously re-assigned this per
-        // request, an unsynchronized shared-field write
         _resourcePath = _contextPath + WARBASE;
         getNonce(); // Initialize the nonce
         // Limited protection against overwriting other config files or directories
@@ -363,18 +339,16 @@ public class I2PSnarkServlet extends BasicServlet {
         super.destroy();
     }
 
-    /**
-     *  We override this to set the file relative to the storage directory
-     *  for the torrent.
-     *
-     *  Deliberately unsynchronized: this runs for every snark request, and
-     *  the only shared field it reads (_resourceBase) is volatile and swapped
-     *  rarely by setResourceBase(). Holding the servlet monitor here
-     *  serialized all requests behind slow torrent lookups and stalled the UI.
-     *
-     *  @param pathInContext should always start with /
-     *  @return the resource
-     */
+/**
+ *  We override this to set the file relative to the storage directory
+ *  for the torrent.
+ *
+ *  Deliberately unsynchronized: this runs for every snark request, and the
+ *  only shared field it reads (_resourceBase) is volatile.
+ *
+ *  @param pathInContext should always start with /
+ *  @return the resource
+ */
     @Override
     public File getResource(String pathInContext) {
         if (pathInContext == null || pathInContext.equals("/") || pathInContext.equals("/index.jsp") ||
@@ -400,17 +374,17 @@ public class I2PSnarkServlet extends BasicServlet {
         return new File(_resourceBase, pathInContext);
     }
 
-    /**
-     * The on-disk location of a path within a torrent. While an incomplete
-     * download is staged in the temp dir, the data-directory tree may not
-     * exist yet; paths are then resolved against the staging tree, which
-     * mirrors the data-directory layout.
-     *
-     * @param storage the torrent's storage
-     * @param pathInTorrent the path within the torrent, "/" or empty for the root
-     * @return the physical file
-     * @since 0.9.71+
-     */
+/**
+ * The on-disk location of a path within a torrent. While an incomplete
+ * download is staged in the temp dir, the data-directory tree may not exist
+ * yet, so the path falls back to the staging tree, which mirrors the
+ * data-directory layout.
+ *
+ * @param storage the torrent's storage
+ * @param pathInTorrent the path within the torrent, "/" or empty for the root
+ * @return the physical file
+ * @since 0.9.71+
+ */
     private static File resolveTorrentPath(Storage storage, String pathInTorrent) {
         File sbase = storage.getBase();
         File r = pathInTorrent.equals("/") ? sbase : new File(sbase, pathInTorrent);
@@ -455,26 +429,16 @@ public class I2PSnarkServlet extends BasicServlet {
         return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT) || isStandalone();
     }
 
-    /**
-     * Handle what we can here, calling super.doGet() or super.doPost() for the rest.
-     *
-     * Some parts modified from Jetty
-     *
-     * Section map, in order:
-     * <ol>
-     *   <li>gatekeeping - CSRF origin check, CSP for scripts, static
-     *       WARBASE resources</li>
-     *   <li>handleAjaxRequest() - XHR fragment endpoints</li>
-     *   <li>browser API /_add and bridge magnet page</li>
-     *   <li>bridge extension update notice</li>
-     *   <li>handleUnmanagedPath() - directory listings, playlists, static
-     *       passthrough for everything but the managed pages</li>
-     *   <li>handleFormSubmission() - nonce'd POST actions, P-R-G redirect</li>
-     *   <li>page assembly - head/navbar/search scaffolding, then either
-     *       writeConfigurePanels() or writeTorrentsSection(), then
-     *       writePageTail()</li>
-     * </ol>
-     */
+/**
+ * Handle what we can here, calling super.doGet() or super.doPost() for the rest.
+ *
+ * Routing, in order: gatekeeping (Origin check on POST, CSP, static WARBASE);
+ * handleAjaxRequest() for the XHR fragment endpoints; /_add; /magnet;
+ * handleUnmanagedPath() for listings, playlists and passthrough;
+ * handleFormSubmission() for nonce'd POST actions; then page assembly - head,
+ * navbar, search scaffolding, either writeConfigurePanels() or
+ * writeTorrentsSection(), and writePageTail().
+ */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get HTTP method and servlet path
         String method = req.getMethod(); // since we are not overriding handle*(), do this here
@@ -673,13 +637,13 @@ public class I2PSnarkServlet extends BasicServlet {
         return true;
     }
 
-    /**
-     * Answers everything outside the managed pages: torrent directory
-     * listings (with optional playlist export) under trailing-slash paths,
-     * and container delegation for the rest.
-     *
-     * @since 0.9.71+
-     */
+/**
+ * Answers everything outside the managed pages: torrent directory listings
+ * (with optional playlist export) under trailing-slash paths, and container
+ * delegation for the rest.
+ *
+ * @since 0.9.71+
+ */
     private void handleUnmanagedPath(HttpServletRequest req, HttpServletResponse resp,
                                      String method, String path) throws ServletException, IOException {
         if (!path.endsWith("/")) {
@@ -751,12 +715,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return true;
     }
 
-    /**
-     * Renders the navbar: configure variant links back to the torrent list;
-     * list variant adds tracker links from the sorted tracker list.
-     *
-     * @since 0.9.71+
-     */
+/**
+ * Renders the navbar: configure variant links back to the torrent list;
+ * list variant adds tracker links from the sorted tracker list.
+ *
+ * @since 0.9.71+
+ */
     private void appendNavbar(StringBuilder buf, boolean isConfigure, String peerString,
                               List<Tracker> sortedTrackers) {
         if (isConfigure) {
@@ -951,7 +915,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const postRemoveMsg = \"").append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
                .append("  const snarkPageSize = ").append(pageSize).append(";\n")
                .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
-               .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
+               .append("  const totalSnarks = ").append(_manager.getTorrents().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
                 .append("  window.totalSnarks = totalSnarks;\n</script>\n");
@@ -1054,34 +1018,31 @@ public class I2PSnarkServlet extends BasicServlet {
         resp.setHeader("Content-Security-Policy", "default-src 'none'; child-src 'self'");
     }
 
-    /**
-     * Cheap change-detection stamp for the screen log, emitted with every xhr1
-     * refresh payload so the client can skip the xhrscreenlog.html round trip
-     * entirely while the log is unchanged. Combines the last message id (which
-     * advances on every add) with the list size (which moves on clears and
-     * cap-driven trims), so both growth and shrinkage are detected without
-     * rendering anything.
-     *
-     * @return "lastMessageId:messageCount", or "0:0" when the log is empty
-     * @since 0.9.71+
-     */
+/**
+ * Cheap change-detection stamp for the screen log, emitted with every xhr1
+ * refresh payload so the client can skip the xhrscreenlog.html round trip
+ * while the log is unchanged. Combines the last message id (which advances on
+ * every add) with the list size (which moves on clears and cap-driven trims),
+ * so both growth and shrinkage are detected without rendering anything.
+ *
+ * @return "lastMessageId:messageCount", or "0:0" when the log is empty
+ * @since 0.9.71+
+ */
     private String screenLogStamp() {
         List<UIMessages.Message> msgs = _manager.getMessages();
         if (msgs.isEmpty()) {return "0:0";}
         return msgs.get(msgs.size() - 1).id + ":" + msgs.size();
     }
 
-    /**
-     * Emits the bandwidth graph element for xhr1 payloads. The client passes its last
-     * seen sample version as the "gv" parameter; the full sample CSV travels only when
-     * the client is behind (including first-load, where no gv is sent), so
-     * steady-state ticks cost a few bytes while new samples and fresh page loads get
-     * data immediately.
-     *
-     * @param req the refresh request, may carry a "gv" parameter
-     * @param out the PrintWriter to write the element to
-     * @since 0.9.71+
-     */
+/**
+ * Emits the bandwidth graph element for xhr1 payloads. The client passes its
+ * last seen sample version as the "gv" parameter; the full sample CSV travels
+ * only when the client is behind, so steady-state ticks cost a few bytes.
+ *
+ * @param req the refresh request, may carry a "gv" parameter
+ * @param out the PrintWriter to write the element to
+ * @since 0.9.71+
+ */
     private void emitGraphData(HttpServletRequest req, PrintWriter out) {
         long version = BandwidthGraph.getVersion();
         long clientVersion = -1;
@@ -1262,19 +1223,28 @@ public class I2PSnarkServlet extends BasicServlet {
         Map<ByteArray, BadgeInfo> badgeCache = new HashMap<>();
 
         // Mint short action tokens for every loaded torrent (not just this page's
-        // slice) so POST resolution always finds exactly one match.
-        List<String> b64Names = new ArrayList<>(snarks.size());
-        for (int i = 0; i < snarks.size(); i++) {
-            b64Names.add(Base64.encode(snarks.get(i).getInfoHash()));
+        // slice) so POST resolution always finds exactly one match. The b64 names
+        // double as the render-scope encode cache: each info hash is encoded once
+        // here and the token is resolved here, so the row never re-encodes it.
+        // Both passes are skipped when the page renders no rows.
+        List<String> b64Names = Collections.emptyList();
+        Map<String, String> actionTokens = Collections.emptyMap();
+        if (end > start) {
+            b64Names = new ArrayList<>(snarks.size());
+            for (int i = 0; i < snarks.size(); i++) {
+                b64Names.add(Base64.encode(snarks.get(i).getInfoHash()));
+            }
+            actionTokens = ActionTokens.mint(b64Names);
         }
-        Map<String, String> actionTokens = ActionTokens.mint(b64Names);
 
         for (int i = start; i < end; i++) {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || showAllPeers
                                 || (peerHash != null && DataHelper.eq(snark.getInfoHash(), peerHash));
+            String b64Name = b64Names.get(i);
+            String token = actionTokens.getOrDefault(b64Name, b64Name);
             buf.setLength(0);
-            displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache, actionTokens), buf);
+            displaySnark(target, new RowContext(snark, i, showPeers, stats, noThinsp, canWrite, filter, srt, badgeCache, token), buf);
 
             // additionally accumulate uploads, ETA, flags
             if (snark.getPeerCount() >= 1) {
@@ -2985,33 +2955,53 @@ public class I2PSnarkServlet extends BasicServlet {
     private void handleRemove(String action) {
         Snark snark = resolveTorrentByToken(action.substring(7));
         if (snark == null) {return;}
-        byte[] infoHash = snark.getInfoHash();
+        // result deliberately unused: Remove stops at the torrent file and
+        // leaves the downloaded data in place
+        unlinkTorrentFile(snark);
+    }
 
-        for (String name : _manager.listTorrentFiles()) {
-            Snark snarkByFile = _manager.getTorrent(name);
-            if (snarkByFile != null && DataHelper.eq(infoHash, snarkByFile.getInfoHash())) {
-                MetaInfo meta = snarkByFile.getMetaInfo();
-                if (meta == null) {
-                    // magnet - remove and delete are the same thing
-                    _manager.deleteMagnet(snarkByFile);
-                    _manager.addMessage(_t("Magnet deleted: {0}", name.replace("Magnet ", "")));
-                    return;
-                }
-                File torrentFile = new File(name);
-                File dataDir = _manager.getDataDir();
-                boolean canDelete = dataDir.canWrite() || !torrentFile.exists();
-                _manager.stopTorrent(snarkByFile, canDelete);
-                if (torrentFile.delete()) {
-                    _manager.addMessage(_t("Torrent file deleted: {0}", torrentFile.getAbsolutePath()));
-                } else if (torrentFile.exists()) {
-                    if (!canDelete) {
-                        _manager.addMessage(_t("No write permissions for data directory") + ": " + dataDir);
-                    }
-                    _manager.addMessage(_t("Torrent file could not be deleted: {0}", torrentFile.getAbsolutePath()));
-                }
-                break;
-            }
+    /**
+     * Unlinks a torrent's .torrent file, reporting the outcome as user messages.
+     * Magnet torrents (no metainfo) are deleted outright, since for them the
+     * .torrent file <em>is</em> the data.
+     *
+     * <p>Shared by the Remove and Delete actions so both report identical
+     * messages for identical outcomes.
+     *
+     * @param snark the torrent whose .torrent file should be removed
+     * @return true when no .torrent file remains, so the caller may proceed to
+     *     remove downloaded data; false when the torrent is still present
+     *     (magnet deleted, or the file could not be removed)
+     * @since 0.9.71+
+     */
+    private boolean unlinkTorrentFile(Snark snark) {
+        // The resolved torrent's own name is the key SnarkManager filed it
+        // under, so re-listing every torrent file only to match the info hash
+        // back onto this same Snark would take N locks to redo known work.
+        String name = snark.getName();
+        MetaInfo meta = snark.getMetaInfo();
+        if (meta == null) {
+            // magnet - remove and delete are the same thing
+            _manager.deleteMagnet(snark);
+            _manager.addMessage(_t("Magnet deleted: {0}", name.replace("Magnet ", "")));
+            return false;
         }
+        File torrentFile = new File(name);
+        File dataDir = _manager.getDataDir();
+        boolean canDelete = dataDir.canWrite() || !torrentFile.exists();
+        _manager.stopTorrent(snark, canDelete);
+        if (torrentFile.delete()) {
+            _manager.addMessage(_t("Torrent file deleted: {0}", torrentFile.getAbsolutePath()));
+            return true;
+        }
+        if (torrentFile.exists()) {
+            if (!canDelete) {
+                _manager.addMessage(_t("No write permissions for data directory") + ": " + dataDir);
+            }
+            _manager.addMessage(_t("Torrent file could not be deleted: {0}", torrentFile.getAbsolutePath()));
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -3022,79 +3012,53 @@ public class I2PSnarkServlet extends BasicServlet {
     private void handleDelete(String action) {
         Snark snark = resolveTorrentByToken(action.substring(7));
         if (snark == null) {return;}
-        byte[] infoHash = snark.getInfoHash();
+        if (!unlinkTorrentFile(snark)) {return;}
+        MetaInfo meta = snark.getMetaInfo();
 
-        for (String name : _manager.listTorrentFiles()) {
-            Snark snarkByFile = _manager.getTorrent(name);
-            if (snarkByFile != null && DataHelper.eq(infoHash, snarkByFile.getInfoHash())) {
-                MetaInfo meta = snarkByFile.getMetaInfo();
-                if (meta == null) {
-                    _manager.deleteMagnet(snarkByFile);
-                    _manager.addMessage(_t("Magnet deleted: {0}", name.replace("Magnet ", "")));
-                    return;
+        Storage storage = snark.getStorage();
+        if (storage == null) {return;}
+
+        // remove partial downloads from the staging dir, if any
+        storage.deleteStagingData();
+
+        List<List<String>> files = meta.getFiles();
+        if (files == null) {
+            for (File file : storage.getFiles()) {
+                if (file.delete()) {
+                    _manager.addMessage(_t("Data file deleted: {0}", file.getAbsolutePath()));
+                } else if (file.exists()) {
+                    _manager.addMessage(_t("Data file could not be deleted: {0}", file.getAbsolutePath()));
                 }
-                File torrentFile = new File(name);
-                File dataDir = _manager.getDataDir();
-                boolean canDelete = dataDir.canWrite() || !torrentFile.exists();
-                _manager.stopTorrent(snarkByFile, canDelete);
-
-                if (torrentFile.delete()) {
-                    _manager.addMessage(_t("Torrent file deleted: {0}", torrentFile.getAbsolutePath()));
-                } else if (torrentFile.exists()) {
-                    if (!canDelete) {
-                        _manager.addMessage(_t("No write permissions for data directory") + ": " + dataDir);
-                    }
-                    _manager.addMessage(_t("Torrent file could not be deleted: {0}", torrentFile.getAbsolutePath()));
-                    return;
-                }
-
-                Storage storage = snark.getStorage();
-                if (storage == null) break;
-
-                // remove partial downloads from the staging dir, if any
-                storage.deleteStagingData();
-
-                List<List<String>> files = meta.getFiles();
-                if (files == null) {
-                    for (File file : storage.getFiles()) {
-                        if (file.delete()) {
-                            _manager.addMessage(_t("Data file deleted: {0}", file.getAbsolutePath()));
-                        } else if (file.exists()) {
-                            _manager.addMessage(_t("Data file could not be deleted: {0}", file.getAbsolutePath()));
-                        }
-                    }
-                    break;
-                }
-
-                // Delete files silently, log failure
-                for (File file : storage.getFiles()) {
-                    if (!file.delete() && file.exists()) {
-                        _manager.addMessage(_t("Data file could not be deleted: {0}", file.getAbsolutePath()));
-                    }
-                }
-
-                // Delete directories bottom-up
-                Set<File> dirs = storage.getDirectories();
-                if (dirs == null) break;
-
-                boolean allDeleted = true;
-                if (_log.shouldInfo()) {
-                    _log.info("Dirs to delete: " + DataHelper.toString(dirs));
-                }
-                for (File dir : dirs) {
-                    if (!dir.delete() && dir.exists()) {
-                        allDeleted = false;
-                        _manager.addMessage(_t("Directory could not be deleted: {0}", dir.getAbsolutePath()));
-                        if (_log.shouldWarn()) {
-                            _log.warn("[I2PSnark] Could not delete directory: " + dir);
-                        }
-                    }
-                }
-                if (allDeleted) {
-                    _manager.addMessage(_t("Directory deleted: {0}", storage.getBase()));
-                }
-                break;
             }
+            return;
+        }
+
+        // Delete files silently, log failure
+        for (File file : storage.getFiles()) {
+            if (!file.delete() && file.exists()) {
+                _manager.addMessage(_t("Data file could not be deleted: {0}", file.getAbsolutePath()));
+            }
+        }
+
+        // Delete directories bottom-up
+        Set<File> dirs = storage.getDirectories();
+        if (dirs == null) {return;}
+
+        boolean allDeleted = true;
+        if (_log.shouldInfo()) {
+            _log.info("Dirs to delete: " + DataHelper.toString(dirs));
+        }
+        for (File dir : dirs) {
+            if (!dir.delete() && dir.exists()) {
+                allDeleted = false;
+                _manager.addMessage(_t("Directory could not be deleted: {0}", dir.getAbsolutePath()));
+                if (_log.shouldWarn()) {
+                    _log.warn("[I2PSnark] Could not delete directory: " + dir);
+                }
+            }
+        }
+        if (allDeleted) {
+            _manager.addMessage(_t("Directory deleted: {0}", storage.getBase()));
         }
     }
 
@@ -3772,14 +3736,15 @@ public class I2PSnarkServlet extends BasicServlet {
          */
         final Map<ByteArray, BadgeInfo> badgeCache;
         /**
-         * Render-scope map of b64 info-hash name to short action token
-         * (see {@link ActionTokens#mint}); shared by every RowContext.
+         * Short unique action token stamped on this row's form controls,
+         * resolved once by the caller from the render-scope map built by
+         * {@link ActionTokens#mint}; falls back to the full b64 name.
          */
-        final Map<String, String> actionTokens;
+        final String token;
 
         RowContext(Snark snark, int index, boolean showPeers, long[] stats,
                    boolean noThinsp, boolean canWrite, String filterParam, String sortParam,
-                   Map<ByteArray, BadgeInfo> badgeCache, Map<String, String> actionTokens) {
+                   Map<ByteArray, BadgeInfo> badgeCache, String token) {
             this.snark = snark;
             this.index = index;
             this.showPeers = showPeers;
@@ -3789,7 +3754,7 @@ public class I2PSnarkServlet extends BasicServlet {
             this.filterParam = filterParam;
             this.sortParam = sortParam;
             this.badgeCache = badgeCache;
-            this.actionTokens = actionTokens;
+            this.token = token;
         }
     }
 
@@ -3860,11 +3825,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String filterParam = rc.filterParam;
         String sortParam = rc.sortParam;
         boolean filterEnabled = !filterParam.isEmpty() && !"all".equals(filterParam);
-        String b64 = Base64.encode(snark.getInfoHash());
-        // Short unique action token minted for this render (falls back to the
-        // full b64 name if the token map is unavailable).
-        String token = rc.actionTokens != null
-            ? rc.actionTokens.getOrDefault(b64, b64) : b64;
+        // resolved by the caller so the info hash is Base64-encoded once per render
+        String token = rc.token;
 
         // Update stats first (minimal processing)
         long uploaded = snark.getUploaded();
@@ -4210,8 +4172,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isUploading = upBps > 0;
         boolean isDownloading = downBps > 0;
 
-        // Cache repeated peer count HTML once
-        final String peerCountHtml = "</td><td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+        // peerCountHtml is built inside each branch rather than once up front:
+        // the ALLOCATING, STARTING, COMPLETE_STOPPED and STOPPED branches emit
+        // their own peer-count cell and would discard a string built eagerly.
 
         StatusKind kind = classifyStatus(snark.isAllocating(), snark.isChecking(), snark.isStarting(),
                                          hasTrackerProblems, isRunning, isComplete,
@@ -4219,7 +4182,7 @@ public class I2PSnarkServlet extends BasicServlet {
         switch (kind) {
             case CHECKING:
                 appendIcon(statusBuf, "processing", "", _t("Checking"), false, true);
-                statusBuf.append(peerCountHtml);
+                statusBuf.append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "active starting processing";
                 break;
             case ALLOCATING:
@@ -4230,7 +4193,7 @@ public class I2PSnarkServlet extends BasicServlet {
             case TRACKER_ERROR:
                 String tooltip = _t("Failed to connect to all configured trackers");
                 appendIcon(statusBuf, "error", "", tooltip, false, true);
-                statusBuf.append(peerCountHtml);
+                statusBuf.append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = isComplete ? "inactive complete neterror" : "inactive downloading incomplete neterror";
                 break;
             case STARTING:
@@ -4241,25 +4204,25 @@ public class I2PSnarkServlet extends BasicServlet {
             case SEEDING_ACTIVE:
                 String seedTooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
                 appendIcon(statusBuf, "seeding_active", "", seedTooltip, false, true);
-                statusBuf.append(peerCountHtml);
+                statusBuf.append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "active seeding complete connected";
                 break;
             case SEEDING_CONNECTED_IDLE:
                 String idleTooltip = _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
                 statusBuf.append(toSVGWithDataTooltip("seeding", "", idleTooltip))
-                    .append(peerCountHtml);
+                    .append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "inactive seeding complete connected";
                 break;
             case STALLED_CONNECTED_IDLE:
                 String stalledTooltip = _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
                 statusBuf.append(toSVGWithDataTooltip("stalled", "", stalledTooltip))
-                    .append(peerCountHtml);
+                    .append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "inactive incomplete connected";
                 break;
             case SEEDING_IDLE:
                 String swarmTooltip = ngettext("Seeding to {0} peer in swarm", "Seeding to {0} peers in swarm", curPeers);
                 appendIcon(statusBuf, "seeding", "", swarmTooltip, false, true);
-                statusBuf.append(peerCountHtml);
+                statusBuf.append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "inactive seeding complete";
                 break;
             case COMPLETE_STOPPED:
@@ -4269,13 +4232,13 @@ public class I2PSnarkServlet extends BasicServlet {
             case DOWNLOADING:
                 String downTooltip = _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers);
                 statusBuf.append(toSVGWithDataTooltip("downloading", "", downTooltip))
-                    .append(peerCountHtml);
+                    .append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "active downloading incomplete connected";
                 break;
             case STALLED_INCOMPLETE_CONNECTED:
                 String stalled2 = _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
                 statusBuf.append(toSVGWithDataTooltip("stalled", "", stalled2))
-                    .append(peerCountHtml);
+                    .append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "inactive downloading incomplete connected";
                 break;
             case NOPEERS_CONNECTED:
@@ -4288,7 +4251,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 break;
             case NOPEERS_UNKNOWN:
                 statusBuf.append(toSVGWithDataTooltip("nopeers", "", _t("No Peers")))
-                    .append(peerCountHtml);
+                    .append(peerCountHtml(curPeers, knownPeers, noThinsp));
                 snarkSt = "inactive downloading incomplete nopeers zero";
                 break;
             default:
@@ -4299,6 +4262,26 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         return new StatusResult(statusBuf.toString(), snarkSt);
+    }
+
+    /**
+     * The peer-count cell shared by most status branches: current peers on the
+     * right, known peers in the swarm on the left.
+     *
+     * <p>Called from {@link #buildStatusString} per rendered row rather than
+     * hoisted to a single local, because four of its fourteen branches emit
+     * their own peer-count markup (em dash, or an empty cell) and would throw
+     * the shared value away.
+     *
+     * @param curPeers currently connected peers
+     * @param knownPeers peers known from trackers, DHT, and PEX
+     * @param noThinsp true to substitute a plain slash for the thin-space pair
+     * @return the peer-count cell markup, ending the preceding status cell
+     * @since 0.9.71+
+     */
+    static String peerCountHtml(int curPeers, int knownPeers, boolean noThinsp) {
+        return "</td><td class=peerCount><b><span class=right>" + curPeers + "</span>"
+               + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
     }
 
     /**
@@ -6668,6 +6651,25 @@ public class I2PSnarkServlet extends BasicServlet {
         return toIcon(item.toString());
     }
 
+/**
+ * Icon name registered for a lower-cased path's file extension.
+ *
+ * <p>A single map lookup replaces a scan of every registered suffix. The two
+ * forms agree because no key in {@link IconMaps#SUFFIX_ICON_MAP} is a suffix
+ * of another, so at most one key can match and it must start at the path's
+ * last dot - exactly the substring taken here. A dotless path matches nothing
+ * either way, and a dot-leading name such as ".exe" yields itself.
+ *
+ * @param lowerPath the file path, already lower-cased
+ * @return the registered icon name, or null when the extension has none
+ * @since 0.9.71+
+ */
+    static String suffixIcon(String lowerPath) {
+        int dot = lowerPath.lastIndexOf('.');
+        if (dot < 0) {return null;}
+        return IconMaps.SUFFIX_ICON_MAP.get(lowerPath.substring(dot));
+    }
+
     /**
      * Returns the icon name representing the file type or mime type of the given file path.
      * Determines custom icons for certain special cases like i2p install executables.
@@ -6697,11 +6699,8 @@ public class I2PSnarkServlet extends BasicServlet {
             return icon;
         }
 
-        for (Map.Entry<String, String> entry : IconMaps.SUFFIX_ICON_MAP.entrySet()) {
-            if (plc.endsWith(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
+        String extIcon = suffixIcon(plc);
+        if (extIcon != null) {return extIcon;}
 
         if (plc.contains(".css.")) return "code";
         if (plc.contains("shasum")) return "hash";
@@ -6714,10 +6713,12 @@ public class I2PSnarkServlet extends BasicServlet {
         return "generic";
     }
 
-    /**
-     * Holds immutable mappings from MIME types and file suffixes to icon names.
-     * Initialized once and reused to optimize performance of icon lookup.
-     */
+/**
+ * Holds immutable mappings from MIME types and file suffixes to icon names.
+ *
+ * <p>{@link #SUFFIX_ICON_MAP} is only safe to look up by suffix because no
+ * key is a suffix of another - see {@link #suffixIcon}.
+ */
     private static class IconMaps {
         static final Map<String, String> MIME_ICON_MAP;
         static final Map<String, String> SUFFIX_ICON_MAP;
