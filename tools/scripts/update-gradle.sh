@@ -114,6 +114,34 @@ if ! "$GRADLEW" wrapper --gradle-version "${LATEST}" --no-daemon 2>&1; then
     exit 1
 fi
 
+# The wrapper task writes the stock layout: gradle/wrapper/ plus scripts pointing at
+# $APP_HOME/gradle/wrapper. This repo keeps them in tools/gradle/wrapper and patches
+# both scripts to look there (cd1c91f352), so as generated the build would silently
+# split across two wrapper directories. Move the jar back and re-apply the one-line
+# redirect instead of keeping what the task wrote.
+if [ -d "${PROJECT_ROOT}/gradle/wrapper" ]; then
+    cp "${PROJECT_ROOT}/gradle/wrapper/gradle-wrapper.jar" "${WRAPPER_DIR}/gradle-wrapper.jar"
+    rm -rf "${PROJECT_ROOT}/gradle/wrapper"
+    echo "Relocated gradle-wrapper.jar into tools/gradle/wrapper"
+
+    for script in "$GRADLEW" "${PROJECT_ROOT}/gradlew.bat"; do
+        [ -f "$script" ] || continue
+        # POSIX sed sees the .bat backslashes as ordinary characters; in BRE a
+        # backslash is not special, so no escaping is needed on either side.
+        sed -i \
+            -e 's|\$APP_HOME/gradle/wrapper/gradle-wrapper.jar|$APP_HOME/tools/gradle/wrapper/gradle-wrapper.jar|g' \
+            -e 's|%APP_HOME%\\gradle\\wrapper\\gradle-wrapper.jar|%APP_HOME%\\tools\\gradle\\wrapper\\gradle-wrapper.jar|g' \
+            "$script"
+    done
+
+    if grep -q 'APP_HOME/gradle/wrapper' "$GRADLEW"; then
+        echo "Error: gradlew still points at the stock wrapper path; revert and retry." >&2
+        exit 1
+    fi
+    chmod +x "$GRADLEW"
+    echo "Re-applied the tools/gradle wrapper redirect to gradlew and gradlew.bat"
+fi
+
 # Update version.txt
 echo "${LATEST}" > "$VERSION_FILE"
 
