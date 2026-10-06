@@ -504,6 +504,34 @@ public class GhostPeerManager {
     }
 
     /**
+     * Count of active ghost exclusions whose peer sits in the fast or
+     * high-capacity tier, a peer in both tiers counted once.
+     *
+     * <p>Needed to pair with {@link ProfileOrganizer#getFastOrHighCapCount()}: an
+     * all-tier ghost count divided by a tier size overstates, because most marks
+     * land on peers that were never in the preferred tier and would not have
+     * competed for those slots.
+     *
+     * <p>Iterates the tracked marks, bounded by {@link #MAX_TRACKED_PEERS} and
+     * filtered to active ones, so it is not a hot-path call — the health scorer
+     * polls it once per tuning cycle.
+     *
+     * @return active ghost exclusions within the fast or high-capacity tier
+     * @since 0.9.71+
+     */
+    public int getFastOrHighCapGhostCount() {
+        ProfileOrganizer po = _context.profileOrganizer();
+        long now = _context.clock().now();
+        int count = 0;
+        for (Map.Entry<Hash, GhostMark> entry : _ghostMarks.entrySet()) {
+            if (now >= entry.getValue().until) continue;
+            Hash peer = entry.getKey();
+            if (po.isFast(peer) || po.isHighCapacity(peer)) count++;
+        }
+        return count;
+    }
+
+    /**
      * Number of tracked marks, active or not (exposed for tests).
      * Bounded by {@link #MAX_TRACKED_PEERS} plus in-flight inserts.
      *
