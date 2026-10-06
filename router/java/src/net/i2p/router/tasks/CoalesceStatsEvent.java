@@ -190,9 +190,15 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         // made them sparse for the same reason. reorganize() now only publishes
         // these values; reading them here costs a field load apiece.
         sm.addRateData("peer.profileCount", po.getProfileCount(), 60L*1000);
-        // Same value: the in-RAM profile count. The console sidebar divides
-        // activeProfileCount by profileCount to show the active share.
-        sm.addRateData("peer.activeProfileCount", po.getProfileCount(), 60L*1000);
+        // Recently-active profiles, not the total. This used to be fed getProfileCount() - the
+        // same value as peer.profileCount directly above - so the Peers page's "Active" ring,
+        // which divides activeProfileCount by profileCount, computed 100% unconditionally and
+        // labelled it "activity in the last 24h" regardless. It now carries the same
+        // short-term-activity meaning as the sidebar's Peers row (active in the last hour).
+        // Read from the field the reorganize walk fills, not by rescanning here: that scan takes
+        // the reorganize read lock, which tunnel peer selection contends on, and this runs
+        // every 50s.
+        sm.addRateData("peer.activeProfileCount", po.getActiveProfileCount(), 60L*1000);
         sm.addRateData("peer.qualityPeerCount", po.getQualityCount(), 60L*1000);
         sm.addRateData("peer.storedProfileCount", po.getStoredProfileCount(), 60L*1000);
 

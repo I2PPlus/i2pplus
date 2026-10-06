@@ -86,6 +86,8 @@ public class ProfileOrganizer {
     private volatile int _profileCount;
     /** @see #_profileCount */
     private volatile int _qualityCount;
+    /** @see #_profileCount */
+    private volatile int _activeProfileCount;
 
     /**
      * Profiles held in RAM, as of the last completed reorganisation.
@@ -102,6 +104,40 @@ public class ProfileOrganizer {
      * @since 0.9.72
      */
     public int getQualityCount() {return _qualityCount;}
+
+    /**
+     * Profiles with recent activity, as of the last completed reorganisation.
+     *
+     * <p>Computed during the reorganisation walk rather than on demand:
+     * {@link #countActivePeersInLastHour()} iterates every profile while holding
+     * _reorganizeLock, which is the lock tunnel peer selection contends on, and CoalesceStatsEvent
+     * runs every 50s. Publishing it here costs one comparison per profile in a walk that already
+     * holds the lock.
+     *
+     * @return the recently active profile count
+     * @since 0.9.72
+     */
+    public int getActiveProfileCount() {return _activeProfileCount;}
+
+    /** Window used by {@link #getActiveProfileCount()}, in ms. */
+    private static final long ACTIVE_WINDOW_MS = 60 * 60 * 1000L;
+
+    /**
+     * Whether a profile shows activity within the active window: a peer test counted as active, a
+     * successful or failed send, or any contact. Split out so the rule is testable without a
+     * reorganise cycle or a live profile set.
+     *
+     * @param profile the profile
+     * @param hideBefore cutoff time, i.e. now minus {@link #ACTIVE_WINDOW_MS}
+     * @return true if the profile is recently active
+     * @since 0.9.72
+     */
+    static boolean isActiveInWindow(PeerProfile profile, long hideBefore) {
+        return profile.getIsActive(ACTIVE_WINDOW_MS) ||
+               profile.getLastSendSuccessful() >= hideBefore ||
+               profile.getLastSendFailed() >= hideBefore ||
+               profile.getLastHeardFrom() >= hideBefore;
+    }
 
     /** True when a peer in the fast tier has proven throughput or is in the high-cap tier. */
     private static boolean isQualityFastPeer(PeerProfile profile, Map<Hash, PeerProfile> highCap) {
@@ -1761,6 +1797,9 @@ public class ProfileOrganizer {
             // Step 6d: Count quality peers (fast/high-cap with good acceptance + recent activity)
             // Used by tuner to adjust tier limits based on viable tunnel candidates
             int qualityCount = countQualityPeers(now, buildSuccess);
+            // Recently-active profiles for peer.activeProfileCount. Counted here so the gauge
+            // costs one pass inside the reorganise instead of a lock-taking scan every 50s.
+            int activeCount = countActiveProfiles(now);
 
             // Step 6e: Compute average peer test RTT across fast peers with data.
             // When the fast tier is large enough, PeerProfile.recalculateLowLatency()
@@ -1792,10 +1831,13 @@ public class ProfileOrganizer {
             // (REORGANIZE_TIME_LONG once uptime passes 2h) while RATES starts at
             // ONE_MINUTE, so an instant sample landed in only ~24% of completed
             // one-minute windows and the rest read zero events - a gauge must hold
-            // its last level, not go blank. peer.activeProfileCount is peer.profileCount
-            // (the in-RAM profile count), so both share this value.
+            // its last level, not go blank. peer.profileCount is sampled from _profileCount;
+            // peer.activeProfileCount is not sampled here because it needs a walk over the
+            // profiles, and CoalesceStatsEvent takes it from countActivePeersInLastHour()
+            // instead.
             _profileCount = profileCount;
             _qualityCount = qualityCount;
+            _activeProfileCount = activeCount;
             // peer.expiredProfileCount is likewise never registered; see above.
 
             // Step 10: Enforce memory cap
@@ -2299,6 +2341,20 @@ public class ProfileOrganizer {
                           (_highCapacityPeers.size() - restored) + ", old " + oldHighCapSize + ")");
             }
         }
+    }
+
+    /**
+     *  Counts profiles with recent activity, over the same set as
+     *  {@link #countActivePeersInLastHour()} so the published gauge and the on-demand scan
+     *  agree. Called during the reorganise, which already holds the write lock.
+     */
+    private int countActiveProfiles(long now) {
+        int activeCount = 0;
+        long hideBefore = now - ACTIVE_WINDOW_MS;
+        for (PeerProfile profile : _notFailingPeers.values()) {
+            if (isActiveInWindow(profile, hideBefore)) activeCount++;
+        }
+        return activeCount;
     }
 
     /**
