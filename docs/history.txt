@@ -1,37 +1,108 @@
+2026-10-06 dr|z3d
+  * Router:
+    - Cut CPU on the packet, tunnel and selection hot paths: drop a
+      dead ChaCha20 block, pool the crypto scratch, read AES key
+      specs without a global lock, bound the SSU2 ack span, and keep
+      per-packet config and clock reads off the data path
+    - Index queued jobs so duplicate detection and the queue pumper
+      stop rescanning every queue, and drop a counter nothing read
+    - Make stat recording lock-cheap and add a resolve-once handle,
+      cutting the cost of recording a sample by about half
+    - Sample the peer profile gauges on the short stats cycle, so
+      /configstats and the health ring stop reading empty windows
+    - Start a fresh reorg thread per fire, and stop a rejected
+      thread-cpu query from killing the tune cycle
+  * Peermanager: Score ghost peers against the preferred tier size,
+    cache the selection invariants, and resolve peers without the
+    full validating netdb lookup where only presence is needed
+  * NetDb: Release the bucket read lock before running the selection
+    collector, and skip validation on presence-only lookups
+  * Console: Stop re-deriving the same render data on every request
+    for logs, netdb, profiles and tunnels
+  * I2PSnark: Encode each infohash once per poll and stop taking a
+    lock per torrent on remove and delete
+
+2026-10-05 dr|z3d
+  * Graphs:
+    - Keep the class where a run of lines changes it, so axis lines
+      keep class="axis" on a tall graph
+    - Draw a line solid when its dash length is zero, accept a dash
+      pair for --graph_dash, and document zero as the solid value
+    - Take the two plot colours from theme CSS variables with the
+      built-in palette as fallback, restore the yellow second plot,
+      and stop duplicating legend rows
+    - Cut every combined graph to two plots, add the filled-path
+      toggle, and keep one legend row per series
+    - Tile a pool's In and Out rates together and register
+      participating bandwidth
+    - Age a stalled listener from its attach time, name it, and
+      spare the rates that never coalesced
+    - Parse hex shorthand, hex alpha and rgb/rgba for theme colours,
+      and find the axis marker wherever it sits in the style
+  * Console:Show bracketed pool names whole in their configstats labels
+  * Router:
+    - Name the queue in the CoDel stat descriptions, tell client
+      builds from exploratory ones, and correct the dispatchNoACK
+      description
+    - Give each precalculated key pool empty counter its own label
+    - Wait for room in a client's I2CP queue instead of dropping
+      LeaseSet requests
+  * Core: Replace the single I2CP dispatcher thread with a bounded
+    worker pool
+  * Docs: Document the graph plot colour variables in the theming
+    guide
+
+2026-10-04 dr|z3d
+  * Console:
+    - Register same-unit stat groups and draw combined graphs as
+      overlaid lines with a per-theme palette, behind an opt-in
+      toggle with combined tiles on /graphs
+    - Expose the smooth plotlines toggle
+  * Graphs: Draw multi-series lines dotted with a widened dash,
+    detect the theme explicitly, hold it across resize, and group the
+    peer profile graphs
+  * Router: Correct the stat descriptions that named the wrong
+    quantity or group, fix the NTCP pumper idle rate, and publish the
+    on-disk profile count
+  * I2PSnark: Give a magnet a working peer source and stop delaying
+    its first announce
+  * Ministreaming: Name the interrupted stage and log socket manager
+    interrupts at WARN
+
 2026-10-03 dr|z3d
-  * Installer:
-    - Install IzPack 5 automatically: fetch into installer/lib/izpack/5,
-      track the latest release, refresh on every installer5 build, reuse
-      the cache when offline
-    - Migrate install5.xml and shortcutSpec.xml to the 5.0 schema so the
-      installer compiles; move translations to a custom langpack
-      resource; set our own window and shortcut icons
-    - Restore testpid in i2prouter so stop exits instead of hanging
+  * Installer: Restore testpid in i2prouter so stop exits instead of
+    hanging
   * Streaming:
     - Size the signature region from the option bytes so signed packets
       are no longer dropped
-    - Clamp the send threshold to the window ceiling and restore the
-      window on unchoke, so large downloads stop collapsing
-    - Allow one immediate retransmit per overdue packet, not per ack,
-      and require data in flight before calling a stream stalled
-  * Console:
-    - Serialize rrd4j flushes across backends
-    - Keep the flush task alive across write failures
-    - Report flush liveness alongside
+    - Clamp the send threshold and restore the window on unchoke so
+      downloads stop collapsing; allow one immediate retransmit per
+      overdue packet
+    - Edge-trigger the stall warning with a 90s give-up budget and
+      collapse repeated hard-disconnect warnings
   * Graphs:
-    - Name why a graph stopped and heal it instead of freezing; isolate
-      a failing stat so one cannot freeze them all
+    - Name why a graph stopped and heal it instead of freezing;
+      isolate a failing stat so one cannot freeze them all
     - Stamp samples with the period due and write the databases off the
       shared timer, so graphs stop skipping points
+    - Smooth graph curves and serialize image rendering so SVG output
+      stops stalling
   * Core:
     - Warn when the timer pool saturates, with queue depth and count
+    - Calibrate the stall watchdog to each timer's longest observed
+      gap, tell an idle timer from a wedged one, and collapse repeated
+      log conditions
     - Create group-readable log directories so the service account can
       write its own logs
   * Tuner: Escape the growth-factor dead zone so a stuck factor moves
   * Tunnel: Keep a valid two-hop client selection, and name the hop
     that failed
-  * Router: Count ban rejections at peer selection and record the cause so
-    a burst of rejected builds can be attributed
+  * Router: Count ban rejections at peer selection and record the cause
+    so a burst of rejected builds can be attributed
+  * I2PSnark: Stop holding the torrent map across torrent creation, log
+    the tracker failure cause, and guard a null message
+  * Console: Report a real coalesce-stall duration instead of the -1
+    "never run" sentinel
 
 2026-10-02 dr|z3d
   * Console: Name and code every language in translation status again
