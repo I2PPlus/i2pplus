@@ -168,6 +168,23 @@ fi
 #   * --module-path (only if needed)
 #   * DEFAULT_JVM_OPTS, JAVA_OPTS, and GRADLE_OPTS environment variables.
 
+# Keep Gradle's project cache (task history, configuration cache, file hashes) out of
+# the source tree. Everything else this build produces already goes to $TMPDIR; see
+# settings.gradle for buildDir. A sibling of build-i2p rather than a child of it,
+# because `ant clean` and `ant distclean` both delete all of build.root - putting the
+# cache in there would discard it on any ant clean, and Gradle's own `clean` task
+# deliberately keeps its project cache. Skipped when the caller passes their own
+# --project-cache-dir, since Gradle rejects a duplicate instead of taking the last one.
+GRADLE_PROJECT_CACHE_DIR="${TMPDIR:-/tmp}/build-i2p-cache"
+for arg in "$@"; do
+    case $arg in
+        --project-cache-dir|--project-cache-dir=*) GRADLE_PROJECT_CACHE_DIR="" ;;
+    esac
+done
+if [ -n "$GRADLE_PROJECT_CACHE_DIR" ]; then
+    set -- "--project-cache-dir=$GRADLE_PROJECT_CACHE_DIR" "$@"
+fi
+
 # For Cygwin or MSYS, switch paths to Windows format before running java
 if "$cygwin" || "$msys" ; then
     APP_HOME=$( cygpath --path --mixed "$APP_HOME" )

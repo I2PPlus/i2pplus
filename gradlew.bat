@@ -99,12 +99,18 @@ goto exitWithErrorLevel
 :execute
 @rem Setup the command line
 
-
-
-@rem Execute gradlew
 @rem endlocal doesn't take effect until after the line is parsed and variables are expanded
 @rem which allows us to clear the local environment before executing the java command
-endlocal & "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -jar "%APP_HOME%\tools\gradle\wrapper\gradle-wrapper.jar" %* & call :exitWithErrorLevel & goto exitWithErrorLevel
+@rem Keep Gradle's project cache (task history, configuration cache, file hashes) out
+@rem of the source tree; see gradlew for why this is a sibling of build-i2p rather than a
+@rem child of it. Skipped when the caller passes their own --project-cache-dir, since
+@rem Gradle rejects a duplicate instead of taking the last one.
+set "GRADLE_PROJECT_CACHE_DIR=%TEMP%\build-i2p-cache"
+echo %* | findstr /b /c:"--project-cache-dir" >nul && set "GRADLE_PROJECT_CACHE_DIR="
+if defined GRADLE_PROJECT_CACHE_DIR set "GRADLE_PROJECT_CACHE_ARG=--project-cache-dir=%GRADLE_PROJECT_CACHE_DIR%"
+
+@rem Execute gradlew
+endlocal & "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -jar "%APP_HOME%\tools\gradle\wrapper\gradle-wrapper.jar" %GRADLE_PROJECT_CACHE_ARG% %* & call :exitWithErrorLevel & goto exitWithErrorLevel
 
 @rem This label must not be changed. We rely on old scripts being able to jump to this point.
 :exitWithErrorLevel

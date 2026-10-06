@@ -142,6 +142,92 @@ if [ -d "${PROJECT_ROOT}/gradle/wrapper" ]; then
     echo "Re-applied the tools/gradle wrapper redirect to gradlew and gradlew.bat"
 fi
 
+# The `wrapper` task above rewrites both start scripts from scratch, so any local edit is
+# gone by this point and has to be reapplied. Two matter: the tools/gradle wrapper redirect
+# above, and the relocated project cache below. Both exist to keep a build from writing into
+# the source tree, so silently losing either would push that output back into the workspace.
+# Done with python rather than sed because the block spans many lines and the .bat needs its
+# CRLF endings preserved.
+if ! grep -q 'build-i2p-cache' "$GRADLEW"; then
+    python3 - "$GRADLEW" "${PROJECT_ROOT}/gradlew.bat" <<'PYEOF'
+import sys
+
+posix_anchor = '# For Cygwin or MSYS, switch paths to Windows format before running java\n'
+posix_block = (
+    '# Keep Gradle\'s project cache (task history, configuration cache, file hashes) out of\n'
+    '# the source tree. Everything else this build produces already goes to $TMPDIR; see\n'
+    '# settings.gradle for buildDir. A sibling of build-i2p rather than a child of it,\n'
+    '# because `ant clean` and `ant distclean` both delete all of build.root - putting the\n'
+    '# cache in there would discard it on any ant clean, and Gradle\'s own `clean` task\n'
+    '# deliberately keeps its project cache. Skipped when the caller passes their own\n'
+    '# --project-cache-dir, since Gradle rejects a duplicate instead of taking the last one.\n'
+    'GRADLE_PROJECT_CACHE_DIR="${TMPDIR:-/tmp}/build-i2p-cache"\n'
+    'for arg in "$@"; do\n'
+    '    case $arg in\n'
+    '        --project-cache-dir|--project-cache-dir=*) GRADLE_PROJECT_CACHE_DIR="" ;;\n'
+    '    esac\n'
+    'done\n'
+    'if [ -n "$GRADLE_PROJECT_CACHE_DIR" ]; then\n'
+    '    set -- "--project-cache-dir=$GRADLE_PROJECT_CACHE_DIR" "$@"\n'
+    'fi\n'
+    '\n'
+)
+posix_anchor_line = posix_anchor + 'if "$cygwin" || "$msys" ; then\n'
+
+# Matched against the line as it stands after the tools/gradle redirect above, which is
+# why the tools path is written here rather than the stock gradle/wrapper one.
+bat_anchor = 'endlocal & "%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% "-Dorg.gradle.appname=%APP_BASE_NAME%" -jar "%APP_HOME%\\tools\\gradle\\wrapper\\gradle-wrapper.jar" %* & call :exitWithErrorLevel & goto exitWithErrorLevel'
+# The block below defines the arg, so the exec line also has to pass it: anchor on the
+# stock form and replace it with the rewritten one.
+bat_new_line = bat_anchor.replace('%*', '%GRADLE_PROJECT_CACHE_ARG% %*', 1)
+bat_block = (
+    "@rem Keep Gradle's project cache (task history, configuration cache, file hashes) out\r\n"
+    "@rem of the source tree; see gradlew for why this is a sibling of build-i2p rather than a\r\n"
+    "@rem child of it. Skipped when the caller passes their own --project-cache-dir, since\r\n"
+    "@rem Gradle rejects a duplicate instead of taking the last one.\r\n"
+    "set \"GRADLE_PROJECT_CACHE_DIR=%TEMP%\\build-i2p-cache\"\r\n"
+    "echo %* | findstr /b /c:\"--project-cache-dir\" >nul && set \"GRADLE_PROJECT_CACHE_DIR=\"\r\n"
+    "if defined GRADLE_PROJECT_CACHE_DIR set \"GRADLE_PROJECT_CACHE_ARG=--project-cache-dir=%GRADLE_PROJECT_CACHE_DIR%\"\r\n"
+    "\r\n"
+    "@rem Execute gradlew\r\n"
+)
+
+
+def patch(path, anchor, replacement):
+    """Insert replacement in place of anchor, once. A no-op if already applied."""
+    if not path:
+        return
+    try:
+        raw = open(path, 'rb').read()
+    except FileNotFoundError:
+        return
+    text = raw.decode('utf-8', errors='surrogateescape')
+    if 'build-i2p-cache' in text:
+        return
+    if text.count(anchor) != 1:
+        sys.exit(f'Error: {path}: expected one anchor, found {text.count(anchor)}')
+    open(path, 'wb').write(text.replace(anchor, replacement, 1).encode(
+        'utf-8', errors='surrogateescape'))
+
+
+gradlew, gradlew_bat = (sys.argv[1] if len(sys.argv) > 1 else '',
+                        sys.argv[2] if len(sys.argv) > 2 else '')
+patch(gradlew, posix_anchor_line, posix_block + posix_anchor_line)
+patch(gradlew_bat, bat_anchor, bat_block + bat_new_line)
+print('  reapplied the relocated project cache to gradlew and gradlew.bat')
+PYEOF
+fi
+
+for script in "$GRADLEW" "${PROJECT_ROOT}/gradlew.bat"; do
+    [ -f "$script" ] || continue
+    if ! grep -q 'build-i2p-cache' "$script"; then
+        echo "Error: $(basename "$script") lost its relocated project cache; reapply and retry." >&2
+        exit 1
+    fi
+done
+chmod +x "$GRADLEW" 2>/dev/null || true
+echo "Verified: no build state is written into the source tree"
+
 # Update version.txt
 echo "${LATEST}" > "$VERSION_FILE"
 
