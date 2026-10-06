@@ -160,10 +160,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             for (int i = 0; i < count; i++) {
                 long id = ids[i];
                 // A thread outside the tracked stages is never attributed, so
-                // its CPU time is never read.
+                // its CPU time is never read. Ids are 1-based; the bean rejects
+                // anything else.
                 int stage = _threadCpu.stageOf(id);
-                if (stage < 0) continue;
-                long cpu = _threadMXBean.getThreadCpuTime(id);
+                if (stage < 0 || id < 1) continue;
+                long cpu;
+                try {
+                    cpu = _threadMXBean.getThreadCpuTime(id);
+                } catch (IllegalArgumentException | UnsupportedOperationException e) {
+                    continue;
+                }
                 if (cpu < 0) continue;
                 long prev = _threadCpu.cpuOf(id);
                 _threadCpu.setCpu(id, cpu);
@@ -230,6 +236,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private void resolveThreadNames(long[] ids, int count) {
         int unseen = 0;
         for (int i = 0; i < count; i++) {
+            // Thread ids are 1-based; the bean throws on 0, so never hand it one.
+            if (ids[i] < 1) {continue;}
             if (_threadCpu.stageOf(ids[i]) == ThreadCpuTable.UNRESOLVED) {
                 if (unseen == _unseenThreadIds.length)
                     _unseenThreadIds = new long[_unseenThreadIds.length * 2];
@@ -243,9 +251,18 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         long[] unseenIds = (unseen == _unseenThreadIds.length)
                            ? _unseenThreadIds
                            : Arrays.copyOf(_unseenThreadIds, unseen);
-        ThreadInfo[] infos = _threadMXBean.getThreadInfo(unseenIds, 0);
+        ThreadInfo[] infos;
+        try {
+            infos = _threadMXBean.getThreadInfo(unseenIds, 0);
+        } catch (IllegalArgumentException iae) {
+            // A bean rejection must not take the tune cycle with it: this runs on a
+            // shared SimpleTimer2 thread, and losing it stops all autotuning.
+            if (_log.shouldWarn())
+                _log.warn("Skipping per-thread CPU attribution this cycle: " + iae);
+            return;
+        }
         for (int i = 0; i < unseen; i++) {
-            long id = _unseenThreadIds[i];
+            long id = unseenIds[i];
             ThreadInfo info = infos[i];
             String name = (info != null) ? info.getThreadName() : null;
             _threadCpu.setStage(id, (name != null) ? stageFor(name) : ThreadCpuTable.NO_STAGE);
