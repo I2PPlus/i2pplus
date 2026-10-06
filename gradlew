@@ -141,18 +141,6 @@ location of your Java installation."
     fi
 fi
 
-# If Java is too new for Gradle's Groovy compiler, fall back to an older JDK.
-_JAVA_VER=$("$JAVACMD" -version 2>&1 | head -1 | sed 's/.*version "\([0-9]*\).*/\1/')
-if [ -n "$_JAVA_VER" ] && [ "$_JAVA_VER" -gt 25 ] 2>/dev/null; then
-    for _alt_jdk in /usr/lib/jvm/java-25-openjdk-*/bin/java /usr/lib/jvm/java-24-openjdk-*/bin/java /usr/lib/jvm/java-24-*/bin/java; do
-        if [ -x "$_alt_jdk" ]; then
-            JAVACMD="$_alt_jdk"
-            break
-        fi
-    done
-fi
-unset _JAVA_VER _alt_jdk
-
 # Increase the maximum file descriptors if we can.
 if ! "$cygwin" && ! "$darwin" && ! "$nonstop" ; then
     case $MAX_FD in #(
