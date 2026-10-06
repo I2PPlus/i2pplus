@@ -3175,7 +3175,7 @@ msgid "Our info"
 msgstr "Nos infos"
 
 msgid "Floodfill"
-msgstr "MARQUEUR D'INONDATION"
+msgstr "Floodfill"
 
 msgid "Router is banlisted"
 msgstr "Le routeur est banni"
@@ -6029,7 +6029,7 @@ msgid "Key <b>{0}</b> selected for removal. To commit the change, save the confi
 msgstr "Clé <b>{0}</b> sélectionnée pour la suppression. Pour valider le changement, enregistrez la configuration ou annulez pour restaurer la clé."
 
 msgid "Floodfill Configuration"
-msgstr "Configuration du MARQUEUR D'INONDATION"
+msgstr "Configuration du Floodfill"
 
 msgid "Floodfill participation helps the network, but may use more of your computer's resources."
 msgstr "La participation des nœuds d'inondation aide le réseau, mais peut utiliser davantage de ressources de votre ordinateur."
