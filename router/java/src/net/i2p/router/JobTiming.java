@@ -62,8 +62,18 @@ public class JobTiming implements Clock.ClockUpdateListener {
      */
     public void setActualStart(long actualStartTime) { _actualStart = actualStartTime; }
 
-    /** Record the current time as the actual start. */
-    public void start() { _actualStart = _context.clock().now(); }
+    /**
+     * Record the actual start.
+     *
+     * <p>The caller supplies the timestamp because JobQueueRunner already
+     * reads the clock once per job and reuses that value for the run start,
+     * the queue-wait origin and the lag origin; a second read here only added
+     * clock skew between the timing record and the reported lag.
+     *
+     * @param now the actual start time in milliseconds
+     * @since 0.9.71+
+     */
+    public void start(long now) { _actualStart = now; }
 
     /**
      * The actual end time when the job finished execution.
@@ -79,8 +89,17 @@ public class JobTiming implements Clock.ClockUpdateListener {
      */
     public void setActualEnd(long actualEndTime) { _actualEnd = actualEndTime; }
 
-    /** Record the current time as the actual end. */
-    public void end() { _actualEnd = _context.clock().now(); }
+    /**
+     * Record the actual end.
+     *
+     * <p>As with {@link #start(long)}, the caller passes in a clock reading
+     * it already needs, keeping the duration consistent with the timestamp
+     * JobQueueRunner takes around updateStats().
+     *
+     * @param now the actual end time in milliseconds
+     * @since 0.9.71+
+     */
+    public void end(long now) { _actualEnd = now; }
 
     /**
      * Adjust all timing values by the specified delta

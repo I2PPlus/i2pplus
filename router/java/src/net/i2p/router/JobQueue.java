@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -50,12 +49,32 @@ public class JobQueue {
     private final BlockingQueue<Job> _readyJobs;
     /** List of high priority jobs that should run before others */
     private final BlockingQueue<Job> _highPriorityJobs;
-    /** SortedSet of jobs that are scheduled for running in the future, earliest first */
-    private final Set<Job> _timedJobs;
+    /** SortedSet of jobs that are scheduled for running in the future, earliest first.
+     *  Typed as the concrete skip list because the pumper reads {@code first()}
+     *  as the minimum start time rather than re-deriving one per pass. */
+    private final ConcurrentSkipListSet<Job> _timedJobs;
     /** Queue of timed jobs that are ready to run (moved from _timedJobs when ready) */
     private final BlockingQueue<Job> _timedJobsReady;
-    /** Track jobs currently being processed by runners to prevent duplicate requeue */
-    private final Set<Job> _jobsInFlight;
+    /** Membership index over the three ready queues, so duplicate detection is O(1).
+     *  Maintained exclusively through {@link #offerReady}, {@link #removeReady},
+     *  {@link #takeReady}, {@link #addTimed} and {@link #removeTimed} so that no
+     *  queue mutation can leave it stale.
+     *
+     *  <p>Membership is released at <em>dispatch</em>, not at completion:
+     *  {@link JobImpl#requeue} is called from {@code runJob()} on the running job
+     *  itself, so holding the entry until completion would swallow every
+     *  self-requeueing job.
+     */
+    private final Set<Job> _readyIndex;
+    /**
+     * Number of TestJob instances in the three ready queues or _timedJobs, i.e.
+     * what {@link #getTestJobCount} reports.  Maintained by the same helpers, so
+     * the pumper can sample it at 100 Hz without walking three collections under
+     * _jobLock.
+     *
+     * @since 0.9.71+
+     */
+    private final AtomicInteger _queuedTestJobs;
     /** Job name to JobStat for that job */
     private final ConcurrentHashMap<String, JobStats> _jobStats;
     private final QueuePumper _pumper;
@@ -94,7 +113,10 @@ public class JobQueue {
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em - scale with runner count */
     private static final int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 24 : 48;
-    private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
+    /** Resolved once from {@link #PROP_MAX_WAITING_JOBS} at construction.
+     *  shouldDrop() read it per addJob() that could exceed the cap.  A
+     *  non-positive value disables dropping. */
+    private final int _maxWaitingJobs;
     /** Minimum lag (ms) before the drop policy activates.
      *  Must be high enough to avoid drops during normal processing jitter;
      *  low enough to shed load before queue saturation causes cascading failure.
@@ -127,6 +149,7 @@ public class JobQueue {
     public JobQueue(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(JobQueue.class);
+        _maxWaitingJobs = _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS);
 
         _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
         _context.statManager().createRequiredRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
@@ -143,12 +166,67 @@ public class JobQueue {
         _highPriorityJobs = new LinkedBlockingQueue<>();
         _timedJobs = new ConcurrentSkipListSet<>(new JobComparator());
         _timedJobsReady = new LinkedBlockingQueue<>();
-        _jobsInFlight = Collections.synchronizedSet(new HashSet<>());
+        _readyIndex = Collections.newSetFromMap(new ConcurrentHashMap<>(256));
+        _queuedTestJobs = new AtomicInteger();
         _jobLock = new Object();
         _queueRunners = new ConcurrentHashMap<>(runners);
         _jobStats = new ConcurrentHashMap<>();
         _pumper = new QueuePumper();
         _scaler = new JobQueueScaler(context, this);
+    }
+
+    /**
+     * Claim the job in {@link #_readyIndex} before {@code offer()} publishes it,
+     * so a concurrent addJob() sees it as already queued in that window.
+     */
+    private void offerReady(Job job, BlockingQueue<Job> queue) {
+        _readyIndex.add(job);
+        if (job instanceof TestJob) {_queuedTestJobs.incrementAndGet();}
+        queue.offer(job);
+    }
+
+    /**
+     * Remove from a ready queue, releasing the index and TestJob claims only if
+     * the job was actually present.
+     *
+     * @return true if the job was in the queue and has been removed
+     */
+    private boolean removeReady(Job job, BlockingQueue<Job> queue) {
+        if (!queue.remove(job)) return false;
+        _readyIndex.remove(job);
+        if (job instanceof TestJob) {_queuedTestJobs.decrementAndGet();}
+        return true;
+    }
+
+    /**
+     * Dispatch from a ready queue, releasing the index claim here rather than at
+     * completion.
+     *
+     * @return the next job, or null if the queue was empty
+     */
+    private Job takeReady(BlockingQueue<Job> queue) {
+        Job job = queue.poll();
+        if (job == null) return null;
+        _readyIndex.remove(job);
+        if (job instanceof TestJob) {_queuedTestJobs.decrementAndGet();}
+        return job;
+    }
+
+    /** Add to the future-scheduled skip list, keeping {@link #_queuedTestJobs} in step. */
+    private void addTimed(Job job) {
+        _timedJobs.add(job);
+        if (job instanceof TestJob) {_queuedTestJobs.incrementAndGet();}
+    }
+
+    /**
+     * Remove from the future-scheduled skip list.
+     *
+     * @return true if the job was scheduled and has been removed
+     */
+    private boolean removeTimed(Job job) {
+        if (!_timedJobs.remove(job)) return false;
+        if (job instanceof TestJob) {_queuedTestJobs.decrementAndGet();}
+        return true;
     }
 
     /**
@@ -165,7 +243,7 @@ public class JobQueue {
         }
 
         int numReady;
-        boolean alreadyExists = false;
+        boolean alreadyExists;
         boolean dropped = false;
         boolean readyNow = false;
         long now = _context.clock().now();
@@ -173,17 +251,14 @@ public class JobQueue {
         if (start > now + 3*24*60*60*1000L && _log.shouldWarn()) {
             _log.warn(job + " scheduled far in the future: " + (new Date(start)));
         }
-        // Check existence — all three queues are thread-safe (LinkedBlockingQueue
-        // and ConcurrentSkipListSet), so this read-only check does not need _jobLock.
-        alreadyExists = _readyJobs.contains(job) || _highPriorityJobs.contains(job) ||
-                       _timedJobsReady.contains(job);
-        // Include _timedJobsReady — jobs promoted by the pumper are as ready as
-        // those in _readyJobs; ignoring them understates pressure and delays drops.
+        // O(1) index lookup; it covers _timedJobsReady too, whose jobs the pumper has
+        // promoted and which are as ready as those in _readyJobs.
+        alreadyExists = _readyIndex.contains(job);
         numReady = getReadyCount();
 
         if (!alreadyExists) {
             // _timedJobs is ConcurrentSkipListSet — safe to modify outside the lock.
-            boolean removed = _timedJobs.remove(job);
+            boolean removed = removeTimed(job);
             if (removed && _log.shouldWarn()) {_log.warn(job + " removed from queue and rescheduled -> Duplicate instance");}
 
             // Don't re-add if it was already in _timedJobs (duplicate from requeue while still scheduled)
@@ -198,10 +273,10 @@ public class JobQueue {
                     if (start <= now) {
                         job.getTiming().setStartAfter(now);
                         if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
-                        _readyJobs.offer(job);
+                        offerReady(job, _readyJobs);
                         readyNow = true;
                     } else {
-                        _timedJobs.add(job);
+                        addTimed(job);
                         if (_log.shouldDebug()) {
                             long diff = _nextPumperRun - start;
                             _log.debug("Waking pumper: job " + job.getName() + " early by " + diff + "ms");
@@ -266,16 +341,17 @@ public class JobQueue {
         synchronized (_jobLock) {
             // Promote any scheduled copy so the job runs once (now) instead of
             // twice (now, plus again when the timed copy matures).
-            if (_timedJobs.remove(job) && _log.shouldWarn()) {
+            if (removeTimed(job) && _log.shouldWarn()) {
                 _log.warn(job + " removed from queue and promoted to top -> Duplicate instance");
             }
-            _timedJobsReady.remove(job);
-            _readyJobs.remove(job);
             // remove() is O(n) on a LinkedBlockingQueue but the queue is always small (< 100).
-            // Calling it unconditionally avoids a second linear scan for contains().
-            _highPriorityJobs.remove(job);
+            // Calling it unconditionally on all three avoids a second linear
+            // scan for contains().
+            removeReady(job, _timedJobsReady);
+            removeReady(job, _readyJobs);
+            removeReady(job, _highPriorityJobs);
             if (job instanceof JobImpl) {((JobImpl) job).madeReady(_context.clock().now());}
-            _highPriorityJobs.offer(job);
+            offerReady(job, _highPriorityJobs);
         }
 
         // Wake up runners in case they're waiting
@@ -291,14 +367,10 @@ public class JobQueue {
      */
     public void removeJob(Job job) {
         synchronized (_jobLock) {
-            boolean removed = _timedJobs.remove(job);
-            if (!removed) {
-                removed = _timedJobsReady.remove(job);
-            }
-            if (!removed) {
-                _readyJobs.remove(job);
-                _highPriorityJobs.remove(job);
-            }
+            if (removeTimed(job)) return;
+            if (removeReady(job, _timedJobsReady)) return;
+            removeReady(job, _readyJobs);
+            removeReady(job, _highPriorityJobs);
         }
     }
 
@@ -448,7 +520,7 @@ public class JobQueue {
     private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
-        if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
+        if (numReady > _maxWaitingJobs) {
             Class<? extends Job> cls = job.getClass();
             String jobName = cls.getName();
             if (getMaxLag() >= MIN_LAG_TO_DROP) {
@@ -528,6 +600,9 @@ public class JobQueue {
             _timedJobsReady.clear();
             _readyJobs.clear();
             _highPriorityJobs.clear();
+            // The queues are now empty, so the derived state must go too.
+            _readyIndex.clear();
+            _queuedTestJobs.set(0);
             _jobLock.notifyAll();
         }
         Job poison = new PoisonJob();
@@ -601,26 +676,23 @@ public class JobQueue {
         while (_alive) {
             try {
                 // First check high-priority jobs
-                Job j = _highPriorityJobs.poll();
+                Job j = takeReady(_highPriorityJobs);
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
-                    _jobsInFlight.add(j);
                     return j;
                 }
 
                 // Check timed jobs ready queue first (O(1) instead of iterating skip list)
-                j = _timedJobsReady.poll();
+                j = takeReady(_timedJobsReady);
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
-                    _jobsInFlight.add(j);
                     return j;
                 }
 
                 // Check normal priority jobs (non-blocking — we wait below)
-                j = _readyJobs.poll();
+                j = takeReady(_readyJobs);
                 if (j != null) {
                     if (j.getJobId() == POISON_ID) break;
-                    _jobsInFlight.add(j);
                     return j;
                 }
 
@@ -795,6 +867,13 @@ public class JobQueue {
     }
 
     private final class QueuePumper implements Runnable, Clock.ClockUpdateListener, RouterClock.ClockShiftListener {
+        /**
+         * Scratch buffer for the jobs a single pass promotes out of _timedJobs,
+         * reused across passes so a 100 Hz pumper does not allocate per pass.
+         * Emptied after the move so it never retains Job references between passes.
+         */
+        private final List<Job> _toMove = new ArrayList<>();
+
         public QueuePumper() {
             _context.clock().addUpdateListener(this);
             ((RouterClock) _context.clock()).addShiftListener(this);
@@ -816,40 +895,45 @@ public class JobQueue {
                     long timeToWait = -1;
                     int movedJobs = 0;
                     try {
-                        // Snapshot timed jobs that are ready (timeLeft <= 0).
-                        // ConcurrentSkipListSet supports weakly-consistent iteration
-                        // without holding _jobLock, so addJob() is not blocked.
-                        List<Job> toMove = new ArrayList<>();
+                        // first() *is* the minimum: _timedJobs is ordered on getStartAfter().
+                        // It throws on an empty set, hence the guard. -1 means "due
+                        // now", which the wait ladder below turns into the shortest interval.
+                        Job first = _timedJobs.isEmpty() ? null : _timedJobs.first();
                         long minWaitTime = -1;
+                        if (first != null) {
+                            long timeLeft = first.getTiming().getStartAfter() - now;
+                            if (timeLeft > 0) {minWaitTime = timeLeft;}
+                        }
+                        // Weakly-consistent iteration, so no _jobLock is held and addJob()
+                        // is not blocked. Walk everything rather than stopping at the first
+                        // future job: setStartAfter() and offsetChanged() mutate the key
+                        // concurrently and can transiently break the ordering.
+                        _toMove.clear();
                         for (Job j : _timedJobs) {
-                            long timeLeft = j.getTiming().getStartAfter() - now;
-                            if (timeLeft <= 0) {
-                                toMove.add(j);
-                            } else {
-                                // Track minimum wait time among not-ready jobs
-                                if (minWaitTime < 0 || timeLeft < minWaitTime) {
-                                    minWaitTime = timeLeft;
-                                }
+                            if (j.getTiming().getStartAfter() <= now) {
+                                _toMove.add(j);
                             }
                         }
                         // Move ready jobs to timed jobs ready queue
-                        for (Job j : toMove) {
-                            _timedJobs.remove(j);
+                        for (Job j : _toMove) {
+                            if (!removeTimed(j)) {continue;}
                             if (j instanceof JobImpl) ((JobImpl)j).madeReady(now);
                             j.getTiming().setStartAfter(now);
-                            _timedJobsReady.offer(j);
+                            offerReady(j, _timedJobsReady);
                             movedJobs++;
                         }
+                        _toMove.clear();
                         timeToWait = minWaitTime;
                         // Cap the wait time to prevent long delays for periodic jobs
                         if (timeToWait > 10000) {
                             timeToWait = 500;
                         }
-                        if (movedJobs > 0) {
+                        if (movedJobs > 0 && _log.shouldInfo()) {
                             _log.info("Pumper moved " + movedJobs + " jobs to timed ready queue, next wait: " + timeToWait + "ms, _timedJobs size: " + _timedJobs.size());
                         }
-                        // Track TestJob queue count periodically from the pumper (was in addJob)
-                        int testJobCount = getTestJobCount();
+                        // O(1) counter now, so this 100 Hz pass is cheap enough to sample
+                        // a stat that only feeds a graph.
+                        int testJobCount = _queuedTestJobs.get();
                         if (testJobCount > 0) {
                             _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
                         }
@@ -924,8 +1008,6 @@ public class JobQueue {
 
     /** Update stats */
     void updateStats(Job job, long doStart, long origStartAfter, long duration) {
-        // Remove from in-flight tracking when job completes
-        _jobsInFlight.remove(job);
         if (_context.router() == null) return;
         String key = job.getName();
         // Fix lag calculation: use actual job start time, not current time
@@ -1036,30 +1118,19 @@ public class JobQueue {
      * Count the number of TestJob instances currently queued in the job queue.
      * This includes both ready jobs and timed jobs waiting to be executed.
      *
+     * O(1): maintained by the queue-mutation helpers, because the pumper samples
+     * it on every pass and walking three collections under _jobLock was
+     * measurable work for a stat that only feeds a graph.
+     *
+     * <p>Counts a pumper-promoted job in {@link #_timedJobsReady} as queued.
+     * Those jobs are due to run now, so omitting them understated the queue;
+     * this matches the {@code jobQueue.testJobCount} description and the
+     * admission check in {@link #addJob(Job)}, which treats them as ready.
+     *
      * @return the total number of TestJob instances in the queue
      */
     public int getTestJobCount() {
-        int count = 0;
-        synchronized (_jobLock) {
-            // Count TestJob instances in ready queues
-            for (Job job : _readyJobs) {
-                if (job instanceof TestJob) {
-                    count++;
-                }
-            }
-            for (Job job : _highPriorityJobs) {
-                if (job instanceof TestJob) {
-                    count++;
-                }
-            }
-            // Count TestJob instances in timed queue
-            for (Job job : _timedJobs) {
-                if (job instanceof TestJob) {
-                    count++;
-                }
-            }
-        }
-        return count;
+        return _queuedTestJobs.get();
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.i2p.router;
 
+import net.i2p.stat.RateStat;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -18,6 +19,20 @@ class JobQueueRunner extends I2PThread {
     private volatile Job _lastJob;
     private volatile long _lastBegin;
     private volatile long _lastEnd;
+
+    /**
+     * Cached "jobQueue.jobRun" handle, resolved on first use.
+     * Null until resolved, and it stays null when stat.full is off (in which
+     * case JobQueue's createRateStat() is a no-op). Resolution is idempotent,
+     * so a benign race can only assign the same handle twice.
+     *
+     * @since 0.9.71+
+     */
+    private volatile RateStat _jobRunStat;
+    /** Cached "jobQueue.jobLag" handle, resolved on first use. @since 0.9.71+ */
+    private volatile RateStat _jobLagStat;
+    /** Cached "jobQueue.jobWait" handle, resolved on first use. @since 0.9.71+ */
+    private volatile RateStat _jobWaitStat;
 
     /**
      * Create a new job queue runner.
@@ -69,8 +84,27 @@ class JobQueueRunner extends I2PThread {
      */
     public long getLastEnd() {return _lastEnd;}
 
+    /**
+     * Resolve the cached RateStat handles for the three per-job stats.
+     *
+     * Every job used to pay three string-keyed ConcurrentHashMap lookups in
+     * StatManager, and each handle then fans out to a synchronized Rate per
+     * period - nine monitor acquisitions per job across three periods. The
+     * stats are created once by the JobQueue constructor before any runner
+     * exists, so caching the handles removes the lookups without changing
+     * which rates receive data. Left null when the stat was never created
+     * (stat.full off), in which case the update is skipped, matching
+     * StatManager.addRateData()'s own no-op.
+     */
+    private void resolveStats() {
+        if (_jobRunStat == null) {_jobRunStat = _context.statManager().getRate("jobQueue.jobRun");}
+        if (_jobLagStat == null) {_jobLagStat = _context.statManager().getRate("jobQueue.jobLag");}
+        if (_jobWaitStat == null) {_jobWaitStat = _context.statManager().getRate("jobQueue.jobWait");}
+    }
+
     public void run() {
         long lastActive;
+        resolveStats();
         while (_keepRunning && _context.jobQueue().isAlive()) {
             try {
                 Job job = _context.jobQueue().getNext();
@@ -80,6 +114,8 @@ class JobQueueRunner extends I2PThread {
                     }
                     continue;
                 }
+                // Single clock read per iteration, reused as the job's start
+                // instant, its queue wait origin and its lag origin.
                 long now = _context.clock().now();
 
                 long enqueuedTime = 0;
@@ -96,21 +132,24 @@ class JobQueueRunner extends I2PThread {
                     _log.debug("[Job " + job.getJobId() + "] " + job.getName() + " -> [Runner " + _id + "] running");
                 }
                 long origStartAfter = job.getTiming().getStartAfter();
-                long doStart = _context.clock().now();
-                job.getTiming().start();
+                long doStart = now;
+                job.getTiming().start(doStart);
+                _lastBegin = doStart;
                 runCurrentJob();
-                job.getTiming().end();
-                long duration = job.getTiming().getActualEnd() - job.getTiming().getActualStart();
                 long beforeUpdate = _context.clock().now();
+                job.getTiming().end(beforeUpdate);
+                long duration = job.getTiming().getActualEnd() - job.getTiming().getActualStart();
                 _context.jobQueue().updateStats(job, doStart, origStartAfter, duration);
-                long diff = _context.clock().now() - beforeUpdate;
 
                 long lag = doStart - origStartAfter;
                 if (lag < 0) {lag = 0;}
 
-                _context.statManager().addRateData("jobQueue.jobRun", duration, duration);
-                _context.statManager().addRateData("jobQueue.jobLag", lag);
-                _context.statManager().addRateData("jobQueue.jobWait", enqueuedTime, enqueuedTime);
+                RateStat jobRunStat = _jobRunStat;
+                if (jobRunStat != null) {jobRunStat.addData(duration, duration);}
+                RateStat jobLagStat = _jobLagStat;
+                if (jobLagStat != null) {jobLagStat.addData(lag);}
+                RateStat jobWaitStat = _jobWaitStat;
+                if (jobWaitStat != null) {jobWaitStat.addData(enqueuedTime, enqueuedTime);}
 
                 if (duration > 1500) {
                     _context.statManager().addRateData("jobQueue.jobRunSlow", duration, duration);
@@ -121,11 +160,13 @@ class JobQueueRunner extends I2PThread {
                     }
                 }
 
-                if (diff > 1000 && _log.shouldWarn()) {
-                    _log.warn("Updating stats for '" + job.getName() + "' took too long (" + diff + "ms)");
-                }
-
                 lastActive = _context.clock().now();
+                // Reuses the post-update reading instead of a second one taken
+                // immediately before the slow-job branch; the warning threshold
+                // is 1s, far beyond the microseconds that separates them.
+                if (lastActive - beforeUpdate > 1000 && _log.shouldWarn()) {
+                    _log.warn("Updating stats for '" + job.getName() + "' took too long (" + (lastActive - beforeUpdate) + "ms)");
+                }
                 _lastJob = _currentJob;
                 _currentJob = null;
                 _lastEnd = lastActive;
@@ -137,7 +178,6 @@ class JobQueueRunner extends I2PThread {
 
     private void runCurrentJob() {
         try {
-            _lastBegin = _context.clock().now();
             if (_currentJob != null) {_currentJob.runJob();}
         } catch (OutOfMemoryError oom) {
             try {
