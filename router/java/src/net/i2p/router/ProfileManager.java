@@ -84,14 +84,18 @@ public interface ProfileManager {
      * Note that we were able to push some data through a tunnel that the peer
      * is participating in (detected after rtt).
      *
+     * @param size bytes pushed, accumulated into a long so a period total
+     *        exceeding 2 GB is not truncated
      */
-    void tunnelDataPushed(Hash peer, long rtt, int size);
+    void tunnelDataPushed(Hash peer, long rtt, long size);
 
     /**
      * Note that the peer is participating in a tunnel that pushed the given amount of data
      * over the last minute.
+     *
+     * @param size bytes pushed during the period, normalized to a minute
      */
-    void tunnelDataPushed1m(Hash peer, int size);
+    void tunnelDataPushed1m(Hash peer, long size);
 
     /**
      * Note that we were able to push the given amount of data through a tunnel

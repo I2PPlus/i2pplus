@@ -239,6 +239,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static volatile long _cachedProactiveRepublishThreshold;
     private static volatile boolean _cachedBlockMyCountry;
     private static volatile String _cachedMyCountry;
+    private static volatile String _cachedMinVersionAllowed;
     private static final long CONFIG_REFRESH_MS = 30 * 1000L;
 
     /**
@@ -253,6 +254,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _cachedProactiveRepublishThreshold = ctx.getProperty("i2p.netdb.proactiveRepublishThreshold", 3*60*1000);
         _cachedBlockMyCountry = ctx.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         _cachedMyCountry = ctx.getProperty(PROP_IP_COUNTRY);
+        _cachedMinVersionAllowed = ctx.getProperty(PROP_MIN_ROUTER_VERSION);
         _cfgCtx = ctx;
         _cfgRefreshed = now;
     }
@@ -2660,22 +2662,24 @@ return false;
     private String checkRouterVersion(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         if (routerInfo == null) {return null;}
         String v = routerInfo.getVersion();
-        String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
-        String ipPort = TransportImpl.getRouterIPPort(routerInfo);
+        refreshConfig(_context);
+        String minVersionAllowed = _cachedMinVersionAllowed;
+        String tooOld;
         if (minVersionAllowed != null) {
-            if (VersionComparator.comp(v, minVersionAllowed) < 0) {
-                _banLogger.logBanForever(h, ipPort, "Router too old (" + v + ")", routerInfo);
-                _context.banlist().banlistRouterForever(h, "Router too old (" + v + ")");
-                return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
-            }
+            if (VersionComparator.comp(v, minVersionAllowed) >= 0) {return null;}
+            tooOld = "Router too old (" + v + ")";
         } else {
-            if (VersionComparator.comp(v, MIN_ROUTER_VERSION) < 0) {
-                _banLogger.logBanForever(h, ipPort, "Router too old (" + v + ")", routerInfo);
-                _context.banlist().banlistRouterForever(h, "Router too old (" + v + ")");
-                return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
-            }
+            if (VersionComparator.comp(v, MIN_ROUTER_VERSION) >= 0) {return null;}
+            tooOld = "Router too old (" + v + ")";
         }
-        return null;
+        // Resolved only on the ban path: getRouterIPPort() takes a lock on a
+        // process-wide map and walks the addresses, and validate() runs this for
+        // every RouterInfo read, so paying for it on the common accept path
+        // serialized all netDb reads behind one global monitor.
+        String ipPort = TransportImpl.getRouterIPPort(routerInfo);
+        _banLogger.logBanForever(h, ipPort, tooOld, routerInfo);
+        _context.banlist().banlistRouterForever(h, tooOld);
+        return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
     }
 
     /**
@@ -2709,6 +2713,27 @@ return false;
             }
             return caps + " Router [" + routerId + "] -> Slow and published over 2h ago";
         }
+        return null;
+    }
+
+    /**
+     * Look up a peer's RouterInfo without running the full
+     * {@link #validate(RouterInfo)} ban cascade.
+     *
+     * <p>{@link #lookupLocallyWithoutValidation(Hash)} returns any database
+     * entry, so the entry type is checked here; {@link #lookupRouterInfoLocally(Hash)}
+     * would have done that plus the validation. Callers must only use the result
+     * where a validating lookup would answer the same question — presence, or a
+     * predicate over the peer's own immutable RouterInfo fields.
+     *
+     * @param key the peer hash
+     * @return the RouterInfo, or null if this peer is not held as a RouterInfo
+     * @since 0.9.71+
+     */
+    RouterInfo lookupRIUnvalidated(Hash key) {
+        DatabaseEntry ds = lookupLocallyWithoutValidation(key);
+        if (ds != null && ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+            return (RouterInfo) ds;
         return null;
     }
 

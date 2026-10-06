@@ -34,6 +34,13 @@ class ProbeStalePeerJob extends JobImpl {
     private final Log _log;
     private final FloodfillNetworkDatabaseFacade _facade;
     private final Map<Hash, Long> _lastProbed;
+    /**
+     * Probe scores for the current cycle's candidates, keyed by hash. Filled as
+     * candidates are collected and cleared each cycle, so the sort comparator
+     * is a pure map read instead of a netDb lookup. Bounded by
+     * {@code STARTUP_MAX_PROBES_PER_CYCLE * 2}.
+     */
+    private final Map<Hash, Integer> _scores = new ConcurrentHashMap<>();
     private int _runCount;
 
     private static final long CYCLE_INTERVAL = 60L * 1000;
@@ -67,6 +74,7 @@ class ProbeStalePeerJob extends JobImpl {
         long now = ctx.clock().now();
 
         List<Hash> candidates = new ArrayList<>();
+        _scores.clear();
         long maxAge = ctx.getProperty(
             "profileOrganizer.maxRouterInfoAgeHours", 2) * 3600_000L;
         boolean isStartupBurst = (_runCount < STARTUP_BURST_CYCLES) ||
@@ -74,6 +82,7 @@ class ProbeStalePeerJob extends JobImpl {
         _runCount++;
 
         int maxCandidates = isStartupBurst ? STARTUP_MAX_PROBES_PER_CYCLE * 2 : MAX_PROBES_PER_CYCLE * 2;
+        final Map<Hash, Integer> scores = _scores;
         for (Hash peer : ctx.profileOrganizer().selectAllPeers()) {
             if (candidates.size() >= maxCandidates) break;
 
@@ -81,7 +90,12 @@ class ProbeStalePeerJob extends JobImpl {
             if (last != null && now - last < PROBE_COOLDOWN) continue;
             if (ctx.commSystem().isEstablished(peer)) continue;
 
-            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+            // Unvalidated on purpose: this sweep only needs presence and a
+            // staleness score, and a validating lookup runs the whole
+            // KademliaNetworkDatabaseFacade.validate() ban cascade once per
+            // candidate (twice per candidate at 15s startup cadence). Expiry
+            // eviction is ExpireRoutersJob's job, not a side effect of this one.
+            RouterInfo ri = _facade.lookupRIUnvalidated(peer);
             if (ri == null || ri.isHidden()) continue;
 
             if (isStartupBurst) {
@@ -92,6 +106,7 @@ class ProbeStalePeerJob extends JobImpl {
                     // Already ping-tested in this session — skip
                     continue;
                 }
+                scores.put(peer, Integer.valueOf(score(ri)));
                 candidates.add(peer);
             } else {
                 // Normal operation: probe peers with stale RouterInfo
@@ -105,16 +120,22 @@ class ProbeStalePeerJob extends JobImpl {
 
                 // Use shorter maxAge (1/3 of default, minimum 1h) for high-value peers
                 // so their RIs are refreshed more aggressively for tunnel building.
-                int score = scorePeer(ctx, peer);
+                int score = score(ri);
                 long tierMaxAge = (score >= 10) ? Math.max(maxAge / 3, 3600_000L) : maxAge;
                 if (ri.getPublished() > now - tierMaxAge) continue;
+                scores.put(peer, Integer.valueOf(score));
                 candidates.add(peer);
             }
         }
 
-        // Prioritize high-bandwidth reachable peers first
+        // Prioritize high-bandwidth reachable peers first. The score depends
+        // only on the RouterInfo, so it is computed once per candidate above
+        // and read back here — a comparator calling score() would re-look-up
+        // (and, before this change, re-validate) the RouterInfo on every one of
+        // the ~n*log(n) comparisons. Same pattern as RefreshRoutersJob.
         if (candidates.size() > 1) {
-            Collections.sort(candidates, (a, b) -> scorePeer(ctx, b) - scorePeer(ctx, a));
+            Collections.sort(candidates, (a, b) -> Integer.compare(scores.getOrDefault(b, Integer.valueOf(0)),
+                                                                  scores.getOrDefault(a, Integer.valueOf(0))));
         }
 
         int maxProbes = isStartupBurst ? STARTUP_MAX_PROBES_PER_CYCLE : MAX_PROBES_PER_CYCLE;
@@ -125,7 +146,7 @@ class ProbeStalePeerJob extends JobImpl {
             _lastProbed.put(peer, now);
             probed++;
 
-            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+            RouterInfo ri = _facade.lookupRIUnvalidated(peer);
             if (ri != null && _log.shouldInfo()) {
                 _log.info("Pinging " + (isStartupBurst ? "startup" : "stale") +
                           " peer [" + peer.toBase64().substring(0, 6) + "]" +
@@ -175,12 +196,17 @@ class ProbeStalePeerJob extends JobImpl {
     /**
      * Score a peer for startup probing priority.
      * Higher score = probe sooner.
+     *
+     * <p>Pure function of the RouterInfo: no context access, so it is directly
+     * unit-testable and can be computed once per candidate instead of once per
+     * comparison.
+     *
+     * @param ri the peer's RouterInfo (non-null)
+     * @return the probe priority score; higher is probed sooner
+     * @since 0.9.71+
      */
-    private static int scorePeer(RouterContext ctx, Hash peer) {
+    static int score(RouterInfo ri) {
         int score = 0;
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
-        if (ri == null) return 0;
-
         String cap = ri.getCapabilities();
         if (cap != null) {
             if (cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0) score += 10;

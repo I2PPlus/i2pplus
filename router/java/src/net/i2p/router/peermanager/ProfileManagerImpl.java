@@ -33,6 +33,16 @@ public class ProfileManagerImpl implements ProfileManager {
      * Note that it took msToSend to send a message of size bytesSent to the peer over the transport.
      * This should only be called if the transport considered the send successful.
      * Non-blocking. Will not update the profile if we can't get the lock.
+     *
+     * <p>This runs per message, so the cost is one
+     * {@code getOrCreateProfileNonblocking} — a {@code tryReadLock()} plus a map
+     * probe — and, on the rare miss, one {@code tryWriteLock()} to insert the
+     * newly created profile. Both are non-blocking, so neither can stall the
+     * transport thread behind reorganize; see {@link #peerLossEvent} for why the
+     * write-lock attempt is not a contention hazard. Left unchanged deliberately:
+     * the profile must exist for {@code setLastSendSuccessful} to be recorded at
+     * all, so a non-creating variant would silently drop first-contact
+     * send-success timestamps.
      */
     @Override
     public void messageSent(Hash peer, String transport, long msToSend, long bytesSent) {
@@ -44,6 +54,18 @@ public class ProfileManagerImpl implements ProfileManager {
     /**
      * Record the packet-loss (retransmit) ratio measured by the transport for a peer.
      * Non-blocking. Will not update the profile if we can't get the lock.
+     *
+     * <p>Note on the write lock below: {@link ProfileOrganizer#demoteIfLossy} does
+     * attempt the reorganize write lock, but it uses {@code tryWriteLock()}, which
+     * returns immediately rather than waiting, and the caller is already committed
+     * to the non-blocking contract of this method — so the message path cannot be
+     * stalled by reorganize. Frequency is also bounded well below message rate:
+     * {@code PeerState.reportLossRatio} only calls this when the retransmit ratio
+     * crosses a 5% bucket <em>after</em> at least
+     * {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS} packets, so the write-lock
+     * attempt happens at most once per bucket per connection, not per packet.
+     * The check is left in place deliberately: dropping it would leave a lossy
+     * peer in the fast/high-cap tiers until the next reorganize judged it.
      *
      * @param peer the peer
      * @param ratio retransmitted / transmitted packets, 0.0 = healthy
@@ -167,7 +189,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
-    public void tunnelDataPushed(Hash peer, long rtt, int size) {
+    public void tunnelDataPushed(Hash peer, long rtt, long size) {
         if (_context.routerHash().equals(peer))
             return;
         PeerProfile data = getProfileNonblocking(peer);
@@ -179,7 +201,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * Non-blocking. Will not update the profile if we can't get the lock.
      */
     @Override
-    public void tunnelDataPushed1m(Hash peer, int size) {
+    public void tunnelDataPushed1m(Hash peer, long size) {
         if (_context.routerHash().equals(peer))
             return;
         PeerProfile data = getProfileNonblocking(peer);
@@ -424,6 +446,10 @@ public class ProfileManagerImpl implements ProfileManager {
      * through this metric.  If msToReceive is negative, there was no timing information
      * available.
      * Non-blocking. Will not update the profile if we can't get the lock.
+     *
+     * <p>Same per-message cost profile as {@link #messageSent}, and the same
+     * decision to leave it alone: one {@code tryReadLock()} plus a map probe on
+     * the hot path, with no lock escalation that could block the caller.
      */
     public void messageReceived(Hash peer, String style, long msToReceive, int bytesRead) {
         PeerProfile data = getProfileNonblocking(peer);

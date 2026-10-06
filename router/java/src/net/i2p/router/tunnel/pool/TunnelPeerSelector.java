@@ -1997,11 +1997,54 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // accepts unvalidated cached entries, so selection matches that.
         DatabaseEntry de = ctx.netDb().lookupLocallyWithoutValidation(peer);
         if (de == null || de.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) return false;
-        RouterInfo ri = (RouterInfo) de;
+        return hasValidTransportAddress((RouterInfo) de);
+    }
+
+    /**
+     *  Address half of {@link #hasValidTransportAddress(RouterContext, Hash)},
+     *  split out so a caller that already holds the RouterInfo does not have to
+     *  probe the netdb a second time for the same entry. Pure decision, safe
+     *  for unit tests.
+     *
+     * @param ri the RouterInfo to check (non-null)
+     * @return true if it has at least one usable SSU or NTCP address
+     * @since 0.9.71+
+     */
+    static boolean hasValidTransportAddress(RouterInfo ri) {
         for (RouterAddress ra : ri.getAddresses()) {
             if (isUsableRouterAddress(ra)) {return true;}
         }
         return false;
+    }
+
+    /**
+     *  Fetch a peer RouterInfo for a message we address to it, preferring the
+     *  unvalidated store lookup.
+     *
+     *  <p>The peer reached this point through selection or through the already
+     *  established transport, so it passed store-time validation, and the
+     *  build requestor accepts unvalidated cached entries. Running the full
+     *  validate() here (address walk, banlist, country, version and
+     *  slow-router checks) per peer per cycle bought nothing, and for
+     *  {@link #keepAlive} it ran for up to 200 already-established peers a
+     *  cycle purely to build an OutNetMessage.
+     *
+     *  <p>Unvalidated first, validating second — the same ordering
+     *  {@link BuildRequestor} uses for every hop of a build request, so a
+     *  pre-connect addresses the RouterInfo a build would. The fallback runs
+     *  only when the unvalidated probe missed: one extra store lookup for a
+     *  peer we hold no entry for, and it resolves the peer when an entry
+     *  landed in between the two probes.
+     *
+     * @param ctx the router context
+     * @param peer hash of the peer
+     * @return the RouterInfo, or null if neither lookup resolves it
+     * @since 0.9.71+
+     */
+    private static RouterInfo lookupRouterInfoUnvalidated(RouterContext ctx, Hash peer) {
+        DatabaseEntry de = ctx.netDb().lookupLocallyWithoutValidation(peer);
+        if (de != null && de.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {return (RouterInfo) de;}
+        return ctx.netDb().lookupRouterInfoLocally(peer);
     }
 
     /**
@@ -2067,12 +2110,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param peer hash of the peer to connect to
      */
     protected static void preConnectTo(RouterContext ctx, Hash peer) {
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo ri = lookupRouterInfoUnvalidated(ctx, peer);
         if (ri == null)
             return;
         // Skip peers with no valid transport addresses to avoid triggering
         // bans in EstablishmentManager.establish() or NTCPTransport.send().
-        if (!hasValidTransportAddress(ctx, peer)) {
+        // Tested against the RouterInfo already fetched above rather than
+        // through hasValidTransportAddress(ctx, peer), which would probe the
+        // netdb a second time for the entry we are holding.
+        if (!hasValidTransportAddress(ri)) {
             // Record failure so selector avoids this peer
             recordFirstHopFail(ctx, peer);
             Log log = ctx.logManager().getLog(TunnelPeerSelector.class);
@@ -2527,7 +2573,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 // Peer already connected — send a lightweight DLM to keep the session alive.
                 // For established peers, transport.send() just enqueues to fragments with
                 // no establishment overhead.
-                RouterInfo ri = rctx.netDb().lookupRouterInfoLocally(peer);
+                RouterInfo ri = lookupRouterInfoUnvalidated(rctx, peer);
                 if (ri == null) continue;
                 long lifetime = now + 30*1000L;
                 DatabaseLookupMessage dlm = new DatabaseLookupMessage(rctx, true);

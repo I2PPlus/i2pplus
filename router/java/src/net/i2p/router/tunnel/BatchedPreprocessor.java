@@ -45,6 +45,18 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     private long _pendingDelay;
     private final String _name;
 
+    /**
+     *  Fragment number of each flushed message, accumulated over the flush and
+     *  reported as one mean sample.  Both stats here were sampled per
+     *  fragment, which is two stat lookups and two monitors per rate period
+     *  for every fragment leaving the gateway; both are means, so one sample
+     *  per flush reports the same quantity.
+     *  @since 0.9.71+
+     */
+    private final RateStatMeanBatch _fragmentationBatch = new RateStatMeanBatch();
+    /** Gateway lifetime of each flushed message, weight = its byte length. */
+    private final RateStatMeanBatch _writeDelayBatch = new RateStatMeanBatch();
+
     private static final boolean DEBUG = false;
 
     /** Minimum delay even under full pressure (ms) -- avoids busy-wait retry storms */
@@ -142,6 +154,28 @@ class BatchedPreprocessor extends TrivialPreprocessor {
     /* See TunnelGateway.QueuePreprocessor for Javadoc */
     @Override
     public boolean preprocessQueue(List<PendingGatewayMessage> pending, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {
+        // The flush has four exit points in the body below, so it is wrapped
+        // rather than repeated: the batches are per-flush accumulators, and
+        // anything left pending would be carried into the next flush and skew
+        // that one.
+        try {
+            return preprocessAndSend(pending, sender, rec);
+        } finally {
+            _fragmentationBatch.flush(_context, "tunnel.batchFragmentation");
+            _writeDelayBatch.flushWithEventDuration(_context, "tunnel.writeDelay");
+        }
+    }
+
+    /**
+     *  Body of {@link #preprocessQueue(List, TunnelGateway.Sender, TunnelGateway.Receiver)},
+     *  split out so the per-flush stat batches are flushed on every return path.
+     *
+     *  @param pending the list of pending messages
+     *  @param sender the sender
+     *  @param rec the receiver for preprocessed data
+     *  @return true if messages remain queued for a later flush
+     */
+    private boolean preprocessAndSend(List<PendingGatewayMessage> pending, TunnelGateway.Sender sender, TunnelGateway.Receiver rec) {
         if (_log.shouldInfo())
             display(0, pending, "Starting batching preprocessor...");
         StringBuilder timingBuf;
@@ -224,8 +258,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                             timingBuf.append(" sent ").append(cur);
                         if (DEBUG)
                             notePreprocessing(cur.getMessageId(), cur.getFragmentNumber(), cur.getData().length, cur.getMessageIds(), "flushed allocated");
-                        _context.statManager().addRateData("tunnel.batchFragmentation", cur.getFragmentNumber() + 1);
-                        _context.statManager().addRateData("tunnel.writeDelay", cur.getLifetime(), cur.getData().length);
+                        _fragmentationBatch.add(cur.getFragmentNumber() + 1);
+                        _writeDelayBatch.add(cur.getLifetime(), cur.getData().length);
                     }
                     if (msg.getOffset() >= msg.getData().length) {
                         // ok, this last message fit perfectly, remove it too
@@ -234,8 +268,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                             timingBuf.append(" sent perfect fit ").append(cur).append(".");
                         if (DEBUG)
                             notePreprocessing(cur.getMessageId(), cur.getFragmentNumber(), msg.getData().length, msg.getMessageIds(), "flushed tail, remaining: " + pending);
-                        _context.statManager().addRateData("tunnel.batchFragmentation", cur.getFragmentNumber() + 1);
-                        _context.statManager().addRateData("tunnel.writeDelay", cur.getLifetime(), cur.getData().length);
+                        _fragmentationBatch.add(cur.getFragmentNumber() + 1);
+                        _writeDelayBatch.add(cur.getLifetime(), cur.getData().length);
                     }
                     if (i > 0)
                         _context.statManager().addRateData("tunnel.batchMultipleCount", (long) i+1);
@@ -291,8 +325,8 @@ class BatchedPreprocessor extends TrivialPreprocessor {
                         pending.remove(0);
                         if (DEBUG)
                             notePreprocessing(cur.getMessageId(), cur.getFragmentNumber(), cur.getData().length, cur.getMessageIds(), "flushed remaining");
-                        _context.statManager().addRateData("tunnel.batchFragmentation", cur.getFragmentNumber() + 1);
-                        _context.statManager().addRateData("tunnel.writeDelay", cur.getLifetime(), cur.getData().length);
+                        _fragmentationBatch.add(cur.getFragmentNumber() + 1);
+                        _writeDelayBatch.add(cur.getLifetime(), cur.getData().length);
                     }
 
                     if (!pending.isEmpty()) {

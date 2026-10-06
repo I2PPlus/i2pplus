@@ -108,6 +108,12 @@ public class PeerProfile {
     private final float[] _peakTunnelThroughput = new float[THROUGHPUT_COUNT];
     /** Total number of bytes pushed through a single tunnel in a 1 minute period. */
     private final float[] _peakTunnel1mThroughput = new float[THROUGHPUT_COUNT];
+    /**
+     * Monitor guarding {@link #_peakTunnel1mThroughput}. Private and final so
+     * it cannot be locked from outside, unlike the array itself.
+     * @since 0.9.71+
+     */
+    private final Object _peakTunnel1mLock = new Object();
     private long _lastTestStarted;
     private volatile long _lastThroughputUpdate;
     private long _lastCoalesceDate = System.currentTimeMillis();
@@ -987,9 +993,10 @@ public class PeerProfile {
     /**
      * Record data pushed through this peer.
      *
-     * @param size the number of bytes pushed
+     * @param size the number of bytes pushed; long because the running total is
+     *        a long and a per-period sum can exceed Integer.MAX_VALUE
      */
-    void dataPushed(int size) {_peakThroughputCurrentTotal.addAndGet(size);}
+    void dataPushed(long size) {_peakThroughputCurrentTotal.addAndGet(size);}
 
     /**
      * The tunnel pushed that much data in its lifetime.
@@ -1038,13 +1045,19 @@ public class PeerProfile {
     /**
      * The tunnel pushed that much data in a 1 minute period.
      *
-     * @param size the number of bytes in that minute
+     * @param size the number of bytes in that minute, normalized; comparisons
+     *        against the float ring widen, so the stored KBps average is unaffected
      */
-    void dataPushed1m(int size) {
+    void dataPushed1m(long size) {
         _lastThroughputUpdate = _context.clock().now();
         float lowPeak = _peakTunnel1mThroughput[THROUGHPUT_COUNT-1];
         if (size > lowPeak) {
-            synchronized (_peakTunnel1mThroughput) {
+            // Monitor a dedicated, private object rather than the float array.
+            // Synchronizing on the array both exposes a mutable object as a
+            // lock (any other holder of that reference could lock it) and read
+            // the last slot outside the lock above, so the value that gated the
+            // update was not the value the update compared against.
+            synchronized (_peakTunnel1mLock) {
                 for (int i = 0; i < THROUGHPUT_COUNT; i++) {
                     if (size > _peakTunnel1mThroughput[i]) {
                         for (int j = THROUGHPUT_COUNT-1; j > i; j--)
@@ -1053,17 +1066,17 @@ public class PeerProfile {
                         break;
                     }
                 }
-            }
 
-            if (_log.shouldDebug() ) {
-                StringBuilder buf = new StringBuilder(128);
-                buf.append("1 minute throughput for [");
-                buf.append(_peer.toBase64().substring(0,6));
-                buf.append("] updated after ").append(size).append(" bytes sent \n* Measured: ");
-                for (int i = 0; i < THROUGHPUT_COUNT; i++) {
-                    buf.append(_peakTunnel1mThroughput[i]).append(" ");
+                if (_log.shouldDebug() ) {
+                    StringBuilder buf = new StringBuilder(128);
+                    buf.append("1 minute throughput for [");
+                    buf.append(_peer.toBase64().substring(0,6));
+                    buf.append("] updated after ").append(size).append(" bytes sent \n* Measured: ");
+                    for (int i = 0; i < THROUGHPUT_COUNT; i++) {
+                        buf.append(_peakTunnel1mThroughput[i]).append(" ");
+                    }
+                    _log.debug(buf.toString());
                 }
-                _log.debug(buf.toString());
             }
         }
     }
@@ -1078,7 +1091,9 @@ public class PeerProfile {
      */
     public float getPeakTunnel1mThroughputKBps() {
         float rv = 0;
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnel1mThroughput[i];}
+        synchronized (_peakTunnel1mLock) {
+            for (int i = 0; i < THROUGHPUT_COUNT; i++) {rv += _peakTunnel1mThroughput[i];}
+        }
         rv /= (60 * 1024L * THROUGHPUT_COUNT);
         return rv;
     }
@@ -1091,7 +1106,9 @@ public class PeerProfile {
     void setPeakTunnel1mThroughputKBps(float kBps) {
         // Set all so the average remains the same
         float speed = kBps * (60 * 1024);
-        for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
+        synchronized (_peakTunnel1mLock) {
+            for (int i = 0; i < THROUGHPUT_COUNT; i++) {_peakTunnel1mThroughput[i] = speed;}
+        }
     }
 
     /**

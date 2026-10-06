@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel;
 
 import net.i2p.data.Hash;
-import net.i2p.router.ProfileManager;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
@@ -74,14 +73,14 @@ class InboundEndpointProcessor {
         decrypt(_context, _config, orig, offset, length);
 
         if (_config.getLength() > 0) {
-            int rtt = 0; // dunno... may not be related to an rtt
-            ProfileManager pm = _context.profileManager();
-            // null for unit tests
-            if (pm != null) {
-                for (int i = 0; i < _config.getLength(); i++) {
-                    pm.tunnelDataPushed(_config.getPeer(i), rtt, length);
-                }
-            }
+            // The per-hop profile crediting that used to sit here moved into
+            // TunnelCreatorConfig.coalescePeakThroughput(), which totals the
+            // same bytes over a one minute window and then credits each hop
+            // once. PeerProfile.dataPushed() is a plain counter add, so the
+            // per-fragment loop and the per-minute flush accumulate identical
+            // totals - but the loop cost a ProfileManager probe (and a
+            // RouterInfo hash compare) per hop per 1KB fragment, the hottest
+            // path in the router. This call does both totals.
             _config.incrementVerifiedBytesTransferred(length);
             _config.recordRealTraffic();
         }

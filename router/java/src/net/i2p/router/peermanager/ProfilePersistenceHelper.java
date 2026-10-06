@@ -86,7 +86,6 @@ class ProfilePersistenceHelper {
      */
     private void setStoredProfileCount(int count) {
         _storedProfileCount = count;
-        _context.statManager().addRateData(STAT_STORED_PROFILES, count, 0L);
     }
 
     /**

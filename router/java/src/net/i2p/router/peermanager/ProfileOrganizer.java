@@ -18,10 +18,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterAddress;
@@ -73,6 +76,32 @@ public class ProfileOrganizer {
      * Maintained exclusively via {@link #putFastPeer} and {@link #removeFastPeer}.
      */
     private int _fastQualityCount;
+
+    /**
+     * Last values published by {@link #reorganize(boolean)}, sampled by
+     * CoalesceStatsEvent on the short cycle. Plain reads are enough: these are
+     * gauges that hold their last level, and a torn pair would at worst report a
+     * count from the previous reorganisation.
+     */
+    private volatile int _profileCount;
+    /** @see #_profileCount */
+    private volatile int _qualityCount;
+
+    /**
+     * Profiles held in RAM, as of the last completed reorganisation.
+     *
+     * @return the in-RAM profile count
+     * @since 0.9.72
+     */
+    public int getProfileCount() {return _profileCount;}
+
+    /**
+     * Peers passing the quality gates, as of the last completed reorganisation.
+     *
+     * @return the quality peer count
+     * @since 0.9.72
+     */
+    public int getQualityCount() {return _qualityCount;}
 
     /** True when a peer in the fast tier has proven throughput or is in the high-cap tier. */
     private static boolean isQualityFastPeer(PeerProfile profile, Map<Hash, PeerProfile> highCap) {
@@ -325,6 +354,14 @@ public class ProfileOrganizer {
     private static final float LOSSY_SELECTION_PENALTY = 4.0f;
 
     /**
+     * Latency used as a peer's selection weight when it has no measured
+     * peer-test average. The widest weight means the widest priority range,
+     * so an unmeasured peer is drawn last.
+     * @since 0.9.71+
+     */
+    private static final float DEFAULT_PRIORITY_LATENCY_MS = 5000f;
+
+    /**
      * Adaptive absolute-RTT ceiling for fast-tier selection. The fast tier is a
      * relative ranking (top N% by speed), so on a degraded network its members
      * can still sit at high absolute latency and intermittently drop build
@@ -416,11 +453,13 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.profileCount", "Stored in RAM", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.activeProfileCount", "Number of active peer profiles", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.fastPeerCount", "Number of fast-tier peers", "Peers", RATES);
-        // peer.fastPeerCount and router.fastPeers (CoalesceStatsEvent) are fed from the same
-        // _fastPeers set, as are peer.highCapPeerCount and router.highCapacityPeers. Both are
-        // kept because each appears on /configstats and dropping one would break saved graph
-        // selections. Never place both members of a pair in one combined graph: they would
-        // plot on top of each other.
+        // peer.fastPeerCount and router.fastPeers are fed from the same
+        // _fastPeers set, as are peer.highCapPeerCount and router.highCapacityPeers, and
+        // CoalesceStatsEvent feeds both members of each pair on its short cycle so the
+        // one-minute window is always covered. Both are kept because each appears on
+        // /configstats and dropping one would break saved graph selections. Never place
+        // both members of a pair in one combined graph: they would plot on top of
+        // each other.
         _context.statManager().createRequiredRateStat("peer.highCapPeerCount", "Number of high-capacity peers", "Peers", RATES);
         // The union of the two tiers. A peer can be both fast and high-capacity, so neither
         // count contains the other and the sum over-counts; this is what the "Fast" series
@@ -794,7 +833,7 @@ public class ProfileOrganizer {
         double buildSuccess = getTunnelBuildSuccess();
         getReadLock();
         try {lockedSelectPeers(_fastPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess));}
-        finally {releaseReadLock();}
+        finally {releaseReadLock(); flushSelectionCounters();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
                 _log.debug("Need " + howMany + " Fast peers in tier -> " + matches.size() +
@@ -905,7 +944,7 @@ public class ProfileOrganizer {
              long cap = computeAdaptiveRttCeiling(_thresholdRTT, buildSuccess) * 2;
              long rttCeiling = Math.min(cap, AUTO_RTT_CAP_MS);
              lockedSelectPeers(_highCapacityPeers, howMany, exclude, matches, mask, ipSet, buildSuccess, rttCeiling);
-         } finally {releaseReadLock();}
+         } finally {releaseReadLock(); flushSelectionCounters();}
         if (matches.size() < howMany) {
             if (_log.shouldDebug()) {
                 _log.debug("Need " + (howMany > 1 ? "High Capacity peers" : "High Capacity peer") +
@@ -1013,7 +1052,7 @@ public class ProfileOrganizer {
                 double buildSuccess = getTunnelBuildSuccess();
                 getReadLock();
                 try {lockedSelectActive(connected, howMany, exclude, matches, mask, ipSet, buildSuccess);}
-                finally {releaseReadLock();}
+                finally {releaseReadLock(); flushSelectionCounters();}
             }
         }
     }
@@ -1050,7 +1089,7 @@ public class ProfileOrganizer {
                 }
             }
             return true;
-        } finally {releaseReadLock();}
+        } finally {releaseReadLock(); flushSelectionCounters();}
     }
 
     /**
@@ -1105,13 +1144,12 @@ public class ProfileOrganizer {
                     Hash cur = iter.next();
                     if (matches.contains(cur) || (exclude != null && exclude.contains(cur))) continue;
                     if (onlyNotFailing && _highCapacityPeers.containsKey(cur)) continue;
-                    if (!passesBasicGates(cur) || hasExcessiveLifetimeFailures(cur)) continue;
-                    RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(cur);
+                    PeerProfile profile = _notFailingPeers.get(cur);
+                    if (!passesBasicGates(cur) || isExcessiveLifetimeFailure(profile)) continue;
+                    RouterInfo info = lookupRouterInfoUnvalidated(cur);
                     if (info != null) {
-                        String tier = DataHelper.stripHTML(info.getBandwidthTier());
-                        if ("O".equals(tier) || "P".equals(tier) || "X".equals(tier)) {
+                        if (isHighBandwidthTierName(DataHelper.stripHTML(info.getBandwidthTier()))) {
                             // Reliability check: skip peers with low acceptance or no recent activity
-                            PeerProfile profile = _notFailingPeers.get(cur);
                             if (profile != null && !isReliableBandwidthPeer(profile, now,
                                                                             _context.commSystem().isEstablished(cur))) {
                                 continue;
@@ -1127,6 +1165,7 @@ public class ProfileOrganizer {
                 }
             } finally {
                 releaseReadLock();
+                flushSelectionCounters();
             }
             matches.addAll(selected);
         }
@@ -1260,6 +1299,7 @@ public class ProfileOrganizer {
                 }
             } finally {
                 releaseReadLock();
+                flushSelectionCounters();
             }
             matches.addAll(selected);
         }
@@ -1285,10 +1325,14 @@ public class ProfileOrganizer {
         }
 
         Set<Hash> allPeers = selectAllPeers();
-        for (Hash peer : allPeers) {
-            if (matches.size() >= howMany) break;
-            if (matches.contains(peer) || (exclude != null && exclude.contains(peer))) continue;
-            if (isSelectable(peer, buildSuccess)) matches.add(peer);
+        try {
+            for (Hash peer : allPeers) {
+                if (matches.size() >= howMany) break;
+                if (matches.contains(peer) || (exclude != null && exclude.contains(peer))) continue;
+                if (isSelectable(peer, buildSuccess)) matches.add(peer);
+            }
+        } finally {
+            flushSelectionCounters();
         }
     }
 
@@ -1445,16 +1489,27 @@ public class ProfileOrganizer {
         if (transports.isEmpty()) {return 0;}
         long now = _context.clock().now();
         int sampled = 0;
+        long rttSum = 0;
+        long rttCount = 0;
         getReadLock();
         try {
-            for (PeerProfile profile : _fastPeers.values()) {
-                if (sampleFirstHopRtt(profile, transports, now)) {sampled++;}
-            }
-            for (PeerProfile profile : _highCapacityPeers.values()) {
-                if (sampleFirstHopRtt(profile, transports, now)) {sampled++;}
+            for (PeerProfile profile : sampleTierPeers()) {
+                int rtt = sampleFirstHopRtt(profile, transports, now);
+                if (rtt > 0) {
+                    sampled++;
+                    rttSum += rtt;
+                    rttCount++;
+                }
             }
         } finally {
             releaseReadLock();
+        }
+        // One stat sample per cycle carrying the cycle mean, not one per sampled
+        // peer: the rate's consumers (console, jrobin) plot the average, so only
+        // the within-cycle spread is lost.
+        if (rttCount > 0) {
+            _context.statManager().addRateData("tunnel.firstHopRtt",
+                                              Math.round(rttSum / (double) rttCount));
         }
         if (sampled > 0 && _log.shouldDebug()) {
             _log.debug("Sampled first hop RTT for " + sampled + " tier peers");
@@ -1463,28 +1518,69 @@ public class ProfileOrganizer {
     }
 
     /**
-     *  Record the best RTT any transport reports for this peer, if any.
+     *  Bounded random sample of the tier peers for RTT measurement, capped at
+     *  {@link #DEFAULT_MIN_CANDIDATE_SAMPLE} with a rotated start so successive
+     *  cycles do not always read the same prefix.
      *
-     * @return true if a measurement was recorded
+     *  <p>Sampling is safe here because a peer's RTT is a property of its transport
+     *  session, not an accumulator: a peer missed this cycle is measured in a
+     *  later one.
+     *
+     *  @return the sampled profiles, at most {@link #sampleFirstHopRttLimit(int)}
+     *  @since 0.9.71+
      */
-    private boolean sampleFirstHopRtt(PeerProfile profile, Collection<Transport> transports, long now) {
-        if (profile == null) {return false;}
+    private List<PeerProfile> sampleTierPeers() {
+        int fast = _fastPeers.size();
+        int highCap = _highCapacityPeers.size();
+        int total = fast + highCap;
+        int limit = sampleFirstHopRttLimit(total);
+        List<PeerProfile> sample = new ArrayList<>(Math.min(limit, total));
+        if (total == 0) return sample;
+        int offset = ThreadLocalRandom.current().nextInt(total);
+        int idx = 0;
+        for (PeerProfile profile : _fastPeers.values()) {
+            if (sample.size() >= limit) break;
+            if (((idx++ - offset) % total + total) % total < limit) sample.add(profile);
+        }
+        for (PeerProfile profile : _highCapacityPeers.values()) {
+            if (sample.size() >= limit) break;
+            if (((idx++ - offset) % total + total) % total < limit) sample.add(profile);
+        }
+        return sample;
+    }
+
+    /**
+     *  How many tier peers to sample for first-hop RTT in one reorganize.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param total combined size of the two tiers
+     *  @return the sample size, never negative
+     *  @since 0.9.71+
+     */
+    static int sampleFirstHopRttLimit(int total) {
+        if (total <= 0) return 0;
+        return Math.min(total, DEFAULT_MIN_CANDIDATE_SAMPLE);
+    }
+
+    /**
+     * Record the best RTT any transport reports for this peer, if any.
+     *
+     * @return the recorded RTT in ms, or 0 if there was no measurement
+     */
+    private int sampleFirstHopRtt(PeerProfile profile, Collection<Transport> transports, long now) {
+        if (profile == null) {return 0;}
         Hash peer = profile.getPeer();
-        if (peer == null) {return false;}
+        if (peer == null) {return 0;}
         int best = 0;
         for (Transport transport : transports) {
             int rtt = transport.getEstimatedRTT(peer);
             if (rtt > best) {best = rtt;}
         }
-        if (best <= 0) {return false;}
+        if (best <= 0) {return 0;}
         profile.setFirstHopRtt(best, now);
-        // Same stat the pre-connect path records, so the graph reflects the
-        // sampler too. Without it the console only ever showed measurements
-        // taken at pre-connect, which is the smaller of the two sources and the
-        // one that used to read a freshly created session as zero.
-        _context.statManager().addRateData("tunnel.firstHopRtt", best);
         profile.recalculateLowLatency();
-        return true;
+        return best;
     }
 
     /**
@@ -1510,6 +1606,27 @@ public class ProfileOrganizer {
             if (larger.containsKey(peer)) {overlap++;}
         }
         return _fastPeers.size() + _highCapacityPeers.size() - overlap;
+    }
+
+    /**
+     *  Live size of the fast or high-capacity union, a peer in both tiers counted
+     *  once.  Read-locked, so it is safe to call outside a coalesce pass.
+     *
+     *  <p>Callers that already hold the write lock — {@code reorganize()} — must
+     *  call the package-visible {@link #fastOrHighCapCount()} directly; going
+     *  through this accessor would re-enter the lock.
+     *
+     *  @return size of the union of the two tiers
+     *  @see #fastOrHighCapCount()
+     *  @since 0.9.71+
+     */
+    public int getFastOrHighCapCount() {
+        getReadLock();
+        try {
+            return fastOrHighCapCount();
+        } finally {
+            releaseReadLock();
+        }
     }
 
     void reorganize(boolean shouldCoalesce) {
@@ -1584,7 +1701,8 @@ public class ProfileOrganizer {
                         estimatedExpired++;
                     }
                 }
-                _context.statManager().addRateData("peer.profileEstimatedExpired", estimatedExpired, 0);
+                // peer.profileEstimatedExpired is never registered, so recording it here was a
+                // silent no-op; leave it uncounted rather than half-wire a dead stat.
             } finally {
                 releaseReadLock();
             }
@@ -1612,9 +1730,12 @@ public class ProfileOrganizer {
             double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
             double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder, now, newCapacityThreshold);
 
-            // Step 3: Preserve existing maps as fallback, then clear and rebuild
-            Map<Hash, PeerProfile> oldFastPeers = new HashMap<>(_fastPeers);
-            Map<Hash, PeerProfile> oldHighCapPeers = new HashMap<>(_highCapacityPeers);
+            // Step 3: Snapshot the old tier memberships as the restore fallback, then
+            // clear and rebuild. Keys only: a peer still in _notFailingPeers after
+            // the rebuild is by construction the same PeerProfile instance the
+            // old map held.
+            Set<Hash> oldFastPeers = new HashSet<>(_fastPeers.keySet());
+            Set<Hash> oldHighCapPeers = new HashSet<>(_highCapacityPeers.keySet());
             _fastPeers.clear();
             _fastQualityCount = 0;
             _highCapacityPeers.clear();
@@ -1666,19 +1787,16 @@ public class ProfileOrganizer {
 
             long total = System.currentTimeMillis() - start;
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
-            _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
-            // peer.profileCount was created but never fed, so it read zero everywhere:
-            // the stored-profiles graph plotted a flat line, and the console sidebar
-            // divides by it to show the active share, which therefore always showed as
-            // unavailable. Same value as peer.activeProfileCount, which is the in-RAM
-            // profile count at this point in the reorganisation.
-            _context.statManager().addRateData("peer.profileCount", profileCount, 0);
-            _context.statManager().addRateData("peer.fastPeerCount", _fastPeers.size(), 0);
-            _context.statManager().addRateData("peer.highCapPeerCount", _highCapacityPeers.size(), 0);
-            _context.statManager().addRateData("peer.fastOrHighCapProfileCount",
-                    fastOrHighCapCount(), 0);
-            _context.statManager().addRateData("peer.qualityPeerCount", qualityCount, 0);
-            _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
+            // Publish the reorganisation's gauges for CoalesceStatsEvent to sample.
+            // They used to be recorded here, but reorganize() runs every 30-250s
+            // (REORGANIZE_TIME_LONG once uptime passes 2h) while RATES starts at
+            // ONE_MINUTE, so an instant sample landed in only ~24% of completed
+            // one-minute windows and the rest read zero events - a gauge must hold
+            // its last level, not go blank. peer.activeProfileCount is peer.profileCount
+            // (the in-RAM profile count), so both share this value.
+            _profileCount = profileCount;
+            _qualityCount = qualityCount;
+            // peer.expiredProfileCount is likewise never registered; see above.
 
             // Step 10: Enforce memory cap
             enforceProfileCap();
@@ -1826,8 +1944,10 @@ public class ProfileOrganizer {
     boolean passesTierGates(PeerProfile profile, double buildSuccess, long now) {
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
+        // The profile is already in hand, so the failure check takes it directly
+        // rather than re-probing the map.
         return passesBasicGates(profile.getPeer()) &&
-               !hasExcessiveLifetimeFailures(profile.getPeer()) &&
+               !isExcessiveLifetimeFailure(profile) &&
                !isLowTunnelAcceptance(profile, buildSuccess, now) &&
                !hasRecentTunnelFailures(profile) &&
                !inLossProbation(profile, now);
@@ -2123,7 +2243,7 @@ public class ProfileOrganizer {
         if (tier.containsKey(peer)) return false;
         // Use basic gates instead of isSelectable to avoid stale RouterInfo
         // proof-of-life filtering peers that were already vetted at tier entry.
-        if (!passesBasicGates(peer) || hasExcessiveLifetimeFailures(peer)) return false;
+        if (!passesBasicGates(peer) || isExcessiveLifetimeFailure(profile)) return false;
         if (hasRecentTunnelFailures(profile)) return false;
         if (highCap ? hasHighLoss(profile, now) : inLossProbation(profile, now)) return false;
         return !isLowTunnelAcceptance(profile, buildSuccess, now);
@@ -2133,17 +2253,22 @@ public class ProfileOrganizer {
      *  Re-adds preserved pre-reorganize tier entries when the rebuild shrank
      *  the tiers too much.  Must be called with the write lock held.
      */
-    private void restorePreservedPeers(long now, Map<Hash, PeerProfile> oldFastPeers,
-                                       Map<Hash, PeerProfile> oldHighCapPeers, double buildSuccess) {
+    private void restorePreservedPeers(long now, Set<Hash> oldFastPeers,
+                                       Set<Hash> oldHighCapPeers, double buildSuccess) {
         // Prevents starvation when thresholds shift unfavorably — old entries that remain
         // selectable (no recent failures, no ban, no stale RI) are re-added.
+        //
+        // The profile is re-read from _notFailingPeers rather than carried in the
+        // snapshot: a peer the rebuild dropped has nothing usable to restore, and
+        // skipping it stops this fallback from resurrecting a profile that expired
+        // or went unreachable in this very reorganize.
         int oldFastSize = oldFastPeers.size();
         if (needsTierRestore(_fastPeers.size(), oldFastSize)) {
             int restored = 0;
-            for (Map.Entry<Hash, PeerProfile> entry : oldFastPeers.entrySet()) {
+            for (Hash peer : oldFastPeers) {
                 if (_fastPeers.size() >= oldFastSize) break;
-                Hash peer = entry.getKey();
-                PeerProfile profile = entry.getValue();
+                PeerProfile profile = lockedGetProfile(peer);
+                if (profile == null) continue;
                 if (isFastTierCapable(peer) &&
                     isRestorableTierPeer(peer, profile, _fastPeers, buildSuccess, now, false)) {
                     putFastPeer(peer, profile);
@@ -2159,10 +2284,10 @@ public class ProfileOrganizer {
         int oldHighCapSize = oldHighCapPeers.size();
         if (needsTierRestore(_highCapacityPeers.size(), oldHighCapSize)) {
             int restored = 0;
-            for (Map.Entry<Hash, PeerProfile> entry : oldHighCapPeers.entrySet()) {
+            for (Hash peer : oldHighCapPeers) {
                 if (_highCapacityPeers.size() >= oldHighCapSize) break;
-                Hash peer = entry.getKey();
-                PeerProfile profile = entry.getValue();
+                PeerProfile profile = lockedGetProfile(peer);
+                if (profile == null) continue;
                 if (isHighBandwidthCapable(peer) &&
                     isRestorableTierPeer(peer, profile, _highCapacityPeers, buildSuccess, now, true)) {
                     _highCapacityPeers.put(peer, profile);
@@ -2197,6 +2322,14 @@ public class ProfileOrganizer {
     public void purgeStaleProfileFiles() {
         int maxProfiles = ABSOLUTE_MAX_PROFILES;
 
+        // selectAllPeers() materializes every tracked hash and purgeExcessProfiles()
+        // only acts above the cap, so skip both while the known on-disk count is
+        // well under it. The 10% margin covers the count being stale: it is
+        // refreshed only on the store/load/delete cycle (every STORE_TIME, 15
+        // min) while reorganize runs every 30-250s.
+        int stored = getStoredProfileCount();
+        if (stored > 0 && stored <= maxProfiles * 9 / 10) return;
+
         // Get all currently active peers (those we keep in memory)
         Set<Hash> activePeers = selectAllPeers(); // includes fast, high-cap, not-failing
 
@@ -2221,7 +2354,7 @@ public class ProfileOrganizer {
         }
         double meanCapacity = totalCapacity / totalPeers;
 
-        // Sort to find median and Nth peer
+        // One primitive sort, from which every order statistic below is read.
         Arrays.sort(capacities);
         int minHighCap = getMinimumHighCapacityPeers();
         double thresholdAtMedian = capacities[totalPeers / 2];
@@ -2229,12 +2362,33 @@ public class ProfileOrganizer {
             ? capacities[Math.min(minHighCap - 1, totalPeers - 1)]
             : CapacityCalculator.GROWTH_FACTOR;
         double thresholdAtLowest = capacities[totalPeers - 1];
-        int numExceedingMean = 0;
-        for (double v : capacities) {
-            if (v > meanCapacity) numExceedingMean++;
-        }
+        int numExceedingMean = countExceedingMean(capacities, meanCapacity);
         return calculateCapacityThreshold(meanCapacity, numExceedingMean, totalPeers,
                                        thresholdAtMedian, thresholdAtMinHighCap, thresholdAtLowest);
+    }
+
+    /**
+     *  How many of the given capacities are strictly above the mean.
+     *
+     *  <p>Scanned rather than derived from an index into the sorted array: the
+     *  mean is a repeated value whenever capacities cluster, and
+     *  {@code Arrays.binarySearch} returns only <em>some</em> index among equal
+     *  entries, so an index-derived count silently includes peers whose capacity
+     *  merely equals the mean and can flip the {@code >= minHighCap} branch.
+     *  The scan is over a primitive array the sort above already walked.
+     *
+     *  @param capacities the capacities; the caller holds them sorted, but the
+     *         count does not depend on their order
+     *  @param meanCapacity the mean to compare against
+     *  @return the number of entries greater than the mean, never negative
+     *  @since 0.9.71+
+     */
+    static int countExceedingMean(double[] capacities, double meanCapacity) {
+        int numExceedingMean = 0;
+        for (double capacity : capacities) {
+            if (capacity > meanCapacity) numExceedingMean++;
+        }
+        return numExceedingMean;
     }
 
     /**
@@ -2434,21 +2588,11 @@ public class ProfileOrganizer {
     }
 
     private double calculateSpeedThreshold(Set<PeerProfile> reordered, long now, double capacityThreshold) {
-        List<PeerProfile> candidates = new ArrayList<>();
-        for (PeerProfile profile : reordered) {
-            if (profile.getCapacityValue() >= capacityThreshold && profile.getIsActive(now)) {
-                candidates.add(profile);
-            }
-        }
-
-        if (candidates.isEmpty()) return 0;
-
-        // Sort by speed descending
-        candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
-        int cutoff = Math.min((int)(candidates.size() * 0.3), 50); // Top 30% or 50 peers
+        PeerProfile boundary = selectSpeedBoundary(reordered, now, capacityThreshold);
+        if (boundary == null) return 0;
 
         // Record the boundary peer's measured latency for display and diagnostics
-        _thresholdRTT = candidates.get(cutoff).getTunnelTestTimeAverage();
+        _thresholdRTT = boundary.getTunnelTestTimeAverage();
         // Capture the baseline RTT on the first reorganize pass.  This is used
         // to floor the adaptive ceiling when the network is degraded, preventing
         // RTT ceiling amplification where the ceiling rises with the network
@@ -2456,7 +2600,160 @@ public class ProfileOrganizer {
         if (_baselineRTT <= 0 && _thresholdRTT > 0) {
             _baselineRTT = _thresholdRTT;
         }
-        return candidates.get(cutoff).getSpeedValue();
+        return boundary.getSpeedValue();
+    }
+
+    /**
+     *  Rank boundary for the speed threshold: the top 30% of qualifying peers,
+     *  capped at 50.  0-based, so rank 0 is the fastest.
+     *  <p>
+     *  The qualifying count drives the rank, never the profile count: the profile
+     *  count is an order of magnitude larger and would pin the rank at the cap,
+     *  asking for a peer that does not exist.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param qualifyingCount number of peers that passed the capacity and activity gates
+     *  @return the rank to read the boundary peer from, or 0 for an empty set
+     *  @since 0.9.71+
+     */
+    static int speedThresholdCutoff(int qualifyingCount) {
+        if (qualifyingCount <= 0) return 0;
+        return Math.min((int) (qualifyingCount * 0.3), 50);
+    }
+
+    /**
+     *  The profile whose speed becomes the speed threshold: the one at rank
+     *  {@link #speedThresholdCutoff(int)} of the qualifying set, ranked fastest
+     *  first.  Only that one profile is ever read, and the rank is capped at 50,
+     *  so a bounded top-K selection replaces a full sort of every profile.
+     *
+     *  @param profiles candidates, not necessarily sorted
+     *  @param now current time in ms, for the activity test
+     *  @param capacityThreshold minimum capacity to qualify
+     *  @return the boundary profile, or null if none qualifies
+     *  @since 0.9.71+
+     */
+    static PeerProfile selectSpeedBoundary(Collection<PeerProfile> profiles, long now,
+                                           double capacityThreshold) {
+        int qualifying = countQualifying(profiles, now, capacityThreshold);
+        if (qualifying == 0) return null;
+        return selectNthFastest(profiles, now, capacityThreshold, speedThresholdCutoff(qualifying) + 1);
+    }
+
+    /**
+     *  Whether a profile qualifies for the speed-threshold ranking: enough
+     *  capacity to count and recently active.  One definition, shared by the
+     *  qualifying count and the bounded selection so the two passes cannot
+     *  disagree about who is in the set.
+     *
+     *  @param profile the profile to test
+     *  @param now current time in ms, for the activity test
+     *  @param capacityThreshold minimum capacity to qualify
+     *  @return true if the profile takes part in the speed ranking
+     *  @since 0.9.71+
+     */
+    private static boolean qualifiesForSpeedRank(PeerProfile profile, long now, double capacityThreshold) {
+        return profile.getCapacityValue() >= capacityThreshold && profile.getIsActive(now);
+    }
+
+    /**
+     *  How many of the given profiles qualify for the speed-threshold ranking.
+     *  The rank read from the ranked set is a fraction of this count, not of the
+     *  profile count, so it has to be known before the boundary is selected.
+     *
+     *  @param profiles candidates, not necessarily sorted
+     *  @param now current time in ms, for the activity test
+     *  @param capacityThreshold minimum capacity to qualify
+     *  @return the qualifying count, never negative
+     *  @since 0.9.71+
+     */
+    static int countQualifying(Collection<PeerProfile> profiles, long now, double capacityThreshold) {
+        int qualifying = 0;
+        for (PeerProfile profile : profiles) {
+            if (qualifiesForSpeedRank(profile, now, capacityThreshold)) qualifying++;
+        }
+        return qualifying;
+    }
+
+    /**
+     *  Select the {@code k}-th fastest qualifying profile (1-based) without
+     *  sorting the whole candidate set.
+     *
+     *  <p>Holds the {@code k} fastest profiles seen so far in an unsorted bounded
+     *  array plus the index of the slowest: a slower profile is discarded in
+     *  O(1), one that displaces the slowest costs a {@code k}-element rescan.
+     *  Worst case O(n·k), and {@code k} is at most 51 for the only caller.
+     *
+     *  <p>Ties in speed may resolve to a different peer of equal speed than a
+     *  full sort would have picked; only the boundary value is read.
+     *
+     *  @param profiles candidates, not necessarily sorted
+     *  @param now current time in ms, for the activity test
+     *  @param capacityThreshold minimum capacity to qualify
+     *  @param k how many of the fastest to keep, 1-based
+     *  @return the k-th fastest qualifying profile, or null if fewer than k qualify
+     *  @since 0.9.71+
+     */
+    static PeerProfile selectNthFastest(Collection<PeerProfile> profiles, long now,
+                                        double capacityThreshold, int k) {
+        if (k <= 0) return null;
+        PeerProfile[] top = new PeerProfile[k];
+        double[] speeds = new double[k];
+        int size = 0;
+        // Index of the slowest kept profile. Rescanning for it keeps the loop a
+        // straight scan, which is cheaper than a sift at k <= 51.
+        int slowest = -1;
+        for (PeerProfile profile : profiles) {
+            if (!qualifiesForSpeedRank(profile, now, capacityThreshold)) continue;
+            double speed = profile.getSpeedValue();
+            if (size < k) {
+                top[size] = profile;
+                speeds[size] = speed;
+                if (slowest < 0 || speed < speeds[slowest]) slowest = size;
+                size++;
+                continue;
+            }
+            if (speed <= speeds[slowest]) continue;
+            top[slowest] = profile;
+            speeds[slowest] = speed;
+            int next = 0;
+            for (int i = 1; i < k; i++) {
+                if (speeds[i] < speeds[next]) next = i;
+            }
+            slowest = next;
+        }
+        // The k-th fastest is the slowest of the k kept.
+        return size < k ? null : top[slowest];
+    }
+
+    /**
+     *  Fetch a peer's local RouterInfo without re-running the network database's
+     *  {@code validate()}.
+     *
+     *  <p>Every caller here reads raw RouterInfo content (tier, capabilities,
+     *  addresses) and applies its own gate, so nothing depends on validation
+     *  rejecting an entry that is present — it already ran when the entry was
+     *  stored.  Callers must not use this to evict: the validating lookup's
+     *  failure path calls {@code fail(key)}, which is the netDb's job.
+     *
+     *  <p>Falls back to {@code lookupRouterInfoLocally} on a miss, needed only
+     *  for {@code DummyNetworkDatabaseFacade}: it serves
+     *  {@code lookupRouterInfoLocally} from its own map and returns null from
+     *  {@code lookupLocallyWithoutValidation}.
+     *
+     *  @param peer the peer hash
+     *  @return the local RouterInfo, or null if absent or not a RouterInfo
+     *  @since 0.9.71+
+     */
+    private RouterInfo lookupRouterInfoUnvalidated(Hash peer) {
+        NetworkDatabaseFacade netDb = _context.netDb();
+        if (netDb == null) return null;
+        DatabaseEntry ds = netDb.lookupLocallyWithoutValidation(peer);
+        if (ds != null) {
+            return ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO ? (RouterInfo) ds : null;
+        }
+        return netDb.lookupRouterInfoLocally(peer);
     }
 
     /**
@@ -2467,7 +2764,7 @@ public class ProfileOrganizer {
      *  @since 0.9.70+
      */
     boolean isExcludedFromProfiling(Hash peer) {
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
         if (peerInfo == null) return true;
         String caps = peerInfo.getCapabilities();
         return caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
@@ -2480,9 +2777,21 @@ public class ProfileOrganizer {
      *  @since 0.9.70+
      */
     boolean isLowBandwidthTier(Hash peer) {
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
         if (peerInfo == null) return true; // no RouterInfo, assume low bandwidth
         String tier = peerInfo.getBandwidthTier();
+        return isLowBandwidthTierName(tier);
+    }
+
+    /**
+     *  Whether a bandwidth tier name is one of the tiers excluded from
+     *  profiling.  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param tier the advertised bandwidth tier
+     *  @return true for K, L, M, or Unknown
+     *  @since 0.9.71+
+     */
+    static boolean isLowBandwidthTierName(String tier) {
         return "K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier);
     }
 
@@ -2493,7 +2802,7 @@ public class ProfileOrganizer {
      *  @since 0.9.70+
      */
     private boolean isCongestedPeer(Hash peer) {
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
         if (peerInfo == null) return false;
         String caps = peerInfo.getCapabilities();
         return caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||
@@ -2515,28 +2824,57 @@ public class ProfileOrganizer {
      *  @since 0.9.71+
      */
     private boolean isHighBandwidthCapable(Hash peer) {
-        RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(peer);
+        RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
         if (peerInfo == null) return false;
-        String tier = peerInfo.getBandwidthTier();
-        if (!"X".equals(tier) && !"P".equals(tier) && !"O".equals(tier)) return false;
-        String caps = peerInfo.getCapabilities();
-        if (caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0) return false;
-        if (caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) >= 0) return false;
-        if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) return false;
-        if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) return false;
-        return true;
+        return qualifiesHighBandwidthTier(peerInfo.getBandwidthTier(), peerInfo.getCapabilities());
     }
 
     /**
-     *  Whether the peer qualifies for the fast tier based on advertised
-     *  bandwidth tier and capabilities.  Currently identical to
-     *  {@link #isHighBandwidthCapable(Hash)} — both tiers reject X/P/O
-     *  with D/E/G/U caps.  Kept separate so fast tier can diverge
-     *  (e.g. stricter RTT gate) in the future.
+     *  Whether a bandwidth tier and capability string together qualify the peer
+     *  for the high-capacity / fast tiers: X/P/O tier and none of the D (moderate
+     *  congestion), E (severe congestion), G (no tunnels) or U (unreachable)
+     *  capability flags.
+     *  <p>
+     *  Pure decision — no context access, so a (tier, caps) pair already in hand
+     *  can be tested without a router.
      *
-     *  @param peer the peer to check
+     *  @param tier the advertised bandwidth tier
+     *  @param caps the peer's capability string
      *  @return true if X/P/O tier and no D/E/G/U caps
      *  @since 0.9.71+
+     */
+    static boolean qualifiesHighBandwidthTier(String tier, String caps) {
+        if (!"X".equals(tier) && !"P".equals(tier) && !"O".equals(tier)) return false;
+        if (caps == null) return true;
+        return caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) < 0 &&
+               caps.indexOf(Router.CAPABILITY_CONGESTION_SEVERE) < 0 &&
+               caps.indexOf(Router.CAPABILITY_NO_TUNNELS) < 0 &&
+               caps.indexOf(Router.CAPABILITY_UNREACHABLE) < 0;
+    }
+
+    /**
+     * Whether a bandwidth tier is one of the high-capacity tiers (O, P, X).
+     * <p>
+     * Pure decision — no context access, safe for unit tests.
+     *
+     * @param tier the advertised bandwidth tier, already stripped of HTML
+     * @return true for O, P, or X
+     * @since 0.9.71+
+     */
+    static boolean isHighBandwidthTierName(String tier) {
+        return "O".equals(tier) || "P".equals(tier) || "X".equals(tier);
+    }
+
+    /**
+     * Whether the peer qualifies for the fast tier based on advertised
+     * bandwidth tier and capabilities.  Currently identical to
+     * {@link #isHighBandwidthCapable(Hash)} — both tiers reject X/P/O
+     * with D/E/G/U caps.  Kept separate so fast tier can diverge
+     * (e.g. stricter RTT gate) in the future.
+     *
+     * @param peer the peer to check
+     * @return true if X/P/O tier and no D/E/G/U caps
+     * @since 0.9.71+
      */
     private boolean isFastTierCapable(Hash peer) {
         return isHighBandwidthCapable(peer);
@@ -2708,7 +3046,9 @@ public class ProfileOrganizer {
             k1 = DataHelper.fromLong8(rk, 8);
         }
 
-        int start = peerCount > maxCandidates ? _context.random().nextInt(peerCount) : 0;
+        // One draw per scan. This is a scan-position offset, not a security-relevant
+        // value, so it needs no cryptographic generator.
+        int start = peerCount > maxCandidates ? ThreadLocalRandom.current().nextInt(peerCount) : 0;
         List<Map.Entry<Hash, PeerProfile>> candidates =
                 new ArrayList<Map.Entry<Hash, PeerProfile>>(Math.min(maxCandidates, peerCount));
         int examined = 0;
@@ -2755,7 +3095,8 @@ public class ProfileOrganizer {
                 skipGated++;
                 continue;
             }
-            if (hasExcessiveLifetimeFailures(peer)) {
+            // entry.getValue() is the profile; the Hash form re-probes the map for it.
+            if (isExcessiveLifetimeFailure(entry.getValue())) {
                 if (toExclude != null) toExclude.add(peer);
                 skipGated++;
                 continue;
@@ -2821,6 +3162,13 @@ public class ProfileOrganizer {
     /**
      *  Selects the lowest-priority candidates, penalizing moderately-lossy peers.
      *  Must be called with the read lock held.
+     *
+     *  <p>Both lossy thresholds are resolved once for the whole list rather than
+     *  per candidate.  The lottery draw uses {@link ThreadLocalRandom} rather
+     *  than {@code _context.random()}: it only breaks ties among peers that have
+     *  already passed every gate, so it carries no cryptographic requirement,
+     *  while {@code _context.random().nextFloat()} is a monitored read on the
+     *  process-wide Fortuna instance and serialized every concurrent selection.
      */
     private void lockedPickLowestPriority(List<Map.Entry<Hash, PeerProfile>> candidates, int howMany,
                                            Set<Hash> matches) {
@@ -2831,10 +3179,16 @@ public class ProfileOrganizer {
         int sz = candidates.size();
         float[] priority = new float[sz];
         long now = _context.clock().now();
+        float moderateThreshold = getModerateLossyThreshold(_context);
+        float demoteThreshold = getLossyThreshold(_context);
+        ThreadLocalRandom rnd = ThreadLocalRandom.current();
         for (int i = 0; i < sz; i++) {
-            float lat = candidates.get(i).getValue().getPeerTestTimeAverage();
-            float prio = _context.random().nextFloat() * (lat > 0 ? lat : 5000f);
-            if (isModeratelyLossy(candidates.get(i).getValue(), now)) {prio *= LOSSY_SELECTION_PENALTY;}
+            PeerProfile profile = candidates.get(i).getValue();
+            float lat = profile.getPeerTestTimeAverage();
+            float prio = rnd.nextFloat() * (lat > 0 ? lat : DEFAULT_PRIORITY_LATENCY_MS);
+            if (isModeratelyLossy(profile.getLossScore(now), moderateThreshold, demoteThreshold)) {
+                prio *= LOSSY_SELECTION_PENALTY;
+            }
             priority[i] = prio;
         }
         for (int s = 0; s < howMany && s < sz; s++) {
@@ -2850,10 +3204,22 @@ public class ProfileOrganizer {
         }
     }
 
+/**
+     *  Scan up to {@link #maxCandidateSample} established peers for the active
+     *  tier, in {@link RandomIterator} order so the peers examined differ from
+     *  call to call.  Capped for the same reason as {@link #lockedSelectPeers}:
+     *  one attempt's worth of lottery, not a walk of the whole list.
+     */
     private void lockedSelectActive(List<Hash> connected, int howMany, Set<Hash> toExclude,
                                     Set<Hash> matches, int mask, MaskedIPSet ipSet, double buildSuccess) {
-        for (Iterator<Hash> iter = new RandomIterator<>(connected); matches.size() < howMany && iter.hasNext(); ) {
+        int peerCount = connected.size();
+        int maxCandidates = maxCandidateSample(howMany, peerCount, getMinCandidateSample(_context));
+        if (maxCandidates <= 0) return;
+        int examined = 0;
+        for (Iterator<Hash> iter = new RandomIterator<>(connected);
+             matches.size() < howMany && examined < maxCandidates && iter.hasNext(); ) {
             Hash peer = iter.next();
+            examined++;
             if (toExclude != null && toExclude.contains(peer)) continue;
             if (matches.contains(peer)) continue;
             // Self-exclusion is handled by passesBasicGates, reached via
@@ -2870,13 +3236,93 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     *  Subnet-diversity gate: reject the peer if any of its masked addresses,
+     *  ports, or family option is already represented in {@code ipSet}, and
+     *  otherwise claim them.  Claimed in one pass rather than through a
+     *  throwaway {@link MaskedIPSet} that was then walked twice.
+     */
     private boolean notRestricted(Hash peer, MaskedIPSet ipSet, int mask) {
-        Set<String> peerIPs = new MaskedIPSet(_context, peer, mask);
-        if (ipSet.containsAny(peerIPs)) return false;
-        ipSet.addAll(peerIPs);
-        return true;
+        return addSameIPFingerprint(ipSet, peer, mask);
     }
 
+    /**
+     *  Claim a candidate's IP/port/family fingerprint in {@code keys},
+     *  reporting whether anything was already claimed.
+     *
+     *  <p>Load-bearing asymmetry: the peer is rejected if <em>any</em> of its keys
+     *  was already present, but <em>all</em> of its keys are added either way, so
+     *  a peer colliding on its last key still leaves its earlier keys claimed.
+     *  Claiming conditionally would make selection order-dependent.
+     */
+    private boolean addSameIPFingerprint(MaskedIPSet keys, Hash peer, int mask) {
+        RouterContext ctx = _context;
+        RouterInfo info = lookupRouterInfoUnvalidated(peer);
+        boolean sameIP = false;
+        byte[] commIP = ctx.commSystem() != null ? ctx.commSystem().getIP(peer) : null;
+        if (commIP != null)
+            sameIP |= !keys.add(maskedIPKey(commIP, mask));
+        if (info != null) {
+            for (RouterAddress pa : info.getAddresses()) {
+                byte[] ip = pa.getIP();
+                if (ip == null) continue;
+                sameIP |= !keys.add(maskedIPKey(ip, mask));
+                // Routers with a common port may be run by a single entity
+                // with a common configuration
+                int port = pa.getPort();
+                if (port > 0)
+                    sameIP |= !keys.add("p" + port);
+            }
+            String family = info.getOption("family");
+            // Prefixed so an IP cannot be spoofed into a family match
+            if (family != null)
+                sameIP |= !keys.add('x' + family);
+        }
+        return sameIP;
+    }
+
+    /**
+     *  Fingerprint key for one masked IP, byte-identical to the key
+     *  {@code MaskedIPSet.maskedIP} builds for the same address and mask.
+     *
+     *  <p>Format: a family-delimiting leading char ('.' for IPv4, ':' for IPv6,
+     *  which also doubles the matched byte count), then two '0'-offset hex
+     *  nibbles per matched byte.  The leading char differs by address family and
+     *  port keys begin with 'p', family keys with 'x', so an IP key can never
+     *  equal a port or family key.  Keeping the {@link MaskedIPSet} format means
+     *  an accumulator built by MaskedIPSet's own constructor still compares
+     *  equal; the floodfill path's packed-{@code long} key cannot be used because
+     *  the accumulator arrives as a {@code MaskedIPSet} from callers outside this
+     *  package.  {@code ProfileOrganizerSelectionCostTest} pins the format.
+     *
+     *  @param ip an IPv4 (4-byte) or IPv6 (16-byte) address
+     *  @param mask 1-4, the number of leading bytes to match
+     *  @return the fingerprint key; equal keys mean "same masked subnet"
+     *  @since 0.9.71+
+     */
+    static String maskedIPKey(byte[] ip, int mask) {
+        final char delim;
+        if (ip.length == 16) {
+            mask *= 2;
+            delim = ':';
+        } else {
+            delim = '.';
+        }
+        final char[] buf = new char[1 + (mask * 2)];
+        buf[0] = delim;
+        for (int i = 0; i < mask; i++) {
+            // fake hex "0123456789:;<=>?"
+            byte b = ip[i];
+            buf[1 + (i * 2)] = (char) ('0' + ((b >> 4) & 0x0f));
+            buf[2 + (i * 2)] = (char) ('0' + (b & 0x0f));
+        }
+        return new String(buf);
+    }
+
+    /**
+     *  Sub-tier slice index for a peer, keyed off the session key so the same
+     *  key always yields the same slice.
+     */
     private int getSubTier(Hash peer, long k0, long k1) {
         return ((int) SipHashInline.hash24(k0, k1, peer.getData())) & 0x03;
     }
@@ -2889,7 +3335,11 @@ public class ProfileOrganizer {
      * @return whether selectable
      */
     public boolean isSelectable(Hash peer) {
-        return isSelectable(peer, getTunnelBuildSuccess());
+        try {
+            return isSelectable(peer, getTunnelBuildSuccess());
+        } finally {
+            flushSelectionCounters();
+        }
     }
 
     /**
@@ -2904,7 +3354,11 @@ public class ProfileOrganizer {
         if (_context.router() == null) return true;
         if (!passesBasicGates(peer)) return false;
         if (hasExcessiveLifetimeFailures(peer)) return false;
-        RouterInfo info = (RouterInfo) _context.netDb().lookupRouterInfoLocally(peer);
+        // Unvalidated: every check a validating lookup would add on top of presence is
+        // done below — banlist and XG/LU in passesBasicGates, and hidden flag,
+        // age with proof-of-life fallback, transport establishment, usable
+        // address and tier in hasValidRouterInfo.
+        RouterInfo info = lookupRouterInfoUnvalidated(peer);
         if (info != null) return hasValidRouterInfo(peer, info, buildSuccess);
         return false;
     }
@@ -2947,8 +3401,11 @@ public class ProfileOrganizer {
         if (_context.banlist() != null && _context.banlist().isBanlisted(peer)) {
             // Counted here because this is the one chokepoint every selection path
             // funnels through. If tunnel.buildBanHit ever exceeds this materially,
-            // a path has stopped routing through these gates.
-            _context.statManager().addRateData("tunnel.peerBannedAtSelection", 1);
+            // a path has stopped routing through these gates. Accumulated rather
+            // than recorded here, so a sweep with mostly-banned candidates costs
+            // one stat call rather than thousands; drained by
+            // flushSelectionCounters().
+            _bannedAtSelection.incrementAndGet();
             return false;
         }
         // Ghost peers are rejected here rather than filtered after selection:
@@ -2970,6 +3427,29 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Banned-candidate rejections seen since the last
+     *  {@link #flushSelectionCounters()}.
+     *  @since 0.9.71+
+     */
+    private final AtomicInteger _bannedAtSelection = new AtomicInteger();
+
+    /**
+     *  Record the banned-candidate rejections accumulated since the last flush
+     *  as a single {@code tunnel.peerBannedAtSelection} sample.  The count stays
+     *  exact: the atomic get-and-reset loses nothing, it only attributes a
+     *  rejection to whichever scan drains it first.  A count of zero writes
+     *  nothing.
+     *
+     *  @since 0.9.71+
+     */
+    private void flushSelectionCounters() {
+        int banned = _bannedAtSelection.getAndSet(0);
+        if (banned > 0) {
+            _context.statManager().addRateData("tunnel.peerBannedAtSelection", banned);
+        }
+    }
+
+    /**
      *  Returns true when the peer has excessive cumulative tunnel failures.
      *  Uses a dual gate: hard exclusion at {@link #MAX_LIFETIME_TUNNEL_FAILURES}
      *  failures or when the lifetime failure ratio exceeds
@@ -2987,12 +3467,28 @@ public class ProfileOrganizer {
      *  @return true when the peer should be excluded from selection
      */
     private boolean hasExcessiveLifetimeFailures(Hash peer) {
-        PeerProfile prof = getProfileNonblocking(peer);
+        return isExcessiveLifetimeFailure(getProfileNonblocking(peer));
+    }
+
+    /**
+     *  Whether the given profile carries excessive cumulative tunnel failures.
+     *  Same dual gate as {@link #hasExcessiveLifetimeFailures(Hash)}, for callers
+     *  that already hold the profile and so avoid a re-probe per candidate.  A
+     *  null profile or null history is not a failure.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param prof the profile, may be null
+     *  @return true when the peer should be excluded from selection
+     *  @since 0.9.71+
+     */
+    static boolean isExcessiveLifetimeFailure(PeerProfile prof) {
         if (prof == null) return false;
-        long lifetimeFailed = prof.getTunnelHistory().getLifetimeFailed();
+        TunnelHistory th = prof.getTunnelHistory();
+        if (th == null) return false;
+        long lifetimeFailed = th.getLifetimeFailed();
         if (lifetimeFailed > MAX_LIFETIME_TUNNEL_FAILURES) return true;
-        long lifetimeAgreed = prof.getTunnelHistory().getLifetimeAgreedTo();
-        long totalRequests = lifetimeAgreed + lifetimeFailed;
+        long totalRequests = th.getLifetimeAgreedTo() + lifetimeFailed;
         if (totalRequests > 0) {
             double ratio = (double) lifetimeFailed / totalRequests;
             if (ratio > MAX_LIFETIME_FAILURE_RATIO) return true;
@@ -3030,7 +3526,7 @@ public class ProfileOrganizer {
     private boolean hasValidRouterInfo(Hash peer, RouterInfo info, double buildSuccess) {
         if (info.isHidden()) return false;
         long now = _context.clock().now();
-        long maxAge = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS) * 3600_000L;
+        long maxAge = getMaxRouterInfoAgeMs();
         // RouterInfo is stale — demand proof of life to trust it.
         // This check applies regardless of startup grace period: peers
         // with stale RouterInfo and no handled requests are not trusted
@@ -3054,10 +3550,55 @@ public class ProfileOrganizer {
         // port, or a private/internal address — selecting them leads to
         // immediate transport failure and an 8h ban with logspam.
         if (!hasUsableTransportAddress(info)) return false;
-        String tier = DataHelper.stripHTML(info.getBandwidthTier());
-        if (tier.equals("L") || tier.equals("M") || tier.equals("N")) return false;
+        if (isExcludedBuildTier(info.getBandwidthTier())) return false;
         return !TunnelPeerSelector.shouldExclude(_context, info, buildSuccess);
     }
+
+    /**
+     *  Whether a RouterInfo's advertised bandwidth tier is one that cannot host
+     *  a tunnel: L, M, or N.
+     *  <p>
+     *  The raw string is compared directly rather than through
+     *  {@code DataHelper.stripHTML}, which is not a weakening: stripHTML only
+     *  substitutes spaces for {@code < > " '}, so {@code stripHTML(t).equals("L")}
+     *  holds exactly when {@code t} is the one-character string {@code "L"}.
+     *  <p>
+     *  Pure decision — no context access, safe for unit tests.
+     *
+     *  @param rawTier the tier string as advertised, possibly HTML-obfuscated
+     *  @return whether the tier excludes the peer from tunnel hosting
+     *  @since 0.9.71+
+     */
+    static boolean isExcludedBuildTier(String rawTier) {
+        if (rawTier == null) return false;
+        return "L".equals(rawTier) || "M".equals(rawTier) || "N".equals(rawTier);
+    }
+
+    /**
+     *  Maximum RouterInfo age in ms, cached alongside
+     *  {@link #getTunnelBuildSuccess()} on the same
+     *  {@link #BUILD_SUCCESS_CACHE_MS} cadence: it is a constant read per
+     *  candidate, and 15s of staleness on a proof-of-life bar is immaterial.
+     *
+     *  @return the max RouterInfo age in ms
+     *  @since 0.9.71+
+     */
+    private long getMaxRouterInfoAgeMs() {
+        long now = _context.clock().now();
+        if (now - _cachedMaxRouterInfoAgeTime < BUILD_SUCCESS_CACHE_MS) {
+            return _cachedMaxRouterInfoAge;
+        }
+        long age = _context.getProperty(PROP_MAX_ROUTERINFO_AGE_HOURS, DEFAULT_MAX_ROUTERINFO_AGE_HOURS)
+                   * 3600_000L;
+        _cachedMaxRouterInfoAge = age;
+        _cachedMaxRouterInfoAgeTime = now;
+        return age;
+    }
+
+    /** Cached {@link #getMaxRouterInfoAgeMs()}, and the timestamp of the fetch. @since 0.9.71+ */
+    private volatile long _cachedMaxRouterInfoAge = DEFAULT_MAX_ROUTERINFO_AGE_HOURS * 3600_000L;
+    /** When {@link #_cachedMaxRouterInfoAge} was fetched. @since 0.9.71+ */
+    private volatile long _cachedMaxRouterInfoAgeTime;
 
     /**
      *  Returns true when the RouterInfo has a reachable NTCP/NTCP2/SSU/SSU2 address.
@@ -3287,7 +3828,7 @@ public class ProfileOrganizer {
          boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
          // Use basic gates instead of isSelectable to avoid stale RouterInfo
          // proof-of-life filtering peers that were already vetted at tier entry.
-         boolean isPeerSelectable = passesBasicGates(peer) && !hasExcessiveLifetimeFailures(peer);
+         boolean isPeerSelectable = passesBasicGates(peer) && !isExcessiveLifetimeFailure(profile);
          boolean lowTunnelAcceptance = isLowTunnelAcceptance(profile, buildSuccess, now);
          boolean congested = isCongestedPeer(peer);
          boolean highLoss = inLossProbation(profile, now);
@@ -4085,21 +4626,37 @@ public class ProfileOrganizer {
     }
 
     /**
-     * True if the peer's decayed loss score is in the moderate band: at or above
-     * {@link #PROP_LOSSY_MODERATE_THRESHOLD} but below the demotion threshold.
-     * Such peers remain eligible for the tiers — they never crossed the hard bar —
-     * but are de-prioritized at selection time (see LOSSY_SELECTION_PENALTY).
+     * The moderate de-prioritization threshold in effect, read straight from
+     * config (there is no Tuner override, unlike {@link #getLossyThreshold}).
+     * Separate so a caller walking a whole candidate list can resolve both
+     * thresholds once instead of paying two config lookups per candidate.
      *
-     * @param profile the profile
-     * @param now current time in ms
+     * @param ctx the router context
+     * @return the loss score at or above which a peer is de-prioritized at selection
      * @since 0.9.71+
      */
-    private boolean isModeratelyLossy(PeerProfile profile, long now) {
-        float score = profile.getLossScore(now);
+    public static float getModerateLossyThreshold(RouterContext ctx) {
+        return ctx.getProperty(PROP_LOSSY_MODERATE_THRESHOLD, DEFAULT_LOSSY_MODERATE_THRESHOLD);
+    }
+
+    /**
+     * Whether a decayed loss score falls in the moderate band: at or above the
+     * moderate threshold but below the demotion threshold. Such peers remain
+     * eligible for the tiers — they never crossed the hard bar — but are
+     * de-prioritized at selection time (see LOSSY_SELECTION_PENALTY).
+     * <p>
+     * Pure decision — the score and both thresholds are passed in so a caller
+     * scanning a candidate list resolves them once, safe for unit tests.
+     *
+     * @param score the peer's decayed loss score
+     * @param moderateThreshold lower bound of the band, inclusive
+     * @param demoteThreshold upper bound of the band, exclusive
+     * @return whether the score is in the moderate band
+     * @since 0.9.71+
+     */
+    static boolean isModeratelyLossy(float score, float moderateThreshold, float demoteThreshold) {
         if (score <= 0.0f) return false;
-        float threshold = getLossyThreshold(_context);
-        return score >= _context.getProperty(PROP_LOSSY_MODERATE_THRESHOLD, DEFAULT_LOSSY_MODERATE_THRESHOLD) &&
-               score < threshold;
+        return score >= moderateThreshold && score < demoteThreshold;
     }
 
     /**

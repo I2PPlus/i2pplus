@@ -3742,6 +3742,10 @@ public class TunnelPool {
      * Unlike refreshLeaseSet() which republishes when tunnels are EXPIRING SOON,
      * this republishes when tunnels are ALL HEALTHY to reset the LeaseSet lifetime.
      *
+     * Called for every alive pool on every build loop iteration, so the cheap
+     * checks (throttle timestamp, then usable count) run before anything that
+     * takes the pool-wide tunnel lock.
+     *
      * @since 0.9.71+
      */
     void proactiveRepublishIfHealthy() {
@@ -3751,17 +3755,29 @@ public class TunnelPool {
 
         long now = _context.clock().now();
         long threeMinutes = 3L * 60 * 1000;
-        long expiryThreshold = now + threeMinutes;
 
-        // Only republish if we have tunnels and they're all healthy
-        int tunnelCount = countAllHealthyTunnels(now, expiryThreshold);
-        if (tunnelCount <= 0) {
+        // Rate limit first. This runs for every alive pool on every 15s build
+        // loop iteration, and every check below it walks the tunnel list under
+        // the pool-wide _tunnelsLock, so gating on the cheap timestamp here is
+        // what keeps a republish cycle from costing a lock walk per pool every
+        // 15 seconds. Checked before countAllHealthyTunnels() because that walk
+        // has no side effect that the republish depends on - it only counts.
+        long lastPublish = _lastLeaseSetPublishTime;
+        if (lastPublish > 0 && now - lastPublish < threeMinutes) {
             return;
         }
 
-        // Rate limit: don't republish more than every 3 minutes
-        long lastPublish = _lastLeaseSetPublishTime;
-        if (lastPublish > 0 && now - lastPublish < threeMinutes) {
+        // A pool below its quantity has nothing healthy to advertise, and
+        // refreshLeaseSet() owns the below-quantity case, so skip before
+        // taking the lock again.
+        if (getUsableTunnelCount() < _settings.getQuantity()) {
+            return;
+        }
+
+        long expiryThreshold = now + threeMinutes;
+        // Only republish if we have tunnels and they're all healthy
+        int tunnelCount = countAllHealthyTunnels(now, expiryThreshold);
+        if (tunnelCount <= 0) {
             return;
         }
 

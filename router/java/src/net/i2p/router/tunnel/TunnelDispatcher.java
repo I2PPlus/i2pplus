@@ -25,6 +25,7 @@ import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
@@ -78,12 +79,14 @@ public class TunnelDispatcher implements Service {
     /** Map of outbound gateways we created */
     private final ConcurrentHashMap<TunnelId, TunnelGateway> _outboundGateways = new ConcurrentHashMap<>();
 
-    /**
-     * Whether an outbound gateway exists for the given TunnelId.
-     * This helps callers determine if a tunnel is ready for outbound dispatch.
-     *
-     * @return true if we currently have an outbound gateway for the given TunnelId.
-     */
+/**
+ *  Whether an outbound gateway exists for the given TunnelId.
+ *  Lets callers avoid dispatching to a tunnel that is not ready yet.
+ *
+ *  @param tid the tunnel ID
+ *  @return true if we currently have an outbound gateway for the given TunnelId.
+ *  @since 0.9.71+
+ */
     public boolean hasOutboundGateway(TunnelId tid) {
         return _outboundGateways.containsKey(tid);
     }
@@ -103,12 +106,12 @@ public class TunnelDispatcher implements Service {
     /** Timestamp of the last expiration of a participating tunnel */
     private volatile long _lastParticipatingExpiration;
 
-    /**
-     * Cached transit throttle factors — avoids property lookup per tunnel message.
-     * Updated via {@link #updateThrottleFactors()} on property change or periodically.
-     *
-     * @since 0.9.70+
-     */
+/**
+ * Cached transit throttle factors, refreshed by
+ * {@link #updateThrottleFactors()} on the cleanup timer.
+ *
+ * @since 0.9.70+
+ */
     private volatile float _transitThrottleFactor = 0.95f;
     private volatile float _inboundTransitThrottleFactor = 0.0f;
 
@@ -172,6 +175,29 @@ public class TunnelDispatcher implements Service {
 
     /** Validator used for tunnel IVs */
     private BloomFilterIVValidator _validator;
+
+/**
+ *  Cached handles for the three per-transit-message counters reported by
+ *  {@link #dispatch(TunnelDataMessage, Hash)} and
+ *  {@link #dispatch(TunnelGatewayMessage)}.
+ *
+ *  <p>These cannot be batched: N calls of {@code addRateData(name, 1)} give a
+ *  period total of N <em>and</em> an event count of N, and both are read —
+ *  {@code GraphListener} stores the count when total equals count, and the
+ *  Tuner reads {@code Rate.getLastEventCount()} directly. Batching would keep
+ *  the plotted value right and drop the count to one per flush.
+ *
+ *  <p>What they do not need is the string-keyed map lookup and log-level check
+ *  on every call. Resolved after {@link #initializeStats()} so the handles can
+ *  only ever alias an already-registered stat.
+ *
+ *  @since 0.9.71+
+ */
+    private final RateStat _dispatchParticipantStat;
+    /** @see #_dispatchParticipantStat */
+    private final RateStat _dispatchEndpointStat;
+    /** @see #_dispatchParticipantStat */
+    private final RateStat _dispatchInboundStat;
 
     /**
      *  The tunnel IV validator, so the Tuner can retune its size. Null before
@@ -248,11 +274,23 @@ public class TunnelDispatcher implements Service {
         // Cache throttle factors from properties
         updateThrottleFactors();
 
-        // Schedule periodic cleanup for expired tunnels
-        new PeriodicCleanup().schedule(getCleanupInterval());
-
         // Initialize stats
         initializeStats();
+
+        // Hot-path handles, resolved once the stats above exist
+        StatManager sm = ctx.statManager();
+        _dispatchParticipantStat = sm.getOrCreateRateStat("tunnel.dispatchParticipant",
+                "Messages we sent through a tunnel we are participating in",
+                "Tunnels [Participating]", RATES);
+        _dispatchEndpointStat = sm.getOrCreateRateStat("tunnel.dispatchEndpoint",
+                "Messages received as Outbound Endpoint of a tunnel",
+                "Tunnels [Participating]", RATES);
+        _dispatchInboundStat = sm.getOrCreateRateStat("tunnel.dispatchInbound",
+                "Messages we sent through our Tunnel Gateway",
+                "Tunnels [Participating]", RATES);
+
+        // Schedule periodic cleanup for expired tunnels
+        new PeriodicCleanup().schedule(getCleanupInterval());
     }
 
     /**
@@ -263,9 +301,9 @@ public class TunnelDispatcher implements Service {
      */
     private long getCleanupInterval() {
         int count = getParticipatingCount();
-        if (count > CLEANUP_THRESHOLD_HIGH) {return CLEANUP_INTERVAL_MIN;}           // 2000+: 30s
-        else if (count > CLEANUP_THRESHOLD_MED) {return CLEANUP_INTERVAL_MIN * 2;}  // 1000-2000: 60s
-        else {return CLEANUP_INTERVAL_MAX;}                                           // <1000: 90s
+        if (count > CLEANUP_THRESHOLD_HIGH) {return CLEANUP_INTERVAL_MIN;}           // 2000+: 5 min
+        else if (count > CLEANUP_THRESHOLD_MED) {return CLEANUP_INTERVAL_MIN * 2;}  // 1000-2000: 10 min
+        else {return CLEANUP_INTERVAL_MAX;}                                          // <1000: 10 min
     }
 
     /**
@@ -288,13 +326,10 @@ public class TunnelDispatcher implements Service {
     private final AtomicLong _joinsSinceLast = new AtomicLong();
     private final AtomicLong _expiresSinceLast = new AtomicLong();
 
-    /**
-     *  Per-minute transit pool summary for trend monitoring.
-     *
-     *  Logs participating count plus join and expiry rates so that a
-     *  transition from growth to decline is visible in the log trace
-     *  without needing the stats graphing framework.
-     */
+/**
+ *  Per-minute transit pool summary, so a transition from growth to decline
+ *  is visible in the log trace without the stats graphing framework.
+ */
     private void logTransitSummary() {
         long joins = _joinsSinceLast.getAndSet(0);
         long expires = _expiresSinceLast.getAndSet(0);
@@ -399,11 +434,8 @@ public class TunnelDispatcher implements Service {
         int cleanedRecently = prevSize - _recentlyExpired.size();
         cleaned += cleanedRecently;
 
-        // Update last participating expiration
-        updateLastParticipatingExpiration();
-
-        // Run consistency check between queue and maps
-        validateQueueMapConsistency();
+        // Recompute the expiration max and prune orphans in the same walk
+        pruneExpirationQueue();
 
         if (cleaned > 0 && _log.shouldInfo()) {
             _log.info("Periodic cleanup removed " + cleaned + " tunnels (recentlyExpired: " + cleanedRecently + ")");
@@ -416,18 +448,30 @@ public class TunnelDispatcher implements Service {
         return cleaned;
     }
 
-    /**
-     * Validate consistency between expiration queue and participating config maps.
-     * Removes any tunnels from the queue that are no longer in the maps.
-     * @return number of inconsistencies fixed
-     */
-    private int validateQueueMapConsistency() {
+/**
+ *  Single pass over the expiration queue that both recomputes
+ *  {@link #_lastParticipatingExpiration} and drops entries the maps no
+ *  longer hold.
+ *
+ *  <p>Ordering is deliberate: the running maximum is folded in <em>before</em>
+ *  the orphan test, so a pruned entry still contributes to the maximum and
+ *  {@link #remove(HopConfig)} still compares against the same value it always
+ *  did.
+ *
+ * @return number of orphaned entries pruned
+ * @since 0.9.71+
+ */
+    private int pruneExpirationQueue() {
         int fixed = 0;
+        long maxExp = -1;
 
-        // Check each tunnel in queue - remove if not in participatingConfig
         Iterator<HopConfig> qit = _leaveJob.getConfigs().iterator();
         while (qit.hasNext()) {
             HopConfig cfg = qit.next();
+            long exp = cfg.getExpiration();
+            if (exp > maxExp) {
+                maxExp = exp;
+            }
             TunnelId recvId = cfg.getReceiveTunnel();
             if (recvId == null || _participatingConfig.get(recvId) == null) {
                 // Tunnel in queue but not in maps - remove from queue
@@ -438,6 +482,7 @@ public class TunnelDispatcher implements Service {
                 }
             }
         }
+        _lastParticipatingExpiration = maxExp;
 
         if (fixed > 0 && _log.shouldInfo()) {
             _log.info("Queue/map consistency check fixed " + fixed + " inconsistencies");
@@ -487,22 +532,19 @@ public class TunnelDispatcher implements Service {
         registerFragmentStats(_context.statManager());
     }
 
-    /**
-     *  Declare the rate stats emitted by {@link FragmentHandler} on the
-     *  endpoint side.
-     *
-     *  <p>StatManager discards {@code addRateData} for a stat that was never
-     *  registered, and {@code createRateStat} is itself a no-op unless
-     *  {@code stat.full} is set, so these must be declared as required: they
-     *  are failure and abuse signals that have to exist in the default
-     *  configuration.
-     *
-     *  <p>Package-visible and static so a unit test can assert the
-     *  registration without standing up a whole router.
-     *
-     *  @param sm the stat manager to declare into
-     *  @since 0.9.71+
-     */
+/**
+ *  Declare the rate stats emitted by {@link FragmentHandler} on the endpoint
+ *  side. They must be declared as <em>required</em>: {@code createRateStat} is
+ *  a no-op unless {@code stat.full} is set, and StatManager discards
+ *  {@code addRateData} for an unregistered stat, so these failure and abuse
+ *  signals would silently never appear in the default configuration.
+ *
+ *  <p>Package-visible and static so a unit test can assert the registration
+ *  without standing up a whole router.
+ *
+ *  @param sm the stat manager to declare into
+ *  @since 0.9.71+
+ */
     static void registerFragmentStats(StatManager sm) {
         sm.createRequiredRateStat("tunnel.corruptMessage", "Corrupt or unverifiable I2NP messages", "Tunnels", RATES);
         sm.createRequiredRateStat("tunnel.smallFragments", "Excess padding bytes seen in small fragments", "Tunnels", RATES);
@@ -899,7 +941,8 @@ public class TunnelDispatcher implements Service {
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         byte[] data = msg.getData();
         if (data != null && shouldDropParticipatingInboundMessage(Location.PARTICIPANT, TunnelDataMessage.MESSAGE_TYPE, data.length, null)) {
-            _context.statManager().addRateData("tunnel.participatingInBps", (long) data.length * 1024 / 1, 0);
+            // The registered drop counter (tunnel.participatingInboundMessageDropped)
+            // is incremented inside shouldDropParticipatingInboundMessage().
             return;
         }
         TunnelParticipant participant = _participants.get(msg.getTunnelIdObj());
@@ -908,7 +951,7 @@ public class TunnelDispatcher implements Service {
                 _log.debug("Dispatching [MsgID " + msg.getUniqueId() + "] to " + participant + " from [" + recvFrom.toBase64().substring(0, 6) + "]");
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "participant");
             participant.dispatch(msg, recvFrom);
-            _context.statManager().addRateData("tunnel.dispatchParticipant", 1);
+            _dispatchParticipantStat.addData(1);
         } else {
             OutboundTunnelEndpoint endpoint = _outboundEndpoints.get(msg.getTunnelIdObj());
             if (endpoint != null) {
@@ -916,7 +959,7 @@ public class TunnelDispatcher implements Service {
                     _log.debug("Dispatch where we are the Outbound Endpoint:\n* " + endpoint + msg + " from [" + recvFrom.toBase64().substring(0, 6) + "]");
                 _context.messageHistory().tunnelDispatched(msg.getUniqueId(), msg.getTunnelId(), "outbound endpoint");
                 endpoint.dispatch(msg, recvFrom);
-                _context.statManager().addRateData("tunnel.dispatchEndpoint", 1);
+                _dispatchEndpointStat.addData(1);
             } else {
                 _context.messageHistory().droppedTunnelDataMessageUnknown(msg.getUniqueId(), msg.getTunnelId());
                 if (_log.shouldInfo())
@@ -964,7 +1007,7 @@ public class TunnelDispatcher implements Service {
 
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), submsg.getUniqueId(), id.getTunnelId(), "Inbound gateway");
             gw.add(msg);
-            _context.statManager().addRateData("tunnel.dispatchInbound", 1);
+            _dispatchInboundStat.addData(1);
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), id.getTunnelId());
             if (_log.shouldInfo())
@@ -1118,12 +1161,11 @@ public class TunnelDispatcher implements Service {
         _context.statManager().addRateData("tunnel.cache.participatingConfig", _participatingConfig.size());
     }
 
-    /**
-     * Update cached transit throttle factors from router properties.
-     * Called on property change or periodically.
-     *
-     * @since 0.9.70+
-     */
+/**
+ * Update cached transit throttle factors from router properties.
+ *
+ * @since 0.9.70+
+ */
     void updateThrottleFactors() {
         _transitThrottleFactor = getTransitThrottleFactor(_context, 0.95f);
         _inboundTransitThrottleFactor = getTransitThrottleFactor(_context, 0.0f);
@@ -1217,10 +1259,7 @@ public class TunnelDispatcher implements Service {
         int outKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
         double share = _context.router().getSharePercentage();
         int max = (int)(outKBps * share * 1024L);
-            // Dynamic divisor: configurable via router.tunnel.perTunnelBweDivisor
-            // Falls back to min(maxTunnels, 100) if not set
             int divisor = Math.max(1, getPerTunnelBweDivisor(_context));
-
             int calculated = max / divisor;
             if (max > 256 * 1024L) {
                 int floor = 10 * 1024;

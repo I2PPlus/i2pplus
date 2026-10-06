@@ -42,6 +42,16 @@ class PumpedTunnelGateway extends TunnelGateway {
     /** Whether this gateway is inbound (vs outbound) */
     public final boolean _isInbound;
     private final Hash _nextHop;
+    /**
+     *  Gateway queue depths observed since the last flush, reported as one
+     *  mean sample per pump rather than one sample per message.  The stat is a
+     *  level the Tuner and the graphs read as a per-period average, so the
+     *  mean is the same quantity; sampling it per message cost a stat lookup
+     *  and one monitor per rate period for every message enqueued, which on a
+     *  busy gateway is thousands a second.
+     *  @since 0.9.71+
+     */
+    private final RateStatMeanBatch _queueSizeBatch = new RateStatMeanBatch();
 
     private static volatile int _maxObMsgsPerPump;
     private static volatile int _maxIbMsgsPerPump;
@@ -192,11 +202,7 @@ class PumpedTunnelGateway extends TunnelGateway {
         if (_prequeue.offer(cur)) {
             _messagesSent++;
             _pumper.wantsPumping(this);
-            int qSize = _prequeue.size();
-            if (_isInbound)
-                _context.statManager().addRateData("tunnel.ibgw.queueSize", qSize);
-            else
-                _context.statManager().addRateData("tunnel.obgw.queueSize", qSize);
+            _queueSizeBatch.add(_prequeue.size());
             return true;
         } else {
             _context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);
@@ -220,6 +226,13 @@ class PumpedTunnelGateway extends TunnelGateway {
      * @return true if there are still messages remaining in _prequeue and the caller should requeue this gateway
      */
     public boolean pump(List<PendingGatewayMessage> queueBuf) {
+        // Report the queue depths observed since the last pump before anything
+        // can return early, so an idle pump still clears the accumulator.
+        if (_isInbound)
+            _queueSizeBatch.flush(_context, "tunnel.ibgw.queueSize");
+        else
+            _queueSizeBatch.flush(_context, "tunnel.obgw.queueSize");
+
         // Adjust max messages per pump based on backlog and system load
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);

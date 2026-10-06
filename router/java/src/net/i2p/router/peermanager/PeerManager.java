@@ -110,13 +110,30 @@ class PeerManager {
 
     private class Reorg extends SimpleTimer2.TimedEvent {
         /**
+         * The single reorg worker, created on the first fire and reused for
+         * every later one. ReorgThread reschedules the timer from inside its
+         * own run() and then returns, so the thread is no longer alive by the
+         * next fire; a fresh Thread per fire (what this did before) allocated a
+         * thread object and a fresh stack every 30/90/250 seconds forever, for
+         * work that is almost entirely blocked on the reorganize lock anyway.
+         * Reusing one object keeps the thread's stack allocated across cycles.
+         */
+        private ReorgThread _thread;
+
+        /**
          * Create the timer event for periodic profile reorganization.
          */
         public Reorg() {super(_context.simpleTimer2(), REORGANIZE_TIME);}
         /**
-         * Start a reorg thread when the timer fires.
+         * Start (or restart) the reorg thread when the timer fires.
          */
-        public void timeReached() {(new ReorgThread(this)).start();}
+        public void timeReached() {
+            if (_thread == null) _thread = new ReorgThread(this);
+            // A live thread means the previous reorg is still running; its own
+            // run() will reschedule, so starting a second one here would only
+            // contend for the reorganize write lock.
+            if (!_thread.isAlive()) _thread.start();
+        }
     }
 
     /**

@@ -16,6 +16,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
@@ -173,6 +174,27 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
 
         int highCap = _ctx.profileOrganizer().countHighCapacityPeers();
         sm.addRateData("router.highCapacityPeers", highCap, 60L*1000);
+
+        // The peer.* mirrors above are fed here, not from reorganize(). reorganize()
+        // runs every 30-250s (REORGANIZE_TIME_LONG once uptime passes 2h), but
+        // RATES starts at ONE_MINUTE, so an instant sample landed in only ~24% of
+        // completed 1-minute windows and the other ~76% read zero events. A
+        // consumer requiring a non-NaN value then saw no data at all and degraded
+        // its whole subsystem. Feed them on this short cycle with the same 60s
+        // event duration as router.fastPeers so every window is covered.
+        ProfileOrganizer po = _ctx.profileOrganizer();
+        sm.addRateData("peer.fastPeerCount", fast, 60L*1000);
+        sm.addRateData("peer.highCapPeerCount", highCap, 60L*1000);
+        sm.addRateData("peer.fastOrHighCapProfileCount", po.getFastOrHighCapCount(), 60L*1000);
+        // The remaining peer.* gauges were recorded inside reorganize(), which
+        // made them sparse for the same reason. reorganize() now only publishes
+        // these values; reading them here costs a field load apiece.
+        sm.addRateData("peer.profileCount", po.getProfileCount(), 60L*1000);
+        // Same value: the in-RAM profile count. The console sidebar divides
+        // activeProfileCount by profileCount to show the active share.
+        sm.addRateData("peer.activeProfileCount", po.getProfileCount(), 60L*1000);
+        sm.addRateData("peer.qualityPeerCount", po.getQualityCount(), 60L*1000);
+        sm.addRateData("peer.storedProfileCount", po.getStoredProfileCount(), 60L*1000);
 
         int integrated = _ctx.peerManager().getPeersByCapability('f').size();
         sm.addRateData("router.integratedPeers", integrated, 60L*1000);

@@ -160,13 +160,37 @@ public class FloodfillPeerSelector extends PeerSelector {
      *  @return all floodfills not banlisted forever and not flagged unreachable.
      */
     List<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> _kbuckets) {
+        List<Hash> rv = buildFloodfillCandidates(toIgnore);
+        for (Iterator<Hash> iter = rv.iterator(); iter.hasNext(); ) {
+            if (_context.profileOrganizer().peerSendsBadReplies(iter.next())) {iter.remove();}
+        }
+        return rv;
+    }
+
+    /**
+     *  Build the floodfill candidate list with only the cheap per-peer checks:
+     *  the exclusion set, the two banlist tiers, and the unreachable capability
+     *  flag. No profile is touched.
+     *
+     *  <p>{@link #peerSendsBadReplies(Hash)} is deliberately not applied here —
+     *  it takes ProfileOrganizer's read lock and then four synchronized Rate reads
+     *  per peer, which on a healthy router is ~1000 lock acquisitions and ~4000
+     *  Rate reads for a single exploratory lookup, nearly all of them thrown away
+     *  because {@link #selectFloodfillParticipantsIncludingUs} only ever walks a
+     *  bounded prefix of the XOR order. That path applies the predicate lazily
+     *  instead, which yields the identical selection.
+     *
+     *  @param toIgnore can be null
+     *  @return the candidates, neither sorted nor shuffled; may be modified
+     *  @since 0.9.71+
+     */
+    private List<Hash> buildFloodfillCandidates(Set<Hash> toIgnore) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         List<Hash> rv = new ArrayList<>(set.size());
         for (Hash h : set) {
             if ((toIgnore != null && toIgnore.contains(h)) ||
                 _context.banlist().isBanlisted(h) ||
-                _context.banlist().isBanlistedForever(h) ||
-                _context.profileOrganizer().peerSendsBadReplies(h)) {
+                _context.banlist().isBanlistedForever(h)) {
                 continue;
             }
             RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
@@ -257,7 +281,11 @@ public class FloodfillPeerSelector extends PeerSelector {
      *  @param kbuckets now unused
      */
     private List<Hash> selectFloodfillParticipantsIncludingUs(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
-        List<Hash> sorted = selectFloodfillParticipants(toIgnore, kbuckets);
+        List<Hash> sorted = buildFloodfillCandidates(toIgnore);
+        // Still a full sort rather than a bounded nearest prefix: the walk below
+        // examines a data-dependent number of entries (unbounded when most
+        // candidates classify BAD or are skipped), so any fixed-size top-K would
+        // either change which peers are selected or degenerate into this sort.
         Collections.sort(sorted, new XORComparator<>(key));
 
         int found = 0;
@@ -284,6 +312,16 @@ public class FloodfillPeerSelector extends PeerSelector {
             if (uptime < 45*1000L) {break;}
             // Skip recently-queried floodfills to spread load across concurrent searches
             if (_facade.isRecentlyQueried(entry)) {
+                continue;
+            }
+            // Deferred from the candidate build: this predicate costs a profile
+            // read lock plus four synchronized Rate reads, and the loop below
+            // examines only a bounded prefix of the XOR order. Applying it here
+            // instead of before the ordering selects exactly the same peers —
+            // the bad-reply set is disjoint from everything else the loop tests,
+            // so dropping entries from a walk yields the same subsequence — while
+            // costing one call per examined candidate rather than one per peer.
+            if (_context.profileOrganizer().peerSendsBadReplies(entry)) {
                 continue;
             }
             RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(entry);

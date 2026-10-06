@@ -694,7 +694,12 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         int flooded = 0;
         for (int i = 0; i < peers.size(); i++) {
             Hash peer = peers.get(i);
-            RouterInfo target = lookupRouterInfoLocally(peer);
+            // Unvalidated: shouldFloodTo() reads only the peer's own immutable
+            // RouterInfo fields (version, signing key type, encryption key type)
+            // plus the banlist, all of which the validating lookup would answer
+            // from the very same stored entry. Validating here would run the
+            // whole validate() ban cascade — up to MAX_TO_FLOOD times per store.
+            RouterInfo target = lookupRIUnvalidated(peer);
             if (!shouldFloodTo(key, type, lsSigType, peer, target)) {
                 if (_log.shouldDebug()) {
                     _log.debug("Not flooding [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] -> Too old");

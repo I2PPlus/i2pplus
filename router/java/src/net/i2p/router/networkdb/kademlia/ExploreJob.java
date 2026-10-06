@@ -307,7 +307,10 @@ public class ExploreJob extends SearchJob {
         if (from != null) {
             final RouterContext ctx = getContext();
             if (ctx.commSystem().isEstablished(from)) {
-                RouterInfo ri = _facade.lookupRouterInfoLocally(from);
+                // Unvalidated: the RouterInfo is used only as the transport
+                // target for a direct DatabaseLookupMessage, never as a trust
+                // decision, so the validate() ban cascade buys nothing here.
+                RouterInfo ri = _facade.lookupRIUnvalidated(from);
                 if (ri != null) {
                     // Skip direct lookup for banned routers
                     if (ctx.banlist().isBanlisted(peer)) {

@@ -405,9 +405,17 @@ public abstract class BuildRequestor {
         }
         // Wrap in garlic if IBGW != OBEP (to hide IBGW from OBEP)
         if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
-            RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
+            // Unvalidated first: this hop came out of peer selection and passed
+            // store-time validation on the way in, so running the full validate()
+            // (address walk, banlist, country, version and slow-router checks)
+            // per hop per build meant the unvalidated path never actually ran.
+            RouterInfo peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(ibgw);
             if (peer == null) {
-                peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(ibgw);
+                // Nothing in the store at all: the validating lookup is kept as
+                // the fallback so an entry that lands between the two probes
+                // still resolves, and so one the store rejects is evicted
+                // rather than silently used.
+                peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
             }
             I2NPMessage enc = peer != null ? MessageWrapper.wrap(ctx, msg, peer) : null;
             if (enc != null) {
@@ -448,10 +456,12 @@ public abstract class BuildRequestor {
         // Add fuzz to expiration to obscure tunnel structure
         msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(20*1000L));
 
-        RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
+        RouterInfo peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(nextHop);
         if (peer == null) {
-            // Same revalidation-race fallback as the record builder
-            peer = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(nextHop);
+            // Same unvalidated-first ordering as the inbound garlic wrap: the
+            // validating lookup stays as the fallback for an entry that is
+            // absent or that the store rejects.
+            peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
         }
         if (peer == null) {
             log.warn("Next hop RouterInfo not found for outbound build: " + cfg);
@@ -564,13 +574,16 @@ public abstract class BuildRequestor {
         RouterInfo[] hopRIs = new RouterInfo[cfg.getLength()];
         for (int i = 0; i < cfg.getLength(); i++) {
             Hash peer = cfg.getPeer(i);
-            RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(peer);
+            // Accept an unvalidated cached entry rather than failing the
+            // build: the entry passed store-time validation and selection,
+            // so a background revalidation race must not turn healthy
+            // builds into instant failures. Tried first, because a
+            // per-hop validate() (address walk, banlist, country and
+            // version checks) on every build request meant the fallback
+            // below was the only path that ever ran.
+            RouterInfo ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peer);
             if (ri == null) {
-                // Accept an unvalidated cached entry rather than failing the
-                // build: the entry passed store-time validation and selection,
-                // so a background revalidation race must not turn healthy
-                // builds into instant failures.
-                ri = (RouterInfo) ctx.netDb().lookupLocallyWithoutValidation(peer);
+                ri = ctx.netDb().lookupRouterInfoLocally(peer);
             }
             hopRIs[i] = ri;
         }

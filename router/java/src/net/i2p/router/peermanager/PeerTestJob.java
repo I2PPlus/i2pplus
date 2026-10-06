@@ -381,7 +381,12 @@ public class PeerTestJob extends JobImpl {
         // All profiled peers with a RouterInfo are eligible; we sort by tier
         // priority then by staleness so the most important and most stale
         // peers are tested first.
-        int needed = getTestConcurrency() - peers.size();
+        // Fetched once: getTestConcurrency() reads a property and calls
+        // SystemVersion.getCPULoadAvg() (a /proc read on Linux), and the value
+        // cannot change within one round — the two later uses in this method are
+        // the same round as this one.
+        int concurrency = getTestConcurrency();
+        int needed = concurrency - peers.size();
         if (needed > 0) {
             // Use non-blocking selection to avoid stalling on reorganize()'s
             // write lock.  If the lock is held, skip this round and requeue.
@@ -409,27 +414,24 @@ public class PeerTestJob extends JobImpl {
             // Sort: tier priority (fast=0, high-cap=1, other=2),
             // then by tunnelTestTimeAvgLastUpdate ascending (never tested first).
             // Uses persisted EWMA timestamp so untested peers are prioritized after restart.
-            validCandidates.sort((a, b) -> {
-                int aTier = organizer.isFast(a.profile.getPeer()) ? 0
-                          : organizer.isHighCapacity(a.profile.getPeer()) ? 1 : 2;
-                int bTier = organizer.isFast(b.profile.getPeer()) ? 0
-                          : organizer.isHighCapacity(b.profile.getPeer()) ? 1 : 2;
-                int tierCmp = aTier - bTier;
-                if (tierCmp != 0) return tierCmp;
-                return Long.compare(
-                    a.profile.getTunnelTestTimeAvgLastUpdate(),
-                    b.profile.getTunnelTestTimeAvgLastUpdate()
-                );
-            });
+            // Tier rank is resolved once per candidate, not once per comparison.
+            // isFast()/isHighCapacity() each take the reorganize read lock
+            // (ProfileOrganizer.isX), so computing them inside the comparator
+            // cost 4 read-lock acquisitions per comparison, O(n log n) times —
+            // the only reason this block is not purely arithmetic.
+            for (PeerData data : validCandidates) {
+                data.tierRank = tierRank(organizer, data.profile.getPeer());
+            }
+            validCandidates.sort(PeerData::compareByTierThenStaleness);
 
             // Add top candidates up to concurrency limit
             for (PeerData data : validCandidates) {
-                if (peers.size() >= getTestConcurrency()) break;
+                if (peers.size() >= concurrency) break;
                 peers.add(data.routerInfo);
             }
         }
 
-        if (getTestConcurrency() != 1 && !peers.isEmpty() && _log.shouldInfo())
+        if (concurrency != 1 && !peers.isEmpty() && _log.shouldInfo())
             _log.info("Running " + peers.size() + " concurrent peer tests (" + priorityPeers.size() + " priority)");
         return peers;
     }
@@ -521,6 +523,25 @@ public class PeerTestJob extends JobImpl {
     }
 
     /**
+     *  Selection priority for a test candidate: tier first (fast 0, high-cap 1,
+     *  other 2), then staleness of the persisted tunnel-test EWMA so never-tested
+     *  peers go first.
+     *  <p>
+     *  Precomputed by {@link PeerTestJob#tierRank} rather than derived from
+     *  {@code ProfileOrganizer.isFast}/{@code isHighCapacity} inside the
+     *  comparator: those take the reorganize read lock, and calling them per
+     *  comparison meant 4 lock acquisitions per comparison across an
+     *  {@code O(n log n)} sort.
+     *
+     *  @since 0.9.71+
+     */
+    private static int tierRank(ProfileOrganizer organizer, Hash peer) {
+        if (organizer.isFast(peer)) return 0;
+        if (organizer.isHighCapacity(peer)) return 1;
+        return 2;
+    }
+
+    /**
      * Cached peer data to eliminate repeated lookups and string parsing.
      *
      * <p>This class consolidates all frequently accessed peer information into a single
@@ -532,9 +553,16 @@ public class PeerTestJob extends JobImpl {
      *   <li>Single netDb lookup instead of multiple calls</li>
      *   <li>Pre-parsed capability flags (no repeated string operations)</li>
      *   <li>Cached short hash for logging (avoids repeated base64 encoding)</li>
+     *   <li>Tier rank resolved once per candidate instead of per sort comparison</li>
      * </ul>
      */
     private static class PeerData {
+        /**
+         *  Precomputed tier priority, 0 (fast) to 2 (other). Assigned before
+         *  sorting; see {@link PeerTestJob#tierRank}.
+         *  @since 0.9.71+
+         */
+        int tierRank;
         /** The peer's RouterInfo from the network database (null if not found locally) */
         final RouterInfo routerInfo;
         /** The peer's performance profile (null if no profile exists) */
@@ -574,6 +602,25 @@ public class PeerTestJob extends JobImpl {
                 this.capabilities = "";
                 this.isReachable = false;
             }
+        }
+
+        /**
+         *  Order candidates by tier, then by staleness of the persisted
+         *  tunnel-test EWMA (never tested first).
+         *  <p>
+         *  Reads only precomputed fields, so the sort performs no lock
+         *  acquisition at all.
+         *
+         *  @param a first candidate
+         *  @param b second candidate
+         *  @return negative if a sorts first
+         *  @since 0.9.71+
+         */
+        static int compareByTierThenStaleness(PeerData a, PeerData b) {
+            int tierCmp = a.tierRank - b.tierRank;
+            if (tierCmp != 0) return tierCmp;
+            return Long.compare(a.profile.getTunnelTestTimeAvgLastUpdate(),
+                                b.profile.getTunnelTestTimeAvgLastUpdate());
         }
     }
 

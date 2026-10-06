@@ -4,11 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.TunnelId;
 import net.i2p.router.JobImpl;
+import net.i2p.router.ProfileManager;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelTestStatus;
@@ -37,8 +39,19 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private long _replyMessageId;
     private final boolean _isInbound;
     private final AtomicInteger _messagesProcessed = new AtomicInteger();
-    private long _verifiedBytesTransferred;
-    private long _lastTransferredTime;
+    /**
+     *  Total verified bytes on this tunnel.  A {@link LongAdder} so the
+     *  per-fragment delivery path can add without the tunnel monitor; a
+     *  stale-by-one-add read of a monotonic counter is as good as synchronized.
+     *  @since 0.9.71+
+     */
+    private final LongAdder _verifiedBytesTransferred = new LongAdder();
+    /**
+     *  Wall clock (ms) of the last production byte, volatile for the same
+     *  reason as {@link #_verifiedBytesTransferred}.
+     *  @since 0.9.71+
+     */
+    private volatile long _lastTransferredTime;
     /**
      *  Wall-clock time this config was created, i.e. when its build started.
      *  Lets the test cycle give a freshly built tunnel a grace period before
@@ -89,8 +102,20 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
 
     private volatile boolean _reused;
     private volatile int _priority;
-    private long _peakThroughputCurrentTotal;
-    private long _peakThroughputLastCoallesce = System.currentTimeMillis();
+    /**
+     *  Bytes verified on this tunnel since the last per-peer profile update.
+     *  A {@link LongAdder} because it is bumped once per 1KB fragment and does
+     *  not need the monitor guarding {@link #_peakThroughputLastCoallesce}.
+     *  @since 0.9.71+
+     */
+    private final LongAdder _peakThroughputCurrentTotal = new LongAdder();
+    /**
+     *  Wall clock (ms) of the last per-peer profile update.  Written under the
+     *  tunnel monitor by {@link #coalescePeakThroughput(long)} but read without
+     *  it, so that the per-fragment path can skip the monitor, hence volatile.
+     *  @since 0.9.71+
+     */
+    private volatile long _peakThroughputLastCoallesce = System.currentTimeMillis();
     private Hash _blankHash;
     private SessionKey[] _ChaReplyKeys;
     private byte[][] _ChaReplyADs;
@@ -167,6 +192,13 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.71+
      */
     public static final long FIRST_HOP_FAILURE_WINDOW_MS = 60 * 1000L;
+    /**
+     *  Window over which this tunnel's throughput is totaled before the
+     *  per-peer profiles are updated, in ms.  Matches the window
+     *  {@code PeerProfile} coalesces its own peak throughput on.
+     *  @since 0.9.71+
+     */
+    private static final long PEAK_THROUGHPUT_COALESCE_MS = 60 * 1000L;
     private static final int LATENCY_SAMPLE_SIZE = 3;
     private volatile int _lastLatency = -1;
     private final int[] _latencyHistory = new int[LATENCY_SAMPLE_SIZE];
@@ -367,43 +399,70 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *        test or synthetic traffic
      *  @since 0.9.71+
      */
-    public synchronized void incrementVerifiedBytesTransferred(int bytes, boolean realTraffic) {
-        _verifiedBytesTransferred += bytes;
-        _peakThroughputCurrentTotal += bytes;
+    public void incrementVerifiedBytesTransferred(int bytes, boolean realTraffic) {
+        // No monitor: this is the inbound endpoint's per-1KB-fragment path and
+        // every counter it touches is a LongAdder or a volatile.
+        _verifiedBytesTransferred.add(bytes);
+        _peakThroughputCurrentTotal.add(bytes);
         long now = System.currentTimeMillis();
         if (realTraffic) {
             _lastTransferredTime = now;
         }
+        if (now - _peakThroughputLastCoallesce >= PEAK_THROUGHPUT_COALESCE_MS) {
+            coalescePeakThroughput(now);
+        }
+    }
+
+    /**
+     *  Periodically push this tunnel's throughput into the per-peer profiles.
+     *
+     *  <p>Run once a minute from
+     *  {@link #incrementVerifiedBytesTransferred(int, boolean)}, crediting both
+     *  {@code tunnelDataPushed()} (raw period bytes) and
+     *  {@code tunnelDataPushed1m()} (that total normalized to a minute): both
+     *  are pure sums, so bulk crediting equals per-fragment crediting.
+     *
+     *  @param now wall clock at the call site, already compared against the
+     *        coalesce deadline so the fast path never gets here
+     *  @since 0.9.71+
+     */
+    private synchronized void coalescePeakThroughput(long now) {
         long timeSince = now - _peakThroughputLastCoallesce;
-        if (timeSince >= 60*1000) {
-            long tot = _peakThroughputCurrentTotal;
-            int normalized = (int) (tot * 60d*1000d / timeSince);
-            _peakThroughputLastCoallesce = now;
-            _peakThroughputCurrentTotal = 0;
-            // Capture peers and context for iteration outside the lock
-            if (_context != null && _peers.length > 0) {
-                int start = _isInbound ? 0 : 1;
-                int end = _isInbound ? _peers.length - 1 : _peers.length;
-                Hash[] peersCopy = Arrays.copyOfRange(_peers, start, end);
-                _context.jobQueue().addJob(new JobImpl(_context) {
-                    /**
-                     * Update the per-peer throughput profiles with the normalized total.
-                     */
-                    @Override
-                    public void runJob() {
-                        for (Hash peer : peersCopy) {
-                            _context.profileManager().tunnelDataPushed1m(peer, normalized);
-                        }
+        // Re-tested under the monitor: inbound arrival and outbound dispatch can
+        // both race in, and the loser must not reset the period twice.
+        if (timeSince < PEAK_THROUGHPUT_COALESCE_MS) {return;}
+        long tot = _peakThroughputCurrentTotal.sumThenReset();
+        // Exact in long: tot * 60000 does not overflow for any byte count a
+        // minute can hold, and avoids the double multiply/divide.
+        long normalized = tot * PEAK_THROUGHPUT_COALESCE_MS / timeSince;
+        _peakThroughputLastCoallesce = now;
+        // Capture peers and context for iteration outside the lock.
+        // The slice drops our own end of the tunnel; ProfileManagerImpl drops
+        // our hash as well.
+        ProfileManager pm = _context != null ? _context.profileManager() : null;
+        if (pm != null && _peers.length > 0) {
+            int start = _isInbound ? 0 : 1;
+            int end = _isInbound ? _peers.length - 1 : _peers.length;
+            Hash[] peersCopy = Arrays.copyOfRange(_peers, start, end);
+            _context.jobQueue().addJob(new JobImpl(_context) {
+                /**
+                 * Update the per-peer throughput profiles with the normalized total.
+                 */
+                @Override
+                public void runJob() {
+                    for (Hash peer : peersCopy) {
+                        pm.tunnelDataPushed(peer, 0, tot);
+                        pm.tunnelDataPushed1m(peer, normalized);
                     }
-                    /**
-                     * The name of this job.
-                     *
-                     * @return the name
-                     */
-                    @Override
-                    public String getName() { return "TunnelCreatorConfig profile update"; }
-                });
-            }
+                }
+                /**
+                 * The name of this job.
+                 *
+                 * @return the name
+                 */
+                @Override
+                public String getName() { return "TunnelCreatorConfig profile update"; }
+            });
         }
     }
 
@@ -412,13 +471,13 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *
      * @return the verified bytes transferred
      */
-    public synchronized long getVerifiedBytesTransferred() {return _verifiedBytesTransferred;}
+    public long getVerifiedBytesTransferred() {return _verifiedBytesTransferred.sum();}
 
     /**
      * When we last sent or received data on this tunnel
      * @return the last transferred
      */
-    public synchronized long getLastTransferred() { return _lastTransferredTime; }
+    public long getLastTransferred() { return _lastTransferredTime; }
 
     /**
      *  When this tunnel was built, in wall-clock ms.  Never zero, so a caller
@@ -548,6 +607,11 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.71+
      */
     public void clearSoftFailures() {
+        // No-monitor fast path for the per-fragment caller: both fields are
+        // atomic/volatile, and clearing an already-clear streak is a no-op, so
+        // the unlocked read decides the same thing. A failure recorded
+        // concurrently survives, the correct order for clear vs record.
+        if (_softFailures.get() == 0 && _lastSoftFailure == 0) {return;}
         synchronized (this) {
             _softFailures.set(0);
             _lastSoftFailure = 0;
@@ -710,6 +774,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      *  @since 0.9.71+
      */
     public void clearFirstHopFailures() {
+        // Same no-monitor fast path as clearSoftFailures().
+        if (_firstHopSendFailures.get() == 0 && _lastFirstHopSendFailure == 0 && !_firstHopFailed) {return;}
         synchronized (this) {
             _firstHopSendFailures.set(0);
             _lastFirstHopSendFailure = 0;
@@ -1247,7 +1313,7 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
             int msgs = _messagesProcessed.get();
             if (msgs > 0) {
                 buf.append(" with ").append(msgs).append(" messages (")
-                   .append(_verifiedBytesTransferred).append(" bytes)");
+                   .append(_verifiedBytesTransferred.sum()).append(" bytes)");
             }
         }
         return buf.toString();

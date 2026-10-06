@@ -12,9 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.EncType;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.XORComparator;
@@ -79,7 +81,31 @@ public class IterativeSearchJob extends FloodSearchJob {
     private static Hash _alwaysQueryHash;
     /** Max number of peers to query */
     private final int _totalSearchLimit;
-    private final MaskedIPSet _ipSet;
+    /**
+     * Masked-IP keys, ports and family options of the peers already queried by
+     * this search, used to avoid querying several peers of one entity. The
+     * three key spaces stay separate, so a masked IP can never collide with a
+     * port or a family. See {@link #collectFingerprint} for the encoding.
+     */
+    private final Set<Long> _maskedIPs;
+    private final Set<Integer> _ports;
+    private final Set<String> _families;
+    /**
+     * Scratch buffers for one candidate's keys, filled by
+     * {@link #collectFingerprint} and consumed by {@link #fingerprintClaimed} /
+     * {@link #claimFingerprint}. The IP and port key spaces are counted
+     * separately, so neither array can hold a stale entry from the previous
+     * candidate. Sized by {@link #MAX_FINGERPRINT_ENTRIES}, a hard cap on the
+     * keys any one peer can contribute. Reused across candidates.
+     */
+    private final long[] _fingerprintIPs;
+    private final int[] _fingerprintPorts;
+    /** The one family option of the current candidate, or null. */
+    private String _fingerprintFamily;
+    /** Number of entries used in {@link #_fingerprintIPs}. */
+    private int _fingerprintIPCount;
+    /** Number of entries used in {@link #_fingerprintPorts}. */
+    private int _fingerprintPortCount;
     private final Set<Hash> _skippedPeers;
     /** Floodfill peers we've sent queries to in this search — for active-query tracking */
     private final Set<Hash> _queriedFloodfills;
@@ -113,6 +139,113 @@ public class IterativeSearchJob extends FloodSearchJob {
      */
     static boolean shouldSkipPeer(boolean recentlyQueried, boolean overloaded, boolean ipClose, int remainingCandidates) {
         return (recentlyQueried || overloaded || ipClose) && remainingCandidates > 1;
+    }
+
+    /**
+     *  Upper bound on the keys one peer can contribute: the comm system's
+     *  address plus at most {@link #MAX_RI_ADDRESSES} netDb addresses. RouterInfo
+     *  rejects a longer parsed or assigned address list, so this is a hard cap.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int MAX_RI_ADDRESSES = 16;
+    /**
+     *  @since 0.9.71+
+     */
+    private static final int MAX_FINGERPRINT_ENTRIES = 1 + MAX_RI_ADDRESSES;
+
+    /**
+     *  Look up a peer's RouterInfo in the router's main NetDb without running
+     *  {@link net.i2p.router.NetworkDatabase#lookupRouterInfoLocally}'s full
+     *  validation. The main NetDb is used rather than this job's facade, which
+     *  may be a client NetDb.
+     *
+     *  @param ctx the router context
+     *  @param peer the peer hash
+     *  @return the RouterInfo, or null if not held as a RouterInfo
+     *  @since 0.9.71+
+     */
+    private static RouterInfo lookupRIUnvalidated(RouterContext ctx, Hash peer) {
+        DatabaseEntry ds = ctx.netDb().lookupLocallyWithoutValidation(peer);
+        if (ds != null && ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)
+            return (RouterInfo) ds;
+        return null;
+    }
+
+    /**
+     *  Collect one candidate's fingerprint keys into the reusable scratch
+     *  buffers, without claiming them.
+     *
+     *  <p>Masked IPs are packed into a {@code long} via
+     *  {@link FloodfillPeerSelector#maskedIPKey(byte[], int)} (whose IPv4/IPv6
+     *  marker bit keeps the address families apart), ports into an {@code int},
+     *  and the family option kept as the String it is.
+     *
+     *  @param ctx the router context
+     *  @param peer the candidate
+     *  @param mask byte count to match
+     *  @since 0.9.71+
+     */
+    private void collectFingerprint(RouterContext ctx, Hash peer, int mask) {
+        int ipCount = 0;
+        int portCount = 0;
+        byte[] commIP = ctx.commSystem().getIP(peer);
+        if (commIP != null) {
+            _fingerprintIPs[ipCount++] = FloodfillPeerSelector.maskedIPKey(commIP, mask);
+        }
+        RouterInfo info = lookupRIUnvalidated(ctx, peer);
+        String family = null;
+        if (info != null) {
+            for (RouterAddress pa : info.getAddresses()) {
+                byte[] ip = pa.getIP();
+                if (ip == null) continue;
+                _fingerprintIPs[ipCount++] = FloodfillPeerSelector.maskedIPKey(ip, mask);
+                // Routers with a common port may be run by a single entity
+                // with a common configuration
+                int port = pa.getPort();
+                if (port > 0) _fingerprintPorts[portCount++] = port;
+            }
+            family = info.getOption("family");
+        }
+        _fingerprintIPCount = ipCount;
+        _fingerprintPortCount = portCount;
+        _fingerprintFamily = family;
+    }
+
+    /**
+     *  Is any key of the candidate collected by {@link #collectFingerprint}
+     *  already claimed by a peer this search has queried?
+     *
+     *  <p>Test-only: the caller may still reject the candidate on other
+     *  grounds and must then claim nothing.
+     *
+     *  @return true if any key was already claimed
+     *  @since 0.9.71+
+     */
+    private boolean fingerprintClaimed() {
+        for (int i = 0; i < _fingerprintIPCount; i++) {
+            if (_maskedIPs.contains(_fingerprintIPs[i])) {return true;}
+        }
+        for (int i = 0; i < _fingerprintPortCount; i++) {
+            if (_ports.contains(_fingerprintPorts[i])) {return true;}
+        }
+        return _fingerprintFamily != null && _families.contains(_fingerprintFamily);
+    }
+
+    /**
+     *  Claim every key collected by {@link #collectFingerprint}, so later
+     *  candidates of the same entity are skipped.
+     *
+     *  @since 0.9.71+
+     */
+    private void claimFingerprint() {
+        for (int i = 0; i < _fingerprintIPCount; i++) {
+            _maskedIPs.add(_fingerprintIPs[i]);
+        }
+        for (int i = 0; i < _fingerprintPortCount; i++) {
+            _ports.add(_fingerprintPorts[i]);
+        }
+        if (_fingerprintFamily != null) _families.add(_fingerprintFamily);
     }
 
     /**
@@ -228,7 +361,7 @@ public class IterativeSearchJob extends FloodSearchJob {
     public static int getMaxRouterInfoLookupTime() { return _maxRouterInfoLookupTime; }
 
     /**
-     *  @param val RouterInfo lookup deadline cap in ms, clamped to [2000, max search time]
+     *  @param val RouterInfo lookup deadline cap in ms, clamped to [5000, max search time]
      *  @since 0.9.70+
      */
     public static void setMaxRouterInfoLookupTime(int val) {
@@ -265,13 +398,6 @@ public class IterativeSearchJob extends FloodSearchJob {
         this(ctx, facade, key, onFind, onFailed, timeoutMs, isLease, null);
     }
 
-    /**
-     *  Lookup using the client's tunnels.
-     *  Do not use for RI lookups down client tunnels,
-     *  as the response will be dropped in InboundMessageDistributor.
-     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
-     *  @since 0.9.10
-     */
     private static volatile int _tunedSearchLimit = -1;
     private static volatile int _tunedSingleSearchTime = -1;
 
@@ -312,27 +438,37 @@ public class IterativeSearchJob extends FloodSearchJob {
         return ctx.getProperty("netdb.singleSearchTime", def);
     }
 
+    /**
+     *  Lookup using the client's tunnels.
+     *  Do not use for RI lookups down client tunnels,
+     *  as the response will be dropped in InboundMessageDistributor.
+     *  @param fromLocalDest use these tunnels for the lookup, or null for exploratory
+     *  @since 0.9.10
+     */
     public IterativeSearchJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade, Hash key,
                               Job onFind, Job onFailed, int timeoutMs, boolean isLease, Hash fromLocalDest) {
         super(ctx, facade, key, onFind, onFailed, timeoutMs, isLease);
         int known = ctx.netDb().getKnownRouters();
         int totalSearchLimit = (facade.floodfillEnabled() && ctx.router().getUptime() > 60*60*1000) ?
                                 TOTAL_SEARCH_LIMIT_WHEN_FF : TOTAL_SEARCH_LIMIT;
-        // RouterInfo lookups use the message timeout, capped at the adaptive
-        // RouterInfo deadline (shorter than the max search time) so transit next-hop
-        // lookups for a missing/unreachable peer fail fast instead of holding the
-        // message for the full search window. LeaseSet lookups below use their own
-        // adaptive, shorter cap instead.
+        // RouterInfo lookups are capped well below the max search time so transit
+        // next-hop lookups for a missing peer fail fast instead of holding the
+        // message; LeaseSet lookups use their own adaptive cap.
         _timeoutMs = Math.min(timeoutMs, _maxRouterInfoLookupTime);
-        // LeaseSet lookups use an adaptive, shorter deadline cap so client
-        // connect don't stall behind a doomed search (streaming retransmits
-        // paper over the miss).
         if (isLease) {_timeoutMs = Math.min(Math.min(timeoutMs * 3, (int) getMaxSearchTime()), _maxLeaseSetLookupTime);}
         _expiration = _timeoutMs + ctx.clock().now();
         _rkey = ctx.routingKeyGenerator().getRoutingKey(key);
         _toTry = new TreeSet<>(new XORComparator<>(_rkey));
         _totalSearchLimit = getSearchLimit(ctx, totalSearchLimit);
-        _ipSet = new MaskedIPSet(2 * (_totalSearchLimit + EXTRA_PEERS));
+        int fpCap = 2 * (_totalSearchLimit + EXTRA_PEERS);
+        _maskedIPs = new HashSet<>(fpCap);
+        _ports = new HashSet<>(fpCap);
+        _families = new HashSet<>(4);
+        _fingerprintIPs = new long[MAX_FINGERPRINT_ENTRIES];
+        _fingerprintPorts = new int[MAX_FINGERPRINT_ENTRIES];
+        _fingerprintFamily = null;
+        _fingerprintIPCount = 0;
+        _fingerprintPortCount = 0;
         _singleSearchTime = getSingleSearchTime(ctx, (int) SINGLE_SEARCH_TIME);
         _unheardFrom = new HashSet<>(CONCURRENT_SEARCHES);
         _failedPeers = new HashSet<>(_totalSearchLimit);
@@ -345,10 +481,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         }
-        // FloodSearchJob does not extend SearchJob, so searchCount must be
-        // incremented here or iterative searches are invisible in the stats.
+        // FloodSearchJob does not extend SearchJob, so increment here
         ctx.statManager().addRateData("netDb.searchCount", 1);
-        // All createRateStat in FNDF
     }
 
     /**
@@ -376,8 +510,6 @@ public class IterativeSearchJob extends FloodSearchJob {
 
         // Resolved while this search sat in the job queue - a store or flood
         // landed the RI locally after the caller's own local check missed it.
-        // Succeed immediately instead of querying floodfills for data we
-        // already hold (and instead of timing out against our own deadline).
         RouterInfo local = getContext().netDb().lookupRouterInfoLocally(_key);
         if (local != null) {
             if (_log.shouldInfo()) {
@@ -508,8 +640,8 @@ public class IterativeSearchJob extends FloodSearchJob {
                         iter.remove();
                         boolean recentlyQueried = _facade.isRecentlyQueried(h);
                         boolean overloaded = _facade.isFloodfillOverloaded(h);
-                        Set<String> peerIPs = new MaskedIPSet(getContext(), h, IP_CLOSE_BYTES);
-                        boolean ipClose = _ipSet.containsAny(peerIPs);
+                        collectFingerprint(getContext(), h, IP_CLOSE_BYTES);
+                        boolean ipClose = fingerprintClaimed();
                         if (shouldSkipPeer(recentlyQueried, overloaded, ipClose, _toTry.size())) {
                             // Only skip when alternatives remain - a starved search must still make progress
                             if (ipClose && _log.shouldInfo()) {
@@ -519,7 +651,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                             // go around again
                             continue;
                         }
-                        _ipSet.addAll(peerIPs);
+                        claimFingerprint();
                         peer = h;
                         break;
                     }
@@ -943,9 +1075,6 @@ public class IterativeSearchJob extends FloodSearchJob {
      *  Cancels the search and delivers failure to all registered waiters.
      *  Cancellation is terminal for callers - negative-cache skip, banlist
      *  skip, exhausted search window - so this fires the onFailed jobs.
-     *  Earlier versions returned silently here, which leaked caller
-     *  resources: observed live as transit next-hop slots held until their
-     *  deadline while builds timed out with no reply at all.
      *  @since 0.9.65+
      */
     void cancelJob() {
@@ -1005,14 +1134,9 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         if (getContext().commSystem().getStatus() != Status.DISCONNECTED
                 && NegativeLookupCache.countsAsDefinitiveFail(tries)) {
-            // Count-based negative caching: NegativeLookupCache trips after
-            // netdb.negativeCache.maxFails failures within its cleaner window,
-            // so a peer that is truly gone starts failing fast for subsequent
-            // lookups, while a single transient blip (one dropped search)
-            // doesn't poison the key and cut off transit traffic through it.
-            // Zero-try failures are local (no peer contacted) and must not
-            // poison the key. Pure timeouts use a higher threshold so a brief
-            // tunnel outage doesn't lock out a live destination.
+            // Zero-try failures are local (no peer contacted) and must not poison the
+            // key. Pure timeouts use a higher threshold so a brief tunnel outage
+            // doesn't lock out a live destination.
             if (sawReply) {_facade.lookupFailed(_key);}
             else {_facade.lookupTimeout(_key);}
         }
@@ -1032,9 +1156,8 @@ public class IterativeSearchJob extends FloodSearchJob {
             getContext().statManager().addRateData(
                 _isLease ? "netDb.lookupsFailedLeaseSet" : "netDb.lookupsFailedRouterInfo", 1);
         } else {
-            // Zero-try: banlist/negcache skip, no floodfill peers, or job drop.
-            // Callbacks still fire; keep these out of the iterative-fail counters
-            // so "real search failed" stays comparable to replyTimeout/searchCount.
+            // Zero-try: banlist/negcache skip, no floodfill peers, or job drop. Keep
+            // these out of the iterative-fail counters.
             getContext().statManager().addRateData(
                 _isLease ? "netDb.lookupsFailedLeaseSetZeroTry" : "netDb.lookupsFailedRouterInfoZeroTry", 1);
         }
