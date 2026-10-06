@@ -33,18 +33,33 @@ def documentedTasks = [
 // (buildDeb, jbigi) are checked by name only.
 def selftestReal = ['updaterCompact']
 
-// Resolved at configuration time (config-cache-safe); the check itself is
-// gated to the selftest tasks, so a drifted inventory fails only selftest
-def missingTasks = documentedTasks.findAll { tasks.findByName(it) == null }
+// Every task name across every project. Collected from a projectsEvaluated listener
+// because this script is applied during root-project evaluation, so at that point the
+// subprojects have not been evaluated and their task containers are still empty - the
+// i2psnark standalone family is declared in apps/i2psnark/build.gradle and was reported
+// missing for exactly that reason. A root-only lookup misses it even later.
+//
+// A plain Set of Strings, so selftestNames reads only captured values and stays
+// configuration-cache safe.
+def allTaskNames = new TreeSet<String>()
+def projectCount = 0
+gradle.projectsEvaluated {
+    rootProject.allprojects.each { p ->
+        allTaskNames.addAll(p.tasks.names)
+        projectCount++
+    }
+}
 
 task selftestNames {
     group = 'verification'
     description = 'Verify every documented task name still resolves.'
     doLast {
-        if (missingTasks) {
-            throw new GradleException("selftest: documented tasks no longer resolve: ${missingTasks.join(', ')}")
+        def missing = documentedTasks.findAll { !allTaskNames.contains(it) }
+        if (missing) {
+            throw new GradleException("selftest: documented tasks no longer resolve: ${missing.join(', ')}")
         }
-        println "selftest: all ${documentedTasks.size()} documented tasks resolve"
+        println "selftest: all ${documentedTasks.size()} documented tasks resolve " +
+                "across ${allTaskNames.size()} tasks in ${projectCount} projects"
     }
 }
 
