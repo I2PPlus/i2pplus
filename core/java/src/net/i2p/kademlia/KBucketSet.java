@@ -371,16 +371,28 @@ public class KBucketSet<T extends SimpleDataStructure> {
     /**
      * Add all entries in all buckets to the provided collector.
      *
+     * <p>The read lock is held only long enough to copy the bucket references
+     * out of the list, then released before the collector runs. Collectors do
+     * netDb, banlist and profile lookups, so holding the lock across the pass
+     * blocked every {@link #add} and bucket split in the router for the
+     * duration of a full traversal of the whole keyspace — and this is called
+     * once per DSRM reply and once per outbound explore query. A concurrent
+     * split may leave a snapshot entry already emptied and a concurrent add may
+     * not appear; both were already possible outcomes of the unsynchronized
+     * per-bucket access documented on {@link #_buckets}.
+     *
      * @param collector the collector to add entries to
      */
     public void getAll(SelectionCollector<T> collector) {
+        List<KBucket<T>> snapshot;
         getReadLock();
         try {
-            for (KBucket<T> b : _buckets) {
-                b.getEntries(collector);
-            }
+            snapshot = new ArrayList<>(_buckets);
         } finally {
             releaseReadLock();
+        }
+        for (KBucket<T> b : snapshot) {
+            b.getEntries(collector);
         }
     }
 
