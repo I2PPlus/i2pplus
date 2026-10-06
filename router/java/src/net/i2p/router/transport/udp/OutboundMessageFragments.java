@@ -55,6 +55,10 @@ class OutboundMessageFragments {
     static final int MIN_WAIT_MS = 10;
     /** Counter for periodic aggregate stat emission */
     private int _statEmitCounter;
+    /** How many add() calls between "udp.memory.activePeers" samples. @since 0.9.71+ */
+    private static final int MEMORY_STAT_INTERVAL = 16;
+    /** Counter gating the memory stat. Single sender thread, no synchronization needed. */
+    private int _memoryStatCounter;
 
     /**
      *  Reusable consumed-fragment marker for {@link #preparePackets}. Reused
@@ -203,14 +207,31 @@ class OutboundMessageFragments {
                 _log.debug("Adding a new message to an existing peer [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
             }
         }
-        _context.statManager().addRateData("udp.outboundActivePeers", _activePeers.size());
-        _context.statManager().addRateData("udp.memory.activePeers", _activePeers.size());
+        // One size read for both stats; they always sample the same value.
+        // The memory stat is a slow-moving gauge rather than an event counter, so
+        // emit it on a lower cadence to halve the CHM lookups per outbound message.
+        int activePeers = _activePeers.size();
+        _context.statManager().addRateData("udp.outboundActivePeers", activePeers);
+        if (shouldEmitMemoryStat()) {
+            _context.statManager().addRateData("udp.memory.activePeers", activePeers);
+        }
 
         // Avoid sync if possible ... no, this doesn't always work.
         // Also note that the iterator in getNextVolley may have alreay passed us, or not reflected the addition.
         if (added || size <= 0 || peer.getSendWindowBytesRemaining() >= size) {
             nudge();
         }
+    }
+
+/**
+     * Should the "udp.memory.activePeers" gauge be sampled on this add()?
+     * True once every {@link #MEMORY_STAT_INTERVAL} messages.
+     *
+     * @return true if the gauge should be updated now
+     * @since 0.9.71+
+     */
+    private boolean shouldEmitMemoryStat() {
+        return (++_memoryStatCounter % MEMORY_STAT_INTERVAL) == 0;
     }
 
     /**

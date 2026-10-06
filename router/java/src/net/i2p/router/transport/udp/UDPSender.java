@@ -314,17 +314,10 @@ public class UDPSender {
          */
         private UDPPacket getNextPacket() {
             UDPPacket packet = null;
-            int codelTarget = CODEL_TARGET;
-            String propValue = _context.getProperty(PROP_CODEL_TARGET);
-            if (propValue != null) {
-                try {
-                    codelTarget = Integer.parseInt(propValue);
-                } catch (NumberFormatException nfe) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Invalid property value for " + PROP_CODEL_TARGET + ": " + propValue);
-                    }
-                }
-            }
+            // getNextPacket() runs once per send-loop iteration, i.e. per outbound
+            // packet, so read the CoDel target with a TTL rather than doing a
+            // property lookup (config map miss, then System.getProperty) each time.
+            int codelTarget = codelTarget();
 
             while (_keepRunning) {
                 try {
@@ -356,5 +349,37 @@ public class UDPSender {
             }
             return packet;
         }
+    }
+
+    /** How long a cached PROP_CODEL_TARGET value stays valid. */
+    private static final long CODEL_TARGET_TTL = 1000;
+
+    /** Cached CoDel target, refreshed at most once per {@link #CODEL_TARGET_TTL}. */
+    private volatile int _codelTarget = CODEL_TARGET;
+    /** When the cache was last refreshed. */
+    private volatile long _codelTargetRead;
+
+    /**
+     *  The CoDel target delay in ms, from {@link #PROP_CODEL_TARGET}, read at
+     *  most once per second. An unparseable value logs once per read and falls
+     *  back to {@link #CODEL_TARGET}, as does an unset property.
+     *
+     *  @return the CoDel target delay in ms, never null
+     *  @since 0.9.71+
+     */
+    private int codelTarget() {
+        long now = _context.clock().now();
+        if (now - _codelTargetRead < CODEL_TARGET_TTL) {return _codelTarget;}
+        _codelTargetRead = now;
+        String propValue = _context.getProperty(PROP_CODEL_TARGET);
+        if (propValue == null) return _codelTarget;
+        try {
+            _codelTarget = Integer.parseInt(propValue);
+        } catch (NumberFormatException nfe) {
+            if (_log.shouldWarn()) {
+                _log.warn("Invalid property value for " + PROP_CODEL_TARGET + ": " + propValue);
+            }
+        }
+        return _codelTarget;
     }
 }

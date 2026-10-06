@@ -11,7 +11,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -1121,15 +1120,17 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Published IP, IPv4 only
-     *  @return IP or null
+     *  Published IP, IPv4 only.
+     *
+     *  Reads the cached IPv4 address rather than scanning _currentAddresses,
+     *  so this does not take the address-list monitor. For the per-packet
+     *  comparison, prefer {@link #isCurrentIPv4(byte[])} over copying the array.
+     *
+     *  @return a copy of the IP, or null if we have no IPv4 address
      *  @since 0.9.2
      */
     byte[] getExternalIP() {
-        RouterAddress addr = getCurrentAddress(false);
-        if (addr != null)
-            return addr.getIP();
-        return null;
+        return getCurrentIPv4();
     }
 
     /**
@@ -2224,6 +2225,7 @@ public class UDPTransport extends TransportImpl {
                .append(timeSinceRecv).append(" / ").append(timeSinceAck)
                .append("]; Consecutive failures: ").append(consec);
             if (why != null) {buf.append("\n* Cause: ").append(why);}
+            _log.debug(buf.toString());
         }
         synchronized(_addDropLock) {locked_dropPeer(peer, shouldBanlist, why);}
         // The only possible reason to rebuild is if they were an introducer for us
@@ -2638,7 +2640,7 @@ public class UDPTransport extends TransportImpl {
                 int port = addr.getPort();
                 if (ip == null || !TransportUtil.isValidPort(port) ||
                     (!isValid(ip)) ||
-                    (Arrays.equals(ip, getExternalIP()) && !allowLocal())) {
+                    (isCurrentIPv4(ip) && !allowLocal())) {
                     continue;
                 }
             } else {
@@ -2707,20 +2709,25 @@ public class UDPTransport extends TransportImpl {
             long lastSend = peer.getLastSendFullyTime();
             long lastRecv = peer.getLastReceiveTime();
             long now = _context.clock().now();
-            int inboundActive = peer.expireInboundMessages();
-            if ((lastSend > 0) && (lastRecv > 0)) {
-                if ((now - lastSend > MAX_IDLE_TIME) &&
-                     (now - lastRecv > MAX_IDLE_TIME) &&
-                     (peer.getConsecutiveFailedSends() > 2) &&
-                     (inboundActive <= 0)) {
-                    // peer is waaaay idle, drop the con and queue it up as a new con
-                    dropPeer(peer, false, "proactive reconnection");
-                    msg.timestamp("peer is really idle, dropping con and reestablishing");
-                    if (_log.shouldDebug()) {_log.debug("Proactive reestablish to " + to);}
-                    _establisher.establish(msg);
-                    _context.statManager().addRateData("udp.proactiveReestablish", now-lastSend, now-peer.getKeyEstablishedTime());
-                    return;
-                }
+            // expireInboundMessages() walks the inbound message map under
+            // _inboundLock and is only consumed by the idle check below, so call
+            // it only once the other three gates have passed rather than for every
+            // message to an established peer. The sweep is not load-bearing
+            // otherwise: stale states are also released when the peer is dropped,
+            // and a peer idle in both directions for MAX_IDLE_TIME is dropped
+            // here or by the expire event.
+            if ((lastSend > 0) && (lastRecv > 0) &&
+                (now - lastSend > MAX_IDLE_TIME) &&
+                (now - lastRecv > MAX_IDLE_TIME) &&
+                (peer.getConsecutiveFailedSends() > 2) &&
+                (peer.expireInboundMessages() <= 0)) {
+                // peer is waaaay idle, drop the con and queue it up as a new con
+                dropPeer(peer, false, "proactive reconnection");
+                msg.timestamp("peer is really idle, dropping con and reestablishing");
+                if (_log.shouldDebug()) {_log.debug("Proactive reestablish to " + to);}
+                _establisher.establish(msg);
+                _context.statManager().addRateData("udp.proactiveReestablish", now-lastSend, now-peer.getKeyEstablishedTime());
+                return;
             }
             msg.timestamp("Enqueueing for an already established peer");
             // skip the priority queue and go straight to the active pool

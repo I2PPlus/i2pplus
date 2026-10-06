@@ -7,11 +7,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -27,7 +28,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.PacketBuilder2.Fragment;
-import net.i2p.util.Addresses;
 import net.i2p.util.HexDump;
 import net.i2p.util.SimpleTimer2;
 
@@ -63,6 +63,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private final ACKTimer _ackTimer;
 
     private long _sentMessagesLastExpired;
+    /**
+     *  Incremental expiry cursor over a snapshot of _sentMessages, so a tick
+     *  examines a bounded number of entries instead of the whole map.  Only
+     *  touched from the PacketPusher thread via finishAndAllocate().
+     */
+    private final ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> _sentMessagesExpiryCursor = new ArrayDeque<>();
     private volatile byte[] _ourIP;
     private volatile int _ourPort;
     private volatile int _destroyReason;
@@ -157,6 +163,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     private static final int MAX_SESS_CONF_RETX = 5;
     /** Configurable sent-messages sweep interval. Default 60s, shortened under load. */
     private static volatile long _sentMessagesCleanTime = 60*1000L;
+    /** Max _sentMessages entries examined per expireSentMessages() call. @since 0.9.71+ */
+    private static final int SENT_MESSAGES_EXPIRE_BATCH = 32;
     private final boolean shouldLogDebug = _log.shouldDebug();
 
     /**
@@ -290,6 +298,60 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     /**
+     *  Expire complete or timed-out entries from _sentMessages, walking an
+     *  incremental cursor instead of rescanning the whole map and every fragment
+     *  list on every tick.
+     *
+     *  <p>The cursor holds a snapshot of the map taken when it runs dry;
+     *  entries acked in the meantime are skipped by the identity check, and
+     *  newly added entries are picked up on the next refill.  An entry is
+     *  removed only when every fragment's message is complete or expired, so it
+     *  never expires early.  One pass covers the whole cursor, so retention
+     *  matches the old full scan's single tick.
+     *
+     *  <p>Only called from {@link #finishAndAllocate} on the PacketPusher
+     *  thread, so the cursor needs no synchronization.  Failure detection is
+     *  unaffected: that is the "ahead &gt; BITFIELD_SIZE" check in
+     *  {@link #finishAndAllocate}, which runs on its own schedule.
+     *
+     *  @param now current time, for the expiry test
+     *  @since 0.9.71+
+     */
+    private void expireSentMessages(long now) {
+        ArrayDeque<Map.Entry<Long, List<PacketBuilder2.Fragment>>> cursor = _sentMessagesExpiryCursor;
+        int examined = 0;
+        // Work is bounded per fragment, but the sweep itself runs to completion
+        // in one call. Capping it per tick pushed fragment-buffer release out to
+        // ceil(size / SENT_MESSAGES_EXPIRE_BATCH) ticks - around 8 minutes at a
+        // thousand in-flight entries - where the old full scan released
+        // everything in one.
+        int budget = Integer.MAX_VALUE;
+        while (examined++ < budget) {
+            if (cursor.isEmpty()) {
+                for (Map.Entry<Long, List<PacketBuilder2.Fragment>> entry : _sentMessages.entrySet()) {
+                    cursor.addLast(entry);
+                }
+                if (cursor.isEmpty()) {return;}
+                if (shouldLogDebug)
+                    _log.debug("[SSU] finishAndAllocate() over " + _sentMessages.size() + " pending ACKs");
+            }
+            Map.Entry<Long, List<PacketBuilder2.Fragment>> entry = cursor.pollFirst();
+            Long key = entry.getKey();
+            List<PacketBuilder2.Fragment> frags = entry.getValue();
+            // acked and removed since the snapshot, or superseded
+            if (_sentMessages.get(key) != frags) {continue;}
+            loop:
+            for (PacketBuilder2.Fragment f : frags) {
+                OutboundMessageState state = f.state;
+                if (!state.isComplete() && !state.isExpired(now)) {continue loop;}
+            }
+            _sentMessages.remove(key, frags);
+            if (shouldLogDebug)
+                _log.debug("[SSU] Cleaned from sentMessages: " + frags);
+        }
+    }
+
+    /**
      *  Single-pass combined cleanup + send allocation, overriding the base class
      *  to incorporate SSU2-specific _sentMessages cleanup and SessionConfirmed
      *  retransmit logic.
@@ -317,19 +379,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                     _transport.sendDestroy(this, REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "Too many unACKed packets");
                 }
-                if (shouldLogDebug)
-                    _log.debug("[SSU] finishAndAllocate() over " + _sentMessages.size() + " pending ACKs");
-                loop:
-                for (Iterator<List<PacketBuilder2.Fragment>> iter = _sentMessages.values().iterator(); iter.hasNext(); ) {
-                    List<PacketBuilder2.Fragment> frags = iter.next();
-                    for (PacketBuilder2.Fragment f : frags) {
-                        OutboundMessageState state = f.state;
-                        if (!state.isComplete() && !state.isExpired(now)) {continue loop;}
-                    }
-                    iter.remove();
-                    if (shouldLogDebug)
-                        _log.debug("[SSU] Cleaned from sentMessages: " + frags);
-                }
+                expireSentMessages(now);
             }
         }
 
@@ -552,22 +602,23 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         byte[] data = dpacket.getData();
         int off = dpacket.getOffset();
         int len = dpacket.getLength();
-        boolean shouldLog = shouldLogDebug || _log.shouldWarn();
-        String fromPeer = (shouldLog && from != null ? " from: " + from : "");
+        // Build the " from: <host>" suffix only inside a branch that is about to
+        // log it. This runs per inbound packet and formatting the host is not free.
         try {
             SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
             if (header == null) {
                 // Java I2P thru 0.9.55 would send 35-39 byte ping packets
                 // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
-                if (len > 2 && len < 35 && shouldLog) {
-                    _log.warn("[SSU] Inbound packet" + fromPeer + " too short [" + len + " bytes] " + (shouldLogDebug ? this : ""));
+                if (len > 2 && len < 35 && shouldLogDebug) {
+                    _log.warn("[SSU] Inbound packet from: " + from + " too short [" + len + " bytes] " + this);
                 }
                 return;
             }
             if (header.getDestConnID() != _rcvConnID) {
-                if (shouldLog) {
-                    _log.warn("[SSU] BAD Destination ConnectionID" + fromPeer + "\n* " + header + " -> Size: " + len + " bytes " +
-                              (shouldLogDebug ? this : ""));
+                if (shouldLogDebug) {
+                    _log.warn("[SSU] BAD Destination ConnectionID from: " + from + "\n* " + header + " -> Size: " + len + " bytes " + this);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[SSU] BAD Destination ConnectionID from: " + from);
                 }
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // This was probably a retransmitted session created, sent with k_header_1 = bob's intro key,
@@ -579,9 +630,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
-                if (shouldLog) {
-                    _log.warn("[SSU] BAD " + len + " byte data packet" + fromPeer + " [Type " + (header.getType() & 0xff) + "] received " +
-                              (shouldLogDebug ? this : ""));
+                if (shouldLogDebug) {
+                    _log.warn("[SSU] BAD " + len + " byte data packet from: " + from + " [Type " + (header.getType() & 0xff) + "] received " + this);
                 }
                 // Track bad packets for repeat offender detection (skip if already blocklisted)
                 // Use the peer hash for full-context BanLogger output (caps, version) instead of IP-only
@@ -596,6 +646,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 return;
             }
             long n = header.getPacketNumber();
+            // read before decrypt/process: the trial-decrypted Header is thread scratch
+            boolean ackImmediate = (header.data[SHORT_HEADER_FLAGS_OFFSET] & 0x01) != 0;
             SSU2Header.acceptTrialDecrypt(packet, header);
             synchronized (_rcvCha) {
                 _rcvCha.setNonce(n);
@@ -604,14 +656,16 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (_receivedMessages.set(n)) {
                 synchronized(this) {_packetsReceivedDuplicate++;}
-                if (shouldLog) {
-                    _log.warn("[SSU] Duplicate packet [#" + n + "]" + fromPeer + " received " + (shouldLogDebug ? this : ""));
+                if (shouldLogDebug) {
+                    _log.warn("[SSU] Duplicate packet [#" + n + "] from: " + from + " received " + this);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[SSU] Duplicate packet [#" + n + "] from: " + from);
                 }
                 return;
             }
 
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
-            if (shouldLogDebug) {_log.debug("[SSU] New " + len + " byte packet [#" + n + "]" + fromPeer + " received " + this);}
+            if (shouldLogDebug) {_log.debug("[SSU] New " + len + " byte packet [#" + n + "] from: " + from + " received " + this);}
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
             packetReceived(payloadLen);
 
@@ -633,16 +687,12 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 if (limitSending) {pathUnverified();}
             } //// !_dead
 
-            boolean ackImmediate = (header.data[SHORT_HEADER_FLAGS_OFFSET] & 0x01) != 0;
-            if (ackImmediate) {
-                _ackTimer.scheduleImmediate();
-            }
-
+            if (ackImmediate) {_ackTimer.scheduleImmediate();}
         } catch (Exception e) {
             if (shouldLogDebug) {
-                _log.warn("[SSU] Received BAD encrypted packet" + fromPeer + this + '\n' + HexDump.dump(data, off, len), e);
+                _log.warn("[SSU] Received BAD encrypted packet from: " + from + this + '\n' + HexDump.dump(data, off, len), e);
             } else if (_log.shouldWarn()) {
-                _log.warn("[SSU] Received BAD encrypted packet" + fromPeer);
+                _log.warn("[SSU] Received BAD encrypted packet from: " + from);
             }
         }
     }
@@ -1443,6 +1493,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     void dropOutbound() {
         super.dropOutbound();
         _sentMessages.clear();
+        _sentMessagesExpiryCursor.clear();
         _ackTimer.cancel();
     }
 

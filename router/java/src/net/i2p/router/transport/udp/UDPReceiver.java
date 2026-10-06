@@ -3,7 +3,6 @@ package net.i2p.router.transport.udp;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.util.Arrays;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.util.I2PThread;
@@ -91,7 +90,7 @@ class UDPReceiver {
         }
 
         // drop anything apparently from our IP (any port)
-        if (Arrays.equals(from.getIP(), _transport.getExternalIP()) && !_transport.allowLocal()) {
+        if (_transport.isCurrentIPv4(from.getIP()) && !_transport.allowLocal()) {
             if (_log.shouldWarn()) {_log.warn("Dropping (spoofed?) UDP packet from ourselves");}
             packet.release();
             return 0;

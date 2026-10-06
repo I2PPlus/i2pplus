@@ -81,6 +81,18 @@ public class EstablishmentManager {
     private final Map<RemoteHostId, Token> _outboundTokens;
     private final Map<RemoteHostId, Token> _inboundTokens;
     private final ObjectCounter<RemoteHostId> _terminationCounter;
+    /**
+     *  Cached "udp.inboundTokenLifetime" RateStat handle. Registered in the
+     *  constructor and never replaced, so it is resolved once rather than on
+     *  every getInboundToken() call: that path is reachable from an
+     *  unauthenticated inbound Token Request, so the stat lookup (a name-based
+     *  map get followed by a synchronized read of the Rate) was attacker
+     *  triggerable. Resolved lazily because a test may construct this manager
+     *  before the stat exists.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile RateStat _inboundTokenLifetimeStat;
 
     /** Map of RemoteHostId to InboundEstablishState */
     private final ConcurrentHashMap<RemoteHostId, InboundEstablishState> _inboundStates;
@@ -828,7 +840,7 @@ public class EstablishmentManager {
             String ipAddress = Addresses.toString(remAddr.getAddress());
 
             if (isInvalidPeerIP(_transport.isValid(maybeTo.getIP()),
-                                Arrays.equals(maybeTo.getIP(), _transport.getExternalIP()),
+                                _transport.isCurrentIPv4(maybeTo.getIP()),
                                 _transport.allowLocal())) {
                 _transport.failed(msg, "Peer's IP address isn't valid");
                 _transport.markUnreachable(toHash);
@@ -2915,6 +2927,30 @@ public class EstablishmentManager {
      * @return the inbound token
      * @since 0.9.54
      */
+    /**
+     *  Resolves the "udp.inboundTokenLifetime" RateStat, caching the handle.
+     *
+     *  The stat is created in this class's constructor and never replaced, so
+     *  after the first successful lookup this is a single volatile read. A
+     *  stat that is not registered yet is not cached, so a later call retries.
+     *
+     *  @return the cached stat, or null if it is not registered yet
+     *  @since 0.9.71+
+     */
+    private RateStat inboundTokenLifetimeStat() {
+        RateStat rv = _inboundTokenLifetimeStat;
+        if (rv != null) {return rv;}
+        RateStat rs = _context.statManager().getRate("udp.inboundTokenLifetime");
+        if (rs != null) {_inboundTokenLifetimeStat = rs;}
+        return rs;
+    }
+
+    /**
+     * Token that can be used later for the peer to connect to us
+     *
+     * @return the inbound token
+     * @since 0.9.54
+     */
     public Token getInboundToken(RemoteHostId peer) {
         return getInboundToken(peer, IB_TOKEN_EXPIRATION);
     }
@@ -2933,7 +2969,7 @@ public class EstablishmentManager {
         } while (token == 0);
         long now = _context.clock().now();
         // shorten expiration based on average eviction time
-        RateStat rs = _context.statManager().getRate("udp.inboundTokenLifetime");
+        RateStat rs = inboundTokenLifetimeStat();
         if (rs != null) {
             Rate r = rs.getRate(RateConstants.TEN_MINUTES);
             if (r != null) {

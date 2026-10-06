@@ -138,8 +138,14 @@ class PeerTestManager {
     private final PacketBuilder2 _packetBuilder2;
     /** Map of Long(nonce) to PeerTestState for tests currently in progress (as Bob/Charlie). */
     private final Map<Long, PeerTestState> _activeTests;
-    /** Current test we are running (as Alice), or null. */
-    private PeerTestState _currentTest;
+    /**
+     *  Current test we are running (as Alice), or null.  Volatile: cleared by
+     *  testComplete() on the UDP handle threads as well as set under the instance
+     *  lock by runTest(), and ContinueTimer reads it after dropping the lock.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile PeerTestState _currentTest;
     private volatile boolean _currentTestComplete;
     /** Test being run as Alice. */
     private final Queue<Long> _recentTests;
@@ -177,6 +183,37 @@ class PeerTestManager {
 
     // Preliminary
     private static final boolean ENABLE_SSU2_SYMNAT_TEST = true;
+
+    /**
+     *  Per-thread ChaChaPoly scratch for decrypting out-of-session Peer Test
+     *  packets.  Every such packet uses the same static intro key and sets the
+     *  nonce from the packet number, so one instance per thread is safe.
+     *
+     *  @since 0.9.71+
+     */
+    private static final ThreadLocal<ChaChaPolyCipherState> _testCipher = new ThreadLocal<ChaChaPolyCipherState>() {
+        @Override
+        protected ChaChaPolyCipherState initialValue() {return new ChaChaPolyCipherState();}
+    };
+
+    /** How long a "no RouterInfo for this Peer Test" answer is reused. @since 0.9.71+ */
+    private static final long TEST_RI_MISS_TTL = 250;
+    /**
+     *  Last hash whose RouterInfo lookup missed, with the time it was recorded.
+     *  Both in one immutable holder: read as two separate volatiles a writer
+     *  landing between the reads could pair a hash with a foreign timestamp and
+     *  stretch or collapse the TTL.
+     *
+     *  @since 0.9.71+
+     */
+    private static final class RIMiss {
+        private final Hash hash;
+        private final long when;
+        RIMiss(Hash hash, long when) {this.hash = hash; this.when = when;}
+    }
+
+    /** Single-entry negative cache for "no RouterInfo for this Peer Test". */
+    private volatile RIMiss _testRIMiss;
 
     /**
      *  Have seen peer tests (as Alice) get stuck (_currentTest != null)
@@ -268,7 +305,7 @@ class PeerTestManager {
         _recentTests.offer(Long.valueOf(test.getNonce()));
 
         test.incrementPacketsRelayed();
-        sendTestToBob();
+        sendTestToBob(test);
 
         new ContinueTimer(test.getNonce());
         return true;
@@ -287,94 +324,155 @@ class PeerTestManager {
             schedule(RESEND_TIMEOUT);
         }
 
+        /**
+         *  Decide what to do under the instance lock, then send outside it.
+         *
+         *  The decision reads and clears _currentTest, so it needs the lock; the
+         *  send builds a packet and can block, and holding the lock across that
+         *  would stall runTest() and every receiveTest() path.  The state
+         *  captured under the lock is passed to the send explicitly.
+         */
         public void timeReached() {
+            PeerTestState state;
+            int action;
+            boolean complete = false;
+            long reschedAfter = 0;
             synchronized (PeerTestManager.this) {
-                PeerTestState state = _currentTest;
+                state = _currentTest;
                 if (state == null || state.getNonce() != _nonce) {
                     // already completed, possibly on to the next test
                     return;
-                } else if (expired()) {
-                    if (!_currentTestComplete)
-                        testComplete();
-                    return;
-                }
-                long now = _context.clock().now();
-                long timeSinceSend = now - state.getLastSendTime();
-                if (timeSinceSend >= RESEND_TIMEOUT) {
-                    int sent = state.incrementPacketsRelayed();
-                    if (sent > MAX_RELAYED_PER_TEST_ALICE) {
-                        if (_log.shouldWarn())
-                            _log.warn("Sent too many packets " + state);
-                        if (!_currentTestComplete)
-                            testComplete();
-                        return;
-                    }
-                    long bobTime = state.getReceiveBobTime();
-                    long charlieTime = state.getReceiveCharlieTime();
-                    if (bobTime <= 0 && charlieTime <= 0) {
-                        // no message from Bob or Charlie yet, send it again
-                        sendTestToBob();
-                    } else if (charlieTime <= 0) {
-                        // received from Bob, but no reply from Charlie.  send it to
-                        // Bob again so he pokes Charlie
-                        // We don't resend to Bob for SSU2; Charlie will retransmit.
-                        if (ENABLE_SSU2_SYMNAT_TEST) {
-                            // if it's been long enough, and Charlie isn't firewalled, send msg 6 anyway
-                            // This allows us to detect Symmetric NAT.
-                            // We don't have his IP/port if he's firewalled, and we wouldn't trust his answer
-                            // anyway as he could be symmetric natted.
-                            // After this, we will ignore any msg 5 received
-                            if (now - bobTime > 5000 && state.getCharliePort() != PENDING_PORT &&
-                                state.getCharlieIntroKey() != null) {
+                } else if (expired(state)) {
+                    complete = !_currentTestComplete;
+                    action = ACTION_NONE;
+                } else {
+                    long now = _context.clock().now();
+                    long timeSinceSend = now - state.getLastSendTime();
+                    if (timeSinceSend < RESEND_TIMEOUT) {
+                        action = ACTION_NONE;
+                        reschedAfter = RESEND_TIMEOUT - timeSinceSend;
+                    } else {
+                        int sent = state.incrementPacketsRelayed();
+                        if (sent > MAX_RELAYED_PER_TEST_ALICE) {
+                            if (_log.shouldWarn())
+                                _log.warn("Sent too many packets " + state);
+                            complete = !_currentTestComplete;
+                            action = ACTION_NONE;
+                        } else {
+                            long bobTime = state.getReceiveBobTime();
+                            long charlieTime = state.getReceiveCharlieTime();
+                            action = decideRetransmit(bobTime, charlieTime, state.getCharliePort(),
+                                                     state.getCharlieIntroKey() != null, now);
+                            if (action == ACTION_SEND_CHARLIE) {
                                 if (_log.shouldWarn())
                                     _log.warn("Continuing test w/o msg 5: " + state);
-                                sendTestToCharlie();
+                            }
+                            if (bobTime > 0 && charlieTime <= 0 &&
+                                state.getBeginTime() + MAX_CHARLIE_LIFETIME < now) {
+                                complete = !_currentTestComplete;
+                                action = ACTION_NONE;
+                            } else if (bobTime > 0 && charlieTime <= 0) {
+                                // earlier because charlie will go away at 15 sec
+                                // retx at 4, 6, 9, 13 elapsed time
+                                reschedAfter = sent*1000L;
+                            } else {
+                                // retx at 4, 10, 17, 25 elapsed time
+                                reschedAfter = RESEND_TIMEOUT + (sent*1000L);
                             }
                         }
-                    } else if (bobTime <= 0) {
-                        // received from Charlie, but no reply from Bob.  Send it to
-                        // Bob again so he retransmits his reply.
-                        // Bob handles dups / retx as of 0.9.57
-                            sendTestToBob();
-                        // Tracked limitation: for version 2 we cannot send
-                        // msg 6 without knowing Charlie's intro key, so a
-                        // version 2 test that only hears from Charlie is
-                        // abandoned when MAX_BOB_LIFETIME expires. For version
-                        // 1 the intro key is not needed, so a msg 6 could be
-                        // sent from the retransmit timer; that path is not
-                        // implemented and the test expires instead.
-                    } else {
-                        // received from both Bob and Charlie, but we haven't received a
-                        // second message from Charlie yet
-                        if (state.getCharliePort() != PENDING_PORT &&
-                            state.getCharlieIntroKey() != null) {
-                            sendTestToCharlie();
-                        }
-                        // else msg 5 wasn't from a valid ip/port ???
                     }
-                    if (bobTime > 0 && charlieTime <= 0) {
-                        if (state.getBeginTime() + MAX_CHARLIE_LIFETIME < now) {
-                            if (!_currentTestComplete)
-                                testComplete();
-                            return;
-                        }
-                        // earlier because charlie will go away at 15 sec
-                        // retx at 4, 6, 9, 13 elapsed time
-                        reschedule(sent*1000L);
-                    } else {
-                    // retx at 4, 10, 17, 25 elapsed time
-                    reschedule(RESEND_TIMEOUT + (sent*1000L));
-                    }
-                } else {
-                    reschedule(RESEND_TIMEOUT - timeSinceSend);
                 }
             }
+            // Outside the lock, but re-check under it: the receiveTest paths also
+            // complete the test, and completing twice would publish a second
+            // reachability status. Complete the test decided on above rather than
+            // re-reading _currentTest: runTest() may have installed a new one while
+            // the lock was dropped.
+            if (complete) {
+                synchronized (PeerTestManager.this) {
+                    if (!_currentTestComplete) {testComplete(state);}
+                }
+                return;
+            }
+            if (action == ACTION_SEND_BOB) {
+                sendTestToBob(state);
+            } else if (action == ACTION_SEND_CHARLIE) {
+                sendTestToCharlie(state);
+            }
+            if (reschedAfter > 0) {reschedule(reschedAfter);}
         }
     }
 
-    /** Call from a synchronized method. */
-    private boolean expired() {
-        PeerTestState state = _currentTest;
+    /** No retransmit needed. @since 0.9.71+ */
+    static final int ACTION_NONE = 0;
+    /** Retransmit msg 1 to Bob. @since 0.9.71+ */
+    static final int ACTION_SEND_BOB = 1;
+    /** Send msg 6 to Charlie. @since 0.9.71+ */
+    static final int ACTION_SEND_CHARLIE = 2;
+
+    /** How long after msg 4 we may send msg 6 without having seen msg 5. @since 0.9.71+ */
+    private static final long SYMNAT_GRACE = 5000;
+
+/**
+     *  Which retransmit (if any) the ContinueTimer should make.  Pure decision
+     *  logic, with the test state passed in as scalars so it is testable without
+     *  a running test.
+     *
+     *  @param bobTime when msg 4 was received, or 0
+     *  @param charlieTime when msg 5 was received, or 0
+     *  @param charliePort Charlie's reported port, or {@link #PENDING_PORT} if firewalled
+     *  @param haveCharlieIntroKey whether msg 4 supplied Charlie's intro key
+     *  @param now current time
+     *  @return {@link #ACTION_NONE}, {@link #ACTION_SEND_BOB} or {@link #ACTION_SEND_CHARLIE}
+     *  @since 0.9.71+
+     */
+    static int decideRetransmit(long bobTime, long charlieTime, int charliePort,
+                                boolean haveCharlieIntroKey, long now) {
+        if (bobTime <= 0 && charlieTime <= 0) {
+            // no message from Bob or Charlie yet, send it again
+            return ACTION_SEND_BOB;
+        } else if (charlieTime <= 0) {
+            // received from Bob, but no reply from Charlie.  send it to
+            // Bob again so he pokes Charlie
+            // We don't resend to Bob for SSU2; Charlie will retransmit.
+            if (ENABLE_SSU2_SYMNAT_TEST) {
+                // if it's been long enough, and Charlie isn't firewalled, send msg 6 anyway
+                // This allows us to detect Symmetric NAT.
+                // We don't have his IP/port if he's firewalled, and we wouldn't trust his answer
+                // anyway as he could be symmetric natted.
+                // After this, we will ignore any msg 5 received
+                if (now - bobTime > SYMNAT_GRACE && charliePort != PENDING_PORT && haveCharlieIntroKey) {
+                    return ACTION_SEND_CHARLIE;
+                }
+            }
+            return ACTION_NONE;
+        } else if (bobTime <= 0) {
+            // received from Charlie, but no reply from Bob.  Send it to
+            // Bob again so he retransmits his reply.
+            // Bob handles dups / retx as of 0.9.57
+            return ACTION_SEND_BOB;
+            // Tracked limitation: for version 2 we cannot send
+            // msg 6 without knowing Charlie's intro key, so a
+            // version 2 test that only hears from Charlie is
+            // abandoned when MAX_BOB_LIFETIME expires. For version
+            // 1 the intro key is not needed, so a msg 6 could be
+            // sent from the retransmit timer; that path is not
+            // implemented and the test expires instead.
+        }
+        // received from both Bob and Charlie, but we haven't received a
+        // second message from Charlie yet
+        if (charliePort != PENDING_PORT && haveCharlieIntroKey) {
+            return ACTION_SEND_CHARLIE;
+        }
+        // else msg 5 wasn't from a valid ip/port ???
+        return ACTION_NONE;
+    }
+
+    /** Has the given test (which may be null) run past its time budget?
+     *  @return true if the test is null or expired
+     *  @since 0.9.71+
+     */
+    private boolean expired(PeerTestState state) {
         if (state != null)
             return state.getBeginTime() + MAX_TEST_TIME < _context.clock().now();
         else
@@ -382,12 +480,14 @@ class PeerTestManager {
     }
 
     /**
-     * SSU 2. We are Alice.
-     * Call from a synchronized method.
+     * SSU 2. We are Alice.  Builds and enqueues msg 1.
+     * Packet construction can block, so this runs without the instance lock
+     * (from ContinueTimer) and takes the state as a parameter.
+     *
+     * @param test the current test state, non-null
      */
-    private void sendTestToBob() {
-        PeerTestState test = _currentTest;
-        if (!expired()) {
+    private void sendTestToBob(PeerTestState test) {
+        if (!expired(test)) {
             if (_log.shouldDebug())
                 _log.debug("Sending test to Bob: " + test);
             UDPPacket packet;
@@ -403,7 +503,7 @@ class PeerTestManager {
                 if (data == null) {
                     if (_log.shouldWarn())
                         _log.warn("sig fail");
-                     testComplete();
+                     testComplete(test);
                      return;
                 }
                 test.setTestData(data);
@@ -419,21 +519,24 @@ class PeerTestManager {
             long now = _context.clock().now();
             test.setLastSendTime(now);
             bob.setLastSendTime(now);
-            } else {
-                _currentTest = null;
+        } else {
+            synchronized (PeerTestManager.this) {
+                if (_currentTest == test) {_currentTest = null;}
             }
+        }
     }
 
     /**
      * Message 6. SSU 2. We are Alice.
-     * Call from a synchronized method.
-     * _currentTest.getCharlieIntroKey() must be non-null.
+     * Packet construction can block, so this runs without the instance lock
+     * (from ContinueTimer) and takes the state as a parameter.
+     *
+     * @param test the current test state; test.getCharlieIntroKey() must be non-null
      */
-    private void sendTestToCharlie() {
-        PeerTestState test = _currentTest;
+    private void sendTestToCharlie(PeerTestState test) {
         if (test == null)
             return;
-        if (!expired()) {
+        if (!expired(test)) {
             if (_log.shouldDebug())
                 _log.debug("Sending message #6 to Charlie: " + test);
             long now = _context.clock().now();
@@ -459,7 +562,9 @@ class PeerTestManager {
 
             _transport.send(packet);
         } else {
-            _currentTest = null;
+            synchronized (PeerTestManager.this) {
+                if (_currentTest == test) {_currentTest = null;}
+            }
         }
     }
 
@@ -488,7 +593,7 @@ class PeerTestManager {
         test.setAlicePortFromCharlie(0);
         test.setReceiveCharlieTime(0);
         test.setReceiveBobTime(0);
-        testComplete();
+        testComplete(test);
     }
 
     /**
@@ -548,9 +653,23 @@ class PeerTestManager {
      *</pre>
      *
      */
-    private void testComplete() {
+    private void testComplete() {testComplete(_currentTest);}
+
+    /**
+     *  Complete the given test.
+     *
+     *  <p>The test is passed in rather than re-read from {@link #_currentTest},
+     *  so a caller that decided to complete a specific test cannot end up
+     *  completing its successor: {@link ContinueTimer#timeReached()} releases the
+     *  instance lock to send, and {@link #runTest()} can install a new test in
+     *  that window. Re-reading here would publish a reachability status against
+     *  the wrong test.
+     *
+     *  @param test the test being completed, or null to do nothing
+     */
+    private void testComplete(PeerTestState test) {
+        if (test == null) return;
         _currentTestComplete = true;
-        PeerTestState test = _currentTest;
 
         // Don't do this or we won't call honorStatus()
         // to set the status to UNKNOWN or REJECT_UNSOLICITED
@@ -679,7 +798,10 @@ class PeerTestManager {
         if (type != PEER_TEST_FLAG_BYTE)
             return;
         byte[] introKey = _transport.getSSU2StaticIntroKey();
-        ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
+        // Thread-scoped scratch: unauthenticated and rate-limited only by the
+        // IPThrottler, so a per-packet cipher is worth avoiding. initializeKey()
+        // fully resets the state; destroy() would wipe the shared scratch.
+        ChaChaPolyCipherState chacha = _testCipher.get();
         chacha.initializeKey(introKey, 0);
         long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
         chacha.setNonce(n);
@@ -693,8 +815,6 @@ class PeerTestManager {
         } catch (Exception e) {
             if (_log.shouldWarn())
                 _log.warn("Bad PeerTest packet:\n" + HexDump.dump(data, off, len), e);
-        } finally {
-            chacha.destroy();
         }
     }
 
@@ -737,20 +857,40 @@ class PeerTestManager {
      * @since 0.9.55
      */
     private boolean receiveTest(RemoteHostId from, PeerState2 fromPeer, int msg, Hash h, byte[] data, int retryCount) {
-        if (retryCount < 5) {
-            RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
-            if (ri == null) {
-                if (_log.shouldInfo()) {
-                    _log.info("Delay after receiving message " + msg + " and " + retryCount +
-                              " retries, no RI for [" + h.toBase64().substring(0,6) + "]");
-                }
-                if (retryCount == 0)
-                    new DelayTest(from, fromPeer, msg, h, data);
-                return false;
+        if (retryCount < 5 && lookupRIForTest(h) == null) {
+            if (_log.shouldInfo()) {
+                _log.info("Delay after receiving message " + msg + " and " + retryCount +
+                          " retries, no RI for [" + h.toBase64().substring(0,6) + "]");
             }
+            if (retryCount == 0)
+                new DelayTest(from, fromPeer, msg, h, data);
+            return false;
         }
         receiveTest(from, fromPeer, msg, 0, h, data, null, 0);
         return true;
+    }
+
+    /**
+     *  Look up the RouterInfo a Peer Test message refers to, with a short
+     *  negative cache.
+     *
+     *  DelayTest retries on a 50ms doubling backoff, so a miss would otherwise be
+     *  re-probed on every retry.  The cache is single-entry: it only collapses the
+     *  closely spaced retries of one hash, and concurrent tests for different
+     *  hashes do not share it.  Only misses are cached, so a hit is never stale.
+     *
+     *  @param h the hash to look up, non-null
+     *  @return the RouterInfo, or null if not found (or looked up too recently)
+     *  @since 0.9.71+
+     */
+    private RouterInfo lookupRIForTest(Hash h) {
+        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
+        if (ri != null) {return ri;}
+        long now = _context.clock().now();
+        RIMiss cached = _testRIMiss;
+        if (cached != null && cached.hash.equals(h) && now - cached.when < TEST_RI_MISS_TTL) {return null;}
+        _testRIMiss = new RIMiss(h, now);
+        return null;
     }
 
     /**
@@ -1389,10 +1529,9 @@ class PeerTestManager {
                 test.setCharlieIntroKey(charlieIntroKey);
                 if (test.getReceiveCharlieTime() > 0) {
                     // send msg 6
-                    // logged in sendTestToCharlie()
-                    synchronized(this) {
-                        sendTestToCharlie();
-                    }
+                    // logged in sendTestToCharlie(); no lock, packet construction
+                    // can block and this is a UDP handle thread
+                    sendTestToCharlie(test);
                 } else {
                     // delay, await msg 5
                     if (_log.shouldDebug())
@@ -1479,10 +1618,9 @@ class PeerTestManager {
                 }
                 if (test.getCharlieIntroKey() != null) {
                     // send msg 6
-                    // logged in sendTestToCharlie()
-                    synchronized(this) {
-                        sendTestToCharlie();
-                    }
+                    // logged in sendTestToCharlie(); no lock, packet construction
+                    // can block and this is a UDP handle thread
+                    sendTestToCharlie(test);
                 } else {
                     // we haven't gotten message 4 yet
                     // We don't know Charlie's hash or intro key, we can't send msg 6 until we do

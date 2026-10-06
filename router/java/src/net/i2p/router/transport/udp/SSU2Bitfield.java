@@ -17,6 +17,20 @@ import net.i2p.router.transport.udp.SSU2Payload.AckBlock;
  */
 class SSU2Bitfield {
 
+    /**
+     *  Largest message-number span (in bits) we will build from a received ACK
+     *  block. A peer's own receive bitfield is 512 bits and shifts up by at most
+     *  max_shift (4096) before starting over, so a live peer can legitimately
+     *  describe a span of under 512 + 4096 bits. Anything beyond that is a
+     *  malformed or hostile block: the span is derived from unvalidated
+     *  attacker-controlled bytes, so an unchecked value lets a ~1.5KB packet
+     *  allocate a ~48KB bitfield. The margin here leaves room for
+     *  implementation differences while capping the allocation at 1KB.
+     *
+     *  @since 0.9.71+
+     */
+    static final int MAX_ACK_SPAN = 8192;
+
     /** Bit storage. */
     private final long[] bitfield;
     /** Bitfield size. */
@@ -166,7 +180,34 @@ class SSU2Bitfield {
     }
 
     /**
+     *  Compute the number of message numbers (bits) the bitfield for an ACK block
+     *  must cover, without allocating one.
+     *
+     *  Pure and package-visible so the hostile-input case can be tested directly.
+     *
+     *  @param thru the highest acked message number
+     *  @param acnt number of contiguous acks below thru, 0-255
+     *  @param ranges non-null, at least rangeCount * 2 bytes
+     *  @param rangeCount number of (nack, ack) range pairs, must be non-zero
+     *  @return the span in bits, always at least 1
+     *  @throws IndexOutOfBoundsException if ranges is too short for rangeCount
+     *  @since 0.9.71+
+     */
+    static long calculateAckSpan(int thru, int acnt, byte[] ranges, int rangeCount) {
+        // long math: a hostile block can push the implied low message number
+        // below Integer.MIN_VALUE, which would wrap and defeat the size check
+        long min = (long) thru - acnt;
+        for (int i = 0; i < rangeCount * 2; i++) {min -= ranges[i] & 0xff;}
+        // fixup if the last ack count was zero
+        // this doesn't handle multiple ranges with a zero ack count
+        if (ranges[(rangeCount * 2) - 1] == 0) {min += ranges[(rangeCount * 2) - 2] & 0xff;}
+        return 1L + (long) thru - min;
+    }
+
+    /**
      *  @param ranges may be null
+     *  @throws IllegalArgumentException if the ranges describe a span larger than
+     *                 {@link #MAX_ACK_SPAN}, or the offset would be negative
      */
     public static SSU2Bitfield fromACKBlock(long thru, int acnt, byte[] ranges, int rangeCount) {
         int t = (int) thru;
@@ -176,21 +217,24 @@ class SSU2Bitfield {
             for (int i = t; i >= t - acnt; i--) {rv.set(i);}
             return rv;
         }
+        // Bound the span before allocating: it is derived from unvalidated
+        // attacker-controlled bytes, and the bitfield is size/8 bytes.
+        long span = calculateAckSpan(t, acnt, ranges, rangeCount);
+        if (span > MAX_ACK_SPAN)
+            throw new IllegalArgumentException("ACK block span too large: " + span);
         // get the minimum acked value
-        int min = t - acnt;
-        for (int i = 0; i < rangeCount * 2; i++) {min -= ranges[i] & 0xff;}
-        // fixup if the last ack count was zero
-        // this doesn't handle multiple ranges with a zero ack count
-        if (ranges[(rangeCount * 2) - 1] == 0) {min += ranges[(rangeCount * 2) - 2] & 0xff;}
+        long min = (long) t + 1 - span;
 
-        SSU2Bitfield rv = new SSU2Bitfield(1 + t - min, min);
+        SSU2Bitfield rv = new SSU2Bitfield((int) span, min);
         for (int i = t; i >= t - acnt; i--) {rv.set(i);}
 
-        int j = t - (acnt + 1);
+        long j = t - (acnt + 1);
         for (int i = 0; i < rangeCount * 2; i += 2) {
             j -= ranges[i] & 0xff; // nack count
             int toAck = ranges[i + 1] & 0xff; // ack count
-            for (int k = 0; k < toAck; k++) {rv.set(j--);}
+            // stop at the bottom of the bitfield, so a range claiming more acked
+            // bits than the span covers cannot write below the offset
+            for (int k = 0; k < toAck && j >= min; k++) {rv.set(j--);}
         }
         return rv;
     }

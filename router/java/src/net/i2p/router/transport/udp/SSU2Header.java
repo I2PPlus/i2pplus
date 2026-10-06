@@ -19,11 +19,40 @@ final class SSU2Header {
     /** 12 bytes of zeros */
     public static final byte[] CHACHA_IV_0 = new byte[CHACHA_IV_LEN];
 
+    /**
+     *  Thread-scoped scratch for the trial decrypts, which run 3-6 times per
+     *  inbound datagram on the UDP handle threads.
+     *
+     *  Safe because a trial-decrypted Header never escapes the calling method:
+     *  acceptTrialDecrypt() copies the bytes into the packet, and no caller
+     *  stores the Header. One scratch per header size, because Header.toString()
+     *  and getEphemeralKey() infer the header type from the array length, and
+     *  because PacketHandler may hold a handshake header while falling back to
+     *  a long-header decrypt of the same packet.
+     *
+     *  @since 0.9.71+
+     */
+    private static final class Scratch {
+        final Header session = new Header(SESSION_HEADER_SIZE);
+        final Header longHdr = new Header(LONG_HEADER_SIZE);
+        final Header shortHdr = new Header(SHORT_HEADER_SIZE);
+        /** reused by decryptDestConnID(), decryptShortHeader(), encryptShortHeader() */
+        final byte[] xor = new byte[HEADER_PROT_DATA_LEN];
+    }
+
+    private static final ThreadLocal<Scratch> SCRATCH = new ThreadLocal<Scratch>() {
+        @Override
+        protected Scratch initialValue() {return new Scratch();}
+    };
+
     private SSU2Header() { /* no-op */ }
 
     /**
      *  Session Request and Session Created only. 64 bytes.
      *  Packet is unmodified.
+     *
+     *  The returned Header is scratch, valid only until the next trial decrypt
+     *  on this thread. It must not be retained.
      *
      *  @param packet must be 88 bytes min
      *  @return 64 byte header, null if data too short
@@ -32,14 +61,18 @@ final class SSU2Header {
         DatagramPacket pkt = packet.getPacket();
         if (pkt.getLength() < MIN_HANDSHAKE_DATA_LEN)
             return null;
-        Header header = new Header(SESSION_HEADER_SIZE);
-        decryptHandshakeHeader(pkt, key1, key2, header);
+        Scratch scratch = SCRATCH.get();
+        Header header = scratch.session;
+        decryptHandshakeHeader(pkt, key1, key2, header, scratch);
         return header;
     }
 
     /**
      *  Retry, Token Request, Peer Test only. 32 bytes.
      *  Packet is unmodified.
+     *
+     *  The returned Header is scratch, valid only until the next trial decrypt
+     *  on this thread. It must not be retained.
      *
      *  @param packet must be 56 bytes min
      *  @return 32 byte header, null if data too short
@@ -48,14 +81,18 @@ final class SSU2Header {
         DatagramPacket pkt = packet.getPacket();
         if (pkt.getLength() < MIN_LONG_DATA_LEN)
             return null;
-        Header header = new Header(LONG_HEADER_SIZE);
-        decryptLongHeader(pkt, key1, key2, header);
+        Scratch scratch = SCRATCH.get();
+        Header header = scratch.longHdr;
+        decryptLongHeader(pkt, key1, key2, header, scratch);
         return header;
     }
 
     /**
      *  Session Confirmed and data phase. 16 bytes.
      *  Packet is unmodified.
+     *
+     *  The returned Header is scratch, valid only until the next trial decrypt
+     *  on this thread. It must not be retained.
      *
      *  @param packet must be 40 bytes min
      *  @return 16 byte header, null if data too short, must be 40 bytes min
@@ -64,8 +101,9 @@ final class SSU2Header {
         DatagramPacket pkt = packet.getPacket();
         if (pkt.getLength() < MIN_DATA_LEN)
             return null;
-        Header header = new Header(SHORT_HEADER_SIZE);
-        decryptShortHeader(pkt, key1, key2, header);
+        Scratch scratch = SCRATCH.get();
+        Header header = scratch.shortHdr;
+        decryptShortHeader(pkt, key1, key2, header, scratch);
         return header;
     }
 
@@ -81,7 +119,7 @@ final class SSU2Header {
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte[] xor = new byte[HEADER_PROT_DATA_LEN];
+        byte[] xor = SCRATCH.get().xor;
 
         ChaCha20.decrypt(key1, data, off + len - HEADER_PROT_SAMPLE_1_OFFSET, HEADER_PROT_DATA, 0, xor, 0, HEADER_PROT_DATA_LEN);
         for (int i = 0; i < HEADER_PROT_DATA_LEN; i++) {
@@ -106,10 +144,10 @@ final class SSU2Header {
      *  First 64 bytes
      *  Packet is unmodified.
      */
-    private static void decryptHandshakeHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header) {
+    private static void decryptHandshakeHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
-        decryptShortHeader(pkt, key1, key2, header);
+        decryptShortHeader(pkt, key1, key2, header, scratch);
         ChaCha20.decrypt(key2, CHACHA_IV_0, data, off + SHORT_HEADER_SIZE, header.data, SHORT_HEADER_SIZE, KEY_LEN + LONG_HEADER_SIZE - SHORT_HEADER_SIZE);
     }
 
@@ -118,10 +156,10 @@ final class SSU2Header {
      *  First 32 bytes
      *  Packet is unmodified.
      */
-    private static void decryptLongHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header) {
+    private static void decryptLongHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
-        decryptShortHeader(pkt, key1, key2, header);
+        decryptShortHeader(pkt, key1, key2, header, scratch);
         ChaCha20.decrypt(key2, CHACHA_IV_0, data, off + SHORT_HEADER_SIZE, header.data, SHORT_HEADER_SIZE, LONG_HEADER_SIZE - SHORT_HEADER_SIZE);
     }
 
@@ -132,11 +170,11 @@ final class SSU2Header {
      *  First 8 bytes uses key1 and the next-to-last 12 bytes as the IV.
      *  Next 8 bytes uses key2 and the last 12 bytes as the IV.
      */
-    private static void decryptShortHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header) {
+    private static void decryptShortHeader(DatagramPacket pkt, byte[] key1, byte[] key2, Header header, Scratch scratch) {
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte[] xor = new byte[HEADER_PROT_DATA_LEN];
+        byte[] xor = scratch.xor;
 
         ChaCha20.decrypt(key1, data, off + len - HEADER_PROT_SAMPLE_1_OFFSET, HEADER_PROT_DATA, 0, xor, 0, HEADER_PROT_DATA_LEN);
         for (int i = 0; i < HEADER_PROT_DATA_LEN; i++) {
@@ -245,7 +283,7 @@ final class SSU2Header {
         byte[] data = pkt.getData();
         int off = pkt.getOffset();
         int len = pkt.getLength();
-        byte[] xor = new byte[HEADER_PROT_DATA_LEN];
+        byte[] xor = SCRATCH.get().xor;
 
         ChaCha20.encrypt(key1, data, off + len - HEADER_PROT_SAMPLE_1_OFFSET, HEADER_PROT_DATA, 0, xor, 0, HEADER_PROT_DATA_LEN);
         for (int i = 0; i < HEADER_PROT_DATA_LEN; i++) {

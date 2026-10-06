@@ -3,6 +3,7 @@ package net.i2p.router.transport.udp;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.i2p.router.Banlist;
 import net.i2p.router.RouterContext;
 import net.i2p.router.Tuner;
 import net.i2p.router.util.CoDelBlockingQueue;
@@ -580,7 +581,15 @@ class PacketHandler {
      */
     private void countBadPacket(RemoteHostId from) {
         if (from == null || from.getIP() == null) {return;}
-        _context.banlist().badPacket(from.toString(), null);
+        // badPacket() takes a String, so its three cheap early-outs (feature
+        // disabled, inside the startup grace period, null IP) come too late to
+        // avoid building the address. This is on the unauthenticated inbound
+        // path, so replicate the gates here first. isBadPacketBanEnabled() and
+        // getStartupGrace() are the same fields badPacket() tests.
+        Banlist banlist = _context.banlist();
+        if (!banlist.isBadPacketBanEnabled()) {return;}
+        if (_context.router().getUptime() < banlist.getStartupGrace()) {return;}
+        banlist.badPacket(from.toString(), null);
     }
 
 }

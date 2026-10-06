@@ -137,6 +137,16 @@ public class PeerState {
     private int _packetsRetransmitted;
     /** Last 5% loss-ratio bucket reported to the profile, -1 = nothing reported yet. Lock: _outboundLock. */
     private int _lastReportedLossBucket = -1;
+    /**
+     *  Minimum transmitted packets before a loss ratio is reported, from
+     *  {@link ProfileOrganizer#PROP_LOSSY_MIN_PACKETS}. Read once per peer
+     *  rather than per volley: reportLossRatio() is called under _outboundLock,
+     *  and a property lookup there falls through to System.getProperty every
+     *  time. A peer reads it once at construction, which is off the hot path.
+     *
+     *  @since 0.9.71+
+     */
+    private final int _lossyMinPackets;
     private long _nextSequenceNumber;
     private final AtomicBoolean _fastRetransmit = new AtomicBoolean();
 
@@ -1061,6 +1071,8 @@ public class PeerState {
         _isInbound = isInbound;
         _remoteHostId = new RemoteHostId(_remoteIP, _remotePort);
         _bwEstimator = new SimpleBandwidthEstimator(ctx, this);
+        _lossyMinPackets = Math.max(0, ctx.getProperty(ProfileOrganizer.PROP_LOSSY_MIN_PACKETS,
+                                                        ProfileOrganizer.DEFAULT_LOSSY_MIN_PACKETS));
     }
 
     /**
@@ -1906,7 +1918,7 @@ public class PeerState {
         }
     }
 
-    /**
+        /**
      * Report the current retransmit ratio to the profile when it crosses a 5% bucket
      * boundary since the last report. Bucketing keeps profile writes to at most one
      * per bucket change per connection.
@@ -1921,9 +1933,7 @@ public class PeerState {
      * @since 0.9.71+
      */
     private void reportLossRatio() {
-        if (_packetsTransmitted < _context.getProperty(ProfileOrganizer.PROP_LOSSY_MIN_PACKETS,
-                                                       ProfileOrganizer.DEFAULT_LOSSY_MIN_PACKETS))
-            return;
+        if (_packetsTransmitted < _lossyMinPackets) return;
         int bucket = (int) ((_packetsRetransmitted * 20L) / _packetsTransmitted);
         if (bucket != _lastReportedLossBucket) {
             _lastReportedLossBucket = bucket;
