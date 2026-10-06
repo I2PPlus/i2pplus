@@ -92,6 +92,11 @@ public class PublicKey extends SimpleDataStructure {
     private static final EncType DEF_TYPE = EncType.ELGAMAL_2048;
     /** Default key size in bytes (256 for ElGamal). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
+    /**
+     * Shared result for the no-padding case. Zero-length arrays cannot be
+     * mutated, so a single instance may be handed to every caller.
+     */
+    private static final byte[] EMPTY = new byte[0];
     private static final int CACHE_SIZE = 1024;
     private static final SDSCache<PublicKey> _cache = new SDSCache<>(PublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
     private final EncType _type;
@@ -268,9 +273,10 @@ public class PublicKey extends SimpleDataStructure {
      *  Padding portion of this (type 0) PK based on the Key Cert type given,
      *  if any
      *
-     *  @return trailing padding length &gt; 0 or null if no padding or type is unknown
-     *  @throws IllegalArgumentException if this is already typed to a different type
      *  @param kcert the key certificate
+     *  @return the trailing padding, or a shared empty array if there is no
+     *          padding or the type is unknown
+     *  @throws IllegalStateException if this is already typed to a different type
      *  @since 0.9.42
      */
     public byte[] getPadding(KeyCertificate kcert) {
@@ -279,14 +285,14 @@ public class PublicKey extends SimpleDataStructure {
         }
         EncType newType = kcert.getEncType();
         if (_type == newType || newType == null) {
-            return new byte[0];
+            return EMPTY;
         }
         if (_type != EncType.ELGAMAL_2048) {
             throw new IllegalStateException("Cannot convert " + _type + " to " + newType);
         }
         int newLen = newType.getPubkeyLen();
         if (newLen >= KEYSIZE_BYTES) {
-            return new byte[0];
+            return EMPTY;
         }
         int padLen = KEYSIZE_BYTES - newLen;
         byte[] pad = new byte[padLen];

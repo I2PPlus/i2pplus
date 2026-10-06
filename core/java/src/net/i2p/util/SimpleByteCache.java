@@ -1,6 +1,8 @@
 package net.i2p.util;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  * Like ByteCache but works directly with byte arrays, not ByteArrays.
@@ -19,8 +21,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("PMD.SingleMethodSingleton")
 public final class SimpleByteCache {
 
-    private static final ConcurrentHashMap<Integer, SimpleByteCache> _caches = new ConcurrentHashMap<>(8);
-    private static final ConcurrentHashMap<Integer, SimpleByteCache> _allCaches = new ConcurrentHashMap<>(8);
+    /**
+     *  The caches, keyed by array size. An int-keyed table rather than a
+     *  ConcurrentHashMap&lt;Integer, SimpleByteCache&gt;, so the hot acquire and
+     *  release lookups neither hash an Integer nor box the size.
+     */
+    private static final IntCacheMap _caches = new IntCacheMap(8);
 
     private static final int DEFAULT_SIZE = 64;
 
@@ -41,7 +47,7 @@ public final class SimpleByteCache {
     private static class GlobalCleanup extends SimpleTimer2.TimedEvent {
         @Override
         public void timeReached() {
-            for (SimpleByteCache cache : _allCaches.values()) {
+            for (SimpleByteCache cache : _caches.values()) {
                 cache.cleanup();
             }
             schedule(CLEANUP_FREQUENCY);
@@ -79,9 +85,10 @@ public final class SimpleByteCache {
      * Cache responsible for objects of the given size.
      *
      * There is one cache per size for the life of the JVM, and cacheSize is
-     * (re)applied to it on every call: a later call with a different cacheSize
-     * resizes the shared cache, discarding the excess on a shrink. The arrays
-     * evicted are simply garbage collected - nothing zeroes them.
+     * (re)applied to it whenever it differs from the size the cache already
+     * holds: a later call with a different cacheSize resizes the shared cache,
+     * discarding the excess on a shrink. The arrays evicted are simply garbage
+     * collected - nothing zeroes them.
      *
      * @param cacheSize how many objects (NOT memory bytes) to keep before
      *                  discarding released objects
@@ -89,19 +96,23 @@ public final class SimpleByteCache {
      * @return the instance
      */
     public static SimpleByteCache getInstance(int cacheSize, int size) {
-        Integer sz = Integer.valueOf(size);
-        SimpleByteCache cache = _caches.get(sz);
+        SimpleByteCache cache = _caches.get(size);
         if (cache == null) {
-            cache = new SimpleByteCache(cacheSize, size);
-            SimpleByteCache old = _caches.putIfAbsent(sz, cache);
-            if (old != null) {
-                cache = old;
-            } else {
-                // Also add to the allCaches list for global cleanup
-                _allCaches.put(sz, cache);
+            cache = _caches.putIfAbsent(size, new SimpleByteCache(cacheSize, size));
+        }
+        // On the acquire/release path the requested cacheSize never changes, so
+        // this volatile read is the whole cost and resize() is skipped. Callers
+        // passing *different* cacheSize values must not interleave read-then-
+        // write, or the loser would skip a resize that the previous
+        // unconditional call would have applied, so the rare resize is
+        // serialised per cache.
+        if (cache.capacity() != cacheSize) {
+            synchronized (cache) {
+                if (cache.capacity() != cacheSize) {
+                    cache.resize(cacheSize);
+                }
             }
         }
-        cache.resize(cacheSize);
         return cache;
     }
 
@@ -148,6 +159,15 @@ public final class SimpleByteCache {
     }
 
     /**
+     * Current object count ceiling.
+     *
+     * @return the maximum number of entries currently held
+     */
+    private int capacity() {
+        return _available.getCapacity();
+    }
+
+    /**
      * Next available array, either from the cache or a brand new one.
      *
      * @param size how large should the object be?
@@ -168,6 +188,7 @@ public final class SimpleByteCache {
      * Put this array back onto the available cache for reuse
      */
     public static void release(byte[] entry) {
+        if (entry == null) return;
         SimpleByteCache cache = _caches.get(entry.length);
         if (cache != null) {
             cache.releaseIt(entry);
@@ -178,7 +199,7 @@ public final class SimpleByteCache {
      * Put this array back onto the available cache for reuse
      */
     private void releaseIt(byte[] entry) {
-        if (entry == null || entry.length != _entrySize) {
+        if (entry.length != _entrySize) {
             return;
         }
         // should be safe without this
@@ -191,5 +212,125 @@ public final class SimpleByteCache {
      */
     private void clear() {
         _available.clear();
+    }
+
+/**
+     *  A set of {@link SimpleByteCache}, keyed by array size. Open addressed with
+     *  linear probing: lookups are lock-free and unboxed, and only putIfAbsent and
+     *  the occasional growth take the lock.
+     *
+     *  <p>Values are read through an AtomicReferenceArray, which both marks the
+     *  occupied slots - every int is a legal key, so there is no value to spare
+     *  as an empty-slot sentinel - and publishes each cache's fully built internals.
+     *
+     *  @since 0.9.72
+     */
+    private static final class IntCacheMap {
+
+        /** Replaced wholesale on growth, so a reader always sees a complete one. */
+        private static final class Table {
+            private final int mask;
+            private final int[] keys;
+            private final AtomicReferenceArray<SimpleByteCache> vals;
+
+            Table(int capacity) {
+                keys = new int[capacity];
+                vals = new AtomicReferenceArray<>(capacity);
+                mask = capacity - 1;
+            }
+        }
+
+        private volatile Table _table;
+
+        /** Occupied slots in the current table. Guarded by this. */
+        private int _size;
+
+        IntCacheMap(int expectedSize) {
+            int capacity = 16;
+            while (capacity < expectedSize * 2) capacity <<= 1;
+            _table = new Table(capacity);
+        }
+
+        /** Mixes the key, so that nearby sizes land in different slots. */
+        private static int slot(int key, int mask) {
+            int h = key * 0x9E3779B1;
+            h ^= h >>> 16;
+            return h & mask;
+        }
+
+        /**
+         *  @param key the array size
+         *  @return the cache for the key, or null
+         */
+        SimpleByteCache get(int key) {
+            Table t = _table;
+            int mask = t.mask;
+            int idx = slot(key, mask);
+            while (true) {
+                SimpleByteCache val = t.vals.get(idx);
+                if (val == null) return null;
+                if (t.keys[idx] == key) return val;
+                idx = (idx + 1) & mask;
+            }
+        }
+
+        /**
+         *  Store a cache unless the key is already present.
+         *
+         *  @param key the array size
+         *  @param val the cache to store if the key is free
+         *  @return the value now stored for the key - val, or the one that was
+         *          already there
+         */
+        synchronized SimpleByteCache putIfAbsent(int key, SimpleByteCache val) {
+            Table t = _table;
+            int idx = slot(key, t.mask);
+            while (t.vals.get(idx) != null) {
+                if (t.keys[idx] == key) return t.vals.get(idx);
+                idx = (idx + 1) & t.mask;
+            }
+            // keep the table at most three-quarters full, so probes stay short
+            if (_size * 4 >= t.keys.length * 3) {
+                t = grow();
+                idx = slot(key, t.mask);
+                while (t.vals.get(idx) != null) idx = (idx + 1) & t.mask;
+            }
+            t.keys[idx] = key;
+            _size++;
+            t.vals.set(idx, val);
+            return val;
+        }
+
+        /** Double the table. Caller must synchronize on this. */
+        private Table grow() {
+            Table old = _table;
+            Table t = new Table(old.keys.length * 2);
+            for (int i = 0; i < old.keys.length; i++) {
+                SimpleByteCache val = old.vals.get(i);
+                if (val == null) continue;
+                int key = old.keys[i];
+                int idx = slot(key, t.mask);
+                while (t.vals.get(idx) != null) idx = (idx + 1) & t.mask;
+                t.keys[idx] = key;
+                t.vals.set(idx, val);
+            }
+            _table = t;
+            return t;
+        }
+
+        /**
+         *  Snapshot of the caches, for the cleanup task and {@link #clearAll()}.
+         *
+         *  @return never null
+         */
+        List<SimpleByteCache> values() {
+            Table t = _table;
+            List<SimpleByteCache> rv = new ArrayList<>(_size);
+            for (int i = 0; i < t.vals.length(); i++) {
+                SimpleByteCache val = t.vals.get(i);
+                if (val != null) rv.add(val);
+            }
+            return rv;
+        }
     }
 }

@@ -81,6 +81,12 @@ public class KeysAndCert extends DataStructureImpl {
     protected Certificate _certificate;
     /** Cached calculated hash value. */
     private Hash __calculatedHash;
+    /**
+     * Cached key certificate, created lazily from {@link #_certificate} when
+     * that is a plain CERTIFICATE_TYPE_KEY Certificate. null when there is
+     * nothing to cache. Volatile so a racy double-creation is harmless.
+     */
+    private volatile KeyCertificate __keyCertificate;
     /** If compressed, 32 bytes only. */
     private byte[] _padding;
 
@@ -93,6 +99,12 @@ public class KeysAndCert extends DataStructureImpl {
 
     /** Compressed padding block length in bytes. */
     private static final int PAD_COMP_LEN = 32;
+    /**
+     * Hash bytes needed for the 8-char b32 hash prefix in toString().
+     * 8 b32 chars carry 40 bits, and 5 bytes is the smallest input that
+     * produces a full 8 chars.
+     */
+    private static final int B32_PREFIX_BYTES = 5;
     /** Logger instance. */
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(KeysAndCert.class);
 
@@ -122,16 +134,10 @@ public class KeysAndCert extends DataStructureImpl {
      *  @since 0.9.17
      */
     public SigType getSigType() {
-        if (_certificate == null) return null;
-        if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
-            try {
-                KeyCertificate kcert = _certificate.toKeyCertificate();
-                return kcert.getSigType();
-            } catch (DataFormatException dfe) {
-                // invalid certificate format, fall through to default
-            }
-        }
-        return SigType.DSA_SHA1;
+        Certificate cert = _certificate;
+        if (cert == null) return null;
+        KeyCertificate kcert = getKeyCertificate(cert);
+        return (kcert != null) ? kcert.getSigType() : SigType.DSA_SHA1;
     }
 
     /**
@@ -141,16 +147,34 @@ public class KeysAndCert extends DataStructureImpl {
      *  @since 0.9.42
      */
     public EncType getEncType() {
-        if (_certificate == null) return null;
-        if (_certificate.getCertificateType() == Certificate.CERTIFICATE_TYPE_KEY) {
-            try {
-                KeyCertificate kcert = _certificate.toKeyCertificate();
-                return kcert.getEncType();
-            } catch (DataFormatException dfe) {
-                // invalid certificate format, fall through to default
-            }
+        Certificate cert = _certificate;
+        if (cert == null) return null;
+        KeyCertificate kcert = getKeyCertificate(cert);
+        return (kcert != null) ? kcert.getEncType() : EncType.ELGAMAL_2048;
+    }
+
+    /**
+     *  Up-convert the certificate to a KeyCertificate, caching the result.
+     *  The cache avoids a new KeyCertificate allocation on every identity-type
+     *  query for identities holding a plain CERTIFICATE_TYPE_KEY Certificate
+     *  (KeyCertificate.toKeyCertificate() already returns itself).
+     *
+     *  @param cert the non-null certificate
+     *  @return the key certificate, or null if the certificate is not of type
+     *          CERTIFICATE_TYPE_KEY or its payload is too short
+     */
+    private KeyCertificate getKeyCertificate(Certificate cert) {
+        if (cert.getCertificateType() != Certificate.CERTIFICATE_TYPE_KEY) return null;
+        KeyCertificate rv = __keyCertificate;
+        if (rv != null) return rv;
+        try {
+            rv = cert.toKeyCertificate();
+        } catch (DataFormatException dfe) {
+            // invalid certificate format, caller uses the default
+            return null;
         }
-        return EncType.ELGAMAL_2048;
+        __keyCertificate = rv;
+        return rv;
     }
 
     /**
@@ -374,9 +398,12 @@ public class KeysAndCert extends DataStructureImpl {
         buf.append(cls);
         buf.append(" [");
         if (cls.equals("Destination")) {
-            buf.append(getHash().toBase32().substring(0, 8));
+            // 8 b32 chars carry 40 bits, so encoding only the first 5 hash bytes
+            // yields exactly the 8 chars kept here, without encoding all 32
+            buf.append(Base32.encode(Arrays.copyOf(getHash().getData(), B32_PREFIX_BYTES)));
         } else {
-            buf.append(getHash().toBase64().substring(0, 6));
+            // toBase64() caches its result on the Hash, so just avoid the substring copy
+            buf.append(getHash().toBase64(), 0, 6);
         }
         buf.append("]");
 

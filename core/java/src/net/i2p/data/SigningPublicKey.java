@@ -96,6 +96,16 @@ public class SigningPublicKey extends SimpleDataStructure {
     /** Default key size in bytes (128 for DSA-SHA1). */
     public static final int KEYSIZE_BYTES = DEF_TYPE.getPubkeyLen();
     private static final int CACHE_SIZE = 1024;
+    /**
+     * Shared result for the no-padding case. Zero-length arrays cannot be
+     * mutated, so a single instance may be handed to every caller.
+     */
+    private static final byte[] EMPTY = new byte[0];
+    /**
+     * Number of leading data bytes that determine the 6-char b64 prefix in toString().
+     * 6 b64 chars carry 36 bits, so 5 bytes are the minimum that reproduce them exactly.
+     */
+    private static final int B64_PREFIX_BYTES = 5;
 
     private static final SDSCache<SigningPublicKey> _cache = new SDSCache<>(SigningPublicKey.class, KEYSIZE_BYTES, CACHE_SIZE);
 
@@ -248,8 +258,10 @@ public class SigningPublicKey extends SimpleDataStructure {
      *  Get the portion of this (type 0) SPK that is really padding based on the Key Cert type given,
      *  if any
      *
-     *  @return leading padding length &gt; 0 or null if no padding or type is unknown
-     *  @throws IllegalArgumentException if this is already typed to a different type
+     *  @param kcert the key certificate
+     *  @return the leading padding, or a shared empty array if there is no
+     *          padding or the type is unknown
+     *  @throws IllegalStateException if this is already typed to a different type
      *  @since 0.9.12
      */
     public byte[] getPadding(KeyCertificate kcert) {
@@ -258,14 +270,14 @@ public class SigningPublicKey extends SimpleDataStructure {
         }
         SigType newType = kcert.getSigType();
         if (_type == newType || newType == null) {
-            return new byte[0];
+            return EMPTY;
         }
         if (_type != SigType.DSA_SHA1) {
             throw new IllegalStateException("Cannot convert " + _type + " to " + newType);
         }
         int newLen = newType.getPubkeyLen();
         if (newLen >= KEYSIZE_BYTES) {
-            return new byte[0];
+            return EMPTY;
         }
         int padLen = KEYSIZE_BYTES - newLen;
         byte[] pad = new byte[padLen];
@@ -311,7 +323,13 @@ public class SigningPublicKey extends SimpleDataStructure {
         if (_data == null) {
             buf.append("null");
         } else if (length <= 32) {
-            buf.append(toBase64().substring(0, 6));
+            // only the leading bytes determine the 6 kept b64 chars, so don't
+            // encode the whole key just to throw most of it away
+            if (_data.length >= B64_PREFIX_BYTES) {
+                buf.append(Base64.encode(_data, 0, B64_PREFIX_BYTES, false), 0, 6);
+            } else {
+                buf.append(toBase64().substring(0, 6));
+            }
         } else {
             buf.append("Size: ").append(length).append(" bytes");
         }

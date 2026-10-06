@@ -20,9 +20,10 @@ public class ReusableGZIPOutputStream extends ResettableGZIPOutputStream {
     // Apache Harmony 5.0M13 Deflater doesn't work after reset()
     // Neither does Android
     // attempt to fix #1915
-    // private static final boolean ENABLE_CACHING = !(SystemVersion.isApache() ||
-    //                                                SystemVersion.isAndroid());
-    private static final boolean ENABLE_CACHING = false;
+    // Same guard as ReusableGZIPInputStream: on those platforms every instance
+    // is destroyed on release rather than reset and pooled.
+    private static final boolean ENABLE_CACHING = !(SystemVersion.isApache() ||
+                                                   SystemVersion.isAndroid());
     private static final LinkedBlockingQueue<ReusableGZIPOutputStream> _available;
 
     static {

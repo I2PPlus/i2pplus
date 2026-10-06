@@ -119,13 +119,17 @@ public class Certificate extends DataStructureImpl {
         if (length == 0) return new Certificate(type, null);
         if (off + 3 + length > data.length)
             throw new DataFormatException("not enough bytes");
+        // test the known 4-byte key certs in place, before copying out the payload,
+        // since most destinations and router identities carry one of them
+        if (type == CERTIFICATE_TYPE_KEY && length == 4) {
+            if (DataHelper.eq(data, off + 3, KeyCertificate.Ed25519_PAYLOAD, 0, 4))
+                return KeyCertificate.ELG_Ed25519_CERT;
+            if (DataHelper.eq(data, off + 3, KeyCertificate.ECDSA256_PAYLOAD, 0, 4))
+                return KeyCertificate.ELG_ECDSA256_CERT;
+        }
         byte[] payload = new byte[length];
         System.arraycopy(data, off + 3, payload, 0, length);
         if (type == CERTIFICATE_TYPE_KEY) {
-            if (length == 4) {
-                if (Arrays.equals(payload, KeyCertificate.Ed25519_PAYLOAD)) return KeyCertificate.ELG_Ed25519_CERT;
-                if (Arrays.equals(payload, KeyCertificate.ECDSA256_PAYLOAD)) return KeyCertificate.ELG_ECDSA256_CERT;
-            }
             try {
                 return new KeyCertificate(payload);
             } catch (DataFormatException dfe) {

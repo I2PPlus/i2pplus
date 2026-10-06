@@ -35,7 +35,7 @@ import java.io.InputStream;
  * <p>Rendering:</p>
  * <ul>
  *   <li>{@link #toBase64()} caches its result in a volatile field.</li>
- *   <li>{@link #toBase32()} is not cached; it encodes on every call.</li>
+ *   <li>{@link #toBase32()} caches its result the same way.</li>
  * </ul>
  *
  * <p>Comparison:</p>
@@ -52,13 +52,14 @@ import java.io.InputStream;
  * <ul>
  *   <li>The data cannot be reassigned once set, so a Hash that is safely
  *       published (constructed and then handed to other threads) can be shared
- *       freely; the derived {@code _base64ed} and {@code _cachedHashCode} fields
- *       are volatile. {@link #_data} itself is neither final nor volatile, so a
+ *       freely; the derived {@code _base64ed}, {@code _base32ed} and
+ *       {@code _cachedHashCode} fields are volatile. {@link #_data} itself is
+ *       neither final nor volatile, so a
  *       Hash built by a constructor and published through an unsynchronized
  *       data structure may expose stale data.</li>
  *   <li>{@link #getData()} hands out the backing array, so a caller that
- *       mutates it corrupts the cached hash code and any byte cache that shares
- *       the array.</li>
+ *       mutates it corrupts the cached hash code and the cached Base64 and
+ *       Base32 strings, as well as any byte cache that shares the array.</li>
  * </ul>
  *
  * @author jrandom
@@ -66,6 +67,7 @@ import java.io.InputStream;
 @SuppressWarnings({"PMD.OverrideBothEqualsAndHashcode", "checkstyle:EqualsHashCode"})
 public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
+    private volatile String _base32ed;
     private volatile int _cachedHashCode;
 
     /** Length of SHA-256 hash in bytes. */
@@ -144,6 +146,7 @@ public class Hash extends SimpleDataStructure {
     public void setData(byte[] data) {
         super.setData(data);
         _base64ed = null;
+        _base32ed = null;
         _cachedHashCode = super.hashCode();
     }
 
@@ -152,6 +155,7 @@ public class Hash extends SimpleDataStructure {
     public void readBytes(InputStream in) throws DataFormatException, IOException {
         super.readBytes(in);
         _base64ed = null;
+        _base32ed = null;
         _cachedHashCode = super.hashCode();
     }
 
@@ -174,15 +178,20 @@ public class Hash extends SimpleDataStructure {
     }
 
     /**
-     *  The .b32.i2p form of the hash. Encoded on every call - unlike
-     *  toBase64(), the result is not cached.
+     *  The .b32.i2p form of the hash. Cached after the first call, like
+     *  toBase64(), and dropped by setData() and readBytes().
      *
      *  @return "{52 chars}.b32.i2p" or null if data not set.
      *  @since 0.9.25
      */
     public String toBase32() {
         if (_data == null) return null;
-        return Base32.encode(_data) + ".b32.i2p";
+        String rv = _base32ed;
+        if (rv == null) {
+            rv = Base32.encode(_data) + ".b32.i2p";
+            _base32ed = rv;
+        }
+        return rv;
     }
 
     /**

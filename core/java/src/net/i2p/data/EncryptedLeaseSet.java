@@ -115,6 +115,37 @@ public class EncryptedLeaseSet extends LeaseSet2 {
     private static final int CLIENT_LEN = ID_LEN + COOKIE_LEN;
 
     /**
+     *  Cached HKDF for layer encryption/decryption. HKDF is stateless (it only
+     *  holds the context, and the context's HMAC256Generator is itself
+     *  thread-safe), so one instance per context is reusable by all client
+     *  threads and saves an allocation per encrypt/decrypt.
+     */
+    private static volatile HKDF _hkdf;
+    /** The context {@link #_hkdf} was built for, so a context change forces a rebuild. */
+    private static volatile I2PAppContext _hkdfCtx;
+
+    /**
+     *  Get the shared HKDF for a context.
+     *  The cached instance is rebuilt if the context differs, so a context swap
+     *  never leaves a HKDF bound to a stale one. A racy double build is
+     *  harmless, as both instances are equivalent.
+     *
+     *  @param ctx the app context
+     *  @return the shared HKDF, never null
+     */
+    private static HKDF hkdf(I2PAppContext ctx) {
+        if (_hkdfCtx != ctx) {
+            synchronized (EncryptedLeaseSet.class) {
+                if (_hkdfCtx != ctx) {
+                    _hkdf = new HKDF(ctx);
+                    _hkdfCtx = ctx;
+                }
+            }
+        }
+        return _hkdf;
+    }
+
+    /**
      * Creates a new EncryptedLeaseSet with default values.
      */
     public EncryptedLeaseSet() {
@@ -459,7 +490,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         byte[] salt = new byte[SALT_LEN];
         ctx.random().nextBytes(salt);
-        HKDF hkdf = new HKDF(ctx);
+        HKDF hkdf = hkdf(ctx);
         byte[] key = new byte[32];
         // use first 12 bytes only
         byte[] iv = new byte[32];
@@ -619,7 +650,7 @@ public class EncryptedLeaseSet extends LeaseSet2 {
         byte[] authInput = getHKDFInput(ctx);
 
         // layer 1 (outer) decryption
-        HKDF hkdf = new HKDF(ctx);
+        HKDF hkdf = hkdf(ctx);
         byte[] key = new byte[32];
         // use first 12 bytes only
         byte[] iv = new byte[32];

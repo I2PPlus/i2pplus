@@ -395,7 +395,9 @@ public class Base64 {
     private static String safeEncode(byte[] source, int off, int len, boolean useStandardAlphabet) {
         if (len + off > source.length)
             throw new ArrayIndexOutOfBoundsException("Trying to encode too much!  source.len=" + source.length + " off=" + off + " len=" + len);
-        StringBuilder buf = new StringBuilder(len * 4 / 3);
+        // The encoded length is ceil(len / 3) * 4. Anything less makes the
+        // StringBuilder grow (and copy) part way through the encoding.
+        StringBuilder buf = new StringBuilder(((len + 2) / 3) * 4);
         if (useStandardAlphabet)
             encodeBytes(source, off, len, false, buf, ALPHABET);
         else
@@ -462,78 +464,68 @@ public class Base64 {
 
     /* ********  D E C O D I N G   M E T H O D S  ******** */
 
-        /**
-     * Decodes four bytes from array <var>source</var>
-     * and writes the resulting bytes (up to three of them)
-     * to <var>destination</var>.
-     * The source and destination arrays can be manipulated
-     * anywhere along their length by specifying
-     * <var>srcOffset</var> and <var>destOffset</var>.
-     * This method does not check to make sure your arrays
-     * are large enough to accomodate <var>srcOffset</var> + 4 for
-     * the <var>source</var> array or <var>destOffset</var> + 3 for
-     * the <var>destination</var> array.
-     * This method returns the actual number of bytes that
-     * were converted from the Base64 encoding.
+    /**
+     * The DECODABET value of the equals sign. No other character maps to it,
+     * so a decoded value of -1 means the char was '='.
+     */
+    private static final byte DECODABET_EQUALS = -1;
+
+    /**
+     * Decodes four Base64 chars, already mapped through {@link #DECODABET},
+     * and writes the resulting bytes (up to three of them) to
+     * <var>destination</var> at <var>destOffset</var>.
+     * This method does not check that <var>destination</var> is large enough for
+     * <var>destOffset</var> + 3.
      *
-     *
-     * @param source the array to convert
-     * @param srcOffset the index where conversion begins
+     * @param d0..d3 the DECODABET values of the four source chars
      * @param destination the array to hold the conversion
      * @param destOffset the index where output will be put
      * @return the number of decoded bytes converted 1-3, or -1 on error, never zero
      * @since 1.3
      */
-    private static int decode4to3(byte[] source, int srcOffset, byte[] destination, int destOffset) {
-        byte decode0 = DECODABET[source[srcOffset++]];
-        byte decode1 = DECODABET[source[srcOffset++]];
-        if (decode0 < 0 || decode1 < 0)
+    private static int decode4to3(byte d0, byte d1, byte d2, byte d3, byte[] destination, int destOffset) {
+        if (d0 < 0 || d1 < 0)
             return -1;
 
         // Example: Dk==
-        if (source[srcOffset] == EQUALS_SIGN) {
-            if (source[srcOffset + 1] != EQUALS_SIGN)
+        if (d2 == DECODABET_EQUALS) {
+            if (d3 != DECODABET_EQUALS)
                 return -1;
             // verify no extra bits
-            if ((decode1 & 0x0f) != 0)
+            if ((d1 & 0x0f) != 0)
                 return -1;
-            int outBuff = (decode0 << 18)
-                          | (decode1 << 12);
+            int outBuff = (d0 << 18)
+                          | (d1 << 12);
             destination[destOffset] = (byte) (outBuff >> 16);
             return 1;
         }
 
         // Example: DkL=
-        else if (source[srcOffset + 1] == EQUALS_SIGN) {
-            byte decode2 = DECODABET[source[srcOffset]];
-            if (decode2 < 0)
+        if (d3 == DECODABET_EQUALS) {
+            if (d2 < 0)
                 return -1;
             // verify no extra bits
-            if ((decode2 & 0x03) != 0)
+            if ((d2 & 0x03) != 0)
                 return -1;
-            int outBuff = (decode0 << 18)
-                          | (decode1 << 12)
-                          | (decode2 << 6);
+            int outBuff = (d0 << 18)
+                          | (d1 << 12)
+                          | (d2 << 6);
             destination[destOffset++] = (byte) (outBuff >> 16);
             destination[destOffset] = (byte) (outBuff >> 8);
             return 2;
         }
 
         // Example: DkLE
-        else {
-            byte decode2 = DECODABET[source[srcOffset++]];
-            byte decode3 = DECODABET[source[srcOffset]];
-            if (decode2 < 0 || decode3 < 0)
-                return -1;
-            int outBuff = (decode0 << 18)
-                          | (decode1 << 12)
-                          | (decode2 << 6)
-                          | decode3;
-            destination[destOffset++] = (byte) (outBuff >> 16);
-            destination[destOffset++] = (byte) (outBuff >> 8);
-            destination[destOffset] = (byte) (outBuff);
-            return 3;
-        }
+        if (d2 < 0 || d3 < 0)
+            return -1;
+        int outBuff = (d0 << 18)
+                      | (d1 << 12)
+                      | (d2 << 6)
+                      | d3;
+        destination[destOffset++] = (byte) (outBuff >> 16);
+        destination[destOffset++] = (byte) (outBuff >> 8);
+        destination[destOffset] = (byte) (outBuff);
+        return 3;
     } // end decodeToBytes
 
     /**
@@ -545,11 +537,15 @@ public class Base64 {
      * @since 1.4
      */
     private static byte[] standardDecode(String s) {
-        // We use getUTF8() instead of getASCII() so we may verify
-        // there's no UTF-8 in there.
-        byte[] bytes = DataHelper.getUTF8(s);
-        if (bytes.length != s.length()) return null;
-        return decode(bytes, 0, bytes.length);
+        final int len = s.length();
+        // Only ASCII is valid. We used to run DataHelper.getUTF8(s) and compare
+        // the length to s.length(), so any char that encodes to more than one
+        // byte (anything >= 0x80, including an unpaired surrogate) was rejected.
+        // Comparing the chars is the same test without the intermediate byte[].
+        for (int i = 0; i < len; i++) {
+            if (s.charAt(i) > 0x7f) return null;
+        }
+        return decode(s, 0, len);
     } // end decode
 
     /**
@@ -582,8 +578,10 @@ public class Base64 {
     } // end decodeToString
 
     /**
-     * Decodes Base64 content in byte array format and returns
-     * the decoded byte array.
+     * Decodes Base64 content in string format and returns
+     * the decoded byte array. The chars are looked up in the DECODABET
+     * directly, so no UTF-8 byte[] copy of the string is made. The caller
+     * must have verified that every char is ASCII.
      *
      * As of 0.9.14, does not require trailing '=' if remaining bits are zero.
      * Prior to that, trailing 1, 2, or 3 chars were ignored.
@@ -600,7 +598,7 @@ public class Base64 {
      * @return decoded data, null on error
      * @since 1.3
      */
-    private static byte[] decode(byte[] source, int off, int len) {
+    private static byte[] decode(String source, int off, int len) {
         int len34 = len * 3 / 4;
         byte[] outBuff = new byte[len34]; // size of output
         int outBuffPosn = 0;
@@ -609,7 +607,11 @@ public class Base64 {
         int end = off + len;
         int converted = 0;
         while (i + 3 < end) {
-            converted = decode4to3(source, i, outBuff, outBuffPosn);
+            converted = decode4to3(DECODABET[source.charAt(i)],
+                                   DECODABET[source.charAt(i + 1)],
+                                   DECODABET[source.charAt(i + 2)],
+                                   DECODABET[source.charAt(i + 3)],
+                                   outBuff, outBuffPosn);
             if (converted < 0) return null;
             outBuffPosn += converted;
             i += 4;
@@ -622,15 +624,11 @@ public class Base64 {
         if (remaining > 0) {
             if (converted > 0 && converted < 3) return null;
             if (remaining == 1 || remaining > 3) return null;
-            byte[] b4 = new byte[4];
-            b4[0] = source[i++];
-            b4[1] = source[i++];
-            if (remaining == 3)
-                b4[2] = source[i];
-            else
-                b4[2] = EQUALS_SIGN;
-            b4[3] = EQUALS_SIGN;
-            converted = decode4to3(b4, 0, outBuff, outBuffPosn);
+            // pad the tail out to four chars rather than building a byte[4]
+            byte decode0 = DECODABET[source.charAt(i++)];
+            byte decode1 = DECODABET[source.charAt(i++)];
+            byte decode2 = (remaining == 3 ? DECODABET[source.charAt(i)] : DECODABET_EQUALS);
+            converted = decode4to3(decode0, decode1, decode2, DECODABET_EQUALS, outBuff, outBuffPosn);
             if (converted < 0) return null;
             outBuffPosn += converted;
         }

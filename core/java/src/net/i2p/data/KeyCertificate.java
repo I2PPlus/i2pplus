@@ -71,6 +71,12 @@ public class KeyCertificate extends Certificate {
     public static final int HEADER_LENGTH = 4;
 
     /**
+     * Shared result for the no-extra-data case. Zero-length arrays cannot be
+     * mutated, so a single instance may be handed to every caller.
+     */
+    private static final byte[] EMPTY = new byte[0];
+
+    /**
      * ElG + Ed25519
      *
      * @since 0.9.22 pkg private for Certificate.create()
@@ -284,10 +290,10 @@ public class KeyCertificate extends Certificate {
      *  Crypto Key extra data, if any, is second in the array,
      *  at offset max(0, getSigType().getPubkeyLen() - 128)
      *
-     *  @return null if unset or none
+     *  @return empty array if unset or none
      */
     public byte[] getExtraKeyData() {
-        if (_payload == null || _payload.length <= HEADER_LENGTH) return new byte[0];
+        if (_payload == null || _payload.length <= HEADER_LENGTH) return EMPTY;
         byte[] rv = new byte[_payload.length - HEADER_LENGTH];
         System.arraycopy(_payload, HEADER_LENGTH, rv, 0, rv.length);
         return rv;
@@ -296,12 +302,12 @@ public class KeyCertificate extends Certificate {
     /**
      *  Signing Key extra data, if any.
      *
-     *  @return null if unset or none
+     *  @return empty array if unset or none
      *  @throws UnsupportedOperationException if the sig type is unsupported
      */
     public byte[] getExtraSigningKeyData() {
         // we assume no crypto key data
-        if (_payload == null || _payload.length <= HEADER_LENGTH) return new byte[0];
+        if (_payload == null || _payload.length <= HEADER_LENGTH) return EMPTY;
         SigType type = getSigType();
         if (type == null) throw new UnsupportedOperationException("Unknown signature type");
         int extra = Math.max(0, type.getPubkeyLen() - 128);

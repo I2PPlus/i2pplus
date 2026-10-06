@@ -794,6 +794,9 @@ public class DataHelper {
 
     private static final byte[] EMPTY_BUFFER = new byte[0];
 
+    /** Lower-case hex digits, so toString(byte[], int) never calls Integer.toHexString(). */
+    private static final char[] HEX_CHARS = "0123456789abcdef".toCharArray();
+
     /**
      *  Lower-case hex with leading zeros.
      *  Use toHexString(byte[]) to not get leading zeros
@@ -806,19 +809,18 @@ public class DataHelper {
         if (buf == null) {
             buf = EMPTY_BUFFER;
         }
-        StringBuilder out = new StringBuilder();
+        StringBuilder out = new StringBuilder(len > 0 ? len * 2 : 0);
         if (len > buf.length) {
             for (int i = 0; i < len - buf.length; i++) {
-                out.append("00");
+                out.append('0');
+                out.append('0');
             }
         }
         int min = Math.min(buf.length, len);
         for (int i = 0; i < min; i++) {
             int bi = buf[i] & 0xff;
-            if (bi < 16) {
-                out.append('0');
-            }
-            out.append(Integer.toHexString(bi));
+            out.append(HEX_CHARS[bi >>> 4]);
+            out.append(HEX_CHARS[bi & 0x0f]);
         }
         return out.toString();
     }
@@ -2290,6 +2292,22 @@ public class DataHelper {
     }
 
     /**
+     *  The shared output buffer for decompress().
+     *
+     *  A holder class rather than a static field of DataHelper, so the lookup is
+     *  done once and I2PAppContext is still not initialized until the first call.
+     *  The entry size is invariant, so the cache never needs resizing.
+     *
+     *  @since 0.9.72
+     */
+    private static final class DecompressCacheHolder {
+        /** Not a DataHelper static field - see the class comment. */
+        private static final ByteCache CACHE = ByteCache.getInstance(8, MAX_UNCOMPRESSED);
+
+        private DecompressCacheHolder() {}
+    }
+
+    /**
      *  Decompress the GZIP compressed data (returning null on error).
      *
      *  @throws IOException if uncompressed is over 40 KB,
@@ -2319,8 +2337,7 @@ public class DataHelper {
         ReusableGZIPInputStream in = ReusableGZIPInputStream.acquire();
         in.initialize(new ByteArrayInputStream(orig, offset, length));
 
-        // don't make this a static field, or else I2PAppContext gets initialized too early
-        ByteCache cache = ByteCache.getInstance(8, MAX_UNCOMPRESSED);
+        ByteCache cache = DecompressCacheHolder.CACHE;
         ByteArray outBuf = cache.acquire();
         try {
             int written = 0;
@@ -2502,7 +2519,7 @@ public class DataHelper {
      * @since 0.9.29
      */
     public static void copy(InputStream in, OutputStream out) throws IOException {
-        final ByteCache cache = ByteCache.getInstance(8, 8 * 1024);
+        final ByteCache cache = CopyCacheHolder.CACHE;
         final ByteArray ba = cache.acquire();
         try {
             final byte[] buf = ba.getData();
@@ -2513,6 +2530,19 @@ public class DataHelper {
         } finally {
             cache.release(ba);
         }
+    }
+
+    /**
+     *  The shared buffer for copy(), resolved once for the same reason and in the
+     *  same way as {@link DecompressCacheHolder}.
+     *
+     *  @since 0.9.72
+     */
+    private static final class CopyCacheHolder {
+        /** Not a DataHelper static field - see DecompressCacheHolder. */
+        private static final ByteCache CACHE = ByteCache.getInstance(8, 8 * 1024);
+
+        private CopyCacheHolder() {}
     }
 
     /**

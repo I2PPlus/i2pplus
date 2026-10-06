@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 
 /**
  *  A least recently used cache with a max size, for SimpleDataStructures.
@@ -57,7 +57,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /** The cache. */
-    private final ConcurrentHashMap<Integer, WeakReference<V>> _cache;
+    private final IntWeakCache<V> _cache;
 
     /** The byte array length for the class we are caching. */
     private final int _datalen;
@@ -74,7 +74,7 @@ public class SDSCache<V extends SimpleDataStructure> {
      */
     public SDSCache(Class<V> rvClass, int len, int max) {
         int size = (int) (max * FACTOR);
-        _cache = new ConcurrentHashMap<>(size);
+        _cache = new IntWeakCache<>(size);
         _datalen = len;
         try {
             _rvCon = rvClass.getConstructor(byte[].class);
@@ -122,7 +122,7 @@ public class SDSCache<V extends SimpleDataStructure> {
     public V get(byte[] data) {
         if (data == null) throw new NullPointerException("Don't pull null data from the cache");
         V rv;
-        Integer key = hashCodeOf(data);
+        int key = hashCodeOf(data);
         WeakReference<V> ref = _cache.get(key);
         if (ref != null) rv = ref.get();
         else rv = null;
@@ -175,9 +175,136 @@ public class SDSCache<V extends SimpleDataStructure> {
     }
 
     /** We assume the data has enough randomness in it, so use the first 4 bytes for speed. */
-    private static Integer hashCodeOf(byte[] data) {
+    private static int hashCodeOf(byte[] data) {
         int rv = data[0];
         for (int i = 1; i < 4; i++) rv ^= (data[i] << (i * 8));
-        return Integer.valueOf(rv);
+        return rv;
+    }
+
+    /**
+     *  An int-keyed, weak-value cache, replacing a
+     *  ConcurrentHashMap&lt;Integer, WeakReference&lt;V&gt;&gt; so the hot lookup
+     *  neither hashes an Integer nor boxes the key - the first 4 bytes of a
+     *  SimpleDataStructure almost always fall outside the Integer cache.
+     *
+     *  <p>Occupancy is marked by the AtomicReferenceArray rather than by the key,
+     *  since every int is a legal key (a hash of ff ff ff ff is -1). Its
+     *  release/acquire ordering also means a reader that sees a reference sees
+     *  its key and everything the writer did before publishing it.
+     *
+     *  <p>As with the map it replaces, a collected value keeps its slot until the
+     *  key is written again, so the table grows with the number of distinct keys
+     *  seen rather than with the number of live entries.
+     *
+     *  @param <V> type of object cached
+     *  @since 0.9.72
+     */
+    private static final class IntWeakCache<V> {
+
+        /** Largest table allocated up front, however big the caller expects the cache to get. */
+        private static final int MAX_INITIAL_CAPACITY = 1024;
+
+        /** Replaced wholesale (never resized in place) so a reader always sees a complete table. */
+        private static final class Table {
+            private final int mask;
+            private final int[] keys;
+            private final AtomicReferenceArray<WeakReference<?>> refs;
+
+            Table(int capacity) {
+                keys = new int[capacity];
+                refs = new AtomicReferenceArray<>(capacity);
+                mask = capacity - 1;
+            }
+        }
+
+        private volatile Table _table;
+
+        /** Occupied slots in the current table. Guarded by this. */
+        private int _size;
+
+        IntWeakCache(int expectedSize) {
+            int capacity = 16;
+            while (capacity < expectedSize && capacity < MAX_INITIAL_CAPACITY) capacity <<= 1;
+            _table = new Table(capacity);
+        }
+
+        /** Mixes the key, so that nearby keys land in different slots. */
+        private static int slot(int key, int mask) {
+            int h = key * 0x9E3779B1;
+            h ^= h >>> 16;
+            return h & mask;
+        }
+
+        /**
+         *  @param key the 4-byte index
+         *  @return the reference for the key, or null. A slot whose key is
+         *          published but whose reference is not yet reads as empty, so a
+         *          reader racing a put may see a miss; the put holds the lock.
+         */
+        @SuppressWarnings("unchecked")
+        WeakReference<V> get(int key) {
+            Table t = _table;
+            int mask = t.mask;
+            int idx = slot(key, mask);
+            while (true) {
+                WeakReference<?> ref = t.refs.get(idx);
+                if (ref == null) return null;
+                if (t.keys[idx] == key) return (WeakReference<V>) ref;
+                idx = (idx + 1) & mask;
+            }
+        }
+
+        /**
+         *  Store a reference, replacing any existing entry for the key.
+         *  Only misses reach here, so this is off the hot path.
+         *
+         *  @param key the 4-byte index
+         *  @param ref the value
+         */
+        synchronized void put(int key, WeakReference<V> ref) {
+            Table t = _table;
+            int idx = slot(key, t.mask);
+            while (t.refs.get(idx) != null) {
+                if (t.keys[idx] == key) {
+                    t.refs.set(idx, ref);
+                    return;
+                }
+                idx = (idx + 1) & t.mask;
+            }
+            // keep the table at most half full, so probes stay short
+            if (_size * 2 >= t.keys.length) {
+                t = grow();
+                idx = slot(key, t.mask);
+                while (t.refs.get(idx) != null) idx = (idx + 1) & t.mask;
+            }
+            t.keys[idx] = key;
+            _size++;
+            t.refs.set(idx, ref);
+        }
+
+        /** Double the table. Callers must synchronize on this. */
+        private Table grow() {
+            Table old = _table;
+            Table t = new Table(old.keys.length * 2);
+            for (int i = 0; i < old.keys.length; i++) {
+                WeakReference<?> ref = old.refs.get(i);
+                if (ref == null) continue;
+                int key = old.keys[i];
+                int idx = slot(key, t.mask);
+                while (t.refs.get(idx) != null) idx = (idx + 1) & t.mask;
+                t.keys[idx] = key;
+                t.refs.set(idx, ref);
+            }
+            _table = t;
+            return t;
+        }
+
+        /** Drop all entries. */
+        void clear() {
+            synchronized (this) {
+                _table = new Table(16);
+                _size = 0;
+            }
+        }
     }
 }
