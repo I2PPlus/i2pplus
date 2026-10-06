@@ -43,6 +43,109 @@ public class LogsHelper extends HelperBase {
     private static final Pattern LOG_READ = Pattern.compile("\\|.*\\[.*Read.*\\].*?:");
     private static final Pattern LOG_DIRMON = Pattern.compile("\\|.*\\[.*DirMon.*\\].*?:");
     private static final Pattern LOG_QUEUE = Pattern.compile("\\|.*\\[.*Queue.*\\].*?:");
+    /** Anchor-stripping runs on every rendered line, so its patterns are hoisted. */
+    private static final Pattern ANCHOR_ESCAPED = Pattern.compile("&lt;a[^&]*&gt;");
+    private static final Pattern ANCHOR_CLOSE_ESCAPED = Pattern.compile("&lt;/a&gt;");
+    private static final Pattern ANCHOR = Pattern.compile("<a[^>]*>");
+    private static final Pattern ANCHOR_CLOSE = Pattern.compile("</a>");
+
+/**
+ *  Ordered literal rewrites applied to an escaped log message, up to the
+ *  double-bracket cleanup. Order is load-bearing and not mergeable: this table
+ *  turns "&amp;hellip;" into "...", which MSG_REWRITES_C turns into
+ *  "&hellip;", and it ticks "false" before a later rewrite can restore
+ *  "[&#10008;] positives" to "false positives".
+ *
+ *  @since 0.9.72+
+ */
+    private static final String[][] MSG_REWRITES_A = {
+        {"&amp;darr;", "&darr;"},
+        {"&amp;uarr;", "&uarr;"},
+        {"&amp;#10140;", "&#10140;"},
+        {"--&gt;", " &#10140; "},
+        {" -&gt;", " &#10140;"},
+        {"-&gt;", " &#10140; "},
+        {"  &#10140;  ", " &#10140; "},
+        {"&amp;hellip;", "..."}, // "..." is rewritten again below
+        {"\u2026obQueue", "JobQueue"},
+        {"[DBWriter   ]", "[NetDB Writer]"},
+        {"[NTCP Pumper", "[ NTCP Pumper"},
+        {"[\u2026ueue Pumper", "[Queue Pumper"},
+        {"[UDPSender", "[UDP Sender"},
+        {"[BWRefiller", "[BW Refiller"},
+        {"[Addressbook]", "[Addressbook ]"},
+        {"[Thread-", "[ Thread-"},
+        {"[Timestamper]", "[Timestamper ]"},
+        {"[DHT Explore]", "[DHT Explore ]"},
+        {"[HostChecker]", "[HostChecker ]"},
+        {"false", "[&#10008;]"}, // no (cross)
+        {"[&#10008;] positives", "false positives"},
+        {"true", "[&#10004;]"} // yes (tick)
+    };
+
+/**
+ *  The middle of the rewrite chain, run after the double-bracket cleanup and
+ *  before the bullet rewrite. The un-ticking has to see the "&#10004;" and
+ *  "&#10008;" that the first table produces.
+ *
+ *  @since 0.9.72+
+ */
+    private static final String[][] MSG_REWRITES_B = {
+        {"=[&#10004;]", "=true"},
+        {"=[&#10008;]", "=false"},
+        {"[IRC Client] Inbound message", "[IRC Client] &#11167;"},
+        {"[IRC Client] Outbound message", "[IRC Client] &#11165;"},
+        {"not publishing old one: RouterInfo:", "not publishing old one:"},
+        {"Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:"},
+        {":  ", ": "}
+    };
+
+/**
+ *  The tail of the rewrite chain, run after the bullet rewrite. "..." has to be
+ *  rewritten here, not in the first table, because it is what that table's
+ *  "&amp;hellip;" rewrite produces.
+ *
+ *  @since 0.9.72+
+ */
+    private static final String[][] MSG_REWRITES_C = {
+        {"\r\n\r\n", ""},
+        {"<br>:", " "},
+        {"<b>", ""},
+        {"</b>", ""},
+        {"&lt;b&gt;", ""},
+        {"&lt;/b&gt;", ""},
+        {"...", "&hellip;"},
+        {"]]", "]"}
+    };
+
+    /**
+     *  Ordered literal rewrites applied to a raw wrapper log buffer. Order is
+     *  load-bearing: "INFO   | ERROR" is rewritten into "| ERROR  |" first, and
+     *  the later "| ERROR  |" → "| ERR  |" then has to see that result.
+     *
+     *  @since 0.9.72+
+     */
+    private static final String[][] WRAPPER_LOG_REWRITES = {
+        {"| |", "|"},
+        {"| INFO   | INFO:", "| INFO   |"},
+        {"| INFO   | CRIT ", "| CRIT   |"},
+        {"| INFO   | ERROR", "| ERROR  |"},
+        {"| INFO   | Error", "| ERROR  | Error"},
+        {"| INFO   | java.lang", "| ERROR  | java.lang"},
+        {"| INFO   | \tat", "| ERROR  | \tat"},
+        {"| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |"},
+        {" |[", " | ["},
+        {"INFO   | WARN:", "WARN   |"},
+        {"INFO   | WARNING:", "WARN   |"},
+        {"   |", " |"},
+        {"| ERROR  |", "| ERR  |"},
+        {"| INFO | # V  [", "| INFO | # Source: ["},
+        {"->", "\u279c"},
+        {"| LOCAL LeaseSet for", "| WARN | LOCAL LeaseSet for"},
+        {"| Initiating graceful restart", "| INFO | Initiating graceful restart"},
+        {"| Graceful shutdown", "| INFO | Graceful shutdown"},
+        {"| I2P+ update downloaded", "| INFO | I2P+ update downloaded"}
+    };
 
     public void setContext(RouterContext context) {this._context = context;}
     private static final String _jstlVersion = jstlVersion();
@@ -215,33 +318,15 @@ public class LogsHelper extends HelperBase {
                 else {str = "";} // truncated?
                 if (prop != null) {_context.router().saveConfig(PROP_LAST_WRAPPER, null);} // remove old setting
             } else {
-                str = buf.toString().replace("| |", "|")
-                                    .replace("| INFO   | INFO:", "| INFO   |")
-                                    .replace("| INFO   | CRIT ", "| CRIT   |")
-                                    .replace("| INFO   | ERROR", "| ERROR  |")
-                                    .replace("| INFO   | Error", "| ERROR  | Error")
-                                    .replace("| INFO   | java.lang", "| ERROR  | java.lang")
-                                    .replace("| INFO   | \tat", "| ERROR  | \tat")
-                                    .replace("| ERROR  | [Reseed     ] ....reseed.Reseeder:", "| WARN   |")
-                                    .replace(" |[", " | [")
-                                    .replace("INFO   | WARN:", "WARN   |")
-                                    .replace("INFO   | WARNING:", "WARN   |")
-                                    .replace("   |", " |")
-                                    .replace("| ERROR  |", "| ERR  |")
-                                    .replace("| INFO | # V  [", "| INFO | # Source: [")
-                                    .replace("->", "➜")
-                                    .replace("| LOCAL LeaseSet for", "| WARN | LOCAL LeaseSet for")
-                                    .replace("| Initiating graceful restart", "| INFO | Initiating graceful restart")
-                                    .replace("| Graceful shutdown", "| INFO | Graceful shutdown")
-                                    .replace("| I2P+ update downloaded", "| INFO | I2P+ update downloaded")
-                                    .replaceAll(LOG_HUTD.pattern(), "|")
-                                    .replaceAll(LOG_DATE.pattern(), "|")
-                                    .replaceAll(LOG_CONNECTION.pattern(), "|")
-                                    .replaceAll(LOG_RESTART.pattern(), "|")
-                                    .replaceAll(LOG_READ.pattern(), "|")
-                                    .replaceAll(LOG_DIRMON.pattern(), "|")
-                                    .replaceAll(LOG_QUEUE.pattern(), "|");
-                // Remove lines containing unwanted strings - process line by line to avoid array allocation
+                str = applyRewrites(buf.toString(), WRAPPER_LOG_REWRITES);
+                str = LOG_HUTD.matcher(str).replaceAll("|");
+                str = LOG_DATE.matcher(str).replaceAll("|");
+                str = LOG_CONNECTION.matcher(str).replaceAll("|");
+                str = LOG_RESTART.matcher(str).replaceAll("|");
+                str = LOG_READ.matcher(str).replaceAll("|");
+                str = LOG_DIRMON.matcher(str).replaceAll("|");
+                str = LOG_QUEUE.matcher(str).replaceAll("|");
+                // Remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder(str.length());
                 int start = 0;
                 int end;
@@ -358,6 +443,26 @@ public class LogsHelper extends HelperBase {
 
     private final static String NL = System.getProperty("line.separator");
 
+/**
+ *  Apply an ordered table of literal rewrites.
+ *
+ *  <p>Equivalent to chaining {@link String#replace(CharSequence, CharSequence)}
+ *  down the table in order, so a rewrite routinely matches text an earlier one
+ *  produced. A rewrite whose needle is absent costs one indexOf and allocates
+ *  nothing, which is the common case.
+ *
+ *  @param msg the text to rewrite, never null
+ *  @param rewrites {needle, replacement} pairs, applied in array order
+ *  @return the rewritten text
+ *  @since 0.9.72+
+ */
+    static String applyRewrites(String msg, String[][] rewrites) {
+        for (String[] rewrite : rewrites) {
+            if (msg.indexOf(rewrite[0]) >= 0) {msg = msg.replace(rewrite[0], rewrite[1]);}
+        }
+        return msg;
+    }
+
     /** formats in forward order */
     private String formatMessages(List<String> msgs) {
         if (msgs.isEmpty()) {return "</td></tr><tr><td><p class=nologs><i>" + _t("No log messages") + "</i></p>";}
@@ -373,9 +478,9 @@ public class LogsHelper extends HelperBase {
             if (!displayed && msg.contains("&uarr;") || !displayed && msg.contains("&darr;")) {continue;}
             displayed = true;
             msg = msg.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-            // Preserve thread column padding for HTML (raw logs keep spaces)
-            // Convert trailing spaces inside [thread··] to &nbsp; so HTML doesn't collapse them.
-            // e.g., "[SAM-PWkr.2  ]" → "[SAM-PWkr.2&nbsp;&nbsp;]" — only the thread bracket, not the whole line.
+            // Preserve thread column padding for HTML (raw logs keep spaces):
+            // convert trailing spaces inside [thread··] to &nbsp; so HTML does
+            // not collapse them, e.g. "[SAM-PWkr.2  ]" -> "[SAM-PWkr.2&nbsp;&nbsp;]".
             {
                 int lb = msg.indexOf(" [");
                 int rb = lb >= 0 ? msg.indexOf("] ", lb + 2) : -1;
@@ -392,51 +497,23 @@ public class LogsHelper extends HelperBase {
                 }
             }
             // Strip <a>...</a> to just inner text for console — e.g., "<a href=...>foo</a>" → "foo"
-            msg = msg.replaceAll("&lt;a[^&]*&gt;", "").replaceAll("&lt;/a&gt;", "");
-            msg = msg.replaceAll("<a[^>]*>", "").replaceAll("</a>", "");
-            msg = msg.replace("&amp;darr;", "&darr;");
-            msg = msg.replace("&amp;uarr;", "&uarr;");
-            msg = msg.replace("&amp;#10140;", "&#10140;");
-            msg = msg.replace("--&gt;", " &#10140; ");
-            msg = msg.replace(" -&gt;", " &#10140;");
-            msg = msg.replace("-&gt;", " &#10140; ");
-            msg = msg.replace("  &#10140;  ", " &#10140; ");
-            msg = msg.replace("&amp;hellip;", "...");
-            msg = msg.replace("…obQueue", "JobQueue");
-            msg = msg.replace("[DBWriter   ]", "[NetDB Writer]");
-            msg = msg.replace("[NTCP Pumper", "[ NTCP Pumper");
-            msg = msg.replace("[…ueue Pumper", "[Queue Pumper");
-            msg = msg.replace("[UDPSender", "[UDP Sender");
-            msg = msg.replace("[BWRefiller", "[BW Refiller");
-            msg = msg.replace("[Addressbook]", "[Addressbook ]");
-            msg = msg.replace("[Thread-", "[ Thread-");
-            msg = msg.replace("[Timestamper]", "[Timestamper ]");
-            msg = msg.replace("[DHT Explore]", "[DHT Explore ]");
-            msg = msg.replace("[HostChecker]", "[HostChecker ]");
-            msg = msg.replace("false", "[&#10008;]"); // no (cross)
-            msg = msg.replace("[&#10008;] positives", "false positives");
-            msg = msg.replace("true", "[&#10004;]"); // yes (tick)
-            // Use regex to clean up double brackets
-            Matcher bm = BRACKET_CLEANUP_PATTERN.matcher(msg);
-            msg = bm.replaceAll("[$1]");
-            msg = msg.replace("=[&#10004;]", "=true");
-            msg = msg.replace("=[&#10008;]", "=false");
-            msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
-            msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165;");
-            msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
-            msg = msg.replace("Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
-            msg = msg.replace(":  ", ": ");
-            // Use regex for bullet replacements
-            Matcher nm = NEWLINE_STAR_PATTERN.matcher(msg);
-            msg = nm.replaceAll("\n$1&bullet; ");
-            msg = msg.replace("\r\n\r\n", "");
-            msg = msg.replace("<br>:", " ");
-            msg = msg.replace("<b>", "");
-            msg = msg.replace("</b>", "");
-            msg = msg.replace("&lt;b&gt;", "");
-            msg = msg.replace("&lt;/b&gt;", "");
-            msg = msg.replace("...", "&hellip;");
-            msg = msg.replace("]]", "]");
+            msg = ANCHOR_ESCAPED.matcher(msg).replaceAll("");
+            msg = ANCHOR_CLOSE_ESCAPED.matcher(msg).replaceAll("");
+            msg = ANCHOR.matcher(msg).replaceAll("");
+            msg = ANCHOR_CLOSE.matcher(msg).replaceAll("");
+            msg = applyRewrites(msg, MSG_REWRITES_A);
+            // Use regex to clean up double brackets, but only when one is present
+            if (msg.indexOf("[[") >= 0) {
+                Matcher bm = BRACKET_CLEANUP_PATTERN.matcher(msg);
+                msg = bm.replaceAll("[$1]");
+            }
+            msg = applyRewrites(msg, MSG_REWRITES_B);
+            // Use regex for bullet replacements, but only when there is a newline
+            if (msg.indexOf('\n') >= 0) {
+                Matcher nm = NEWLINE_STAR_PATTERN.matcher(msg);
+                msg = nm.replaceAll("\n$1&bullet; ");
+            }
+            msg = applyRewrites(msg, MSG_REWRITES_C);
             // highlight log level indicators using regex
             Matcher m = LOG_LEVEL_PATTERN.matcher(msg);
             if (m.find()) {

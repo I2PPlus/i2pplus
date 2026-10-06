@@ -7,6 +7,8 @@ import java.math.RoundingMode;
 import net.i2p.stat.RateConstants;
 import java.text.Collator;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.FieldPosition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,40 +54,26 @@ class TunnelRenderer {
     private static final Pattern AMP_T_RUN = Pattern.compile("(?i)&\\s*T\\b.*");
     private final RouterContext _context;
 
-    /**
-     *  A bounded LRU cache extending LinkedHashMap with computeIfAbsent support.
-     */
+    /** A bounded LRU cache extending LinkedHashMap with computeIfAbsent support. */
     @SuppressWarnings("java:S2975")
     private static class BoundedCache<K, V> extends LinkedHashMap<K, V> {
         private final int _maxSize;
 
-        /**
-         * BoundedCache.
-         */
         public BoundedCache(int maxSize) {
             super(maxSize, 0.75f, true);
             _maxSize = maxSize;
         }
 
-        /**
-         * removeEldestEntry.
-         */
         @Override
         protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
             return size() > _maxSize;
         }
 
-        /**
-         * clone.
-         */
         @Override
         public Object clone() {
             return super.clone();
         }
 
-        /**
-         * computeIfAbsent.
-         */
         public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
             V value = get(key);
             if (value == null) {
@@ -108,11 +96,75 @@ class TunnelRenderer {
     /** Length of the truncated base64 hash used as a per-row data-key in fragment mode. */
     private static final int KEY_LEN = 16;
     private int displayed;
-    private static final DecimalFormat TWO_DECIMALS = new DecimalFormat("#0.00");
-    private static String fmt(double val) { synchronized (TWO_DECIMALS) { return TWO_DECIMALS.format(val); } }
-    private static final DecimalFormat ZERO_DECIMALS = new DecimalFormat("#0");
-    static {ZERO_DECIMALS.setRoundingMode(RoundingMode.HALF_UP);}
-    private static String fmt0(double val) { synchronized (ZERO_DECIMALS) { return ZERO_DECIMALS.format(val); } }
+    /** Locale symbols snapshotted once at class load, cloned by every formatter. */
+    private static final DecimalFormatSymbols FORMAT_SYMBOLS = DecimalFormatSymbols.getInstance();
+    /** DecimalFormat is not thread-safe, so tunnel rows get one formatter per thread. */
+    private static final ThreadLocal<DecimalFormat> TWO_DECIMALS =
+            ThreadLocal.withInitial(() -> new DecimalFormat("#0.00", FORMAT_SYMBOLS));
+    private static final ThreadLocal<DecimalFormat> ZERO_DECIMALS = ThreadLocal.withInitial(() -> {
+        DecimalFormat fmt = new DecimalFormat("#0", FORMAT_SYMBOLS);
+        fmt.setRoundingMode(RoundingMode.HALF_UP);
+        return fmt;
+    });
+    /** Scratch buffer for the formatters; NumberFormat can only format into a StringBuffer. */
+    private static final ThreadLocal<StringBuffer> FMT_SCRATCH =
+            ThreadLocal.withInitial(() -> new StringBuffer(32));
+    /** Reusable parse position; a new FieldPosition per call would defeat the reusable scratch buffer. */
+    private static final ThreadLocal<FieldPosition> FMT_POS =
+            ThreadLocal.withInitial(() -> new FieldPosition(0));
+    /** The ".00" that a whole number formats to and the trimmed forms drop. */
+    private static final String ZEROES = ".00";
+
+    /**
+     * Append a value with two decimal places.
+     *
+     * @param buf the buffer to append to
+     * @param val the value to format
+     */
+    private static void fmt(StringBuilder buf, double val) {
+        buf.append(format(TWO_DECIMALS.get(), val));
+    }
+
+    /**
+     * Append a value with no decimal places, rounded half up.
+     *
+     * @param buf the buffer to append to
+     * @param val the value to format
+     */
+    private static void fmt0(StringBuilder buf, double val) {
+        buf.append(format(ZERO_DECIMALS.get(), val));
+    }
+
+    /**
+     * Append a value with two decimal places, dropping every ".00".
+     *
+     * @param buf the buffer to append to
+     * @param val the value to format
+     */
+    private static void fmtTrim(StringBuilder buf, double val) {
+        StringBuffer scratch = format(TWO_DECIMALS.get(), val);
+        int from = 0;
+        int at;
+        while ((at = scratch.indexOf(ZEROES, from)) >= 0) {
+            buf.append(scratch, from, at);
+            from = at + ZEROES.length();
+        }
+        buf.append(scratch, from, scratch.length());
+    }
+
+    /**
+     * Format through the calling thread's reusable scratch buffer.
+     *
+     * @param formatter the per-thread formatter
+     * @param val the value to format
+     * @return the reusable buffer holding the formatted text
+     */
+    private static StringBuffer format(DecimalFormat formatter, double val) {
+        StringBuffer scratch = FMT_SCRATCH.get();
+        scratch.setLength(0);
+        formatter.format(val, scratch, FMT_POS.get());
+        return scratch;
+    }
 
     /**
      * TunnelRenderer.
@@ -178,7 +230,7 @@ class TunnelRenderer {
                 if (_context.clientManager().shouldPublishLeaseSet(client)) {
                     out.write("server ");
                     if (tname.equals(_t("I2PSnark")) || tname.startsWith("I2PSnark -")) {
-                    	   out.write("snark ");
+                        out.write("snark ");
                     }
                     else if ("messenger".equalsIgnoreCase(tname) ||
                              "i2pchat".equalsIgnoreCase(tname)) {
@@ -373,7 +425,7 @@ class TunnelRenderer {
                         long timeLeft = cfg.getExpiration()-now;
                         sb.append("<td class=expiry data-sort=").append(timeLeft).append(">");
                         if (timeLeft > 0) {
-                            sb.append(renderExpiryBar(timeLeft));
+                            renderExpiryBar(sb, timeLeft);
                         } else {
                             sb.append("<i>").append(gracePeriodTip).append("</i>");
                         }
@@ -382,9 +434,9 @@ class TunnelRenderer {
                         double sizeInKB = count * 1024.0 / 1000.0;
                         double sizeInMB = sizeInKB / 1024.0;
                         sb.append("<td class=data data-sort=")
-                          .append(count).append("><span class=right>")
-                          .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
-                          .append("</span><span class=left>&#8239;")
+                          .append(count).append("><span class=right>");
+                        if (sizeInKB >= 1024) {fmt(sb, sizeInMB);} else {fmt0(sb, sizeInKB);}
+                        sb.append("</span><span class=left>&#8239;")
                           .append(sizeInKB >= 1024 ? "MB" : "KB")
                           .append("</span></td>");
 
@@ -393,8 +445,9 @@ class TunnelRenderer {
                         else if (lifetime > 10*60) {lifetime = 10*60;}
                         float bps = 1024f * count / lifetime;
                         float kbps = bps / 1024;
-                        sb.append("<td class=speed data-sort=").append(bps).append("><span class=right>")
-                          .append(fmt(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
+                        sb.append("<td class=speed data-sort=").append(bps).append("><span class=right>");
+                        fmt(sb, kbps);
+                        sb.append("&#8239;</span><span class=left>KB/s</span></td>");
 
                         long recv = cfg.getReceiveTunnelId();
                         if (isAdvanced) {
@@ -605,7 +658,7 @@ class TunnelRenderer {
                 long bw = bws.count(h);
                 sb.append("<td data-sort=").append(bw).append(">");
                 if (bw > 0) {
-                    sb.append("<span class=data>").append(fmt(bw).replace(".00", "")).append("KB</span>");
+                    sb.append("<span class=data>"); fmtTrim(sb, bw); sb.append("KB</span>");
                 } else {sb.append("<span class=data hidden>0KB</span>");}
                 sb.append("</td>");
 
@@ -821,9 +874,9 @@ class TunnelRenderer {
                    .append(localTunnelCount)
                    .append(">").append(localTunnelCount)
                    .append("</td><td class=bar data-sort-column-key=localCount>")
-                   .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
-                   .append(fmt(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""))
-                   .append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
+                   .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
+                   fmtTrim(chunkSb, localTunnelCount * 100.0 / tunnelCount);
+                   chunkSb.append("%\"><span class=percentBarText>").append(localTunnelCount * 100 / tunnelCount)
                    .append("%</span></span></span>");
         } else {
             chunkSb.append("<td class=tcount colspan=2 data-sort-column-key=localCount data-sort=0>");
@@ -834,9 +887,9 @@ class TunnelRenderer {
                    .append(transitTunnelCount)
                    .append(">").append(transitTunnelCount)
                    .append("</td><td class=bar data-sort-column-key=transitCount>")
-                   .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:")
-                   .append(fmt(transitTunnelCount * 100.0 / partCount).replace(".00", ""))
-                   .append("%\"><span class=percentBarText>").append(transitTunnelCount * 100 / partCount)
+                   .append("<span class=percentBarOuter><span class=percentBarInner style=\"width:");
+                   fmtTrim(chunkSb, transitTunnelCount * 100.0 / partCount);
+                   chunkSb.append("%\"><span class=percentBarText>").append(transitTunnelCount * 100 / partCount)
                    .append("%</span></span></span>")
                    .append("</td>");
         } else {
@@ -1190,11 +1243,8 @@ class TunnelRenderer {
         }
 
           int colCount = 5 + maxLength;
-          // The summary table above is a separate, closed element and this
-          // footer belongs to the tunnel table. When no tunnel table was opened
-          // there is nothing for a tfoot to attach to, so emitting one left it
-          // loose in the wrapper div, outside any table. Close the body, emit
-          // the footer and the table closer as one unit, or emit nothing.
+          // The tfoot belongs to the tunnel table; with no table open it would be
+          // left loose in the wrapper div, so emit body+footer+closer as one unit.
           if (tableOpen) {
               buf.append("</tbody>\n<tfoot class=statusnotes>")
                  .append("<tr class=bwUsage><td colspan=").append(colCount)
@@ -1254,9 +1304,8 @@ class TunnelRenderer {
      *  Append one tunnel row: direction badge, test status, expiry bar,
      *  latency, data transferred, and the peer cells.
      *
-     *  <p>Terminates the row only. The table body is closed once by the caller
-     *  after the last row, so closing it here put a stray {@code </tbody>}
-     *  after every row and left the remaining rows outside the body.
+     *  <p>Terminates the row only - the caller closes {@code </tbody>} once,
+     *  after the last row.
      *
      *  @return the processed message count, for the bandwidth footer
      *  @since 0.9.70+
@@ -1292,7 +1341,7 @@ class TunnelRenderer {
                .append("\"></span></td>");
         }
         renderTestStatus(buf, info);
-        buf.append("<td class=expiry>").append(renderExpiryBar(timeLeft)).append("</td>");
+        buf.append("<td class=expiry>"); renderExpiryBar(buf, timeLeft); buf.append("</td>");
 
         int latency = info.getLastLatency();
         buf.append("<td class=latency data-sort=").append(latency).append(">");
@@ -1306,9 +1355,9 @@ class TunnelRenderer {
         double sizeInMB = sizeInKB / 1024.0;
         buf.append("<td class=data data-sort=").append(count).append(">");
         if (count > 0) {
-            buf.append("<span class=right>")
-               .append(sizeInKB >= 1024 ? fmt(sizeInMB) : fmt0(sizeInKB))
-               .append("</span><span class=left>&#8239;")
+            buf.append("<span class=right>");
+            if (sizeInKB >= 1024) {fmt(buf, sizeInMB);} else {fmt0(buf, sizeInKB);}
+            buf.append("</span><span class=left>&#8239;")
                .append(sizeInKB >= 1024 ? "MB" : "KB")
                .append("</span>");
         }
@@ -1459,7 +1508,6 @@ class TunnelRenderer {
 
     /* duplicate of that in tunnelPoolManager for now */
     /** @return total number of non-fallback expl. + client tunnels */
-
     private int countTunnelsPerPeer(ObjectCounter<Hash> lc) {
         List<TunnelPool> pools = new ArrayList();
         _context.tunnelManager().listPools(pools);
@@ -1479,7 +1527,6 @@ class TunnelRenderer {
     }
 
     /** @return total number of part. tunnels */
-
     private int countParticipatingPerPeer(ObjectCounter<Hash> pc) {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         for (HopConfig cfg : participating) {
@@ -1614,18 +1661,22 @@ class TunnelRenderer {
     /** translate a string */
     public String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
-    /** Generate a percentage bar for expiry time */
-    private String renderExpiryBar(long timeLeft) {
+    /** Generate a percentage bar for expiry time, appending straight to the row buffer. */
+    private void renderExpiryBar(StringBuilder buf, long timeLeft) {
         if (timeLeft <= 0) {timeLeft = 0;}
         boolean fiveLeft = timeLeft < 5*60*1000;
         boolean threeLeft = timeLeft < 3*60*1000;
         boolean oneLeft = timeLeft < 60*1000;
-        String expiry = fiveLeft ? " 5m" : threeLeft ? " 3m" : oneLeft ? " 1m" : "";
         int percent = (int) Math.min(100, timeLeft * 100.0 / 600000);
-        String timeStr = DataHelper.formatDuration2(timeLeft);
-        return "<span class=\"percentBarOuter" + expiry + "\">" +
-               "<span class=percentBarInner style=width:" + percent + "%>" +
-               "<span class=percentBarText>" + timeStr + "</span></span></span>";
+        buf.append("<span class=\"percentBarOuter");
+        if (fiveLeft) {buf.append(" 5m");}
+        else if (threeLeft) {buf.append(" 3m");}
+        else if (oneLeft) {buf.append(" 1m");}
+        buf.append("\"><span class=percentBarInner style=width:")
+           .append(percent)
+           .append("%><span class=percentBarText>");
+        buf.append(DataHelper.formatDuration2(timeLeft));
+        buf.append("</span></span></span>");
     }
 
     /**

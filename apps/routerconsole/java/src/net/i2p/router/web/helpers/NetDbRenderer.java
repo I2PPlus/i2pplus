@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -69,7 +70,9 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.util.HashDistance;
 import net.i2p.router.web.Messages;
+import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.ObjectCounterUnsafe;
@@ -119,17 +122,69 @@ class NetDbRenderer {
      * Number of local lease sets, set during lease set rendering.
      */
     public int localLSCount;
-    /**
-     * LeaseSet keys already rendered for this request, so a LeaseSet stored
-     * in more than one facade is shown only once on the local netdb page.
-     * A fresh NetDbRenderer is created per request, so no reset is needed.
-     */
+/**
+ *  LeaseSet keys already rendered for this request, so a LeaseSet stored in
+ *  more than one facade is shown only once. A fresh NetDbRenderer is created
+ *  per request, so no reset is needed.
+ */
     private final Set<Hash> _renderedLeaseSetKeys = new HashSet<>();
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
     /** Bound on a single parallel render task so a stalled common pool cannot hang the netdb page */
     private static final long RENDER_TASK_TIMEOUT = 30 * 1000L;
+    /** Memo for the "{0} ago" renders of {@link #renderRouterInfo}, one per renderer */
+    private final AgoMemo _agoMemo = new AgoMemo();
+    /** Expensive translator behind {@link #agoMemo(String)}, bound once so the memo never sees a fresh lambda */
+    private final Function<String, String> _agoFormat = duration -> _t("{0} ago", duration);
+    /** Memoized result of {@link #memoryUsedMB()}, -1 until first use */
+    private volatile long _memoryUsedMB = -1;
+    /** Whether {@link #_memoryUsedMB} holds a value for this render pass */
+    private volatile boolean _memoryUsedValid;
+    /** Memoized capability tooltip for this render pass, null until first use */
+    private volatile String _capTooltip;
     private long now;
+
+/**
+ *  Memoized "{0} ago" translations.
+ *
+ *  <p>{@link Translate#getString} rebuilds a {@code MessageFormat} and
+ *  re-parses the pattern on every call, and a full /netdb page asks for this
+ *  text once or twice per router row. Keying on the already-formatted duration
+ *  string is therefore exact and callers may pass dynamic ages freely.
+ *
+ *  <p>Entries are dropped wholesale when the UI language changes; a race
+ *  between two render threads can only cost a redundant translation, never a
+ *  wrong result.
+ *
+ *  @since 0.9.72+
+ */
+    static class AgoMemo {
+        /** Upper bound on retained durations; formatDuration2() yields far fewer distinct strings. */
+        private static final int MAX_ENTRIES = 1024;
+        /** UI language the entries were produced under; a change invalidates them all. */
+        private String _lang;
+        /** duration string to formatted text, for {@link #_lang} only */
+        private final Map<String, String> _byDuration = new ConcurrentHashMap<>();
+
+        /**
+         *  @param duration the age, already run through {@link DataHelper#formatDuration2}
+         *  @param lang the current UI language
+         *  @param format the translator to memoize
+         *  @return the localized "&lt;duration&gt; ago", or null if either argument was null
+         */
+        String ago(String duration, String lang, Function<String, String> format) {
+            if (duration == null || format == null) {return null;}
+            if (!lang.equals(_lang)) {
+                _byDuration.clear();
+                _lang = lang;
+            }
+            String memoized = _byDuration.get(duration);
+            if (memoized != null) {return memoized;}
+            String formatted = format.apply(duration);
+            if (_byDuration.size() < MAX_ENTRIES) {_byDuration.put(duration, formatted);}
+            return formatted;
+        }
+    }
 
     /**
      *  Whether the router matches all capability characters in the filter.
@@ -557,12 +612,10 @@ class NetDbRenderer {
         startRdnsWorker();
     }
 
-    /**
-     *  Start the background staggered rdns worker if not already running.
-     *  Uses the async getCanonicalHostName() to avoid blocking on DNS/WHOIS.
-     *  DNS + WHOIS work happens on the shared reverseDnsExecutor pool.
-     *  Results accumulate in rdnsCache for future page loads.
-     */
+/**
+ *  Start the background staggered rdns worker if not already running.
+ *  Uses the async getCanonicalHostName() to avoid blocking on DNS/WHOIS.
+ */
     private void startRdnsWorker() {
         if (!_rdnsWorkerRunning.compareAndSet(false, true)) {
             return; // already running
@@ -572,11 +625,12 @@ class NetDbRenderer {
         worker.start();
     }
 
-    /**
-     *  Staggered reverse-DNS worker: drains the RDNS queue in batches, pausing
-     *  between lookups and after each batch. Runs on a daemon thread.
-     *  @since 0.9.70+
-     */
+/**
+ *  Staggered reverse-DNS worker: drains the RDNS queue one lookup per
+ *  {@link #LOOKUP_INTERVAL_MS}, pausing after every
+ *  {@link #LOOKUPS_BEFORE_PAUSE}. Runs on a daemon thread.
+ *  @since 0.9.70+
+ */
     private void runRdnsWorker() {
         int count = 0;
         try {
@@ -1085,7 +1139,11 @@ class NetDbRenderer {
                 transportCount[classifyTransports(ri)]++;
             }
         } else if (!showStats) {
-            countFullRouterStats(routers, versions, countries, transportCount, countryTiers);
+            RouterTallies tallies = cachedTallies(routers);
+            versions = tallies.versions;
+            countries = tallies.countries;
+            transportCount = tallies.transportCount;
+            countryTiers = tallies.countryTiers;
         }
         if (showStats) {
             renderRoutersToWriter(routers, out, isLocal, page, pageSize);
@@ -1323,6 +1381,67 @@ class NetDbRenderer {
     }
 
     /**
+     *  Summary tallies for the /netdb overview, all read-only once built.
+     *  @since 0.9.72+
+     */
+    private static class RouterTallies {
+        /** router.version option value to count */
+        final ObjectCounterUnsafe<String> versions;
+        /** country code to count */
+        final ObjectCounterUnsafe<String> countries;
+        /** transport class index to count, sized for TNAMES */
+        final int[] transportCount;
+        /** country code to [X-tier count, floodfill count] */
+        final Map<String, int[]> countryTiers;
+
+        RouterTallies() {
+            versions = new ObjectCounterUnsafe<>();
+            countries = new ObjectCounterUnsafe<>();
+            transportCount = new int[TNAMES.length];
+            countryTiers = new HashMap<>();
+        }
+    }
+
+/**
+ *  How long cached overview tallies stay valid. Well under the ten second
+ *  /netdb auto-refresh, so it only bounds how long a hash whose country
+ *  resolves late stays uncounted.
+ */
+    private static final long TALLIES_CACHE_MS = 3 * 1000L;
+    /** Tally source list the cached tallies were computed from */
+    private static volatile List<RouterInfo> _cachedTalliesSource;
+    /** Cached tallies, valid only for {@link #_cachedTalliesSource} */
+    private static volatile RouterTallies _cachedTallies;
+    /** Expiry for {@link #_cachedTallies} */
+    private static volatile long _cachedTalliesUntil;
+
+/**
+ *  Overview tallies for the sorted router list, memoized for a few seconds.
+ *
+ *  <p>Counting costs a country lookup, an option read and a transport
+ *  classification per known router, and the sorted list is only replaced on
+ *  its own expiry — so the list's identity is the stamp the tallies belong
+ *  to, and the TTL bounds a country that resolves later.
+ *
+ *  @param routers the sorted list from {@link NetDbRouterCache}
+ *  @return tallies for that list, never null
+ *  @since 0.9.72+
+ */
+    private RouterTallies cachedTallies(List<RouterInfo> routers) {
+        RouterTallies cached = _cachedTallies;
+        if (cached != null && routers == _cachedTalliesSource &&
+            _context.clock().now() < _cachedTalliesUntil) {
+            return cached;
+        }
+        cached = new RouterTallies();
+        countFullRouterStats(routers, cached.versions, cached.countries, cached.transportCount, cached.countryTiers);
+        _cachedTallies = cached;
+        _cachedTalliesSource = routers;
+        _cachedTalliesUntil = _context.clock().now() + TALLIES_CACHE_MS;
+        return cached;
+    }
+
+    /**
      *  Counts the summary statistics for the /netdb overview in a single
      *  pass: versions, countries, transports, and per-country X-tier /
      *  floodfill totals.
@@ -1486,7 +1605,7 @@ class NetDbRenderer {
                     isReachable ? 'R' : isUnreachable ? 'U' : '\0', false);
             processedCapsStr = processedCapsStr.replace("class=\"tier\"", "class=\"tier is" + tier + "\"");
         }
-        processedCapsStr = processedCapsStr.replace("\"><span", CapabilitiesRenderer.capTooltip(_context));
+        processedCapsStr = processedCapsStr.replace("\"><span", capTooltip());
         buf.append(processedCapsStr);
         String version = DataHelper.stripHTML(routerInfo.getVersion());
         buf.append("&nbsp;<a href=\"/netdb?v=").append(version).append("\">")
@@ -1514,8 +1633,7 @@ class NetDbRenderer {
                .append("\">").append(_t("Edit")).append("</a>")
                .append(_context.commSystem().renderPeerFlag(routerHash)).append("</span>");
         } else {
-            long memoryUsedBytes = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
-            long memoryUsedMegabytes = memoryUsedBytes / (1024 * 1024);
+            long memoryUsedMegabytes = memoryUsedMB();
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
         buf.append("</th></tr></thead>\n<tbody>\n<tr>");
@@ -1525,11 +1643,11 @@ class NetDbRenderer {
         if (isLocalRouter && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
                .append("<td><span class=netdb_info>")
-               .append(_t("{0} ago", DataHelper.formatDuration2(age)))
+               .append(agoMemo(DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
         } else if (age > 0) {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td><td><span class=netdb_info>")
-               .append(_t("{0} ago", DataHelper.formatDuration2(age)))
+               .append(agoMemo(DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
             String primaryAddress = Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
             String capsStr = processedCapsStr;
@@ -1790,20 +1908,17 @@ class NetDbRenderer {
         buf.append("</tbody>\n</table>\n");
     }
 
-    /**
-     *  Renders a single RouterInfo, isolating any failure to this one entry.
-     *
-     *  The netdb listing streams progressively (flush per router), so an
-     *  exception escaping a single render would truncate the rest of the
-     *  page with no way to re-render. Malformed options on adversarial
-     *  RouterInfos (e.g. invalid introducer hashes on U-cap routers) must
-     *  degrade to an error marker instead.
-     *
-     *  @param sb output buffer
-     *  @param ri the router to render
-     *  @param isLocalRouter true if this is the local router
-     *  @param rdnsLookups map of IP to hostname for reverse DNS, may be null
-     */
+/**
+ *  Renders a single RouterInfo, isolating any failure to this one entry.
+ *
+ *  <p>The netdb listing streams progressively, so an exception escaping a
+ *  single render would truncate the rest of the page with no way to re-render.
+ *
+ *  @param sb output buffer
+ *  @param ri the router to render
+ *  @param isLocalRouter true if this is the local router
+ *  @param rdnsLookups map of IP to hostname for reverse DNS, may be null
+ */
     private void renderRouterInfoSafe(StringBuilder sb, RouterInfo ri, boolean isLocalRouter,
                                       Map<String, String> rdnsLookups) {
         try {
@@ -1959,4 +2074,54 @@ class NetDbRenderer {
      *  @return translated string
      */
     private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
+
+    /**
+     *  Translate and memoize "{0} ago" for one rendered row.
+     *
+     *  @param duration the age, already run through {@link DataHelper#formatDuration2}
+     *  @return the localized "&lt;duration&gt; ago"
+     *  @see AgoMemo
+     */
+    private String agoMemo(String duration) {
+        return _agoMemo.ago(duration, Translate.getLanguage(_context), _agoFormat);
+    }
+
+/**
+ *  Resident memory in whole megabytes, for the local row's "Memory usage" cell.
+ *
+ *  <p>Memoized because {@code renderRoutersToWriter} hands every row in a list
+ *  the same isLocal flag, so this would otherwise run once per row rather than
+ *  once per page. The rate itself averages over a minute, longer than any
+ *  render.
+ *
+ *  @return megabytes of memory in use, 0 if the stat is not registered yet
+ */
+    private long memoryUsedMB() {
+        RateStat stat = _context.statManager().getRate("router.memoryUsed");
+        Rate rate = (stat != null) ? stat.getRate(RateConstants.ONE_MINUTE) : null;
+        if (rate == null) {return 0;}
+        long cached = _memoryUsedMB;
+        if (cached >= 0 && _memoryUsedValid) {return cached;}
+        long bytes = (long) rate.getAvgOrLifetimeAvg();
+        cached = bytes / (1024 * 1024);
+        _memoryUsedMB = cached;
+        _memoryUsedValid = true;
+        return cached;
+    }
+
+/**
+ *  The capability link tooltip, resolved once per render pass. The value
+ *  depends only on the UI language and a renderer is created per request, so
+ *  the memo cannot go stale within a pass.
+ *
+ *  @return the tooltip suffix inserted before each capability link's span
+ */
+    private String capTooltip() {
+        String cached = _capTooltip;
+        if (cached == null) {
+            cached = CapabilitiesRenderer.capTooltip(_context);
+            _capTooltip = cached;
+        }
+        return cached;
+    }
 }

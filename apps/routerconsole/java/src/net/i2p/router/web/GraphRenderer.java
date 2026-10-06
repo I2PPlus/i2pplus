@@ -93,19 +93,6 @@ class GraphRenderer {
      */
     private static final int SERIES_ALPHA_DARK = 0xAA;
 
-    /**
-     * Series colours for combined graphs, in series order.
-     *
-     * <p>Index 0 is each theme's existing single-series line colour, so a combined graph
-     * opens in a shade the eye already knows from every other graph on the page. The rest
-     * are tonal rotations of that theme's hue rather than an unrelated rainbow: the historic
-     * colours were chosen to sit correctly against their own background, and a fixed set of
-     * bright hues would clash with two of the three themes.
-     *
-     * <p>The two-series bandwidth graph does not use these at all; it keeps the exact
-     * colours it shipped with.
-     */
-
     private static final Color ARROW_COLOR_DARK = new Color(0, 0, 0, 0);
     private static final Color RESTART_BAR_COLOR = new Color(223, 13, 13, 255);
     private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
@@ -236,9 +223,8 @@ class GraphRenderer {
         applyTheme(def, cfg);
         configureFonts(def, cfg);
         configureBaseAndDecimals(cfg);
-        // The y-axis floor is the one range setting that depends on the data, so the
-        // window is scanned here and only the floor is set: rrd4j derives the ceiling
-        // and rounds the ticks itself.
+        // The only range setting that depends on the data; rrd4j derives the
+        // ceiling and rounds the ticks itself.
         resolveAxisRange(cfg);
         def.setMinValue(axisFloor(cfg.dataMin, cfg.dataMax, cfg.forceZero));
         configureTitle(def, cfg);
@@ -252,12 +238,10 @@ class GraphRenderer {
     }
 
     /**
-     * Render a graph with any number of extra series overlaid.
-     *
-     * <p>All series share one axis, so they must measure the same thing; see
-     * {@link GraphGroups} for the groupings that satisfy this. The primary series is drawn
-     * first and supplies the axis range; each extra is drawn as a line, never an area, and
-     * is named in the legend.
+     * Render a graph with any number of extra series overlaid. All series share
+     * one axis, so they must measure the same thing; see {@link GraphGroups}.
+     * The primary is drawn first and supplies the axis range; each extra is
+     * drawn as a line, never an area, and is named in the legend.
      *
      * @param out where the SVG is written
      * @param extras extra series in legend order, or null or empty for none
@@ -401,14 +385,11 @@ class GraphRenderer {
     /**
      * Caps how many points are plotted so that each has room to be drawn.
      *
-     * <p>Without a cap the renderer is handed roughly one point per pixel, and once points are
-     * closer together than a pixel a value change falls inside a single column with no width to
-     * draw across. That is what the window-size thresholds used to guard: they keyed off the
-     * number of periods with fixed bucket counts, which did not track the graph width, so a narrow
-     * graph still ended up with sub-pixel points.
-     *
-     * <p>The cap is derived from the width instead, and only applied when smoothing is on, so the
-     * default rendering is untouched.
+     * <p>Uncapped, the renderer is handed roughly one point per pixel, and once
+     * points are closer together than a pixel a value change falls inside a
+     * single column with no width to draw across. The cap is derived from the
+     * width instead, and only applied when smoothing is on, so the default
+     * rendering is untouched.
      *
      * @param def the graph definition
      * @param cfg the render configuration
@@ -531,22 +512,20 @@ class GraphRenderer {
         return floor;
     }
 
-    /**
+/**
      *  Measure the window's data range so {@link #axisFloor} has something to scale.
      *
-     *  <p>The values cannot be taken off the definition before the graph is built: rrd4j
-     *  only computes them internally, while rendering, out of the datasource it is about
-     *  to plot. So this reads the same window from the listener's already-open RRD - the
-     *  read {@link RrdGraph} performs a moment later anyway - and reduces it in one pass.
-     *  An archive that lives in memory (the default) makes that a linear scan of one
-     *  primitive array with nothing allocated per point.
+     *  <p>The values cannot be taken off the definition before the graph is built:
+     *  rrd4j computes them internally, while rendering. So this reads the same window
+     *  from the listener's already-open RRD - the read {@link RrdGraph} performs a
+     *  moment later anyway - and reduces it in one pass.
      *
      *  <p>Skipped entirely when a floor could not take effect anyway: {@code forceZero}
      *  asks for the historical axis, and {@link #usesMrtgScaling} means rrd4j rebuilds
-     *  the range itself. Neither case can benefit from the read.
+     *  the range itself.
      *
      *  @param cfg the render configuration, whose range fields are filled in
-     * @since 0.9.71+
+     *  @since 0.9.71+
      */
     private void resolveAxisRange(GraphRenderConfig cfg) {
         cfg.dataMin = Double.NaN;
@@ -602,12 +581,12 @@ class GraphRenderer {
     /**
      *  Fold one series into the running range, ignoring missing and infinite points.
      *
-     *  <p>One pass over a primitive array: no boxing, no sorting, nothing allocated per
-     *  point. Two comparisons per value, so the cost is a fraction of the read itself.
+     *  <p>One pass over a primitive array: no boxing, no sorting, nothing
+     *  allocated per point.
      *
      *  @param cfg the render configuration, updated in place
      *  @param values archived values, or null if unavailable
-     * @since 0.9.71+
+     *  @since 0.9.71+
      */
     private static void accumulateRange(GraphRenderConfig cfg, double[] values) {
         if (values == null) {
@@ -812,38 +791,13 @@ class GraphRenderer {
         }
     }
 
-    /**
-     * Declare and plot every extra series of a combined graph.
-     *
-     * <p>Each member becomes its own datasource drawn as a line, never an area, with a
-     * per-series colour and its description in the legend. Areas are reserved for the
-     * primary series: filling several overlaid series hides whichever one is behind.
-     *
-     * <p>The max/min/avg/now summary block is emitted for the first extra series only when
-     * there are exactly two, matching the long-standing combined-bandwidth graph. With more
-     * series that block would add four legend lines per series and bury the plot.
-     */
-    /**
+/**
      * Render a combined graph of several stats as overlaid lines.
      *
-     * <p>Every series shares one axis, so the caller is responsible for supplying members
-     * that measure the same thing; see {@link GraphGroups}. Each member is drawn as a line
-     * rather than an area and is named in the legend.
-     *
      * @param out where the SVG is written
-     * @param width pixels
-     * @param height pixels
-     * @param hideLegend suppress the legend and its summary block
-     * @param hideGrid suppress the grid lines
-     * @param hideTitle suppress the title
      * @param showEvents unused; event mode is not supported for combined graphs
-     * @param periodCount how many periods to plot
-     * @param end latest sample, in milliseconds
-     * @param showCredit include the credit line
      * @param primary the series drawn first; also supplies the axis range
      * @param extras the remaining series, in legend order
-     * @param titleOverride title to draw, or null for the stat description
-     * @param showRestarts draw restart markers
      * @return true if a graph was written
      * @throws IOException if the graph cannot be produced
      * @since 0.9.71+
@@ -861,6 +815,19 @@ class GraphRenderer {
         return true;
     }
 
+    /**
+     *  Declare and plot every extra series of a combined graph.
+     *
+     *  <p>Each member becomes its own datasource drawn as a line, never an area,
+     *  with a per-series colour and its description in the legend. Areas are
+     *  reserved for the primary series: filling several overlaid series hides
+     *  whichever one is behind.
+     *
+     *  <p>The max/min/avg/now summary block is emitted for the first extra
+     *  series only when there is exactly one, matching the long-standing
+     *  combined-bandwidth graph; with more, four legend lines per series would
+     *  bury the plot.
+     */
     private void configureExtraDataSources(RrdGraphDef def, GraphRenderConfig cfg) throws IOException {
         List<GraphListener> extras = cfg.extras;
         if (extras == null || extras.isEmpty()) {
@@ -935,22 +902,19 @@ class GraphRenderer {
         return 2F;
     }
 
-    /**
+/**
      * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
-     *
-     * <p>Only for the multi-line graphs, and only up to two plots. The two-series bandwidth
-     * graph predates grouping and keeps the exact colour it always shipped with, so switching
-     * combining on cannot alter a graph people already know.
-     *
-     * <p>No hue rotation and no palette walk any more. A frame carries at most two plots
-     * ({@link GraphGroups#MAX_SERIES}), so "which colour is the extra series" has exactly
-     * one answer and it is a themeable one.
-     *
-     * @param theme console theme name
-     * @param allLines whether the primary is drawn as a line rather than a filled area
-     * @param extraIndex zero-based position among the extra series
-     * @return the colour for that series
-     */
+ *
+ * <p>A frame carries at most two plots ({@link GraphGroups#MAX_SERIES}), so
+ * "which colour is the extra series" has exactly one answer and it is a
+ * themeable one. The two-series bandwidth graph predates grouping and keeps the
+ * exact colour it always shipped with.
+ *
+ * @param theme console theme name
+ * @param allLines whether the primary is drawn as a line rather than a filled area
+ * @param extraIndex zero-based position among the extra series
+ * @return the colour for that series
+ */
     static Color extraSeriesColor(String theme, boolean allLines, int extraIndex) {
         return paletteColor(theme, Math.max(1, extraIndex));
     }

@@ -101,6 +101,8 @@ class ProfileOrganizerRenderer {
      */
     public void renderFragment(Writer out, int mode, String id) throws IOException {
         if (mode == 3) {
+            // if/else if: only one branch runs, so the full all-peers walk and
+            // TreeSet build in loadProfiles is resolved once per fragment
             if ("ffstats".equals(id)) {
                 renderFloodfillRings(out, loadProfiles(mode).order);
             } else if ("floodfills".equals(id) || "ffProfiles".equals(id)) {
@@ -156,12 +158,11 @@ class ProfileOrganizerRenderer {
      */
     private ProfileSelection loadProfiles(int mode) {
         long now = _context.clock().now();
-        // Snapshot tier membership once under a single read lock, then use
-        // local contains() throughout — avoids per-peer lock acquisitions
-        // in the comparator and render loop.
-        Set<Hash> fastSnapshot = Collections.unmodifiableSet(new java.util.HashSet<>(_organizer.selectFastPeers()));
-        Set<Hash> hcSnapshot = Collections.unmodifiableSet(new java.util.HashSet<>(_organizer.selectHighCapacityPeers()));
-        Set<Hash> intSnapshot = Collections.unmodifiableSet(new java.util.HashSet<>(_organizer.selectWellIntegratedPeers()));
+        // Snapshot tier membership once under a single read lock, then use local
+        // contains() throughout, so the comparator and render loop take no locks.
+        Set<Hash> fastSnapshot = _organizer.selectFastPeers();
+        Set<Hash> hcSnapshot = _organizer.selectHighCapacityPeers();
+        Set<Hash> intSnapshot = _organizer.selectWellIntegratedPeers();
         Set<PeerProfile> order = new TreeSet<>(mode == 3 ? new ProfComparator() : new ProfileComparator(fastSnapshot, hcSnapshot));
         int older = 0;
         long hideWindow = 0;

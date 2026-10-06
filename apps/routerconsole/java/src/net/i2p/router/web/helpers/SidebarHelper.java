@@ -66,19 +66,24 @@ public class SidebarHelper extends HelperBase {
     private static volatile long _concurrencyCachedUntil;
     /** Expiry for the cached share ratio string */
     private static volatile long _shareRatioCachedUntil;
+    /** Expiry for the cached active profile count */
+    private static volatile long _activeProfilesCachedUntil;
     /** Cached tunnel build success percentage */
     private static volatile int _cachedTunnelBuildSuccess;
     /** Cached concurrency string */
     private static volatile String _cachedConcurrency;
     /** Cached share ratio string */
     private static volatile String _cachedShareRatio;
+    /** Cached active profile count */
+    private static volatile int _cachedActiveProfiles;
 
-    /**
-     *  How long cached sidebar stats stay valid: one sidebar refresh interval.
-     *  Never shorter than 1 second so concurrent renders still share the cache.
-     *
-     *  @return the refresh interval, in milliseconds
-     */
+/**
+ *  How long cached sidebar stats stay valid: one sidebar refresh interval.
+ *  Never shorter than 1 second so concurrent renders share the cache.
+ *
+ *  @return the refresh interval, in milliseconds
+ *  @since 0.9.72+
+ */
     private long statsCacheMs() {
         int refresh = _context.getProperty(CSSHelper.PROP_REFRESH, 3);
         if (refresh < 1) {refresh = 3;}
@@ -697,14 +702,23 @@ public class SidebarHelper extends HelperBase {
         return netDbReady && uptime > 2*60*1000 && !isDummy && !hasPeers && enoughRouters;
     }
 
-    /**
-     * How many active identities have we spoken with recently
-     *
-     * @return the active profiles
-     */
+/**
+ * How many active identities have we spoken with recently.
+ *
+ * Counted over a one-hour window, and the underlying scan walks every tracked
+ * profile while holding the profile organizer's reorganize read lock - the lock
+ * tunnel peer selection contends on. Cached for one refresh interval, like the
+ * other sidebar peer stats.
+ *
+ * @return the active profiles
+ */
     public int getActiveProfiles() {
         if (_context == null) {return 0;}
-        else {return _context.profileOrganizer().countActivePeersInLastHour();}
+        if (_context.clock().now() < _activeProfilesCachedUntil) {return _cachedActiveProfiles;}
+        int count = _context.profileOrganizer().countActivePeersInLastHour();
+        _activeProfilesCachedUntil = _context.clock().now() + statsCacheMs();
+        _cachedActiveProfiles = count;
+        return count;
     }
     /**
      * How many active peers the router ranks as fast.
