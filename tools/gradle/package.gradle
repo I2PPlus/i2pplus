@@ -99,6 +99,16 @@ task updaterCompact(type: Zip) {
 // longer required: tools/scripts/pack200.sh falls back to a serial loop.
 def rootDirAbs = rootDir.absolutePath
 def pack200MarkerAbs = "${System.getProperty('java.io.tmpdir')}/build-i2p/.pack200-before"
+// The pack200 jar's path, captured once every project has been evaluated:
+// :apps:pack200's jar task does not exist while this script is applied, and reading
+// project(...) from doFirst is rejected by the configuration cache. A captured Provider
+// is a config-cache value, so pack200Updater can read it at execution time - the file
+// itself is produced by its dependsOn, not by the lookup.
+def p200JarFile
+gradle.projectsEvaluated {
+    p200JarFile = project(':apps:pack200').jar.archiveFile
+}
+
 task pack200Updater(type: Exec) {
     group = 'package'
     description = 'Pack200-compress pkg-temp lib jars and webapps (mirrors ant pack200).'
@@ -110,10 +120,23 @@ task pack200Updater(type: Exec) {
     environment 'JAVA', "${System.getProperty('java.home')}/bin/java"
     environment 'PKGDIR', pkgTmpDirAbs
     environment 'MARKER', pack200MarkerAbs
+    // Read the captured Provider here, not at configuration time: projectsEvaluated has
+    // not fired yet when this task block is configured. Resolving a Provider at execution
+    // time is allowed; reaching back into project(...) is not.
     doFirst {
-        // Resolved here rather than at configuration time so the :apps:pack200:jar
-        // dependency above has already produced the file.
-        environment 'P200JAR', project(':apps:pack200').jar.archiveFile.get().asFile.absolutePath
+        environment 'P200JAR', p200JarFile.get().asFile.absolutePath
+    }
+}
+
+// Helpers for task bodies, on a plain class because a bare script method does not
+// resolve inside a task closure (delegate-first dispatch).
+class PkgUtil {
+    // Run a shell snippet. ProcessBuilder rather than ant.exec: `ant` is the project's
+    // AntIntegration, so reaching it from doLast is Task.project at execution time and
+    // the configuration cache rejects it. Plain String arguments, so nothing here
+    // closes over the Project.
+    void runShell(String dir, String script) {
+        new ProcessBuilder(['sh', '-c', script]).directory(new File(dir)).inheritIO().start().waitFor()
     }
 }
 
@@ -125,17 +148,12 @@ task updater200Compact(type: Zip) {
     destinationDirectory.set(distDir)
     from pkgTmpDirAbs
     doLast {
+        def util = new PkgUtil()
         // Pack200 savings vs. the raw payload and the SHA-256 (mirrors ant zipit200)
         if (new File(pack200MarkerAbs).exists()) {
-            ant.exec(executable: 'sh', failonerror: 'false', dir: rootDirAbs) {
-                arg(value: '-c')
-                arg(value: '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))
-            }
+            util.runShell(rootDirAbs, '''if [ -f __MARKER__ ]; then before=$(cat __MARKER__); zipsize=$(wc -c < dist/i2pupdate200.zip); saved=$((before - zipsize)); b_mb=$(printf "%d.%02d" $((before/1000000)) $(((before%1000000)/10000))); z_mb=$(printf "%d.%02d" $((zipsize/1000000)) $(((zipsize%1000000)/10000))); s_mb=$(printf "%d.%02d" $((saved/1000000)) $(((saved%1000000)/10000))); echo "Pack200: jars (${b_mb}MB) -> zip (${z_mb}MB) (saved ${s_mb}MB)"; rm -f __MARKER__; fi'''.replace('__MARKER__', pack200MarkerAbs))
         }
-        ant.exec(executable: 'sh', failonerror: 'false', dir: rootDirAbs) {
-            arg(value: '-c')
-            arg(value: 'h=$(sha256sum "dist/i2pupdate200.zip"); echo "$(basename "dist/i2pupdate200.zip"): ${h%% *}"')
-        }
+        util.runShell(rootDirAbs, 'h=$(sha256sum "dist/i2pupdate200.zip"); echo "$(basename "dist/i2pupdate200.zip"): ${h%% *}"')
     }
 }
 
