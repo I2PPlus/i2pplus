@@ -36,6 +36,13 @@ public class TorrentDest {
     private final I2PServerSocket _serverSocket;
     /** Session property carrying the pool's torrent names, for the /tunnels pool tooltip */
     public static final String PROP_POOL_MEMBERS = "i2psnark.poolMembers";
+    /**
+     * Tunnel quantity most recently pushed to this pool's session by {@link IdleChecker}, so each
+     * pool's floor can be judged against what it was actually given rather than against the
+     * client-wide configured option. Starts at the floor, which is how {@link I2PSnarkUtil}
+     * creates a pool.
+     */
+    private volatile int _appliedTunnelQuantity = 2;
 
     /** Assigned torrents by Base64-encoded info hash key, guarded by synchronized methods. */
     private final Map<String, InfoHash> _torrents = new HashMap<>(1);
@@ -88,6 +95,37 @@ public class TorrentDest {
      */
     public int getPoolNum() {
         return _poolNum;
+    }
+
+    /**
+     * Whether any torrent is assigned to this destination, so it still needs its tunnel floor
+     * even with no peers connected yet.
+     *
+     * @return true if at least one torrent is assigned
+     * @since 0.9.71+
+     */
+    public synchronized boolean hasTorrents() {
+        return !_torrents.isEmpty();
+    }
+
+    /**
+     * The tunnel quantity last applied to this pool's own session, which is also its floor.
+     *
+     * @return the applied quantity in each direction, never below 2
+     * @since 0.9.71+
+     */
+    public int getAppliedTunnelQuantity() {
+        return _appliedTunnelQuantity;
+    }
+
+    /**
+     * Record the tunnel quantity pushed to this pool's session.
+     *
+     * @param qty the quantity in each direction
+     * @since 0.9.71+
+     */
+    public void setAppliedTunnelQuantity(int qty) {
+        _appliedTunnelQuantity = qty;
     }
 
     public I2PSocketManager getSocketManager() {

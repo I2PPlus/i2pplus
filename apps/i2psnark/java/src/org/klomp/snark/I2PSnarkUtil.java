@@ -888,6 +888,17 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * The number of shared pool slots, so a caller can bucket torrents by pool without
+     * recomputing {@link #getPoolIndex(byte[])} per torrent per peer.
+     *
+     * @return the configured pool count, 0 when pooling is off
+     * @since 0.9.71+
+     */
+    public int getPoolCount() {
+        return _maxDest;
+    }
+
+    /**
      * @since 0.9.71+
      */
     public void setMultiDest(boolean multiDest) {
