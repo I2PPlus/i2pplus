@@ -145,6 +145,12 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         if (target == NO_CHANGE) {
             return;
         }
+        if (target < current && _util.isLookupPending()) {
+            // A tracker lookup is answered over this same session, so hold the floor for as long
+            // as one is outstanding. Letting the count fall now would leave the lookup with no
+            // usable path, which is what makes a tracker resubmit and re-enter this branch.
+            return;
+        }
         if (target > current) {
             setTunnels(target, true);
         } else {

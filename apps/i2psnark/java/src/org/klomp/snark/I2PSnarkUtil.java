@@ -136,6 +136,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _multiDest;
     /** Maximum shared destinations in multi-dest mode, 0 for one per torrent */
     private int _maxDest = SnarkManager.DEFAULT_MULTI_DEST_MAX;
+    /** Whether a tracker metadata lookup is outstanding; holds the tunnel floor while true */
+    private volatile boolean _lookupPending;
     /** Per-run random salt mixing pool assignments so the grouping is unlearnable */
     private final int _destSalt;
     /**
@@ -885,6 +887,32 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public boolean getMultiDest() {
         return _multiDest;
+    }
+
+    /**
+     * Whether a metadata lookup requested by a tracker such as zzzot is outstanding.
+     *
+     * <p>Set by {@link SnarkManager} as lookups are submitted and cleared as they resolve or are
+     * swept. Consulted by {@link IdleChecker} to hold the tunnel floor: trackers use these
+     * lookups to resolve infohashes to torrent names, and they are answered over the same session
+     * the torrents use, so the tunnels have to stay up for as long as one is outstanding. Without
+     * it a lookup's arrival and expiry could time a reduction into a pool that a torrent is
+     * about to need.
+     *
+     * @since 0.9.71+
+     */
+    public boolean isLookupPending() {
+        return _lookupPending;
+    }
+
+    /**
+     * Record whether any tracker lookup is outstanding.
+     *
+     * @param pending true while at least one lookup is in flight
+     * @since 0.9.71+
+     */
+    public void setLookupPending(boolean pending) {
+        _lookupPending = pending;
     }
 
     /**

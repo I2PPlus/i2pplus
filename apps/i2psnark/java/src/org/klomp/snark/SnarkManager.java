@@ -3868,6 +3868,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 created = (snark != null);
                 if (created) {
                     _lookupCreationTimes.put(new SHA1Hash(infoHash), System.currentTimeMillis());
+                    _util.setLookupPending(true);
                 }
             } catch (Exception e) {
                 _log.warn("lookupTorrentName addMagnet failed for " + hex, e);
@@ -3936,6 +3937,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } finally {
             _lookupSemaphore.release();
             _lookupCreationTimes.remove(new SHA1Hash(infoHash));
+            _util.setLookupPending(!_lookupCreationTimes.isEmpty());
             // Clean up lookup torrent if we created it or it is still a lookup-*
             Snark toDelete = getTorrentByInfoHash(infoHash);
             if (toDelete != null) {
@@ -4078,6 +4080,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 created = (snark != null);
                 if (created) {
                     _lookupCreationTimes.put(new SHA1Hash(infoHash), System.currentTimeMillis());
+                    _util.setLookupPending(true);
                 }
             } catch (Exception e) {
                 _log.warn("lookupTorrentInfo addMagnet failed for " + hex, e);
@@ -4133,6 +4136,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } finally {
             _lookupSemaphore.release();
             _lookupCreationTimes.remove(new SHA1Hash(infoHash));
+            _util.setLookupPending(!_lookupCreationTimes.isEmpty());
             Snark toDelete = getTorrentByInfoHash(infoHash);
             if (toDelete != null) {
                 String toDeleteName = null;
@@ -4287,6 +4291,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             SHA1Hash ihHash = new SHA1Hash(ih);
             String hex = I2PSnarkUtil.toHex(ih);
             _lookupCreationTimes.remove(ihHash);
+            _util.setLookupPending(!_lookupCreationTimes.isEmpty());
             try {
                 deleteMagnet(snark);
             } catch (Exception e) {
