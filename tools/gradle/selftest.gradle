@@ -23,6 +23,7 @@ def documentedTasks = [
     'testCore', 'testRouter', 'testApps',
     'preppkg', 'preppkg-nowindows', 'preppkg-linux-only',
     'preppkg-freebsd-only', 'preppkg-osx-only', 'preppkg-windows-only',
+    'izpackPanelJar', 'izpackPanelTest', 'izpackBrandingCheck',
 ]
 
 // Tasks actually executed here: updaterCompact compiles and packages every

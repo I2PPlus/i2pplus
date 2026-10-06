@@ -64,6 +64,17 @@ final def iz5exeScript = "${iz5home}/utils/wrappers/izpack2exe/izpack2exe.py"
 // defaults to LZMA2, which that stub cannot decode.
 final def iz5exe7za = "${iz5home}/utils/wrappers/izpack2exe/7za"
 
+// Our IzPack 5 panels (ant izpack-panel-jar). Declared with the other finals because
+// iz5CompilerCp below has to reach izpack5Cfg, and a script method cannot see a local
+// declared after it - the factory reads everything through cfg.
+final def panelSrcDir = file("${workspaceRootAbs}/installer/lib/izpack/5/patches/java/src")
+final def panelClassesDir = file("${buildDir}/izpack-panel/classes")
+final def panelJarFile = file("${buildDir}/izpack-panel/izpack-i2p.jar")
+// The compiler loads every <panel classname=...> reflectively and writes the class into
+// the installer jar, so an unloadable panel is a build failure, not a runtime one. lib/*
+// expands to the whole distribution; our jar is appended.
+final def iz5CompilerCp = "${iz5home}/lib/*:${panelJarFile.absolutePath}"
+
 // One shared instance; task closures capture it by value under the config cache
 final def installerUtil = new InstallerUtil()
 
@@ -74,7 +85,8 @@ final def stageCfg = [seed: payloadSeed, launcherWork: "${launcherWork}",
 final def izpack4Cfg = [seed: payloadSeed, izWork: "${izpackWork}", dAbs: "${distAbs}",
             wsAbs: workspaceRootAbs, compiler: izPack4Compiler, util: installerUtil]
 final def izpack5Cfg = [seed: payloadSeed, izWork: "${izpackWork}", dAbs: "${distAbs}",
-            wsAbs: workspaceRootAbs, iz5home: iz5home, util: installerUtil]
+            wsAbs: workspaceRootAbs, iz5home: iz5home, compilerCp: iz5CompilerCp,
+            util: installerUtil]
 
 // ant sets noExe when launch4j has no binaries for the build host. Final
 // locals so onlyIf closures capture them by value under the config cache.
@@ -116,6 +128,36 @@ class InstallerUtil {
         f.setText(text.replaceAll('\r?\n', '\r\n'), 'UTF-8')
       }
     }
+  }
+
+  // ant izpack5-patches: the compiler resolves langpacks and flag GIFs relative to its
+  // working directory, so they are staged into <repo>/com/izforge/izpack/ before the
+  // compile. ant does the same as two <copy> tasks; both halves are needed, since a
+  // langpack whose flag is absent is a hard "ISO3 flag image not found" error.
+  //
+  // Lives on this class, not as a script method, because a bare script method does not
+  // resolve inside a task closure (delegate-first dispatch). NIO rather than
+  // File.copyTo: the Groovy extension method does not resolve there either under
+  // Gradle 9's Groovy, and it fails at execution time rather than at compile time.
+  void stageLangpacksAndFlags(String wsAbs) {
+    File langpackRoot = new File("${wsAbs}/com/izforge/izpack/bin/langpacks")
+    langpackRoot.mkdirs()
+    langpackRoot.deleteDir()
+    Closure copyTree = { File src, File dstDir, String suffix ->
+      src.eachFileRecurse(groovy.io.FileType.FILES) { f ->
+        if (!suffix || f.name.endsWith(suffix)) {
+          File dest = new File(dstDir, src.toPath().relativize(f.toPath()).toString())
+          dest.parentFile.mkdirs()
+          java.nio.file.Files.copy(f.toPath(), dest.toPath(),
+              java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        }
+      }
+    }
+    copyTree(new File("${wsAbs}/installer/lib/izpack/5/patches/resources"), langpackRoot, null)
+    // The distribution ships most flags but not the codes it spells differently
+    // (fas for fa, zho for chn, ind for idn) nor the ones it omits entirely.
+    copyTree(new File("${wsAbs}/installer/lib/izpack/resources/flags"),
+             new File(langpackRoot, 'flags'), '.gif')
   }
 
   // Walker helper for crlfStage: matches ant-style include patterns per directory
@@ -288,6 +330,7 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
       from 'installer/resources/platform-specific/unix/i2prouter'
       from 'installer/resources/platform-specific/unix/osid'
       from 'installer/resources/platform-specific/unix/postinstall.sh'
+      from 'installer/resources/platform-specific/unix/uninstall-i2p.sh'
     }
     if (variant == 'all' || variant == 'nowindows' || variant == 'linux') {
       ['linux', 'linux64', 'linux-armv5', 'linux-armv7', 'linux64-armv8'].each { d ->
@@ -364,7 +407,14 @@ def makeStageTask(String taskName, String stageDir, String variant, String taskD
         cfg.util.crlfStage(stageF)
       }
       if (variant != 'windows') {
-        ['eepget', 'eephead', 'i2ping', 'hostping', 'graceful_update'].each { s ->
+        // Every staged script, not just the ones a user runs by hand. IzPack's unpacker
+        // never calls setExecutable, so a script with no <executable> entry depends on the
+        // mode surviving the pack. This list had drifted from ant preppkg-unix, which
+        // leaves i2prouter, runplain.sh, osid and postinstall.sh out and so leaves them
+        // to the runtime chmod instead.
+        ['eepget', 'eephead', 'i2ping', 'hostping', 'graceful_update',
+         'i2prouter', 'runplain.sh', 'osid', 'postinstall.sh',
+         'uninstall-i2p.sh'].each { s ->
           new File(stageF, s).setExecutable(true)
         }
       }
@@ -434,19 +484,48 @@ makeJbigiJarTask('jbigi-windows', "${stageRoot}/windows", 'windows',
 
 // Filtered IzPack install descriptors with the pkg-temp dir redirected to the
 // gradle payload location (ant preppkg-base ends with the same substitution)
-task prepIzpackConfigs(type: Copy) {
-  group = 'package'
-  description = 'Prepare the IzPack 4/5 install descriptors for the gradle payload dir (mirrors ant preppkg-base).'
-  destinationDir = izpackWork
-  from('installer/lib/izpack/4/install.xml') {
-    into '4'
-    filter { line -> line.replace('dir="pkg-temp"', 'dir="' + payloadSeed + '"') }
-  }
-  from('installer/lib/izpack/5/install5.xml') {
-    into '5'
-    filter { line -> line.replace('dir="pkg-temp"', 'dir="' + payloadSeed + '"') }
+// Filtered IzPack install descriptors, one pair per variant (ant preppkg-base ends
+// with the same substitution, but ant has a single shared pkg-temp so one copy suffices;
+// gradle stages each variant separately, so the descriptor has to name that variant's
+// directory).
+//
+// This was pointed at ${pkgTempDir}, the update payload, while the installer-only files
+// - postinstall.sh, osid, runplain.sh, i2prouter, the lib/wrapper tree, jbigi - are
+// staged by preppkg into pkg-installer/<variant>. Every gradle-built IzPack installer
+// therefore shipped without them and died during unpacking at "file execution error
+// executing: /bin/chmod a+x <path>/postinstall.sh", which is that file simply not having
+// been unpacked. ant reuses one pkg-temp for all variants; gradle cannot, which is why
+// this is per variant.
+def makePrepIzpackConfigs(String taskName, String variantKey, String stageDir, String workDir, String taskDesc) {
+  task(taskName, type: Copy) {
+    group = 'package'
+    description = taskDesc
+    // One directory per variant: the installer tasks build in parallel and would
+    // otherwise overwrite each other's filtered descriptor between runs.
+    into new File(workDir, variantKey)
+    from('installer/lib/izpack/4/install.xml') {
+      into '4'
+      filter { line -> line.replace('dir="pkg-temp"', 'dir="' + stageDir + '"') }
+    }
+    from('installer/lib/izpack/5/install5.xml') {
+      into '5'
+      filter { line -> line.replace('dir="pkg-temp"', 'dir="' + stageDir + '"') }
+    }
   }
 }
+
+makePrepIzpackConfigs('prepIzpackConfigsAll', 'all', "${stageRoot}/all", "${izpackWork}",
+    'Prepare the IzPack 4/5 install descriptors for the all-platform payload dir (mirrors ant preppkg-base).')
+makePrepIzpackConfigs('prepIzpackConfigsNowindows', 'nowindows', "${stageRoot}/nowindows", "${izpackWork}",
+    'Prepare the IzPack 4/5 install descriptors for the no-windows payload dir (mirrors ant preppkg-base).')
+makePrepIzpackConfigs('prepIzpackConfigsLinux', 'linux', "${stageRoot}/linux", "${izpackWork}",
+    'Prepare the IzPack 4/5 install descriptors for the linux-only payload dir (mirrors ant preppkg-base).')
+makePrepIzpackConfigs('prepIzpackConfigsFreebsd', 'freebsd', "${stageRoot}/freebsd", "${izpackWork}",
+    'Prepare the IzPack 4/5 install descriptors for the freebsd-only payload dir (mirrors ant preppkg-base).')
+makePrepIzpackConfigs('prepIzpackConfigsOsx', 'osx', "${stageRoot}/osx", "${izpackWork}",
+    'Prepare the IzPack 4/5 install descriptors for the osx-only payload dir (mirrors ant preppkg-base).')
+makePrepIzpackConfigs('prepIzpackConfigsWindows', 'windows', "${stageRoot}/windows", "${izpackWork}",
+    'Prepare the IzPack 4/5 install descriptors for the windows-only payload dir (mirrors ant preppkg-base).')
 
 // Language-picker flag GIFs the IzPack distributions do not ship (ant
 // izpack-flag-gifs). Both compilers hardcode
@@ -455,18 +534,22 @@ task prepIzpackConfigs(type: Copy) {
 // set. The GIFs are committed, so --ensure writes nothing and needs no
 // rasteriser on a normal build; it only fires when a descriptor gains a langpack
 // whose flag is missing.
+// Resolved at configuration time: file(...) is a Gradle script method, and calling it
+// from a closure that runs at execution time is what the configuration cache rejects.
+final def flagsScript = file("${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh")
+
 task izpackFlagGifs(type: Exec) {
   group = 'package'
   description = 'Generate any missing IzPack langpack flag GIFs from the console SVG flags (mirrors ant izpack-flag-gifs).'
-  commandLine "${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh", '--ensure'
-  inputs.files(file("${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh"))
+  commandLine flagsScript.absolutePath, '--ensure'
+  inputs.files(flagsScript)
   inputs.files(file('installer/lib/izpack/4/install.xml'))
   inputs.files(file('installer/lib/izpack/5/install5.xml'))
   // The flags are shared by both IzPack versions, so this is the single directory
   // that can come out changed; it used to name the IzPack 5 tree only, which meant
   // a flag added for IzPack 4 alone did not mark this task out of date.
   outputs.dir(file('installer/lib/izpack/resources/flags'))
-  onlyIf { file("${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh").canExecute() }
+  onlyIf { flagsScript.canExecute() }
 }
 
 // IzPack 4 patches jar, built from the bundled patch classes (ant izpack-patches)
@@ -568,15 +651,20 @@ makeLaunch4jTask('installerexe', "${workspaceRootAbs}/installer/i2pinstaller.xml
 
 // IzPack 4 installer builds; each produces one jar (the exe is the separate
 // installerexe task), then the platform jar names as in ant
-def makeIzpack4Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg) {
+def makeIzpack4Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg,
+                    String variant, String stageDir) {
+  // variant picks this build's filtered descriptor; stageTask must stage the matching
+  // directory, or the descriptor names a payload the install never unpacked.
+  final String descriptor = "${cfg.izWork}/${variant}/4/install.xml"
+  final String prepCfg = "prepIzpackConfigs${variant.capitalize()}"
   task(taskName, type: Exec) {
     group = 'package'
     description = taskDesc
-    dependsOn stageTask, jbigiTask, izpackPatches, prepIzpackConfigs
-    // CLI is positional: the xml file comes first, '-c' is compression
-    commandLine 'java', '-jar', cfg.compiler, "${cfg.izWork}/4/install.xml",
+    dependsOn stageTask, jbigiTask, izpackPatches, prepCfg
+    // CLI is positional: the xml file comes first, '-b' is the base path and '-k' the kind
+    commandLine 'java', '-jar', cfg.compiler, descriptor,
         '-b', cfg.wsAbs, '-k', 'standard', '-o', "${cfg.dAbs}/${outJarName}"
-    inputs.files(fileTree(cfg.seed), file("${cfg.izWork}/4/install.xml"), izpackPatches)
+    inputs.files(fileTree(stageDir), file(descriptor), izpackPatches)
     outputs.file("${cfg.dAbs}/${outJarName}")
     doLast {
       cfg.util.printSha(new File("${cfg.dAbs}/${outJarName}"))
@@ -585,15 +673,20 @@ def makeIzpack4Task(String taskName, String stageTask, String jbigiTask, String 
 }
 
 makeIzpack4Task('installer', 'preppkg', 'jbigi', 'install.jar',
-    'Build the full all-platform installer dist/install.jar (mirrors ant installer).', izpack4Cfg)
+    'Build the full all-platform installer dist/install.jar (mirrors ant installer).', izpack4Cfg,
+    'all', "${stageRoot}/all")
 makeIzpack4Task('installer-nowindows', 'preppkg-nowindows', 'jbigi-nowindows', "i2pinstall_${fullVersion}.jar",
-    'Build the no-windows installer jar (mirrors ant installer-nowindows).', izpack4Cfg)
+    'Build the no-windows installer jar (mirrors ant installer-nowindows).', izpack4Cfg,
+    'nowindows', "${stageRoot}/nowindows")
 makeIzpack4Task('installer-linux', 'preppkg-linux-only', 'jbigi-linux', "i2pinstall_${fullVersion}_linux-only.jar",
-    'Build the linux-only installer jar (mirrors ant installer-linux).', izpack4Cfg)
+    'Build the linux-only installer jar (mirrors ant installer-linux).', izpack4Cfg,
+    'linux', "${stageRoot}/linux")
 makeIzpack4Task('installer-freebsd', 'preppkg-freebsd-only', 'jbigi-freebsd', "i2pinstall_${fullVersion}_freebsd-only.jar",
-    'Build the freebsd-only installer jar (mirrors ant installer-freebsd).', izpack4Cfg)
+    'Build the freebsd-only installer jar (mirrors ant installer-freebsd).', izpack4Cfg,
+    'freebsd', "${stageRoot}/freebsd")
 makeIzpack4Task('installer-osx', 'preppkg-osx-only', 'jbigi-osx', "i2pinstall_${fullVersion}_osx-only.jar",
-    'Build the osx-only installer jar and the mac app bundle (mirrors ant installer-osx).', izpack4Cfg)
+    'Build the osx-only installer jar and the mac app bundle (mirrors ant installer-osx).', izpack4Cfg,
+    'osx', "${stageRoot}/osx")
 
 // Windows-only izpack4 installer: intermediate names avoid clobbering the
 // full installer's install.jar / i2pinstall.exe when both build in parallel
@@ -601,10 +694,10 @@ makeIzpack4Task('installer-osx', 'preppkg-osx-only', 'jbigi-osx', "i2pinstall_${
 task installerW4Jar(type: Exec) {
   group = 'package'
   description = 'Build the windows-only installer jar (mirrors ant installer-windows).'
-  dependsOn 'preppkg-windows-only', 'jbigi-windows', izpackPatches, prepIzpackConfigs
-  commandLine 'java', '-jar', izPack4Compiler, "${izpackWork}/4/install.xml",
+  dependsOn 'preppkg-windows-only', 'jbigi-windows', izpackPatches, prepIzpackConfigsWindows
+  commandLine 'java', '-jar', izPack4Compiler, "${izpackWork}/windows/4/install.xml",
       '-b', workspaceRootAbs, '-k', 'standard', '-o', "${distAbs}/install-windows.jar"
-  inputs.files(fileTree(payloadSeed), file("${izpackWork}/4/install.xml"), izpackPatches)
+  inputs.files(fileTree("${stageRoot}/windows"), file("${izpackWork}/windows/4/install.xml"), izpackPatches)
   outputs.file("${distAbs}/install-windows.jar")
 }
 
@@ -686,31 +779,120 @@ final def izpack5Missing = "Error - IzPack 5 must be present at ${iz5home} (lib/
     "or set izpack5.home=/PATH/TO/IzPack to use an existing installation, " +
     "or run installer/lib/izpack/5/download-izpack5.sh to fetch it"
 
+// Our IzPack 5 panels, compiled into the jar the compiler loads panel classes from
+// (ant izpack-panel-jar). Without it the compiler only ever sees the distribution and
+// installer5 fails with "Class 'net.i2p.installer.LocalizedHTMLInfoPanel' not found".
+// Built under buildDir rather than in-tree at patches/java/build as ant does, so module
+// builds stay out of the source tree.
+task izpackPanelClasses(type: JavaCompile) {
+  group = 'package'
+  description = 'Compile the IzPack 5 panel patches against the IzPack distribution (mirrors ant izpack-panel-jar, compile half).'
+  dependsOn downloadIzpack5
+  source = fileTree(panelSrcDir) { include '**/*.java' }
+  destinationDirectory = panelClassesDir
+  // Resolved lazily, so the distribution may be downloaded during this same run
+  classpath = files(fileTree(file("${iz5home}/lib")) { include '*.jar' })
+  options.encoding = 'UTF-8'
+  options.release = 8            // ant compiles these at source/target 8
+  options.compilerArgs << '-Xlint:-options'
+  options.compilerArgs << '-XDignore.symbol.file'
+  doFirst {
+    if (!new File("${iz5home}/lib").isDirectory()) {
+      throw new GradleException(izpack5Missing)
+    }
+  }
+}
+
+task izpackPanelJar(type: Jar) {
+  group = 'package'
+  description = 'Build the IzPack 5 panel jar the compiler loads <panel classname=...> from (mirrors ant izpack-panel-jar).'
+  dependsOn izpackPanelClasses
+  archiveFileName.set('izpack-i2p.jar')
+  destinationDirectory.set(file("${buildDir}/izpack-panel"))
+  from panelClassesDir
+  inputs.files(fileTree(panelSrcDir) { include '**/*.java' })
+  outputs.file(panelJarFile)
+}
+
+// Panel tests (mirrors ant izpack-branding-check, which compiles this directory).
+// Both suites are plain main() programs, matching the ant build.
+final def panelTestDir = file("${workspaceRootAbs}/installer/lib/izpack/5/patches/java/test")
+final def panelTestClassesDir = file("${buildDir}/izpack-panel/test-classes")
+
+task izpackPanelTestClasses(type: JavaCompile) {
+  group = 'verification'
+  description = 'Compile the IzPack 5 panel tests against the distribution and our panel jar.'
+  dependsOn downloadIzpack5, izpackPanelJar
+  source = fileTree(panelTestDir) { include '**/*.java' }
+  destinationDirectory = panelTestClassesDir
+  classpath = files(fileTree(file("${iz5home}/lib")) { include '*.jar' }, izpackPanelJar)
+  options.encoding = 'UTF-8'
+  options.release = 8
+  options.compilerArgs << '-Xlint:-options'
+  doFirst {
+    if (!new File("${iz5home}/lib").isDirectory()) {
+      throw new GradleException(izpack5Missing)
+    }
+  }
+}
+
+// Guards the panel classes: the constructor signatures picocontainer needs, the
+// resource rebase, and that IzPack still resolves the console and automation
+// counterparts of LocalizedHTMLInfoPanel. Needs no built installer, so it can run
+// before installer5.
+task izpackPanelTest(type: JavaExec) {
+  group = 'verification'
+  description = 'Run LocalizedResourcesTest against the panel jar (needs no built installer).'
+  dependsOn izpackPanelTestClasses
+  mainClass = 'net.i2p.installer.LocalizedResourcesTest'
+  classpath = files(panelTestClassesDir, panelJarFile,
+      fileTree(file("${iz5home}/lib")) { include '*.jar' })
+}
+
+// ant izpack-branding-check: reads the langpacks and CustomLangPack out of the built
+// installer, so it reports the previous build's strings unless dist/install.jar is
+// current. Fails loudly rather than silently checking a jar that is not there.
+task izpackBrandingCheck(type: JavaExec) {
+  group = 'verification'
+  description = 'Run BrandingSuppressedTest against dist/install.jar (mirrors ant izpack-branding-check).'
+  dependsOn izpackPanelTestClasses
+  mainClass = 'net.i2p.installer.BrandingSuppressedTest'
+  classpath = files(panelTestClassesDir, fileTree(file("${iz5home}/lib")) { include '*.jar' },
+      file("${distAbs}/install.jar"))
+  doFirst {
+    if (!new File("${distAbs}/install.jar").isFile()) {
+      throw new GradleException("${distAbs}/install.jar is missing - run ./gradlew installer5 first")
+    }
+  }
+}
+
 // IzPack 5 variants; the distribution is downloaded on demand and the build
 // fails with the ant message if that leaves no usable copy
-def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg) {
+def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String outJarName, String taskDesc, Map cfg,
+                    String variant, String stageDir) {
+  // variant picks this build's filtered descriptor; stageTask must stage the matching
+  // directory, or the descriptor names a payload the install never unpacked.
+  final String descriptor = "${cfg.izWork}/${variant}/5/install5.xml"
+  final String prepCfg = "prepIzpackConfigs${variant.capitalize()}"
   task(taskName, type: Exec) {
     group = 'package'
     description = taskDesc
-    dependsOn stageTask, jbigiTask, prepIzpackConfigs, downloadIzpack5, izpackFlagGifs
-    commandLine 'java', '-cp', "${cfg.iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
-        '-c', "${cfg.izWork}/5/install5.xml", '-b', cfg.wsAbs, '-o', "${cfg.dAbs}/${outJarName}"
-    inputs.files(fileTree(cfg.seed), file("${cfg.izWork}/5/install5.xml"))
+    dependsOn stageTask, jbigiTask, prepCfg, downloadIzpack5, izpackFlagGifs, izpackPanelJar
+    // The descriptor is POSITIONAL. CliAnalyzer accepts only -b/--base, -c/--compression,
+    // -h, -k/--kind, -l/--compression-level and -o/--out, so passing it as -c was read as
+    // a compression format and the compiler printed its usage and exited 1. Ant does not
+    // hit this because it goes through the IzPackTask wrapper, which maps attributes.
+    commandLine 'java', '-cp', cfg.compilerCp, 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
+        descriptor, '-b', cfg.wsAbs, '-k', 'standard', '-o', "${cfg.dAbs}/${outJarName}"
+    inputs.files(fileTree(stageDir), file(descriptor), izpackPanelJar)
     outputs.file("${cfg.dAbs}/${outJarName}")
     doFirst {
       if (!new File("${cfg.iz5home}/lib").isDirectory()) {
         throw new GradleException(izpack5Missing)
       }
-      // Custom langpacks load relative to the working directory; place
-      // them at the repo root, as ant does (distclean wipes com/)
-      new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks" as String).mkdirs()
-      new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks" as String).deleteDir()
-      def src = new File("${cfg.wsAbs}/installer/lib/izpack/5/patches/resources")
-      src.eachFileRecurse(groovy.io.FileType.FILES) { f ->
-        def rel = src.toPath().relativize(f.toPath()).toString()
-        new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks/${rel}").parentFile.mkdirs()
-        f.copyTo(new File("${cfg.wsAbs}/com/izforge/izpack/bin/langpacks/${rel}"))
-      }
+      // Custom langpacks and flags load relative to the working directory, which is the
+      // repo root for this task - the same place ant puts them.
+      cfg.util.stageLangpacksAndFlags(cfg.wsAbs as String)
     }
     doLast {
       cfg.util.printSha(new File("${cfg.dAbs}/${outJarName}"))
@@ -719,15 +901,20 @@ def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String 
 }
 
 makeIzpack5Task('installer5', 'preppkg', 'jbigi', 'install.jar',
-    'Build the full all-platform installer dist/install.jar with IzPack 5 (mirrors ant installer5).', izpack5Cfg)
+    'Build the full all-platform installer dist/install.jar with IzPack 5 (mirrors ant installer5).', izpack5Cfg,
+    'all', "${stageRoot}/all")
 makeIzpack5Task('installer5-nowindows', 'preppkg-nowindows', 'jbigi-nowindows', "i2pinstall_${fullVersion}.jar",
-    'Build the no-windows installer jar with IzPack 5 (mirrors ant installer5-nowindows).', izpack5Cfg)
+    'Build the no-windows installer jar with IzPack 5 (mirrors ant installer5-nowindows).', izpack5Cfg,
+    'nowindows', "${stageRoot}/nowindows")
 makeIzpack5Task('installer5-linux', 'preppkg-linux-only', 'jbigi-linux', "i2pinstall_${fullVersion}_linux-only.jar",
-    'Build the linux-only installer jar with IzPack 5 (mirrors ant installer5-linux).', izpack5Cfg)
+    'Build the linux-only installer jar with IzPack 5 (mirrors ant installer5-linux).', izpack5Cfg,
+    'linux', "${stageRoot}/linux")
 makeIzpack5Task('installer5-freebsd', 'preppkg-freebsd-only', 'jbigi-freebsd', "i2pinstall_${fullVersion}_freebsd-only.jar",
-    'Build the freebsd-only installer jar with IzPack 5 (mirrors ant installer5-freebsd).', izpack5Cfg)
+    'Build the freebsd-only installer jar with IzPack 5 (mirrors ant installer5-freebsd).', izpack5Cfg,
+    'freebsd', "${stageRoot}/freebsd")
 makeIzpack5Task('installer5-osx', 'preppkg-osx-only', 'jbigi-osx', "i2pinstall_${fullVersion}_osx-only.jar",
-    'Build the osx-only installer jar with IzPack 5 (mirrors ant installer5-osx).', izpack5Cfg)
+    'Build the osx-only installer jar with IzPack 5 (mirrors ant installer5-osx).', izpack5Cfg,
+    'osx', "${stageRoot}/osx")
 
 // IzPack5 exe via izpack2exe.py (ant installer5exe), fixed to read dist/install.jar.
 // Not launch4j: launch4j output cannot be Windows-signed. The script is Python 3
@@ -760,11 +947,17 @@ task installer5exe(type: Exec) {
 task installer5WJar(type: Exec) {
   group = 'package'
   description = 'Build the windows-only installer jar with IzPack 5 (mirrors ant installer5-windows).'
-  dependsOn 'preppkg-windows-only', 'jbigi-windows', prepIzpackConfigs, downloadIzpack5
-  commandLine 'java', '-cp', "${iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
-      '-c', "${izpackWork}/5/install5.xml", '-b', workspaceRootAbs, '-o', "${distAbs}/install-windows.jar"
-  inputs.files(fileTree(payloadSeed), file("${izpackWork}/5/install5.xml"))
+  dependsOn 'preppkg-windows-only', 'jbigi-windows', prepIzpackConfigsWindows, downloadIzpack5, izpackFlagGifs, izpackPanelJar
+  commandLine 'java', '-cp', iz5CompilerCp, 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
+      "${izpackWork}/windows/5/install5.xml", '-b', workspaceRootAbs, '-k', 'standard', '-o', "${distAbs}/install-windows.jar"
+  inputs.files(fileTree("${stageRoot}/windows"), file("${izpackWork}/windows/5/install5.xml"), izpackPanelJar)
   outputs.file("${distAbs}/install-windows.jar")
+  doFirst {
+    if (!new File("${iz5home}/lib").isDirectory()) {
+      throw new GradleException(izpack5Missing)
+    }
+    installerUtil.stageLangpacksAndFlags(workspaceRootAbs as String)
+  }
 }
 
 task installer5WExe(type: Exec) {

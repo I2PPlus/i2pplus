@@ -52,6 +52,18 @@ dirs, jbigi natives, scripts, Windows CRLF). All output goes to `dist/`.
 | `./gradlew installer5exe`       | Windows exe from the IzPack 5 jar (izpack2exe.py, not launch4j) | `dist/i2pinstall.exe`                    |
 | `./gradlew installer-all`       | Build every platform installer                                  |                                          |
 | `./gradlew downloadIzpack5`     | Download or update the IzPack 5 distribution                   |                                          |
+| `./gradlew izpackPanelJar`      | Build the panel jar the IzPack 5 compiler loads `<panel classname=...>` from (Ant `izpack-panel-jar`) | `build/izpack-panel/izpack-i2p.jar` |
+
+#### Panel and langpack checks
+
+| Task                              | Description                                                                     |
+| --------------------------------- | ------------------------------------------------------------------------------- |
+| `./gradlew izpackPanelTest`       | Run `LocalizedResourcesTest` against the panel jar. Needs no built installer      |
+| `./gradlew izpackBrandingCheck`   | Run `BrandingSuppressedTest` against `dist/install.jar` (Ant `izpack-branding-check`) |
+
+Neither is wired into `installer5`, because `izpackPanelTest` guards the panel
+classes and so should run *before* the installer is built, while
+`izpackBrandingCheck` reads the built jar and so has to run after it.
 
 The `preppkg*` staging tasks (`preppkg`, `preppkg-nowindows`,
 `preppkg-linux-only`, `preppkg-freebsd-only`, `preppkg-osx-only`,
@@ -168,10 +180,12 @@ Configuration cache is enabled in `gradle.properties`. If you see "configuration
   renamed; the Gradle port uses `dist/`-relative intermediates
   (`install-windows.jar`, `i2pinstall-windows.exe`) and renames into
   `dist/i2pinstall_<ver>_windows.exe`
-- `installer2app` tar output goes to `dist/` (Ant writes it to the repo root)
 - Each platform installer stages into its own directory; Ant shares one
   `pkg-temp` for everything and deletes it per target (`installer-all` in Ant
-  is order-dependent)
+  is order-dependent). Because Ant reuses that one directory, its filtered
+  descriptors can all point at the same `dir="pkg-temp"`; Gradle needs one
+  filtered descriptor per variant, or the install ships a payload that was
+  never staged
 - `lib/pack200.jar` is built by the `:apps:pack200` module and rides in the
   update payload (ant parity with `prepupdateSmall`); the launcher
   Class-Path references it too. `pack200Updater` compresses with that same
