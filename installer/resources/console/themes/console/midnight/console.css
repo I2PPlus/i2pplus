@@ -499,9 +499,9 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #sidebar h3 a[href="/info"] .badge{vertical-align:text-top;text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3{position:relative}
-#sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
+#sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -1px;vertical-align:middle;display:inline-block}
 #sidebar #localtunnelsActive,#sidebar #localtunnelsActive td{text-align:center;background:none;padding:3px 0;line-height:16px;vertical-align:middle;text-align:center}
-#sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle;margin:1px 4px;line-height:16px;width:auto;letter-spacing:2px}
+#sidebar #localtunnelsActive span{display:inline-block;font-size:90%;font-weight:600;text-transform:lowercase;vertical-align:middle;margin:1px 3px;line-height:16px;width:auto;letter-spacing:1px}
 #sidebar #localtunnelsActive span.count_0{display:none}
 #sidebar #localtunnelSummary{margin:-7px auto -8px}
 #sidebar #sb_internals.collapsed a:not(.sb_icon),#sidebar #sb_advanced.collapsed a:not(.sb_icon),#sidebar #sb_services.collapsed a:not(.sb_icon){display:none}
