@@ -20,6 +20,30 @@ public final class Curve25519 {
     // Numbers modulo 2^255 - 19 are broken up into ten 26-bit words.
     private static final int NUM_LIMBS_255BIT = 10;
     private static final int NUM_LIMBS_510BIT = 20;
+
+    /**
+     * Per-thread scratch state for {@link #eval(byte[], int, byte[], byte[])}.
+     * <p>
+     * The evaluation is a few microseconds of arithmetic over roughly 1 KB of
+     * limb arrays; allocating those 16 arrays on every call put that cost on
+     * the GC (LS2 derives a key per client tunnel, SSU2/NTCP2 do it per
+     * handshake, ECIES ratchets do it per turn).
+     * <p>
+     * A {@code Curve25519} is reachable only through the private constructor
+     * and the static {@code eval()}, and {@code eval()} never reenters itself -
+     * every instance method it calls is private leaf arithmetic. One instance
+     * per thread is therefore sufficient.
+     * <p>
+     * Security: the instance handed out here is always fully zeroed, both on
+     * creation and on release ({@link #destroy()} runs in a {@code finally} on
+     * every path out of {@code eval()}), and {@code eval()} clears it again
+     * before use - so a pooled instance never carries private key material
+     * forward, exactly as a freshly allocated one did not.
+     *
+     * @since 0.9.71+
+     */
+    private static final ThreadLocal<Curve25519> _SCRATCH = ThreadLocal.withInitial(Curve25519::new);
+
     private final int[] x_1;
     private final int[] x_2;
     private final int[] x_3;
@@ -61,7 +85,8 @@ public final class Curve25519 {
     }
 
     /**
-     * Destroy all sensitive data in this object.
+     * Destroy all sensitive data in this object. Also used to reset the
+     * per-thread scratch instance before each evaluation.
      */
     private void destroy() {
         // Destroy all temporary variables.
@@ -439,7 +464,12 @@ public final class Curve25519 {
      * @throws IllegalArgumentException on low-order input see RFC 7748
      */
     public static void eval(byte[] result, int offset, byte[] privateKey, byte[] publicKey) {
-        Curve25519 state = new Curve25519();
+        Curve25519 state = _SCRATCH.get();
+        // Clear on entry as well as on exit: the exit scrub in the finally block
+        // is what keeps the pooled instance free of key material, but clearing
+        // here means a use that threw before reaching the finally (or a future
+        // refactor that reorders them) still starts from a zeroed state.
+        state.destroy();
         try {
             // Unpack the public key value.  If null, use 9 as the base point.
             //Arrays.fill(state.x_1, 0);
@@ -496,7 +526,10 @@ public final class Curve25519 {
             if (b == 0)
             throw new IllegalArgumentException("Low order input RFC 7748");
         } finally {
-            // Clean up all temporary state before we exit.
+            // Clean up all temporary state before we exit, including on the
+            // IllegalArgumentException path - the instance goes back to the
+            // per-thread pool and must not retain anything derived from the
+            // private key.
             state.destroy();
         }
     }

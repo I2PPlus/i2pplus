@@ -108,8 +108,10 @@ public class AESEngine {
         cur += 4;
         System.arraycopy(payload, 0, data, cur, payload.length);
         cur += payload.length;
-        byte[] paddingData = getPadding(_context, size, paddedSize);
-        System.arraycopy(paddingData, 0, data, cur, paddingData.length);
+        // Fill the padding region of 'data' in place. The bytes there are
+        // uninitialized and are only read back after encrypt(), so a separate
+        // padding buffer plus an arraycopy would be pure waste.
+        _context.random().nextBytes(data, cur, padding);
 
         encrypt(data, 0, data, 0, sessionKey, iv, data.length);
         return data;

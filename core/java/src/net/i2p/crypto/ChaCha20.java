@@ -14,6 +14,32 @@ import net.i2p.data.DataHelper;
  */
 public final class ChaCha20 {
 
+    /**
+     *  Number of 32-bit words in a ChaCha20 state block.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int STATE_WORDS = 16;
+
+    /**
+     *  Per-thread scratch pair: {@code [0]} is the input state block,
+     *  {@code [1]} is the keystream block.
+     *  <p>
+     *  Both arrays are strictly internal - they never escape
+     *  {@link #encrypt(byte[], byte[], int, byte[], int, byte[], int, int)},
+     *  so no caller can retain or observe them, and a thread-confined instance
+     *  is safe. Reentry is impossible: the only callees are
+     *  {@link ChaChaCore} statics and {@link DataHelper#fromLongLE}, all of
+     *  which are leaf code with no callbacks back into this class.
+     *  <p>
+     *  This saves two 128-byte allocations per call; SSU2 protects 2-5 header
+     *  blocks per packet and NTCP2/LS2 do the same per session.
+     *
+     *  @since 0.9.71+
+     */
+    private static final ThreadLocal<int[][]> _SCRATCH =
+            ThreadLocal.withInitial(() -> new int[2][STATE_WORDS]);
+
     private ChaCha20() {}
 
     /**
@@ -45,14 +71,15 @@ public final class ChaCha20 {
      * @since 0.9.54
      */
     public static void encrypt(byte[] key, byte[] iv, int ivOffset, byte[] plaintext, int plaintextOffset, byte[] ciphertext, int ciphertextOffset, int length) {
-        int[] input = new int[16];
-        int[] output = new int[16];
+        if (length <= 0) return;
+        int[][] scratch = _SCRATCH.get();
+        int[] input = scratch[0];
+        int[] output = scratch[1];
         ChaChaCore.initKey256(input, key, 0);
         input[12] = 1;
         input[13] = (int) DataHelper.fromLongLE(iv, ivOffset, 4);
         input[14] = (int) DataHelper.fromLongLE(iv, ivOffset + 4, 4);
         input[15] = (int) DataHelper.fromLongLE(iv, ivOffset + 8, 4);
-        ChaChaCore.hash(output, input);
         while (length > 0) {
             int tempLen = 64;
             if (tempLen > length) {

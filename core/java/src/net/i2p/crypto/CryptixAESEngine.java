@@ -17,9 +17,10 @@ import net.i2p.util.SystemVersion;
 
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.crypto.Cipher;
@@ -40,8 +41,6 @@ public final class CryptixAESEngine extends AESEngine {
 
     private static final boolean CACHE = true;
     private static final int CACHE_SIZE = 8;
-    private static final SecretKeySpec ZERO_KEY = new SecretKeySpec(new byte[32], "AES");
-    private static final IvParameterSpec ZERO_IV = new IvParameterSpec(new byte[16], 0, 16);
 
     /**
      *  Upper bound on the per-session {@link SecretKeySpec} memo cache. Plenty
@@ -54,7 +53,7 @@ public final class CryptixAESEngine extends AESEngine {
 
     /**
      *  Memoized {@link SecretKeySpec} per {@link SessionKey} for the system-AES
-     *  path, in access order so hot sessions survive eviction.
+     *  path.
      *  <p>
      *  Why memoize at all: building the spec clones the key material, but
      *  {@link SecretKeySpec#getEncoded()} returns the spec's *internal* array,
@@ -63,14 +62,31 @@ public final class CryptixAESEngine extends AESEngine {
      *  256-bit key on every JVM-path encrypt/decrypt.
      *  <p>
      *  This cache is deliberately NOT the same as
-     *  {@link SessionKey#preparedKey()}, which is owned by the legacy Cryptix
+     *  {@link SessionKey#getPreparedKey()}, which is owned by the legacy Cryptix
      *  path and lives per SessionKey - keep the two fast paths decoupled.
      *  {@link SessionKey} equality is value-based, so distinct-but-identical
      *  keys share one spec (their bytes are equal, so sharing is correct).
+     *  <p>
+     *  DO NOT make this map access-ordered: with accessOrder=true, {@code get()}
+     *  counts as a structural modification, so every lookup would need a lock
+     *  and that would serialize every AES op of at least
+     *  {@link #MIN_SYSTEM_AES_LENGTH} bytes across the whole router. Insertion
+     *  order keeps lookups lock-free and eviction drops the eldest, not the
+     *  coldest.
      *
      *  @since 0.9.71+
      */
-    private final Map<SessionKey, SecretKeySpec> _keySpecs = new LinkedHashMap<>(16, 0.75f, true);
+    private final Map<SessionKey, SecretKeySpec> _keySpecs = new LinkedHashMap<>(16, 0.75f, false);
+
+    /**
+     *  Lock-free read side of the {@link #_keySpecs} memo. Written only inside
+     *  the {@code synchronized(_keySpecs)} miss path, so it is always a mirror
+     *  of {@link #_keySpecs} (plus, transiently, the entry being evicted).
+     *  Bounded by the same {@link #KEY_SPEC_CACHE_SIZE}.
+     *
+     *  @since 0.9.71+
+     */
+    private final ConcurrentMap<SessionKey, SecretKeySpec> _keySpecReads = new ConcurrentHashMap<>(KEY_SPEC_CACHE_SIZE);
 
     /**
      * Check for AES-NI support in processor and JVM.
@@ -269,10 +285,10 @@ public final class CryptixAESEngine extends AESEngine {
      *  key. Package-visible so the unit tests can verify reuse, longevity
      *  across sessions and the size bound.
      *  <p>
-     *  Bounded to {@link #KEY_SPEC_CACHE_SIZE} entries: on overflow the least
-     *  recently used spec is evicted. Reached from {@link #encrypt}/
-     *  {@link #decrypt}, which per tunnel is effectively single-threaded, so no
-     *  contention exists; a lock is held anyway to keep reentry safe.
+     *  The hit path is lock-free: a {@link ConcurrentHashMap} lookup only. The
+     *  miss path takes {@code synchronized(_keySpecs)} - that is the only place
+     *  the {@link #KEY_SPEC_CACHE_SIZE} bound is enforced, by evicting the
+     *  eldest entry in insertion order.
      *
      *  @param sessionKey the session key (value-equality, may be a fresh object
      *                    each call carrying the same bytes as a cached one)
@@ -280,17 +296,21 @@ public final class CryptixAESEngine extends AESEngine {
      *  @since 0.9.71+
      */
     SecretKeySpec getKeySpec(SessionKey sessionKey) {
+        SecretKeySpec rv = _keySpecReads.get(sessionKey);
+        if (rv != null)
+            return rv;
         synchronized (_keySpecs) {
-            SecretKeySpec rv = _keySpecs.get(sessionKey);
+            rv = _keySpecs.get(sessionKey);
             if (rv != null)
                 return rv;
             rv = new SecretKeySpec(sessionKey.getData(), "AES");
             if (_keySpecs.size() >= KEY_SPEC_CACHE_SIZE) {
-                Iterator<Map.Entry<SessionKey, SecretKeySpec>> it = _keySpecs.entrySet().iterator();
-                it.next();
-                it.remove();
+                Map.Entry<SessionKey, SecretKeySpec> eldest = _keySpecs.entrySet().iterator().next();
+                _keySpecs.remove(eldest.getKey());
+                _keySpecReads.remove(eldest.getKey());
             }
             _keySpecs.put(sessionKey, rv);
+            _keySpecReads.put(sessionKey, rv);
             return rv;
         }
     }
@@ -314,17 +334,21 @@ public final class CryptixAESEngine extends AESEngine {
     }
 
     /**
-     *  Cipher will be initialized with a zero key and IV.
+     *  Return the Cipher to the cache without scrubbing it first.
+     *  <p>
+     *  The pooled Cipher keeps the round keys of the operation that just
+     *  finished. Re-initializing it with a zero key was dropped because
+     *  {@link Cipher#init} at the next acquire overwrites the schedule anyway,
+     *  and the extra key schedule is pure overhead. It protected nothing either:
+     *  the live key bytes are already resident for the life of the
+     *  {@link SessionKey} in the {@link #_keySpecReads} memo and in
+     *  {@link SessionKey#getPreparedKey()} on the legacy Cryptix path.
      *
+     *  @param cipher the Cipher to return to the cache
      *  @since 0.9.49
      */
     private void release(Cipher cipher) {
         if (CACHE) {
-            try {
-                cipher.init(Cipher.DECRYPT_MODE, ZERO_KEY, ZERO_IV, _context.random());
-            } catch (GeneralSecurityException e) {
-                return;
-            }
             _ciphers.offer(cipher);
         }
     }

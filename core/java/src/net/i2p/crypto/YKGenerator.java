@@ -16,22 +16,30 @@ import net.i2p.util.SystemVersion;
 
 import java.math.BigInteger;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Precalculate the Y and K for ElGamal encryption operations.
  *
  * This class precalcs a set of values on its own thread, using those transparently
  * when a new instance is created.  By default, the minimum threshold for creating
- * new values for the pool is 20, and the max pool size is 50.  Whenever the pool has
- * less than the minimum, it fills it up again to the max.  There is a delay after
- * each precalculation so that the CPU isn't hosed during startup.
- * These three parameters are controlled by java environmental variables and
- * can be adjusted via:
+ * new values for the pool is 50, and the max pool size is 200 (30 and 100 on a
+ * slow system); both scale up with heap size, to 400 and 1600.  Whenever the pool
+ * has less than the minimum, it refills it above the minimum by however many values
+ * it saw consumed since the previous check, so an idle router does no speculative
+ * 2048-bit modular exponentiations.  There is a delay after each precalculation so
+ * that the CPU isn't hosed during startup.  These three parameters are controlled by
+ * java environmental variables and can be adjusted via:
  * -Dcrypto.yk.precalc.min=40 -Dcrypto.yk.precalc.max=100 -Dcrypto.yk.precalc.delay=60000
  *
  * (delay is milliseconds)
  *
  * To disable precalculation, set min to 0
+ *
+ * Tradeoff: the pool now normally sits near the minimum rather than near the
+ * maximum, so a sustained burst can drain it and cost a foreground modular
+ * exponentiation per message until the precalc thread catches up.  Raise
+ * -Dcrypto.yk.precalc.min if that cost is noticeable.
  *
  * @author jrandom
  */
@@ -40,6 +48,12 @@ final class YKGenerator {
     private final int MAX_NUM_BUILDERS;
     private final int CALC_DELAY;
     private final LinkedBlockingQueue<BigInteger[]> _values;
+    /**
+     *  Pool occupancy, maintained alongside {@link #_values}: sampling
+     *  LinkedBlockingQueue.size() takes both the put and the take lock, so it
+     *  contends with poll() on the encryption path.
+     */
+    private final AtomicInteger _size = new AtomicInteger();
     private Thread _precalcThread;
     private final I2PAppContext ctx;
     private volatile boolean _isRunning;
@@ -106,10 +120,7 @@ final class YKGenerator {
             _precalcThread.interrupt();
         }
         _values.clear();
-    }
-
-    private final int getSize() {
-        return _values.size();
+        _size.set(0);
     }
 
     /**
@@ -117,7 +128,11 @@ final class YKGenerator {
      * @return true if successful, false if full
      */
     private final boolean addValues(BigInteger[] yk) {
-        return _values.offer(yk);
+        if (!_values.offer(yk)) {
+            return false;
+        }
+        _size.incrementAndGet();
+        return true;
     }
 
     /** Next precomputed YK value.
@@ -127,6 +142,7 @@ final class YKGenerator {
     public BigInteger[] getNextYK() {
         BigInteger[] rv = _values.poll();
         if (rv != null) {
+            _size.decrementAndGet();
             return rv;
         }
         rv = generateYK();
@@ -168,11 +184,22 @@ final class YKGenerator {
 
     /** Precalculation thread. */
     private class YKPrecalcRunner implements Runnable {
+        /**
+         *  Refill headroom for a pool that saw no consumption yet, covering the
+         *  jitter between a drain and this thread noticing it.
+         */
+        private static final int MIN_SLACK = 5;
+
         private final int _minSize;
         private final int _maxSize;
 
         /** Check every 30 seconds whether fewer than the minimum YK pairs remain. */
         private long _checkDelay = (long) 30 * 1000;
+
+        /** Pool occupancy at the end of the previous cycle. */
+        private int _lastSize;
+        /** Wall clock time at the end of the previous cycle. */
+        private long _lastSample;
 
         private YKPrecalcRunner(int minSize, int maxSize) {
             _minSize = minSize;
@@ -185,7 +212,11 @@ final class YKGenerator {
         @Override
         public void run() {
             while (_isRunning) {
-                int startSize = getSize();
+                int startSize = _size.get();
+                // Nothing adds to the pool but us, so the drop since the last
+                // sample is exactly what the encryption path consumed.
+                int drained = Math.max(0, _lastSize - startSize);
+                long elapsed = ctx.clock().now() - _lastSample;
                 // Adjust delay
                 if (startSize <= (_minSize * 2 / 3) && _checkDelay > 1000) {
                     _checkDelay -= 1000;
@@ -193,8 +224,10 @@ final class YKGenerator {
                     _checkDelay += 1000;
                 }
                 if (startSize < _minSize) {
-                    // Fill all the way up, do the check here so we don't throw away one when full in addValues()
-                    while (getSize() < _maxSize && _isRunning) {
+                    // Fill to the demand-derived target, do the check here so we
+                    // don't throw away one when full in addValues()
+                    int target = refillTarget(drained, elapsed);
+                    while (_size.get() < target && _isRunning) {
                         if (!addValues(generateYK())) {
                             break;
                         }
@@ -209,12 +242,45 @@ final class YKGenerator {
                 if (!_isRunning) {
                     break;
                 }
+                // Resample after filling, so the next cycle measures drain only
+                _lastSize = _size.get();
+                _lastSample = ctx.clock().now();
                 try {
                     Thread.sleep(_checkDelay);
                 } catch (InterruptedException ie) {
                     // interrupted during check sleep
                 }
             }
+        }
+
+        /**
+         *  How far above the minimum to refill: scoped to one check interval's
+         *  worth of observed consumption, so the expensive modular exponentiations
+         *  track real demand. Only consulted once the pool is already below the
+         *  minimum, so it never changes when a refill starts, only how far it goes.
+         *
+         *  @param drained how many values the pool lost since the previous cycle
+         *  @param elapsedMs how long ago the previous cycle ended
+         *  @return the size to fill to, never above the configured maximum
+         */
+        private int refillTarget(int drained, long elapsedMs) {
+            int room = _maxSize - _minSize;
+            if (room <= 0) {
+                // misconfigured with max <= min, don't spin on a full queue
+                return Math.min(_minSize, _maxSize);
+            }
+            if (drained <= 0 || elapsedMs <= 0) {
+                return _minSize + Math.min(room, MIN_SLACK);
+            }
+            // scale the drain up to one check interval, rounding up so that even
+            // a single consumed value buys one back
+            long slack = (((long) drained * _checkDelay) + elapsedMs - 1) / elapsedMs;
+            if (slack < 1) {
+                slack = 1;
+            } else if (slack > room) {
+                slack = room;
+            }
+            return _minSize + (int) slack;
         }
     }
 }

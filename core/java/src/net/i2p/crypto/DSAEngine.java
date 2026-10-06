@@ -38,6 +38,15 @@ public final class DSAEngine {
     private static final boolean _useJavaLibs = false; // = _isAndroid;
 
     /**
+     *  Thread-local SHA-1 digest for {@link #calculateHash(byte[], int, int)} and
+     *  {@link #calculateHash(InputStream)}, so that a DSA-SHA1 hash does not
+     *  allocate a fresh SHA1 (a MessageDigestSpi plus a 64 byte pad) each time.
+     *  Reset on every acquire and never handed outside this class, so there is
+     *  no state that can leak between calls.
+     */
+    private static final ThreadLocal<MessageDigest> _sha1 = ThreadLocal.withInitial(SHA1::getInstance);
+
+    /**
      *  Create a DSA engine for the given context.
      *
      * @param context the context
@@ -190,15 +199,14 @@ public final class DSAEngine {
 
         try {
             byte[] sigbytes = signature.getData();
-            byte[] rbytes = new byte[20];
-            byte[] sbytes = new byte[20];
-            for (int x = 0; x < 40; x++) {
-                if (x < 20) {
-                    rbytes[x] = sigbytes[x];
-                } else {
-                    sbytes[x - 20] = sigbytes[x];
-                }
-            }
+            // BigInteger has no (array, offset, length) constructor, so each half
+            // of the signature needs its own copy; BigInteger may alias the array
+            // it is handed, so these cannot be pooled across calls.
+            int half = sigbytes.length >> 1;
+            byte[] rbytes = new byte[half];
+            byte[] sbytes = new byte[half];
+            System.arraycopy(sigbytes, 0, rbytes, 0, half);
+            System.arraycopy(sigbytes, half, sbytes, 0, half);
 
             BigInteger s = new NativeBigInteger(1, sbytes);
             BigInteger r = new NativeBigInteger(1, rbytes);
@@ -428,7 +436,8 @@ public final class DSAEngine {
      *  @return hash SHA-1 hash, NOT a SHA-256 hash
      */
     public SHA1Hash calculateHash(InputStream in) {
-        MessageDigest digest = SHA1.getInstance();
+        MessageDigest digest = _sha1.get();
+        digest.reset();
         byte[] buf = new byte[64];
         int read = 0;
         try {
@@ -451,7 +460,8 @@ public final class DSAEngine {
      * @return the SHA-1 hash
      */
     public static SHA1Hash calculateHash(byte[] source, int offset, int len) {
-        MessageDigest h = SHA1.getInstance();
+        MessageDigest h = _sha1.get();
+        h.reset();
         h.update(source, offset, len);
         byte[] digested = h.digest();
         return new SHA1Hash(digested);

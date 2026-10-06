@@ -6,7 +6,8 @@ import net.i2p.data.Hash;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Defines a wrapper for SHA-256 operation.
@@ -15,17 +16,48 @@ import java.util.concurrent.LinkedBlockingQueue;
  * As of release 0.9.25, uses only MessageDigest.
  * GNU-Crypto gnu.crypto.hash.Sha256Standalone
  * is removed as of 0.9.28.
+ * As of release 0.9.71, the digest pool is lock-free (ConcurrentLinkedQueue)
+ * instead of a LinkedBlockingQueue.
  */
 public final class SHA256Generator {
-    private final LinkedBlockingQueue<MessageDigest> _digests;
+    /**
+     *  Bound on how many digests are kept for reuse. It caps retained digests,
+     *  not concurrency: an exhausted pool simply hands out a fresh digest.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int POOL_SIZE = 32;
+
+    /**
+     *  Reuse pool of SHA-256 {@link MessageDigest}s.
+     *  <p>
+     *  A {@link ConcurrentLinkedQueue} rather than a blocking queue, which took a
+     *  lock twice per hash.
+     *  <p>
+     *  Deliberately NOT a {@link ThreadLocal}: digests are not acquire/release
+     *  scoped. {@code com.southernstorm.noise}'s {@code SymmetricState} checks one
+     *  out in its constructor and holds it for the life of the Noise state, so
+     *  more than one can be live on a thread at once and a thread-confined digest
+     *  would silently alias them and corrupt the key derivation.
+     *
+     *  @since 0.9.71+
+     */
+    private final ConcurrentLinkedQueue<MessageDigest> _digests = new ConcurrentLinkedQueue<>();
+
+    /**
+     *  Number of elements in {@link #_digests}, maintained explicitly because
+     *  {@link ConcurrentLinkedQueue#size()} is O(n). May drift by a constant
+     *  factor under races, which does not matter for a reuse bound.
+     *
+     *  @since 0.9.71+
+     */
+    private final AtomicInteger _pooled = new AtomicInteger();
 
     /**
      *  Unused.
      *  @param context unused
      */
-    public SHA256Generator(I2PAppContext context) {
-        _digests = new LinkedBlockingQueue<>(32);
-    }
+    public SHA256Generator(I2PAppContext context) {}
 
     /**
      * Instance.
@@ -57,7 +89,7 @@ public final class SHA256Generator {
         MessageDigest digest = acquire();
         digest.update(source, start, len);
         byte[] rv = digest.digest();
-        releaseit(digest);
+        release(digest);
         return Hash.create(rv);
     }
 
@@ -75,44 +107,48 @@ public final class SHA256Generator {
         } catch (DigestException e) {
             throw new RuntimeException(e);
         } finally {
-            releaseit(digest);
+            release(digest);
         }
     }
 
     /**
-     *  Obtain a MessageDigest instance from the pool,
-     *  for uses where the one-shot calculateHash()
-     *  would require copying the data.
-     *  Return the instance via release() when done.
+     *  Check out a SHA-256 MessageDigest, reset and ready to use.
+     *  <p>
+     *  For uses where the one-shot calculateHash() would require copying the
+     *  data. Hand it back via {@link #release(MessageDigest)} when done. A
+     *  MessageDigest is not thread-safe and must not be shared, so a caller
+     *  holding two at once must have checked out two.
      *
-     *  @return a MessageDigest instance
+     *  @return a reset MessageDigest instance
      *  @since public since 0.9.66
      */
     public MessageDigest acquire() {
         MessageDigest rv = _digests.poll();
-        if (rv != null) rv.reset();
-        else rv = getDigestInstance();
+        if (rv == null)
+            rv = getDigestInstance();
+        else
+            _pooled.decrementAndGet();
+        rv.reset();
         return rv;
     }
 
     /**
-     *  Release a digest back to the pool
+     *  Release a digest back to the pool, reset so that no hashed data survives
+     *  in a pooled digest between uses.
+     *  <p>
+     *  The digest must be SHA-256, i.e. one {@link #acquire()} returned. That
+     *  invariant is not re-checked: {@link MessageDigest#getAlgorithm()} is a
+     *  provider-dependent string comparison on a hot path.
      *
      *  @param digest must be SHA-256
      *  @since public since 0.9.66
      */
     public void release(MessageDigest digest) {
-        if (!digest.getAlgorithm().equals("SHA-256")) throw new IllegalArgumentException();
-        _digests.offer(digest);
-    }
-
-    /**
-     *  Release a digest back to the pool - internal version
-     *
-     *  @since 0.9.66 renamed from release()
-     */
-    private void releaseit(MessageDigest digest) {
-        _digests.offer(digest);
+        digest.reset();
+        if (_pooled.get() >= POOL_SIZE)
+            return;
+        if (_digests.offer(digest))
+            _pooled.incrementAndGet();
     }
 
     /**

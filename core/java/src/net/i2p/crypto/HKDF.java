@@ -7,7 +7,6 @@ import java.security.GeneralSecurityException;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 /**
  * HMAC-based Key Derivation Function (HKDF) implementation using HMAC-SHA256.
@@ -115,15 +114,16 @@ public final class HKDF {
             // HMAC256Generator for efficiency.
             HMAC256Generator hmac = _context.hmac256();
             Mac mac = hmac.acquire();
-            // SecretKeySpec copies the data, HMACKey doesn't
+            // SecretKeySpec copies the data in the constructor, HMACKey doesn't
             SecretKey keyObj = new HMACKey(key);
             mac.init(keyObj);
             mac.update(data);
             // Extract to out as a tmp
             mac.doFinal(out, 0);
             // PRK
-            // SecretKeySpec copies the data, HMACKey doesn't
-            keyObj = new SecretKeySpec(out, 0, 32, "HmacSHA256");
+            // HMACKey references out instead of copying it, which is safe here
+            // because 'out' is exactly the 32 bytes HmacSHA256 reads from a key
+            keyObj = new HMACKey(out);
             mac.init(keyObj);
             // Expand
             // HMAC 1 with info and 0x01
@@ -133,6 +133,7 @@ public final class HKDF {
             tmp[ilen] = 2;
             // HMAC 2 with output 1, info, and 0x02
             // output 2 to out2
+            // reset() discards the message state but keeps the PRK key schedule
             mac.reset();
             mac.update(out, 0, 32);
             mac.update(tmp, 0, ilen + 1);
@@ -140,9 +141,6 @@ public final class HKDF {
             hmac.release(mac);
         } catch (GeneralSecurityException e) {
             throw new IllegalArgumentException("HmacSHA256", e);
-        } finally {
-            // we could re-init the mac with a zero key
-            // no way to zero out the SecretKeySpec though
         }
     }
 }

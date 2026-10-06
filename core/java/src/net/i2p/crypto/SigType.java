@@ -233,6 +233,15 @@ public enum SigType {
     private final AlgorithmParameterSpec params;
     private final boolean isAvail;
 
+    /**
+     * Pristine digest for {@link #digestName}, created once and cloned per call.
+     * Never handed out and never fed data, so any clone of it is a fully
+     * independent digest in its initial state. Lazily created by
+     * {@link #getDigestPrototype()} so that an unavailable algorithm still
+     * leaves the enum constant constructible.
+     */
+    private volatile MessageDigest digestProto;
+
     SigType(
             int cod,
             int pubLen,
@@ -305,16 +314,59 @@ public enum SigType {
         return params;
     }
 
-    /** A MessageDigest instance for this signature type.
+    /** A private, unshared MessageDigest instance for this signature type,
+     *  in its initial state.
+     *
+     *  A MessageDigest is stateful and not thread safe, so the prototype is
+     *  never returned directly; it is cloned on every call. Cloning skips the
+     *  JCA provider lookup (algorithm string hashing plus provider list
+     *  scanning) that {@link MessageDigest#getInstance(String)} performs, and
+     *  the clone shares no state with the prototype or with any other clone.
      *
      *  @throws UnsupportedOperationException if not supported
-     *  @return The digest instance.
+     *  @return a new digest instance owned by the caller
      */
     public MessageDigest getDigestInstance() {
-        if (digestName.equals("SHA-1")) return SHA1.getInstance();
-        if (digestName.equals("SHA-256")) return SHA256Generator.getDigestInstance();
+        MessageDigest proto = getDigestPrototype();
         try {
-            return MessageDigest.getInstance(digestName);
+            MessageDigest rv = (MessageDigest) proto.clone();
+            // the prototype is never fed, so the clone is already pristine;
+            // reset() makes that guarantee explicit for a few word writes
+            rv.reset();
+            return rv;
+        } catch (CloneNotSupportedException cnse) {
+            // non-cloneable SPI, fall back to the full provider lookup
+            return createDigestInstance(digestName);
+        }
+    }
+
+    /**
+     *  The pristine digest prototype for this type, created on first use.
+     *
+     *  @throws UnsupportedOperationException if not supported
+     *  @return the prototype, which callers must not use or modify
+     */
+    private MessageDigest getDigestPrototype() {
+        MessageDigest rv = digestProto;
+        if (rv == null) {
+            rv = createDigestInstance(digestName);
+            digestProto = rv;
+        }
+        return rv;
+    }
+
+    /**
+     *  Provider lookup for a digest by name. Called at most once per SigType.
+     *
+     *  @param name the JCA digest name
+     *  @throws UnsupportedOperationException if not supported
+     *  @return a new digest instance
+     */
+    private static MessageDigest createDigestInstance(String name) {
+        if (name.equals("SHA-1")) return SHA1.getInstance();
+        if (name.equals("SHA-256")) return SHA256Generator.getDigestInstance();
+        try {
+            return MessageDigest.getInstance(name);
         } catch (NoSuchAlgorithmException e) {
             throw new UnsupportedOperationException(e);
         }
@@ -396,7 +448,7 @@ public enum SigType {
                     jsig.sign();
                 }
             }
-            getDigestInstance();
+            getDigestPrototype();
             getHashInstance();
         } catch (GeneralSecurityException e) {
             return false;

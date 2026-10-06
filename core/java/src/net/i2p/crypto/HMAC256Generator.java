@@ -39,7 +39,6 @@ public final class HMAC256Generator extends HMACGenerator {
 
     private static final boolean CACHE = true;
     private static final int CACHE_SIZE = 8;
-    private static final SecretKey ZERO_KEY = new HMACKey(new byte[32]);
 
     /**
      * Create a new HMAC256Generator.
@@ -133,7 +132,15 @@ public final class HMAC256Generator extends HMACGenerator {
 
     /**
      *  Release a Mac back to the pool.
-     *  Mac will be reset and initialized with a zero key.
+     *  Mac will be reset, discarding any accumulated message state.
+     *  Per the JCA contract, {@link Mac#reset()} "resets this Mac object to
+     *  the state it was in when previously initialized via a call to
+     *  init(Key)", so it clears the message state without re-running the
+     *  ipad/opad key schedule that {@link Mac#init(javax.crypto.Key)} does.
+     *  That is all a pooled Mac needs, because every caller of acquire() must
+     *  init() before use, and engineInit() overwrites all 64 bytes of both
+     *  k_ipad and k_opad, so the previous key schedule cannot leak into the
+     *  next operation.
      *  Package private for HKDF.
      *
      *  @param mac the Mac to release
@@ -141,11 +148,7 @@ public final class HMAC256Generator extends HMACGenerator {
      */
     void release(Mac mac) {
         if (CACHE) {
-            try {
-                mac.init(ZERO_KEY);
-            } catch (GeneralSecurityException e) {
-                return;
-            }
+            mac.reset();
             _macs.offer(mac);
         }
     }
@@ -158,9 +161,14 @@ public final class HMAC256Generator extends HMACGenerator {
      * Unlike standard SecretKeySpec, this implementation maintains a direct reference
      * to the key data while maintaining compatibility with Mac operations.
      *
-     * <p><strong>Implementation Note:</strong> getEncoded() returns a copy of the
-     * first 32 bytes because the Mac class requires this behavior for proper
-     * operation. The full key data may be longer than 32 bytes.</p>
+     * <p><strong>Implementation Note:</strong> HmacSHA256 only uses the first 32
+     * bytes of the key, so getEncoded() returns exactly those 32 bytes (zero padded
+     * if the caller supplied a shorter key); the full key data may be longer than
+     * 32 bytes. The copy is mandatory rather than an optimization: the JDK's
+     * HmacCore.engineInit() zeroes the array returned by getEncoded() once it has
+     * consumed it, so handing out the internal array would destroy the caller's
+     * key. This also means the result must never be cached - a second init() with
+     * the same key object would read back an all-zero key.</p>
      *
      * @since 0.9.38
      */

@@ -47,7 +47,38 @@ public final class Blinding {
         }
     };
 
+    /**
+     *  Cached HKDF for {@link #generateAlpha}, which is called once per blinded
+     *  destination. HKDF is stateless (it only holds the context, and the
+     *  context's HMAC256Generator is itself thread-safe), so one instance per
+     *  context is reusable and saves an allocation per call.
+     */
+    private static volatile HKDF _hkdf;
+    /** The context {@link #_hkdf} was built for, so a context change forces a rebuild. */
+    private static volatile I2PAppContext _hkdfCtx;
+
     private Blinding() {}
+
+    /**
+     *  Get the shared HKDF for a context.
+     *  The cached instance is rebuilt if the context differs, so a non-global
+     *  context never ends up using a HKDF bound to a different one. A racy
+     *  double build is harmless, as both instances are equivalent.
+     *
+     *  @param ctx the app context
+     *  @return the shared HKDF, never null
+     */
+    private static HKDF hkdf(I2PAppContext ctx) {
+        if (_hkdfCtx != ctx) {
+            synchronized (Blinding.class) {
+                if (_hkdfCtx != ctx) {
+                    _hkdf = new HKDF(ctx);
+                    _hkdfCtx = ctx;
+                }
+            }
+        }
+        return _hkdf;
+    }
 
     /**
      *  Only for SigTypes EdDSA_SHA512_Ed25519 and RedDSA_SHA512_Ed25519.
@@ -155,7 +186,7 @@ public final class Blinding {
         } else {
             data = mod;
         }
-        HKDF hkdf = new HKDF(ctx);
+        HKDF hkdf = hkdf(ctx);
         byte[] out = new byte[64];
         int stoff = INFO_ALPHA.length + destspk.length();
         byte[] in = new byte[stoff + 4];

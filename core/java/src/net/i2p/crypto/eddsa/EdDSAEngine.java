@@ -6,7 +6,6 @@ import net.i2p.crypto.eddsa.math.ScalarOps;
 import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 
 import java.io.ByteArrayOutputStream;
-import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -19,7 +18,6 @@ import java.security.SignatureException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.util.Arrays;
 
 /**
  * EdDSA signature engine implementing the Java Signature API.
@@ -53,6 +51,32 @@ public class EdDSAEngine extends Signature {
     public static final AlgorithmParameterSpec ONE_SHOT_MODE = new OneShotSpec();
 
     private static final BigIntegerLittleEndianEncoding _ble = new BigIntegerLittleEndianEncoding();
+
+    /**
+     *  {@link EdDSABlinding#ORDER} as 32 little-endian bytes, so that the
+     *  RFC 8032 range check on S can be done by subtraction instead of building
+     *  a BigInteger. Verified against BigInteger.compareTo().
+     */
+    private static final byte[] ORDER_LITTLE_ENDIAN = {
+        (byte) 0xed, (byte) 0xd3, (byte) 0xf5, (byte) 0x5c,
+        (byte) 0x1a, (byte) 0x63, (byte) 0x12, (byte) 0x58,
+        (byte) 0xd6, (byte) 0x9c, (byte) 0xf7, (byte) 0xa2,
+        (byte) 0xde, (byte) 0xf9, (byte) 0xde, (byte) 0x14,
+        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x00,
+        (byte) 0x00, (byte) 0x00, (byte) 0x00, (byte) 0x10
+    };
+
+    /**
+     *  Reusable buffer for the S half of a signature, to avoid allocating a
+     *  fresh array for every verification. Only valid within one call, and
+     *  never retained by any callee. Like the digest, baos and oneShotBytes
+     *  state this class already keeps, it assumes the instance is used by one
+     *  thread at a time - callers that care create a fresh engine per
+     *  operation.
+     */
+    private byte[] sBuf;
 
     private static class OneShotSpec implements AlgorithmParameterSpec {}
 
@@ -272,10 +296,19 @@ public class EdDSAEngine extends Signature {
         // h mod l
         h = key.getParams().getScalarOps().reduce(h);
 
-        byte[] sByte = Arrays.copyOfRange(sigBytes, b / 8, b / 4);
+        int slen = b / 4 - b / 8;
+        if (sBuf == null || sBuf.length != slen) {
+            sBuf = new byte[slen];
+        }
+        byte[] sByte = sBuf;
+        System.arraycopy(sigBytes, b / 8, sByte, 0, slen);
         // RFC 8032
-        BigInteger sBigInt = _ble.toBigInteger(sByte);
-        if (sBigInt.compareTo(EdDSABlinding.ORDER) >= 0) return false;
+        if (b == 256) {
+            if (!isBelowOrder(sByte)) return false;
+        } else if (_ble.toBigInteger(sByte).compareTo(EdDSABlinding.ORDER) >= 0) {
+            // wider curves have a different order, so keep the BigInteger check
+            return false;
+        }
 
         // R = SB - H(Rbar,Abar,M)A
         GroupElement rPoint = key.getParams().getB().doubleScalarMultiplyVariableTime(((EdDSAPublicKey) key).getNegativeA(), h, sByte);
@@ -287,6 +320,33 @@ public class EdDSAEngine extends Signature {
             if (rCalc[i] != sigBytes[i]) return false;
         }
         return true;
+    }
+
+    /**
+     *  Is the 32 byte little-endian value in {@code s} strictly less than
+     *  {@link EdDSABlinding#ORDER}?
+     *
+     *  Equivalent to {@code _ble.toBigInteger(s).compareTo(EdDSABlinding.ORDER) < 0}
+     *  without allocating a BigInteger and a reversed copy of the input. This is
+     *  a fixed 32 iteration borrow chain: every byte is read and every byte is
+     *  subtracted, and the only carry is folded into the next iteration with
+     *  arithmetic, so there is no data-dependent branch or memory access. That
+     *  makes it strictly better than BigInteger.compareTo(), which exits early
+     *  on the first differing magnitude word. A short-circuiting byte compare
+     *  would be a timing oracle here; DataHelper.eq()/MessageDigest.isEqual()
+     *  are equality tests and cannot express an ordering, so they don't apply.
+     *
+     *  @param s the value to test, 32 bytes, little-endian
+     *  @return true if s is less than the group order
+     */
+    private static boolean isBelowOrder(byte[] s) {
+        int borrow = 0;
+        for (int i = 0; i < 32; i++) {
+            int diff = (s[i] & 0xff) - (ORDER_LITTLE_ENDIAN[i] & 0xff) - borrow;
+            // negative diff means we owe a borrow to the next byte
+            borrow = (diff >> 31) & 1;
+        }
+        return borrow == 1;
     }
 
     /**
