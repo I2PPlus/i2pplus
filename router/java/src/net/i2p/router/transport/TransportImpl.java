@@ -81,9 +81,21 @@ import net.i2p.util.Translate;
  *
  */
 public abstract class TransportImpl implements Transport {
+    /** Timestamp labels for afterSend(), constants so neither costs an allocation. */
+    private static final String AFTER_SEND_SUCCESSFUL = "afterSend(successful)";
+    private static final String AFTER_SEND_FAILED = "afterSend(failed)";
+
     private final Log _log;
     private TransportEventListener _listener;
     private final List<RouterAddress> _currentAddresses;
+    /**
+     *  IP of the current IPv4 address, or null.  Maintained by every mutation of
+     *  _currentAddresses so the per-packet "is this us?" check need not take that
+     *  list's monitor.  Cloned on read and on write, so no array escapes.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile byte[] _currentIPv4;
     // Only used by NTCP. SSU does not use. See send() below.
     private volatile PrioritySendPool _sendPool;
     /**
@@ -448,7 +460,10 @@ public abstract class TransportImpl implements Transport {
         String style = getStyle();
         long now = _context.clock().now();
 
-        msg.timestamp("afterSend(" + (sendSuccessful ? "successful" : "failed") + ")");
+        // A constant rather than a concatenation: timestamp() ignores the label
+        // unless the message is being timestamped, so building it per send is a
+        // wasted allocation.
+        msg.timestamp(sendSuccessful ? AFTER_SEND_SUCCESSFUL : AFTER_SEND_FAILED);
 
         if (!sendSuccessful) {
             int prev = msg.transportFailed(style);
@@ -671,6 +686,53 @@ public abstract class TransportImpl implements Transport {
     }
 
     /**
+     *  Recompute the cached IPv4 address. Must be called with _currentAddresses
+     *  held, after every change to the list, so that
+     *  {@link #isCurrentIPv4(byte[])} tracks exactly what getCurrentAddress(false)
+     *  would return. Clones the IP so later mutation of the RouterAddress cannot
+     *  be seen through the cache.
+     */
+    private void refreshCurrentIPv4() {
+        byte[] ip = null;
+        for (RouterAddress ra : _currentAddresses) {
+            if (!TransportUtil.isIPv6(ra)) {
+                byte[] addrIP = ra.getIP();
+                if (addrIP != null) {ip = addrIP.clone();}
+                break;
+            }
+        }
+        _currentIPv4 = ip;
+    }
+
+    /**
+     *  Is the given IP the current external IPv4 address?
+     *
+     *  Equivalent to comparing against {@link #getCurrentAddress(boolean)}
+     *  with ipv6 false, but without taking the address-list monitor. For the
+     *  hot inbound path (per-packet "did this come from us?" check).
+     *
+     *  @param ip the IP to test, may be null
+     *  @return true if we currently have an IPv4 address equal to ip
+     *  @since 0.9.71+
+     */
+    public boolean isCurrentIPv4(byte[] ip) {
+        byte[] current = _currentIPv4;
+        return current != null && DataHelper.eq(current, ip);
+    }
+
+    /**
+     *  IP of the current IPv4 address, from the cache maintained by the address
+     *  mutators. Does not take the address-list monitor.
+     *
+     *  @return a copy of the IP, or null if we have no IPv4 address
+     *  @since 0.9.71+
+     */
+    protected byte[] getCurrentIPv4() {
+        byte[] current = _currentIPv4;
+        return (current != null ? current.clone() : null);
+    }
+
+    /**
      * Do we have any current address?
      * @return whether current address is present
      * @since IPv6
@@ -719,6 +781,7 @@ public abstract class TransportImpl implements Transport {
                 _currentAddresses.add(address);
                 sz = _currentAddresses.size();
             }
+            refreshCurrentIPv4();
         }
         if (_log.shouldWarn()) {
              _log.warn("[" + getStyle() + "] now has " + sz + " addresses");
@@ -742,6 +805,7 @@ public abstract class TransportImpl implements Transport {
         synchronized(_currentAddresses) {
             changed = _currentAddresses.remove(address);
             sz = _currentAddresses.size();
+            refreshCurrentIPv4();
         }
         if (changed) {
             if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}
@@ -770,6 +834,7 @@ public abstract class TransportImpl implements Transport {
                 }
             }
             sz = _currentAddresses.size();
+            refreshCurrentIPv4();
         }
         if (changed) {
             if (_log.shouldWarn()) {_log.warn("[" + getStyle() + "] now has " + sz + " addresses");}

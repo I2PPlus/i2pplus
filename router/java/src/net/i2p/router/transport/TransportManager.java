@@ -111,6 +111,37 @@ public class TransportManager implements TransportEventListener {
     private final X25519KeyFactory _xdhThread;
     private final boolean _enableUDP;
     private boolean _upnpUpdateQueued;
+    /**
+     * Cached getEstablished() result.  Held as a single immutable holder so
+     * that publishing the list and its deadline is one volatile write — two
+     * separate volatiles would let a reader pair a fresh deadline with the
+     * previous list.
+     *
+     * @since 0.9.71+
+     */
+    private volatile EstablishedSnapshot _establishedCache;
+    /** How long a getEstablished() snapshot is reused, in ms. @since 0.9.71+ */
+    private static final long ESTABLISHED_CACHE_TTL = 1000;
+
+    /**
+     * Immutable getEstablished() snapshot plus its expiry.
+     *
+     * @param peers unmodifiable peer hash list
+     * @param expiresAt wall-clock ms after which the snapshot is stale
+     */
+    private static final class EstablishedSnapshot {
+        private final List<Hash> peers;
+        private final long expiresAt;
+
+        /**
+         * @param peers the unmodifiable peer hash list
+         * @param expiresAt wall-clock ms after which this snapshot is stale
+         */
+        EstablishedSnapshot(List<Hash> peers, long expiresAt) {
+            this.peers = peers;
+            this.expiresAt = expiresAt;
+        }
+    }
 
     /** Property enabling the UDP transport; defaults to true. */
     public static final String PROP_ENABLE_UDP = "i2np.udp.enable";
@@ -761,9 +792,24 @@ public class TransportManager implements TransportEventListener {
 
     /**
      * The list of peer hashes with established connections, may be empty.
-     * @return list of peer hashes with established connections, may be empty
+     *
+     * The result is an unmodifiable snapshot shared across callers for up to
+     * {@link #ESTABLISHED_CACHE_TTL} ms. Merging cost two list allocations
+     * plus two full traversals of the NTCP and SSU connection tables, and
+     * BuildRequestor alone calls this up to five times per tunnel build. Every
+     * caller (ProfileOrganizer selection, BuildRequestor logging and hop
+     * checks, ConnectChecker, ExploratoryPeerSelector, KademliaNetworkDatabaseFacade,
+     * and our own outbound maintainer) only reads the list, so sharing is safe;
+     * the TTL is well under the 60s maintainer interval, so the only possible
+     * effect is a momentarily stale view of which peers are connected.
+     *
+     * @return unmodifiable list of peer hashes with established connections, may be empty
      */
     public List<Hash> getEstablished() {
+        long now = System.currentTimeMillis();
+        EstablishedSnapshot cached = _establishedCache;
+        if (cached != null && now < cached.expiresAt)
+            return cached.peers;
         // for efficiency
         Transport t = _transports.get(Transport.STYLE_NTCP);
         List<Hash> rv = null;
@@ -778,7 +824,9 @@ public class TransportManager implements TransportEventListener {
         } else if (rv == null) {
             rv = new ArrayList<>(0);
         }
-        return rv;
+        List<Hash> snapshot = Collections.unmodifiableList(rv);
+        _establishedCache = new EstablishedSnapshot(snapshot, now + ESTABLISHED_CACHE_TTL);
+        return snapshot;
     }
 
     /**

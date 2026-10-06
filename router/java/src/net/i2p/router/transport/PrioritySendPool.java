@@ -14,14 +14,36 @@ import net.i2p.router.OutNetMessage;
  *
  * <p>Sorted array with binary search insertion — optimal for the small
  * bounded sizes (64–8192) used by the NTCP send path. Synchronized
- * on the backing list; contention is minimal because the thread that
+ * on a private lock; contention is minimal because the thread that
  * offers almost always polls immediately (handoff pattern).
+ *
+ * <p>The live region is {@code [_head, _messages.size())}: dequeue is a plain
+ * index bump, and the drained prefix is dropped wholesale once it is at least
+ * half the array, which keeps the insertion shift proportional to the live
+ * backlog rather than to capacity — at the tuned cap (cores * 512) a dequeue
+ * used to copy the whole array under the lock.  Ordering is unchanged: the live
+ * region is still sorted by descending priority then ascending sequence number,
+ * so its first element is the highest-priority message and its last is the
+ * eviction victim.
  *
  * @since 0.9.70+
  */
 public final class PrioritySendPool {
 
-    private final ArrayList<OutNetMessage> _messages;
+    /**
+     * Guards every field below.  Deliberately not {@code _messages}: compaction
+     * swaps the backing list, and a monitor has to outlive the object it guards.
+     */
+    private final Object _lock = new Object();
+    /**
+     * Sorted live region is {@code [_head, size)}; {@code [0, _head)} is
+     * dequeued-but-not-yet-discarded.  Replaced wholesale by compaction.
+     */
+    private ArrayList<OutNetMessage> _messages;
+    /** Index of the highest-priority live message; guarded by {@link #_lock}. */
+    private int _head;
+    /** Dead prefix length above which the backing array is compacted. */
+    private static final int COMPACT_MIN_HEAD = 64;
     private final AtomicLong _seqNum = new AtomicLong();
     private volatile int _capacity;
 
@@ -52,10 +74,10 @@ public final class PrioritySendPool {
      */
     public boolean offer(OutNetMessage msg) {
         msg.setSeqNum(_seqNum.incrementAndGet());
-        synchronized (_messages) {
+        synchronized (_lock) {
             int sz = _messages.size();
-            if (sz < _capacity) {
-                insertSorted(msg, sz);
+            if (sz - _head < _capacity) {
+                _messages.add(insertPosition(msg, _head, sz), msg);
                 _addedCount++;
                 return true;
             }
@@ -63,7 +85,7 @@ public final class PrioritySendPool {
             OutNetMessage lowest = _messages.get(sz - 1);
             if (msg.getPriority() > lowest.getPriority()) {
                 _messages.remove(sz - 1);
-                insertSorted(msg, sz - 1);
+                _messages.add(insertPosition(msg, _head, sz - 1), msg);
                 _evictedCount++;
                 _addedCount++;
                 return true;
@@ -78,21 +100,49 @@ public final class PrioritySendPool {
      * Highest priority first, FIFO within same priority.
      */
     public OutNetMessage poll() {
-        synchronized (_messages) {
-            if (_messages.isEmpty()) {
+        synchronized (_lock) {
+            if (_head >= _messages.size()) {
+                // Fully drained. The prefix below _head is all dead entries, so
+                // it must go before the head can return to zero, otherwise the
+                // next offer would resurrect already-sent messages.
+                if (_head > 0) {
+                    _messages.clear();
+                    _head = 0;
+                }
                 return null;
             }
-            return _messages.remove(0);
+            OutNetMessage rv = _messages.get(_head++);
+            // Discard the dead prefix once it dominates the array, so a long run
+            // of dequeue-then-enqueue does not degrade every insert into a
+            // full-capacity shift. ArrayList.removeRange(0, n) cannot be used
+            // here: it truncates the tail without shifting the survivors down.
+            if (_head >= COMPACT_MIN_HEAD && _head * 2 >= _messages.size()) {
+                compact();
+            }
+            return rv;
         }
+    }
+
+    /**
+     * Move the live region to the front of a freshly sized backing list.
+     * Only called with {@link #_lock} held and the live region non-empty.
+     */
+    private void compact() {
+        int live = _messages.size() - _head;
+        ArrayList<OutNetMessage> fresh = new ArrayList<>(live);
+        fresh.addAll(_messages.subList(_head, _messages.size()));
+        _messages = fresh;
+        _head = 0;
     }
 
     /**
      * Drain all messages into the target list (for resize).
      */
     public void drainTo(ArrayList<OutNetMessage> target) {
-        synchronized (_messages) {
-            target.addAll(_messages);
+        synchronized (_lock) {
+            target.addAll(_messages.subList(_head, _messages.size()));
             _messages.clear();
+            _head = 0;
         }
     }
 
@@ -100,8 +150,8 @@ public final class PrioritySendPool {
      * Number of messages currently in the pool.
      */
     public int size() {
-        synchronized (_messages) {
-            return _messages.size();
+        synchronized (_lock) {
+            return _messages.size() - _head;
         }
     }
 
@@ -109,8 +159,8 @@ public final class PrioritySendPool {
      * Free capacity remaining in the pool.
      */
     public int remainingCapacity() {
-        synchronized (_messages) {
-            return _capacity - _messages.size();
+        synchronized (_lock) {
+            return _capacity - (_messages.size() - _head);
         }
     }
 
@@ -149,12 +199,16 @@ public final class PrioritySendPool {
     public int getDroppedCount() { return _droppedCount; }
 
     /**
-     * Binary search insertion — highest priority at index 0, FIFO within
-     * same priority (lower seqnum first).
+     * Binary search for the insertion point — highest priority first, FIFO
+     * within same priority (lower seqnum first).  The caller performs the
+     * insertion, so both call sites share the comparison but keep their own
+     * bookkeeping.
+     *
+     * @return the index within {@code [from, to)} at which msg must be inserted
      */
-    private void insertSorted(OutNetMessage msg, int sz) {
-        int lo = 0;
-        int hi = sz;
+    private int insertPosition(OutNetMessage msg, int from, int to) {
+        int lo = from;
+        int hi = to;
         while (lo < hi) {
             int mid = (lo + hi) >>> 1;
             OutNetMessage existing = _messages.get(mid);
@@ -175,6 +229,6 @@ public final class PrioritySendPool {
                 }
             }
         }
-        _messages.add(lo, msg);
+        return lo;
     }
 }
