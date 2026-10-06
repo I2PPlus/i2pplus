@@ -126,6 +126,12 @@ msgstr "Vertaisversiot, joilla ei ole julkaistua IP-osoitetta"
 msgid "Average tunnel build success %"
 msgstr "Keskimääräinen tunnelin rakentamisen onnistuminen %"
 
+msgid "Memory used by the JVM"
+msgstr "JVM:n käyttämä muisti"
+
+msgid "maximum"
+msgstr "enimmäis"
+
 msgid "No transports"
 msgstr "Ei kuljetuksia (piilotettu vai käynnistymässä?)"
 
@@ -1889,6 +1895,12 @@ msgstr "Ei näyttää mitään - tilaa ei ole määritelty!"
 msgid "Bandwidth Usage"
 msgstr "Kaistanleveyskäyttö"
 
+msgid "Graph combining is not enabled"
+msgstr "Kaavioiden yhdistäminen ei ole käytössä"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Ei tarpeeksi tilastoja käytössä yhdistämiseen"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "loppuu {0} sitten"
@@ -2003,6 +2015,24 @@ msgstr "Kimalaisuustehoste"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Lisää kimalaisuustehoste graafin viivoihin"
+
+msgid "Smooth lines"
+msgstr "Tasaiset viivat"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Käytä Bézier-käyriä kaavioiden piirtoon"
+
+msgid "Filled paths"
+msgstr "Täytetyt polut"
+
+msgid "Use filled areas for graphs"
+msgstr "Käytä täytettyjä alueita kaavioihin"
+
+msgid "Combine graphs"
+msgstr "Yhdistä kaaviot"
+
+msgid "Merge related graphs into a plot"
+msgstr "Sulauta liittyvät kaaviot yhdeksi kuvioksi"
 
 msgid "Select Stats"
 msgstr "Valitse tilastot"
@@ -3330,8 +3360,8 @@ msgstr "Tuttu"
 msgid "Total entries in network database"
 msgstr "Tietojen kokonaismäärä verkkotietokannassa"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profiilit, joissa on toimintaa viimeisen 24 tunnin aikana"
+msgid "Profiles with activity in the last hour"
+msgstr "Profiilit, joilla on ollut toimintaa viimeisen tunnin aikana"
 
 msgid "Unreachable"
 msgstr "Ei saavutettavissa"
@@ -3539,6 +3569,9 @@ msgstr "Nopeus"
 
 msgid "Low Latency"
 msgstr "Matala latenssi"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Edellisen tunnin aikana toimintaa omaavat profiilit"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Uudelleenlähetetyt paketit / lähetetyt paketit UDP-siirron ilmoittamana"
@@ -5406,11 +5439,11 @@ msgstr "Kirjoituspuskuri NTCP-yhteyttä kohti."
 msgid "Min time between retransmissions (ms)."
 msgstr "Uudelleenlähetysten välinen vähimmäisaika (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Ruuhkanvälttelyn kasvunopeus."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Ikkunan kasvu RTT kohti hidastetun aloituksen jälkeen; suurempi toipuu nopeammin."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Ikkunan kerroin RTT:tä kohti hitaan aloituksen aikana."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Ikkunan kasvu ACK kohti hidastetun aloituksen aikana; suurempi kiihdyttää nopeammin."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Vähimmäislähetysnopeus ennen tahdistuksen käynnistymistä (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Saapuvat yhteydet, jotka voivat odottaa vapaata palvelinkäsittelijäsä
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Palvelinkäsittelijäsäikeiden oletusraja kullekin palvelintunnelille."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Oma resurssipooli palvelin→asiakas-tiedonsiirtoa varten, vapauttaa käsittelijäsäikeet."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Omistettu varanto palvelin→asiakas-siirroille, vapauttaa käsittelijät."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Pysähtymän aikakatkaisu palvelin→asiakas-tiedonsiirroille (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Järjestelmäkuormaprosentti, joka laukaisee kohtalaisen kuorman yhteyde
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Kohtalaisen kuorman kesto ennen pyyntöjen hylkäystä (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Laajentaa vertaisten tuoreusikkunaa vertaisten uudelleenhyväksymiseksi, kun rakennukset epäonnistuvat."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Laajentaa vertaisajankohtaa, kun nopeat vertaiset loppuvat."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Peräkkäiset epäonnistumiset ennen varannon perääntymistä."
@@ -5538,8 +5571,8 @@ msgstr "RTO:n kasvukerroin uudelleenlähetyksen aikakatkaisua kohti (%, 100 = ta
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-pistokkeen yhteydenmuodostuksen aikakatkaisu tunnelipalvelimen käsittelijäsäikeille (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Tunnelin IV-suodatuksen duplikaattien poiston eksponentti: kumpikin sen kahdesta puskurista sisältää 2^n bittiä, joten parin kustannus on 2^(n-2) tavua. Koko määritetään todellisuudessa nähdyistä IV:istä; liian pieni koko näkyy hyvän tunnelidatan pudottamisena."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV-duplikaattisuodattimen koko; liian pieni pudottaa kelvollista tunnelidataa."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Suurin keskimääräinen viestin viive ennen kuljetuksen hylkäämistä (ms)."

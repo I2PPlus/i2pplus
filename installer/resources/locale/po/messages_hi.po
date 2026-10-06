@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME को अच्छी तरह से बंद कर रहे हैं"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME चल नहीं रहा है।"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME चल रहा है: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME चल रहा है: PID:$pid, वेपर:$STATUS, जावा:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME डीमॉन पहले से ही स्थापित है।"
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME डीमॉन को स्थापित कर रहे हैं"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "$DIST_OS के लिए स्थापना वर्तमान में समर्थन नहीं है"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME डीमॉन को हटा रहे हैं"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME डीमॉन को वर्तमान में स्थापित नहीं किया गया है।"
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "$DIST_OS के लिए हटाना वर्तमान में समर्थन नहीं है"
 
 msgid "Commands:"
 msgstr "आदेश:"
@@ -142,3 +122,14 @@ msgstr "I2P को रूट उपयोगकर्ता के रूप म
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "अभी भी रूट के रूप में चलाने के लिए, i2prouter को संपादित करें और ALLOW_ROOT=true सेट करें।"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME चल नहीं रहा है।"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME चल रहा है: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

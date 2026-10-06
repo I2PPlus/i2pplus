@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Dừng $APP_LONG_NAME một cách nhã nhặn"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME không đang chạy."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME đang chạy: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME đang chạy: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "Quỷ $APP_LONG_NAME đã được cài đặt."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Đang cài đặt quỷ $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "Cài đặt không được hỗ trợ cho $DIST_OS hiện tại"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Loại bỏ quỷ $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "Quỷ $APP_LONG_NAME hiện không được cài đặt."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "Xóa không được hỗ trợ cho $DIST_OS hiện tại"
 
 msgid "Commands:"
 msgstr "Lệnh:"
@@ -142,3 +122,14 @@ msgstr "Chạy I2P dưới dạng người dùng root *không* được khuyến
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Để chạy như root bất kể điều gì, chỉnh sửa i2prouter và đặt ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME không đang chạy."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME đang chạy: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

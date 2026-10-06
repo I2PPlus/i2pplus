@@ -134,6 +134,12 @@ msgstr "الأقران بدون عنوان IP منشور"
 msgid "Average tunnel build success %"
 msgstr "متوسط نجاح بناء النفق %"
 
+msgid "Memory used by the JVM"
+msgstr "الذاكرة المستخدمة من قبل JVM"
+
+msgid "maximum"
+msgstr "أقصى"
+
 msgid "No transports"
 msgstr "ﻻ وسائل النقل (مخفية أو جاري البدء؟)"
 
@@ -1913,6 +1919,12 @@ msgstr "لا يوجد شيء لعرضه - لم يتم تحديد إحصاء!"
 msgid "Bandwidth Usage"
 msgstr "استعمال الشيكة"
 
+msgid "Graph combining is not enabled"
+msgstr "دمج الرسوم البيانية غير مفعّل"
+
+msgid "Not enough stats enabled to combine"
+msgstr "لا توجد إحصائيات كافية مفعّلة للدمج"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "تنتهي قبل {0}"
@@ -2027,6 +2039,24 @@ msgstr "تأثير التوهج"
 
 msgid "Add a glow effect to graph lines"
 msgstr "إضافة تأثير توهج لخطوط الرسم البياني"
+
+msgid "Smooth lines"
+msgstr "خطوط ناعمة"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "استخدم منحنيات بيزيه لرسم الرسوم البيانية"
+
+msgid "Filled paths"
+msgstr "مسارات مملوءة"
+
+msgid "Use filled areas for graphs"
+msgstr "استخدم مناطق مملوءة للرسوم البيانية"
+
+msgid "Combine graphs"
+msgstr "دمج الرسوم البيانية"
+
+msgid "Merge related graphs into a plot"
+msgstr "ادمج الرسوم البيانية ذات الصلة في رسم واحد"
 
 msgid "Select Stats"
 msgstr "حدد الإحصائيات"
@@ -3354,8 +3384,8 @@ msgstr "معروف"
 msgid "Total entries in network database"
 msgstr "إجمالي الإدخالات في قاعدة بيانات الشبكة"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "الملفات الشخصية ذات النشاط خلال الـ 24 ساعة الماضية"
+msgid "Profiles with activity in the last hour"
+msgstr "ملفات تعريف مع نشاط في الساعة الأخيرة"
 
 msgid "Unreachable"
 msgstr "لا يمكن الوصول له"
@@ -3571,6 +3601,9 @@ msgstr "سرعة"
 
 msgid "Low Latency"
 msgstr "الكمون المنخفض"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "زمن الذهاب والإياب إلى هذا النظير على الوصلة المباشرة، كما يقيسه الناقل"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "الحزم المعاد إرسالها / الحزم المرسلة، كما يبلّغ عنها ناقل UDP"
@@ -5450,11 +5483,11 @@ msgstr "كتابة المخزن المؤقت لكل اتصال NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "الحد الأدنى للوقت بين عمليات إعادة الإرسال (مللي ثانية)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "معدل نمو تجنب الازدحام."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "نمو النافذة لكل RTT بعد البدء البطيء؛ الأعلى يتعافى أسرع."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "مضاعف النافذة لكل RTT أثناء البداية البطيئة."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "نمو النافذة لكل ACK أثناء البدء البطيء؛ الأعلى يتسارع أسرع."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "الحد الأدنى لمعدل الإرسال قبل بدء السرعة (كيلو بايت/ثانية)."
@@ -5492,8 +5525,8 @@ msgstr "الاتصالات الواردة التي قد تنتظر خيط معا
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "الحد الافتراضي لخيوط معالج الخادم لكل نفق خادم."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "تجمع مخصص لنقل البيانات من الخادم→العميل، يحرر خيوط المعالج."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "تجمع مخصص لنقل الخادم→العميل، يفك انسداد المعالجات."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "مهلة توقف نقل البيانات من الخادم→العميل (مللي ثانية)."
@@ -5543,8 +5576,8 @@ msgstr "تؤدي النسبة المئوية لتحميل النظام إلى ق
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "مدة التحميل المعتدل قبل رفض الطلبات (بالمللي ثانية)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "توسيع نافذة حداثة النظير لإعادة قبول الزملاء عند فشل الإصدارات."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "يوسع نافذة حداثة النظير عندما ينفد النظيرون السريعون."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "حالات فشل متتالية قبل التراجع عن التجمع."
@@ -5582,8 +5615,8 @@ msgstr "مضاعف نمو RTO لكل مهلة إعادة الإرسال (%، 100
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "انتهت مهلة توصيل مقبس TCP لمؤشرات ترابط معالج خادم النفق (ملي ثانية)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "أس مرشح إزالة تكرار IV الخاص بالنفق: يحمل كل من مخزنيه 2^n بت، لذا يكلّف الزوج 2^(n-2) بايت. يُحدَّد الحجم من قيم IV التي شوهدت فعليًا؛ والحجم الصغير جدًا يظهر على صورة إسقاط بيانات أنفاق جيدة."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "حجم مرشح إزالة تكرار IV؛ الصغير جداً يسقط بيانات النفق الصحيحة."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "الحد الأقصى لمتوسط ​​تأخير الرسالة قبل رفض النقل (بالمللي ثانية)."

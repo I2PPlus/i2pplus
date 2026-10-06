@@ -116,13 +116,19 @@ msgid "Total number of threads in use"
 msgstr "བེད་སྤྱོད་བྱེད་བཞིན་པའི་སྲོལ་ཁག་གི་བསྡོམས།"
 
 msgid "Time spent paused in GC (ms)"
-msgstr "Time spent paused in GC (ms)"
+msgstr "GC ནང་གནུབ་ལས་ཟོས་པའི་དུས་ཚོད། (ms)"
 
 msgid "Peers without a published IP address"
 msgstr "IP ཁ་བྱང་སྤེལ་མེད་པའི་མཐུད་སྣེ།"
 
 msgid "Average tunnel build success %"
 msgstr "གདོང་ལམ་བཟོ་སྐྲུན་ལེགས་གྲུབ་ཀྱི་ཆ་སྙོམས། %"
+
+msgid "Memory used by the JVM"
+msgstr "JVM ཀྱིས་བེད་སྤྱོད་མཁན་གྱིས་མེད་བུའི་དྲོན་གནས།"
+
+msgid "maximum"
+msgstr "མང་ཤོས་"
 
 msgid "No transports"
 msgstr "འགྲེམ་སྤེལ་མེད། (སྦས་གསང་ཡང་ན་འགོ་བརྩམས་བཞིན་པ།)"
@@ -686,7 +692,7 @@ msgid "If the problem persists, verify that you have cookies enabled in your bro
 msgstr "གནས་བབ་འདི་མི་བཞིན་པའི་རོགས་པ་ཙམ།"
 
 msgid "Bandwidth usage"
-msgstr "Bandwidth usage"
+msgstr "བརྒྱུད་བཏོན་པའི་འགྲོལ་བ།"
 
 #, java-format
 msgid "events in {0}"
@@ -1883,6 +1889,12 @@ msgstr "བཀྲལ་བར་ཅི་ཡང་མེད། - ཚད་རྩ
 msgid "Bandwidth Usage"
 msgstr "བརྒྱུད་བཏོན་པའི་ཚོད་བཤོལ་བ།"
 
+msgid "Graph combining is not enabled"
+msgstr "རིས་ཐོ་མཉམ་བསྡུར་ནས་བརྟེན་བྱས་མེད།"
+
+msgid "Not enough stats enabled to combine"
+msgstr "མཉམ་བསྡུར་བྱེད་པའི་གྲངས་ཚད་འོས་མེད།"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} ནས་མཇུག་པ།"
@@ -1972,13 +1984,13 @@ msgid "Do not show legend on graphs"
 msgstr "རི་མོའི་ཐོག་དཔེ་རིས་མི་སྟོན་པ།"
 
 msgid "Disabled while legend is hidden"
-msgstr "Disabled while legend is hidden"
+msgstr "རྟེན་འབྱུང་མི་སྟོན་བརྗོད་པའི་གནས་སྟེར་བྱས།"
 
 msgid "Hide restarts"
-msgstr "Hide restarts"
+msgstr "སླར་འཛུགས་མི་སྟོན།"
 
 msgid "Suppress restart lines on graphs"
-msgstr "Suppress restart lines on graphs"
+msgstr "རིས་ཐོའི་སྟེར་རིང་སླར་འཛུགས་ཀྱི་རིག་པའི་མི་སྟོན།"
 
 msgid "Persistence"
 msgstr "རྒྱུན་མཐུགས་རང་བཞིན།"
@@ -1998,6 +2010,24 @@ msgstr "འོད་འཕྲོའི་ནུས་པ།"
 msgid "Add a glow effect to graph lines"
 msgstr "གྲ་རིས་ཀྱི་ཐིག་ལ་འོད་འཕྲོའི་ནུས་པ་སྣོན་པ།"
 
+msgid "Smooth lines"
+msgstr "མཐའ་སྟབས་འགྲིག"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "རིས་ཐོ་འདེབས་པའི་སྟེགས་རིག་ལ་བེད་སྤྱོད།"
+
+msgid "Filled paths"
+msgstr "བརྡའི་ཐབས་ལམ།"
+
+msgid "Use filled areas for graphs"
+msgstr "རིས་ཐོའི་ནང་ཁུལ་སྟེན་བརྡ་སྤྱོད།"
+
+msgid "Combine graphs"
+msgstr "རིས་ཐོ་མཉམ་བསྡུར་བྱེད།"
+
+msgid "Merge related graphs into a plot"
+msgstr "འབྲེལ་བའི་རིས་ཐོ་གཅིག་སྟེར་ཐོག་ནས་བསྡུས།"
+
 msgid "Select Stats"
 msgstr "ཚད་རྩིས་གདམ་པ།"
 
@@ -2011,10 +2041,10 @@ msgid "Graph settings unchanged"
 msgstr "རི་མོའི་སྒྲིག་སྟེན་བསྒྱུར་བཏོན་མེད།"
 
 msgid "improved"
-msgstr "improved"
+msgstr "ལེགས་སུ་གསར་དུ་ཡོད།"
 
 msgid "vs baseline"
-msgstr "vs baseline"
+msgstr "སྨི་དྲོག་བརྗོད་དང་བསྡུར་ན།"
 
 msgid "CPU"
 msgstr "CPU"
@@ -2050,7 +2080,7 @@ msgid "Ready jobs waiting in queue"
 msgstr "སྒུག་ཐིག་ནང་སྒུག་པའི་ལས་ཀ་བཟོད་པ།"
 
 msgid "Threads"
-msgstr "Threads"
+msgstr "ཐེངས་གཏན་འབེབས་བྱེད།"
 
 msgid "Active JVM threads"
 msgstr "འཕྲུལ་ལས་སུ་ཡོད་པའི་JVMསྐུད་པ།"
@@ -2218,7 +2248,7 @@ msgid "Health"
 msgstr "གཟུགས་གཞི།"
 
 msgid "Router performance overview"
-msgstr "Router performance overview"
+msgstr "རོ་ཌེར་གི་ནུས་པའི་རྒྱས་ཚུལ།"
 
 msgid "Help"
 msgstr "རོགས་རམ།"
@@ -2287,7 +2317,7 @@ msgid "Router Auto-Tuning"
 msgstr "རྟོག་མཁན་གྱི་རང་འཕྲུལ་སྒྲིག་སྐྱོང་།"
 
 msgid "Tuning"
-msgstr "Tuning"
+msgstr "བཅོས་སྒྱུར།"
 
 msgid "Manage server and client tunnels"
 msgstr "སརྟོན་པ་དང་ལག་གདང་གི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ།"
@@ -2723,7 +2753,7 @@ msgid "No"
 msgstr "མིན།"
 
 msgid "GeoIP Db"
-msgstr "GeoIP Db"
+msgstr "GeoIP གནས་བསྡུད།"
 
 msgid "ASN Db"
 msgstr "ASNགནས་བསྡུ།"
@@ -3295,55 +3325,55 @@ msgid "to your router.config file."
 msgstr "ཁྱེད་ཀྱི་router.configཡིག་ཆར།"
 
 msgid "Peers reached in the last 60s"
-msgstr "Peers reached in the last 60s"
+msgstr "སྐར་མ་དང་པའི་ནང་འཛུལ་མཐུད་སྣེ།"
 
 msgid "Fast"
 msgstr "མྱུར་བ།"
 
 msgid "Low-latency peers for tunnel participation"
-msgstr "Low-latency peers for tunnel participation"
+msgstr "འགྲུལ་ལམ་སྤྱོད་སྤེལ་བྱེད་པའི་བརྒྱུད་དུས་ལྡན་མཐུད་སྣེ།"
 
 msgid "HighCap"
-msgstr "HighCap"
+msgstr "སྲོད་པ་ཆེ་བ"
 
 msgid "High-bandwidth peers for many tunnels"
-msgstr "High-bandwidth peers for many tunnels"
+msgstr "འགྲུལ་ལམ་མང་པོར་ཞུགས་པའི་བརྒྱུད་ཆེའི་མཐུད་སྣེ།"
 
 msgid "Reliable"
-msgstr "Reliable"
+msgstr "ཡིན་ཚེས་བདེ་བའི"
 
 msgid "High-capacity peers with good acceptance"
-msgstr "High-capacity peers with good acceptance"
+msgstr "ཡོད་ལས་ཤུགས་ལྡན་མཐུད་སྣེ་དང་སྲོད་པ་ཆེ་བའི་མཐུད་སྣེ།"
 
 msgid "Peers that store and serve NetDb info"
-msgstr "Peers that store and serve NetDb info"
+msgstr "དྲ་རྒྱའི་གནས་བསྡུའི་གནས་བསྡུ་དང་སྟོན་པའི་མཐུད་སྣེ།"
 
 msgid "Known"
 msgstr "ཤེས་པ།"
 
 msgid "Total entries in network database"
-msgstr "Total entries in network database"
+msgstr "དྲ་ལམ་གནད་སྡུད་གཞིའི་ནང་གི་མཐུན་ཐོག་བསྡོམས།"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profiles with activity in the last 24h"
+msgid "Profiles with activity in the last hour"
+msgstr "སྐར་མ་གཅིག་གི་ནང་ཤུགས་ལྡན་གསལ་ཐོ།"
 
 msgid "Unreachable"
 msgstr "འབྲེལ་ཐུབ་མེད་པ།"
 
 msgid "Peers without a reachable address"
-msgstr "Peers without a reachable address"
+msgstr "འཛུལ་ཐབས་མེད་པའི་མཐུད་སྣེ།"
 
 msgid "Peers excluded from all interactions"
-msgstr "Peers excluded from all interactions"
+msgstr "འདོད་ལྡན་གྱི་འདུ་སྦྱོར་ནས་བསྐོར་བའི་མཐུད་སྣེ།"
 
 msgid "/min"
-msgstr "/min"
+msgstr "/སྐར"
 
 msgid "Test Fail"
-msgstr "Test Fail"
+msgstr "ཉམས་ཚད་མེད།"
 
 msgid "Connectivity test failures per minute"
-msgstr "Connectivity test failures per minute"
+msgstr "སྐར་མ་རེར་གསང་འཛིན་ཉམས་ཚད་ལྟའི་ཉམས་མེད།"
 
 msgid "Peer Connections"
 msgstr "ལག་གདང་འབྲེལ་བ།"
@@ -3531,6 +3561,9 @@ msgstr "མྱུར་ཚད།"
 
 msgid "Low Latency"
 msgstr "དལ་བའི་གཡོར་བ།"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "འགྲོལ་བ་ཀྱིས་ཐད་ཀར་གནས་ཀྱི་ཐད་ཀར་ལམ་ནང་འདེ་མཐུད་སྣེ་ལ་ཕྱིར་འགྲེམ་དུས་ཚད།"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP འཁོར་འདུས་ཀྱིས་བསྟན་པའི་འགྲམ་གསོལ་པ / འགྲམ་གཏོང་བ"
@@ -3873,7 +3906,7 @@ msgid "Building tunnels"
 msgstr "གྲུང་ནེལ་བཟོ་བཞིན་པ།"
 
 msgid "Ping"
-msgstr "Ping"
+msgstr "ཕིང་བསྟད་འཕྲིན།"
 
 msgid "I2Ping"
 msgstr "I2Ping"
@@ -4126,7 +4159,7 @@ msgid "View router debug information"
 msgstr "རོ་ཌེར་གྱི་རྐྱེན་སེལ་བརྒྱུད་བཏོན་པ་ལྟ་བ།"
 
 msgid "Jars"
-msgstr "Jars"
+msgstr "བྱེད་རིགས།"
 
 msgid "Review extended info about installed .jar and .war files"
 msgstr "བཙོན་པའི་.jar དང་.war ཡིག་ཆའི་རྒྱུན་དུ་བཙོན་པའི་རྒྱུན་དུ་བཙོན་པའི་བརྒྱུད་བཏོན་པ་ལྟ་བ།"
@@ -4135,7 +4168,7 @@ msgid "Textual router performance statistics"
 msgstr "རོ་ཌེར་གྱི་ནུས་གནས་ཚད་རྩིས་ཡིག་གཟུག"
 
 msgid "Sybils"
-msgstr "Sybils"
+msgstr "དབུག་འདུག་མཐུད་སྣེ།"
 
 msgid "Review possible sybils in network database"
 msgstr "དྲ་ལམ་གནད་དཔེར་ནང་གི་sybilsལྟ་བ།"
@@ -4724,7 +4757,7 @@ msgid "Max Concurrent Streams"
 msgstr "མཉམ་འགྲོགས་རྩོམ་འགྲུལ་མཐའ་ཚད།"
 
 msgid "Max SYN Sends"
-msgstr "Max SYN Sends"
+msgstr "མང་ཤོས་སང་གཏོང་ཚད།"
 
 msgid "Max RTO"
 msgstr "RTO མཐོ་ཤོས།"
@@ -4871,7 +4904,7 @@ msgid "Max Concurrent RI Lookups"
 msgstr "དུས་མཉམ་RI འཚོལ་བ་མཐོ་ཤོས།"
 
 msgid "Next-Hop Lookup %"
-msgstr "Next-Hop Lookup %"
+msgstr "རྣམ་གཉིས་ཀྱི་འཚོལ་བའི་ཚད་ཆེན།"
 
 msgid "Max Concurrent Test Jobs"
 msgstr "དུས་མཉམ་བརྟག་ཞིབ་ལས་དོན་མཐོ་ཤོས།"
@@ -4967,7 +5000,7 @@ msgid "Slow Start Growth Rate"
 msgstr "འཇམ་པོའི་འགོ་བཙུགས་འཕེལ་རྒྱས་ཀྱི་ཚད།"
 
 msgid "Min Pacing Rate"
-msgstr "Min Pacing Rate"
+msgstr "མཐུན་མང་གི་མདུགས་མྱུར་ཚད།"
 
 msgid "RTT Cap"
 msgstr "RTT མཐའ་ཚད།"
@@ -4982,7 +5015,7 @@ msgid "Inactivity Timeout"
 msgstr "བྱ་སྤེལ་མེད་པའི་དུས་ཚད།"
 
 msgid "Max Window Size"
-msgstr "Max Window Size"
+msgstr "མང་ཤོས་གྒོང་ཆེའི་ཆེ་ཚད།"
 
 msgid "Connect Timeout Multiplier"
 msgstr "འབྲེལ་བའི་དུས་ཚད་བསྡུར་ཚད།"
@@ -5096,13 +5129,13 @@ msgid "Socket Connect Timeout"
 msgstr "སོ་ཁེའི་(socket)་སྦྲེལ་མའི་དུས་ཚད།"
 
 msgid "Untested Tunnel Cap Multiplier"
-msgstr "Untested Tunnel Cap Multiplier"
+msgstr "ཉམས་མ་བརྡའི་འགྲུལ་ལམ་ཀྱི་ཚད་སྡུར་རྒྱུའི་མཐུན་ཆེའི་ཆེ་ཚད།"
 
 msgid "Tunnel IV Filter Size"
 msgstr "གྲུང་ལམ་ཀྱི་IV མཚོན་ཉིད་བླངས་མཁན་གྱི་ཆེ་ཚད།"
 
 msgid "Message Processing Throttle"
-msgstr "Message Processing Throttle"
+msgstr "འགྲོལ་བའི་བཅོས་སྤྱོད་ཚད་འདུམ་གཏེར།"
 
 msgid "Data packets between each ACK."
 msgstr "ACK སོ་སོའི་བར་གྱི་གནས་སྡུད་གྲུ་བོ།"
@@ -5126,7 +5159,7 @@ msgid "Bandwidth token refill interval (ms)."
 msgstr "རྒྱུན་ཚད་མཚོན་རྟགས་སླར་བརྡན་པའི་དབར་ཡུན།(ms)"
 
 msgid "NIO selector sleep between loops (ms)."
-msgstr "NIO selector sleep between loops (ms)."
+msgstr "རྐྱེད་སྐོར་ཀྱི་བར་ནང་NIO འདེ་མཛོད་ཀྱི་ཉམས་གྱིས་མཇུག་འདུག་གི་ཚད།"
 
 msgid "Outbound messages batched per gateway pump."
 msgstr "ལམ་སྒོའི་མེ་སིན་རེར་ཕྲལ་བའི་ཕྱིར་གཏོང་འཕྲོས་པ།"
@@ -5156,7 +5189,7 @@ msgid "Dynamic cap on concurrent streams per destination."
 msgstr "འདོད་ཡུལ་རེ་རེའི་མཉམ་འགྲོགས་རྩོམ་འགྲུལ་གྱི་རྣམ་རྒྱུགས་ཀྱི་མཐའ་ཚད།"
 
 msgid "Total SYN attempts before giving up on a handshake."
-msgstr "Total SYN attempts before giving up on a handshake."
+msgstr "མདུད་འཆིའི་ཚེས་སང་གི་ཚད་བཅོས་ཕུན་ཚད་ལྟའི་སྤྱོད་ཚུལ་སྡོད།"
 
 msgid "Max retransmission timeout (ms)."
 msgstr "སླར་གཏོང་གི་དུས་ཚད་མཐོ་ཤོས།(ms)"
@@ -5174,7 +5207,7 @@ msgid "Max idle time before dropping a stream (ms)."
 msgstr "རྒྱུན་ཁམས་བོར་སྔོན་གྱི་སྟོང་བའི་དུས་ཚོད་མཐོ་ཤོས།(ms)"
 
 msgid "Max unacknowledged packets per stream connection."
-msgstr "Max unacknowledged packets per stream connection."
+msgstr "གཡེར་འབྲི་སྦྱོར་འབྱེད་སྦྱོར་འབྱེད་ཁང་རེར་མི་འགྲོད་པའི་ཐེན་ལོ་མང་ཤོས།"
 
 msgid "I2CP write queue depth."
 msgstr "I2CP བྲི་བའི་རིམ་པའི་གཏིང་ཚད།"
@@ -5309,7 +5342,7 @@ msgid "Max concurrent RI lookups during builds."
 msgstr "བཟོ་སྐྲུན་དུས་སའི་དུས་མཉམ་RI འཚོལ་བ་མཐོ་ཤོས།"
 
 msgid "Concurrent next-hop lookup limit as % of transit tunnels."
-msgstr "Concurrent next-hop lookup limit as % of transit tunnels."
+msgstr "འབྲེལ་འདུག་བླངས་པའི་རྣམ་གཉིས་འཚོལ་བའི་ཉམས་ཁྱད་པར།"
 
 msgid "Max concurrent tunnel test jobs."
 msgstr "དུས་མཉམ་ཁ་བསྐྲུན་བརྟག་ཞིབ་ལས་དོན་མཐོ་ཤོས།"
@@ -5345,7 +5378,7 @@ msgid "Threads decrypting inbound NTCP data."
 msgstr "ནང་འབྱོར་NTCP གནས་སྡུད་ཉོག་འགྲོལ་བྱེད་པའི་རྒྱུན་རིམ།"
 
 msgid "Threads that encrypt outbound NTCP messages."
-msgstr "Threads that encrypt outbound NTCP messages."
+msgstr "འདོགས་བསྒྱུར་NTCP འགྲོལ་བ་གསྦྲུམས་པའི་ཐེངས་གཏན་འབེབས་བྱེད།"
 
 msgid "Failsafe scan interval for stuck NTCP pumps (ms)."
 msgstr "འཐེབས་པའི་NTCP མེ་སིན་བྱེད་མཁན་གྱི་བདེ་འཇགས་འཕྲལ་སྡོམ་བརྟག་ཞིབ་དབར་ཡུན།(ms)"
@@ -5375,7 +5408,7 @@ msgid "Window restart size (MTUs) after RTO collapse."
 msgstr "RTO ཡོངས་རྫོགས་ཆད་རྗེས་ཀྱི་སྒོ་སྟེགས་སླར་འགོ་བཙུགས་པའི་ཚད།(MTU)"
 
 msgid "Priority-aware buffer where client messages jump transit."
-msgstr "Priority-aware buffer where client messages jump transit."
+msgstr "གཞུག་དང་བཅོས་འགྲོལ་བ་གྱི་གདོགས་ཀྱི་བཀོད་ཡིན་པའི་འབུམ་སྡུག་ཁང།"
 
 msgid "I2CP session buffer size."
 msgstr "I2CP ཚོགས་པའི་བར་སྣོན་གྱི་ཚད་ཀ།"
@@ -5395,14 +5428,14 @@ msgstr "NTCP སྦྲེལ་མ་རེར་བྲི་བའི་བར�
 msgid "Min time between retransmissions (ms)."
 msgstr "སླར་གཏོང་དབར་གྱི་དུས་ཚོད་དམའ་མ།(ms)"
 
-msgid "Congestion avoidance growth rate."
-msgstr "འགོག་རྐྱེན་སྤོང་བའི་འཕེལ་རྒྱས་ཀྱི་ཚད།"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "དལྡེབས་འགོ་ནས་རྗེས་ཀྱི་ཕྱིར་འགྲེམ་དུས་རེར་གྒོང་ཆེ་དེས་སྲིད་པ་མགོགས་ཐོག་སྲིད།"
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "འཇམ་པོའི་འགོ་བཙུགས་དུས་ཀྱི་RTT རེར་སྒོ་སྟེགས་འགྱུར་གྲངས།"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "དལྡེབས་འགོ་ནང་རེར་འདེབས་མ་བྱོན་པར་གྒོང་ཆེ་དེས་སྲིད་པ་མགོགས་ཐོག་སྲིད།"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
-msgstr "Minimum send rate before pacing kicks in (KB/s)."
+msgstr "མཐུན་མང་གི་མདུགས་མྱུར་སྤེལ་མེད་ལ་གོང་འཇུག་གི་མདུགས་ཚད་མང་ཤོས།"
 
 msgid "Upper bound on RTT estimate (ms)."
 msgstr "RTT གདེངས་གཞིའི་མཐའ་མིག (ms)།"
@@ -5437,8 +5470,8 @@ msgstr "སྐྱེད་ཀྲོགས་བཅོས་བསྒྲུབ་
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "སྐྱེད་ཀྲོགས་གྲུང་ལམ་རེ་རེའི་བཅོས་བསྒྲུབ་སྤྲོད་པའི་ཡུག་ལ་སྔོན་སྒྲིག་མཐའ་ཚད།"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Server→Client གནད་ཡོད་པའི་ནོར་ཐུག་གི་གླིང་མཛོད་གཅིག་གིས་བྱེད་སྟངས། བཅོས་བསྒྲུབ་སྤྲོད་པའི་ཡུག་དང་ལྡན་བའི་བསྒྲིལ་བ་བཅོས་པ།"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "སརྟོན་པས་ལེན་གནད་མཁར་ལ་གཏོང་འདུས་སྐྱེད་སྐྱེད་ཆེན་གྱི་རྡོབས་ཁང་།"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Server→Client གནད་ཡོད་གཞིའི་གནད་ཡོད་འདུགས་ཀྱི་འཁོར་འབེབས་ཀྱི་དུས་ཚད། (ms)"
@@ -5488,20 +5521,20 @@ msgstr "འཐམ་པོའི་མང་བའི་དོམ་ཕྱལ་
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "མངགས་བཀོད་རྟོག་པའི་སྔོན་གྱི་འཐམ་པོའི་མང་བའི་དུས་ཡུན།(ms)"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "བཟོ་སྐྲུན་ཕམ་དུས་ཟླ་གྲོགས་སླར་གསེབ་སྦྱོར་བྱེད་པའི་ཟླ་གྲོགས་གསར་ཉེ་སྒོ་སྟེགས་ཆེ་རུ་གཏོང་བ།"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "མྱུར་མཐུད་སྣེ་ཉུང་བཞིན་གྱིས་མཐུན་རྡོབས་བྱུང་བའི་མཐུད་སྣེ་གཞན་གྲོང་ཆེའི་མདུགས་ཆེར་བརྟག་བྱེད།"
 
 msgid "Consecutive failures before pool backoff."
 msgstr "གཞི་ཚོགས་རྒྱུན་འཐེན་གྱི་སྔོན་གྱི་རྒྱུན་མཐུད་ཕམ་འབྱུང་།"
 
 msgid "Cooldown duration after pool failure threshold (ms)."
-msgstr "Cooldown duration after pool failure threshold (ms)."
+msgstr "རྡོབས་ཚུགས་ཀྱི་ཀྲངས་ཉམས་རྗེས་ཁྱིམ་བདེའི་གྲོགས་ཚད།"
 
 msgid "Target spare tunnel count per pool."
 msgstr "གཞི་ཚོགས་རེར་དམིགས་ཡུལ་གྱི་ཁ་བསྐྲུན་ལྷག་མའི་གྲངས་ཀ།"
 
 msgid "Widens untested tunnel cap when testing stalls."
-msgstr "Widens untested tunnel cap when testing stalls."
+msgstr "ཉམས་སྒྲོན་ཐད་ནང་ཉམས་མ་བརྡའི་འགྲུལ་ལམ་ཀྱི་ཚད་ཀྱིས་བརྟེན་ཏེན་རིང་བརྟག་བྱེད།"
 
 msgid "Load threshold where probabilistic transit rejection starts (%)."
 msgstr "སྲིད་པ་ཅན་གྱི་འགྲུམ་ལམ་རྩིས་བཤོལ་འགོ་བརྩམས་པའི་དོག་ཤུགས་ཚད་གཞི།(%)"
@@ -5527,11 +5560,11 @@ msgstr "སླར་གཏོང་དུས་ཚད་རེར་RTO འཕ�
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "ཁ་བསྐྲུན་ཞབས་ཞུ་པ་ལས་སྒྲུབ་རྒྱུན་རིམ་གྱི་TCP སོ་ཁེ་སྦྲེལ་མའི་དུས་ཚད།(ms)"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "གྲུང་ལམ་ཀྱི་IV ཡིན་ལས་མཚོན་ཉིད་བླངས་མཁན་གྱི་ལྟ་གྲངས། དེའི་བསེར་བའི་མཛུབ་སྟོང་གཉིས་ལ་2^n བི་ཏེས་གནས། དེས་ན་དེ་གཉིས་འབྲེལ་བར་2^(n-2) བྷེ་ཐང་འོག་ཡིན། མིང་མཐོང་མིན་གྱིས་གསར་བཏགས་གྲུབ་པའི་IV ལས་ཚད་བཅོས། ཉུང་ཉུང་དགོས་ན་གཙང་མའི་གྲུང་ལམ་གཞི་ཡིག་ཆ་བརྗོད་སོང་འདུག"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV དབྱིགས་གདོག་མཁའ་གྱི་ཆེ་ཚད། ལྕགས་ཆེན་ན་འགན་ལ་བདེན་མིན་པའི་འགྲུལ་ལམ་གནས་ཡོད།"
 
 msgid "Max average message delay before rejecting transit (ms)."
-msgstr "Max average message delay before rejecting transit (ms)."
+msgstr "མགོག་འདུག་ཁང་ཞ཭ང་འགྲེལ་བའི་མང་ཤོས་ཆ་སྙོམ་འགྲོགས་ཚད།"
 
 msgid "Tunnel"
 msgstr "འགྲུལ་ལམ་"
@@ -5823,10 +5856,10 @@ msgid "My eepsite web server"
 msgstr "ངའི་eepsite web སརྟོན་པ།"
 
 msgid "I2P webserver (eepsite)"
-msgstr "I2P webserver (eepsite)"
+msgstr "I2P ཝེབ་སརྟོན་པ་(eepsite)"
 
 msgid "I2P Web Server (eepsite)"
-msgstr "I2P Web Server (eepsite)"
+msgstr "I2P ཝེབ་སརྟོན་པ་(eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "འགོ་ཚུགས་སྐབས་འགྲུབ་འཕེལ་བ།"
@@ -6655,7 +6688,7 @@ msgid "This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin 
 msgstr "འདི་གདོས་པའི་I2P གི་HTTP ཕྱི་འདྲེན་outproxy དོང་རྒྱུན་སྒྲིག་བྱེད་པ་ཡང་ན་Orchid གློགས་པ་རྒྱུན་སྒྲིག་བྱེད་པ། དྲོན་བརྟག: ཁྱེད་ཀྱི་0 ཤེས་པའི་ལག་གདང་ཚུད་པ་དུས་བཀོད་མི་རྒྱུན་བཞིན་པར་མི་རྒྱུན་བཞིན་པ།"
 
 msgid "I2P Outproxy"
-msgstr "I2P Outproxy"
+msgstr "I2P སུའོངས་ཐོག་གི་པྲོཀསི།"
 
 msgid "Use HTTP Proxy for HTTP Reseed Hosts"
 msgstr "HTTP Reseed མངའ་དབང་ལ་དོང་HTTP Proxy བེད་པ།"
@@ -7521,13 +7554,13 @@ msgid "Startup suppression period in milliseconds. Warnings and tunnel reduction
 msgstr "འགོ་འཛུགས་སྐབས་ཀྱི་བཀག་སྡོམ་དུས་ཚོད། Router ཀྱི་མགོ་དང་པོའི་འགོ་འཛུགས་སྐབས་ཉེན་བརྡ་དང་འབྲེལ་ལམ་ཉུང་དུ་གཏོང་བའི་རྩིས་ལུགས་བཀག་སྡོམ་བྱེད།. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]. Warnings and tunnel reduction logic are suppressed during initial router startup to avoid premature decisions [Default is 300000 (5 minutes)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
-msgstr "Minimum interval in milliseconds between LeaseSet publishes. Prevents rapid publish storms during tunnel churn. [Default is 120000 (2 minutes)]"
+msgstr "LeaseSet རྒྱུད་གསར་བཟོ་བྱེད་ཀྱི་བར་ཆད་ཀྱི་མཐུན་མང་གི་ཚད་ཆེན། འགྲུལ་ལམ་གསར་འབེབས་ནང་གི་བརྒྱུད་མང་མགྲགས་བརྒྱུད་འདུས་འཛོད་པ། [སྤྱིར་བསྟུན་ 120000 (སྐར་མ་2)]"
 
 msgid "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
-msgstr "Minimum interval in milliseconds between LeaseSet object builds. Prevents unnecessary LeaseSet object churn on every tunnel add/remove. [Default is 120000 (2 minutes)]"
+msgstr "LeaseSet ཀྱི་རྣམ་ཡུག བཟོ་བྱེད་ཀྱི་བར་ཆད་ཀྱི་མཐུན་མང་གི་ཚད་ཆེན། འགྲུལ་ལམ་འབྱེད་འདུས་གང་ཡིན་ཀྱང་LeaseSet ཀྱི་རྣམ་ཡུག དེ་དག་འགསར་བཟོ་བྱེད་མི་དགོས། [སྤྱིར་བསྟུན་ 120000 (སྐར་མ་2)]"
 
 msgid "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
-msgstr "Maximum lease duration in milliseconds for published LeaseSets. Lease end dates are capped to this value from now, so peers re-fetch sooner when set shorter than the tunnel lifetime. The gateway still processes messages for the full tunnel lifetime; only the cached LeaseSet on the requesting side expires earlier, triggering a re-fetch of the latest version. Default is auto-computed from i2p.netdb.republishInterval + 60 seconds (6 minutes with standard settings)."
+msgstr "རྒྱུད་གསར་བཟོའི་LeaseSet ཀྱི་རྨིམ་གོའི་མང་ཤོས་ཚད། རྨིམ་གོའི་མཇུག་ཉིན་དེར་བཀག་སྟངས་བཅད་ཡིན་པས། འགྲུལ་ལམ་གྱི་ཚེ་ཚེས་ལས་ཐང་བཀྱི་མཐུན་སྣེ་སྔོན་དུ་ཡོངས་པ། མཁའ་བྱུང་གིས་ཀྱང་འགྲུལ་ལམ་གྱི་ཚེ་ཚེས་ཡོངས་པའི་ནང་འགྲོལ་བ་བཅོས་སྤྱོད་བྱེད་ཀྱང་། ཞུགས་མཁར་སོག་གི་ནང་གི་འབུམ་སྡུག་བཟོས་པའི་LeaseSet ཙམ་སྔོན་ཞལ་བྱེད་པས། གཞིང་ལུགའི་བཤད་ཡིན། སྤྱིར་བསྟུན་ནི་i2p.netdb.republishInterval + 60 སྐར་མ་གསར་འབེབས་ཀྱིས་རང་འདེབས་ཐོབ་སྟེ། (སྤྱིར་གཞག་གི་བཀོད་ལྟར་ 6 སྐར་མ་)."
 
 msgid "Maximum number of concurrent tunnel builds per direction. Higher values accelerate pool recovery but may overload the network. [Default is 6]"
 msgstr "ཕྱོགས་རེ་རེའི་ཆེ་ཤོས་མཉམ་བྱེད་འབྲེལ་ལམ་འཛུགས་སྐྲུན། གྲངས་མཐོ་ཤོས་ཀྱིས་ཆོག་མཛོད་སླར་བསྒྲུབ་མྱུར་དུ་གཏོང་ཡང་དྲ་བར་ཁུར་བརྒལ་དུ་འགྲོ་སྲིད།. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]. Higher values accelerate pool recovery but may overload the network [Default is 6]"
@@ -8148,7 +8181,7 @@ msgid "BOB (Basic Open Bridge) is a (now-deprecated) simple application-to-route
 msgstr "BOB (Basic Open Bridge) ནི་ (ད་ལྟོབ་བསྒྱུར་བཅད་པའི་) སྟོབ་པའི་ལེན་གནད་ནས་རོ་ཌེར་ལ་འབྲེལ་བརྒྱུད་བྱེད་པའི་སྟོབ་པའི་ལེན་གནད་རྒྱུན་མཐུད་ཞིག་ཡིན། <i>SAM</i>གིས་ཚབ་བཙོག་པ། ཕྱི་མཚམས་ཆེ་བའི་ཆེད་དོན། <a href=https://geti2p.net/en/docs/api/bob class='sitelink external' target=_blank rel=noreferrer>གློ་བརྟེན་ཡིག་ཆ་</a>ལ་གཟིགས།"
 
 msgid "Clearnet"
-msgstr "Clearnet"
+msgstr "སྐར་ཆག་དྲ་ལམ།"
 
 msgid "Clearnet normally refers to the publicly accessible internet, the opposite of the darknet that typically describes the encrypted, anonymous services built on I2P, Tor etc. For more information, see the <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia article</a>."
 msgstr "Clearnet གིས་སྤྱོད་ཡོད་པའི་དྲ་ལམ་ལ་འཛོལ་བརྒྱུད་པའི་དྲ་བརྒྱུད་པ་ལ་གོ་རེན་པའི་དྲ་ལམ་ལ་འཛོལ་བརྒྱུད་པ་ཡིན། དེ་ནི་ darknet གི་ལྡོགས་པ་ཡིན། darknet ནི་ I2P། Tor ལ་སོགས་པའི་གསང་བཅད་བྱས་པའི་མིང་ཚང་མེད་པའི་ཞབས་བརྩམས་བྱེད་པའི་ཞབས་བརྩམས་བྱེད་པ་ཡིན། ཕྱི་མཚམས་ཆེ་བའི་ཆེད་དོན་གསལ་བའི་དོན་གསལ་ <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia རྩོམ་ཡིག</a> ལ་གཟིགས་རོགས།"
@@ -9053,7 +9086,7 @@ msgid "I2P Developers' Forum"
 msgstr "I2P གི་བཟོ་སྐྲུན་པའི་སྐད་འཕྲིན་ཁང་།"
 
 msgid "I2P Wiki"
-msgstr "I2P Wiki"
+msgstr "I2P ཝི་ཀི།"
 
 msgid "The FAQ on <a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> or <a href=https://geti2p.net/en/faq target=_blank rel=noreferrer>geti2p.net</a>"
 msgstr "<a href=http://i2p-projekt.i2p/en/faq target=_blank rel=noreferrer>i2p-projekt.i2p</a> དང་ <a href=https://geti2p.net/en/faq   target=_blank rel=noreferrer>geti2p.net</a> གཉིས་གྱི་FAQ"
@@ -9873,7 +9906,7 @@ msgid "Select the language to be used for the router console and web application
 msgstr "router console དང་ web applications ལ་སྤྱོད་བསྒྱུད་ལས་པར་གནས་པར་མདོ་པའི་སྤྱོད་བསྒྱུད་ language དགམ་རོགས་ ("
 
 msgid "Router Console &amp; WebApps Display Language"
-msgstr "Router Console &amp; WebApps Display Language"
+msgstr "རོ་ཌེར་རོགས་སྒྲག་སྟེན་དང་ཝེབ་ལག་བསྟེན་གྱི་སྟོན་ཚིག་སྐད་ཡིག"
 
 msgid "Your I2P+ router by default contributes to the network by routing internal, end-to-end encrypted traffic for other routers, known as <i>participation</i>. Bandwidth participation improves the anonymity level of all users on the network and maximizes your download speed."
 msgstr "ཁྱེད་ཀྱི་ I2P+ རོ་ཌེར་སྔོན་སྒྲིག་ལྟར་གཞན་པའི་རོ་ཌེར་ལ་ནང་ཁུངས་ཀྱི་མཐའ་ནས་མཐའ་བར་གསང་བཅད་བྱས་པའི་འགྲུལ་རྟགས་ལམ་སྲང་བརྒྱུད་ནས་དྲ་བར་རམ་འདེགས་བྱེད། དེ་ལ་ <i>participation</i> ཟེར། སྐུད་རྒྱ་རམ་འདེགས་ཀྱིས་དྲ་བའི་སྤྱོད་མཁན་ཡོངས་ཀྱི་མིང་མེད་རང་བཞིན་ལེགས་བཅོས་བྱེད་པ་དང་། ཁྱེད་ཀྱི་ཕབ་ལེན་མྱུར་ཚད་མཐོ་ཤོས་སུ་གཏོང་བ་བྱེད།"

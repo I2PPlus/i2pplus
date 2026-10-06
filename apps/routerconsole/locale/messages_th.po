@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: en\n"
@@ -135,6 +134,12 @@ msgstr "peerที่ไม่มีที่อยู่IPที่เผยแ
 
 msgid "Average tunnel build success %"
 msgstr "เปอร์เซ็นต์ความสำเร็จเฉลี่ยในการสร้างอุโมงคม"
+
+msgid "Memory used by the JVM"
+msgstr "หน่วยความจำที่ใช้โดย JVM"
+
+msgid "maximum"
+msgstr "สูงสุด"
 
 msgid "No transports"
 msgstr "ไม่มีtransport"
@@ -1899,6 +1904,12 @@ msgstr "ไม่มีสิ่งให้แสดง-ไม่ได้ร�
 msgid "Bandwidth Usage"
 msgstr "การใช้แบนด์วิดท์"
 
+msgid "Graph combining is not enabled"
+msgstr "ไม่ได้เปิดใช้งานการรวมกราฟ"
+
+msgid "Not enough stats enabled to combine"
+msgstr "สถิติที่เปิดใช้งานไม่เพียงพอที่จะรวม"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "สิ้นสุดเมื่อ{0}ที่ผ่านมา"
@@ -2013,6 +2024,24 @@ msgstr "เอฟเฟกต์เรืองแสง"
 
 msgid "Add a glow effect to graph lines"
 msgstr "เพิ่มเอฟเฟกต์เรืองแสงให้เส้นกราฟ"
+
+msgid "Smooth lines"
+msgstr "เส้นที่เรียบ"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "ใช้เส้นโค้บเบซิเอร์เพื่อวาดกราฟ"
+
+msgid "Filled paths"
+msgstr "เส้นทางที่เติมสี"
+
+msgid "Use filled areas for graphs"
+msgstr "ใช้พื้นที่ที่เติมสีสำหรับกราฟ"
+
+msgid "Combine graphs"
+msgstr "รวมกราฟ"
+
+msgid "Merge related graphs into a plot"
+msgstr "รวมกราฟที่เกี่ยวข้องเป็นพล็อตเดียว"
 
 msgid "Select Stats"
 msgstr "เลือกสถิติ"
@@ -3340,8 +3369,8 @@ msgstr "เป็นที่รู้จัก"
 msgid "Total entries in network database"
 msgstr "รายการทั้งหมดในฐานข้อมูลเครือข่าย"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "โปรไฟล์ที่มีกิจกรรมใน24ชั่วโมงล่าสุด"
+msgid "Profiles with activity in the last hour"
+msgstr "โปรไฟล์ที่มีกิจกรรมในชั่วโมงที่ผ่านมา"
 
 msgid "Unreachable"
 msgstr "เข้าถึงไม่ได้"
@@ -3549,6 +3578,9 @@ msgstr "ความเร็ว"
 
 msgid "Low Latency"
 msgstr "ความล่าช้าต่ำ"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "เวลาไปกลับไปยังเพียร์นี้บนลิงก์โดยตรง ตามที่วัดโดยการรับส่งข้อมูล"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "แพ็กเก็ตที่ส่งซ้ำ/แพ็กเก็ตที่ส่งตามที่การรับส่งข้อมูลUDPรายงาน"
@@ -5416,11 +5448,11 @@ msgstr "บัฟเฟอร์การเขียนต่อหนึ่ง
 msgid "Min time between retransmissions (ms)."
 msgstr "เวลาขั้นต่ำระหว่างการส่งซ้ำ(ms)"
 
-msgid "Congestion avoidance growth rate."
-msgstr "อัตราการเติบโตในการหลีกเลี่ยงการแออัด"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "การเติบโตของหน้าต่างต่อ RTT หลังจาก slow start; ค่าสูงกว่าจะกู้คืนเร็วขึ้น"
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "ตัวคูณหน้าต่างต่อหนึ่งRTTในช่วงเริ่มช้า"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "การเติบโตของหน้าต่างต่อ ACK ระหว่าง slow start; ค่าสูงกว่าจะไต่เร็วขึ้น"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "อัตราการส่งต่ำสุดก่อนที่การควบคุมจังหวะจะเริ่มทำงาน(KB/s)"
@@ -5458,8 +5490,8 @@ msgstr "จำนวนการเชื่อมต่อขาเข้าท
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "ขีดจำกัดค่าเริ่มต้นของเธรดจัดการเซิร์ฟเวอร์สำหรับแต่ละอุโมงคมบริการ"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "กลุ่มเธรดเฉพาะสำหรับการถ่ายโอนข้อมูลจากเซิร์ฟเวอร์ไปยังไคลเอนต์ซึ่งช่วยปลดล็อกเธรดจัดการ"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "สระว่ายน้ำเฉพาะสำหรับการถ่ายโอนเซิร์ฟเวอร์→ไคลเอนต์ ปลดล็อกตัวจัดการ"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "หมดเวลาเมื่อการถ่ายโอนข้อมูลจากเซิร์ฟเวอร์ไปยังไคลเอนต์ค้าง(ms)"
@@ -5509,8 +5541,8 @@ msgstr "เปอร์เซ็นต์โหลดของระบบที
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "ระยะเวลาของโหลดระดับปานกลางก่อนที่จะปฏิเสธคำขอ(ms)"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "ขยายหน้าต่างความล่าสุดของpeerเพื่อให้รับpeerกลับเข้ามาได้เมื่อการสร้างล้มเหลว"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "ขยายหน้าต่างความล่าสุดของเพียร์เมื่อเพียร์ที่เร็วหมด"
 
 msgid "Consecutive failures before pool backoff."
 msgstr "จำนวนความล้มเหลวติดต่อกันก่อนที่กลุ่มอุโมงคมจะถอยหลัง"
@@ -5548,8 +5580,8 @@ msgstr "ตัวคูณการเติบโตของRTOต่อหน
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "หมดเวลาเชื่อมต่อซ็อกเก็ตTCPสำหรับเธรดจัดการอุโมงคมบริการ(ms)"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "เลขชี้กำลังของตัวกรองการตัดข้อมูลซ้ำของIVในอุโมงคม:บัฟเฟอร์แต่ละอันของสองอันเก็บ2^nบิตดังนั้นทั้งคู่กินพื้นที่2^(n-2)ไบต์ขนาดกำหนดจากIVที่พบจริงหากเล็กเกินไปจะพบว่าข้อมูลอุโมงคมที่ดีถูกทิ้ง"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "ขนาดตัวกรอง IV dedup; เล็กเกินไปจะทำให้ข้อมูลอุโมงคมที่ถูกต้องหลุด"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ความล่าช้าเฉลี่ยสูงสุดของข้อความก่อนที่จะปฏิเสธtransit(ms)"

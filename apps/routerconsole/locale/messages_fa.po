@@ -126,6 +126,12 @@ msgstr "همتایان بدون آدرس IP منتشر شده"
 msgid "Average tunnel build success %"
 msgstr "درصد موفقیت متوسط ​​ساخت تونل"
 
+msgid "Memory used by the JVM"
+msgstr "حافظه استفاده‌شده توسط JVM"
+
+msgid "maximum"
+msgstr "حداکثر"
+
 msgid "No transports"
 msgstr "بدون حمل و نقل (مخفی یا راه اندازی؟)"
 
@@ -1889,6 +1895,12 @@ msgstr "چیزی برای نمایش وجود ندارد - هیچ آمار مش�
 msgid "Bandwidth Usage"
 msgstr "مصرف پهنای باند"
 
+msgid "Graph combining is not enabled"
+msgstr "ترکیب نمودارها فعال نیست"
+
+msgid "Not enough stats enabled to combine"
+msgstr "آمار کافی برای ترکیب فعال نیست"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "پایان {0} پیش"
@@ -2003,6 +2015,24 @@ msgstr "جلوه درخشش"
 
 msgid "Add a glow effect to graph lines"
 msgstr "افزودن جلوه درخشش به خطوط نمودار"
+
+msgid "Smooth lines"
+msgstr "خطوط نرم"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "استفاده از منحنی‌های بزیه برای رسم نمودارها"
+
+msgid "Filled paths"
+msgstr "مسیرهای پرشده"
+
+msgid "Use filled areas for graphs"
+msgstr "استفاده از نواحی پرشده برای نمودارها"
+
+msgid "Combine graphs"
+msgstr "ترکیب نمودارها"
+
+msgid "Merge related graphs into a plot"
+msgstr "ادغام نمودارهای مرتبط در یک نمودار"
 
 msgid "Select Stats"
 msgstr "آمار را انتخاب کنید"
@@ -3330,8 +3360,8 @@ msgstr "معروف"
 msgid "Total entries in network database"
 msgstr "کل ورودی ها در پایگاه داده شبکه"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "نمایه هایی با فعالیت در 24 ساعت گذشته"
+msgid "Profiles with activity in the last hour"
+msgstr "پروفایل‌های دارای فعالیت در ساعت گذشته"
 
 msgid "Unreachable"
 msgstr "غیر قابل دسترس"
@@ -3539,6 +3569,9 @@ msgstr "سرعت"
 
 msgid "Low Latency"
 msgstr "تأخیر کم"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "زمان رفت‌وبرگشت به این همتا در پیوند مستقیم، به‌اندازه‌گیری انتقال"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "بسته‌های ارسال مجدد / بسته‌های ارسالی، آنگونه که انتقال UDP گزارش می‌دهد"
@@ -5406,11 +5439,11 @@ msgstr "بافر نوشتن به ازای اتصال NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "حداقل زمان بین ارسال‌های مجدد (میلی‌ثانیه)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "نرخ رشد اجتناب از ازدحام."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "رشد پنجره به‌ازای هر RTT پس از شروع آهسته؛ بالاتر سریع‌تر بازیابی می‌شود."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "ضریب پنجره به ازای RTT در طول شروع آهسته."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "رشد پنجره به‌ازای هر ACK در طول شروع آهسته؛ بالاتر سریع‌تر افزایش می‌یابد."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "حداقل سرعت ارسال قبل از شروع ضربان (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "اتصال‌های ورودی که می‌توانند در انتظا�
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "سقف پیش‌فرض رشته‌های پردازشگر سرور برای هر تونل سرور."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "استخر اختصاصی برای انتقال داده سرور→مشتری، رشته‌های پردازشگر را آزاد می‌کند."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "استخر اختصاصی برای انتقال‌های Server→Client، مسدودکننده‌های هندلر را باز می‌کند."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "زمان انقضای توقف برای انتقال‌های داده سرور→مشتری (میلی‌ثانیه)."
@@ -5499,8 +5532,8 @@ msgstr "درصد بار سیستم که قطع بار متوسط را تحریک
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "مدت بار متوسط پیش از رد درخواست‌ها (میلی‌ثانیه)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "پنجره تازگی همتا را برای پذیرش مجدد همتاها هنگام شکست ساخت‌ها گسترش می‌دهد."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "پنجره اخیر همتا را وقتی همتاهای سریع کم می‌آورند گسترش می‌دهد."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "شکست‌های پیاپی پیش از عقب‌نشینی استخر."
@@ -5538,8 +5571,8 @@ msgstr "ضریب رشد RTO به ازای زمان انقضای ارسال مج�
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "زمان انقضای اتصال سوکت TCP برای رشته‌های پردازشگر سرور تونل (میلی‌ثانیه)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "توان فیلتر حذف تکرار IV تونل: هر یک از دو بافر آن 2^n بیت نگه می‌دارد، بنابراین جفت 2^(n-2) بایت هزینه دارد. بر اساس IV های واقعاً مشاهده‌شده اندازه‌گذاری می‌شود؛ اندازه بیش از حد کوچک به صورت حذف شدن داده خوب تونل ظاهر می‌شود."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "اندازه فیلتر حذف تکرار IV؛ خیلی کوچک داده‌های معتبر تونل را حذف می‌کند."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "حداکثر میانگین تأخیر پیام قبل از رد انتقال (ms)."

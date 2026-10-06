@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr " إيقاف $APP_LONG_NAME بأمان"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME ليس قيد التشغيل."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME يقوم بتشغيل: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME يقوم بتشغيل: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "تم تثبيت خادم $APP_LONG_NAME بالفعل."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "تثبيت الخادم $APP_LONG_NAME "
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "تثبيت $DIST_OS غير مدعوم حاليًا"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "إزالة خادم $APP_LONG_NAME "
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "لم يتم تثبيت خادم $APP_LONG_NAME حتى اﻵن."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "إزالة $DIST_OS غير مدعومة حاليًا"
 
 msgid "Commands:"
 msgstr "اﻷوامر:"
@@ -142,3 +122,14 @@ msgstr "لا ينصح بتشغيل I2P كمستخدم مسؤول."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "للتشغيل كمسؤول على أيّة حال ، قم بتحرير i2prouter وتعيين ALLOW_ROOT = true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME ليس قيد التشغيل."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME يقوم بتشغيل: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

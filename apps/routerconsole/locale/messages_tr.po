@@ -126,6 +126,12 @@ msgstr "Yayınlanmış bir IP adresi olmayan eşler"
 msgid "Average tunnel build success %"
 msgstr "Ortalama tünel inşa başarısı %"
 
+msgid "Memory used by the JVM"
+msgstr "JVM tarafından kullanılan bellek"
+
+msgid "maximum"
+msgstr "maksimum"
+
 msgid "No transports"
 msgstr "Aktarım yok (gizli ya da yeni mi başlıyor)"
 
@@ -1889,6 +1895,12 @@ msgstr "Gösterilecek içerik yok - belirli bir istatistik bulunmamaktadır!"
 msgid "Bandwidth Usage"
 msgstr "Bant genişliği kullanımı"
 
+msgid "Graph combining is not enabled"
+msgstr "Grafik birleştirme etkin değil"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Birleştirmek için yeterli istatistik etkin değil"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} önce bitti"
@@ -2003,6 +2015,24 @@ msgstr "Parlama efekti"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Grafik çizgilerine parlama efekti ekle"
+
+msgid "Smooth lines"
+msgstr "Yumuşak çizgiler"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Grafikleri çizmek için bezier eğrilerini kullanın"
+
+msgid "Filled paths"
+msgstr "Dolu yollar"
+
+msgid "Use filled areas for graphs"
+msgstr "Grafikler için dolu alanlar kullanın"
+
+msgid "Combine graphs"
+msgstr "Grafikleri birleştir"
+
+msgid "Merge related graphs into a plot"
+msgstr "İlgili grafikleri tek bir grafikte birleştirin"
 
 msgid "Select Stats"
 msgstr "İstatistikleri Seçin"
@@ -3330,8 +3360,8 @@ msgstr "Bilinen"
 msgid "Total entries in network database"
 msgstr "Ağ veritabanındaki toplam girişler"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Son 24 saat içinde etkinliği olan profiller"
+msgid "Profiles with activity in the last hour"
+msgstr "Son saatte etkinlik olan profiller"
 
 msgid "Unreachable"
 msgstr "Erişilemeyen"
@@ -3539,6 +3569,9 @@ msgstr "Hız"
 
 msgid "Low Latency"
 msgstr "Düşük Gecikme"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Aktarım tarafından ölçüldüğü gibi, doğrudan bağlantıdaki bu eşe gidiş-dönüş süresi"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP taşımasının bildirdiği yeniden iletilen paketler / gönderilen paketler"
@@ -5406,11 +5439,11 @@ msgstr "NTCP bağlantısı başına yazma arabelleği."
 msgid "Min time between retransmissions (ms)."
 msgstr "Yeniden iletimler arasındaki en düşük süre (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Tıkanıklıktan kaçınma büyüme oranı."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Yavaş başlangıçtan sonra RTT başına pencere büyümesi; daha yüksek daha hızlı kurtarır."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Yavaş başlangıç sırasında RTT başına pencere çarpanı."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Yavaş başlangıç sırasında ACK başına pencere büyümesi; daha yüksek daha hızlı tırmanır."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "İlerleme hızı devreye girmeden önce minimum gönderme hızı (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Serbest bir sunucu işleyici iş parçacığı bekleyebilecek gelen bağ
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Her sunucu tüneli için sunucu işleyici iş parçacıklarının varsayılan sınırı."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Sunucu→İstemci veri aktarımı için ayrılmış havuz, işleyici iş parçacıklarını bekletmez."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Sunucu→İstemci aktarımları için özel havuz, işleyicilerin kilidini açar."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Sunucu→İstemci veri aktarımları için duraklama zaman aşımı (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Orta yük kopmasını tetikleyen sistem yükü yüzdesi."
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "İstekleri reddetmeden önceki orta yük süresi (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Kurulumlar başarısız olduğunda eşleri yeniden kabul etmek için eş yakınlık penceresini genişletir."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Hızlı eşler azaldığında eş yenilik penceresini genişletir."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Havuz geri çekilmesinden önceki art arda hatalar."
@@ -5538,8 +5571,8 @@ msgstr "Yeniden iletim zaman aşımı başına RTO büyüme çarpanı (%, 100 = 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tünel sunucu işleyici iş parçacıkları için TCP soket bağlantı zaman aşımı (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Tünel IV yinelenen eleme filtresinin üssü: iki arabelleğinden her biri 2^n bit tutar, bu nedenle çift 2^(n-2) bayt maliyetindedir. Gerçekte görülen IV'lerden boyutlandırılır; fazla küçük olması, iyi tünel verilerinin düşürülmesi olarak ortaya çıkar."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV filtre boyutu; çok küçük geçerli tünel verisini düşürür."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Aktarımı reddetmeden önceki maksimum ortalama mesaj gecikmesi (ms)."

@@ -130,6 +130,12 @@ msgstr "Parterji brez objavljenega IP naslova"
 msgid "Average tunnel build success %"
 msgstr "Povprečen uspeh izgradnje tunela (%)"
 
+msgid "Memory used by the JVM"
+msgstr "Pomnilnik, ki ga uporablja JVM"
+
+msgid "maximum"
+msgstr "največ"
+
 msgid "No transports"
 msgstr "Brez prevoznikov (skriti ali se zagonja?)"
 
@@ -1901,6 +1907,12 @@ msgstr "Ničesar za prikaz - statistika ni določena!"
 msgid "Bandwidth Usage"
 msgstr "Uporaba širine pasma"
 
+msgid "Graph combining is not enabled"
+msgstr "Združevanje grafov ni omogočeno"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Ni dovolj omogočenih statistik za združevanje"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "konča {0} pred"
@@ -2015,6 +2027,24 @@ msgstr "Učinek žarenja"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Dodaj učinek žarenja k črtam grafa"
+
+msgid "Smooth lines"
+msgstr "Gladke črte"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Uporabi Bezierjeve krivulje za risanje grafov"
+
+msgid "Filled paths"
+msgstr "Zapolnjene poti"
+
+msgid "Use filled areas for graphs"
+msgstr "Uporabi zapolnjena območja za grafe"
+
+msgid "Combine graphs"
+msgstr "Združi grafe"
+
+msgid "Merge related graphs into a plot"
+msgstr "Združi povezane grafe v eno risbo"
 
 msgid "Select Stats"
 msgstr "Izberi statistiko"
@@ -3342,8 +3372,8 @@ msgstr "Znani"
 msgid "Total entries in network database"
 msgstr "Skupaj vnosov v omrežno bazo podatkov"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profili z aktivnostjo v zadnjih 24 urah"
+msgid "Profiles with activity in the last hour"
+msgstr "Profili z dejavnostjo v zadnji uri"
 
 msgid "Unreachable"
 msgstr "Ne dosegljivo"
@@ -3555,6 +3585,9 @@ msgstr "Hitrost"
 
 msgid "Low Latency"
 msgstr "Nizka zavzeta"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Čas povratnega poti do tega parterja na neposredni povezavi, kot ga izmeri prenos"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Ponovno preneseni paketi / poslani paketi, kot jih poroča prenos UDP"
@@ -5428,11 +5461,11 @@ msgstr "Medpomnilnik za pisanje na povezavo NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Najmanjši čas med ponovnimi prenosi (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Hitrost rasti izogibanja zasedenosti."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Rast okna na RTT po počasnem zagonu; višja vrednost hitreje obnovi."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Množitelj okna na RTT med počasnim zagonom."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Rast okna na ACK med počasnim zagonom; višja vrednost hitreje pospeši."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Najmanjša hitrost pošiljanja, preden se sproži pospeševanje (KB/s)."
@@ -5470,8 +5503,8 @@ msgstr "Dohodne povezave, ki lahko čakajo na prosto nit strežniškega obdelova
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Privzeta omejitev niti strežniškega obdelovalca za vsak strežniški predor."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Poseben bazen za prenos podatkov s strežnika odjemalcu, ki sprosti niti obdelovalcev."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Namenska zaloga za prenose Strežnik→Odjemalec, deblokira obdelovalce."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Časovna omejitev zaustavitve za prenose podatkov s strežnika odjemalcu (ms)."
@@ -5521,8 +5554,8 @@ msgstr "Odstotek sistemske obremenitve, ki sproži prekinitev pri zmerni obremen
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Trajanje zmerne obremenitve pred zavračanjem zahtev (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Razširi okno svežosti vozlišč za ponovni sprejem vozlišč ob neuspešnih gradnjah."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Razširi okno nedavnosti parterjev, ko hitri parterji zmanjka."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Zaporedni neuspehi pred umikom zaloge."
@@ -5560,8 +5593,8 @@ msgstr "Množitelj rasti RTO na časovno omejitev ponovnega prenosa (%, 100 = ra
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časovna omejitev povezave vtičnice TCP za niti strežniškega obdelovalca predorov (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Eksponent filtra za odstranjevanje podvajanja IV predorov: vsak od njegovih dveh medpomnilnikov vsebuje 2^n bitov, zato par stane 2^(n-2) bajtov. Velikost je določena iz dejansko opaženih IV-jev; premajhen filter se pokaže kot izguba dobrih podatkov predora."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Velikost filtra za odstranjevanje dvojnikov IV; premajhna velikost zavrže veljavne podatke tunela."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Največja povprečna zakasnitev sporočila pred zavrnitvijo tranzita (ms)."

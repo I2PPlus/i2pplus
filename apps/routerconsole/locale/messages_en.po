@@ -126,6 +126,12 @@ msgstr ""
 msgid "Average tunnel build success %"
 msgstr ""
 
+msgid "Memory used by the JVM"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
 msgid "No transports"
 msgstr ""
 
@@ -1889,6 +1895,12 @@ msgstr ""
 msgid "Bandwidth Usage"
 msgstr ""
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr ""
@@ -2002,6 +2014,24 @@ msgid "Glow effect"
 msgstr ""
 
 msgid "Add a glow effect to graph lines"
+msgstr ""
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
 msgstr ""
 
 msgid "Select Stats"
@@ -3330,7 +3360,7 @@ msgstr ""
 msgid "Total entries in network database"
 msgstr ""
 
-msgid "Profiles with activity in the last 24h"
+msgid "Profiles with activity in the last hour"
 msgstr ""
 
 msgid "Unreachable"
@@ -3538,6 +3568,9 @@ msgid "Speed"
 msgstr ""
 
 msgid "Low Latency"
+msgstr ""
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
 msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
@@ -5406,10 +5439,10 @@ msgstr ""
 msgid "Min time between retransmissions (ms)."
 msgstr ""
 
-msgid "Congestion avoidance growth rate."
+msgid "Window growth per RTT after slow start; higher recovers faster."
 msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
 msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
@@ -5448,7 +5481,7 @@ msgstr ""
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr ""
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
 msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
@@ -5499,7 +5532,7 @@ msgstr ""
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr ""
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
+msgid "Widens the peer recency window when fast peers run short."
 msgstr ""
 
 msgid "Consecutive failures before pool backoff."
@@ -5538,7 +5571,7 @@ msgstr ""
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr ""
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
+msgid "IV dedup filter size; too small drops valid tunnel data."
 msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."

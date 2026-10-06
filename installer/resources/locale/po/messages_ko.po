@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "우아하게 $APP_LONG_NAME 정지하는 중"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME 은 실행중이 아닙니다."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME 은 실행중입니다: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME 은 실행중입니다: PID:$pid, Wrapper:$STATUS,Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME 데몬은 이미 설치되어 있습니다."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME 데몬 설치 중"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "설치는 현재 $DIST_OS 에서 지원되지 않습니다"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME 데몬 제거중"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME 데몬은 현재 설치되어 있지 않습니다."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "제거는 현재 $DIST_OS 에서 지원되지 않습니다"
 
 msgid "Commands:"
 msgstr "명령어:"
@@ -142,3 +122,14 @@ msgstr "I2P를 루트 유저로 실행하는 것은 *비권장* 됩니다."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "그래도 루트로 실행하고자 하면, i2prouter를 편집하며 ALLOW_ROOT=true를 설정하세요."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME 은 실행중이 아닙니다."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME 은 실행중입니다: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

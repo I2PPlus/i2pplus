@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Zastavuji $APP_LONG_NAME elegantně"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME není spuštěn."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME běží: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME běží: PID:$pid, Obal:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "Demon $APP_LONG_NAME je již nainstalován."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Instaluji démona $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "Instalace momentálně není podporována pro $DIST_OS"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Odstraňuji démona $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "Démon $APP_LONG_NAME není v současné době nainstalován."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "Odstranit není v současné době podporováno pro $DIST_OS"
 
 msgid "Commands:"
 msgstr "Příkazy:"
@@ -142,3 +122,14 @@ msgstr "Spouštění I2P jako uživatele root *není* doporučeno."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Pokud chcete běžet jako root stále, upravte i2prouter a nastavte ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME není spuštěn."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME běží: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

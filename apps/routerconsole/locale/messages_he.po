@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: he\n"
@@ -135,6 +134,12 @@ msgstr "peers ללא כתובת IP מפורסמת"
 
 msgid "Average tunnel build success %"
 msgstr "ממוצע אחוז הצלחה בבניית מנהורים"
+
+msgid "Memory used by the JVM"
+msgstr "זיכרון בשימוש JVM"
+
+msgid "maximum"
+msgstr "מרבי"
 
 msgid "No transports"
 msgstr "אין transports"
@@ -1899,6 +1904,12 @@ msgstr "אין מה להצוג - לא צוינה סטטיסטיקה!"
 msgid "Bandwidth Usage"
 msgstr "שימוש ברוחב פס"
 
+msgid "Graph combining is not enabled"
+msgstr "שילוב גרפים אינו מופעל"
+
+msgid "Not enough stats enabled to combine"
+msgstr "אין מספיק סטטיסטיקות מופעלות לשילוב"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "שהסתיים לפני {0}"
@@ -2013,6 +2024,24 @@ msgstr "אפקט זוהר"
 
 msgid "Add a glow effect to graph lines"
 msgstr "הוסף אפקט זוהר לקווי הגרף"
+
+msgid "Smooth lines"
+msgstr "קווים חלקים"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "השתמש בעקומות בזייה לשרטוט גרפים"
+
+msgid "Filled paths"
+msgstr "נתיבים מלאים"
+
+msgid "Use filled areas for graphs"
+msgstr "השתמש באזורים מלאים לגרפים"
+
+msgid "Combine graphs"
+msgstr "שלב גרפים"
+
+msgid "Merge related graphs into a plot"
+msgstr "מזג גרפים קשורים לשרטוט אחד"
 
 msgid "Select Stats"
 msgstr "בחר סטטיסטיקה"
@@ -3340,8 +3369,8 @@ msgstr "ידועים"
 msgid "Total entries in network database"
 msgstr "סה\"כ הרשומות במסד נתוני הרשת"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "פרופילים עם פעילות ב-24 השעות האחרונות"
+msgid "Profiles with activity in the last hour"
+msgstr "פרופילים עם פעילות בשעה האחרונה"
 
 msgid "Unreachable"
 msgstr "לא נגיש"
@@ -3549,6 +3578,9 @@ msgstr "מהירות"
 
 msgid "Low Latency"
 msgstr "השהייה נמוכה"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "זמן הלוך ושוב לעמית זה בקישור הישיר, כפי שנמדד על ידי התעבורה"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "מנות ששודרו מחדש / מנות שנשלחו, כפי שדווח עליהן תעבורת ה-UDP"
@@ -5416,11 +5448,11 @@ msgstr "חוצץ כתיבה לכל חיבור NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "זמן מזערי בין שידורים חוזרים (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "קצב גדילה של הימנעות מעומס."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "גדילת חלון לכל RTT אחרי התחלה איטית; גבוה יותר משתקם מהר יותר."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "מכפיל חלון לכל RTT במהלך Slow Start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "גדילת חלון לכל ACK במהלך התחלה איטית; גבוה יותר מאיץ מהר יותר."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "קצב שליחה מזערי לפני הפעלת התזמון (KB/s)."
@@ -5458,8 +5490,8 @@ msgstr "חיבורים נכנסים העשויים לחכות לתהלילון �
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "מגבלת ברירת המחדל על תהלילוני מטפל שרת לכל מנהור שרת."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "מאגר ייעודי להעברת נתונים של Server→Client, משחרר תהלילוני מטפל."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "מאגר ייעודי להעברות Server→Client, משחרר מטפלים."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "זמן קצוב לתקיעה בהעברות נתונים של Server→Client (ms)."
@@ -5509,8 +5541,8 @@ msgstr "אחוז עומס מערכת שמפעיל ניתוק בעומס בינו
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "משך עומס בינוני לפני דחיית בקשות (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "מרחיב חלון עדכניות ה-peer כדי להחזיר peers למערכת כאשר הבניות נכשלות."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "מרחיב את חלון עדכניות העמיתים כאשר עמיתים מהירים נגמרים."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "מספר כשלים רצופים לפני נסיגת המאגר."
@@ -5548,8 +5580,8 @@ msgstr "מכפיל גדילת RTO לכל זמן קצוב לשידור חוזר (
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "זמן קצוב לחיבור TCP socket עבור תהלילוני מטפל שרת של מנהורים (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "מעריך מסנן ה-IV לסינון כפילויות של מנהור: כל אחד משני המאגרים שלו מכיל 2^n ביטים, ולכן הזוג עולה 2^(n-2) בתים. גודלו נקבע מה-IV שנצפו בפועל; גודל קטן מדי מתבטא בנתוני מנהור טובים שמושמטים."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "גודל מסנן IV dedup; קטן מדי משליך נתוני מנהור תקפים."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "השהיית הודעה ממוצעת מרבית לפני דחיית מנהור חולף (ms)."

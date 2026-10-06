@@ -128,6 +128,12 @@ msgstr "Közzétett IP-cím nélküli társak"
 msgid "Average tunnel build success %"
 msgstr "Átlagos alagútépítési siker %"
 
+msgid "Memory used by the JVM"
+msgstr "Pamäť používaná JVM"
+
+msgid "maximum"
+msgstr "maximum"
+
 msgid "No transports"
 msgstr "Nincs átvitel (rejtett vagy indul)?"
 
@@ -1895,6 +1901,12 @@ msgstr "Nincs mit megjeleníteni - nem adták meg az állapotot!"
 msgid "Bandwidth Usage"
 msgstr "Sávszélesség felhasználás"
 
+msgid "Graph combining is not enabled"
+msgstr "Kombinovanie grafov nie je povolené"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Nie je dostatok povolených štatistík na kombinovanie"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "Véget ért {0} előtt."
@@ -2009,6 +2021,24 @@ msgstr "Efekt žiarenia"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Pridať efekt žiarenia na čiary grafov"
+
+msgid "Smooth lines"
+msgstr "Hladké čiary"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Použiť Bézierove krivky na vykreslenie grafov"
+
+msgid "Filled paths"
+msgstr "Vyplnené oblasti"
+
+msgid "Use filled areas for graphs"
+msgstr "Použiť vyplnené oblasti pre grafy"
+
+msgid "Combine graphs"
+msgstr "Kombinovať grafy"
+
+msgid "Merge related graphs into a plot"
+msgstr "Zlúčiť súvisiace grafy do jedného grafu"
 
 msgid "Select Stats"
 msgstr "Statisztika Kiválasztása"
@@ -3336,8 +3366,8 @@ msgstr "Ismert"
 msgid "Total entries in network database"
 msgstr "Celkový počet záznamov v databáze siete"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profily s aktivitou za posledných 24 hodín"
+msgid "Profiles with activity in the last hour"
+msgstr "Profily s aktivitou za poslednú 1 hodinu"
 
 msgid "Unreachable"
 msgstr "Nem elérhető"
@@ -3547,6 +3577,9 @@ msgstr "Sebesség"
 
 msgid "Low Latency"
 msgstr "Alacsony késleltetés"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Doba cesty tam a späť k tomuto peeru na priamom spojení, meraná transportom"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Pakety opakovane odoslané / pakety odoslané, podľa hlásenia UDP prenosu"
@@ -5417,11 +5450,11 @@ msgstr "Zapisovací buffer na spojenie NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Minimálny čas medzi opätovnými prenosmi (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Rýchlosť rastu vyhýbania sa preťaženiu."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Nárast okna za RTT po pomalom štarte; vyššia hodnota sa rýchlejšie zotaví."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Násobič okna na RTT počas pomalého štartu."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Nárast okna za ACK počas pomalého štartu; vyššia hodnota sa rýchlejšie zvyšuje."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimálna rýchlosť odosielania pred spustením stimulácie (KB/s)."
@@ -5459,8 +5492,8 @@ msgstr "Prichádzajúce pripojenia, ktoré môžu čakať na voľné vlákno obs
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Predvolený limit vlákien obsluhy servera pre každý serverový tunel."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Vyhradený fond pre prenos Server→Klient, odomyka vlákna obsluhy."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Vyhradený zásobník pre prenosy Server→Klient, odblokováva obsluhu."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Časový limit blokovania prenosov Server→Klient (ms)."
@@ -5510,8 +5543,8 @@ msgstr "Percento záťaže systému spúšťajúce odpojenie pri miernej záťa�
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Trvanie miernej záťaži pred odmietaním požiadaviek (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Rozširuje okno čerstvosti uzla na opätovné prijatie uzlov pri zlyhaní budovania."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Rozšíri okno nedávnosti peerov, keď rýchli peeri nedostačujú."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Po sebe idúce zlyhania pred ústupom zásoby."
@@ -5549,8 +5582,8 @@ msgstr "Násobič rastu RTO na opätovný prenos (%, 100 = plochý)."
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Časový limit pripojenia TCP socketu pre obslužné vlákna servera tunela (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Exponent filtra odstránenia duplicít IV tunelov: každý z jeho dvoch zásobníkov obsahuje 2^n bitov, takže dvojica stojí 2^(n-2) bajtov. Určovaný podľa skutočne pozorovaných IV; príliš malá hodnota sa prejaví zahadzovaním užitočných dát tunelov."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Veľkosť dedup filtra IV; príliš malá zahadzuje platné údaje tunela."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximálne priemerné oneskorenie správy pred odmietnutím prenosu (ms)."

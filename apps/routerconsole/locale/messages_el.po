@@ -126,6 +126,12 @@ msgstr "Ομότιμοι χωρίς δημοσιευμένη διεύθυνση 
 msgid "Average tunnel build success %"
 msgstr "Μέση % επιτυχίας κατασκευής σήραγγας"
 
+msgid "Memory used by the JVM"
+msgstr "Μνήμη που χρησιμοποιείται από τη JVM"
+
+msgid "maximum"
+msgstr "μέγιστο"
+
 msgid "No transports"
 msgstr "Κανένας μεταφορέας (κρυφοί ή κατά την εκκίνηση;)"
 
@@ -1889,6 +1895,12 @@ msgstr "Τίποτα να εμφανίσει - δεν έχει καθοριστ�
 msgid "Bandwidth Usage"
 msgstr "Χρήση του εύρους ζώνης"
 
+msgid "Graph combining is not enabled"
+msgstr "Ο συνδυασμός γραφημάτων δεν είναι ενεργοποιημένος"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Δεν είναι ενεργοποιημένα αρκετά στατιστικά για συνδυασμό"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "έληγε {0} πριν"
@@ -2003,6 +2015,24 @@ msgstr "Εφέ λάμψης"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Προσθήκη εφέ λάμψης στις γραμμές του γραφήματος"
+
+msgid "Smooth lines"
+msgstr "Ομαλές γραμμές"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Χρήση καμπυλών bezier για σχεδίαση γραφημάτων"
+
+msgid "Filled paths"
+msgstr "Γεμάτες διαδρομές"
+
+msgid "Use filled areas for graphs"
+msgstr "Χρήση γεμάτων περιοχών για γραφήματα"
+
+msgid "Combine graphs"
+msgstr "Συνδυασμός γραφημάτων"
+
+msgid "Merge related graphs into a plot"
+msgstr "Συγχώνευση σχετικών γραφημάτων σε ένα γράφημα"
 
 msgid "Select Stats"
 msgstr "Επιλογή στατιστικών"
@@ -3330,8 +3360,8 @@ msgstr "Γνωστό"
 msgid "Total entries in network database"
 msgstr "Συνολικές καταχωρήσεις στη βάση δεδομένων δικτύου"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Προφίλ με δραστηριότητα τις τελευταίες 24 ώρες"
+msgid "Profiles with activity in the last hour"
+msgstr "Προφίλ με δραστηριότητα στην τελευταία ώρα"
 
 msgid "Unreachable"
 msgstr "Απροσπέλαστος"
@@ -3539,6 +3569,9 @@ msgstr "Ταχύτητα"
 
 msgid "Low Latency"
 msgstr "Χαμηλή καθυστέρηση"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Χρόνος μετάβασης και επιστροφής σε αυτόν τον ομότιμο στην άμεση σύνδεση, όπως μετράται από το μεταφορέα"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Πακέτα που επαναμεταδόθηκαν / πακέτα που στάλθηκαν, όπως αναφέρει η μεταφορά UDP"
@@ -5406,11 +5439,11 @@ msgstr "Buffer εγγραφής ανά σύνδεση NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Ελάχιστος χρόνος μεταξύ επαναμεταδόσεων (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Ρυθμός ανάπτυξης αποφυγής συμφόρησης."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Αύξηση παραθύρου ανά RTT μετά την αργή εκκίνηση· υψηλότερη τιμή ανακάμπτει γρηγορότερα."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Πολλαπλασιαστής παραθύρου ανά RTT κατά το slow start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Αύξηση παραθύρου ανά ACK κατά την αργή εκκίνηση· υψηλότερη τιμή αυξάνει γρηγορότερα."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Ελάχιστος ρυθμός αποστολής πριν από την έναρξη βηματοδότησης (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Εισερχόμενες συνδέσεις που επιτρέπετα�
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Προεπιλεγμένο όριο νημάτων χειριστή διακομιστή για κάθε σήραγγα διακομιστή."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Αποκλειστική ομάδα για τη μεταφορά δεδομένων Server→Client, απελευθερώνει τα νήματα χειριστή."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Αποκλειστική ομάδα για μεταφορές Server→Client, ξεμπλοκάρει τους χειριστές."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Χρονικό όριο στάσης για μεταφορές δεδομένων Server→Client (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Ποσοστό φόρτου συστήματος που προκαλεί
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Διάρκεια μετρίου φόρτου πριν την απόρριψη αιτημάτων (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Διευρύνει το παράθυρο πρόσφατης δραστηριότητας κόμβου για επανεισαγωγή κόμβων όταν αποτυγχάνουν οι κατασκευές."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Διευρύνει το παράθυρο πρόσφατων ομότιμων όταν οι γρήγοροι ομότιμοι εξαντλούνται."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Διαδοχικές αποτυχίες πριν την οπισθοχώρηση ομάδας."
@@ -5538,8 +5571,8 @@ msgstr "Πολλαπλασιαστής ανάπτυξης RTO ανά χρονι�
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Χρονικό όριο σύνδεσης υποδοχής TCP για νήματα χειριστή διακομιστή σήραγγας (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Εκθέτης του φίλτρου αφαίρεσης διπλολογιών IV της σήραγγας: καθένας από τους δύο εσωτερικούς του buffers χωράει 2^n bit, άρα το ζεύγος κοστίζει 2^(n-2) byte. Ορίζεται βάσει των IV που παρατηρήθηκαν στην πράξη· αν είναι πολύ μικρός εκδηλώνεται ως απόρριψη καλών δεδομένων σήραγγας."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Μέγεθος φίλτρου απομάκρυνσης διπλοτύπων IV· πολύ μικρό απορρίπτει έγκυρα δεδομένα τούνελ."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Μέγιστη μέση καθυστέρηση μηνύματος πριν από την απόρριψη της μετάδοσης (ms)."

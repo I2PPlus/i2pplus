@@ -127,6 +127,12 @@ msgstr "Peers uden en offentliggjort IP-adresse"
 msgid "Average tunnel build success %"
 msgstr "Gennemsnitlig tunnelbygningssucces %"
 
+msgid "Memory used by the JVM"
+msgstr "Hukommelse brugt af JVM"
+
+msgid "maximum"
+msgstr "maksimum"
+
 msgid "No transports"
 msgstr "Ingen transporter (skjult eller under opstart?)"
 
@@ -1899,6 +1905,12 @@ msgstr "Ingenting at vise - ingen status angivet!"
 msgid "Bandwidth Usage"
 msgstr "Båndbreddeforbrug"
 
+msgid "Graph combining is not enabled"
+msgstr "Grafkombinering er ikke aktiveret"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Ikke nok statistikker aktiveret til at kombinere"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "slutter {0} siden"
@@ -2017,6 +2029,24 @@ msgstr "Gloweffekt"
 # /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
 msgid "Add a glow effect to graph lines"
 msgstr "Tilføj en gloweffekt til graflinjer"
+
+msgid "Smooth lines"
+msgstr "Glade linjer"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Brug Bézier-kurver til at plotte grafer"
+
+msgid "Filled paths"
+msgstr "Udfyldte stier"
+
+msgid "Use filled areas for graphs"
+msgstr "Brug udfyldte områder til grafer"
+
+msgid "Combine graphs"
+msgstr "Kombiner grafer"
+
+msgid "Merge related graphs into a plot"
+msgstr "Flet relaterede grafer til et plot"
 
 msgid "Select Stats"
 msgstr "Vælg Statistikker"
@@ -3396,8 +3426,8 @@ msgstr "Kendte"
 msgid "Total entries in network database"
 msgstr "Samlet antal poster i netværksdatabasen"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profiler med aktivitet inden for de sidste 24 timer"
+msgid "Profiles with activity in the last hour"
+msgstr "Profiler med aktivitet i den sidste time"
 
 msgid "Unreachable"
 msgstr "Utilgængelig"
@@ -3605,6 +3635,9 @@ msgstr "Hastighed"
 
 msgid "Low Latency"
 msgstr "Lav latens"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Round-trip-tid til denne peer på det direkte link, som målt af transporten"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Genoverførte pakker / sendte pakker, som rapporteret af UDP-transporten"
@@ -5482,11 +5515,11 @@ msgstr "Skrivebuffer pr. NTCP-forbindelse."
 msgid "Min time between retransmissions (ms)."
 msgstr "Min tid mellem genoverførsler (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Tiltagningsundgåelses-vækstrate."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Vinduesvækst per RTT efter langsom start; højere genopretter hurtigere."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Vindues-multiplikator pr. RTT under langsom start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Vinduesvækst per ACK under langsom start; højere ramper hurtigere."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimum sendehastighed før pacing starter (KB/s)."
@@ -5524,8 +5557,8 @@ msgstr "Indgående forbindelser, der må vente på en ledig serverhåndteringstr
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Standardloft for serverhåndteringstråde for hver servertunnel."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Dedikeret pulje til Server→Client-dataoverførsel, frigiver håndteringstråde."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Dedikeret pool til Server→Client-overførsler, opblokerer handtere."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Stall-timeout for Server→Client-dataoverførsler (ms)."
@@ -5575,8 +5608,8 @@ msgstr "Systembelastningsprocent der udløser moderat-belastnings frakobling."
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Varighed af moderat belastning før afvisning af requests (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Udvider peer-nylighedsvindue for at genoptage peers når bygninger fejler."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Udvider peer-aktualitetsvinduet, når hurtige peers løber tør."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Efterfølgende fejl før pulje-tilbagetrækning."
@@ -5614,8 +5647,8 @@ msgstr "RTO-vækst-multiplikator pr. genoverførsels-timeout (%, 100 = flad)."
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-socket-forbindelses-timeout for tunnel-server-håndteringstråde (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Eksponent for tunnel-IV-dedup-filteret: hver af dets to buffere rummer 2^n bit, så parret koster 2^(n-2) byte. Dimensioneret efter de IV'er, der faktisk er set; for lille viser sig som at gode tunneldata droppes."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV-dedup-filterstørrelse; for små dropper gyldige tunneldata."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maks. gennemsnitlig beskedforsinkelse før afvisning af transit (ms)."

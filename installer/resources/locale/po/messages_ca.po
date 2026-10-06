@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Aturant $APP_LONG_NAME de manera suau"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME no és en execució."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME és en execució: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME és en execució: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "El dimoni $APP_LONG_NAME ja està instal·lat."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Instal·lant el dimoni $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "La instal·lació no és compatible amb $DIST_OS en aquest moment"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Elimenant el dimoni $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "El dimoni $APP_LONG_NAME no està instal·lat en aquest moment."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "L’eliminació no és compatible amb $DIST_OS en aquest moment"
 
 msgid "Commands:"
 msgstr "Ordres:"
@@ -142,3 +122,14 @@ msgstr "Executar I2P com a usuari root *no* està recomanat."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Per executar com a root igualment, editeu i2prouter i definiu ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME no és en execució."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME és en execució: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

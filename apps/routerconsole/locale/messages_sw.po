@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: sw\n"
@@ -135,6 +134,12 @@ msgstr "Peer bila anwani ya IP iliyochapishwa"
 
 msgid "Average tunnel build success %"
 msgstr "Asilimia ya wastani ya kujenga tuneli kwa mafanikio"
+
+msgid "Memory used by the JVM"
+msgstr "Kumbukumbu inayotumika na JVM"
+
+msgid "maximum"
+msgstr "kiwango cha juu"
 
 msgid "No transports"
 msgstr "Hakuna transport"
@@ -1899,6 +1904,12 @@ msgstr "Hakuna kitu cha kuonyesha - hakuna takwimu iliyotajwa!"
 msgid "Bandwidth Usage"
 msgstr "Matumizi ya Kasi"
 
+msgid "Graph combining is not enabled"
+msgstr "Kuunganisha grafi haijawashwa"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Hakuna takwimu za kutosha zilizowashwa kuunganisha"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "ikimalika {0} iliyopita"
@@ -2013,6 +2024,24 @@ msgstr "Efekti ya kuwaka"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Ongeza efekti ya kuwaka kwenye mistari ya grafi"
+
+msgid "Smooth lines"
+msgstr "Mistari laini"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Tumia minyoo ya bezier kuchora grafi"
+
+msgid "Filled paths"
+msgstr "Njia zilizojazwa"
+
+msgid "Use filled areas for graphs"
+msgstr "Tumia maeneo yaliyojazwa kwa grafi"
+
+msgid "Combine graphs"
+msgstr "Unganisha grafi"
+
+msgid "Merge related graphs into a plot"
+msgstr "Changanya grafi zinazohusiana kuwa mmoja"
 
 msgid "Select Stats"
 msgstr "Chagua Takwimu"
@@ -3340,8 +3369,8 @@ msgstr "Zinazozikwa"
 msgid "Total entries in network database"
 msgstr "Idadi ya jumla ya maingizo kwenye kanzidata ya mtandao"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Wasifu wenye shughuli katika saa 24 za mwisho"
+msgid "Profiles with activity in the last hour"
+msgstr "Wasifu wenye shindikaa kwa saa ya mwisho"
 
 msgid "Unreachable"
 msgstr "Haipatikani"
@@ -3549,6 +3578,9 @@ msgstr "Kasi"
 
 msgid "Low Latency"
 msgstr "Latensi Ndogo"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Muda wa kwenda na kwa peer huu kwenye kiungo cha moja kwa moja, kama vipimo vya transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Pakiti zilizotumwa tena / pakiti zilizotumwa, kama zinavyoripotiwa na transport ya UDP"
@@ -5416,11 +5448,11 @@ msgstr "Buffer ya kuandika kwa kila muunganisho wa NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Muda wa chini kati ya utumaji tena (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Kiwango cha kukua cha kuepuka msongamano."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Ukuaji wa dirisha kwa RTT baada ya kuanza polepole; kiwango cha juu hupona haraka."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Kiongezi cha dirisha kwa kila RTT wakati wa kuanza kwa polepole."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Ukuaji wa dirisha kwa ACK wakati wa kuanza polepole; kiwango cha juu huinua haraka."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Kiwango cha chini cha kutuma kabla ya kudhibiti kasi kuanza (KB/s)."
@@ -5458,8 +5490,8 @@ msgstr "Muunganisho wa kuingia unaoweza kusubiri nyuzi wa kishughuliki wa seva u
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Kikomo cha default cha nyuzi wa kishughuliki wa seva kwa kila tuneli ya seva."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Kundi maalum la uhamisho wa data wa Server→Client, hufungua nyuzi wa kishughuliki."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Kundi maalum kwa uhamisho wa Server→Client, hufungua vishughuliki."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Muda wa kusubiri wa kusimama kwa uhamisho wa data wa Server→Client (ms)."
@@ -5509,8 +5541,8 @@ msgstr "Asilimia ya mzigo wa mfumo inayoushuta kukatisha muunganisho kwa mzigo w
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Muda wa mzigo wa wastani kabla ya kukataa maombi (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Inaongeza dirisha la karibu cha peer ili kukubali upya peer pale majenzi yanashindwa."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Hupanua dirisha la hivi karibuni la peer wakati peer za haraka zinapokosa."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Mishindwa mfululizo kabla ya kurudi nyuma kwa kundi."
@@ -5548,8 +5580,8 @@ msgstr "Kiongezi cha ukuaji wa RTO kwa kila muda wa kusubiri wa utumaji tena (%,
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Muda wa kusubiri wa kuunganisha socket ya TCP kwa nyuzi wa kishughuliki wa seva ya tuneli (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Kipekee cha kichuja IV za tuneli: kila mojawapo ya buffer zake mbili ina bits 2^n, kwa hivyo zinazolivyoundana zinagharimu baiti 2^(n-2). Hupangwa kulingana na IV zilizotambuliwa halisi; ukiwa mdogo huonekana kama data nzuri ya tuneli ikitupwa."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Ukubwa wa kichujio cha dedup IV; mdogo sana hupunguza data halali za tuneli."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Muda wa wastani mkubwa zaidi wa ujumbe kabla ya kukataa transit (ms)."

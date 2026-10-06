@@ -126,6 +126,12 @@ msgstr "Közzétett IP-cím nélküli társak"
 msgid "Average tunnel build success %"
 msgstr "Átlagos alagútépítési siker %"
 
+msgid "Memory used by the JVM"
+msgstr "A JVM által használt memória"
+
+msgid "maximum"
+msgstr "maximum"
+
 msgid "No transports"
 msgstr "Nincs átvitel (rejtett vagy indul)?"
 
@@ -1889,6 +1895,12 @@ msgstr "Nincs mit megjeleníteni - nem adták meg az állapotot!"
 msgid "Bandwidth Usage"
 msgstr "Sávszélesség felhasználás"
 
+msgid "Graph combining is not enabled"
+msgstr "A grafikonok kombinálása nincs engedélyezve"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Nincs elég engedélyezett statisztika a kombináláshoz"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "Véget ért {0} előtt."
@@ -2003,6 +2015,24 @@ msgstr "Ragyogás effektus"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Ragyogás effektus hozzáadása a grafikon vonalaihoz"
+
+msgid "Smooth lines"
+msgstr "Sima vonalak"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Bezier-görbék használata a grafikonok rajzolásához"
+
+msgid "Filled paths"
+msgstr "Kitöltött területek"
+
+msgid "Use filled areas for graphs"
+msgstr "Kitöltött területek használata a grafikonokhoz"
+
+msgid "Combine graphs"
+msgstr "Grafikonok kombinálása"
+
+msgid "Merge related graphs into a plot"
+msgstr "Kapcsolódó grafikonok egyesítése egy ábrába"
 
 msgid "Select Stats"
 msgstr "Statisztika Kiválasztása"
@@ -3330,8 +3360,8 @@ msgstr "Ismert"
 msgid "Total entries in network database"
 msgstr "Összes bejegyzés a hálózati adatbázisban"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profilok tevékenységekkel az elmúlt 24 órában"
+msgid "Profiles with activity in the last hour"
+msgstr "Az elmúlt órában aktív profilok"
 
 msgid "Unreachable"
 msgstr "Nem elérhető"
@@ -3539,6 +3569,9 @@ msgstr "Sebesség"
 
 msgid "Low Latency"
 msgstr "Alacsony késleltetés"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Oda-vissza idejű ennek a peer-nek a közvetlen kapcsolaton, a transport által mérve"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Újraküldött csomagok / elküldött csomagok az UDP átviteli réteg jelentése szerint"
@@ -5406,11 +5439,11 @@ msgstr "Író puffer NTCP kapcsolatonként."
 msgid "Min time between retransmissions (ms)."
 msgstr "Minimális idő az újraküldések között (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Torlódáselkerülés növekedési üteme."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Ablak növekedés RTT-ként lassú indítás után; a magasabb gyorsabban visszaállít."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Ablak-szorzó RTT-nként a lassú indítás során."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Ablak növekedés ACK-ként lassú indítás alatt; a magasabb gyorsabban emelkedik."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimális küldési sebesség az ingerlés megkezdése előtt (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Azok a bejövő kapcsolatok, amelyek szabad kiszolgáló kezelő szálra
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Alapértelmezett korlát a kiszolgáló kezelő szálakra minden egyes kiszolgáló alagútnál."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Külön készlet a Szerver→Kliens adatátvitelhez, felszabadítja a kezelő szálakat."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Dedikált készlet a Szerver→Kliens átvitelekhez, feloldja a kezelőket."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Megakadási időtúllépés a Szerver→Kliens adatátvitelhez (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Mérsékelt terhelésű leválasztást kiváltó rendszerterhelés száz
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "A mérsékelt terhelés időtartama a kérések elutasítása előtt (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Kiszélesíti a csomópont-frissességi ablakot, hogy újra befogadjon csomópontokat build hiba esetén."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Kiszélesíti a peer frissességi ablakot, amikor a gyors peer elfogy."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Egymást követő hibák a pool visszavonása előtt."
@@ -5538,8 +5571,8 @@ msgstr "RTO növekedési szorzó újraküldési időtúllépésenként (%, 100 =
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP socket csatlakozási időtúllépés az alagút-kiszolgáló kezelőszálakhoz (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Az alagút IV duplikációs szűrő kitevője: mindkét puffere 2^n bitet tartalmaz, így a kettő együtt 2^(n-2) bájtba kerül. A ténylegesen látott IV-k alapján méretezve; a túl kicsi méret jó alagútadatok eldobásaként jelentkezik."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV dedup szűrő mérete; túl kicsi érvényes tunnel adatokat dob el."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximális átlagos üzenetkésleltetés a tömegközlekedés elutasítása előtt (ms)."

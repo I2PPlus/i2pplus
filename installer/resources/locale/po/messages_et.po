@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME õrnalt peatamine"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME ei ole käimas."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME on käimas: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME on käimas: PID:$pid, Pakend:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME daemon on juba paigaldatud."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME daemoni paigaldamine"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "Paigaldamine ei ole hetkel toetatud $DIST_OS jaoks"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME daemon eemaldamine"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME daemon ei ole hetkel paigaldatud."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "Eemaldamine ei ole hetkel toetatud $DIST_OS jaoks"
 
 msgid "Commands:"
 msgstr "Käsklused:"
@@ -142,3 +122,14 @@ msgstr "I2P käivitamine juur kasutajana *ei ole* soovitatav."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Kui soovite siiski käivitada juurina, muuda i2prouter ja määra ALLOW_ROOT tõene."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME ei ole käimas."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME on käimas: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

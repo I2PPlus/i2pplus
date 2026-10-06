@@ -126,6 +126,12 @@ msgstr "Peers utan en publicerad IP-adress"
 msgid "Average tunnel build success %"
 msgstr "Genomsnittlig tunnelbyggd framgång %"
 
+msgid "Memory used by the JVM"
+msgstr "Minne som används av JVM"
+
+msgid "maximum"
+msgstr "maximum"
+
 msgid "No transports"
 msgstr "Inga transporter (gömd eller håller på att startas?)"
 
@@ -1889,6 +1895,12 @@ msgstr "Inget att visa - ingen statistik angiven!"
 msgid "Bandwidth Usage"
 msgstr "Bandbreddsanvändning"
 
+msgid "Graph combining is not enabled"
+msgstr "Grafkombinering är inte aktiverad"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Inte tillräckligt med statistik aktiverad för kombinering"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "Slutade för {0} sen"
@@ -2003,6 +2015,24 @@ msgstr "Ljuseffekt"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Lägg till ljuseffekt för diagramlinjer"
+
+msgid "Smooth lines"
+msgstr "Mjuka linjer"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Använd Bezier-kurvor för att rita grafer"
+
+msgid "Filled paths"
+msgstr "Fyllda banor"
+
+msgid "Use filled areas for graphs"
+msgstr "Använd fyllda områden för grafer"
+
+msgid "Combine graphs"
+msgstr "Kombinera grafer"
+
+msgid "Merge related graphs into a plot"
+msgstr "Slå samman relaterade grafer till en plot"
 
 msgid "Select Stats"
 msgstr "Vald statistik"
@@ -3330,8 +3360,8 @@ msgstr "Kända"
 msgid "Total entries in network database"
 msgstr "Totalt antal poster i nätverksdatabasen"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profiler med aktivitet under de senaste 24 timmarna"
+msgid "Profiles with activity in the last hour"
+msgstr "Profiler med aktivitet under den senaste timmen"
 
 msgid "Unreachable"
 msgstr "Onåbar"
@@ -3539,6 +3569,9 @@ msgstr "Hastighet"
 
 msgid "Low Latency"
 msgstr "Låg latens"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Round trip-tid till denna peer på den direkta länken, som mäts av transporten"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Paket som återutsänds / paket som skickats, enligt UDP-transporten"
@@ -5406,11 +5439,11 @@ msgstr "Skrivbuffert per NTCP-anslutning."
 msgid "Min time between retransmissions (ms)."
 msgstr "Min tid mellan omsändningar (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Tillväxttakt för överbelastningsundvikande."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Fönsterökning per RTT efter slow start; högre återhämtar sig snabbare."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Fönstermultiplikator per RTT under långsam start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Fönsterökning per ACK under slow start; högre ökar snabbare."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minsta sändningshastighet innan pacing startar (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Inkommande anslutningar som får vänta på en ledig serverhanteringstr�
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Standardgräns för serverhanteringstrådar för varje servertunnel."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Dedikerad pool för dataöverföring från Server→Client, frigör hanteringstrådar."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Dedikerad pool för Server→Client-överföringar, låser upp hanterare."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Stalltidsgräns för dataöverföringar från Server→Client (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Systembelastningsprocent som utlöser frånkoppling vid måttlig belastn
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Varaktighet av måttlig belastning innan begäranden avvisas (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Vidgar nodens aktualitetsfönster för att åter släppa in noder när byggen misslyckas."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Vidgar peer-recency-fönstret när snabba peers tar slut."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Antal misslyckanden i följd innan poolåterhållsamhet."
@@ -5538,8 +5571,8 @@ msgstr "RTO-tillväxtmultiplikator per omsändningstidsgräns (%, 100 = platt)."
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tidsgräns för TCP-socketanslutning för tunnelserverns hanterartrådar (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Exponent för tunnelns IV-avskiljefilter: vardera av dess två buffertar rymmer 2^n bitar, så paret kostar 2^(n-2) byte. Dimensioneras utifrån de IV som faktiskt har setts; för liten storlek yttrar sig som att bra tunneldata kastas bort."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV-dedup-filterstorlek; för liten släpper giltiga tunneldata."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Max genomsnittlig meddelandefördröjning innan transitering avvisas (ms)."

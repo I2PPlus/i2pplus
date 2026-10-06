@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr ""
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr ""
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr ""
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr ""
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr ""
 
@@ -83,19 +71,11 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr ""
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr ""
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr ""
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
-msgstr ""
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
 msgstr ""
 
 msgid "Commands:"
@@ -141,4 +121,15 @@ msgid "Running I2P as the root user is *not* recommended."
 msgstr ""
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr ""
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
 msgstr ""

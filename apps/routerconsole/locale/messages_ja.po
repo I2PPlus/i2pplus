@@ -124,6 +124,12 @@ msgstr "IPアドレスが公開されていないピア"
 msgid "Average tunnel build success %"
 msgstr "平均トンネル構築成功率"
 
+msgid "Memory used by the JVM"
+msgstr "JVMが使用するメモリ"
+
+msgid "maximum"
+msgstr "最大"
+
 msgid "No transports"
 msgstr "トランスポートなし (隠されているかスタートアップ中？)"
 
@@ -1883,6 +1889,12 @@ msgstr "表示するものがありません - 指定された統計情報なし
 msgid "Bandwidth Usage"
 msgstr "帯域幅使用率"
 
+msgid "Graph combining is not enabled"
+msgstr "グラフ結合は有効になっていません"
+
+msgid "Not enough stats enabled to combine"
+msgstr "結合するための十分な統計が有効になっていません"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} 前に終了"
@@ -1997,6 +2009,24 @@ msgstr "グロー効果"
 
 msgid "Add a glow effect to graph lines"
 msgstr "グラフ線にグロー効果を追加"
+
+msgid "Smooth lines"
+msgstr "滑らかな線"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "グラフの描画にベジェ曲線を使用する"
+
+msgid "Filled paths"
+msgstr "塗りつぶしパス"
+
+msgid "Use filled areas for graphs"
+msgstr "グラフに塗りつぶし領域を使用する"
+
+msgid "Combine graphs"
+msgstr "グラフを結合"
+
+msgid "Merge related graphs into a plot"
+msgstr "関連するグラフを1つのプロットに統合する"
 
 msgid "Select Stats"
 msgstr "統計を選択"
@@ -3324,8 +3354,8 @@ msgstr "既知"
 msgid "Total entries in network database"
 msgstr "ネットワーク データベースのエントリの合計"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "過去 24 時間にアクティビティがあったプロファイル"
+msgid "Profiles with activity in the last hour"
+msgstr "過去1時間以内にアクティビティのあるプロファイル"
 
 msgid "Unreachable"
 msgstr "到達不可"
@@ -3531,6 +3561,9 @@ msgstr "速度"
 
 msgid "Low Latency"
 msgstr "低レイテンシー"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "トランスポートによって測定された、直接リンク上のこのピアへのラウンドトリップ時間"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP トランスポートが報告する再送信パケット数 / 送信パケット数"
@@ -5395,11 +5428,11 @@ msgstr "NTCP 接続あたりの書き込みバッファ。"
 msgid "Min time between retransmissions (ms)."
 msgstr "再送信間の最小時間（ミリ秒）。"
 
-msgid "Congestion avoidance growth rate."
-msgstr "輻輳回避成長率。"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "スロースタート後のRTTあたりのウィンドウ増加量。大きいほど高速に回復します。"
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "スロースタート中の RTT あたりのウィンドウ乗数。"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "スロースタート中のACKあたりのウィンドウ増加量。大きいほど高速に立ち上がります。"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "ペーシングが開始される前の最小送信レート (KB/秒)。"
@@ -5437,8 +5470,8 @@ msgstr "空きサーバーハンドラスレッドを待てる着信接続数。
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "各サーバートンネルあたりのサーバーハンドラスレッド数のデフォルト上限。"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Server→Client データ転送専用のプール。ハンドラスレッドのブロックを解除します。"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Server→Client転送専用のプール。ハンドラのブロックを解除します。"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Server→Client データ転送のストールタイムアウト (ms)。"
@@ -5488,8 +5521,8 @@ msgstr "中負荷の切断をトリガーするシステム負荷パーセント
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "リクエストを拒否するまでの中程度の負荷の継続時間 (ミリ秒)。"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "構築が失敗した際にピアを再許可するため、ピア最新性ウィンドウを拡大します。"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "高速ピアが不足している場合にピアの最新性ウィンドウを広げます。"
 
 msgid "Consecutive failures before pool backoff."
 msgstr "プールバックオフ前の連続失敗回数。"
@@ -5527,8 +5560,8 @@ msgstr "再送信タイムアウトあたりの RTO 増加倍率（%、100 = 一
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "トンネルサーバーハンドラスレッド用 TCP ソケット接続タイムアウト（ミリ秒）。"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "トンネル IV 重複排除フィルタの指数: 2 つのバッファはそれぞれ 2^n ビットを保持するため、2 つ合わせて 2^(n-2) バイトのコストになります。実際に観測された IV からサイズを決定します。小さすぎると、正常なトンネルデータが破棄される形で現れます。"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV重複排除フィルターサイズ。小さすぎると有効なトンネルデータが破棄されます。"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "転送を拒否するまでの最大平均メッセージ遅延 (ミリ秒)。"

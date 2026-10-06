@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME elegáns megállítása"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME nem fut."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME fut: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME fut: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME szolgáltatás már telepítve van."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME szolgáltatás telepítése"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "Telepítés nem támogatott jelenleg a $DIST_OS számára"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME szolgáltatás eltávolítása"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME szolgáltatás jelenleg nem telepítve."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "Eltávolítás nem támogatott jelenleg a $DIST_OS számára"
 
 msgid "Commands:"
 msgstr "Parancsok:"
@@ -142,3 +122,14 @@ msgstr "Az I2P futtatása root felhasználóként *nem ajánlott*."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Ha bármivel rootként szeretne futtatni, szerkessze az i2proutert, és állítsa a ALLOW_ROOT értékét igazra."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME nem fut."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME fut: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

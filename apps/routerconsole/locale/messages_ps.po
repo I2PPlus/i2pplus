@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: en\n"
@@ -135,6 +134,12 @@ msgstr "پرته له خپور شوې IP پتې peerونه"
 
 msgid "Average tunnel build success %"
 msgstr "د ټونل د جوړولو د بریا اوسط فیصده"
+
+msgid "Memory used by the JVM"
+msgstr "د JVM لخوا کارول شوی میموری"
+
+msgid "maximum"
+msgstr "تر ټولو لوړ"
 
 msgid "No transports"
 msgstr "ټرانسپورتونه نشته"
@@ -1899,6 +1904,12 @@ msgstr "د ښودلو لپاره هیڅ نشته - شمېر نه ده مشخصه
 msgid "Bandwidth Usage"
 msgstr "د باندویډټ کارول"
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "پای ته {0} مخکې"
@@ -2013,6 +2024,24 @@ msgstr "د ځلېږلو اغېزه"
 
 msgid "Add a glow effect to graph lines"
 msgstr "د ګراف په کرښو غو ځلېږلو اغېزه زیاته کړئ"
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
+msgstr ""
 
 msgid "Select Stats"
 msgstr "شمېرې غوره کړئ"
@@ -3340,8 +3369,8 @@ msgstr "پوهې شوی"
 msgid "Total entries in network database"
 msgstr "په نټورک ډیټابیس کې ټول مدخلات"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "په تېرې 24h کې فعال پروفایلونه"
+msgid "Profiles with activity in the last hour"
+msgstr "په تېرې 1h کې فعال پروفایلونه"
 
 msgid "Unreachable"
 msgstr "ناشته"
@@ -3549,6 +3578,9 @@ msgstr "سرعت"
 
 msgid "Low Latency"
 msgstr "ټیټ لیټنسی"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "بیا لېږل شوی پکټونه / لېږل شوی پکټونه، لکه څنګه چې UDP ټرانسپورټ راګوروی"
@@ -5416,11 +5448,11 @@ msgstr "پر هر NTCP اتصال لیکلی بفر۔"
 msgid "Min time between retransmissions (ms)."
 msgstr "د بیا لېږلو ترمنځ تر ټولو ټیټ وخت (ms)۔"
 
-msgid "Congestion avoidance growth rate."
-msgstr "د کژغ ځنډ د رېږدو سرعت۔"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "په هر RTT کې د ورو پیل پر مهال د کژ پیله۔"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "د وېرې له فعالېدو مخکې تر ټولو ټیټ لېږلو سرعت (KB/s)۔"
@@ -5458,8 +5490,8 @@ msgstr "راتلونکی اتصالونه چې د یوې خلاص سرور پر�
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "پر هر سرور ټونل د سرور د پرازونکو تارونو ابدی حد۔"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "د Server→Client د ډیټا د لېږلو لپاره ځانګړې ټولګه چې پرازونکی تارونه آزادوی۔"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "د Server→Client د ډیټا د لېږلو د ودرېدو وخت پې (ms)۔"
@@ -5509,8 +5541,8 @@ msgstr "د سیسټم هغه بار چې په منځنی بار کې قطع کې
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "د منځنی بار مدت چې مخکې له غوښتنو څخه ردولو (ms)۔"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "کله چې جوړولې ناکامې شی، د peer د تازه والی کژ پراخوی چې peer بیا ومنل شی۔"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr ""
 
 msgid "Consecutive failures before pool backoff."
 msgstr "پرېټسې ناکامی وږی تر ټولګې ورو کېدو مخکې۔"
@@ -5548,8 +5580,8 @@ msgstr "د هر بیا لېږلو وخت لپاره د RTO د رېږدو پیل�
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "د ټونل د سرور د پرازونکو تارونو لپاره د TCP ساکټ د وصل وخت پې (ms)۔"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "د ټونل د IV د تکرار فلټر لهجه: د هغه دوه بفرونو هر یو 2^n بټونه لری، نو دواړه 2^(n-2) بایټه لری۔ د اوس رامنځته شویو IVونو څخه ټاکل کېږی؛ ډېر کوچنی وی نو ښه ټونل د ډیټا پرې کول ښکاره کېږی۔"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "د ترانزیت د ردولو مخکې تر ټولو لوړ اوسطی د پیغام ځنډ (ms)۔"

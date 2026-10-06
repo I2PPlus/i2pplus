@@ -124,6 +124,12 @@ msgstr "게시된 IP 주소가 없는 피어"
 msgid "Average tunnel build success %"
 msgstr "평균 터널 빌드 성공 %"
 
+msgid "Memory used by the JVM"
+msgstr "JVM이 사용하는 메모리"
+
+msgid "maximum"
+msgstr "최대"
+
 msgid "No transports"
 msgstr "트랜스포트 없음 (숨겨졌거나 시작중일 수 있습니다)"
 
@@ -1883,6 +1889,12 @@ msgstr "보여줄 내용 없음 - 통계 정보 미지정!"
 msgid "Bandwidth Usage"
 msgstr "대역폭 사용"
 
+msgid "Graph combining is not enabled"
+msgstr "그래프 결합이 활성화되지 않았습니다"
+
+msgid "Not enough stats enabled to combine"
+msgstr "결합할 충분한 통계가 활성화되지 않았습니다"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} 전부터 끝내는 중"
@@ -1997,6 +2009,24 @@ msgstr "글로우 효과"
 
 msgid "Add a glow effect to graph lines"
 msgstr "그래프 라인에 글로우 효과 추가"
+
+msgid "Smooth lines"
+msgstr "부드러운 선"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "그래프 작성에 베지어 곡선 사용"
+
+msgid "Filled paths"
+msgstr "채워진 경로"
+
+msgid "Use filled areas for graphs"
+msgstr "그래프에 채워진 영역 사용"
+
+msgid "Combine graphs"
+msgstr "그래프 결합"
+
+msgid "Merge related graphs into a plot"
+msgstr "관련 그래프를 하나의 프로병으로 병합"
 
 msgid "Select Stats"
 msgstr "상태 선택"
@@ -3324,8 +3354,8 @@ msgstr "알려진"
 msgid "Total entries in network database"
 msgstr "네트워크 데이터베이스의 총 항목"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "지난 24시간 동안 활동이 있는 프로필"
+msgid "Profiles with activity in the last hour"
+msgstr "지난 1시간 이내에 활동이 있는 프로필"
 
 msgid "Unreachable"
 msgstr "접근불가능"
@@ -3531,6 +3561,9 @@ msgstr "속도"
 
 msgid "Low Latency"
 msgstr "낮은 대기 시간"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "전송 계층에서 측정된 직접 링크상의 이 피어에 대한 왕복 시간"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP 전송이 보고한 재전송 패킷 / 전송 패킷"
@@ -5395,11 +5428,11 @@ msgstr "NTCP 연결당 쓰기 버퍼입니다."
 msgid "Min time between retransmissions (ms)."
 msgstr "재전송 사이의 최소 시간입니다(ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "혼잡 회피 증가율입니다."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "슬로우 시작 후 RTT당 윈도우 증가량. 높을수록 더 빠르게 복구됩니다."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "슬로우 스타트 중 RTT당 창 승수입니다."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "슬로우 시작 중 ACK당 윈도우 증가량. 높을수록 더 빠르게 증가합니다."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "페이싱이 시작되기 전 최소 전송 속도(KB/s)입니다."
@@ -5437,8 +5470,8 @@ msgstr "사용 가능한 서버 처리 스레드를 기다릴 수 있는 인바�
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "각 서버 터널의 서버 처리 스레드 수 기본 상한."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Server→Client 데이터 전송 전용 풀이며, 처리 스레드의 정지를 해소합니다."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Server→Client 전송 전용 풀, 핸들러 차단 해제."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Server→Client 데이터 전송의 정지 제한 시간(ms)."
@@ -5488,8 +5521,8 @@ msgstr "중간 부하 연결 해제를 유발하는 시스템 부하 비율입�
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "요청을 거절하기 전 중간 부하 지속 시간입니다(ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "빌드 실패 시 피어를 다시 수락하기 위해 피어 최신성 윈도우를 넓힙니다."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "빠른 피어가 부족할 때 피어 최근성 창을 넓힙니다."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "풀 백오프 전 연속 실패 횟수입니다."
@@ -5527,8 +5560,8 @@ msgstr "재전송 제한 시간당 RTO 증가 승수입니다(%, 100 = 일정)."
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "터널 서버 처리 스레드를 위한 TCP 소켓 연결 제한 시간입니다(ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "터널 IV 중복 제거 필터의 지수: 두 버퍼 각각이 2^n 비트를 보유하므로 두 버퍼의 비용은 2^(n-2)바이트입니다. 실제로 관찰된 IV를 기준으로 크기가 정해집니다. 너무 작으면 정상적인 터널 데이터가 버려지는 것으로 나타납니다."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV 중복 제거 필터 크기. 너무 작으면 유효한 터널 데이터가 삭제됩니다."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "전송을 거부하기 전 최대 평균 메시지 지연 시간(밀리초)입니다."

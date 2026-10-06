@@ -127,6 +127,12 @@ msgstr "Peers sem endereço IP publicado"
 msgid "Average tunnel build success %"
 msgstr "% média de sucesso na construção do túnel"
 
+msgid "Memory used by the JVM"
+msgstr "Memória usada pela JVM"
+
+msgid "maximum"
+msgstr "máximo"
+
 msgid "No transports"
 msgstr "Sem transportes (escondidos ou a iniciar?)"
 
@@ -1899,6 +1905,12 @@ msgstr "Nada para exibir - nenhum estado especificado!"
 msgid "Bandwidth Usage"
 msgstr "Taxa de uso"
 
+msgid "Graph combining is not enabled"
+msgstr "Combinação de gráficos não está ativada"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Estatísticas insuficientes ativadas para combinar"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "terminando {0} atrás"
@@ -2017,6 +2029,24 @@ msgstr "Efeito de brilho"
 # /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
 msgid "Add a glow effect to graph lines"
 msgstr "Adicionar efeito de brilho às linhas do gráfico"
+
+msgid "Smooth lines"
+msgstr "Linhas suaves"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Usar curvas de Bézier para plotar gráficos"
+
+msgid "Filled paths"
+msgstr "Caminhos preenchidos"
+
+msgid "Use filled areas for graphs"
+msgstr "Usar áreas preenchidas para gráficos"
+
+msgid "Combine graphs"
+msgstr "Combinar gráficos"
+
+msgid "Merge related graphs into a plot"
+msgstr "Mesclar gráficos relacionados em um plot"
 
 msgid "Select Stats"
 msgstr "Selecione estatísticas"
@@ -3396,8 +3426,8 @@ msgstr "Conhecidos"
 msgid "Total entries in network database"
 msgstr "Total de entradas no banco de dados da rede"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Perfis com atividade nas últimas 24h"
+msgid "Profiles with activity in the last hour"
+msgstr "Perfis com atividade na última hora"
 
 msgid "Unreachable"
 msgstr "Inalcançável"
@@ -3605,6 +3635,9 @@ msgstr "Velocidade"
 
 msgid "Low Latency"
 msgstr "Baixa Latência"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Tempo de ida e volta para este peer no link direto, conforme medido pelo transporte"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Pacotes retransmitidos / pacotes enviados, conforme relatado pelo transporte UDP"
@@ -5482,11 +5515,11 @@ msgstr "Buffer de escrita por conexão NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Tempo mínimo entre retransmissões (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Taxa de crescimento de prevenção de congestionamento."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Crescimento da janela por RTT após início lento; maior recupera mais rápido."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Multiplicador da janela por RTT durante o início lento."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Crescimento da janela por ACK durante início lento; maior acelera mais rápido."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Taxa mínima de envio antes do início da estimulação (KB/s)."
@@ -5524,8 +5557,8 @@ msgstr "Conexões de entrada que podem aguardar uma thread de manipulador do ser
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Limite padrão de threads do manipulador do servidor para cada túnel de servidor."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Pool dedicado para a transferência de dados de Servidor→Cliente, libera as threads do manipulador."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Pool dedicado para transferências Servidor→Cliente, desbloqueia manipuladores."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Tempo limite de bloqueio para transferências de dados de Servidor→Cliente (ms)."
@@ -5575,8 +5608,8 @@ msgstr "Percentagem de carga do sistema que aciona a desconexão de carga modera
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Duração da carga moderada antes de recusar pedidos (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Alarga a janela de recência de pares para readmitir pares quando as construções falham."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Amplia a janela de recentez dos peers quando os peers rápidos acabam."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Falhas consecutivas antes do recuo do pool."
@@ -5614,8 +5647,8 @@ msgstr "Multiplicador de crescimento de RTO por tempo limite de retransmissão (
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tempo limite de conexão de socket TCP para threads do manipulador do servidor de túneis (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Expoente do filtro de deduplicação de IV do túnel: cada um de seus dois buffers mantém 2^n bits, portanto o par custa 2^(n-2) bytes. Dimensionado a partir dos IVs realmente vistos; se for pequeno demais, isso aparece como dados bons do túnel sendo descartados."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Tamanho do filtro de deduplicação IV; muito pequeno descarta dados válidos do túnel."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Atraso médio máximo da mensagem antes de rejeitar o trânsito (ms)."

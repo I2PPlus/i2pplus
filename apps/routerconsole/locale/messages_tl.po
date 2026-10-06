@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: en\n"
@@ -135,6 +134,12 @@ msgstr "Mga peer na walang nai-publish na IP address"
 
 msgid "Average tunnel build success %"
 msgstr "Karaniwang % ng tagumpay ng paggawa ng tunnel"
+
+msgid "Memory used by the JVM"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
 
 msgid "No transports"
 msgstr "Walang transport"
@@ -1899,6 +1904,12 @@ msgstr "Walang ipapakita - walang stat na tinukoy!"
 msgid "Bandwidth Usage"
 msgstr "Paggamit ng Bandwidth"
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "nagtapos {0} ang nakalipas"
@@ -2013,6 +2024,24 @@ msgstr "Epekto ng glow"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Magdagdag ng epekto ng glow sa mga linya ng graph"
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
+msgstr ""
 
 msgid "Select Stats"
 msgstr "Pumili ng Stats"
@@ -3340,8 +3369,8 @@ msgstr "Kilala"
 msgid "Total entries in network database"
 msgstr "Kabuuang bilang ng mga entry sa NetDB"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Mga profile na may aktibidad sa huling 24h"
+msgid "Profiles with activity in the last hour"
+msgstr "Mga profile na may aktibidad sa huling 1h"
 
 msgid "Unreachable"
 msgstr "Hindi maabot"
@@ -3549,6 +3578,9 @@ msgstr "Bilis"
 
 msgid "Low Latency"
 msgstr "Mababang Latensiya"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Mga ipinag-ulit na packet / ipinadalang packet, ayon sa tinukoy ng UDP transport"
@@ -5416,11 +5448,11 @@ msgstr "Write buffer kada NTCP koneksyon."
 msgid "Min time between retransmissions (ms)."
 msgstr "Min na oras sa pagitan ng mga retransmission (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Bilis ng paglago ng pag-iwas sa congestion."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Multiplysador ng window kada RTT habang dahan-dahang nagsisimula."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Min na bilis ng pagpapadala bago mailapat ang pacing (KB/s)."
@@ -5458,8 +5490,8 @@ msgstr "Mga inbound na koneksyon na maaaring maghintay para sa libreng server ha
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Default na limitasyon ng server handler thread para sa bawat server tunnel."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Nakatalang pool para sa Server→Client na paglipat ng data, naglalabas ng mga handler thread."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Timeout ng pagkakahinto para sa Server→Client na paglipat ng data (ms)."
@@ -5509,8 +5541,8 @@ msgstr "Porsyento ng system load na nagtrigger ng moderate-load disconnect."
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Tagal ng moderate load bago magtanggihan ng mga request (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Papalawakin ang peer recency window upang muling tanggapin ang mga peer kapag nabigo ang paggawa."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr ""
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Magkasunod na failure bago mag-backoff ang pool."
@@ -5548,8 +5580,8 @@ msgstr "Multiplysador ng paglago ng RTO kada timeout ng retransmission (%, 100 =
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Timeout ng koneksyon ng TCP socket para sa tunnel server handler thread (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Exponent ng tunnel IV dedup filter: ang bawat isa sa dalawang buffer nito ay may 2^n bit, kaya nagkakahalaga ang dalawa sa 2^(n-2) byte. Sinusukat mula sa IV na talagang nakita; kapag napakaliit, ito ay lumalabas bilang pagtatapon ng maganda at kapag-pansin na tunnel data."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Max na katamtamang pagkaelay ng mensahe bago magtanggihan ng transit (ms)."

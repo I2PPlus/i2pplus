@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: sw\n"
@@ -73,18 +72,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Inasitisha $APP_LONG_NAME kwa taratibu"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME hafanyi kazi."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME inafanya kazi: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME inafanya kazi: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "Daemon ya $APP_LONG_NAME tayari imesakinishwa."
 
@@ -93,20 +80,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Inasakinisha daemon ya $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "Kusakinisha kwa $DIST_OS hakusomekewa bado."
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Inaondoa daemon ya $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "Daemon ya $APP_LONG_NAME hujasakinishwa."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "Kuoondoa kwa $DIST_OS hakusomekewa bado."
 
 msgid "Commands:"
 msgstr "Amri:"
@@ -152,3 +131,14 @@ msgstr "Kuendesha I2P kama mtumiaji root si*zo*pendekezwa."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Ili kuendesha kama root hata hivyo, hariri i2prouter na weka ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME hafanyi kazi."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME inafanya kazi: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

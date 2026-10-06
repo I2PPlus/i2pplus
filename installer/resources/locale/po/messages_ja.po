@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME を適切に停止中"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME は起動していません。"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME は起動しています: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME は起動しています: PID:$pid、 ラッパー:$STATUS、 Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME デーモンはすでにインストールされています。"
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME のデーモンをインストール中"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "$DIST_OS に現在サポートされていないインストール"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME デーモンを削除中"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME daemon は現在インストールされていません。"
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "$DIST_OS に現在サポートされていない削除"
 
 msgid "Commands:"
 msgstr "コマンド:"
@@ -142,3 +122,14 @@ msgstr "root ユーザーとしての I2P の起動は推奨され*ません*。
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "とにかく root として起動し、 i2prouter を編集して、ALLOW_ROOT=true と設定する。"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME は起動していません。"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME は起動しています: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

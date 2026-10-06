@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: en\n"
@@ -135,6 +134,12 @@ msgstr "شائع شدہ IP پتے کے بغیر peer"
 
 msgid "Average tunnel build success %"
 msgstr "اوسط ٹنل بنانے کی کامیابی %"
+
+msgid "Memory used by the JVM"
+msgstr "JVM کے ذریعہ استعمال شدہ میموری"
+
+msgid "maximum"
+msgstr "زیادہ سے زیادہ"
 
 msgid "No transports"
 msgstr "کوئی ٹرانسپورٹ نہیں"
@@ -1899,6 +1904,12 @@ msgstr "دکھانے کے لیے کچھ نہیں - کوئی شماریات مق�
 msgid "Bandwidth Usage"
 msgstr "بینڈ وائٹ کا استعمال"
 
+msgid "Graph combining is not enabled"
+msgstr "گراف کا انضمام فعال نہیں"
+
+msgid "Not enough stats enabled to combine"
+msgstr "انضمام کے لیے کافی اعداد و شمار فعال نہیں"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} پہلے ختم ہوا"
@@ -2013,6 +2024,24 @@ msgstr "گلو ایفیکٹ"
 
 msgid "Add a glow effect to graph lines"
 msgstr "گراف لائنوں میں گلو ایفیکٹ شامل کریں"
+
+msgid "Smooth lines"
+msgstr "ہموار لکیریں"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "گراف بنانے کے لیے بیزیئر کرووز کا استعمال کریں"
+
+msgid "Filled paths"
+msgstr "بھرے ہوئے راستے"
+
+msgid "Use filled areas for graphs"
+msgstr "گراف کے لیے بھرے ہوئے علاقوں کا استعمال کریں"
+
+msgid "Combine graphs"
+msgstr "گراف کا انضمام کریں"
+
+msgid "Merge related graphs into a plot"
+msgstr "متعلقہ گراف کو ایک پلاٹ میں ضم کریں"
 
 msgid "Select Stats"
 msgstr "شماریات منتخب کریں"
@@ -3340,8 +3369,8 @@ msgstr "معلوم"
 msgid "Total entries in network database"
 msgstr "نیٹ ورک ڈیٹابیس میں کل اندراجات"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "گزشتہ 24h میں سرگرمی رکھنے والی پروفائلیں"
+msgid "Profiles with activity in the last hour"
+msgstr "گزشتہ گھنٹے میں سرگرمی والے پروفائل"
 
 msgid "Unreachable"
 msgstr "ناقابل رسائی"
@@ -3549,6 +3578,9 @@ msgstr "رفتار"
 
 msgid "Low Latency"
 msgstr "کم لیٹنسی"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "ٹرانسپورٹ کے ذریعے ناپا گیا براہ راست لنک پر اس پیر کا راؤنڈ ٹرپ ٹائم"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "دوبارہ بھیجے گئے پیکٹس / بھیجے گئے پیکٹس، جیسا کہ UDP ٹرانسپورٹ بتاتا ہے"
@@ -5416,11 +5448,11 @@ msgstr "فی NTCP کنکشن رائٹ بفر۔"
 msgid "Min time between retransmissions (ms)."
 msgstr "دوبارہ ترسیل کے درمیان کم سے کم وقت (ms)۔"
 
-msgid "Congestion avoidance growth rate."
-msgstr "کھنگاٹی سے بچنے کی نشوونما شرح۔"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "سلو اسٹارٹ کے بعد RTT فی ونڈو گروتھ؛ زیادہ ریکور تیز ہے۔"
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "سلو اسٹارٹ کے دوران فی RTT ونڈو کا مضاعف۔"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "سلو اسٹارٹ کے دوران ACK فی ونڈو گروتھ؛ زیادہ ریمپ تیز ہے۔"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "رفتامندی شروع ہونے سے پہلے کم سے کم سینڈ شرح (KB/s)۔"
@@ -5458,8 +5490,8 @@ msgstr "وہ ان بانڈ کنکشنز جو آزاد سرور ہینڈلر دھ
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "ہر سرور ٹنل کے لیے سرور ہینڈلر دھاگوں کا طے شدہ سقف۔"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Server→Client ڈیٹا منتقلی کے لیے مخصوص پول جو ہینڈلر دھاگے بلاک ہونے سے آزاد کرتا ہے۔"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "سرور→کلائنٹ ٹرانسفر کے لیے مخصوص پول، ہینڈلرز کو ان بلاک کرتا ہے۔"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Server→Client ڈیٹا منتقلیوں کے لیے رکاوٹ ٹائم آؤٹ (ms)۔"
@@ -5509,8 +5541,8 @@ msgstr "متوسط لوڈ میں منسلکیت منقطع کرنے کا فعا�
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "درخواستیں مسترد کرنے سے پہلے متوسط لوڈ کی مدت (ms)۔"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "بنانے ناکام ہونے پر peer کو دوبارہ شامل کرنے کے لیے peer کی تازگی کا پنچہ بڑھاتا ہے۔"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "تیز پیرز ختم ہونے پر پیر ریسنسی ونڈو کو وسیع کرتا ہے۔"
 
 msgid "Consecutive failures before pool backoff."
 msgstr "پول بیک آف سے پہلے مسلسل ناکامیاں۔"
@@ -5548,8 +5580,8 @@ msgstr "فی دوبارہ ترسیل ٹائم آؤٹ RTO نشوونما کا م�
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "ٹنل سرور ہینڈلر دھاگوں کے لیے TCP سوکٹ منسلک ٹائم آؤٹ (ms)۔"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "ٹنل IV ڈی ڈاپ فلٹر کی طاقت: اس کے دو بفر میں سے ہر ایک 2^n بِٹس رکھتا ہے، اس لیے جوڑا 2^(n-2) بائٹس کا ہوتا ہے۔ جو IVs واقعی دیکھے گئے ان کی بنیاد پر طے کیا جاتا ہے؛ بہت چھوٹا ہونے پر اچھا ٹنل ڈیٹا ڈراپ ہوتا نظر آتا ہے۔"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV ڈیڈپ فلٹر سائز؛ بہت چھوٹا درست ٹنل ڈیٹا ڈراپ کرتا ہے۔"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ٹرانزٹ مسترد کرنے سے پہلے پیغام کی زیادہ سے زیادہ اوسط تاخیر (ms)۔"

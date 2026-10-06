@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME düzgün şəkildə dayandırılır"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME işləmir."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME işləyir: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME işləyir:  PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME işlək proqram artıq quraşdırılıb."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "$APP_LONG_NAME işlək proqramı quraşdırılır "
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "$DIST_OS üçün quraşdırma hazırda dəstəklənmir "
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr " $APP_LONG_NAME işlək proqramı silinir"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr " $APP_LONG_NAME işlək proqramı hazırda quraşdırılmayıb. "
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "$DIST_OS üçün Sil hazırda dəstəklənmir"
 
 msgid "Commands:"
 msgstr "Əmrlər:"
@@ -142,3 +122,14 @@ msgstr "I2P-nin əsas istifadəçi kimi işlətməniz tövsiyə \"olunmur\"."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Əsas olaraq işlətmək üçün i2prouter faylını dəyişin və ALLOW_ROOT=true tənzimləyin."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME işləmir."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME işləyir: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

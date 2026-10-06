@@ -124,6 +124,12 @@ msgstr "Rekan tanpa alamat IP yang dipublikasikan"
 msgid "Average tunnel build success %"
 msgstr "Rata-rata keberhasilan pembangunan terowongan %"
 
+msgid "Memory used by the JVM"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
 msgid "No transports"
 msgstr "Tidak ada transport (tersembunyi atau sedang dinyalakan?)"
 
@@ -1883,6 +1889,12 @@ msgstr "Tidak ada yang ditampilkan - tidak ada statistik yang ditentukan!"
 msgid "Bandwidth Usage"
 msgstr "Penggunaan bandwidth"
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "mengakhiri {0} yang lalu"
@@ -1997,6 +2009,24 @@ msgstr "Efek cahaya"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Tambahkan efek cahaya pada garis grafik"
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
+msgstr ""
 
 msgid "Select Stats"
 msgstr "Pilih Statistik"
@@ -3324,8 +3354,8 @@ msgstr "Diketahui"
 msgid "Total entries in network database"
 msgstr "Total entri dalam database jaringan"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profil dengan aktivitas dalam 24 jam terakhir"
+msgid "Profiles with activity in the last hour"
+msgstr "Profil dengan aktivitas dalam 1 jam terakhir"
 
 msgid "Unreachable"
 msgstr "Tidak dapat dijangkau"
@@ -3531,6 +3561,9 @@ msgstr "Kecepatan"
 
 msgid "Low Latency"
 msgstr "Latensi Rendah"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Paket yang dikirim ulang / paket yang dikirim, sebagaimana dilaporkan oleh transportasi UDP"
@@ -5395,11 +5428,11 @@ msgstr "Buffer tulis per koneksi NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Waktu minimum antar pengiriman ulang (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Laju pertumbuhan penghindaran kemacetan."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Pengali jendela per RTT selama slow start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Kecepatan pengiriman minimum sebelum tempo dimulai (KB/dtk)."
@@ -5437,8 +5470,8 @@ msgstr "Koneksi masuk yang boleh menunggu utas penangan server yang tersedia."
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Batas default utas penangan server untuk setiap terowongan server."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Pool khusus untuk transfer data Server→Klien, membuka blokir utas penangan."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Waktu habis stall untuk transfer data Server→Klien (ms)."
@@ -5488,8 +5521,8 @@ msgstr "Persen beban sistem yang memicu putus beban-sedang."
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Durasi beban sedang sebelum menolak permintaan (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Melebarnya jendela recency rekan untuk menerima kembali rekan saat pembentukan gagal."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr ""
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Kegagalan berturut-turut sebelum backoff pool."
@@ -5527,8 +5560,8 @@ msgstr "Pengali pertumbuhan RTO per waktu habis pengiriman ulang (%, 100 = datar
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Waktu habis koneksi soket TCP untuk utas penangan server terowongan (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Eksponen filter dedup IV terowongan: masing-masing dari dua buffernya menampung 2^n bit, sehingga sepasangannya memerlukan 2^(n-2) byte. Diatur dari IV yang benar-benar terlihat; terlalu kecil akan terlihat sebagai data terowongan baik yang dibuang."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Penundaan pesan rata-rata maksimum sebelum menolak transit (ms)."

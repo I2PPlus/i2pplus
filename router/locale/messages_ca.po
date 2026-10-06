@@ -120,12 +120,10 @@ msgid "Dropping Tunnel Requests: Too slow"
 msgstr "S’estan descartant les sol·licituds de túnels: massa lent"
 
 msgid "Dropping Tunnel Requests: High job lag"
-msgstr ""
-"S’estan descartant les sol·licituds de túnels: retard elevat de les feines"
+msgstr "S’estan descartant les sol·licituds de túnels: retard elevat de les feines"
 
 msgid "Dropping Tunnel Requests:<br>High CPU load"
-msgstr ""
-"S’estan descartant les sol·licituds de túnels:<br>Càrrega alta de la CPU"
+msgstr "S’estan descartant les sol·licituds de túnels:<br>Càrrega alta de la CPU"
 
 msgid "Dropping Tunnel Requests: Overloaded"
 msgstr "S’estan descartant les sol·licituds de túnels: sobrecàrrega"

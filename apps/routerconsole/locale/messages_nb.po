@@ -127,6 +127,12 @@ msgstr "Noder uten en publisert IP-adresse"
 msgid "Average tunnel build success %"
 msgstr "Gjennomsnittlig tunnelbyggingssuksess %"
 
+msgid "Memory used by the JVM"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
 msgid "No transports"
 msgstr "Ingen transport (gjemt eller starter opp?)"
 
@@ -1899,6 +1905,12 @@ msgstr "Ingenting å vise - ingen statistikk angitt!"
 msgid "Bandwidth Usage"
 msgstr "Båndbreddebruk"
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "sluttet for {0}  siden"
@@ -2017,6 +2029,24 @@ msgstr "Glødeeffekt"
 # /java/src/net/i2p/router/web/helpers/GraphHelper.java:497
 msgid "Add a glow effect to graph lines"
 msgstr "Legg til en glødeeffekt på graflinjer"
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
+msgstr ""
 
 msgid "Select Stats"
 msgstr "Velg statistikk"
@@ -3396,8 +3426,8 @@ msgstr "Kjent"
 msgid "Total entries in network database"
 msgstr "Totalt antall oppføringer i nettverksdatabasen"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profiler med aktivitet siste 24 timer"
+msgid "Profiles with activity in the last hour"
+msgstr "Profiler med aktivitet siste 1 time"
 
 msgid "Unreachable"
 msgstr "Ikke tilgjengelige"
@@ -3605,6 +3635,9 @@ msgstr "Hastighet"
 
 msgid "Low Latency"
 msgstr "Lav ventetid"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Omsendte pakker / sendte pakker, slik det rapporteres av UDP-transporten"
@@ -5482,11 +5515,11 @@ msgstr "Skrivebuffer per NTCP-tilkobling."
 msgid "Min time between retransmissions (ms)."
 msgstr "Minste tid mellom omsendinger (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Vekstrate for unngåelse av konsentrasjon."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Vindusmultiplikator per RTT under langsom start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimum sendehastighet før pacing starter (KB/s)."
@@ -5524,8 +5557,8 @@ msgstr "Innkommende tilkoblinger som kan vente på en ledig tjenerebehandlingstr
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Standardtak på tjenerebehandlingstråder for hver servertunnel."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Dedikert pool for dataoverføring fra Server→Klient, frigjør behandlingstråder."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Stall-tidsavbrudd for dataoverføringer fra Server→Klient (ms)."
@@ -5575,8 +5608,8 @@ msgstr "Systemlastprosent som utløser moderat-last-frakobling."
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Varighet av moderat last før avslag av forespørsler (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Utvider node-nyhetsvindu for å slippe inn noder på nytt når bygginger feiler."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr ""
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Konssekutive feil før pool-tilbaketrekning."
@@ -5614,8 +5647,8 @@ msgstr "RTO-vekstmultiplikator per omsendingstidsavbrudd (%, 100 = flat)."
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "TCP-socket-tilkoblingstidsavbrudd for tunneltjener-behandlingstråder (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Eksponent for tunnelens IV-dedup-filter: hver av de to bufferne inneholder 2^n biter, så paret koster 2^(n-2) byte. Størrelsen bestemmes av IV-ene som faktisk er observert; for liten størrelse viser seg som at gode tunneldata blir forkastet."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maks gjennomsnittlig meldingsforsinkelse før avvisning av transitt (ms)."

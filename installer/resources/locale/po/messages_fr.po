@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Fermeture respectueuse de $APP_LONG_NAME"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME n’est pas en cours d’exécution."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME est en cours d’exécution : PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME est en cours d’exécution: PID:$pid, Enveloppeur:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "Le démon de $APP_LONG_NAME est déjà installé."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Installation du démon de $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "L’installation n’est actuellement pas prise en charge pour $DIST_OS"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Suppression du démon de $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "Le démon de $APP_LONG_NAME n’est actuellement pas installé."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "La suppression n’est actuellement pas prise en charge pour $DIST_OS"
 
 msgid "Commands:"
 msgstr "Commandes :"
@@ -142,3 +122,14 @@ msgstr "Il n’est *pas* recommandé d’exécuter I2P en tant que root."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Pour quand même exécuter en tant que root, modifier i2prouter et définir ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME n’est pas en cours d’exécution."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME est en cours d’exécution : PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

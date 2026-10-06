@@ -126,6 +126,12 @@ msgstr "প্রকাশিত IP ঠিকানাবিহীন পিয�
 msgid "Average tunnel build success %"
 msgstr "গড় টানেল নির্মাণ সাফল্যের হার %"
 
+msgid "Memory used by the JVM"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
 msgid "No transports"
 msgstr "কোনো ট্রান্সপোর্ট নেই"
 
@@ -1889,6 +1895,12 @@ msgstr "প্রদর্শনের কিছু নেই - কোনো প
 msgid "Bandwidth Usage"
 msgstr "ব্যান্ডউইথ ব্যবহার"
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} আগে শেষ"
@@ -2003,6 +2015,24 @@ msgstr "গ্লো প্রভাব"
 
 msgid "Add a glow effect to graph lines"
 msgstr "গ্রাফ লাইনে গ্লো প্রভাব যোগ করুন"
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
+msgstr ""
 
 msgid "Select Stats"
 msgstr "পরিসংখ্যান নির্বাচন"
@@ -3330,8 +3360,8 @@ msgstr "পরিচিত"
 msgid "Total entries in network database"
 msgstr "নেটওয়ার্ক ডাটাবেসে মোট এন্ট্রি"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "গত 24 ঘন্টার কার্যকলাপ সহ প্রোফাইল"
+msgid "Profiles with activity in the last hour"
+msgstr "গত 1 ঘন্টার কার্যকলাপ সহ প্রোফাইল"
 
 msgid "Unreachable"
 msgstr "অপ্রাপ্য"
@@ -3539,6 +3569,9 @@ msgstr "গতি"
 
 msgid "Low Latency"
 msgstr "নিম্ন বিলম্ব"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP ট্রান্সপোর্ট অনুসারে পুনঃপ্রেরিত প্যাকেট / প্রেরিত প্যাকেট"
@@ -5406,11 +5439,11 @@ msgstr "প্রতি NTCP সংযোগে রাইট বাফার।"
 msgid "Min time between retransmissions (ms)."
 msgstr "পুনঃপ্রেরণগুলির মধ্যে সর্বনিম্ন সময় (ms)।"
 
-msgid "Congestion avoidance growth rate."
-msgstr "কনজেশন পরিহার বৃদ্ধির হার।"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "স্লো স্টার্টের সময় প্রতি RTT উইন্ডো গুণক।"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "পেসিং কিক ইন (KB/s) আগে ন্যূনতম প্রেরণ হার।"
@@ -5448,8 +5481,8 @@ msgstr "এমন ইনবাউন্ড সংযোগ যেগুলি �
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "প্রতিটি সার্ভার টানেলের জন্য সার্ভার হ্যান্ডলার থ্রেডের ডিফল্ট ক্যাপ।"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "সার্ভার→ক্লায়েন্ট ডেটা ট্রান্সফারের জন্য ডেডিকেটেড পুল, হ্যান্ডলার থ্রেড অবরোধমুক্ত করে।"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "সার্ভার→ক্লায়েন্ট ডেটা ট্রান্সফারের জন্য স্টল টাইমআউট (ms)।"
@@ -5499,8 +5532,8 @@ msgstr "মাঝারি-লোড ডিসকানেক্ট ট্রি
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "অনুরোধ প্রত্যাখ্যানের আগে মাঝারি লোডের স্থিতিকাল (ms)।"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "বিল্ড ব্যর্থ হলে পিয়ার পুনরায় গ্রহণের জন্য পিয়ার রিসেন্সি উইন্ডো প্রসারিত করে।"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr ""
 
 msgid "Consecutive failures before pool backoff."
 msgstr "পুল ব্যাকঅফের আগে ক্রমাগত ব্যর্থতা।"
@@ -5538,8 +5571,8 @@ msgstr "প্রতি পুনঃপ্রেরণ সময়সীমা�
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "টানেল সার্ভার হ্যান্ডলার থ্রেডের জন্য TCP সকেট সংযোগ সময়সীমা (ms)।"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "টানেল IV ডিডাপ ফিল্টারের প্রকাশক: এর দুটি বাফারের প্রতিটিতে 2^n বিট থাকে, তাই জোড়াটির খরচ 2^(n-2) বাইট। প্রকৃতপক্ষে দেখা IV থেকে আকার নির্ধারিত হয়; খুব ছোট হলে ভালো টানেল ডেটা বাদ পড়ছে বলে লক্ষণ দেখা যায়।"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "ট্রানজিট প্রত্যাখ্যান করার আগে সর্বাধিক গড় বার্তা বিলম্ব (ms)"

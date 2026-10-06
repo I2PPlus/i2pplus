@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: he\n"
@@ -73,18 +72,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "עוצר את $APP_LONG_NAME באופן מדורג"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME לא פועל."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME פועל: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME פועל: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "daemon של $APP_LONG_NAME כבר מותקן."
 
@@ -93,20 +80,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "מתקין את daemon של $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "התקנה אינה נתמכת כרגע עבור $DIST_OS"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "מסיר את daemon של $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "daemon של $APP_LONG_NAME אינו מותקן כרגע."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "הסרה אינה נתמכת כרגע עבור $DIST_OS"
 
 msgid "Commands:"
 msgstr "פקודות:"
@@ -152,3 +131,14 @@ msgstr "הרצת I2P כמשתמש root אינה *מומלצת*."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "כדי להריץ בכל זאת כמשתמש root, ערוך את i2prouter והגדר ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME לא פועל."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME פועל: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

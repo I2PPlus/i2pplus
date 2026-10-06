@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "正在等待 $APP_LONG_NAME 自然关闭"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME 未运行"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME 已运行：PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME 已运行：PID:$pid, 封装:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "后台服务 $APP_LONG_NAME 已运行。"
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "正在安装后台服务 $APP_LONG_NAME"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "暂不支持 $DIST_OS 平台上的安装"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "正在删除后台服务 $APP_LONG_NAME"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "后台服务 $APP_LONG_NAME 未安装。"
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "暂不支持 $DIST_OS 平台上的删除"
 
 msgid "Commands:"
 msgstr "命令："
@@ -142,3 +122,14 @@ msgstr "推荐 *不要* 以 root 身份运行 I2P 。"
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "要以root运行，请编辑 i2prouter 并设置 ALLOW_ROOT=true。"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME 未运行"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME 已运行：PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

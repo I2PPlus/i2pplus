@@ -124,6 +124,12 @@ msgstr "Các máy ngang hàng không có địa chỉ IP được công bố"
 msgid "Average tunnel build success %"
 msgstr "Tỷ lệ xây dựng đường hầm trung bình thành công"
 
+msgid "Memory used by the JVM"
+msgstr "Bộ nhớ JVM đang sử dụng"
+
+msgid "maximum"
+msgstr "tối đa"
+
 msgid "No transports"
 msgstr "Không có truyền tải (bị ẩn hoặc đang khởi động?)"
 
@@ -1883,6 +1889,12 @@ msgstr "Không có gì để hiển thị - không có số liệu thống kê n
 msgid "Bandwidth Usage"
 msgstr "Sử dụng băng thông"
 
+msgid "Graph combining is not enabled"
+msgstr "Kết hợp đồ thị chưa được bật"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Chưa đủ số liệu thống kê được bật để kết hợp"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "kết thúc {0} trước"
@@ -1997,6 +2009,24 @@ msgstr "Hiệu ứng phát sáng"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Thêm hiệu ứng phát sáng cho đường biểu đồ"
+
+msgid "Smooth lines"
+msgstr "Đường mượt"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Sử dụng đường cong Bezier để vẽ đồ thị"
+
+msgid "Filled paths"
+msgstr "Vùng tô màu"
+
+msgid "Use filled areas for graphs"
+msgstr "Sử dụng vùng tô màu cho đồ thị"
+
+msgid "Combine graphs"
+msgstr "Kết hợp đồ thị"
+
+msgid "Merge related graphs into a plot"
+msgstr "Gộp các đồ thị liên quan thành một biểu đồ"
 
 msgid "Select Stats"
 msgstr "Chọn số liệu thống kê"
@@ -3324,8 +3354,8 @@ msgstr "Được biết"
 msgid "Total entries in network database"
 msgstr "Tổng số mục trong cơ sở dữ liệu mạng"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Hồ sơ có hoạt động trong 24h qua"
+msgid "Profiles with activity in the last hour"
+msgstr "Hồ sơ có hoạt động trong giờ qua"
 
 msgid "Unreachable"
 msgstr "Không thể truy cập"
@@ -3531,6 +3561,9 @@ msgstr "Tốc độ"
 
 msgid "Low Latency"
 msgstr "Độ trễ thấp"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Thời gian đi về đến đồng đẳng này trên liên kết trực tiếp, theo đo của lớp truyền tải"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Số gói tin đã truyền lại / số gói tin đã gửi, theo báo cáo của lớp truyền tải UDP"
@@ -5395,11 +5428,11 @@ msgstr "Bộ đệm ghi mỗi kết nối NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Thời gian tối thiểu giữa các lần truyền lại (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Tỷ lệ tăng tránh tắc nghẽn."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Tăng trưởng cửa sổ mỗi RTT sau khởi động chậm; cao hơn phục hồi nhanh hơn."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Hệ số nhân cửa sổ mỗi RTT trong khởi động chậm."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Tăng trưởng cửa sổ mỗi ACK trong khởi động chậm; cao hơn tăng tốc nhanh hơn."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Tốc độ gửi tối thiểu trước khi bắt đầu tăng tốc độ (KB/s)."
@@ -5437,8 +5470,8 @@ msgstr "Số kết nối đầu vào được phép chờ một luồng xử lý
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Giới hạn mặc định số luồng xử lý máy chủ cho mỗi đường hầm máy chủ."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Nhóm riêng cho việc truyền dữ liệu Server→Client, giải phóng các luồng xử lý."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Nhóm dành riêng cho truyền Server→Client, bỏ chặn các trình xử lý."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Thời gian chờ treo cho các lần truyền dữ liệu Server→Client (ms)."
@@ -5488,8 +5521,8 @@ msgstr "Phần trăm tải hệ thống kích hoạt ngắt kết nối tải tr
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Thời gian tải trung bình trước khi từ chối yêu cầu (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Mở rộng cửa sổ gần đây của đồng đẳng để kết nạp lại đồng đẳng khi xây dựng thất bại."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Mở rộng cửa sổ thời gian gần đây của đồng đẳng khi thiếu đồng đẳng nhanh."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Số lần thất bại liên tiếp trước khi lùi nhóm."
@@ -5527,8 +5560,8 @@ msgstr "Hệ số nhân tăng RTO mỗi lần hết thời gian truyền lại (
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Thời gian chờ kết nối socket TCP cho các luồng xử lý máy chủ đường hầm (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Số mũ của bộ lọc khử trùng lặp IV đường hầm: mỗi bộ đệm trong hai bộ đệm của nó chứa 2^n bit, nên cả cặp tốn 2^(n-2) byte. Được cỡ theo các IV thực sự gặp phải; quá nhỏ sẽ thể hiện ra ở việc dữ liệu đường hầm tốt bị loại bỏ."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Kích thước bộ lọc trùng lặp IV; quá nhỏ sẽ loại bỏ dữ liệu đường hầm hợp lệ."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Độ trễ tin nhắn trung bình tối đa trước khi từ chối chuyển tuyến (ms)."

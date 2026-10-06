@@ -126,6 +126,12 @@ msgstr "Pairs sans adresse IP publiée"
 msgid "Average tunnel build success %"
 msgstr "% de réussite moyenne de la construction du tunnel"
 
+msgid "Memory used by the JVM"
+msgstr "Mémoire utilisée par la JVM"
+
+msgid "maximum"
+msgstr "maximum"
+
 msgid "No transports"
 msgstr "Aucun transport (caché ou en cours de démarrage ?)"
 
@@ -1889,6 +1895,12 @@ msgstr "Rien à afficher - pas de statistique spécifiée !"
 msgid "Bandwidth Usage"
 msgstr "Utilisation de la bande passante"
 
+msgid "Graph combining is not enabled"
+msgstr "La combinaison de graphiques n'est pas activée"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Pas assez de statistiques activées pour combiner"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "se terminant il y a {0}"
@@ -2003,6 +2015,24 @@ msgstr "Effet de halo"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Ajouter un effet de halo aux lignes du graphique"
+
+msgid "Smooth lines"
+msgstr "Lignes lisses"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Utiliser des courbes de Bézier pour tracer les graphiques"
+
+msgid "Filled paths"
+msgstr "Chemins remplis"
+
+msgid "Use filled areas for graphs"
+msgstr "Utiliser des zones remplies pour les graphiques"
+
+msgid "Combine graphs"
+msgstr "Combiner les graphiques"
+
+msgid "Merge related graphs into a plot"
+msgstr "Fusionner les graphiques liés en un tracé"
 
 msgid "Select Stats"
 msgstr "Sélectionner les statistiques"
@@ -3330,8 +3360,8 @@ msgstr "Connus"
 msgid "Total entries in network database"
 msgstr "Total des entrées dans la base de données du réseau"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profils avec activité au cours des dernières 24 heures"
+msgid "Profiles with activity in the last hour"
+msgstr "Profils avec activité dans la dernière heure"
 
 msgid "Unreachable"
 msgstr "Inaccessible"
@@ -3539,6 +3569,9 @@ msgstr "Vitesse"
 
 msgid "Low Latency"
 msgstr "Faible latence"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Temps d'aller-retour vers ce pair sur la liaison directe, tel que mesuré par le transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Paquets retransmis / paquets envoyés, tel que rapporté par le transport UDP"
@@ -5406,11 +5439,11 @@ msgstr "Tampon d''écriture par connexion NTCP."
 msgid "Min time between retransmissions (ms)."
 msgstr "Temps minimal entre retransmissions (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Taux de croissance d''évitement de congestion."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Croissance de la fenêtre par RTT après le démarrage lent ; plus élevé récupère plus vite."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Multiplicateur de fenêtre par RTT durant le démarrage lent."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Croissance de la fenêtre par ACK pendant le démarrage lent ; plus élevé accélère plus vite."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Débit d'envoi minimum avant le début du rythme (Ko/s)."
@@ -5448,8 +5481,8 @@ msgstr "Connexions entrantes qui peuvent attendre un fil de gestion serveur libr
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Plafond par défaut des fils de gestion serveur pour chaque tunnel serveur."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Pool dédié au transfert de données Serveur→Client, débloque les fils de gestion."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Pool dédié aux transferts Serveur→Client, débloque les gestionnaires."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Délai d'attente de blocage pour les transferts de données Serveur→Client (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Pourcentage de charge système déclenchant la déconnexion en charge mo
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Durée de charge modérée avant refus des requêtes (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Élargit la fenêtre de récence des pairs pour réadmettre les pairs quand les constructions échouent."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Élargit la fenêtre de récence des pairs lorsque les pairs rapides manquent."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Échecs consécutifs avant retrait du pool."
@@ -5538,8 +5571,8 @@ msgstr "Multiplicateur de croissance RTO par délai de retransmission (%, 100 = 
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Délai de connexion du socket TCP pour les threads de gestion du serveur de tunnel (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Exposant du filtre de déduplication des IV de tunnel : chacun de ses deux tampons contient 2^n bits, la paire coûte donc 2^(n-2) octets. Dimensionné d'après les IV réellement observés ; une taille trop faible se manifeste par la suppression de données de tunnel pourtant valides."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "Taille du filtre de déduplication IV ; trop petit supprime des données de tunnel valides."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Délai moyen maximum des messages avant de rejeter le transit (ms)."

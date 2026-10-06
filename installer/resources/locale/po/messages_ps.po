@@ -9,7 +9,6 @@
 # Content-Type: text/plain; charset=UTF-8
 # Content-Transfer-Encoding: 8bit
 # Plural-Forms: nplurals=2; plural=(n != 1);
-#
 msgid ""
 msgstr ""
 "Language: en\n"
@@ -73,18 +72,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "$APP_LONG_NAME په مهربانۍ سره درېږی"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME نه چلېږی۔"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME چلېږی: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME چلېږی: PID:$pid، Wrapper:$STATUS، Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "د $APP_LONG_NAME daemon مخکې نصب شوی دی۔"
 
@@ -93,20 +80,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "د $APP_LONG_NAME daemon نصب کېږی"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "نصب تر اوسه د $DIST_OS لپاره ملاتړ نه کېږی"
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "د $APP_LONG_NAME daemon لیرې کېږی"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "د $APP_LONG_NAME daemon تر اوسه نصب نه دی۔"
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "لیرې کول تر اوسه د $DIST_OS لپاره ملاتړ نه کېږی"
 
 msgid "Commands:"
 msgstr "فرمانونه:"
@@ -152,3 +131,14 @@ msgstr "د I2P د root کاروونکی په توګه اجرا کول *سپار�
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "تر هغه هم د root په توګه د اجرا لپاره، i2prouter سم کړئ او ALLOW_ROOT=true وټاکئ۔"
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME نه چلېږی۔"
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME چلېږی: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

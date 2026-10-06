@@ -63,18 +63,6 @@ msgid "Stopping $APP_LONG_NAME gracefully"
 msgstr "Pysäytetään $APP_LONG_NAME siististi"
 
 #, sh-format
-msgid "$APP_LONG_NAME is not running."
-msgstr "$APP_LONG_NAME ei ole käynnissä."
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid"
-msgstr "$APP_LONG_NAME on käynnissä: PID:$pid"
-
-#, sh-format
-msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
-msgstr "$APP_LONG_NAME on käynnissä: PID:$pid, Käärin:$STATUS, Java:$JAVASTATUS"
-
-#, sh-format
 msgid "The $APP_LONG_NAME daemon is already installed."
 msgstr "$APP_LONG_NAME-taustaprosessi on jo asennettu."
 
@@ -83,20 +71,12 @@ msgid "Installing the $APP_LONG_NAME daemon"
 msgstr "Asennetaan $APP_LONG_NAME-taustaprosessi"
 
 #, sh-format
-msgid "Install not currently supported for $DIST_OS"
-msgstr "Asennus $DIST_OS -järjestelmiin ei tällä hetkellä ole tuettu."
-
-#, sh-format
 msgid "Removing $APP_LONG_NAME daemon"
 msgstr "Poistetaan $APP_LONG_NAME-taustaprosessi"
 
 #, sh-format
 msgid "The $APP_LONG_NAME daemon is not currently installed."
 msgstr "$APP_LONG_NAME-taustaprosessia ei ole asennettu."
-
-#, sh-format
-msgid "Remove not currently supported for $DIST_OS"
-msgstr "Poistamista ei tällä hetkellä ole toteutettu  $DIST_OS -järjestelmissä."
 
 msgid "Commands:"
 msgstr "Komennot:"
@@ -142,3 +122,14 @@ msgstr "I2P:n suorittamista root-käyttäjänä *ei* suositella."
 
 msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
 msgstr "Jos kuitenkin haluat suorittaa ohjelman root-käyttäjänä, muokkaa tiedostoa i2prouter ja aseta ALLOW_ROOT=true."
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr "$APP_LONG_NAME ei ole käynnissä."
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr "$APP_LONG_NAME on käynnissä: PID:$pid"
+
+msgid "  JVM:          not found (wrapper is up but no JVM was located)"
+msgstr ""

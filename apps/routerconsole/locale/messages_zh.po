@@ -124,6 +124,12 @@ msgstr "没有已发布 IP 地址的对等方"
 msgid "Average tunnel build success %"
 msgstr "平均隧道建立成功百分比"
 
+msgid "Memory used by the JVM"
+msgstr "JVM 已用内存"
+
+msgid "maximum"
+msgstr "最大值"
+
 msgid "No transports"
 msgstr "无数据传输（隐身模式或者正在启动？）"
 
@@ -1883,6 +1889,12 @@ msgstr "无内容显示 - 未指定统计信息！"
 msgid "Bandwidth Usage"
 msgstr "带宽占用"
 
+msgid "Graph combining is not enabled"
+msgstr "未启用图表合并"
+
+msgid "Not enough stats enabled to combine"
+msgstr "启用的统计项不足以合并"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} 前结束"
@@ -1997,6 +2009,24 @@ msgstr "发光效果"
 
 msgid "Add a glow effect to graph lines"
 msgstr "为图表线条添加发光效果"
+
+msgid "Smooth lines"
+msgstr "平滑线条"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "使用贝塞尔曲线绘制图表"
+
+msgid "Filled paths"
+msgstr "填充路径"
+
+msgid "Use filled areas for graphs"
+msgstr "使用填充区域绘制图表"
+
+msgid "Combine graphs"
+msgstr "合并图表"
+
+msgid "Merge related graphs into a plot"
+msgstr "将相关图表合并为一个图"
 
 msgid "Select Stats"
 msgstr "选择统计项"
@@ -3324,8 +3354,8 @@ msgstr "已知"
 msgid "Total entries in network database"
 msgstr "网络数据库中的总条目"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "过去 24 小时内有活动的个人资料"
+msgid "Profiles with activity in the last hour"
+msgstr "最近一小时内有活动的配置文件"
 
 msgid "Unreachable"
 msgstr "不可达"
@@ -3531,6 +3561,9 @@ msgstr "速度"
 
 msgid "Low Latency"
 msgstr "低延迟"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "传输层测量的到该对等点直接链路的往返时间"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "UDP 传输报告的已重传数据包数 / 已发送数据包数"
@@ -5395,11 +5428,11 @@ msgstr "每个 NTCP 连接的写入缓冲区。"
 msgid "Min time between retransmissions (ms)."
 msgstr "两次重传之间的最短时间（毫秒）。"
 
-msgid "Congestion avoidance growth rate."
-msgstr "拥塞避免增长率。"
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "慢启动后每个 RTT 的窗口增长；越高恢复越快。"
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "慢启动期间每个 RTT 的窗口乘数。"
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "慢启动期间每个 ACK 的窗口增长；越高爬升越快。"
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "启动调速之前的最低发送速率 (KB/s)。"
@@ -5437,8 +5470,8 @@ msgstr "可等待空闲服务器处理线程的入站连接数。"
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "每条服务器隧道的服务器处理线程数默认上限。"
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "用于服务器→客户端数据传输的专用池，可释放处理线程。"
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Server→Client 传输专用池，解除处理线程阻塞。"
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "服务器→客户端数据传输的停滞超时（毫秒）。"
@@ -5488,8 +5521,8 @@ msgstr "触发中等负载断开的系统负载百分比。"
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "拒绝请求前中等负载的持续时长（毫秒）。"
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "在构建失败时加宽节点最近性窗口以重新接纳节点。"
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "快速对等点不足时扩大对等点新近度窗口。"
 
 msgid "Consecutive failures before pool backoff."
 msgstr "触发池退避前的连续失败次数。"
@@ -5527,8 +5560,8 @@ msgstr "每次重传超时的 RTO 增长乘数（%，100 = 持平）。"
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "隧道服务器处理线程的 TCP 套接字连接超时（毫秒）。"
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "隧道 IV 去重过滤器的指数：其两个缓冲区各保存 2^n 位，因此这一对共占用 2^(n-2) 字节。其大小依据实际观察到的 IV 确定；过小会表现为良好的隧道数据被丢弃。"
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV 去重过滤器大小；过小会丢弃有效隧道数据。"
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "拒绝传输之前的最大平均消息延迟（毫秒）。"

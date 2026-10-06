@@ -126,6 +126,12 @@ msgstr "Dərc edilmiş IP ünvanı olmayan həmkarlar"
 msgid "Average tunnel build success %"
 msgstr "Orta tunel qurma uğuru %"
 
+msgid "Memory used by the JVM"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
 msgid "No transports"
 msgstr "Nəqliyyat yoxdur (gizli və ya başlamaq?)"
 
@@ -1889,6 +1895,12 @@ msgstr "Göstərmək üçün heç bir statistika belirtilmedi!"
 msgid "Bandwidth Usage"
 msgstr "Bant genişliyi istifadəsi"
 
+msgid "Graph combining is not enabled"
+msgstr ""
+
+msgid "Not enough stats enabled to combine"
+msgstr ""
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} əvvəl bitir"
@@ -2003,6 +2015,24 @@ msgstr "Parıltı effekti"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Diaqram xətlərinə parıltı effekti əlavə et"
+
+msgid "Smooth lines"
+msgstr ""
+
+msgid "Use bezier curves to plot graphs"
+msgstr ""
+
+msgid "Filled paths"
+msgstr ""
+
+msgid "Use filled areas for graphs"
+msgstr ""
+
+msgid "Combine graphs"
+msgstr ""
+
+msgid "Merge related graphs into a plot"
+msgstr ""
 
 msgid "Select Stats"
 msgstr "Stats seçin"
@@ -3330,8 +3360,8 @@ msgstr "Məlumdur"
 msgid "Total entries in network database"
 msgstr "Şəbəkə verilənlər bazasındakı ümumi qeydlər"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Son 24 saat ərzində aktivliyi olan profillər"
+msgid "Profiles with activity in the last hour"
+msgstr "Son 1 saat ərzində aktivliyi olan profillər"
 
 msgid "Unreachable"
 msgstr "Əlçatmaz"
@@ -3539,6 +3569,9 @@ msgstr "Sürət"
 
 msgid "Low Latency"
 msgstr "Aşağı gecikmə"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr ""
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Yenidən göndərilən paketlər / göndərilən paketlər, UDP nəqliyyatı tərəfindən bildirildiyi kimi"
@@ -5406,11 +5439,11 @@ msgstr "NTCP bağlantısı başına yazma buferi."
 msgid "Min time between retransmissions (ms)."
 msgstr "Təkrar ötürmələr arasındakı minimum vaxt (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Tıxacdan qaçınma böyümə sürəti."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr ""
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Yavaş başlanğıc zamanı RTT başına pəncərə çarpansı."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr ""
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Pacing başlamazdan əvvəl minimum göndərmə sürəti (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Boş server işləyici mövzusu üçün gözləyə bilən gələn qoşul
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Hər bir server tuneli üçün server işləyici mövzularina standart tavan."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Server→Client məlumat ötürülməsi üçün xüsusi hovuz, işləyici mövzulardan blokdan çıxarır."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr ""
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Server→Client məlumat ötürмələri üçün donma vaxt aşımı (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Orta yüklü kəsintini tetikləyən sistem yük faizi."
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Sorğular rədd edilmədən əvvəlki orta yüklü müddət (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Qurulmalar uğursuz olduqda qovşaqları yenidən qəbul etmək üçün qovşaq yenilik pəncərəsini genişləndirir."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr ""
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Hovuz geri çəkilməsindən əvvəlki ardıcıl uğursuzluqlar."
@@ -5538,8 +5571,8 @@ msgstr "Təkrar ötürmə vaxtı başına RTO böyümə çarpansı (%, 100 = sab
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Tunel server işləyici mövzuları üçün TCP soket qoşulma vaxtı (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Tunel IV təkrarsızlıq filtrinin eksponenti: onun iki buferindən hər biri 2^n bit saxlayır, ona görə cüt 2^(n-2) bayt tutar. Həqiqətən görülən IV-lərdən hesablanır; çox kiçik olması yaxşı tunel məlumatının atılması kimi görünür."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr ""
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Tranzitdən imtina etməzdən əvvəl maksimum orta mesaj gecikməsi (ms)."

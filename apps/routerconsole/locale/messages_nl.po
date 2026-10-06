@@ -126,6 +126,12 @@ msgstr "Peers zonder gepubliceerd IP-adres"
 msgid "Average tunnel build success %"
 msgstr "Gemiddeld succespercentage tunnelbouw"
 
+msgid "Memory used by the JVM"
+msgstr "Geheugen gebruikt door de JVM"
+
+msgid "maximum"
+msgstr "maximum"
+
 msgid "No transports"
 msgstr "Geen transport (verborgen of aan het opstarten?)"
 
@@ -1889,6 +1895,12 @@ msgstr "Niets om weer te geven - geen status opgegeven!"
 msgid "Bandwidth Usage"
 msgstr "Bandbreedte gebruik"
 
+msgid "Graph combining is not enabled"
+msgstr "Grafieken combineren is niet ingeschakeld"
+
+msgid "Not enough stats enabled to combine"
+msgstr "Niet genoeg statistieken ingeschakeld om te combineren"
+
 #, java-format
 msgid "ending {0} ago"
 msgstr "{0} geleden geeindigd"
@@ -2003,6 +2015,24 @@ msgstr "Gloeieffect"
 
 msgid "Add a glow effect to graph lines"
 msgstr "Gloeieffect toevoegen aan grafieklijnen"
+
+msgid "Smooth lines"
+msgstr "Vloeiende lijnen"
+
+msgid "Use bezier curves to plot graphs"
+msgstr "Gebruik Bézier-curven om grafieken te tekenen"
+
+msgid "Filled paths"
+msgstr "Gevulde paden"
+
+msgid "Use filled areas for graphs"
+msgstr "Gebruik gevulde gebieden voor grafieken"
+
+msgid "Combine graphs"
+msgstr "Grafieken combineren"
+
+msgid "Merge related graphs into a plot"
+msgstr "Voeg verwante grafieken samen in één plot"
 
 msgid "Select Stats"
 msgstr "Selecteer Statistieken"
@@ -3330,8 +3360,8 @@ msgstr "Bekend"
 msgid "Total entries in network database"
 msgstr "Totaal aantal vermeldingen in netwerkdatabase"
 
-msgid "Profiles with activity in the last 24h"
-msgstr "Profielen met activiteit in de afgelopen 24 uur"
+msgid "Profiles with activity in the last hour"
+msgstr "Profielen met activiteit in het laatste uur"
 
 msgid "Unreachable"
 msgstr "Onbereikbaar"
@@ -3539,6 +3569,9 @@ msgstr "Snelheid"
 
 msgid "Low Latency"
 msgstr "Lage latentie"
+
+msgid "Round trip time to this peer on the direct link, as measured by the transport"
+msgstr "Round trip time naar deze peer op de directe link, zoals gemeten door het transport"
 
 msgid "Packets retransmitted / packets sent, as reported by the UDP transport"
 msgstr "Hertransmissies / verzonden pakketten, zoals gerapporteerd door het UDP-transport"
@@ -5406,11 +5439,11 @@ msgstr "Schrijfbuffer per NTCP-verbinding."
 msgid "Min time between retransmissions (ms)."
 msgstr "Minimale tijd tussen retransmissies (ms)."
 
-msgid "Congestion avoidance growth rate."
-msgstr "Grocisnelheid voor congestievermijding."
+msgid "Window growth per RTT after slow start; higher recovers faster."
+msgstr "Venstergroei per RTT na slow start; hoger herstelt sneller."
 
-msgid "Window multiplier per RTT during slow start."
-msgstr "Venstervermenigvuldiger per RTT tijdens slow start."
+msgid "Window growth per ACK during slow start; higher ramps faster."
+msgstr "Venstergroei per ACK tijdens slow start; hoger ramp-up sneller."
 
 msgid "Minimum send rate before pacing kicks in (KB/s)."
 msgstr "Minimale verzendsnelheid voordat pacing wordt geactiveerd (KB/s)."
@@ -5448,8 +5481,8 @@ msgstr "Inkomende verbindingen die mogen wachten op een vrije serververwerkingst
 msgid "Default cap on server handler threads for each server tunnel."
 msgstr "Standaardbovengrens op serververwerkingsthreads voor elke servertunnel."
 
-msgid "Dedicated pool for Server→Client data transfer, unblocks handler threads."
-msgstr "Toegewijde pool voor Server→Client-gegevensoverdracht, ontlast verwerkingsthreads."
+msgid "Dedicated pool for Server→Client transfers, unblocks handlers."
+msgstr "Toegewezen pool voor Server→Client-overdrachten, deblokkeert handlers."
 
 msgid "Stall timeout for Server→Client data transfers (ms)."
 msgstr "Stall-time-out voor Server→Client-gegevensoverdrachten (ms)."
@@ -5499,8 +5532,8 @@ msgstr "Systeembelastingspercentage dat verbinding bij matige belasting verbreek
 msgid "Duration of moderate load before declining requests (ms)."
 msgstr "Duur van matige belasting vóór weigeren van verzoeken (ms)."
 
-msgid "Widens peer recency window to re-admit peers when builds fail."
-msgstr "Verbreedt het recentievenster van peers om peers opnieuw toe te laten wanneer opbouw mislukt."
+msgid "Widens the peer recency window when fast peers run short."
+msgstr "Verbreedt de peer recentheid wanneer snelle peers op zijn."
 
 msgid "Consecutive failures before pool backoff."
 msgstr "Opeenvolgende mislukkingen vóór terugval van pool."
@@ -5538,8 +5571,8 @@ msgstr "RTO-groeivermenigvuldiger per retransmissie-time-out (%, 100 = vlak)."
 msgid "TCP socket connect timeout for tunnel server handler threads (ms)."
 msgstr "Time-out voor TCP-socketverbinding voor tunnel-serververwerkingsthreads (ms)."
 
-msgid "Exponent of the tunnel IV dedup filter: each of its two buffers holds 2^n bits, so the pair costs 2^(n-2) bytes. Sized from the IVs actually seen; too small shows up as good tunnel data being dropped."
-msgstr "Exponent van het tunnel-IV-dedupfilter: elk van de twee buffers bevat 2^n bits, dus het paar kost 2^(n-2) bytes. Wordt bepaald op basis van de werkelijk gezien IVs; te klein komt tot uiting als goede tunnelgegevens worden weggegooid."
+msgid "IV dedup filter size; too small drops valid tunnel data."
+msgstr "IV dedup filtergrootte; te klein valt geldige tunnelgegevens."
 
 msgid "Max average message delay before rejecting transit (ms)."
 msgstr "Maximale gemiddelde berichtvertraging voordat transit wordt afgewezen (ms)."
