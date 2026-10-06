@@ -2318,10 +2318,26 @@
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/i2prouter" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/osid" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/postinstall.sh" todir="${pkg.temp.dir}/"/>
+      <copy quiet="true" verbose="false" file="installer/resources/platform-specific/unix/uninstall-i2p.sh" todir="${pkg.temp.dir}/"/>
       <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/man/">
         <fileset dir="installer/resources/platform-specific/unix/man/"/>
       </copy>
     </parallel>
+    <!--
+      Every staged script needs +x here, not just the ones the user runs by hand.
+
+      IzPack's unpacker never calls setExecutable: UnpackerBase hands the files to
+      FileExecutor and the only thing that adds +x at install time is a
+      /bin/chmod a+x run on behalf of an <executable> entry. A script with no such
+      entry therefore relies entirely on the mode surviving the pack, which it does
+      (eepget arrives executable and has no <executable> entry). The runtime chmod is
+      the belt to this braces; marking the file here is what keeps the install quiet
+      when the target is missing the file and the chmod has nothing to chmod.
+
+      i2prouter, runplain.sh, osid and postinstall.sh were absent from this list, so
+      postinstall.sh's own chmod was load-bearing - and it is the step that fails
+      first when re-installing over a directory it has already run in.
+    -->
     <chmod perm="+x" type="file" verbose="true">
       <fileset dir="${pkg.temp.dir}/">
         <include name="eepget"/>
@@ -2329,6 +2345,11 @@
         <include name="i2ping"/>
         <include name="hostping"/>
         <include name="graceful_update"/>
+        <include name="i2prouter"/>
+        <include name="runplain.sh"/>
+        <include name="osid"/>
+        <include name="postinstall.sh"/>
+        <include name="uninstall-i2p.sh"/>
       </fileset>
     </chmod>
   </target>
