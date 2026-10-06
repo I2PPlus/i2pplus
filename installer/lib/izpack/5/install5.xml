@@ -108,7 +108,14 @@
   <resources>
     <res id="installer.langsel.img" src="installer/lib/izpack/resources/images/i2plogo2.png"/>
     <res id="Installer.image" src="installer/lib/izpack/resources/images/i2plogo.png"/>
-    <res id="HTMLHelloPanel.info" src="installer/lib/izpack/resources/welcome.html"/>
+    <!--
+         Id must be HTMLInfoPanel.info, not HTMLHelloPanel.info: the running panel is our
+         LocalizedHTMLInfoPanel subclass, and IzPack derives the resource name from the class
+         it instantiated, so the stock prefix is what it asks with. LocalizedResources
+         rebases our name onto this one before looking it up. No HTMLHelloPanel is declared
+         anywhere in this descriptor, so the old id resolved for nothing.
+    -->
+    <res id="HTMLInfoPanel.info" src="installer/lib/izpack/resources/welcome.html"/>
     <!--
          Per-language welcome pages. IzPack fetches an HTML panel's body by resource
          name and never through the langpack, so without these every language sees
@@ -194,7 +201,15 @@
          Resources.getURL(), which never consults the langpack, so the stock
          HTMLHelloPanel shows one welcome.html for every language. This resolves
          welcome_<iso3>.html and falls back to welcome.html, so a translation is
-         added simply by registering the file. Built by ant izpack-panel-jar. -->
+         added simply by registering the file.
+         It needs three classes, not one: IzPack resolves a panel's console
+         counterpart and automation helper from the declared class name, so without
+         LocalizedHTMLInfoConsolePanel and LocalizedHTMLInfoPanelAutomationHelper a
+         -console or -options-auto install dies on this panel with "Console
+         implementation not found". The GUI never looks for them, which is why the
+         omission only ever showed up in text mode - IzPack 4 is unaffected because
+         it uses the stock HelloPanel. LocalizedResourcesTest asserts both resolve.
+         Built by ant izpack-panel-jar. -->
     <panel classname="net.i2p.installer.LocalizedHTMLInfoPanel"/>
 
     <panel classname="TargetPanel"/>

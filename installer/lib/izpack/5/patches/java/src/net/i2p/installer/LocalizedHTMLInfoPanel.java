@@ -37,6 +37,11 @@ import com.izforge.izpack.panels.htmlinfo.HTMLInfoPanel;
  * virtually when it loads the body, so overriding that is enough - the resource name the
  * superclass computes in its constructor is just the key we rewrite here.
  *
+ * <p>That rewrite does not reach the panel's header: {@code PanelHelper} reads
+ * {@code installData.getMessages()} for it. The header is blanked through
+ * CustomLangPack.xml instead - see
+ * {@link #LocalizedHTMLInfoPanel(Panel, InstallerFrame, GUIInstallData, Resources, Log)}.
+ *
  * @since 0.9.71+
  */
 public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
@@ -49,6 +54,17 @@ public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
 
     /** The language-neutral body, used when no translation has been supplied. */
     private static final String FALLBACK = "welcome.html";
+
+    /**
+     * The superclass's simple name, which is the resource prefix IzPack would have used had
+     * the descriptor named {@code HTMLInfoPanel}.
+     *
+     * <p>See the class comment: this prefix has to be put back, or nothing resolves.
+     */
+    private static final String SUPER_SIMPLE_NAME = "HTMLInfoPanel";
+
+    /** This class's own simple name, the prefix IzPack actually asks with. */
+    private static final String OWN_SIMPLE_NAME = "LocalizedHTMLInfoPanel";
 
     /** Built once: getResources() is called for every string the panel renders. */
     private transient Resources localized;
@@ -63,6 +79,22 @@ public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
      * fails at runtime with "unsatisfied dependency 'class java.lang.Boolean'". Both
      * constructors are mirrored here for that reason, and the five-argument one passes
      * {@code true}, exactly as the stock class does.
+     *
+     * <p>{@code writeConfig=true} builds the panel's header label, which is blanked rather than
+     * removed. The label's text is {@code PanelHelper.getPanelTitleMessageKey(panel, "info",
+     * installData)}, and that helper cannot be reached from here: it reads
+     * {@code installData.getMessages()} directly, never through {@link #getResources()}, so the
+     * rewrite in {@link LocalizedResources} does not apply to it. It derives the key
+     * {@code LocalizedHTMLInfoPanel.info} from the class name it finds in the descriptor, no
+     * langpack defines that key, and {@code LocaleDatabase.get} answers an unknown key with
+     * the key itself - so the header rendered the literal text "LocalizedHTMLInfoPanel.info"
+     * above the welcome text in every language.
+     *
+     * <p>The key is blanked from outside instead: CustomLangPack.xml carries
+     * {@code <str id="LocalizedHTMLInfoPanel.info" txt=""/>}, and IzPack merges that pack over
+     * whichever langpack the user picked with {@code LocaleDatabase.add}, a TreeMap putAll, so
+     * one entry covers every language including English - see
+     * installer/lib/izpack/gen-izpack-langpacks.py.
      */
     public LocalizedHTMLInfoPanel(com.izforge.izpack.api.data.Panel panel,
                                   com.izforge.izpack.installer.gui.InstallerFrame frame,
@@ -105,6 +137,30 @@ public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
     }
 
     /**
+     * Puts the superclass's resource prefix back on a name IzPack derived from our class.
+     *
+     * <p>IzPack names a panel's resources {@code <PanelClass>.<suffix>}, taking the class name
+     * from the object it instantiated, so subclassing renames every key the panel asks for:
+     * {@code HTMLInfoPanel.info} becomes {@code LocalizedHTMLInfoPanel.info}, which no
+     * {@code <res>} entry provides. Both of our panels need this - the GUI one through
+     * {@link LocalizedResources}, the console one directly, since picocontainer injects the
+     * installer-wide Resources and there is no proxy to intercept it.
+     *
+     * <p>Only the leading prefix is rewritten, and only when it is ours, so a per-language body
+     * name, a second suffix such as {@code .winservice}, and any unrelated name pass through.
+     *
+     * @param name a resource name as IzPack computed it, or null
+     * @return the name with the superclass's prefix, or null if {@code name} is null
+     * @since 0.9.71+
+     */
+    static String rebaseResourceName(String name) {
+        if (name == null || !name.startsWith(OWN_SIMPLE_NAME + ".")) {
+            return name;
+        }
+        return SUPER_SIMPLE_NAME + name.substring(OWN_SIMPLE_NAME.length());
+    }
+
+    /**
      * Delegates everything, and rewrites the panel's body resource to the language-specific
      * one when it exists.
      *
@@ -124,7 +180,8 @@ public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
 
         @Override
         public URL getURL(String name) throws ResourceNotFoundException {
-            if (iso3 != null && name != null && name.endsWith(".info")) {
+            String rebased = rebase(name);
+            if (iso3 != null && rebased != null && rebased.endsWith(".info")) {
                 // Resources.getURL throws rather than returning null when the name is
                 // absent, and "no translation yet" is the normal case, so the miss is
                 // expected here rather than exceptional.
@@ -135,7 +192,39 @@ public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
                     // language-neutral body.
                 }
             }
-            return delegate.getURL(name);
+            return delegate.getURL(rebased == null ? name : rebased);
+        }
+
+        /**
+         * Puts the superclass's resource prefix back on a name derived from this class.
+         *
+         * <p>IzPack names a panel's resources {@code <PanelClass>.<suffix>}, and it takes the
+         * class name from the object it instantiated. Subclassing therefore renames every
+         * resource and langpack key the panel asks for: {@code HTMLInfoPanel.info} becomes
+         * {@code LocalizedHTMLInfoPanel.info}, which no {@code <res>} entry provides, and the
+         * panel dies with "Cannot find named resource". Substituting the class is what a
+         * subclass has to do to keep the descriptor's own ids working.
+         *
+         * <p>{@link #getURL} and all three {@code getString} overloads need this, and they
+         * fail differently. {@code getURL} throws on a missing name, so the body lookup dies
+         * loudly. The string lookups fail silently: {@code LocaleDatabase.get} answers an
+         * unknown key with the key itself rather than null, so an unrewritten
+         * {@code ...info} or {@code ...headline} lookup hands the caller the literal key name.
+         *
+         * <p>The panel's own header was never one of those four: it resolves in
+         * {@code installData.getMessages()}, past this proxy, so it needs the blank entry in
+         * CustomLangPack rather than this rewrite. The rewrite is kept so a panel-prefixed
+         * key resolves the same way whichever path asks for it, and
+         * {@link LocalizedHTMLInfoConsolePanel} needs it for the same reason.
+         *
+         * <p>Only the leading prefix is rewritten, and only when it is ours, so the per-language
+         * and fallback names below are unaffected and any unrelated name passes through.
+         *
+         * @param name the resource name as IzPack computed it, or null
+         * @return the name with the superclass prefix, or null if {@code name} is null
+         */
+        private String rebase(String name) {
+            return rebaseResourceName(name);
         }
 
         @Override
@@ -145,17 +234,17 @@ public class LocalizedHTMLInfoPanel extends HTMLInfoPanel {
 
         @Override
         public String getString(String name) {
-            return delegate.getString(name);
+            return delegate.getString(rebase(name));
         }
 
         @Override
         public String getString(String name, String defaultValue) {
-            return delegate.getString(name, defaultValue);
+            return delegate.getString(rebase(name), defaultValue);
         }
 
         @Override
         public String getString(String name, String param, String defaultValue) {
-            return delegate.getString(name, param, defaultValue);
+            return delegate.getString(rebase(name), param, defaultValue);
         }
 
         @Override

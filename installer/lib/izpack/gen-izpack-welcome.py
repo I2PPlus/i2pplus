@@ -80,6 +80,53 @@ def build_page(template, translated):
     return out
 
 
+def panel_prefix():
+    """The resource prefix that must carry the welcome body.
+
+    IzPack derives a panel's resource names from the class it instantiated, which here is
+    our subclass, so the raw name it asks with is not the one the descriptor should use:
+    LocalizedHTMLInfoPanel rebases it onto the stock class before looking anything up, so
+    the body has to be registered under that rebased id.
+    """
+    text = open(os.path.join(REPO, "installer/lib/izpack/5/install5.xml"),
+                encoding="iso-8859-1").read()
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    for m in re.finditer(r'<panel classname="([A-Za-z0-9_.]*[A-Za-z0-9])"', text):
+        simple = m.group(1).rsplit(".", 1)[-1]
+        if "HTML" in simple and "Panel" in simple:
+            return body_resource_id()
+    raise SystemExit("gen-izpack-welcome: no HTML info panel declared in install5.xml")
+
+
+def body_resource_id():
+    """The <res> id that must carry the welcome body, taken from the panel itself.
+
+    LocalizedHTMLInfoPanel rewrites the resource prefix IzPack derives from the declared
+    panel class back onto the stock class, because the descriptor's <res> ids are written
+    against the stock class. Rather than reimplement that here - which is how the two drift -
+    the panel and its test are asked directly. The test is the authority: it exercises the
+    real getURL against a Resources that throws on a miss, exactly as IzPack's does, and it
+    fails if the prefix, the descriptor and the rebase stop agreeing.
+
+    Getting this wrong is silent at build time and fatal at runtime: with the stock
+    HTMLHelloPanel id the panel died on its second screen with "Cannot find named resource".
+    """
+    src = os.path.join(REPO, "installer/lib/izpack/5/patches/java/test/net/i2p/installer",
+                       "LocalizedResourcesTest.java")
+    if not os.path.exists(src):
+        raise SystemExit("gen-izpack-welcome: %s is missing" % src)
+    java = open(src, encoding="utf-8").read()
+    # Read the expectation explicitly marked <body-resource-id>, not merely the first one:
+    # the test also covers the historical HTMLHelloPanel name, and taking whichever came
+    # first would silently pin that instead of the live contract.
+    m = re.search(r'expect\(\s*"([A-Za-z0-9_]+)\.info"[^)]*<body-resource-id>', java)
+    if not m:
+        raise SystemExit("gen-izpack-welcome: %s has no expectation marked "
+                         "<body-resource-id>; it cannot be told which id install5.xml must "
+                         "provide" % src)
+    return m.group(1)
+
+
 def declared():
     text = re.sub(r"<!--.*?-->", "", open(os.path.join(REPO, INSTALL5),
                                          encoding="iso-8859-1").read(), flags=re.S)
@@ -123,7 +170,18 @@ def main():
             print("page not registered as a resource: welcome_%s.html" % c)
         if missing or unregistered:
             return 1
-        print("all %d languages have a registered welcome page" % len(langs))
+        # The panel prefix and the body id must agree, or the panel cannot load its own body.
+        want = "%s.info" % panel_prefix()
+        text = re.sub(r"<!--.*?-->", "",
+                      open(os.path.join(REPO, INSTALL5), encoding="iso-8859-1").read(),
+                      flags=re.S)
+        if ('<res id="%s"' % want) not in text:
+            print("install5.xml declares the welcome panel as %s but has no "
+                  '<res id="%s"> for its body; the panel would fail to load'
+                  % (panel_prefix(), want))
+            return 1
+        print("all %d languages have a registered welcome page, body id %s"
+              % (len(langs), want))
         return 0
 
     if not args.table:
