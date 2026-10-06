@@ -13,6 +13,9 @@
   installer.reversetitle is the window title the uninstaller uses. None of our
   langpacks carries it, so it would otherwise fall back to the distribution's
   English wording in every language; stating it here makes that deliberate.
+
+  LocalizedHTMLInfoPanel.info is the heading our welcome panel looks itself up under.
+  See INFO_PANEL above for why it has to be blanked rather than translated.
 -->
 <izpack:langpack version="5.0"
                  xmlns:izpack="http://izpack.org/schema/langpack"
@@ -21,4 +24,5 @@
 
     <str id="installer.madewith" txt=""/>
     <str id="installer.reversetitle" txt="I2P+ Installation Wizard [$APP_VER]"/>
+    <str id="LocalizedHTMLInfoPanel.info" txt=""/>
 </izpack:langpack>

@@ -4,7 +4,9 @@
   1. Every code a descriptor declares has a langpack the compiler can reach, so a
      language /configui offers never silently falls back to English.
 
-  2. No reachable langpack renders "Made with IzPack".
+  2. No reachable langpack renders "Made with IzPack", and our welcome panel renders no
+     heading at all (see INFO_PANEL). Both are settled in the one CustomLangPack for IzPack
+     5; for IzPack 4 only the first is actionable.
 
 The two versions need opposite techniques, and the difference is not cosmetic.
 
@@ -56,6 +58,18 @@ CUSTOM_PACK = "installer/lib/izpack/resources/CustomLangPack.xml"
 MADEWITH = "installer.madewith"
 BLANK = '<str id="installer.madewith" txt=""/>'
 
+# IzPack titles an HTML panel with <PanelClass>.info, resolved by
+# PanelHelper.getPanelTitleMessageKey straight out of installData.getMessages() - not
+# through the resource proxy, so a panel subclass cannot rebind it. Our welcome panel is
+# net.i2p.installer.LocalizedHTMLInfoPanel, so the key is
+# "LocalizedHTMLInfoPanel.info"; no langpack defines it, LocaleDatabase.get answers an
+# unknown key with the key itself, and the welcome panel rendered the literal text
+# "LocalizedHTMLInfoPanel.info" as its heading in every language. The label has no icon
+# to fall back on either - customicons.xml defines only JFrameIcon, so
+# frame.getIcons().get("edit") is null - which means blanking it here leaves nothing on
+# screen. CustomLangPack covers every language, so one entry does for all of them.
+INFO_PANEL = "LocalizedHTMLInfoPanel.info"
+
 # Upstream packs are wildly inconsistent about how a <str> tag is laid out, and each
 # variation defeats a naive pattern:
 #
@@ -97,6 +111,9 @@ CUSTOM_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
   installer.reversetitle is the window title the uninstaller uses. None of our
   langpacks carries it, so it would otherwise fall back to the distribution's
   English wording in every language; stating it here makes that deliberate.
+
+  LocalizedHTMLInfoPanel.info is the heading our welcome panel looks itself up under.
+  See INFO_PANEL above for why it has to be blanked rather than translated.
 -->
 <izpack:langpack version="5.0"
                  xmlns:izpack="http://izpack.org/schema/langpack"
@@ -105,6 +122,7 @@ CUSTOM_TEMPLATE = '''<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
     <str id="installer.madewith" txt=""/>
     <str id="installer.reversetitle" txt="I2P+ Installation Wizard [$APP_VER]"/>
+    <str id="LocalizedHTMLInfoPanel.info" txt=""/>
 </izpack:langpack>
 '''
 
@@ -269,6 +287,15 @@ def izpack5(check, problems):
         if have.get(MADEWITH):
             problems.append("izpack 5: %s does not blank %s"
                             % (CUSTOM_PACK, MADEWITH))
+        # has_key, not a truth test: the whole point of the entry is that it is
+        # present and empty, so an absent one fails this exactly as a filled one does.
+        if INFO_PANEL not in have:
+            problems.append("izpack 5: %s does not blank %s, so the welcome panel "
+                            "heading renders as its own key name"
+                            % (CUSTOM_PACK, INFO_PANEL))
+        elif have[INFO_PANEL].strip():
+            problems.append("izpack 5: %s fills %s rather than blanking it"
+                            % (CUSTOM_PACK, INFO_PANEL))
         return
     os.makedirs(os.path.dirname(target), exist_ok=True)
     with open(target, "w", encoding="utf-8", newline="\n") as fh:
