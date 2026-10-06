@@ -4,6 +4,16 @@
     <property name="build.root" value="${java.io.tmpdir}/build-i2p/"/>
     <property name="build.dir" value="${build.root}build"/>
     <property name="pkg.temp.dir" value="${build.root}pkg-temp"/>
+    <!-- IzPack 5 panel patch classes and jar. Under build.root rather than beside the
+         source: nothing reads them except the compiler classpath below, and module
+         builds stay out of the workspace. Mirrors tools/gradle/installer.gradle. -->
+    <property name="izpack5.panel.build" value="${build.root}izpack5-panel/classes"/>
+    <property name="izpack5.panel.jar" value="${build.root}izpack5-panel/izpack-i2p.jar"/>
+    <!-- Working dir for the IzPack 5 compiler. The compiler resolves our langpacks and
+         flag GIFs relative to its own working directory, at ./com/izforge/izpack/bin/..., so
+         that tree has to sit directly under here. Rooted in build.root, not the workspace. -->
+    <property name="izpack5.work.dir" value="${build.root}izpack5"/>
+    <property name="izpack5.langpacks.dir" value="${izpack5.work.dir}/com/izforge/izpack/bin/langpacks"/>
     <property name="apps.addressbook.dist" value="${build.root}apps/addressbook/dist"/>
     <property name="apps.i2pcontrol.build.dir" value="${build.root}apps/i2pcontrol/build"/>
     <property name="apps.i2psnark.java.build.dir" value="${build.root}apps/i2psnark/java/build"/>
@@ -3546,6 +3556,43 @@
   </target>
 
   <!-- IzPack 5 -->
+
+  <!--
+    Compile an IzPack 5 installer.
+
+    Replaces the IzPackTask: that runs the compiler in-process and offers no way to set
+    a working directory, and the compiler resolves our langpacks and flag GIFs relative
+    to its own working directory. Forking gives it ${izpack5.work.dir}, where
+    izpack5-patches stages com/izforge/izpack/bin/langpacks - so the staging tree lives
+    under build.root instead of the workspace root, as the gradle build already does
+    (tools/gradle/installer.gradle).
+
+    Our panel jar is on the classpath because the compiler resolves each
+    <panel classname=...> reflectively and writes the class into the installer jar, so a
+    class it cannot load is a build failure.
+
+    The descriptor is positional: the compiler's only options are base, compression,
+    IzPack home, kind, compression level and out, so the xml path comes first and the
+    rest are passed with single dashes.
+  -->
+  <macrodef name="izpack5compile">
+    <attribute name="input"/>
+    <attribute name="output"/>
+    <sequential>
+      <java classname="com.izforge.izpack.compiler.bootstrap.CompilerLauncher"
+            fork="true" failonerror="true" dir="${izpack5.work.dir}">
+        <classpath>
+          <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
+          <pathelement location="${izpack5.panel.jar}"/>
+        </classpath>
+        <arg value="@{input}"/>
+        <arg value="-b"/><arg value="${basedir}"/>
+        <arg value="-k"/><arg value="standard"/>
+        <arg value="-o"/><arg value="@{output}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
   <!-- Fetches the IzPack 5 distribution into installer/lib/izpack/5/. Separate
        target so it can also be run on its own (ant download-izpack5) and called
        by an antcall, which is how ensureIzpack5 invokes it. -->
@@ -3557,9 +3604,9 @@
       failure. izpack5-patches copies resource overrides onto the working directory
       instead, but that trick does not apply to classes.
     -->
-    <mkdir dir="${basedir}/installer/lib/izpack/5/patches/java/build"/>
+    <mkdir dir="${izpack5.panel.build}"/>
     <javac srcdir="${basedir}/installer/lib/izpack/5/patches/java/src"
-           destdir="${basedir}/installer/lib/izpack/5/patches/java/build"
+           destdir="${izpack5.panel.build}"
            includeantruntime="false" debug="true"
            source="8" target="8" encoding="UTF-8"
            nowarn="true">
@@ -3569,8 +3616,8 @@
       <!-- izpack.jar is the panel's superclass; compile against it plus its deps. -->
       <compilerarg value="-XDignore.symbol.file"/>
     </javac>
-    <jar destfile="${basedir}/installer/lib/izpack/5/patches/java/izpack-i2p.jar"
-         basedir="${basedir}/installer/lib/izpack/5/patches/java/build"/>
+    <jar destfile="${izpack5.panel.jar}"
+         basedir="${izpack5.panel.build}"/>
   </target>
 
   <!-- Proves "Made with IzPack" is never rendered. The distribution's langpacks are
@@ -3652,14 +3699,6 @@
   -->
   <target name="ensureIzpack5" depends="ensureIzpack5-libs, izpack-panel-jar">
     <echo message="IzPack 5 home: ${izpack5.home}"/>
-    <path id="izpack5.lib.path">
-      <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
-      <!-- Our own panels, resolved by classname at compile time (ant izpack-panel-jar). -->
-      <pathelement location="${basedir}/installer/lib/izpack/5/patches/java/izpack-i2p.jar"/>
-    </path>
-    <taskdef name="izpack5"
-      classpathref="izpack5.lib.path"
-      classname="com.izforge.izpack.ant.IzPackTask"/>
     <!-- Scratch dir for izpack2exe.py's intermediate installer.7z and config.txt.
          Kept under 5/ (and gitignored) so the wrapper never writes to the repo
          root. install5exe deletes the contents before each run. -->
@@ -3675,8 +3714,13 @@
          that IzPack no longer needs: 5.1.3 and later ship XInfoConsolePanel
          themselves, so there are no Java patches to compile.
      -->
-    <mkdir dir="com/izforge/izpack/bin/langpacks/"/>
-    <copy quiet="true" verbose="false" toDir="com/izforge/izpack/bin/langpacks/">
+    <!-- The compiler resolves langpacks and flags relative to its working directory, and
+         izpack5compile below runs it from ${izpack5.work.dir}, so the staging tree sits at
+         ./com/izforge/... under there - in build.root, not the workspace. Ant's IzPackTask
+         runs the compiler in-process and offers no way to set a working directory, hence
+         the forked java call; it also matches what tools/gradle/installer.gradle does. -->
+    <mkdir dir="${izpack5.langpacks.dir}"/>
+    <copy quiet="true" verbose="false" todir="${izpack5.langpacks.dir}">
       <fileset dir="installer/lib/izpack/5/patches/resources"/>
     </copy>
     <!-- Flags come from the shared resources/flags directory rather than being kept
@@ -3684,7 +3728,7 @@
          looks for them at com/izforge/izpack/bin/langpacks/flags, which is where the
          copy above puts every other resource. -->
     <copy quiet="true" verbose="false"
-      todir="com/izforge/izpack/bin/langpacks/flags">
+      todir="${izpack5.langpacks.dir}/flags">
       <fileset dir="installer/lib/izpack/resources/flags" includes="*.gif"/>
     </copy>
   </target>
@@ -3701,7 +3745,7 @@
         <antcall target="preppkg"/>
         <antcall target="buildProperties"/>
         <antcall target="buildUtilityJar"/>
-        <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+        <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar"/>
         <ant target="installer5exe"/>
         <antcall target="sha256sum">
           <param name="sha256.file" value="dist/install.jar"/>
@@ -3860,7 +3904,7 @@
   <!-- IzPack 5 -->
   <target name="installer5-nowindows" depends="timestamp.started, clean, izpack5-patches, preppkg-nowindows, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}.jar"/>
   </target>
 
   <target name="installer-freebsd" depends="timestamp.started, clean, preppkg-freebsd-only, izpack-patches, timestamp.stopped">
@@ -3877,7 +3921,7 @@
   <!-- IzPack 5 -->
   <target name="installer5-linux" depends="timestamp.started, clean, izpack5-patches, preppkg-linux-only, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
-    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_linux-only.jar"/>
   </target>
 
   <target name="installer-osx" depends="timestamp.started, clean, checkForIzpack2App, preppkg-osx-only, izpack-patches, timestamp.stopped">
@@ -3891,7 +3935,7 @@
   <target name="installer5-osx" depends="timestamp.started, clean, checkForIzpack2App, izpack5-patches, preppkg-osx-only, timestamp.stopped">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="lf"/>
     <mkdir dir="${pkg.temp.dir}/osx"/>
-    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/i2pinstall_${full.version}_osx-only.jar"/>
     <ant target="installer2app"/>
     <delete dir="${pkg.temp.dir}/osx"/>
   </target>
@@ -3947,7 +3991,7 @@
   <!-- IzPack 5 -->
   <target name="installer5-windows" depends="clean, izpack5-patches, preppkg-windows-only, buildUtilityJar">
     <fixcrlf srcdir="${pkg.temp.dir}" includes="*.config *.bat *.cmd **/*.xml **/*.properties **/*.txt scripts/*" encoding="utf8" eol="crlf"/>
-    <izpack5 input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar" installerType="standard" basedir="${basedir}"/>
+    <izpack5compile input="${build.root}/izpack/5/install5.xml" output="${basedir}/dist/install.jar"/>
     <ant target="installer5exe"/>
     <delete file="${basedir}/install.jar"/>
     <move file="${basedir}/dist/i2pinstall.exe" tofile="${basedir}/dist/i2pinstall_${full.version}_windows.exe"/>
