@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="لغو کړئ"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="نصب لغو شو"/>
+    <!-- Close -->
+    <str id="installer.close" txt="بندول"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="په هر حال دوام ورکړئ؟"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="کاپي"/>
+    <!-- Error -->
+    <str id="installer.error" txt="تېروتنه"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="یوه تېروتنه رامنځته شوه"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="نصب بشپړ شو"/>
+    <!-- Help -->
+    <str id="installer.help" txt="مرسته"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="بندول"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="جزئیات پټئ"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="پیغام"/>
+    <!-- Next -->
+    <str id="installer.next" txt="راتلونکی"/>
+    <!-- No -->
+    <str id="installer.no" txt="نه"/>
+    <!-- of -->
+    <str id="installer.of" txt="له"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="پلاتفارم: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="پخونی"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="وتل"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="دا به نصب لغو کړئ!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="ایا مطمئن یاست چې غواړئ وتل؟"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="د ځینو بدلونونو د پلی کولو لپاره ریسټارټ ته اړتیا ده. ایا غواړئ اوس ریسټارټ کړو؟"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="ریسټارټ ته اړتیا ده"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="د ځینو بدلونونو د پلی کولو لپاره ریسټارټ سپارړ شوی."/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="ریسټارټ سپارړ شوی"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="ګزار لېږئ"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="جزئیات ښودئ"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="نصب پیل شو"/>
+    <!-- Step -->
+    <str id="installer.step" txt="ګام"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="‏IzPack - نصب "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="د حذف کولو معلوماتو لیکل ناکام شو."/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="چارچوب: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="خبردارۍ!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="هو"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="معلومات"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="نصب"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="نصب کړې کورنۍ غوره کړئ"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="د میانګڼو جوړول"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="نصب بشپړ شو"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="د مقصد لاره"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="مهرباني وکړئ لاندې معلومات ولولئ:"/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[پای شوی]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="د نصب د پیل کولو لپاره &#x27;لګول!&#x27; ته کلیک وکړئ"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="لګول!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="دا فایل له مخکې نه شته. ایا پټې شي؟"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="دا فایل له مخکې نه شته"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="د نصب ټولیز پرمختګ:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="د کورنۍ د نصب پرمختګ:"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="هغه &quot;$APP_NAME&quot; نصب کوونکی چې تاسو یې پرې کوئ کار کړی ښکاري چې یو بل کاپي یې هم لا شته. دا ممکن د یوې پخوانۍ ناکامې د نصب هڅې څخه وي، یا ممکن تاسو په تصادف کې نصب کوونکی دوه ځله پیل کړی وي. سپارړ شوی اقدام دا دی چې د نصب کوونکي د بل کاپي د پیل لپاره انتظار وکړئ. که تاسو ډاګه یاست چې نور نصب کوونکی نه شته، نو کولی شئ د ډبیول فایل &quot;$LOCK_FILE&quot; ړنګ کړئ او نصب کوونکی بیا پیل کړئ."/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="هغه &quot;$APP_NAME&quot; نصب کوونکی چې تاسو یې پرې کوئ کار کړی ښکاري چې یو بل کاپي یې هم لا شته. دا ممکن د یوې پخوانۍ ناکامې د نصب هڅې څخه وي، یا ممکن تاسو په تصادف کې نصب کوونکی دوه ځله پیل کړی وي.
+
+دا ممکن د یوې پخوانۍ ناکامې د نصب هڅې څخه وي، یا ممکن تاسو په تصادف کې
+نصب کوونکی دوه ځله پیل کړی وي. سپارړ شوی اقدام دا دی چې &#x27;نه&#x27; غوره کړئ او د نصب کوونکي د بل کاپي
+d پیل لپاره انتظار وکړئ. که تاسو ډاګه یاست چې نور نصب کوونکی نه شته، نو &#x27;هو&#x27; تڼۍ ته کلیک وکړئ
+چې دې نصب کوونکي ته اجازه ورکړئ چې وکړي.
+
+ایا مطمئن یاست چې دې نصب ته دوام ورکړئ؟"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="پېښتیاوې: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="غوره شوې کورنۍ لاندې پېښتیاوې و/یا استثنیې لري"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="تشریف"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="استثنیې: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="شته ځای: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="غوره کړئ چې کومې کورنۍ غواړئ نصب کړئ:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ناڅرګندلی"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="د نصب لپاره غواړنې ډسک برخه له شته منځنۍ ځای زیاته ده."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="ټولې اړتیا وړتیا: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="یادونه: خاښي کورنۍ اړینې دي."/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="د رجسټري کلي &#x27;{0}\\{1}&#x27; پرانیستل نه شي کولی."/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="لټون کړئ..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="مخکې ډیر به جوړه شي: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="تاسو کوم مقصد نه دی ټاکلی! ایا دا سمه ده؟"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="دا ډیر له مخکې نه شته! ایا مطمئن یاست چې غواړئ دلته نصب کړئ او لازم له شته فایلونه پټ کړئ؟"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="ناڅرګند نصب وپېژندل شو. لومړی یې حذف کړئ، یا بل ډیر غوره کړئ."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="د نصب لاره غوره کړئ: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="تاسو د یو فایل لاره دی لیکلې. مهرباني وکړئ د نوې یا شته ډیر لاره غوره کړئ."/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="دا فایل ډیر نه دی! مهرباني وکړئ یو ډیر غوره کړئ!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="غوره شوی ډیر غواړنی محصول نه لري."/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="په دې ډیر کې لیکنه ممکنه نه ده! مهرباني وکړئ بل ډیر غوره کړئ!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="غوره شوی ډیر باید شته وي."/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="غوره شوی ډیر باید شته وي."/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="د ډیر لاره ناسمه ده. مهرباني وکړئ د عملیاتو سیستم د شرطونو سره سم ډیر لاره ولیکئ."/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" د حذف قورلي کړئ "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="حذف کول"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="دا به نصب شوی پرنګه له لارې وایستئ!"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="مهرباني وکړئ لاندې معلومات ولولئ:"/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="موږه معذرت غواړو چې IzPack په دې عملیاتو سیستم کې د میانګڼو جوړول ملنړ نه دی. د میانګڼو د جوړولو لپاره خپل عملیاتو سیستم لارښود وګورئ."/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="د متن فایل ذخیره کړئ"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="دا د هغو ډګو لست دی چې دې پروګرام جوړوونکی غوښتل چې تاسو له هغو سره لاسرسی ولرئ."/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="تاسو کولی شئ د پروګرام مقصدونو په اړه بشپړ معلومات په یو متن فایل کې د وروسته لپاره ذخیره کړئ."/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="ناڅرګند پروګرام ډله. مهرباني وکړئ یو الفبایي شمېریزه سمه ولیکئ."/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="د پروګرامونو لست"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="ډسکتاپ"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="پیل لست"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="د پیل ډله"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="ټول کاروونکي"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="په پیل لست کې میانګڼې جوړول"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="اوسنی کاروونکی"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="اصلي"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="په ډسکتاپ کې نور میانګڼې جوړول"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="د میانګڼو لپاره یو پروګرام ډله غوره کړئ:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="پیل لست"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="له سیستم سره پیل"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="د میانګڼې جوړولو لپاره:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="دري له فرمان      : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="تشریف             : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="د نښانې اندیکس    : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="د نښانې فایل      : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="نوې ځای           : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="میانګڼه           : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="د میانګڼې مقصد    : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="کار کوونکی ډیر    : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="غوره شوې نصب کړې کورنۍ"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="د نصب لاره"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="د {0} لپاره د نصب ګزار، نسخه {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- تېروتنې ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="تېروتنه [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; استثنا: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;نصب مو ونه کړی!&lt;br&gt;ایا غواړئ یو ثبت فایل ولیکوئ؟&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;ممکن نصب بشپړ نه وي شوی!&lt;br&gt;ایا غواړئ یو ثبت فایل ولیکوئ؟&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="د نصب ستونزې"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="خبردارۍ!! نصب مو ونه کړی!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="da ګزار {0} عمومي پیغام، {1} خبردارۍ او {2} تېروتنې لري"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- د نصب پیغامونه ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="پیغام  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="خبردارۍ!! ممکن نصب بشپړ نه وي شوی!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="د نصب ډیر               : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           ‏IzPack د نصب ګزار"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="نه شي کولی چې د نصب ګزار په &#x27;{0}&#x27; کې ولیکوئ"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="د ګزار د لیکلو پرمخ تېروتنه"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="د ثبت فایل ذخیره کړئ"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="د نصب وخت               : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- خبرداري ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="خبردارۍ [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="د ارزښت بدلول"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="د ارزښت ړنګول"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="نه شي کولی چې &#x27;{0}&#x27; ولیکوئ"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="کتنه"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="خبردارۍ"/>
+</izpack:langpack>

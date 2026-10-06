@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for urd. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="خوش آمدید"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="تنصیب"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="تنصیبی پیکیج منتخب کریں"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="تنصیب مکمل ہو گئی"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="منزل کا راستہ"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="‏IzPack - تنصیب"/>
+    <!-- Next -->
+    <str id="installer.next" txt="اگلا"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="پچھلا"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="خروج"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="کیا آپ واقعی باہر نکلنا چاہتے ہیں؟"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="اس سے تنصیب منسوخ ہو جائے گی!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="انتباہ!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="ہاں"/>
+    <!-- No -->
+    <str id="installer.no" txt="نہیں"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="منسوخ کریں"/>
+    <!-- Error -->
+    <str id="installer.error" txt="خرابی"/>
+    <!-- Help -->
+    <str id="installer.help" txt="مدد"/>
+    <!-- Step -->
+    <str id="installer.step" txt="مرحلہ"/>
+    <!-- of -->
+    <str id="installer.of" txt="از"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="پیغام"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="اس سے انسٹال شدہ ایپلی کیشن ہٹ جائے گی!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" حذف کرنے پر مجبور کریں "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="انسٹال ہٹائیں"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="تنصیب میں خوش آمدید: "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="یہ سافٹ ویئر تیار کردہ ہے: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="ہوم پیج یہاں ہے: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="منتخب کردہ ڈائریکٹری موجود ہونی چاہیے۔"/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="منتخب کردہ ڈائریکٹری موجود ہونی چاہیے۔"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="منتخب کردہ ڈائریکٹری میں مطلوبہ مصنوعات موجود نہیں۔"/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="تنصیب کا راستہ منتخب کریں: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="تلاش..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="ڈائریکٹری پہلے سے موجود ہے! کیا آپ واقعی یہاں تنصیب کرنا چاہتے ہیں، اور ممکن ہے موجودہ فائلز کو اوور رائٹ کر دی جائیں؟"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="آپ نے کوئی منزل مقرر نہیں کی! کیا یہ درست ہے؟"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="ہدف کا ڈائریکٹری بنائی جائے گی: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="یہ فائل ڈائریکٹری نہیں ہے! براہِ کرم ڈائریکٹری منتخب کریں!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="اس ڈائریکٹری میں لکھا نہیں جا سکتا! براہِ کرم کوئی اور ڈائریکٹری منتخب کریں!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="وہ پیکیج منتخب کریں جو آپ انسٹال کرنا چاہتے ہیں:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="نوٹ: دھندھلے پیکیج لازمی ہیں۔"/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="درکل مجموعی جگہ: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="دستیاب جگہ: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="تفصیل"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="منتخب پیکیج کے درج ذیل انحصار اور/یا استثنیات ہیں"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="انحصار: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="استثنیات: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="تنصیب کے لیے درکل ڈسک اسپیس دستیاب اسپیس سے زیادہ ہے۔"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="تعین نہیں کیا جا سکتا"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="تنصیب کا عمل شروع کرنے کے لیے «تنصیب کریں!» پر کلک کریں"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="تنصیب کریں!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="پیکیج کی تنصیب کی پیش رفت:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[مکمل]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="تنصیب کی مجموعی پیش رفت:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="فائل پہلے سے موجود ہے"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="درج ذیل فائل پہلے سے موجود ہے۔ کیا اسے اوور رائٹ کیا جائے؟"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="تنصیب کا راستہ"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="منتخب شدہ تنصیبی پیکیج"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="رجسٹری کی کلید {0}\{1} کھولی نہیں جا سکتی۔"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack تنصیب رپورٹ"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="انتباہ!!! تنصیب کامیاب نہیں ہوئی!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="انتباہ!!! ممکن ہے تنصیب مکمل طور پر کامیاب نہ ہوئی ہو!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="اس رپورٹ میں {0} عمومی پیغام، {1} انتباہ اور {2} خرابیاں ہیں"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="تنصیب رپورٹ برائے: {0} ورژن {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="انسٹال وقت            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="انسٹال ڈائریکٹری       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- تنصیبی پیغامات ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- انتباہات ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- خرابیاں ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; استثنیٰ: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="پیغام  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="انتباہ [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="خرابی [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="رپورٹ لکھنے میں خرابی"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="تنصیب رپورٹ کو &#x27;{0}&#x27; میں لکھا نہیں جا سکا"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="تنصیبی مسائل"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="لاگ فائل محفوظ کریں"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;تنصیب کامیاب نہیں ہوئی!&lt;br&gt;کیا آپ لاگ فائل لکھنا چاہتے ہیں؟&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;ممکن ہے تنصیب مکمل طور پر کامیاب نہ ہوئی ہو!&lt;br&gt;کیا آپ لاگ فائل لکھنا چاہتے ہیں؟&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="&#x27;{0}&#x27; لکھا نہیں جا سکا"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="قدر تبدیل کریں"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="تصدیق ناکام"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="توجہ درکار ہے"/>
+</langpack>

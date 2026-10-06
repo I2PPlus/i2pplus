@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Prekliči"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="Namestitev je bila preklicana"/>
+    <!-- Close -->
+    <str id="installer.close" txt="Zapri"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="Vseeno nadaljujete?"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="Kopiraj"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Napaka"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="Prišlo je do napake"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="Namestitev se je končala"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Pomoč"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="Zapri"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="Skrij podrobnosti"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Sporočilo"/>
+    <!-- Next -->
+    <str id="installer.next" txt="Naprej"/>
+    <!-- No -->
+    <str id="installer.no" txt="Ne"/>
+    <!-- of -->
+    <str id="installer.of" txt="od"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="Platforma: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Nazaj"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Zapusti"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="To bo preklicalo namestitev!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Ali res želite zapustiti?"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="Ponoven zagon je potreben za uveljavitev nekaterih sprememb. Ali želite zdaj znova zagnati?"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="Potreben je ponoven zagon"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="Za uveljavitev nekaterih sprememb je priporočen ponoven zagon."/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="Priporočen je ponoven zagon"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="Pošlji poročilo"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="Prikaži podrobnosti"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="Namestitev se je začela"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Korak"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="IzPack - Namestitev "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="Zapisovanje podatkov o odstranitvi ni uspelo."/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="Ogrodje: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Opozorilo!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Da"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="Informacije"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Namestitev"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Izberite namestitvene pakete"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="Nastavitev bližnjic"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Namestitev je končana"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Ciljna pot"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="Prosimo, preberite naslednje informacije:"/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Končano]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Za začetek namestitve kliknite »Namesti!«"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Namesti!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Naslednja datoteka že obstaja. Ali jo želite prepisati?"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Datoteka že obstaja"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Skupni napredek namestitve:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Napredek namestitve paketa:"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="Zdi se, da namestitveni program &quot;$APP_NAME&quot;, ki ga želite zagnati, že ima drugo kopijo v teku. To je lahko posledica prejšnjega neuspešnega poskusa namestitve ali ste namestitveni program pomotoma zagnali dvakrat. Priporočen ukrep je počakati, da se zažene druga kopija namestitvenega programa. Če ste prepričani, da druga kopija ne teče, lahko izbrišete zakjučevalno datoteko &quot;$LOCK_FILE&quot; in znova zaženete namestitveni program."/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="Zdi se, da namestitveni program &quot;$APP_NAME&quot;, ki ga želite zagnati, že ima drugo kopijo v teku.\n\nTo je lahko posledica prejšnjega neuspešnega poskusa namestitve ali ste namestitveni program\npomotoma zagnali dvakrat. Priporočen ukrep je, da izberete &#x27;Ne&#x27; in počakate, da se zažene druga\nkopija namestitvenega programa. Če ste prepričani, da druga kopija ne teče, kliknite gumb &#x27;Da&#x27;,\nda dovolite zagon tega namestitvenega programa.\n\nAli res želite nadaljevati s to namestitvijo?"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Odvisnosti: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Izbrani paket ima naslednje odvisnosti in/ali izključitve"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Opis"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Izključitve: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Razpoložljiv prostor: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Izberite pakete, ki jih želite namestiti:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ni mogoče določiti"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Prostor na disku, potreben za namestitev, presega razpoložljivi prostor na disku."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Skupni zahtevani prostor: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Opomba: sivi paketi so obvezni."/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Ključa registra {0}\{1} ni mogoče odpreti."/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Prebrskaj..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Ciljna mapa bo ustvarjena: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Niste določili ciljne lokacije! Ali je to pravilno?"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="Mapa že obstaja! Ali res želite namestiti tukaj in po možnosti prepisati obstoječe datoteke?"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="Zaznana je nezdružljiva namestitev. Najprej jo odstranite ali izberite drugo mapo za namestitev."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Izberite namestitveno pot: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="Vnesli ste pot do datoteke. Izberite pot do nove ali obstoječe mape."/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Ta datoteka ni mapa! Izberite mapo!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="Izbrana mapa ne vsebuje zahtevanega izdelka."/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="V to mapo ni mogoče pisati! Izberite drugo mapo!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="Izbrana mapa mora obstajati."/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="Izbrana mapa mora obstajati."/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="Neveljavna pot mape. Vnesite pot mape, ki ustreza zahtevam operacijskega sistema."/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Prisilno brisanje "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Odstrani"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="To bo odstranilo namesteno aplikacijo!"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="Prosimo, preberite naslednje informacije:"/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="Oprostite, vendar IzPack ne podpira ustvarjanja bližnjic v tem operacijskem sistemu. Za ustvarjanje bližnjic si oglejte priročnik svojega operacijskega sistema."/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="Shrani besedilno datoteko"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Spodaj je seznam ciljev, do katerih vam je želel proizvajalec tega programskega izdelka omogočiti dostop."/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Podrobnosti o ciljih aplikacije lahko shranite v besedilno datoteko za poznejšo uporabo."/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="Neveljavna skupina programov. Vnesite niz alfanumeričnih znakov."/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="Meni aplikacij"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="Namizje"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="Meni Start"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="Skupina ob zagonu"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="vsi uporabniki"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="Ustvari bližnjice v meniju Start"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="trenutni uporabnik"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="Privzeto"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="Ustvari dodatne bližnjice na namizju"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="Izberite skupino programov za bližnjice:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Meni Start"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="Zaženi ob zagonu"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="ustvari bližnjico za:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="Ukazna vrstica      : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="Opis       : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="Indeks ikone        : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="Datoteka ikone         : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="Namenjena lokacija : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="Bližnjica          : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="Cilj bližnjice   : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="Delovna mapa : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Izbrani namestitveni paketi"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Namestitvena pot"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Poročilo o namestitvi za : {0} različica {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Napake ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Napaka [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Izjem: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Namestitev ni uspela!&lt;br&gt;Ali želite zapisati dnevniško datoteko?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Namestitev morda ni povsem uspela!&lt;br&gt;Ali želite zapisati dnevniško datoteko?&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Težave pri namestitvi"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="OPOZORILO!!! Namestitev ni uspela!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="To poročilo vsebuje {0} splošnih sporočil, {1} opozoril in {2} napak"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Namestitvena sporočila ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Sporočilo  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="OPOZORILO!!! Namestitev morda ni povsem uspela!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Mapa namestitve       : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack POROČILO O NAMESTITVI"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Poročila o namestitvi ni mogoče zapisati v &#x27;{0}&#x27;"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Napaka pri zapisu poročila"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Shrani dnevniško datoteko"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Čas namestitve            : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Opozorila ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Opozorilo [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="spremeni vrednost"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="izbriši vrednost"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="zapisati v &#x27;{0}&#x27; ni mogoče"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="Napaka"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="Opozorilo"/>
+</izpack:langpack>

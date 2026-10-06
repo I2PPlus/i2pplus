@@ -172,6 +172,7 @@ public class ConfigUIHelper extends HelperBase {
          * Note: any additions, also add to:
          * - apps/i2psnark/java/src/org/klomp/snark/standalone/ConfigUIHelper.java
          * - apps/routerconsole/jsp/login.jsp
+         * - apps/routerconsole/java/src/net/i2p/router/web/servlets/LoginServlet.java (ALLOWED_LANGS)
          *
          * New lang_xx flags: Add to top-level build.xml
          * Names must be 18 chars or less (including country if specified)
@@ -206,7 +207,8 @@ public class ConfigUIHelper extends HelperBase {
         { "pt", "pt", "Português", null },
         { "ro", "ro", "Română", null },
         { "ru", "ru", "Russian Русский", null },
-        { "sl", "sk", "Slovenčina", null },
+        { "sk", "sk", "Slovenský", null },
+        { "sl", "si", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
         { "sw", "tz", "Swahili Kiswahili", null },
         { "zh_TW", "tw", "Taiwanese 台灣", null },

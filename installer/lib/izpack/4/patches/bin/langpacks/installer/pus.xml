@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for pus. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="ښه راغلاست"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="نصب"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="نصب کړې کورنۍ غوره کړئ"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="نصب بشپړ شو"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="د مقصد لاره"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="‏IzPack - نصب "/>
+    <!-- Next -->
+    <str id="installer.next" txt="راتلونکی"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="پخونی"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="وتل"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="ایا مطمئن یاست چې غواړئ وتل؟"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="دا به نصب لغو کړئ!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="خبردارۍ!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="هو"/>
+    <!-- No -->
+    <str id="installer.no" txt="نه"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="لغو کړئ"/>
+    <!-- Error -->
+    <str id="installer.error" txt="تېروتنه"/>
+    <!-- Help -->
+    <str id="installer.help" txt="مرسته"/>
+    <!-- Step -->
+    <str id="installer.step" txt="ګام"/>
+    <!-- of -->
+    <str id="installer.of" txt="له"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="پیغام"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="دا به نصب شوی پرنګه له لارې وایستئ!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" د حذف قورلي کړئ "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="حذف کول"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="ښه راغلاست! د "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="دا پروګرام جوړوونکی: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="کور پاڼه په: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="غوره شوی ډیر باید شته وي."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="غوره شوی ډیر باید شته وي."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="غوره شوی ډیر غواړنی محصول نه لري."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="د نصب لاره غوره کړئ: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="لټون کړئ..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="دا ډیر له مخکې نه شته! ایا مطمئن یاست چې غواړئ دلته نصب کړئ او لازم له شته فایلونه پټ کړئ؟"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="تاسو کوم مقصد نه دی ټاکلی! ایا دا سمه ده؟"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="مخکې ډیر به جوړه شي: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="دا فایل ډیر نه دی! مهرباني وکړئ یو ډیر غوره کړئ!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="په دې ډیر کې لیکنه ممکنه نه ده! مهرباني وکړئ بل ډیر غوره کړئ!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="غوره کړئ چې کومې کورنۍ غواړئ نصب کړئ:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="یادونه: خاښي کورنۍ اړینې دي."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="ټولې اړتیا وړتیا: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="شته ځای: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="تشریف"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="غوره شوې کورنۍ لاندې پېښتیاوې و/یا استثنیې لري"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="پېښتیاوې: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="استثنیې: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="د نصب لپاره غواړنې ډسک برخه له شته منځنۍ ځای زیاته ده."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ناڅرګندلی"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="د نصب د پیل کولو لپاره &#x27;لګول!&#x27; ته کلیک وکړئ"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="لګول!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="د کورنۍ د نصب پرمختګ:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[پای شوی]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="د نصب ټولیز پرمختګ:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="دا فایل له مخکې نه شته"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="دا فایل له مخکې نه شته. ایا پټې شي؟"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="د نصب لاره"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="غوره شوې نصب کړې کورنۍ"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="د رجسټري کلي &#x27;{0}\\{1}&#x27; پرانیستل نه شي کولی."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           ‏IzPack د نصب ګزار"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="خبردارۍ!! نصب مو ونه کړی!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="خبردارۍ!! ممکن نصب بشپړ نه وي شوی!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="da ګزار {0} عمومي پیغام، {1} خبردارۍ او {2} تېروتنې لري"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="د {0} لپاره د نصب ګزار، نسخه {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="د نصب وخت               : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="د نصب ډیر               : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- د نصب پیغامونه ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- خبرداري ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- تېروتنې ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; استثنا: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="پیغام  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="خبردارۍ [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="تېروتنه [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="د ګزار د لیکلو پرمخ تېروتنه"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="نه شي کولی چې د نصب ګزار په &#x27;{0}&#x27; کې ولیکوئ"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="د نصب ستونزې"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="د ثبت فایل ذخیره کړئ"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;نصب مو ونه کړی!&lt;br&gt;ایا غواړئ یو ثبت فایل ولیکوئ؟&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;ممکن نصب بشپړ نه وي شوی!&lt;br&gt;ایا غواړئ یو ثبت فایل ولیکوئ؟&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="نه شي کولی چې &#x27;{0}&#x27; ولیکوئ"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="د ارزښت بدلول"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="کتنه"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="خبردارۍ"/>
+</langpack>

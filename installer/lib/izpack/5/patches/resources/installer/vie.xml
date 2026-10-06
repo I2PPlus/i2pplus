@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Hủy"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="Đã hủy cài đặt"/>
+    <!-- Close -->
+    <str id="installer.close" txt="Đóng"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="Vẫn tiếp tục?"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="Sao chép"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Lỗi"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="Đã xảy ra lỗi"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="Cài đặt hoàn tất"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Trợ giúp"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="Đóng"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="Ẩn chi tiết"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Thông báo"/>
+    <!-- Next -->
+    <str id="installer.next" txt="Tiếp"/>
+    <!-- No -->
+    <str id="installer.no" txt="Không"/>
+    <!-- of -->
+    <str id="installer.of" txt="trong"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="Nền tảng: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Trước"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Thoát"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="Thao tác này sẽ hủy cài đặt!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Bạn có chắc muốn thoát không?"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="Cần khởi động lại máy để áp dụng một số thay đổi. Bạn có muốn khởi động lại ngay không?"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="Cần khởi động lại máy"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="Nên khởi động lại máy để áp dụng một số thay đổi."/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="Nên khởi động lại máy"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="Gửi báo cáo"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="Hiện chi tiết"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="Đã bắt đầu cài đặt"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Bước"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="IzPack - Cài đặt "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="Không thể ghi thông tin gỡ cài đặt."/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="Khung làm việc: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Cảnh báo!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Có"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="Thông tin"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Cài đặt"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Chọn gói cài đặt"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="Thiết lập lối tắt"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Đã cài đặt xong"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Đường dẫn đích"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="Vui lòng đọc thông tin sau:"/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Xong]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Nhấp vào &#x27;Cài đặt!&#x27; để bắt đầu quá trình cài đặt"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Cài đặt!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Tệp sau đã tồn tại. Bạn có muốn ghi đè không?"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Tệp đã tồn tại"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Tiến độ cài đặt tổng thể:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Tiến độ cài đặt gói:"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="Trình cài đặt &quot;$APP_NAME&quot; mà bạn đang cố chạy dường như đã có một bản sao khác đang chạy. Điều này có thể là do một lần cài đặt trước đó bị thất bại, hoặc bạn đã vô tình khởi chạy trình cài đặt hai lần. Hành động được khuyến nghị là hãy đợi bản sao khác của trình cài đặt bắt đầu. Nếu bạn chắc chắn rằng không có bản sao nào khác của trình cài đặt đang chạy, bạn có thể xóa tệp khóa &quot;$LOCK_FILE&quot; rồi khởi chạy lại trình cài đặt."/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="Trình cài đặt &quot;$APP_NAME&quot; mà bạn đang cố chạy dường như đã có một bản sao khác đang chạy.
+
+Điều này có thể là do một lần cài đặt trước đó bị thất bại, hoặc bạn đã vô tình khởi chạy
+trình cài đặt hai lần. Hành động được khuyến nghị là chọn &#x27;Không&#x27; và đợi bản sao khác của
+trình cài đặt bắt đầu. Nếu bạn chắc chắn rằng không có bản sao nào khác của trình cài đặt đang chạy, hãy nhấp
+nút &#x27;Có&#x27; để cho phép trình cài đặt này chạy.
+
+Bạn có chắc muốn tiếp tục với lần cài đặt này không?"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Phụ thuộc: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Gói đã chọn có các phụ thuộc và/hoặc loại trừ sau"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Mô tả"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Loại trừ: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Dung lượng trống: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Chọn các gói bạn muốn cài đặt:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="không xác định"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Dung lượng đĩa cần cho cài đặt vượt quá dung lượng đĩa trống."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Tổng dung lượng cần: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Lưu ý: Các gói bị làm mờ là bắt buộc."/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Không thể mở khóa đăng ký {0}\\{1}."/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Duyệt..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Thư mục đích sẽ được tạo: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Bạn chưa chỉ định vị trí đích! Điều này có đúng không?"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="Thư mục đã tồn tại! Bạn có chắc muốn cài đặt tại đây và có thể ghi đè các tệp hiện có không?"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="Đã phát hiện bản cài đặt không tương thích. Hãy gỡ cài đặt trước hoặc chọn thư mục khác để cài đặt."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Chọn đường dẫn cài đặt: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="Bạn đã nhập đường dẫn tới một tệp. Vui lòng chọn đường dẫn tới thư mục mới hoặc thư mục đã tồn tại."/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Tệp này không phải là thư mục! Vui lòng chọn một thư mục!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="Thư mục đã chọn không chứa sản phẩm cần thiết."/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Không thể ghi vào thư mục này! Vui lòng chọn thư mục khác!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="Thư mục đã chọn phải tồn tại."/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="Thư mục đã chọn phải tồn tại."/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="Đường dẫn thư mục không hợp lệ. Vui lòng nhập đường dẫn thư mục phù hợp với yêu cầu của hệ điều hành."/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Ép buộc xóa "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Gỡ cài đặt"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="Thao tác này sẽ gỡ bỏ ứng dụng đã cài đặt!"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="Vui lòng đọc thông tin sau:"/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="Rất tiếc, IzPack không hỗ trợ tạo lối tắt trên hệ điều hành này. Để tạo lối tắt, vui lòng tham khảo sách hướng dẫn của hệ điều hành."/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="Lưu tệp văn bản"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Dưới đây là danh sách các đích mà nhà sản xuất sản phẩm phần mềm này muốn bạn có quyền truy cập."/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Bạn có thể lưu thông tin chi tiết về các đích của ứng dụng vào một tệp văn bản để tham khảo sau này."/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="Nhóm chương trình không hợp lệ. Vui lòng nhập một chuỗi chữ và số."/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="Menu Ứng dụng"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="Màn hình nền"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="Menu Bắt đầu"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="Nhóm khởi động"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="tất cả người dùng"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="Tạo lối tắt trong Menu Bắt đầu"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="người dùng hiện tại"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="Mặc định"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="Tạo thêm lối tắt trên màn hình nền"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="Chọn một nhóm chương trình cho lối tắt:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Menu Bắt đầu"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="Khởi chạy khi khởi động"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="tạo lối tắt cho:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="Dòng lệnh         : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="Mô tả             : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="Chỉ số biểu tượng : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="Tệp biểu tượng    : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="Vị trí đích       : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="Lối tắt           : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="Đích lối tắt      : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="Thư mục làm việc  : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Các gói cài đặt đã chọn"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Đường dẫn cài đặt"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Báo cáo cài đặt cho : {0} Phiên bản {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Lỗi ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Lỗi [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Ngoại lệ: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Cài đặt không thành công!&lt;br&gt;Bạn có muốn ghi một tệp nhật ký không?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Cài đặt có thể chưa hoàn tất thành công!&lt;br&gt;Bạn có muốn ghi một tệp nhật ký không?&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Sự cố cài đặt"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="CẢNH BÁO!!! Cài đặt không thành công!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="Báo cáo này chứa {0} thông báo chung, {1} cảnh báo và {2} lỗi"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Thông báo cài đặt ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Thông báo  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="CẢNH BÁO!!! Cài đặt có thể chưa hoàn tất thành công!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Thư mục cài đặt         : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack BÁO CÁO CÀI ĐẶT"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Không thể ghi báo cáo cài đặt vào &#x27;{0}&#x27;"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Lỗi khi ghi báo cáo"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Lưu tệp nhật ký"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Thời gian cài đặt       : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Cảnh báo ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Cảnh báo [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="sửa giá trị"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="xóa giá trị"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="không thể ghi &#x27;{0}&#x27;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="Lỗi"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="Cảnh báo"/>
+</izpack:langpack>

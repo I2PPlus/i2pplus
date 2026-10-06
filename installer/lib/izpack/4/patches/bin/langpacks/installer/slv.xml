@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for slv. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="Dobrodošli"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Namestitev"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Izberite namestitvene pakete"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Namestitev je končana"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Ciljna pot"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - Namestitev "/>
+    <!-- Next -->
+    <str id="installer.next" txt="Naprej"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Nazaj"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Zapusti"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Ali res želite zapustiti?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="To bo preklicalo namestitev!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Opozorilo!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Da"/>
+    <!-- No -->
+    <str id="installer.no" txt="Ne"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Prekliči"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Napaka"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Pomoč"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Korak"/>
+    <!-- of -->
+    <str id="installer.of" txt="od"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Sporočilo"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="To bo odstranilo namesteno aplikacijo!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Prisilno brisanje "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Odstrani"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="Dobrodošli pri namestitvi "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="To programsko opremo je razvil: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="Spletno mesto je na: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="Izbrana mapa mora obstajati."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Izbrana mapa mora obstajati."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="Izbrana mapa ne vsebuje zahtevanega izdelka."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Izberite namestitveno pot: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Prebrskaj..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="Mapa že obstaja! Ali res želite namestiti tukaj in po možnosti prepisati obstoječe datoteke?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Niste določili ciljne lokacije! Ali je to pravilno?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Ciljna mapa bo ustvarjena: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Ta datoteka ni mapa! Izberite mapo!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="V to mapo ni mogoče pisati! Izberite drugo mapo!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Izberite pakete, ki jih želite namestiti:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Opomba: sivi paketi so obvezni."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Skupni zahtevani prostor: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Razpoložljiv prostor: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Opis"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Izbrani paket ima naslednje odvisnosti in/ali izključitve"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Odvisnosti: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Izključitve: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Prostor na disku, potreben za namestitev, presega razpoložljivi prostor na disku."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ni mogoče določiti"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Za začetek namestitve kliknite »Namesti!«"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Namesti!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Napredek namestitve paketa:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Končano]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Skupni napredek namestitve:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Datoteka že obstaja"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Naslednja datoteka že obstaja. Ali jo želite prepisati?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Namestitvena pot"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Izbrani namestitveni paketi"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Ključa registra {0}\{1} ni mogoče odpreti."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack POROČILO O NAMESTITVI"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="OPOZORILO!!! Namestitev ni uspela!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="OPOZORILO!!! Namestitev morda ni povsem uspela!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="To poročilo vsebuje {0} splošnih sporočil, {1} opozoril in {2} napak"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Poročilo o namestitvi za : {0} različica {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Čas namestitve            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Mapa namestitve       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Namestitvena sporočila ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Opozorila ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Napake ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Izjem: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Sporočilo  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Opozorilo [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Napaka [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Napaka pri zapisu poročila"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Poročila o namestitvi ni mogoče zapisati v &#x27;{0}&#x27;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Težave pri namestitvi"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Shrani dnevniško datoteko"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Namestitev ni uspela!&lt;br&gt;Ali želite zapisati dnevniško datoteko?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Namestitev morda ni povsem uspela!&lt;br&gt;Ali želite zapisati dnevniško datoteko?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="zapisati v &#x27;{0}&#x27; ni mogoče"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="spremeni vrednost"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="Napaka"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="Opozorilo"/>
+</langpack>

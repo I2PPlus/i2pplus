@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="ཕྱག་འཚལ"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="བསྐར་ཚད་ཕྱག་འཚལ་ཟིན"/>
+    <!-- Close -->
+    <str id="installer.close" txt="སྒྲོམ"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="མུ་མཐའ་མུ་མཐའ་ཀྱིས་གསུངས་དགོས་དམ།"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="འབྲི་ཤུལ"/>
+    <!-- Error -->
+    <str id="installer.error" txt="ནོར་འཁྲུལ"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="ནོར་འཁྲུལ་ཞིག་སྣང་།"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="བསྐར་ཚད་ཟིན"/>
+    <!-- Help -->
+    <str id="installer.help" txt="བཀའ་རྒྱུད"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="སྒྲོམ"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="ཞིབ་བཤེལ་བསྒྲུབ་པ"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="འཕྲིན་ལམ"/>
+    <!-- Next -->
+    <str id="installer.next" txt="གོ་སོ"/>
+    <!-- No -->
+    <str id="installer.no" txt="མིན"/>
+    <!-- of -->
+    <str id="installer.of" txt="ཀྱི"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="སྤྱོད་རིམ།  {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="ལོག"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="འགྲོ་བ"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="འདིས་བསྐར་ཚད་ཕྱག་འཚལ་བྱེད་ཀྱི་རེད།"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="འགྲོ་བའི་ཕྱིར་ངེས་གཏམ་ཡིན་དམ།"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="ཁ་ཤས་བཅོས་འབེབས་ལ་བསྐར་གཞུག་དགོས། ད་ལྟར་བསྐར་གཞུག་དགོས་དམ།"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="བསྐར་གཞུག་དགོས།"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="ཁ་ཤས་བཅོས་འབེབས་ལ་བསྐར་གཞུག་མཛད་ཐབས་མངར།"/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="བསྐར་གཞུག་ལས་དགའ"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="ལེབས་ཐོབ"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="ཞིབ་བཤེལ་མཚོན་པ"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="བསྐར་ཚད་འགོ་བ་བྱུང་།"/>
+    <!-- Step -->
+    <str id="installer.step" txt="རིམ་པ"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="IzPack - བསྐར་ཚད་ཀྱི་ "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="བསྐར་འདོར་གྲགས་པའི་དགོན་དཔེའི་དོན་གསརུས་མིན།"/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="སྒྲོམ་གཞི།  {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="སྤྱོད་གསོན།"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="ཡིན"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="དགོན་དཔེ"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="བསྐར་ཚད"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="བསྐར་མཛོག་འདེམས"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="ལྡུམ་འབྲེལ་བསྐར་བྱེད"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="བསྐར་ཚད་ཟིན"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="མཚོམས་ཐབས"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="འོངས་ཀྱི་དགོན་དཔེ་ཀློག་གི་ཕེབས། "/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[ཟིན]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="བསྐར་ཚད་གཞུག་འགོ་བའི་ཕྱིར་ &#x27;བསྐར་བྱེད!&#x27; ལ་བསྤལ།"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="བསྐར་བྱེད!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="འོངས་ཀྱི་ཡིག་ཆ་ལྟེར་ཡོད། ཡིན་ན་འདིས་བསྐོར་བརྒྱབས་ཀྱི་དགོས་དམ།"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="ཡིག་ཆ་ལྟེར་ཡོད"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="བསྐར་ཚད་ཀྱི་སྤོས་རིམ།"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="མཛོག་བསྐར་ཚད་ཀྱི་སྤོས་རིམ།"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="&quot;$APP_NAME&quot; བསྐར་བྱེད་འདི་ལ་གཞན་འདུས་ཤིག་འབྲེལ་བ་སྣང་། འདི་ནི་ད་དུང་ཟིན་པའི་བསྐར་ཚད་མ་སྒྲུབ་བྱུང་གི་སྟེ་སྲིད་ཡང་ན། ཡང་ན་བསྐར་བྱེད་བའི་འདུས་ཤིག་ལ་ལན་ངེས་མ་བྱས་གཉིད་ནས་གསུངས་སྲིད། གཞན་བསྐར་བྱེད་ཀྱི་འདུས་ཤིག་འགོ་བའི་སྟེང་བསྟི་དགོས། བསྐར་བྱེད་ཀྱི་གཞན་འདུས་ཤིག་མེད་པར་ངེས་གཏམ་མེད་ན། སྒོ་འདེབས་&quot;$LOCK_FILE&quot; འདི་འདིས་སེལ་ནས་བསྐར་བྱེད་ཀྱི་འགོ་བ་བྱས་ཐབས་མངར།"/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="&quot;$APP_NAME&quot; བསྐར་བྱེད་འདི་ལ་གཞན་འདུས་ཤིག་འབྲེལ་བ་སྣང་།
+
+འདི་ནི་ད་དུང་ཟིན་པའི་བསྐར་ཚད་མ་སྒྲུབ་བྱུང་གི་སྟེ་སྲིད་ཡང་ན། ཡང་ན་བསྐར་བྱེད་བའི་འདུས་
+ཤིག་ལ་ལན་ངེས་མ་བྱས་གཉིད་ནས་བསྐར་བྱེད་འདིར་གཉིད་བསྐར་བའི་སྟེང་སྲིད། གཞན་བསྐར་བྱེད་ཀྱི་འདུས་ཤིག་འགོ་བའི་སྟེང་བསྟི་དགོས་
+ན་ཐེབས་བསྟེན་མིན་ལ་འདེབས་བྱེད་ཕྱིར་བསམ་བསྒྲུབ་བསྟེན་&#x27;མིན&#x27; ཐེབས་བསྟེན་གསུང་དགོས། བསྐར་བྱེད་ཀྱི་གཞན་འདུས་ཤིག་མེད་པར་ངེས་གཏམ་མེད་ན།
+&#x27;ཡིན&#x27; ཐེབས་བསྟེན་ན་བསྐར་བྱེད་འདིར་འབྲེལ་བའི་བཀོལ་འདུག
+
+བསྐར་ཚད་འདི་མུ་མཐའ་བཀྲིན་གསུང་དགོས་དམ།"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="བསྐོར་ཚོགས། "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="འདེམས་པའི་མཛོག་ལ་འོངས་ཀྱི་བསྐོར་ཚོགས་དང་འདོད་མེད་ཡོད།"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="འཇུག་སྟངས"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="འདོད་མེད། "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="ཡོད་ས་ཚད། "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="བསྐར་བྱེད་གང་མཛོག་ཡིན་འདེམས།"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="གཏན་འཇུག་མེད"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="བསྐར་ཚད་ལ་དགོས་པའི་ས་ཁ་ནི་ཡོད་ས་ཁ་ལས་འདས།"/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="དགོས་ས་ཚད། "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="མུད་པ་བསྐྱོད་པའི་མཛོག་ནི་དགོས་པ་ཡིན།"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="འཛིན་རྟེན་སྒག་{0}\\{1} མི་འབྱེད་ཐུབ།"/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="བལྟ་བ..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="འདི་ལ་ས་གནས་གསར་པ་བསྐྲུག་སྟེ། "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="བསྐར་ཚད་ཐབས་མངོན་གསལ་མ་བྱས་ཡོད། འདི་ནི་ཡིན་ནོད།"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="ས་གནས་འདི་ལྟེར་ཡོད། འདིར་བསྐར་བྱེད་བྱས་ནས་གཞན་ཡིག་ཆ་བསྐོར་བརྒྱབས་ཀྱི་དགོས་དམ།"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="འབྲལ་མིན་བསྐར་ཚད་ཞིག་མཐར་སྣང་། དེས་ན་སྔོན་དུ་བསྐར་འདོར་བྱས་ན་ཡང་ན་སའི་ས་གནས་ཞིག་འདེམས།"/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="བསྐར་ཚད་ཐབས་འདེམས། "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="ཡིག་ཆའི་ཐབས་ཅན་ལ་འཇུག་ཡོད། ཡིག་ཆ་མིན་པ་ཡང་ན་ས་གནས་ཀྱི་ཐབས་ཅན་འདེམས།"/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="ཡིག་ཆ་འདི་ས་གནས་མིན། ས་གནས་ཞིག་འདེམས།"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="བསམ་ཟིན་པའི་ས་གནས་ནང་དགོས་པའི་རྩལ་མས་མེད།"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="ས་གནས་འདིར་ཡིག་འདེབས་མིན། སའི་ས་གནས་ཞིག་འདེམས།"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="བསམ་ཟིན་པའི་ས་གནས་ཡོད་དགོས།"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="བསམ་ཟིན་པའི་ས་གནས་ཡོད་དགོས།"/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="ས་གནས་ཀྱི་ཐབས་མཆད། གཞི་ལམ་གྱི་ངོ་མཚར་མ་འདང་བར་འཛུལ་གནས་པའི་ས་གནས་ཐབས་ཅན་ཞིག་འཇུག་གནས།"/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" གསར་པ་དུ་འཇིག་མེད་སོགས་ལ་འཁེལ་ཡང་། "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="བསྐར་འདོར"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="འདིས་བསྐར་བྱེད་འདུས་བསྐོར་འདུག"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="འོངས་ཀྱི་དགོན་དཔེ་ཀློག་གི་ཕེབས། "/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="དགའ་བསུཞུད། འོན་ཀྱང་IzPack ཡིས་གཞི་ལམ་འདིར་ལྡུམ་འབྲེལ་བསྐྲུག་མི་བདེན། ལྡུམ་འབྲེལ་བསྐྲུག་ནི་གཞི་ལམ་གྱི་ལོ་དེབས་ལ་བརྟེན་ནས་སྟོན་ཐབས་ལ་བརྟེན།"/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="ཡིག་ཆ་ཞིག་འདེབས"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="འདི་ནི་རྩལ་མས་འདིའི་མཛོག་གསར་འབྱེད་པས་ཁྱེད་ལ་ཟིན་ཐུབ་བླངས་མཚོམས་རྟེན་གྲངས་ལྟར་ཡིན།"/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="ལག་བསྟོད་ཀྱི་མཚོམས་རྟེན་གྱི་ཞིབ་བཤེལ་ཡིག་ཆ་ཞིག་ནང་འདེབས་ནས་རྗེས་སྐབས་ལ་ལྟ་བའི་ཕྱིར་འཇུག་ཐུབ།"/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="གཞི་བྱེད་སྡོམ་མིན། དཀར་མེད་ཀྱི་ཡིག་རིགས་ཞིག་འཇུག་གནས།"/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="ལག་བསྟོད་འདེབས"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="མཉེན་གཟུགས"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="འགོ་ཐོན་འདེབས"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="འགོ་ལུས་སྡོམ"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="ཡོངས་སྤྱོད་མཁན"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="འགོ་ཐོན་འདེབས་སུ་ལྡུམ་འབྲེལ་བསྐྲུག"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="ད་ལྟའི་སྤྱོད་མཁན"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="སྟོབས"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="མཉེན་གཟུགས་སུ་ལུས་རྫས་ཀྱི་ལྡུམ་འབྲེལ་བསྐྲུག"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="ལྡུམ་འབྲེལ་ལ་གཞི་བྱེད་སྡོམ་ཞིག་འདེམས།"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-Menu"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="འགོ་ལུས་སྐབས་འགོ་བ"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="ལྡུམ་འབྲེལ་བསྐྲུག་སྦས།"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="བསམ་བསྒྲུབ་ཐིག    : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="འཇུག་སྟངས         : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="བེད་རྟེན་ཚད       : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="བེད་རྟེན་ཡིག      : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="དགོངས་འདུན་ས་གནས  : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="ལྡུམ་འབྲེལ        : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="ལྡུམ་འབྲེལ་མཚོམས  : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="ལས་ཀྱིས་གཞུག      : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="འདེམས་པའི་བསྐར་མཛོག"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="བསྐར་ཚད་ཐབས"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="བསྐར་ཚད་ལེབས་ཐོབ་ {0} མིག་ཚད་ {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- ནོར་འཁྲུལ ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="ནོར་འཁྲུལ [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; མཚན་སྤྱོད། {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;བསྐར་ཚད་མ་སྒྲུབ།&lt;br&gt;དཔྱད་རྟེན་ཡིག་འདེབས་ཡིན་དམ།&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;བསྐར་ཚད་མ་ཚར་བར་མི་སྒྲུབ་སྲིད།&lt;br&gt;དཔྱད་རྟེན་ཡིག་འདེབས་ཡིན་དམ།&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="བསྐར་ཚད་ཀྱི་དཀའ་ངལ་"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="སྤྱོད་གསོན།།། བསྐར་ཚད་མ་སྒྲུབ།"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="འདི་ལེབས་ཐོབའི་ནང་ {0} སྤྱི་གྲོག་འཕྲིན་ལམ། {1} སྤྱོད་གསོན། {2} ནོར་འཁྲུལ།"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- བསྐར་ཚད་འཕྲིན་ལམ ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="འཕྲིན་ལམ  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="སྤྱོད་གསོན།།། བསྐར་ཚད་མ་ཚར་བར་མི་སྒྲུབ་སྲིད།"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="བསྐར་ས་གནས              : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack བསྐར་ཚད་ལེབས་ཐོབ"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="བསྐར་ཚད་ལེབས་ཐོབ་{0} ལ་ཡིག་འདེབས་མིན།"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="ལེབས་ཐོབ་ཡིག་འདེབས་ནོར་འཁྲུལ"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="དཔྱད་རྟེན་ཡིག་འདེབས"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="བསྐར་དུས་               : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- སྤྱོད་གསོན ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="སྤྱོད་གསོན [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="རྗེས་ཅིག་བཅོས་བསྐོར"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="རྗེས་ཅིག་བཅོས་འདོར"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="ཡིག་འདེབས་མིན།  &#x27;&#x27;{0}&#x27;&#x27;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="ནོར་འཁྲུལ"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="སྤྱོད་གསོན"/>
+</izpack:langpack>

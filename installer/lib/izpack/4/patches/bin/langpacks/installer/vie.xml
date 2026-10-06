@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for vie. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="Chào mừng"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Cài đặt"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Chọn gói cài đặt"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Đã cài đặt xong"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Đường dẫn đích"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - Cài đặt "/>
+    <!-- Next -->
+    <str id="installer.next" txt="Tiếp"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Trước"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Thoát"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Bạn có chắc muốn thoát không?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="Thao tác này sẽ hủy cài đặt!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Cảnh báo!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Có"/>
+    <!-- No -->
+    <str id="installer.no" txt="Không"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Hủy"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Lỗi"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Trợ giúp"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Bước"/>
+    <!-- of -->
+    <str id="installer.of" txt="trong"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Thông báo"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="Thao tác này sẽ gỡ bỏ ứng dụng đã cài đặt!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Ép buộc xóa "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Gỡ cài đặt"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="Chào mừng đến với trình cài đặt "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="Phần mềm này được phát triển bởi: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="Trang chủ nằm tại: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="Thư mục đã chọn phải tồn tại."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Thư mục đã chọn phải tồn tại."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="Thư mục đã chọn không chứa sản phẩm cần thiết."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Chọn đường dẫn cài đặt: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Duyệt..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="Thư mục đã tồn tại! Bạn có chắc muốn cài đặt tại đây và có thể ghi đè các tệp hiện có không?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Bạn chưa chỉ định vị trí đích! Điều này có đúng không?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Thư mục đích sẽ được tạo: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Tệp này không phải là thư mục! Vui lòng chọn một thư mục!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Không thể ghi vào thư mục này! Vui lòng chọn thư mục khác!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Chọn các gói bạn muốn cài đặt:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Lưu ý: Các gói bị làm mờ là bắt buộc."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Tổng dung lượng cần: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Dung lượng trống: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Mô tả"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Gói đã chọn có các phụ thuộc và/hoặc loại trừ sau"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Phụ thuộc: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Loại trừ: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Dung lượng đĩa cần cho cài đặt vượt quá dung lượng đĩa trống."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="không xác định"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Nhấp vào &#x27;Cài đặt!&#x27; để bắt đầu quá trình cài đặt"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Cài đặt!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Tiến độ cài đặt gói:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Xong]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Tiến độ cài đặt tổng thể:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Tệp đã tồn tại"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Tệp sau đã tồn tại. Bạn có muốn ghi đè không?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Đường dẫn cài đặt"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Các gói cài đặt đã chọn"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Không thể mở khóa đăng ký {0}\\{1}."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack BÁO CÁO CÀI ĐẶT"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="CẢNH BÁO!!! Cài đặt không thành công!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="CẢNH BÁO!!! Cài đặt có thể chưa hoàn tất thành công!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="Báo cáo này chứa {0} thông báo chung, {1} cảnh báo và {2} lỗi"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Báo cáo cài đặt cho : {0} Phiên bản {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Thời gian cài đặt       : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Thư mục cài đặt         : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Thông báo cài đặt ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Cảnh báo ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Lỗi ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Ngoại lệ: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Thông báo  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Cảnh báo [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Lỗi [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Lỗi khi ghi báo cáo"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Không thể ghi báo cáo cài đặt vào &#x27;{0}&#x27;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Sự cố cài đặt"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Lưu tệp nhật ký"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Cài đặt không thành công!&lt;br&gt;Bạn có muốn ghi một tệp nhật ký không?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Cài đặt có thể chưa hoàn tất thành công!&lt;br&gt;Bạn có muốn ghi một tệp nhật ký không?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="không thể ghi &#x27;{0}&#x27;"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="sửa giá trị"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="Lỗi"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="Cảnh báo"/>
+</langpack>

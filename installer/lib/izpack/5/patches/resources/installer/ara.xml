@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Machine-drafted on first fill: taken from our own catalogues where one had the
+         string, machine translated otherwise. Needs a native reviewer's pass before
+         it should be treated as a finished translation. -->
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="إلغاء"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="تم إلغاء التثبيت"/>
+    <!-- Close -->
+    <str id="installer.close" txt="إغلاق"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="هل تريد المتابعة على أي حال؟"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="نسخ"/>
+    <!-- Error -->
+    <str id="installer.error" txt="خطأ"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="حدث خطأ"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="اكتمل التثبيت"/>
+    <!-- Help -->
+    <str id="installer.help" txt="مساعدة"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="إغلاق"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="إخفاء التفاصيل"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="رسالة"/>
+    <!-- Next -->
+    <str id="installer.next" txt="التالي"/>
+    <!-- No -->
+    <str id="installer.no" txt="لا"/>
+    <!-- of -->
+    <str id="installer.of" txt="من"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="المنصة: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="السابق"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="إنهاء"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="سيؤدي هذا إلى إلغاء التثبيت!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="هل أنت متأكد من رغبتك في الإنهاء؟"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="إعادة التشغيل مطلوبة لتطبيق بعض التغييرات. هل تريد إعادة التشغيل الآن؟"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="إعادة التشغيل مطلوبة"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="يُنصح بإعادة التشغيل لتطبيق بعض التغييرات."/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="يُنصح بإعادة التشغيل"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="إرسال التقرير"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="عرض التفاصيل"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="بدأ التثبيت"/>
+    <!-- Step -->
+    <str id="installer.step" txt="خطوة"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="‏IzPack - تثبيت"/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="تعذّرت كتابة معلومات إلغاء التثبيت."/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="الإطار: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="تحذير!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="نعم"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="معلومات"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="التثبيت"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="اختر حزم التثبيت"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="إعداد الاختصارات"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="اكتمل التثبيت"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="مسار الوجهة"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="يرجى قراءة المعلومات التالية:"/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[تم]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="اضغط على «تثبيت!» لبدء عملية التثبيت"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="تثبيت!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="الملف التالي موجود بالفعل. هل تريد استبداله؟"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="الملف موجود بالفعل"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="التقدم الإجمالي للتثبيت:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="تقدم تثبيت الحزمة:"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="يبدو أن مُثبِّت &quot;$APP_NAME&quot; الذي تحاول تشغيله لديه نسخة أخرى قيد التشغيل بالفعل. قد يكون هذا بسبب محاولة تثبيت فاشلة سابقة، أو أنك شغّلت المُثبِّت مرتين عن طريق الخطأ. الإجراء الموصى به هو انتظار بدء النسخة الأخرى من المُثبِّت. إذا كنت متأكداً من عدم وجود نسخة أخرى قيد التشغيل، يمكنك حذف ملف القفل &quot;$LOCK_FILE&quot; ثم إعادة تشغيل المُثبِّت."/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="يبدو أن مُثبِّت &quot;$APP_NAME&quot; الذي تحاول تشغيله لديه نسخة أخرى قيد التشغيل بالفعل.
+
+قد يكون هذا بسبب محاولة تثبيت فاشلة سابقة، أو أنك شغّلت المُثبِّت مرتين عن طريق الخطأ. الإجراء الموصى به هو تحديد &#x27;لا&#x27; والانتظار حتى بدء النسخة الأخرى من المُثبِّت. إذا كنت متأكداً من عدم وجود نسخة أخرى قيد التشغيل، اضغط زر &#x27;نعم&#x27; للسماح بتشغيل هذا المُثبِّت.
+
+هل أنت متأكد من رغبتك في متابعة هذا التثبيت؟"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="التبعيات: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="الحزمة المحددة لها التبعيات و/أو الاستثناءات التالية"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="الوصف"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="الاستثناءات: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="المساحة المتاحة: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="اختر الحزم التي تريد تثبيتها:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="غير قابل للتحديد"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="مساحة القرص المطلوبة للتثبيت تتجاوز المساحة المتاحة."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="إجمالي المساحة المطلوبة: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="ملاحظة: الحزم المعطَّلة مطلوبة."/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="تعذّر فتح مفتاح السجل {0}\{1}."/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="استعراض..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="سيتم إنشاء الدليل الهدف: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="لم تحدد وجهة! هل هذا صحيح؟"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="الدليل موجود بالفعل! هل أنت متأكد من رغبتك في التثبيت هنا، وقد تكون هناك حاجة للكتابة فوق ملفات موجودة؟"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="تم اكتشاف تثبيت غير متوافق. أزله أولاً، أو اختر دليلاً آخر للتثبيت إليه."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="اختر مسار التثبيت: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="لقد أدخلت مسار ملف. يرجى اختيار مسار دليل جديد أو موجود."/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="هذا الملف ليس دليلاً! يرجى اختيار دليل!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="الدليل المختار لا يحتوي على المنتج المطلوب."/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="لا يمكن الكتابة داخل هذا الدليل! يرجى اختيار دليل آخر!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="يجب أن يكون الدليل المختار موجوداً."/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="يجب أن يكون الدليل المختار موجوداً."/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="مسار الدليل غير صالح. يرجى إدخال مسار دليل يستوفي متطلبات نظام التشغيل."/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" فرض حذف "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="إلغاء التثبيت"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="سيؤدي هذا إلى إزالة التطبيق المُثبَّت!"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="يرجى قراءة المعلومات التالية:"/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="نأسف لأن IzPack لا يدعم إنشاء الاختصارات على نظام التشغيل هذا. لإنشاء الاختصارات، يرجى الرجوع إلى دليل نظام التشغيل."/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="حفظ ملف نصي"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="فيما يلي قائمة بالأهداف التي أراد مُصنّع هذا المنتج أن تتمكن من الوصول إليها."/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="يمكنك حفظ معلومات تفصيلية عن أهداف التطبيق في ملف نصي للرجوع إليها لاحقاً."/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="مجموعة برامج غير صالحة. يرجى إدخال سلسلة أبجدية رقمية."/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="قائمة التطبيقات"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="سطح المكتب"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="قائمة ابدأ"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="مجموعة بدء التشغيل"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="جميع المستخدمين"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="إنشاء الاختصارات في قائمة ابدأ"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="المستخدم الحالي"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="افتراضي"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="إنشاء اختصارات إضافية على سطح المكتب"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="اختر مجموعة برامج للاختصارات:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="قائمة ابدأ"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="بدء التشغيل مع النظام"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="إنشاء اختصار لـ:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="سطر الأوامر      : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="الوصف       : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="فهرس الأيقونة        : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="ملف الأيقونة         : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="الموقع المقصود : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="الاختصار          : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="هدف الاختصار   : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="مجلد العمل : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="حزم التثبيت المختارة"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="مسار التثبيت"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="تقرير التثبيت لـ : {0} الإصدار {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- أخطاء ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="خطأ [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; استثناء: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;لم ينجح التثبيت!&lt;br&gt;هل تريد كتابة ملف سجل؟&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;قد لا يكون التثبيت قد نجح بالكامل!&lt;br&gt;هل تريد كتابة ملف سجل؟&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="مشاكل في التثبيت"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="تحذير!!! لم ينجح التثبيت!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="يتضمن هذا التقرير {0} رسالة عامة و{1} تحذيراً و{2} خطأ"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- رسائل التثبيت ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="رسالة  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="تحذير!!! قد لا يكون التثبيت قد نجح بالكامل!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="مجلد التثبيت       : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           تقرير تثبيت IzPack"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="تعذّرت كتابة تقرير التثبيت إلى &#x27;{0}&#x27;"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="خطأ في كتابة التقرير"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="حفظ ملف السجل"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="وقت التثبيت            : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- تحذيرات ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="تحذير [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="تعديل القيمة"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="حذف القيمة"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="تعذّرت كتابة &#x27;{0}&#x27;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="فشل التحقق"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="يلزم الانتباه"/>
+</izpack:langpack>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for tha. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="ยินดีต้อนรับ"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="การติดตั้ง"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="เลือกแพ็กเกจการติดตั้ง"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="การติดตั้งเสร็จสิ้น"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="เส้นทางเป้าหมาย"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - การติดตั้ง "/>
+    <!-- Next -->
+    <str id="installer.next" txt="ถัดไป"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="ก่อนหน้า"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="ออกจากโปรแกรม"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="คุณแน่ใจหรือไม่ว่าต้องการออกจากโปรแกรม?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="การดำเนินการนี้จะยกเลิกการติดตั้ง!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="คำเตือน!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="ใช่"/>
+    <!-- No -->
+    <str id="installer.no" txt="ไม่"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="ยกเลิก"/>
+    <!-- Error -->
+    <str id="installer.error" txt="ข้อผิดพลาด"/>
+    <!-- Help -->
+    <str id="installer.help" txt="ช่วยเหลือ"/>
+    <!-- Step -->
+    <str id="installer.step" txt="ขั้นตอน"/>
+    <!-- of -->
+    <str id="installer.of" txt="จาก"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="ข้อความ"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="การดำเนินการนี้จะลบแอปพลิเคชันที่ติดตั้งไว้!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" บังคับลบ "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="ถอนการติดตั้ง"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="ยินดีต้อนรับสู่การติดตั้ง "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="ซอฟต์แวร์นี้พัฒนาโดย: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="เว็บไซต์หลักอยู่ที่: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="ไดเรกทอรีที่เลือกควรมีอยู่แล้ว"/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="ไดเรกทอรีที่เลือกควรมีอยู่แล้ว"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="ไดเรกทอรีที่เลือกไม่มีผลิตภัณฑ์ที่ต้องการ"/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="เลือกเส้นทางการติดตั้ง: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="เรียกดู..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="ไดเรกทอรีนี้มีอยู่แล้ว! คุณแน่ใจหรือไม่ว่าต้องการติดตั้งที่นี่และอาจเขียนทับไฟล์ที่มีอยู่?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="คุณไม่ได้ระบุตำแหน่งเป้าหมาย! ถูกต้องหรือไม่?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="ไดเรกทอรีเป้าหมายจะถูกสร้างขึ้น: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="ไฟล์นี้ไม่ใช่ไดเรกทอรี! กรุณาเลือกไดเรกทอรี!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="ไม่สามารถเขียนในไดเรกทอรีนี้ได้! กรุณาเลือกไดเรกทอรีอื่น!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="เลือกแพ็กที่คุณต้องการติดตั้ง:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="หมายเหตุ: แพ็กที่เป็นสีเทาจำเป็นต้องติดตั้ง"/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="พื้นที่ที่ต้องการทั้งหมด: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="พื้นที่ที่ใช้ได้: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="คำอธิบาย"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="แพ็กที่เลือกมีการพึ่งพาและ/หรือรายการที่ไม่รวมดังต่อไปนี้"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="การพึ่งพา: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="รายการที่ไม่รวม: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="พื้นที่ดิสก์ที่ต้องการสำหรับการติดตั้งมีมากกว่าพื้นที่ดิสก์ที่มีอยู่"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ไม่สามารถระบุได้"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="คลิก &#x27;ติดตั้ง!&#x27; เพื่อเริ่มกระบวนการติดตั้ง"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="ติดตั้ง!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="ความคืบหน้าการติดตั้งแพ็ก:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[เสร็จสิ้น]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="ความคืบหน้าการติดตั้งทั้งหมด:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="มีไฟล์อยู่แล้ว"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="ไฟล์ต่อไปนี้มีอยู่แล้ว ต้องการเขียนทับหรือไม่?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="เส้นทางการติดตั้ง"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="แพ็กการติดตั้งที่เลือก"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="ไม่สามารถเปิดคีย์รีจิสทรี {0}\{1} ได้"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack รายงานการติดตั้ง"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="คำเตือน!!! การติดตั้งไม่สำเร็จ!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="คำเตือน!!! การติดตั้งอาจไม่สำเร็จสมบูรณ์!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="รายงานนี้มีข้อความทั่วไป {0} รายการ คำเตือน {1} รายการ และข้อผิดพลาด {2} รายการ"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="รายงานการติดตั้งสำหรับ : {0} เวอร์ชัน {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="เวลาการติดตั้ง          : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="ไดเรกทอรีการติดตั้ง     : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- ข้อความการติดตั้ง ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- คำเตือน ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- ข้อผิดพลาด ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; ข้อยกเว้น: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="ข้อความ  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="คำเตือน [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="ข้อผิดพลาด [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="ข้อผิดพลาดในการเขียนรายงาน"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="ไม่สามารถเขียนรายงานการติดตั้งลง &#x27;&#x27;{0}&#x27;&#x27; ได้"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="ปัญหาการติดตั้ง"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="บันทึกไฟล์ log"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;การติดตั้งไม่สำเร็จ!&lt;br&gt;คุณต้องการเขียนไฟล์บันทึกหรือไม่?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;การติดตั้งอาจไม่สำเร็จสมบูรณ์!&lt;br&gt;คุณต้องการเขียนไฟล์บันทึกหรือไม่?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="ไม่สามารถเขียน &#x27;&#x27;{0}&#x27;&#x27; ได้"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="แก้ไขค่า"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="ข้อผิดพลาด"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="คำเตือน"/>
+</langpack>

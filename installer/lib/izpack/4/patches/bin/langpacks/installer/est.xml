@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for est. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="Tere tulemast"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Paigaldamine"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Valige paigalduspaketid"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Paigaldamine lõpetatud"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Sihtkoht"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - Paigaldamine: "/>
+    <!-- Next -->
+    <str id="installer.next" txt="Järgmine"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Eelmine"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Välju"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Kas soovite kindlasti väljuda?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="See tühistab paigaldamise!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Hoiatus!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Jah"/>
+    <!-- No -->
+    <str id="installer.no" txt="Ei"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Loobu"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Viga"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Abi"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Samm"/>
+    <!-- of -->
+    <str id="installer.of" txt="/"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Sõnum"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="See eemaldab paigaldatud rakenduse!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Kustuta jõuga "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Eemalda"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="Tere tulemast "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt=" paigaldamisel!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="Selle tarkvara on välja töötanud: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="Koduleht asub aadressil: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="Valitud kaust peab olema olemas."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Valitud kaust peab olema olemas."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="Valitud kaust ei sisalda nõutud toodet."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Valige paigalduskoht: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Sirvi..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="Kaust on juba olemas! Kas soovite kindlasti siia paigaldada ja võimalikud olemasolevad failid üle kirjutada?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Te pole sihtkohta määranud! Kas see on õige?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Sihtkaust luuakse: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="See fail ei ole kaust! Palun valige kaust!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Selles kaustas ei saa kirjutada! Palun valige mõni muu kaust!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Valige paketid, mille soovite paigaldada:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Märkus: hallid paketid on kohustuslikud."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Kogu vajalik ruum: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Vaba ruum: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Kirjeldus"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Valitud paketil on järgmised sõltuvused ja/või väljajätmised"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Sõltuvused: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Väljajätmised: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Paigaldamiseks vajalik kettaruum ületab saadaoleva kettaruumala."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ei saa määrata"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Paigaldamise alustamiseks klõpsake nupul „Paigalda!“"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Paigalda!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Paketi paigaldamise edenemine:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Lõpetatud]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Paigaldamise üldine edenemine:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Fail on juba olemas"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Järgnev fail on juba olemas. Kas see tuleks üle kirjutada?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Paigalduskoht"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Valitud paigalduspaketid"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Registri võtit {0}\{1} ei saa avada."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack PAIGALDAMISE ARUANNE"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="HOIATUS!!! Paigaldamine ei õnnestunud!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="HOIATUS!!! Paigaldamine ei pruugi olla täielikult õnnestunud!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="See aruanne sisaldab {0} üldist sõnumit, {1} hoiatust ja {2} viga"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Paigaldamise aruanne : {0} versioon {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Paigaldamise aeg            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Paigalduskaust       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Paigaldamise sõnumid ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Hoiatused ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Vead ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Erand: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Sõnum  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Hoiatus [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Viga [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Viga aruande kirjutamisel"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Paigaldamise aruande kirjutamine failisse &#x27;{0}&#x27; ebaõnnestus"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Paigaldusprobleemid"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Salvesta logifail"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Paigaldamine ei õnnestunud!&lt;br&gt;Kas soovite kirjutada logifaili?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Paigaldamine ei pruugi olla täielikult õnnestunud!&lt;br&gt;Kas soovite kirjutada logifaili?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="kirjutamine faili &#x27;{0}&#x27; ebaõnnestus"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="muuda väärtust"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="Viga"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="Hoiatus"/>
+</langpack>

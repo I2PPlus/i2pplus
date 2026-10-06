@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-<!-- The Ukrainian langpack -->
-<!-- Translation by rndnick - the I2P project -->
-
 <langpack>
 
     <!-- Heading messages START -->
@@ -34,7 +31,7 @@
     <str id="installer.next" txt="Далі"/>
     <str id="installer.prev" txt="Назад"/>
     <str id="installer.quit" txt="Вихід"/>
-    <str id="installer.madewith" txt="(Зроблено за допомогою IzPack - http://izpack.org/)"/>
+    <str id="installer.madewith" txt=""/>
     <str id="installer.quit.title" txt="Дійсно вийти?"/>
     <str id="installer.quit.message" txt="Це перерве встановлення!"/>
     <str id="installer.warning" txt="Попередження!"/>
@@ -52,7 +49,6 @@
     <str id="uninstaller.destroytarget" txt=" Примусово видалити "/>
     <str id="uninstaller.uninstall" txt="Видалити"/>
 
-    <!-- The strings for the 'official' IzPack plugins -->
     <!-- HelloPanel strings -->
     <str id="HelloPanel.welcome1" txt="Ласкаво просимо до встановлення "/>
     <str id="HelloPanel.welcome2" txt="!"/>

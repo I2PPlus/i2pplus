@@ -2674,7 +2674,7 @@
 
   <target name="copyflags">
     <copy quiet="true" verbose="false" todir="${pkg.temp.dir}/eepsite/docroot/help/lib/">
-      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="af.svg az.svg bn.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gr.svg hu.svg id.svg il.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg ph.svg pl.svg pk.svg pt.svg ro.svg ru.svg se.svg si.svg th.svg tr.svg tw.svg tz.svg us.svg lang_ar.svg lang_ca.svg ua.svg vn.svg xt.svg"/>
+      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="af.svg az.svg bn.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gr.svg hu.svg id.svg il.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg ph.svg pl.svg pk.svg pt.svg ro.svg ru.svg se.svg si.svg sk.svg th.svg tr.svg tw.svg tz.svg us.svg lang_ar.svg lang_ca.svg ua.svg vn.svg xt.svg"/>
     </copy>
   </target>
 
@@ -3435,9 +3435,16 @@
     <copy quiet="true" verbose="false" file="${build.root}build/jetty-i2p.jar" todir="${pkg.temp.dir}/lib/"/>
   </target>
 
-  <target name="izpack-patches">
+  <target name="izpack-patches" depends="izpack-flag-gifs">
+    <!-- The flags live once in installer/lib/izpack/resources/flags, shared with the
+         IzPack 5 build, and are folded in here at the path the IzPack 4 compiler
+         hardcodes. Staging them into the jar rather than storing a second copy under
+         4/patches keeps one source of truth - two on-disk copies could only diverge. -->
     <jar destfile="${basedir}/installer/lib/izpack/patches.jar"
-      basedir="${basedir}/installer/lib/izpack/4/patches"/>
+      basedir="${basedir}/installer/lib/izpack/4/patches">
+      <zipfileset dir="${basedir}/installer/lib/izpack/resources/flags"
+        prefix="bin/langpacks/flags"/>
+    </jar>
     <taskdef name="izpack" classpath="${basedir}/installer/lib/izpack/4/standalone-compiler.jar:${basedir}/installer/lib/izpack/patches.jar"
       classname="com.izforge.izpack.ant.IzPackTask"/>
   </target>
@@ -3521,11 +3528,72 @@
   <!-- Fetches the IzPack 5 distribution into installer/lib/izpack/5/. Separate
        target so it can also be run on its own (ant download-izpack5) and called
        by an antcall, which is how ensureIzpack5 invokes it. -->
+  <target name="izpack-panel-jar" depends="ensureIzpack5-libs">
+    <!--
+      The localized HTML panel. It has to be on the IzPack 5 compiler classpath, not
+      just on ours: the compiler resolves each <panel classname=...> reflectively and
+      packages the class into the installer jar, so a class it cannot load is a build
+      failure. izpack5-patches copies resource overrides onto the working directory
+      instead, but that trick does not apply to classes.
+    -->
+    <mkdir dir="${basedir}/installer/lib/izpack/5/patches/java/build"/>
+    <javac srcdir="${basedir}/installer/lib/izpack/5/patches/java/src"
+           destdir="${basedir}/installer/lib/izpack/5/patches/java/build"
+           includeantruntime="false" debug="true"
+           source="8" target="8" encoding="UTF-8"
+           nowarn="true">
+      <classpath>
+        <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
+      </classpath>
+      <!-- izpack.jar is the panel's superclass; compile against it plus its deps. -->
+      <compilerarg value="-XDignore.symbol.file"/>
+    </javac>
+    <jar destfile="${basedir}/installer/lib/izpack/5/patches/java/izpack-i2p.jar"
+         basedir="${basedir}/installer/lib/izpack/5/patches/java/build"/>
+  </target>
+
+  <!-- Proves "Made with IzPack" is never rendered. The distribution's langpacks are
+       compiled into the installer from the compiler's own jar and cannot be replaced,
+       so the string is present in the shipped bytes; what has to be checked is that
+       the CustomLangPack merged over the selected langpack wins. Uses the real
+       LocaleDatabase from the izpack-core the installer runs on, against the built jar
+       rather than the source tree. See the test for the full reasoning. -->
+  <target name="izpack-branding-check" depends="ensureIzpack5-libs">
+    <mkdir dir="${build.root}test"/>
+    <javac srcdir="${basedir}/installer/lib/izpack/5/patches/java/test"
+           destdir="${build.root}test"
+           includeantruntime="false" debug="false"
+           source="8" target="8" encoding="UTF-8" nowarn="true">
+      <classpath>
+        <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
+        <pathelement location="${basedir}/dist/install.jar"/>
+      </classpath>
+    </javac>
+    <java classname="net.i2p.installer.BrandingSuppressedTest" fork="true" failonerror="true">
+      <classpath>
+        <pathelement location="${build.root}test"/>
+        <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
+        <pathelement location="${basedir}/dist/install.jar"/>
+      </classpath>
+    </java>
+  </target>
+
+  <target name="izpack-flag-gifs">
+    <!-- A langpack whose flag neither IzPack distribution ships fails the
+         compiler, and the flags live as SVG in the console, so generate the
+         missing ones from there. The flags are committed, so this normally does
+         nothing and needs no rasteriser; it only fires when a descriptor gains a
+         langpack whose flag is absent. See installer/lib/izpack/gen-izpack-flags.sh. -->
+    <exec executable="${basedir}/installer/lib/izpack/gen-izpack-flags.sh" failonerror="true">
+      <arg value="--ensure"/>
+    </exec>
+  </target>
+
   <target name="download-izpack5">
     <exec executable="installer/lib/izpack/5/download-izpack5.sh" failonerror="true"/>
   </target>
 
-  <target name="ensureIzpack5">
+  <target name="ensureIzpack5-libs">
     <!-- Set if unset. override.properties is read at parse time, so an
          izpack5.home set there is already visible here: remember that before
          defaulting, so a hand-installed distribution stays authoritative and is
@@ -3553,9 +3621,20 @@
         </not>
       </condition>
     </fail>
+  </target>
+
+  <!--
+    Split from ensureIzpack5-libs so our own panels can be compiled against the
+    distribution before the taskdef binds its classloader: <panel classname=...> is
+    resolved reflectively at compile time, so a panel class the compiler cannot load is a
+    build failure rather than a runtime one.
+  -->
+  <target name="ensureIzpack5" depends="ensureIzpack5-libs, izpack-panel-jar">
     <echo message="IzPack 5 home: ${izpack5.home}"/>
     <path id="izpack5.lib.path">
       <fileset dir="${izpack5.home}/lib" includes="*.jar"/>
+      <!-- Our own panels, resolved by classname at compile time (ant izpack-panel-jar). -->
+      <pathelement location="${basedir}/installer/lib/izpack/5/patches/java/izpack-i2p.jar"/>
     </path>
     <taskdef name="izpack5"
       classpathref="izpack5.lib.path"
@@ -3566,7 +3645,7 @@
     <property name="izpack5.exe.work" location="${basedir}/installer/lib/izpack/5/exe-work"/>
   </target>
 
-  <target name="izpack5-patches" depends="ensureIzpack5, buildProperties">
+  <target name="izpack5-patches" depends="ensureIzpack5, buildProperties, izpack-flag-gifs">
     <!-- custom langpacks
          Izpack tries to load the resource both from the classpath and the file system;
          we do it this way because jaring them up and adding a pathelement to izpack5.lib.path doesn't work.
@@ -3578,6 +3657,14 @@
     <mkdir dir="com/izforge/izpack/bin/langpacks/"/>
     <copy quiet="true" verbose="false" toDir="com/izforge/izpack/bin/langpacks/">
       <fileset dir="installer/lib/izpack/5/patches/resources"/>
+    </copy>
+    <!-- Flags come from the shared resources/flags directory rather than being kept
+         under 5/patches/resources, for the reason given in izpack-patches. The compiler
+         looks for them at com/izforge/izpack/bin/langpacks/flags, which is where the
+         copy above puts every other resource. -->
+    <copy quiet="true" verbose="false"
+      todir="com/izforge/izpack/bin/langpacks/flags">
+      <fileset dir="installer/lib/izpack/resources/flags" includes="*.gif"/>
     </copy>
   </target>
 

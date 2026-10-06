@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for ben. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="স্বাগতম"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="স্থাপনা"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="স্থাপনা প্যাকেজ নির্বাচন করুন"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="স্থাপনা সম্পন্ন হয়েছে"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="গন্তব্য পথ"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - স্থাপনা করা হচ্ছে "/>
+    <!-- Next -->
+    <str id="installer.next" txt="পরবর্তী"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="পূর্ববর্তী"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="প্রস্থান করুন"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="আপনি কি নিশ্চিতভাবে প্রস্থান করতে চান?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="এতে স্থাপনা বাতিল হয়ে যাবে!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="সতর্কতা!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="হ্যাঁ"/>
+    <!-- No -->
+    <str id="installer.no" txt="না"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="বাতিল"/>
+    <!-- Error -->
+    <str id="installer.error" txt="ত্রুটি"/>
+    <!-- Help -->
+    <str id="installer.help" txt="সহায়তা"/>
+    <!-- Step -->
+    <str id="installer.step" txt="ধাপ"/>
+    <!-- of -->
+    <str id="installer.of" txt="/"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="বার্তা"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="এতে ইনস্টল করা অ্যাপ্লিকেশনটি মুছে যাবে!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" জোর করে মুছে ফেলা "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="অপসারণ"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="স্থাপনায় স্বাগতম "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="এই সফটওয়্যারটি তৈরি করেছেন: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="হোমপেজ এখানে রয়েছে: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="নির্বাচিত ডিরেক্টরির অস্তিত্ব থাকতে হবে."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="নির্বাচিত ডিরেক্টরির অস্তিত্ব থাকতে হবে."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="নির্বাচিত ডিরেক্টরিতে প্রয়োজনীয় পণ্য নেই."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="স্থাপনার পথ নির্বাচন করুন: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="ব্রাউজ করুন..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="ডিরেক্টরিটি ইতিমধ্যেই বিদ্যমান! আপনি কি নিশ্চিতভাবে এখানে স্থাপনা করতে এবং বিদ্যমান ফাইলগুলি অতিলেখন করতে চান?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="আপনি কোনো গন্তব্য অবস্থান উল্লেখ করেননি! এটি কি ঠিক আছে?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="গন্তব্য ডিরেক্টরি তৈরি হবে: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="এই ফাইলটি ডিরেক্টরি নয়! একটি ডিরেক্টরি বেছে নিন!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="এই ডিরেক্টরিতে লেখা যায় না! অন্য একটি ডিরেক্টরি বেছে নিন!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="আপনি যে প্যাকেজগুলি স্থাপনা করতে চান নির্বাচন করুন:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="নোট: ধূসর প্যাকেজগুলি আবশ্যক."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="মোট প্রয়োজনীয় জায়গা: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="উপলব্ধ জায়গা: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="বিবরণ"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="নির্বাচিত প্যাকেজের নিচের নির্ভরতা এবং/অথবা বাদের তালিকা রয়েছে"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="নির্ভরতা: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="বাদ: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="স্থাপনার জন্য প্রয়োজনীয় ডিস্ক জায়গা উপলব্ধ ডিস্ক জায়গার চেয়ে বেশি."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="নির্ণয় করা যায়নি"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="স্থাপনার প্রক্রিয়া শুরু করতে &#x27;স্থাপনা করুন!&#x27; বোতামে ক্লিক করুন"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="স্থাপনা করুন!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="প্যাকেজ স্থাপনার অগ্রগতি:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[সম্পন্ন]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="সামগ্রিক স্থাপনার অগ্রগতি:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="ফাইল ইতিমধ্যেই বিদ্যমান"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="নিচের ফাইলটি ইতিমধ্যেই বিদ্যমান. এটি কি অতিলেখন করা হবে?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="স্থাপনার পথ"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="নির্বাচিত স্থাপনা প্যাকেজ"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="রেজিস্ট্রি কী {0}\{1} খোলা যায়নি."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack স্থাপনা প্রতিবেদন"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="সতর্কতা!!! স্থাপনা সফল হয়নি!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="সতর্কতা!!! স্থাপনা সম্পূর্ণ সফল নাও হতে পারে!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="এই প্রতিবেদনে {0}টি সাধারণ বার্তা, {1}টি সতর্কতা এবং {2}টি ত্রুটি রয়েছে"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="{0}-এর জন্য স্থাপনা প্রতিবেদন : সংস্করণ {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="স্থাপনা সময়            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="স্থাপনা ডিরেক্টরি       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- স্থাপনা বার্তা ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- সতর্কতা ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- ত্রুটি ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; ব্যতিক্রম: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="বার্তা  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="সতর্কতা [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="ত্রুটি [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="প্রতিবেদন লেখায় ত্রুটি"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="স্থাপনা প্রতিবেদন &#x27;&#x27;{0}&#x27;&#x27; ফাইলে লেখা যায়নি"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="স্থাপনার সমস্যা"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="লগ ফাইল সংরক্ষণ করুন"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;স্থাপনা সফল হয়নি!&lt;br&gt;আপনি কি একটি লগ ফাইল লিখতে চান?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;স্থাপনা সম্পূর্ণ সফল নাও হতে পারে!&lt;br&gt;আপনি কি একটি লগ ফাইল লিখতে চান?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="&#x27;&#x27;{0}&#x27;&#x27; লেখা যায়নি"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="মান পরিবর্তন করুন"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="ত্রুটি"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="সতর্কতা"/>
+</langpack>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for ara. See tools/scripts/izpack-required-strings.py. -->
+
+<!-- Machine-drafted on first fill: taken from our own catalogues where one had the
+         string, machine translated otherwise. Needs a native reviewer's pass before
+         it should be treated as a finished translation. -->
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="ترحيب"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="التثبيت"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="اختر حزم التثبيت"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="اكتمل التثبيت"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="مسار الوجهة"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="‏IzPack - تثبيت"/>
+    <!-- Next -->
+    <str id="installer.next" txt="التالي"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="السابق"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="إنهاء"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="هل أنت متأكد من رغبتك في الإنهاء؟"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="سيؤدي هذا إلى إلغاء التثبيت!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="تحذير!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="نعم"/>
+    <!-- No -->
+    <str id="installer.no" txt="لا"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="إلغاء"/>
+    <!-- Error -->
+    <str id="installer.error" txt="خطأ"/>
+    <!-- Help -->
+    <str id="installer.help" txt="مساعدة"/>
+    <!-- Step -->
+    <str id="installer.step" txt="خطوة"/>
+    <!-- of -->
+    <str id="installer.of" txt="من"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="رسالة"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="سيؤدي هذا إلى إزالة التطبيق المُثبَّت!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" فرض حذف "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="إلغاء التثبيت"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="مرحباً بكم في تثبيت "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="تم تطوير هذا البرنامج بواسطة: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="الصفحة الرئيسية على: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="يجب أن يكون الدليل المختار موجوداً."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="يجب أن يكون الدليل المختار موجوداً."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="الدليل المختار لا يحتوي على المنتج المطلوب."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="اختر مسار التثبيت: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="استعراض..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="الدليل موجود بالفعل! هل أنت متأكد من رغبتك في التثبيت هنا، وقد تكون هناك حاجة للكتابة فوق ملفات موجودة؟"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="لم تحدد وجهة! هل هذا صحيح؟"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="سيتم إنشاء الدليل الهدف: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="هذا الملف ليس دليلاً! يرجى اختيار دليل!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="لا يمكن الكتابة داخل هذا الدليل! يرجى اختيار دليل آخر!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="اختر الحزم التي تريد تثبيتها:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="ملاحظة: الحزم المعطَّلة مطلوبة."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="إجمالي المساحة المطلوبة: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="المساحة المتاحة: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="الوصف"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="الحزمة المحددة لها التبعيات و/أو الاستثناءات التالية"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="التبعيات: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="الاستثناءات: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="مساحة القرص المطلوبة للتثبيت تتجاوز المساحة المتاحة."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="غير قابل للتحديد"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="اضغط على «تثبيت!» لبدء عملية التثبيت"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="تثبيت!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="تقدم تثبيت الحزمة:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[تم]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="التقدم الإجمالي للتثبيت:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="الملف موجود بالفعل"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="الملف التالي موجود بالفعل. هل تريد استبداله؟"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="مسار التثبيت"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="حزم التثبيت المختارة"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="تعذّر فتح مفتاح السجل {0}\{1}."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           تقرير تثبيت IzPack"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="تحذير!!! لم ينجح التثبيت!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="تحذير!!! قد لا يكون التثبيت قد نجح بالكامل!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="يتضمن هذا التقرير {0} رسالة عامة و{1} تحذيراً و{2} خطأ"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="تقرير التثبيت لـ : {0} الإصدار {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="وقت التثبيت            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="مجلد التثبيت       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- رسائل التثبيت ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- تحذيرات ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- أخطاء ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; استثناء: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="رسالة  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="تحذير [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="خطأ [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="خطأ في كتابة التقرير"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="تعذّرت كتابة تقرير التثبيت إلى &#x27;{0}&#x27;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="مشاكل في التثبيت"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="حفظ ملف السجل"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;لم ينجح التثبيت!&lt;br&gt;هل تريد كتابة ملف سجل؟&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;قد لا يكون التثبيت قد نجح بالكامل!&lt;br&gt;هل تريد كتابة ملف سجل؟&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="تعذّرت كتابة &#x27;{0}&#x27;"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="تعديل القيمة"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="فشل التحقق"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="يلزم الانتباه"/>
+</langpack>

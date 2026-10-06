@@ -73,7 +73,8 @@
     langToCountry.put("pt", "pt");
     langToCountry.put("ro", "ro");
     langToCountry.put("ru", "ru");
-    langToCountry.put("sl", "sk");
+    langToCountry.put("sk", "sk");
+    langToCountry.put("sl", "si");
     langToCountry.put("sv", "se");
     langToCountry.put("sw", "tz");
     langToCountry.put("bo", "xt");
@@ -127,7 +128,8 @@
 <a href="#" data-param="lang" data-value="pt" title="Portugues"><img src="/flags.jsp?c=pt" alt=""></a>
 <a href="#" data-param="lang" data-value="ro" title="Romana"><img src="/flags.jsp?c=ro" alt=""></a>
 <a href="#" data-param="lang" data-value="ru" title="Russian"><img src="/flags.jsp?c=ru" alt=""></a>
-<a href="#" data-param="lang" data-value="sl" title="Slovencina"><img src="/flags.jsp?c=sk" alt=""></a>
+<a href="#" data-param="lang" data-value="sk" title="Slovensky"><img src="/flags.jsp?c=sk" alt=""></a>
+<a href="#" data-param="lang" data-value="sl" title="Slovencina"><img src="/flags.jsp?c=si" alt=""></a>
 <a href="#" data-param="lang" data-value="sv" title="Svenska"><img src="/flags.jsp?c=se" alt=""></a>
 <a href="#" data-param="lang" data-value="sw" title="Kiswahili"><img src="/flags.jsp?c=tz" alt=""></a>
 <a href="#" data-param="lang" data-value="th" title="Thai"><img src="/flags.jsp?c=th" alt=""></a>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Kanselahin"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="Kinansela ang pag-install"/>
+    <!-- Close -->
+    <str id="installer.close" txt="Isara"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="Magpatuloy pa rin ba?"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="Kopyahin"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Pagkakamali"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="May nagkamali"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="Tapos na ang pag-install"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Tulong"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="Isara"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="Itago ang detalye"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Mensahe"/>
+    <!-- Next -->
+    <str id="installer.next" txt="Susunod"/>
+    <!-- No -->
+    <str id="installer.no" txt="Hindi"/>
+    <!-- of -->
+    <str id="installer.of" txt="sa"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="Plataporma: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Nakaraan"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Umalis"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="Kanselado ang pag-install dahil dito!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Sigurado ka bang gusto mong umalis?"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="Kailangan mag-restart para mailapat ang ilang pagbabago. Gusto mo bang mag-restart ngayon?"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="Kailangan mag-restart"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="Iminumungkahing mag-restart para mailapat ang ilang pagbabago."/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="Iminumungkahing mag-restart"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="Ipadala ang ulat"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="Ipakita ang detalye"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="Nagsimula ang pag-install"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Hakbang"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="IzPack - Pag-install ng "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="Nabigong isulat ang impormasyon sa pag-uninstall."/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="Balangkas: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Babala!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Oo"/>
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="Impormasyon"/>
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Pag-install"/>
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Pumili ng mga pakete"/>
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="Set up ng mga shortcut"/>
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Tapos na ang pag-install"/>
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Landas ng puntuhan"/>
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="Pakisapos ang sumusunod na impormasyon:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Tapos na]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Pindutin ang &#x27;I-install!&#x27; upang simulan ang proseso ng pag-install"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="I-install!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Mayroon nang sumusunod na file. Kayo po ba naisong i-overwrite?"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Mayroon nang file"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Kabuuang progreso ng pag-install:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Progreso ng pag-install ng pakete:"/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="Ang installer na &quot;$APP_NAME&quot; na sinusubukang patakbuhin ay mukhang may tumatakbong kopya na. Maaaring bunga ito ng dating nabigong pag-install, o maliwang sinimulan mo ang installer nang dalawang beses. Ang inirerekomendang hakbang ay maghintay hanggang simulan ng iba pang kopya ng installer. Kung sigurado ka na walang ibang tumatakbong kopya ng installer, maaari mong burahin ang lock file na &quot;$LOCK_FILE&quot; at simulan muli ang installer."/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="Ang installer na &quot;$APP_NAME&quot; na sinusubukang patakbuhin ay mukhang may tumatakbong kopya na.
+
+Maaaring bunga ito ng dating nabigong pag-install, o maliwang sinimulan mo ang
+installer nang dalawang beses. Ang inirerekomendang hakbang ay pumili ng &#x27;Hindi&#x27; at maghintay
+hanggang simulan ng iba pang kopya ng installer. Kung sigurado ka na walang ibang tumatakbong
+kopya ng installer, pindutin ang &#x27;Oo&#x27; upang payagan ang installer na ito.
+
+Sigurado ka bang gusto mong magpatuloy sa pag-install na ito?"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Mga kailangan: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Ang napiling pakete ay may mga sumusunod na kailangan at/o hindi kasama"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Paglalarawan"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Mga hindi kasama: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Espasyong available: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Piliin ang mga paketeng gusto mong i-install:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="hindi matukoy"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Lumampas sa available na espasyo sa disk ang espasyong kailangan para sa pag-install."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Kabuuang espasyong kailangan: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Tandaan: Ang mga nakapailalang na pakete ay kinakailangan."/>
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Hindi maabuksan ang registry key {0}\\{1}."/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Tingnan..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Gagawa ng direktoryo sa: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Hindi ka nagtakda ng lokasyon! Tama ba ito?"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="Nakaraan na ang direktoryo! Sigurado ka bang gusto mong i-install dito at baka ma-overwrite ang mga umiiral na file?"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="Natukoy ang hindi tugmang pag-install. I-uninstall ito muna, o pumili ng ibang direktoryo para sa pag-install."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Pumili ng landas ng pag-install: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="Ang landas na inilagay mo ay tumuturo sa isang file. Mangyaring pumili ng landas sa bagong o umiiral na direktoryo."/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Hindi direktoryo ang file na ito! Mangyaring pumili ng direktoryo!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="Wala ang kinakailangang produkto sa napiling direktoryo."/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Hindi maaaring isulat sa direktoryong ito! Mangyaring pumili ng ibang direktoryo!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="Dapat umiral na ang napiling direktoryo."/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="Dapat umiral na ang napiling direktoryo."/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="Hindi wasto ang landas ng direktoryo. Mangyaring magpasok ng landas ng direktoryo na sumasagot sa mga kinakailangan ng operating system."/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Sapilitang burahin ang "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="I-uninstall"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="Masisira nito ang naka-install na aplikasyon!"/>
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="Pakisapos ang sumusunod na impormasyon:"/>
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="Nagsisisi kami ngunit hindi sinusuportahan ng IzPack ang paggawa ng mga shortcut sa operating system na ito. Para makagawa ng mga shortcut, pakisakong tingnan ang manual ng iyong operating system."/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="I-save ang text file"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Ito ang listahan ng mga target na gusto ng gumagawa ng produktong ito na puntahan mo."/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Maaari mong i-save ang detalyadong impormasyon tungkol sa mga target ng aplikasyon sa isang text file para makita mo ito sa bandang huli."/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="Hindi wasto ang pangkat ng programa. Mangyaring magpasok ng hanay ng titik at numero."/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="Menu ng mga aplikasyon"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="Desktop"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="Menu ngagsimula"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="Pangkat ng startup"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="lahat ng user"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="Gumawa ng mga shortcut sa Menu ngagsimula"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="kasalukuyang user"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="Default"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="Gumawa ng karagdagang shortcut sa desktop"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="Pumili ng pangkat ng programa para sa mga shortcut:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Menu ngagsimula"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="Patakbuhin sa startup"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="gumawa ng shortcut para sa:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="Linya ng utos     : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="Paglalarawan      : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="Index ng ikono    : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="File ng ikono     : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="Nais na lokasyon  : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="Shortcut          : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="Target ng shortcut: "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="Folder ng trabaho : "/>
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Napiling mga pakete"/>
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Landas ng pag-install"/>
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Ulat ng pag-install para sa : {0} Bersyon {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Mga Pagkakamali ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Pagkakamali [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Eksepsiyon: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Hindi matagumpay ang pag-install!&lt;br&gt;Gusto mo bang magsulat ng log file?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Maaaring hindi lubos na matagumpay ang pag-install!&lt;br&gt;Gusto mo bang magsulat ng log file?&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Mga problema sa pag-install"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="BABALA!!! Hindi matagumpay ang pag-install!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="Naglalaman ang ulat na ito ng {0} pangkalahatang mensahe, {1} babala at {2} kamalian"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Mga Mensahe ng Pag-install ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Mensahe  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="BABALA!!! Maaaring hindi lubos na matagumpay ang pag-install!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Landas ng install       : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           ULAT NG PAG-INSTALL NG IzPack"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Hindi maisulat ang ulat ng pag-install sa &#x27;{0}&#x27;"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Pagkakamali sa pagtatago ng ulat"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="I-save ang log file"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Oras ng install         : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Mga Babala ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Babala [{0}] - "/>
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="baguhin ang halaga"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="burahin ang halaga"/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="hindi maisulat ang &#x27;{0}&#x27;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="Pagkakamali"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="Babala"/>
+</izpack:langpack>

@@ -140,6 +140,11 @@ public class ProfileOrganizer {
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
     /**
+     *  Network size above which tier thresholds scale with the network instead of
+     *  staying at their configured default.
+     */
+    static final int SCALING_THRESHOLD = 3000;
+    /**
      * _defaultMinFastPeers.
      */
     public static volatile int _defaultMinFastPeers = 1000;
@@ -1790,8 +1795,15 @@ public class ProfileOrganizer {
      *  the write lock held.
      */
     private void lockedRebuildTiers(Set<PeerProfile> candidates, double buildSuccess) {
+        // Fetched once for the whole rebuild; lockedPlaceProfile() would otherwise
+        // re-walk the network database for every candidate.
+        int known = _context.netDb().getKnownRouters();
+        int active = _context.commSystem().countActivePeers();
+        int minHighCap = getMinimumHighCapacityPeers(known);
+        int maxFast = getMaximumFastPeers(known, active);
+        int maxHighCap = getMaximumHighCapPeers(known, active);
         for (PeerProfile profile : candidates) {
-            lockedPlaceProfile(profile, buildSuccess);
+            lockedPlaceProfile(profile, buildSuccess, minHighCap, maxFast, maxHighCap);
         }
     }
 
@@ -3089,6 +3101,25 @@ public class ProfileOrganizer {
     }
 
     private void lockedPlaceProfile(PeerProfile profile, double buildSuccess) {
+        lockedPlaceProfile(profile, buildSuccess,
+                           getMinimumHighCapacityPeers(),
+                           getMaximumFastPeers(),
+                           getMaximumHighCapPeers());
+    }
+
+    /**
+     * Variant taking the tier thresholds, which the caller has already fetched for
+     * the whole scan.
+     *
+     * @param profile the profile to place
+     * @param buildSuccess cached tunnel build success ratio
+     * @param minHighCap minimum high-capacity peers for this scan
+     * @param maxFast maximum fast peers for this scan
+     * @param maxHighCap maximum high-capacity peers for this scan
+     * @since 0.9.71+
+     */
+    private void lockedPlaceProfile(PeerProfile profile, double buildSuccess,
+                                    int minHighCap, int maxFast, int maxHighCap) {
         Hash peer = profile.getPeer();
 
         // Remove existing entries (idempotent)
@@ -3101,7 +3132,7 @@ public class ProfileOrganizer {
         _notFailingPeersList.add(peer); // Note: O(n), but acceptable during reorg
 
         // Evaluate tier placement
-        lockedPromoteProfileToTiers(profile, buildSuccess);
+        lockedPromoteProfileToTiers(profile, buildSuccess, minHighCap, maxFast, maxHighCap);
     }
 
     /**
@@ -3111,6 +3142,34 @@ public class ProfileOrganizer {
      * Must be called with write lock held.
      */
     private void lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess) {
+        lockedPromoteProfileToTiers(profile, buildSuccess,
+                                    getMinimumHighCapacityPeers(),
+                                    getMaximumFastPeers(),
+                                    getMaximumHighCapPeers());
+    }
+
+    /**
+     * Evaluate a profile for promotion to fast/high-cap tiers without touching
+     * the notFailing structures.  Safe to call between reorganize cycles —
+     * does not add duplicates to _notFailingPeersList.
+     * Must be called with write lock held.
+     *
+     * <p>The three tier thresholds are passed in rather than read here. Each one
+     * costs a walk of the whole network database, and this runs once per profile
+     * in a scan, so reading them per profile made a single pass cost
+     * profiles-times-a-database-scan. They depend only on network size and the
+     * active peer count, neither of which changes during a pass, so the caller
+     * fetches them once for the whole scan.
+     *
+     * @param profile the profile to evaluate
+     * @param buildSuccess cached tunnel build success ratio
+     * @param minHighCap minimum high-capacity peers, fetched once per scan
+     * @param maxFast maximum fast peers, fetched once per scan
+     * @param maxHighCap maximum high-capacity peers, fetched once per scan
+     * @since 0.9.71+
+     */
+    private void lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess,
+                                             int minHighCap, int maxFast, int maxHighCap) {
         Hash peer = profile.getPeer();
         PeerProfile notFailingProfile = _notFailingPeers.get(peer);
 
@@ -3145,7 +3204,6 @@ public class ProfileOrganizer {
         // state is persisted.
         clearLossIfReadmitted(profile);
 
-        int minHighCap = getMinimumHighCapacityPeers();
         double effectiveCapThreshold = Math.max(_thresholdCapacityValue, CapacityCalculator.GROWTH_FACTOR);
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
@@ -3156,7 +3214,7 @@ public class ProfileOrganizer {
         // - isHighBandwidthCapable: X/P/O tier, no D/E/G caps
         // - Capacity above threshold, or room in the tier
         boolean hcNeedsFilling = _highCapacityPeers.size() < minHighCap;
-        boolean hcHasRoom = _highCapacityPeers.size() < getMaximumHighCapPeers();
+        boolean hcHasRoom = _highCapacityPeers.size() < maxHighCap;
         boolean hcTight = _highCapacityPeers.size() >= MIN_HC_TIGHT_COUNT;
         if (!_highCapacityPeers.containsKey(peer)) {
             boolean hasCapacity = profile.getCapacityValue() >= effectiveCapThreshold;
@@ -3173,7 +3231,7 @@ public class ProfileOrganizer {
         // 1. High-cap responsive: already high-cap, low-latency or untested.
         // 2. Quality mode: all tests passing, active, proven throughput.
         // 3. Filling mode: speed-based or low-latency bypass.
-        if (!_fastPeers.containsKey(peer) && _fastPeers.size() < getMaximumFastPeers() &&
+        if (!_fastPeers.containsKey(peer) && _fastPeers.size() < maxFast &&
             isFastTierCapable(peer)) {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
@@ -3242,8 +3300,13 @@ public class ProfileOrganizer {
      * to fill the openings.  Must be called with write lock held.
      */
     private void promoteToFillTiers() {
-        int fastTarget = getMaximumFastPeers();
-        int highCapTarget = getMaximumHighCapPeers();
+        // One network-database walk and one active-peer count for the whole scan.
+        // Both are O(network), and the loop below runs once per profile.
+        int known = _context.netDb().getKnownRouters();
+        int active = _context.commSystem().countActivePeers();
+        int fastTarget = getMaximumFastPeers(known, active);
+        int highCapTarget = getMaximumHighCapPeers(known, active);
+        int minHighCap = getMinimumHighCapacityPeers(known);
         int fastBefore = _fastPeers.size();
         int highCapBefore = _highCapacityPeers.size();
 
@@ -3273,9 +3336,11 @@ public class ProfileOrganizer {
             // capacityBonus, capacityValue, etc. — the TreeSet's copy may be stale
             PeerProfile liveProfile = _notFailingPeers.get(peer);
             if (liveProfile != null)
-                lockedPromoteProfileToTiers(liveProfile, buildSuccess);
+                lockedPromoteProfileToTiers(liveProfile, buildSuccess,
+                                            minHighCap, fastTarget, highCapTarget);
             else
-        lockedPromoteProfileToTiers(profile, buildSuccess);
+                lockedPromoteProfileToTiers(profile, buildSuccess,
+                                            minHighCap, fastTarget, highCapTarget);
 
             if (_log.shouldInfo()) {
                 boolean nowFast = _fastPeers.containsKey(peer);
@@ -4148,14 +4213,73 @@ public class ProfileOrganizer {
     }
 
     /**
+     *  Fallback tier size for a threshold that scales with network size.
+     *
+     *  <p>Networks at or below {@link #SCALING_THRESHOLD} known routers use the
+     *  configured base; above it the base scales with a fraction of the network.
+     *
+     *  @param known routers in the network database
+     *  @param base configured size to use, and the floor once scaling applies
+     *  @param divisor network size is divided by this once scaling applies
+     *  @return the size to use unless a property overrides it
+     *  @since 0.9.71+
+     */
+    static int defaultTierSize(int known, int base, int divisor) {
+        return known > SCALING_THRESHOLD ? Math.max(known / divisor, base) : base;
+    }
+
+    /**
+     *  Ceiling on the fast tier from the number of reachable peers.
+     *
+     *  <p>1.5x headroom over active for near-active peers, never below {@code base}.
+     *
+     *  @param active peers reachable over any transport
+     *  @param base floor to keep even when very few peers are reachable
+     *  @return the fast tier ceiling
+     *  @since 0.9.71+
+     */
+    static int fastActiveCap(int active, int base) {
+        return Math.max(active + active / 2, base);
+    }
+
+    /**
+     *  Ceiling on the high-capacity tier from the number of reachable peers.
+     *
+     *  <p>2x headroom, since high-cap is a broader category, never below {@code base}.
+     *
+     *  @param active peers reachable over any transport
+     *  @param base floor to keep even when very few peers are reachable
+     *  @return the high-capacity tier ceiling
+     *  @since 0.9.71+
+     */
+    static int highCapActiveCap(int active, int base) {
+        return Math.max(active * 2, base);
+    }
+
+    /**
      * Minimum number of peers to keep in the fast tier.
      *
      * @return the minimum fast peers
      */
     protected int getMinimumFastPeers() {
         if (_context.router() == null) return _defaultMinFastPeers;
-        int known = _context.netDb().getKnownRouters();
-        return _context.getProperty(PROP_MINIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 15, _defaultMinFastPeers) : _defaultMinFastPeers);
+        return getMinimumFastPeers(_context.netDb().getKnownRouters());
+    }
+
+    /**
+     * Variant taking the network size, for callers that already know it.
+     *
+     * <p>{@code getKnownRouters()} walks every entry in the network database, which is
+     * far too expensive to repeat once per candidate.
+     *
+     * @param known routers in the network database
+     * @return the minimum fast peers
+     * @since 0.9.71+
+     */
+    protected int getMinimumFastPeers(int known) {
+        if (_context.router() == null) return _defaultMinFastPeers;
+        return _context.getProperty(PROP_MINIMUM_FAST_PEERS,
+                                    defaultTierSize(known, _defaultMinFastPeers, 15));
     }
 
     /**
@@ -4165,15 +4289,26 @@ public class ProfileOrganizer {
      */
     protected int getMaximumFastPeers() {
         if (_context.router() == null) return _defaultMaxFastPeers;
-        int known = _context.netDb().getKnownRouters();
-        int maxFromKnown = _context.getProperty(PROP_MAXIMUM_FAST_PEERS, known > 3000 ? Math.max(known / 12, _defaultMaxFastPeers) : _defaultMaxFastPeers);
+        return getMaximumFastPeers(_context.netDb().getKnownRouters(),
+                                   _context.commSystem().countActivePeers());
+    }
+
+    /**
+     * Variant taking both expensive inputs, for callers that already have them.
+     *
+     * @param known routers in the network database
+     * @param active peers currently reachable over any transport
+     * @return the maximum fast peers
+     * @since 0.9.71+
+     */
+    protected int getMaximumFastPeers(int known, int active) {
+        if (_context.router() == null) return _defaultMaxFastPeers;
+        int maxFromKnown = _context.getProperty(PROP_MAXIMUM_FAST_PEERS,
+                                                defaultTierSize(known, _defaultMaxFastPeers, 12));
         // Cap fast tier by active peers — having more fast peers than are
         // actually reachable wastes builds on stale/unresponsive peers.
-        // Allow 1.5x headroom over active count for near-active peers.
-        int active = _context.commSystem().countActivePeers();
         if (active > 0) {
-            int activeCap = Math.max(active + active / 2, _defaultMinFastPeers);
-            return Math.min(maxFromKnown, activeCap);
+            return Math.min(maxFromKnown, fastActiveCap(active, _defaultMinFastPeers));
         }
         return maxFromKnown;
     }
@@ -4220,14 +4355,25 @@ public class ProfileOrganizer {
      */
     protected int getMaximumHighCapPeers() {
         if (_context.router() == null) return _defaultMaxHighCapPeers;
-        int known = _context.netDb().getKnownRouters();
-        int maxFromKnown = _context.getProperty(PROP_MAXIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 10, _defaultMaxHighCapPeers) : _defaultMaxHighCapPeers);
+        return getMaximumHighCapPeers(_context.netDb().getKnownRouters(),
+                                      _context.commSystem().countActivePeers());
+    }
+
+    /**
+     * Variant taking both expensive inputs, for callers that already have them.
+     *
+     * @param known routers in the network database
+     * @param active peers currently reachable over any transport
+     * @return the maximum high cap peers
+     * @since 0.9.71+
+     */
+    protected int getMaximumHighCapPeers(int known, int active) {
+        if (_context.router() == null) return _defaultMaxHighCapPeers;
+        int maxFromKnown = _context.getProperty(PROP_MAXIMUM_HIGH_CAPACITY_PEERS,
+                                                defaultTierSize(known, _defaultMaxHighCapPeers, 10));
         // Cap high-cap tier by active peers — same rationale as fast tier cap.
-        // Allow 2x headroom since high-cap is a broader category.
-        int active = _context.commSystem().countActivePeers();
         if (active > 0) {
-            int activeCap = Math.max(active * 2, _defaultMinHighCapPeers);
-            return Math.min(maxFromKnown, activeCap);
+            return Math.min(maxFromKnown, highCapActiveCap(active, _defaultMinHighCapPeers));
         }
         return maxFromKnown;
     }
@@ -4239,8 +4385,20 @@ public class ProfileOrganizer {
      */
     protected int getMinimumHighCapacityPeers() {
         if (_context.router() == null) return _defaultMinHighCapPeers;
-        int known = _context.netDb().getKnownRouters();
-        return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, known > 3000 ? Math.max(known / 15, _defaultMinHighCapPeers) : _defaultMinHighCapPeers);
+        return getMinimumHighCapacityPeers(_context.netDb().getKnownRouters());
+    }
+
+    /**
+     * Variant taking the network size, for callers that already know it.
+     *
+     * @param known routers in the network database
+     * @return the minimum high capacity peers
+     * @since 0.9.71+
+     */
+    protected int getMinimumHighCapacityPeers(int known) {
+        if (_context.router() == null) return _defaultMinHighCapPeers;
+        return _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS,
+                                    defaultTierSize(known, _defaultMinHighCapPeers, 15));
     }
 
     private static final DecimalFormat _fmt = new DecimalFormat("###,##0.00", new DecimalFormatSymbols(Locale.UK));

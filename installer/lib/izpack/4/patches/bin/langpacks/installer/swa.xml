@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for swa. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="Karibu"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Usasishaji"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Chagua Kifurushi za Usasishaji"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Usasishaji Umekamilika"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Njia ya Lengo"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - Usasishaji wa "/>
+    <!-- Next -->
+    <str id="installer.next" txt="Endelea"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Iliyotangulia"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Toka"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Je, una uhakika unataka kutoka?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="Hii itaghairi usasishaji!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Onyo!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Ndiyo"/>
+    <!-- No -->
+    <str id="installer.no" txt="Hapana"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Ghairi"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Hitilafu"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Msaida"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Hatua"/>
+    <!-- of -->
+    <str id="installer.of" txt="kati ya"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Ujumbe"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="Hii itaondoa programu iliyosakinishwa!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Futa kwa nguvu "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Ondoa"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="Karibu kwenye usasishaji wa "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="Programu hii imeandikwa na: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="Ukurasa wa mwanzo ni: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="Katalogi iliyochaguliwa inapaswa kuwepo."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Katalogi iliyochaguliwa inapaswa kuwepo."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="Katalogi iliyochaguliwa haipo bidhaa inayohitajika."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Chagua njia ya usasishaji: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Chagua..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="Katalogi tayari ipo! Je, una uhakika unataka kusakinisha hapa na pengaandika juu ya faili zilizopo?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Hujatambua mahali ya lengo! Je, hilo ni sahihi?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Katalogi ya lengo itatengenezwa: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Faili hii si katalogi! Tafadhali chagua katalogi!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Huwezi kuandika katika katalogi hii! Tafadhali chagua katalogi nyingine!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Chagua vifurushi unavyotaka kusakinisha:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Kumbuka: Vifurushi vya kijivu hutakiwa."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Nafasi inayohitajika jumla: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Nafasi inayopatikana: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Maelezo"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Kifurushi kilichochaguliwa kina inategeneo na/au vya kutenguliwa kifuata"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Inategeneo: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Kinachotenguliwa: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Nafasi ya diski inayohitajika kwa usasishaji ni kubwa kuliko nafasi ya diski iliyopo."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="haijuwezi kuthibitishwa"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Bofya &#x27;Sakinisha!&#x27; ili kuanza mchakato wa usasishaji"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Sakinisha!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Maendeleo ya usasishaji wa kifurushi:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Imekamilika]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Maendeleo ya jumla ya usasishaji:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Faili tayari ipo"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Faili ifuatayo tayari ipo. Je, ungependa kuandika juu yake?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Njia ya Usasishaji"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Vifurushi vya Usasishaji Vilivyochaguliwa"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Haiwezi kufunguafunguo ya rejareja {0}\{1}."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           RIPOTE YA USASISHAJI IzPack"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="ONYO!!! Usasishaji haukufaulu!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="ONYO!!! Usasishaji huenda haukuwa kamilifu!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="Ripoti hii ina ujumbe {0} wa kawaida, onyo {1} na hitilafu {2}"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Ripoti ya usasishaji kwa : {0} Toleo {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Muda wa usasishaji      : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Katalogi ya usasishaji  : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Ujumbe wa Usasishaji ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Onyo ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Hitilafu ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Kipotovu: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Ujumbe  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Onyo [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Hitilafu [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Hitilafu kuandika ripoti"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Imeshindwa kuandika ripoti ya usasishaji kwa &#x27;&#x27;{0}&#x27;&#x27;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Matatizo ya Usasishaji"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Hifadhi Faili ya Kumbukumbu"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Usasishaji haukufaulu!&lt;br&gt;Je, ungependa kuandika faili ya kumbukumbu?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Usasishaji huenda haukuwa kamilifu!&lt;br&gt;Je, ungependa kuandika faili ya kumbukumbu?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="Imeshindwa kuandika &#x27;&#x27;{0}&#x27;&#x27;"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="badilisha thamani"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="Hitilafu"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="Onyo"/>
+</langpack>

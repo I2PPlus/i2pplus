@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Loobu"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="Paigaldamine tühistatud"/>
+    <!-- Close -->
+    <str id="installer.close" txt="Sulge"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="Kas soovite siiski jätkata?"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="Kopeeri"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Viga"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="Tekkis viga"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="Paigaldamine lõpetatud"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Abi"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="Sulge"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="Peida üksikasjad"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Sõnum"/>
+    <!-- Next -->
+    <str id="installer.next" txt="Järgmine"/>
+    <!-- No -->
+    <str id="installer.no" txt="Ei"/>
+    <!-- of -->
+    <str id="installer.of" txt="/"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="Platvorm: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Eelmine"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Välju"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="See tühistab paigaldamise!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Kas soovite kindlasti väljuda?"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="Mõne muudatuse rakendamiseks on vaja taaskäivitada. Kas soovite kohe taaskäivitada?"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="Taaskäivitamine vajalik"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="Mõne muudatuse rakendamiseks on soovitatav taaskäivitada."/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="Taaskäivitamine soovitatav"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="Saada aruanne"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="Näita üksikasju"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="Paigaldamine algas"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Samm"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="IzPack - Paigaldamine: "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="Eemaldamise teabe kirjutamine ebaõnnestus."/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="Raamistik: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Hoiatus!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Jah"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="Teave"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Paigaldamine"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Valige paigalduspaketid"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="Otseteede seadistamine"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Paigaldamine lõpetatud"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Sihtkoht"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="Palun lugege järgmist teavet:"/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Lõpetatud]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Paigaldamise alustamiseks klõpsake nupul „Paigalda!“"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Paigalda!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Järgnev fail on juba olemas. Kas see tuleks üle kirjutada?"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Fail on juba olemas"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Paigaldamise üldine edenemine:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Paketi paigaldamise edenemine:"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="Paigaldajat &quot;$APP_NAME&quot;, mida te käivitada püüate, näib juba üks koopia töötavat. See võib tuleneda eelmisest ebaõnnestunud paigaldusest või sellest, et käivitasite paigaldaja kogematult kaks korda. Soovitatav tegevus on oodata, kuni paigaldaja teine koopia käivitub. Kui olete kindel, et paigaldaja teist koopiat ei tööta, võite kustutada lukustusfaili &quot;$LOCK_FILE&quot; ja paigaldaja uuesti käivitada."/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="Paigaldajat &quot;$APP_NAME&quot;, mida te käivitada püüate, näib juba üks koopia töötavat.\n\nSee võib tuleneda eelmisest ebaõnnestunud paigaldusest või sellest, et käivitasite paigaldaja kogematult\nkaks korda. Soovitatav tegevus on valida &#x27;Ei&#x27; ja oodata, kuni paigaldaja teine koopia käivitub.\nKui olete kindel, et paigaldaja teist koopiat ei tööta, klõpsake nupul &#x27;Jah&#x27;, et see paigaldaja\nsaaks käivituda.\n\nKas olete kindel, et soovite selle paigaldamisega jätkata?"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Sõltuvused: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Valitud paketil on järgmised sõltuvused ja/või väljajätmised"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Kirjeldus"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Väljajätmised: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Vaba ruum: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Valige paketid, mille soovite paigaldada:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="ei saa määrata"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Paigaldamiseks vajalik kettaruum ületab saadaoleva kettaruumala."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Kogu vajalik ruum: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Märkus: hallid paketid on kohustuslikud."/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Registri võtit {0}\{1} ei saa avada."/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Sirvi..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Sihtkaust luuakse: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Te pole sihtkohta määranud! Kas see on õige?"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="Kaust on juba olemas! Kas soovite kindlasti siia paigaldada ja võimalikud olemasolevad failid üle kirjutada?"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="Leitud on sobimatu paigaldus. Kõigepealt eemaldage see või valige paigaldamiseks teine kaust."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Valige paigalduskoht: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="Sisestasite faili tee. Palun valige uue või olemasoleva kausta tee."/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="See fail ei ole kaust! Palun valige kaust!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="Valitud kaust ei sisalda nõutud toodet."/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Selles kaustas ei saa kirjutada! Palun valige mõni muu kaust!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="Valitud kaust peab olema olemas."/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="Valitud kaust peab olema olemas."/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="Vale kausta tee. Palun sisestage kausta tee, mis vastab operatsioonisüsteemi nõuetele."/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Kustuta jõuga "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Eemalda"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="See eemaldab paigaldatud rakenduse!"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="Palun lugege järgmist teavet:"/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="Vabandame, kuid IzPack ei toeta selle operatsioonisüsteemi jaoks otseteede loomist. Otseteede loomiseks vaadake oma operatsioonisüsteemi käsiraamatut."/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="Salvesta tekstifail"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="Siin on loetelu sihtmärkidest, mille juurdepääs soovib selle tarkvaratoote tootja teile anda."/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="Saate rakenduse sihtmärkide kohta üksikasjaliku teabe salvestada hilisemaks viitamiseks tekstifaili."/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="Vale programmirühm. Palun sisestage tähestikuline ja numbriline string."/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="Rakenduste menüü"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="Töölaud"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="Start-menüü"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="Käivitusrühm"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="kõik kasutajad"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="Loo otseteed Start-menüüs"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="praegune kasutaja"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="Vaikimisi"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="Loo täiendavad otseteed töölauale"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="Valige otseteete jaoks programmirühm:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="Start-menüü"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="Käivita süsteemi käivitumisel"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="loo otsetee jaoks:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="Käskurida      : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="Kirjeldus       : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="Ikooniindeks        : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="Ikoonifail         : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="Kavandatud koht : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="Otsetee          : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="Otsetee sihtmärk   : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="Töökaust : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Valitud paigalduspaketid"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Paigalduskoht"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Paigaldamise aruanne : {0} versioon {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Vead ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Viga [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Erand: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Paigaldamine ei õnnestunud!&lt;br&gt;Kas soovite kirjutada logifaili?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Paigaldamine ei pruugi olla täielikult õnnestunud!&lt;br&gt;Kas soovite kirjutada logifaili?&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Paigaldusprobleemid"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="HOIATUS!!! Paigaldamine ei õnnestunud!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="See aruanne sisaldab {0} üldist sõnumit, {1} hoiatust ja {2} viga"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Paigaldamise sõnumid ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Sõnum  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="HOIATUS!!! Paigaldamine ei pruugi olla täielikult õnnestunud!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Paigalduskaust       : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack PAIGALDAMISE ARUANNE"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Paigaldamise aruande kirjutamine failisse &#x27;{0}&#x27; ebaõnnestus"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Viga aruande kirjutamisel"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Salvesta logifail"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Paigaldamise aeg            : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Hoiatused ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Hoiatus [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="muuda väärtust"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="kustuta väärtus"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="kirjutamine faili &#x27;{0}&#x27; ebaõnnestus"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="Viga"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="Hoiatus"/>
+</izpack:langpack>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for heb. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="ברוכים הבאים"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="התקנה"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="בחירת חבילות התקנה"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="ההתקנה הסתיימה"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="נתיב היעד"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="‏IzPack - התקנת"/>
+    <!-- Next -->
+    <str id="installer.next" txt="הבא"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="הקודם"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="יציאה"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="האם אתה בטוח שברצונך לצאת?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="פעולה זו תבטל את ההתקנה!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="אזהרה!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="כן"/>
+    <!-- No -->
+    <str id="installer.no" txt="לא"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="ביטול"/>
+    <!-- Error -->
+    <str id="installer.error" txt="שגיאה"/>
+    <!-- Help -->
+    <str id="installer.help" txt="עזרה"/>
+    <!-- Step -->
+    <str id="installer.step" txt="שלב"/>
+    <!-- of -->
+    <str id="installer.of" txt="מתוך"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="הודעה"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="פעולה זו תסיר את היישום המותקן!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" כפוף למחיקת "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="הסר התקנה"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="ברוכים הבאים להתקנת "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="תוכנה זו פותחה על ידי: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="דף הבית נמצא ב: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="התיקייה שנבחרה חייבת להתקיים."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="התיקייה שנבחרה חייבת להתקיים."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="התיקייה שנבחרה אינה מכילה את המוצר הנדרש."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="בחר את נתיב ההתקנה: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="עיון..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="התיקייה כבר קיימת! האם אתה בטוח שברצונך להתקין כאן, ואולי לדרוס קבצים קיימים?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="לא ציינת מיקום יעד! האם זו הכוונה?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="תיקיית היעד תיווצר: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="קובץ זה אינו תיקייה! בחר תיקייה!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="לא ניתן לכתוב לתיקייה זו! בחר תיקייה אחרת!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="בחר את החבילות שברצונך להתקין:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="הערה: חבילות מעומעמות הן חובה."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="סך השטח הנדרש: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="שטח פנוי: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="תיאור"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="לחבילה שנבחרה יש את התלויות ו/או החריגים הבאים"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="תלויות: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="חריגים: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="שטח הדיסק הנדרש להתקנה עולה על שטח הדיסק הפנוי."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="לא ניתן לקבוע"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="לחץ על &#x27;התקן!&#x27; כדי להתחיל בתהליך ההתקנה"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="התקן!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="התקדמות התקנת החבילה:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[הושלם]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="התקדמות ההתקנה הכוללת:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="הקובץ כבר קיים"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="הקובץ הבא כבר קיים. האם לדרוס אותו?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="נתיב ההתקנה"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="חבילות התקנה שנבחרו"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="לא ניתן לפתוח את מפתח הרישום {0}\{1}."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           דוח התקנה של IzPack"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="אזהרה!!! ההתקנה לא הצליחה!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="אזהרה!!! ייתכן שההתקנה לא הצליחה במלואה!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="דוח זה מכיל {0} הודעות כלליות, {1} אזהרות ו{2} שגיאות"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="דוח התקנה עבור : {0} גרסה {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="זמן התקנה            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="תיקיית התקנה       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- הודעות התקנה ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- אזהרות ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- שגיאות ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; חריגה: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="הודעה  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="אזהרה [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="שגיאה [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="שגיאה בכתיבת הדוח"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="לא ניתן לכתוב את דוח ההתקנה אל &#x27;{0}&#x27;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="בעיות בהתקנה"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="שמור קובץ יומן"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;ההתקנה לא הצליחה!&lt;br&gt;האם תרצה לכתוב קובץ יומן?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;ייתכן שההתקנה לא הצליחה במלואה!&lt;br&gt;האם תרצה לכתוב קובץ יומן?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="לא ניתן לכתוב את &#x27;{0}&#x27;"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="שנה ערך"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="האימות נכשל"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="נדרשת תשומת לב"/>
+</langpack>

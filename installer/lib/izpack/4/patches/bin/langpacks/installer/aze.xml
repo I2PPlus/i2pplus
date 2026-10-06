@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for aze. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="Xoş gəlmisiniz"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Quraşdırma"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Quraşdırma paketlərini seçin"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Quraşdırma tamamlandı"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Cilj yolu"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - Quraşdırma: "/>
+    <!-- Next -->
+    <str id="installer.next" txt="Növbəti"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Əvvəlki"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Çıx"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Çıxmaq istədiyinizə əminsiniz?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="Bu, quraşdırmanı ləğv edəcək!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Xəbərdarlıq!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Bəli"/>
+    <!-- No -->
+    <str id="installer.no" txt="Xeyr"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Ləğv et"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Xəta"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Kömək"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Addım"/>
+    <!-- of -->
+    <str id="installer.of" txt="/"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Mesaj"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="Bu, quraşdırılmış tətbiqi siləcək!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Məcburi silmə "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="Sil"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="Quraşdırmaya xoş gəlmisiniz "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="Bu proqram tərəfindən hazırlanıb: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="Ana səhifə ünvanı: "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="Seçilmiş qovluq mövcud olmalıdır."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Seçilmiş qovluq mövcud olmalıdır."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="Seçilmiş qovluq tələb olunan məhsulu özündə saxlamır."/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Quraşdırma yolunu seçin: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Nəzər sal..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="Qovluq artıq mövcuddur! Həqiqətən bura quraşdırmaq və mövcud faylların üstünə yazmaq istəyirsiniz?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Hədəf yer müəyyən etməmisiniz! Bu düzgündür?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Hədəf qovluq yaradılacaq: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Bu fayl qovluq deyil! Qovluq seçin!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Bu qovluğa yazmaq mümkün deyil! Başqa qovluq seçin!"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Quraşdırmaq istədiyiniz paketləri seçin:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Qeyd: solğun rəngli paketlər tələb olunur."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Ümumi tələb olunan yer: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Mövcud yer: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Təsvir"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Seçilmiş paketin aşağıdakı asılılıqları və/və ya istisnaları var"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Asılılıqlar: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="İstisnalar: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Quraşdırma üçün tələb olunan disk sahəsi mövcud disk sahəsindən çoxdur."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="müəyyən etmək mümkün deyil"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Quraşdırma prosesini başlatmaq üçün «Quraşdır!» düyməsini klikləyin"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="Quraşdır!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Paketin quraşdırılma irəliləyişi:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Tamamlandı]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Quraşdırmanın ümumi irəliləyişi:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Fayl artıq mövcuddur"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Aşağıdakı fayl artıq mövcuddur. Üstünə yazılsın?"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Quraşdırma yolu"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Seçilmiş quraşdırma paketləri"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Reyestr açarı {0}\{1} açıla bilmir."/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack QURADŞDIRMA HESABATI"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="XƏBƏRDARLIQ!!! Quraşdırma uğurlu olmadı!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="XƏBƏRDARLIQ!!! Quraşdırma tam uğurlu olmayıb!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="Bu hesabat {0} ümumi mesaj, {1} xəbərdarlıq və {2} xəta ehtiva edir"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="{0} üçün quraşdırma hesabatı : versiya {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Quraşdırma vaxtı            : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Quraşdırma qovluğu       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Quraşdırma mesajları ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Xəbərdarlıqlar ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Xətalar ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; İstisna: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Mesaj  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Xəbərdarlıq [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Xəta [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Hesabat yazılarkən xəta"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Quraşdırma hesabatını &#x27;{0}&#x27; faylına yazmaq mümkün deyil"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Quraşdırma problemləri"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="Log faylını saxlamaq"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Quraşdırma uğurlu olmadı!&lt;br&gt;Log faylı yazmaq istəyirsiniz?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Quraşdırma tam uğurlu olmayıb!&lt;br&gt;Log faylı yazmaq istəyirsiniz?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="&#x27;{0}&#x27; faylına yazmaq mümkün deyil"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="dəyəri dəyiş"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="Xəta"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="Xəbərdarlıq"/>
+</langpack>

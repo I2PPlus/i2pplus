@@ -448,6 +448,27 @@ task prepIzpackConfigs(type: Copy) {
   }
 }
 
+// Language-picker flag GIFs the IzPack distributions do not ship (ant
+// izpack-flag-gifs). Both compilers hardcode
+// bin/langpacks/flags/<iso3>.gif and fail when it is absent, and neither has a
+// PNG or SVG path, so the flags we supply are rasterised from the console's SVG
+// set. The GIFs are committed, so --ensure writes nothing and needs no
+// rasteriser on a normal build; it only fires when a descriptor gains a langpack
+// whose flag is missing.
+task izpackFlagGifs(type: Exec) {
+  group = 'package'
+  description = 'Generate any missing IzPack langpack flag GIFs from the console SVG flags (mirrors ant izpack-flag-gifs).'
+  commandLine "${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh", '--ensure'
+  inputs.files(file("${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh"))
+  inputs.files(file('installer/lib/izpack/4/install.xml'))
+  inputs.files(file('installer/lib/izpack/5/install5.xml'))
+  // The flags are shared by both IzPack versions, so this is the single directory
+  // that can come out changed; it used to name the IzPack 5 tree only, which meant
+  // a flag added for IzPack 4 alone did not mark this task out of date.
+  outputs.dir(file('installer/lib/izpack/resources/flags'))
+  onlyIf { file("${workspaceRootAbs}/installer/lib/izpack/gen-izpack-flags.sh").canExecute() }
+}
+
 // IzPack 4 patches jar, built from the bundled patch classes (ant izpack-patches)
 task izpackPatches(type: Jar) {
   group = 'package'
@@ -455,6 +476,7 @@ task izpackPatches(type: Jar) {
   archiveFileName.set('patches.jar')
   destinationDirectory.set(file('installer/lib/izpack'))
   from 'installer/lib/izpack/4/patches'
+  dependsOn izpackFlagGifs
 }
 
 // Windows startup exe for the payload (ant buildexe): an empty launcher jar
@@ -670,7 +692,7 @@ def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String 
   task(taskName, type: Exec) {
     group = 'package'
     description = taskDesc
-    dependsOn stageTask, jbigiTask, prepIzpackConfigs, downloadIzpack5
+    dependsOn stageTask, jbigiTask, prepIzpackConfigs, downloadIzpack5, izpackFlagGifs
     commandLine 'java', '-cp', "${cfg.iz5home}/lib/*", 'com.izforge.izpack.compiler.bootstrap.CompilerLauncher',
         '-c', "${cfg.izWork}/5/install5.xml", '-b', cfg.wsAbs, '-o', "${cfg.dAbs}/${outJarName}"
     inputs.files(fileTree(cfg.seed), file("${cfg.izWork}/5/install5.xml"))

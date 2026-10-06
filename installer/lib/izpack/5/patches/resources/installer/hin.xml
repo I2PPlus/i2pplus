@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<izpack:langpack version="5.0"
+                 xmlns:izpack="http://izpack.org/schema/langpack"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://izpack.org/schema/langpack http://izpack.org/schema/5.0/izpack-langpack-5.0.xsd">
+
+    <!-- installer -->
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="रद्द करें"/>
+    <!-- Installation cancelled -->
+    <str id="installer.cancelled" txt="स्थापना रद्द कर दी गई"/>
+    <!-- Close -->
+    <str id="installer.close" txt="बंद करें"/>
+    <!-- Continue anyway? -->
+    <str id="installer.continueQuestion" txt="फिर भी जारी रखना है?"/>
+    <!-- Copy -->
+    <str id="installer.copy" txt="कॉपी करें"/>
+    <!-- Error -->
+    <str id="installer.error" txt="त्रुटि"/>
+    <!-- An error occurred -->
+    <str id="installer.errorMessage" txt="एक त्रुटि हुई"/>
+    <!-- Installation finished -->
+    <str id="installer.finished" txt="स्थापना पूरी हो गई"/>
+    <!-- Help -->
+    <str id="installer.help" txt="सहायता"/>
+    <!-- Close -->
+    <str id="installer.help.close" txt="बंद करें"/>
+    <!-- Hide Details -->
+    <str id="installer.hideDetails" txt="विवरण छिपाएँ"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Message -->
+    <str id="installer.Message" txt="संदेश"/>
+    <!-- Next -->
+    <str id="installer.next" txt="अगला"/>
+    <!-- No -->
+    <str id="installer.no" txt="नहीं"/>
+    <!-- of -->
+    <str id="installer.of" txt="/"/>
+    <!-- Platform: {0} -->
+    <str id="installer.platform" txt="प्लेटफ़ॉर्म: {0}"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="पिछला"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="बाहर निकलें"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="इससे स्थापना रद्द हो जाएगी!"/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="क्या आप वाकई बाहर निकलना चाहते हैं?"/>
+    <!-- Reboot required to apply some changes. Do want to reboot now? -->
+    <str id="installer.reboot.ask.message" txt="कुछ बदलाव लागू करने के लिए रीबूट आवश्यक है। क्या आप अभी रीबूट करना चाहते हैं?"/>
+    <!-- Reboot required -->
+    <str id="installer.reboot.ask.title" txt="रीबूट आवश्यक है"/>
+    <!-- It is recommended to reboot to apply some changes. -->
+    <str id="installer.reboot.notice.message" txt="कुछ बदलाव लागू करने के लिए रीबूट करना उचित है।"/>
+    <!-- Reboot recommended -->
+    <str id="installer.reboot.notice.title" txt="रीबूट करने की सलाह दी जाती है"/>
+    <!-- Send Report -->
+    <str id="installer.sendReport" txt="रिपोर्ट भेजें"/>
+    <!-- Show Details -->
+    <str id="installer.showDetails" txt="विवरण दिखाएँ"/>
+    <!-- Installation started -->
+    <str id="installer.started" txt="स्थापना शुरू हो गई"/>
+    <!-- Step -->
+    <str id="installer.step" txt="चरण"/>
+    <!-- IzPack - Installation of -->
+    <str id="installer.title" txt="IzPack - स्थापना हो रही है "/>
+    <!-- Failed to write uninstallation information. -->
+    <str id="installer.uninstall.writefailed" txt="अनइंस्टॉल की जानकारी लिखी नहीं जा सकी।"/>
+    <!-- Framework: {0} -->
+    <str id="installer.version" txt="फ़्रेमवर्क: {0}"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="चेतावनी!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="हाँ"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Information -->
+    <str id="HTMLInfoPanel.headline" txt="सूचना"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="स्थापना"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="स्थापना पैकेज चुनें"/>
+    <!-- ShortcutPanel -->
+    <!-- Setup Shortcuts -->
+    <str id="ShortcutPanel.headline" txt="शॉर्टकट सेटअप करें"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="स्थापना पूरी हो गई"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="गंतव्य पथ"/>
+    <!-- HTMLInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="HTMLInfoPanel.info" txt="कृपया निम्नलिखित सूचना पढ़ें:"/>
+    <!-- InstallPanel -->
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[पूर्ण]"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="स्थापना की प्रक्रिया शुरू करने के लिए &#x27;इंस्टॉल करें!&#x27; पर क्लिक करें"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="इंस्टॉल करें!"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="नीचे दी गई फ़ाइल पहले से मौजूद है। क्या इसे अधिलेखित करना है?"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="फ़ाइल पहले से मौजूद है"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="कुल स्थापना प्रगति:"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="पैकेज स्थापना प्रगति:"/>
+    <!-- LockFile -->
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running. This could be from a previous failed installation attempt or you may have accidentally launched the installer twice. The recommended action is to wait for the other copy of the installer to start. If you are sure there is no other copy of the installer running, you can delete the lock file &quot;$LOCK_FILE&quot; and restart the installer. -->
+    <str id="LockFile.exists.message" txt="आप जिस &quot;$APP_NAME&quot; इंस्टॉलर को चलाने का प्रयास कर रहे हैं, ऐसा प्रतीत होता है कि इसकी एक प्रति पहले से चल रही है। यह पिछली किसी असफल स्थापना प्रयास से हो सकता है, या आपने गलती से इंस्टॉलर को दो बार चला दिया हो। सुझाई गई कार्रवाई यह है कि इंस्टॉलर की दूसरी प्रति शुरू होने तक प्रतीक्षा करें। यदि आप निश्चित हैं कि इंस्टॉलर की कोई अन्य प्रति नहीं चल रही है, तो आप लॉक फ़ाइल &quot;$LOCK_FILE&quot; हटाकर इंस्टॉलर को पुनः चला सकते हैं।"/>
+    <!-- The &quot;$APP_NAME&quot; installer you are attempting to run seems to have a copy already running.&#10;&#10;This could be from a previous failed installation attempt or you may have accidentally launched&#10;the installer twice. The recommended action is to select 'No' and wait for the other copy of&#10;the installer to start. If you are sure there is no other copy of the installer running, click&#10;the 'Yes' button to allow this installer to run.&#10;&#10;Are you sure you want to continue with this installation? -->
+    <str id="LockFile.exists.prompt" txt="आप जिस &quot;$APP_NAME&quot; इंस्टॉलर को चलाने का प्रयास कर रहे हैं, ऐसा प्रतीत होता है कि इसकी एक प्रति पहले से चल रही है।
+
+यह पिछली किसी असफल स्थापना प्रयास से हो सकता है, या आपने गलती से
+इंस्टॉलर को दो बार चला दिया हो। सुझाई गई कार्रवाई यह है कि &#x27;नहीं&#x27; चुनें और इंस्टॉलर की दूसरी प्रति
+शुरू होने तक प्रतीक्षा करें। यदि आप निश्चित हैं कि इंस्टॉलर की कोई अन्य प्रति नहीं चल रही है, तो
+इस इंस्टॉलर को चलने की अनुमति देने हेतु &#x27;हाँ&#x27; बटन पर क्लिक करें।
+
+क्या आप वाकई इस स्थापना के साथ जारी रखना चाहते हैं?"/>
+    <!-- PacksPanel -->
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="निर्भरताएँ: "/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="चुने गए पैकेज की निम्नलिखित निर्भरताएँ और/या बहिष्करण हैं"/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="विवरण"/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="बहिष्करण: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="उपलब्ध जगह: "/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="आप जिन पैकेजों को स्थापित करना चाहते हैं उन्हें चुनें:"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="निर्धारित नहीं किया जा सकता"/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="स्थापना के लिए आवश्यक डिस्क जगह उपलब्ध डिस्क जगह से अधिक है।"/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="कुल आवश्यक जगह: "/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="नोट: धूसर पैकेज आवश्यक हैं।"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="रजिस्ट्री कुंजी {0}\{1} नहीं खोली जा सकी।"/>
+    <!-- TargetPanel -->
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="ब्राउज़ करें..."/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="गंतव्य फ़ोल्डर बनाया जाएगा: "/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="आपने कोई गंतव्य स्थान नहीं बताया! क्या यह ठीक है?"/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.exists_warn" txt="यह फ़ोल्डर पहले से मौजूद है! क्या आप वाकई यहाँ स्थापित करना और मौजूदा फ़ाइलों को अधिलेखित करना चाहते हैं?"/>
+    <!-- Incompatible installation detected. Uninstall it first, or choose another directory to install to. -->
+    <str id="TargetPanel.incompatibleInstallation" txt="असंगत स्थापना मिली है। पहले उसे हटाएँ, या स्थापना के लिए कोई दूसरा फ़ोल्डर चुनें।"/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="स्थापना पथ चुनें: "/>
+    <!-- You have entered a path to a file. Please select a path to a new or existing directory. -->
+    <str id="TargetPanel.isfile" txt="आपने किसी फ़ाइल का पथ दर्ज किया है। कृपया किसी नए या मौजूदा फ़ोल्डर का पथ चुनें।"/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="यह फ़ाइल फ़ोल्डर नहीं है! कोई फ़ोल्डर चुनें!"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="TargetPanel.notValid" txt="चुने गए फ़ोल्डर में आवश्यक उत्पाद मौजूद नहीं है।"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="इस फ़ोल्डर में लिखा नहीं जा सकता! कोई दूसरा फ़ोल्डर चुनें!"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required" txt="चुना गया फ़ोल्डर मौजूद होना चाहिए।"/>
+    <!-- The chosen directory should exist. -->
+    <str id="TargetPanel.required.forModificationInstallation" txt="चुना गया फ़ोल्डर मौजूद होना चाहिए।"/>
+    <!-- Invalid directory path. Please enter a directory path that meets the operating system's requirements. -->
+    <str id="TargetPanel.syntax.error" txt="अमान्य फ़ोल्डर पथ। कृपया ऑपरेटिंग सिस्टम की आवश्यकताओं को पूरा करने वाला फ़ोल्डर पथ दर्ज करें।"/>
+    <!-- uninstaller -->
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" ज़बरदस्ती हटाने के लिए "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="अनइंस्टॉल करें"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="इससे स्थापित एप्लिकेशन हट जाएगा!"/>
+    <!-- XInfoPanel -->
+    <!-- Please read the following information: -->
+    <str id="XInfoPanel.info" txt="कृपया निम्नलिखित सूचना पढ़ें:"/>
+    <!-- ShortcutPanel -->
+    <!-- We are sorry but IzPack does not support the creation of shortcuts on this operating system. To create the shortcuts, please refer to your operating system manual. -->
+    <str id="ShortcutPanel.alternate.apology" txt="हमें खेद है, लेकिन IzPack इस ऑपरेटिंग सिस्टम पर शॉर्टकट बनाने का समर्थन नहीं करता। शॉर्टकट बनाने के लिए कृपया अपने ऑपरेटिंग सिस्टम की नियमावली देखें।"/>
+    <!-- Save Text File -->
+    <str id="ShortcutPanel.alternate.saveButton" txt="पाठ फ़ाइल सहेजें"/>
+    <!-- The following is a list of targets that the manufacturer of this software product wanted you to have access to. -->
+    <str id="ShortcutPanel.alternate.targetsLabel" txt="नीचे उन लक्ष्यों की सूची दी गई है जिन तक इस सॉफ़्टवेयर उत्पाद के निर्माता आपको पहुँच देना चाहते थे।"/>
+    <!-- You can save detailed information about the application targets in a text file for later reference. -->
+    <str id="ShortcutPanel.alternate.textFileExplanation" txt="आप एप्लिकेशन के लक्ष्यों के बारे में विस्तृत जानकारी बाद के उपयोग हेतु एक पाठ फ़ाइल में सहेज सकते हैं।"/>
+    <!-- Invalid program group. Please enter an alphnumeric string. -->
+    <str id="ShortcutPanel.group.error" txt="अमान्य प्रोग्राम समूह। कृपया अक्षर-अंकों वाली स्ट्रिंग दर्ज करें।"/>
+    <!-- Applications Menu -->
+    <str id="ShortcutPanel.location.applications" txt="एप्लिकेशन मेनू"/>
+    <!-- Desktop -->
+    <str id="ShortcutPanel.location.desktop" txt="डेस्कटॉप"/>
+    <!-- Start Menu -->
+    <str id="ShortcutPanel.location.startMenu" txt="स्टार्ट मेनू"/>
+    <!-- Startup Group -->
+    <str id="ShortcutPanel.location.startup" txt="स्टार्टअप समूह"/>
+    <!-- all users -->
+    <str id="ShortcutPanel.regular.allUsers" txt="सभी उपयोगकर्ता"/>
+    <!-- Create shortcuts in the StartMenu -->
+    <str id="ShortcutPanel.regular.create" txt="स्टार्ट मेनू में शॉर्टकट बनाएँ"/>
+    <!-- current user -->
+    <str id="ShortcutPanel.regular.currentUser" txt="वर्तमान उपयोगकर्ता"/>
+    <!-- Default -->
+    <str id="ShortcutPanel.regular.default" txt="डिफ़ॉल्ट"/>
+    <!-- Create additional shortcuts on the desktop -->
+    <str id="ShortcutPanel.regular.desktop" txt="डेस्कटॉप पर अतिरिक्त शॉर्टकट बनाएँ"/>
+    <!-- Select a Program Group for the Shortcuts: -->
+    <str id="ShortcutPanel.regular.list" txt="शॉर्टकट के लिए प्रोग्राम समूह चुनें:"/>
+    <!-- XDG-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:K-Menu" txt="K-Menu"/>
+    <!-- Start-Menu -->
+    <str id="ShortcutPanel.regular.StartMenu:Start-Menu" txt="स्टार्ट मेनू"/>
+    <!-- Launch on startup -->
+    <str id="ShortcutPanel.regular.startup" txt="सिस्टम चालू होने पर चलाएँ"/>
+    <!-- create shortcut for: -->
+    <str id="ShortcutPanel.regular.userIntro" txt="शॉर्टकट बनाएँ:"/>
+    <!-- Command Line      :  -->
+    <str id="ShortcutPanel.textFile.command" txt="कमांड लाइन        : "/>
+    <!-- Description       :  -->
+    <str id="ShortcutPanel.textFile.description" txt="विवरण             : "/>
+    <!-- Shortcut Information\n====================\n\nThe following is a listing of all relevant information about the intended\nshortcuts. This information should make it possible to create shortcuts manually.\n -->
+    <str id="ShortcutPanel.textFile.header" txt=""/>
+    <!-- Icon Index        :  -->
+    <str id="ShortcutPanel.textFile.iconIndex" txt="आइकन इंडेक्स      : "/>
+    <!-- Icon File         :  -->
+    <str id="ShortcutPanel.textFile.iconName" txt="आइकन फ़ाइल        : "/>
+    <!-- Intended Location :  -->
+    <str id="ShortcutPanel.textFile.location" txt="अभिप्रेत स्थान    : "/>
+    <!-- Shortcut          :  -->
+    <str id="ShortcutPanel.textFile.name" txt="शॉर्टकट           : "/>
+    <!-- Shortcut Target   :  -->
+    <str id="ShortcutPanel.textFile.target" txt="शॉर्टकट लक्ष्य    : "/>
+    <!-- Working Directory :  -->
+    <str id="ShortcutPanel.textFile.work" txt="कार्य निर्देशिका  : "/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="चुने गए स्थापना पैकेज"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="स्थापना पथ"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss] zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="{0} के लिए स्थापना रिपोर्ट : संस्करण {1}"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- त्रुटियाँ ---"/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="त्रुटि [{0}] - "/>
+    <!--                  &gt;&gt; Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; अपवाद: {0}"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;स्थापना सफल नहीं हुई!&lt;br&gt;क्या आप एक लॉग फ़ाइल लिखना चाहते हैं?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;स्थापना पूरी तरह सफल नहीं हो सकी है!&lt;br&gt;क्या आप एक लॉग फ़ाइल लिखना चाहते हैं?&lt;/html&gt;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="स्थापना समस्याएँ"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="चेतावनी!!! स्थापना सफल नहीं हुई!"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="इस रिपोर्ट में {0} सामान्य संदेश, {1} चेतावनियाँ और {2} त्रुटियाँ हैं"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- स्थापना संदेश ---"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="संदेश  [{0}] - "/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="चेतावनी!!! स्थापना पूरी तरह सफल नहीं हो सकी है!"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="स्थापना फ़ोल्डर         : {0}"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack स्थापना रिपोर्ट"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="स्थापना रिपोर्ट &#x27;&#x27;{0}&#x27;&#x27; फ़ाइल में लिखी नहीं जा सकी"/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="रिपोर्ट लिखने में त्रुटि"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="लॉग फ़ाइल सहेजें"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="स्थापना समय             : {0}"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- चेतावनियाँ ---"/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="चेतावनी [{0}] - "/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="मान बदलें"/>
+    <!-- delete value -->
+    <str id="debug.deletevariable" txt="मान हटाएँ"/>
+    <!-- log -->
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="&#x27;&#x27;{0}&#x27;&#x27; लिखा नहीं जा सका"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- data -->
+    <!-- Validation failed -->
+    <str id="data.validation.error.title" txt="त्रुटि"/>
+    <!-- Attention needed -->
+    <str id="data.validation.warning.title" txt="चेतावनी"/>
+</izpack:langpack>

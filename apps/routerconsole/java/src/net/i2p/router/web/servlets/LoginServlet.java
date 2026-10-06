@@ -153,7 +153,7 @@ public class LoginServlet extends HttpServlet {
                     "ar", "az", "bn", "bo", "ca", "cs", "da", "de", "el",
                     "en", "es", "et", "fa", "fi", "fr", "he", "hi", "hu",
                     "in", "it", "ja", "ko", "nb", "nl", "pl", "ps", "pt",
-                    "ro", "ru", "sl", "sv", "sw", "th", "tl", "tr", "uk",
+                    "ro", "ru", "sk", "sl", "sv", "sw", "th", "tl", "tr", "uk",
                     "ur", "vi", "zh", "zh_TW")));
 
     private static String sanitizeTheme(String theme) {

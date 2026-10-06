@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<langpack>
+
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="Maligayang pagdating"/>
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="Pag-install"/>
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="Pumili ng mga pakete"/>
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="Tapos na ang pag-install"/>
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="Landas ng puntuhan"/>
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - Pag-install ng "/>
+    <!-- Next -->
+    <str id="installer.next" txt="Susunod"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="Nakaraan"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="Umalis"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="Sigurado ka bang gusto mong umalis?"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="Kanselado ang pag-install dahil dito!"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="Babala!"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="Oo"/>
+    <!-- No -->
+    <str id="installer.no" txt="Hindi"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="Kanselahin"/>
+    <!-- Error -->
+    <str id="installer.error" txt="Pagkakamali"/>
+    <!-- Help -->
+    <str id="installer.help" txt="Tulong"/>
+    <!-- Step -->
+    <str id="installer.step" txt="Hakbang"/>
+    <!-- of -->
+    <str id="installer.of" txt="sa"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="Mensahe"/>
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="Masisira nito ang naka-install na aplikasyon!"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" Sapilitang burahin ang "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="I-uninstall"/>
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="Maligayang pagdating sa pag-install ng "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="!"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="Ang software na ito ay binuo ng: "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="Ang homepage ay nasa: "/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="Dapat umiral na ang napiling direktoryo."/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="Dapat umiral na ang napiling direktoryo."/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="Wala ang kinakailangang produkto sa napiling direktoryo."/>
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="Pumili ng landas ng pag-install: "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="Tingnan..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="Nakaraan na ang direktoryo! Sigurado ka bang gusto mong i-install dito at baka ma-overwrite ang mga umiiral na file?"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="Hindi ka nagtakda ng lokasyon! Tama ba ito?"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="Gagawa ng direktoryo sa: "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="Hindi direktoryo ang file na ito! Mangyaring pumili ng direktoryo!"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="Hindi maaaring isulat sa direktoryong ito! Mangyaring pumili ng ibang direktoryo!"/>
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="Piliin ang mga paketeng gusto mong i-install:"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="Tandaan: Ang mga nakapailalang na pakete ay kinakailangan."/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="Kabuuang espasyong kailangan: "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="Espasyong available: "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="Paglalarawan"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="Ang napiling pakete ay may mga sumusunod na kailangan at/o hindi kasama"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="Mga kailangan: "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="Mga hindi kasama: "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="Lumampas sa available na espasyo sa disk ang espasyong kailangan para sa pag-install."/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="hindi matukoy"/>
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="Pindutin ang &#x27;I-install!&#x27; upang simulan ang proseso ng pag-install"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="I-install!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="Progreso ng pag-install ng pakete:"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[Tapos na]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="Kabuuang progreso ng pag-install:"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="Mayroon nang file"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="Mayroon nang sumusunod na file. Kayo po ba naisong i-overwrite?"/>
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="Landas ng pag-install"/>
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="Napiling mga pakete"/>
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="Hindi maabuksan ang registry key {0}\\{1}."/>
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd/MM/yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           ULAT NG PAG-INSTALL NG IzPack"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="BABALA!!! Hindi matagumpay ang pag-install!"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="BABALA!!! Maaaring hindi lubos na matagumpay ang pag-install!"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="Naglalaman ang ulat na ito ng {0} pangkalahatang mensahe, {1} babala at {2} kamalian"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="Ulat ng pag-install para sa : {0} Bersyon {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="Oras ng install         : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="Landas ng install       : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- Mga Mensahe ng Pag-install ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- Mga Babala ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- Mga Pagkakamali ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; Eksepsiyon: {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="Mensahe  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="Babala [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="Pagkakamali [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="Pagkakamali sa pagtatago ng ulat"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="Hindi maisulat ang ulat ng pag-install sa &#x27;{0}&#x27;"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="Mga problema sa pag-install"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="I-save ang log file"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;Hindi matagumpay ang pag-install!&lt;br&gt;Gusto mo bang magsulat ng log file?&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;Maaaring hindi lubos na matagumpay ang pag-install!&lt;br&gt;Gusto mo bang magsulat ng log file?&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="hindi maisulat ang &#x27;{0}&#x27;"/>
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="baguhin ang halaga"/>
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="Pagkakamali"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="Babala"/>
+</langpack>

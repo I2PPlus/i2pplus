@@ -133,6 +133,10 @@ gradle/wrapper/.gradle/
 # Gradle build artifacts in bin directories
 **/bin/
 !**/bin/README.md
+# ...but the IzPack 4 patches tree is source, not build output: ant izpack-patches
+# jars installer/lib/izpack/4/patches into patches.jar, and the **/bin/ rule above
+# hides the langpacks and flags under it from git entirely.
+!installer/lib/izpack/4/patches/bin/
 
 # JBIGI build artifacts
 core/c/jbigi/bin/

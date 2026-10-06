@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!-- Untranslated skeleton for bod. See tools/scripts/izpack-required-strings.py. -->
+
+<langpack>
+
+    <!-- HelloPanel -->
+    <!-- Welcome -->
+    <str id="HelloPanel.headline" txt="དགའ་བསུ་ཞུ"/>
+    <!-- InstallPanel -->
+    <!-- Installation -->
+    <str id="InstallPanel.headline" txt="བསྐར་ཚད"/>
+    <!-- PacksPanel -->
+    <!-- Select Installation Packages -->
+    <str id="PacksPanel.headline" txt="བསྐར་མཛོག་འདེམས"/>
+    <!-- SimpleFinishPanel -->
+    <!-- Installation Finished -->
+    <str id="SimpleFinishPanel.headline" txt="བསྐར་ཚད་ཟིན"/>
+    <!-- TargetPanel -->
+    <!-- Target Path -->
+    <str id="TargetPanel.headline" txt="མཚོམས་ཐབས"/>
+    <!-- installer -->
+    <!-- IzPack - Installation of  -->
+    <str id="installer.title" txt="IzPack - བསྐར་ཚད་ཀྱི་ "/>
+    <!-- Next -->
+    <str id="installer.next" txt="གོ་སོ"/>
+    <!-- Previous -->
+    <str id="installer.prev" txt="ལོག"/>
+    <!-- Quit -->
+    <str id="installer.quit" txt="འགྲོ་བ"/>
+    <!-- (Made with IzPack - http://izpack.org/) -->
+    <str id="installer.madewith" txt=""/>
+    <!-- Are you sure you want to quit? -->
+    <str id="installer.quit.title" txt="འགྲོ་བའི་ཕྱིར་ངེས་གཏམ་ཡིན་དམ།"/>
+    <!-- This will cancel the installation! -->
+    <str id="installer.quit.message" txt="འདིས་བསྐར་ཚད་ཕྱག་འཚལ་བྱེད་ཀྱི་རེད།"/>
+    <!-- Warning! -->
+    <str id="installer.warning" txt="སྤྱོད་གསོན།"/>
+    <!-- Yes -->
+    <str id="installer.yes" txt="ཡིན"/>
+    <!-- No -->
+    <str id="installer.no" txt="མིན"/>
+    <!-- Cancel -->
+    <str id="installer.cancel" txt="ཕྱག་འཚལ"/>
+    <!-- Error -->
+    <str id="installer.error" txt="ནོར་འཁྲུལ"/>
+    <!-- Help -->
+    <str id="installer.help" txt="བཀའ་རྒྱུད"/>
+    <!-- Step -->
+    <str id="installer.step" txt="རིམ་པ"/>
+    <!-- of -->
+    <str id="installer.of" txt="ཀྱི"/>
+    <!-- Message -->
+    <str id="installer.Message" txt="འཕྲིན་ལམ"/>
+    <!-- uninstaller -->
+    <!-- This will remove the installed application! -->
+    <str id="uninstaller.warning" txt="འདིས་བསྐར་བྱེད་འདུས་བསྐོར་འདུག"/>
+    <!--  Force the deletion of  -->
+    <str id="uninstaller.destroytarget" txt=" གསར་པ་དུ་འཇིག་མེད་སོགས་ལ་འཁེལ་ཡང་། "/>
+    <!-- Uninstall -->
+    <str id="uninstaller.uninstall" txt="བསྐར་འདོར"/>
+    <!-- HelloPanel -->
+    <!-- Welcome to the installation of  -->
+    <str id="HelloPanel.welcome1" txt="བསྐར་ཚད་ལ་དགའ་བསུ་ཞུ། "/>
+    <!-- ! -->
+    <str id="HelloPanel.welcome2" txt="།"/>
+    <!-- This software is developed by:  -->
+    <str id="HelloPanel.authors" txt="རྩལ་མས་བསྐར་བྱེད་འདི་བསྐལ་བའི་མཁན། "/>
+    <!-- The homepage is at:  -->
+    <str id="HelloPanel.url" txt="གནས་ཁང་ནི་འདིར་ཡོད། "/>
+    <!-- PathInputPanel -->
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required" txt="བསམ་ཟིན་པའི་ས་གནས་ཡོད་དགོས།"/>
+    <!-- The chosen directory should exist. -->
+    <str id="PathInputPanel.required.forModificationInstallation" txt="བསམ་ཟིན་པའི་ས་གནས་ཡོད་དགོས།"/>
+    <!-- The chosen directory does not contain the required product. -->
+    <str id="PathInputPanel.notValid" txt="བསམ་ཟིན་པའི་ས་གནས་ནང་དགོས་པའི་རྩལ་མས་མེད།"/>
+    <!-- TargetPanel -->
+    <!-- Select the installation path:  -->
+    <str id="TargetPanel.info" txt="བསྐར་ཚད་ཐབས་འདེམས། "/>
+    <!-- Browse... -->
+    <str id="TargetPanel.browse" txt="བལྟ་བ..."/>
+    <!-- The directory already exists! Are you sure you want to install here and possibly overwrite existing files? -->
+    <str id="TargetPanel.warn" txt="ས་གནས་འདི་ལྟེར་ཡོད། འདིར་བསྐར་བྱེད་བྱས་ནས་གཞན་ཡིག་ཆ་བསྐོར་བརྒྱབས་ཀྱི་དགོས་དམ།"/>
+    <!-- You have not specified a target location! Is this correct? -->
+    <str id="TargetPanel.empty_target" txt="བསྐར་ཚད་ཐབས་མངོན་གསལ་མ་བྱས་ཡོད། འདི་ནི་ཡིན་ནོད།"/>
+    <!-- The target directory will be created:  -->
+    <str id="TargetPanel.createdir" txt="འདི་ལ་ས་གནས་གསར་པ་བསྐྲུག་སྟེ། "/>
+    <!-- This file is not a directory! Please choose a directory! -->
+    <str id="TargetPanel.nodir" txt="ཡིག་ཆ་འདི་ས་གནས་མིན། ས་གནས་ཞིག་འདེམས།"/>
+    <!-- This directory can not be written! Please choose another directory! -->
+    <str id="TargetPanel.notwritable" txt="ས་གནས་འདིར་ཡིག་འདེབས་མིན། སའི་ས་གནས་ཞིག་འདེམས།"/>
+    <!-- PacksPanel -->
+    <!-- Select the packs you want to install: -->
+    <str id="PacksPanel.info" txt="བསྐར་བྱེད་གང་མཛོག་ཡིན་འདེམས།"/>
+    <!-- Note: Grayed packs are required. -->
+    <str id="PacksPanel.tip" txt="མུད་པ་བསྐྱོད་པའི་མཛོག་ནི་དགོས་པ་ཡིན།"/>
+    <!-- Total space required:  -->
+    <str id="PacksPanel.space" txt="དགོས་ས་ཚད། "/>
+    <!-- Available space:  -->
+    <str id="PacksPanel.freespace" txt="ཡོད་ས་ཚད། "/>
+    <!-- Description -->
+    <str id="PacksPanel.description" txt="འཇུག་སྟངས"/>
+    <!-- The selected package has the following dependencies and/or excludes -->
+    <str id="PacksPanel.dependencyList" txt="འདེམས་པའི་མཛོག་ལ་འོངས་ཀྱི་བསྐོར་ཚོགས་དང་འདོད་མེད་ཡོད།"/>
+    <!-- Dependencies:  -->
+    <str id="PacksPanel.dependencies" txt="བསྐོར་ཚོགས། "/>
+    <!-- Excludes:  -->
+    <str id="PacksPanel.excludes" txt="འདོད་མེད། "/>
+    <!-- Disk space required for the installation exceeds available disk space. -->
+    <str id="PacksPanel.notEnoughSpace" txt="བསྐར་ཚད་ལ་དགོས་པའི་ས་ཁ་ནི་ཡོད་ས་ཁ་ལས་འདས།"/>
+    <!-- not ascertainable -->
+    <str id="PacksPanel.notAscertainable" txt="གཏན་འཇུག་མེད"/>
+    <!-- InstallPanel -->
+    <!-- Click 'Install!' to begin the installation process -->
+    <str id="InstallPanel.info" txt="བསྐར་ཚད་གཞུག་འགོ་བའི་ཕྱིར་ &#x27;བསྐར་བྱེད!&#x27; ལ་བསྤལ།"/>
+    <!-- Install! -->
+    <str id="InstallPanel.install" txt="བསྐར་བྱེད!"/>
+    <!-- Pack installation progress: -->
+    <str id="InstallPanel.tip" txt="མཛོག་བསྐར་ཚད་ཀྱི་སྤོས་རིམ།"/>
+    <!-- TODO -->
+    <str id="InstallPanel.begin" txt=" "/>
+    <!-- [Finished] -->
+    <str id="InstallPanel.finished" txt="[ཟིན]"/>
+    <!-- Overall installation progress: -->
+    <str id="InstallPanel.progress" txt="བསྐར་ཚད་ཀྱི་སྤོས་རིམ།"/>
+    <!-- File already exists -->
+    <str id="InstallPanel.overwrite.title" txt="ཡིག་ཆ་ལྟེར་ཡོད"/>
+    <!-- The following file already exists. Should it be overwritten? -->
+    <str id="InstallPanel.overwrite.question" txt="འོངས་ཀྱི་ཡིག་ཆ་ལྟེར་ཡོད། ཡིན་ན་འདིས་བསྐོར་བརྒྱབས་ཀྱི་དགོས་དམ།"/>
+    <!-- TargetPanel -->
+    <!-- Installation Path -->
+    <str id="TargetPanel.summaryCaption" txt="བསྐར་ཚད་ཐབས"/>
+    <!-- PacksPanel -->
+    <!-- Chosen Installation Packs -->
+    <str id="PacksPanel.summaryCaption" txt="འདེམས་པའི་བསྐར་མཛོག"/>
+    <!-- functionFailed -->
+    <!-- Cannot open registry key {0}\\{1}. -->
+    <str id="functionFailed.RegOpenKeyEx" txt="འཛིན་རྟེན་སྒག་{0}\\{1} མི་འབྱེད་ཐུབ།"/>
+    <!-- log -->
+    <!-- MM-dd-yyyy [HH:mm:ss]  zzzz -->
+    <str id="log.timeStamp" txt="dd.MM.yyyy HH:mm:ss"/>
+    <!--                            IzPack INSTALLATION REPORT -->
+    <str id="log.reportHeading" txt="                           IzPack བསྐར་ཚད་ལེབས་ཐོབ"/>
+    <!-- WARNING!!! The installation did not succeed! -->
+    <str id="log.installFailed" txt="སྤྱོད་གསོན།།། བསྐར་ཚད་མ་སྒྲུབ།"/>
+    <!-- WARNING!!! The installation might not have completely succeeded! -->
+    <str id="log.partialInstall" txt="སྤྱོད་གསོན།།། བསྐར་ཚད་མ་ཚར་བར་མི་སྒྲུབ་སྲིད།"/>
+    <!-- This report contains {0} general message(s), {1} warning(s) and {2} error(s) -->
+    <str id="log.messageCount" txt="འདི་ལེབས་ཐོབའི་ནང་ {0} སྤྱི་གྲོག་འཕྲིན་ལམ། {1} སྤྱོད་གསོན། {2} ནོར་འཁྲུལ།"/>
+    <!-- Installation report for : {0} Version {1} -->
+    <str id="log.application" txt="བསྐར་ཚད་ལེབས་ཐོབ་ {0} མིག་ཚད་ {1}"/>
+    <!-- Install time            : {0} -->
+    <str id="log.timePrefix" txt="བསྐར་དུས་               : {0}"/>
+    <!-- Install directory       : {0} -->
+    <str id="log.pathPrefix" txt="བསྐར་ས་གནས              : {0}"/>
+    <!--                          - - - Installation Messages - - - -->
+    <str id="log.messageHeading" txt="                         --- བསྐར་ཚད་འཕྲིན་ལམ ---"/>
+    <!--                                - - - Warnings - - - -->
+    <str id="log.warningHeading" txt="                               --- སྤྱོད་གསོན ---"/>
+    <!--                                 - - - Errors - - - -->
+    <str id="log.errorHeading" txt="                                --- ནོར་འཁྲུལ ---"/>
+    <!--                  >> Exception: {0} -->
+    <str id="log.exceptionPrefix" txt="                 &gt;&gt; མཚན་སྤྱོད། {0}"/>
+    <!-- Message  [{0}] -  -->
+    <str id="log.messagePrefix" txt="འཕྲིན་ལམ  [{0}] - "/>
+    <!-- Warning [{0}] -  -->
+    <str id="log.warningPrefix" txt="སྤྱོད་གསོན [{0}] - "/>
+    <!-- Error [{0}] -  -->
+    <str id="log.errorPrefix" txt="ནོར་འཁྲུལ [{0}] - "/>
+    <!-- Error writing report -->
+    <str id="log.reportWriteErrorTitle" txt="ལེབས་ཐོབ་ཡིག་འདེབས་ནོར་འཁྲུལ"/>
+    <!-- Unable to write the installation report to ''{0}'' -->
+    <str id="log.reportWriteError" txt="བསྐར་ཚད་ལེབས་ཐོབ་{0} ལ་ཡིག་འདེབས་མིན།"/>
+    <!-- Installation Problems -->
+    <str id="log.informUserTitle" txt="བསྐར་ཚད་ཀྱི་དཀའ་ངལ་"/>
+    <!-- Save Log File -->
+    <str id="log.saveLogTitle" txt="དཔྱད་རྟེན་ཡིག་འདེབས"/>
+    <!-- installLog.txt -->
+    <str id="log.LogFileName" txt="installLog.txt"/>
+    <!-- &lt;html&gt;The installation did not succeed!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserFail" txt="&lt;html&gt;བསྐར་ཚད་མ་སྒྲུབ།&lt;br&gt;དཔྱད་རྟེན་ཡིག་འདེབས་ཡིན་དམ།&lt;/html&gt;"/>
+    <!-- &lt;html&gt;The installation might not have completely succeeded!&lt;br&gt;Would you like to write a log file?&lt;/html&gt; -->
+    <str id="log.informUserPartial" txt="&lt;html&gt;བསྐར་ཚད་མ་ཚར་བར་མི་སྒྲུབ་སྲིད།&lt;br&gt;དཔྱད་རྟེན་ཡིག་འདེབས་ཡིན་དམ།&lt;/html&gt;"/>
+    <!-- TODO -->
+    <str id="log.message_" txt=""/>
+    <!-- TODO -->
+    <str id="log.warning_" txt=""/>
+    <!-- unable to write ''{0}'' -->
+    <str id="log.error_0" txt="ཡིག་འདེབས་མིན།  &#x27;&#x27;{0}&#x27;&#x27;"/>
+    <!-- debug -->
+    <!-- modify value -->
+    <str id="debug.changevariable" txt="རྗེས་ཅིག་བཅོས་བསྐོར"/>
+    <!-- data -->
+    <!-- Error -->
+    <str id="data.validation.error.title" txt="ནོར་འཁྲུལ"/>
+    <!-- Warning -->
+    <str id="data.validation.warning.title" txt="སྤྱོད་གསོན"/>
+</langpack>
