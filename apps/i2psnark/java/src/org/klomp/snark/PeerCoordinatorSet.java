@@ -63,6 +63,27 @@ class PeerCoordinatorSet implements Iterable<PeerCoordinator> {
     }
 
     /**
+     * Whether any other live, non-halted coordinator is registered. Consulted before dropping the
+     * shared I2CP session in single-destination mode, where every torrent runs on one session and
+     * one torrent tearing it down strands the rest.
+     *
+     * @param exclude the coordinator being torn down, so it does not count as another user
+     * @return true if some other torrent still needs the shared session
+     * @since 0.9.71+
+     */
+    public boolean hasOtherRunning(PeerCoordinator exclude) {
+        for (PeerCoordinator pc : _coordinators.values()) {
+            if (pc == exclude) {
+                continue;
+            }
+            if (!pc.halted()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @since 0.9.2
      */
     public PeerCoordinator get(byte[] infoHash) {

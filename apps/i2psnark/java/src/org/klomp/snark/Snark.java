@@ -728,6 +728,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * or, after the stop's unannounces have had a chance to dispatch, by
      * stopAllTorrents().
      *
+     * <p>In single-destination mode the session is shared by every torrent, so it is only
+     * dropped once no other torrent still needs it. A transient lookup torrent never owned the
+     * shared session, so destroying one must not take it down: trackers such as zzzot submit
+     * throwaway lookup magnets and delete them again minutes later, and each delete used to
+     * disconnect every running torrent, forcing a fresh destination and a full tunnel rebuild.
+     *
      * @since 0.9.71+
      */
     void teardownSession() {
@@ -741,7 +747,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 acceptor.removeTorrentAcceptor(_dest, pc);
                 _util.removeTorrentDest(key);
                 _dest = null;
-            } else {
+            } else if (!_peerCoordinatorSet.hasOtherRunning(pc)) {
+                // No other torrent still needs the shared session, so it is ours to close.
                 _util.disconnect();
             }
         }
