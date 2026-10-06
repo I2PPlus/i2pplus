@@ -131,16 +131,22 @@ class InstallerUtil {
   }
 
   // ant izpack5-patches: the compiler resolves langpacks and flag GIFs relative to its
-  // working directory, so they are staged into <repo>/com/izforge/izpack/ before the
-  // compile. ant does the same as two <copy> tasks; both halves are needed, since a
-  // langpack whose flag is absent is a hard "ISO3 flag image not found" error.
+  // working directory, so they are staged just above it before the compile. ant does the
+  // same as two <copy> tasks; both halves are needed, since a langpack whose flag is
+  // absent is a hard "ISO3 flag image not found" error.
+  //
+  // workDir is per variant, not the repo root: the directory is wiped and rebuilt on
+  // every run, and gradle executes the installer5* tasks in parallel (org.gradle.parallel),
+  // so a shared location let one compile delete another's langpacks mid-flight and fail.
   //
   // Lives on this class, not as a script method, because a bare script method does not
-  // resolve inside a task closure (delegate-first dispatch). NIO rather than
-  // File.copyTo: the Groovy extension method does not resolve there either under
-  // Gradle 9's Groovy, and it fails at execution time rather than at compile time.
-  void stageLangpacksAndFlags(String wsAbs) {
-    File langpackRoot = new File("${wsAbs}/com/izforge/izpack/bin/langpacks")
+  // resolve inside a task closure (delegate-first dispatch).
+  //
+  // NIO rather than File.copyTo: the Groovy extension method does not resolve from
+  // inside these closures under Gradle 9's Groovy, and it fails at execution time
+  // rather than at compile time.
+  void stageLangpacksAndFlags(String workDir, String wsAbs) {
+    File langpackRoot = new File("${workDir}/com/izforge/izpack/bin/langpacks")
     langpackRoot.mkdirs()
     langpackRoot.deleteDir()
     Closure copyTree = { File src, File dstDir, String suffix ->
@@ -886,13 +892,14 @@ def makeIzpack5Task(String taskName, String stageTask, String jbigiTask, String 
         descriptor, '-b', cfg.wsAbs, '-k', 'standard', '-o', "${cfg.dAbs}/${outJarName}"
     inputs.files(fileTree(stageDir), file(descriptor), izpackPanelJar)
     outputs.file("${cfg.dAbs}/${outJarName}")
+    // The compiler resolves our langpacks and flags relative to its working directory,
+    // so each variant gets its own scratch dir to stage them into.
+    workingDir "${cfg.izWork}/${variant}"
     doFirst {
       if (!new File("${cfg.iz5home}/lib").isDirectory()) {
         throw new GradleException(izpack5Missing)
       }
-      // Custom langpacks and flags load relative to the working directory, which is the
-      // repo root for this task - the same place ant puts them.
-      cfg.util.stageLangpacksAndFlags(cfg.wsAbs as String)
+      cfg.util.stageLangpacksAndFlags("${cfg.izWork}/${variant}" as String, cfg.wsAbs as String)
     }
     doLast {
       cfg.util.printSha(new File("${cfg.dAbs}/${outJarName}"))
@@ -952,11 +959,12 @@ task installer5WJar(type: Exec) {
       "${izpackWork}/windows/5/install5.xml", '-b', workspaceRootAbs, '-k', 'standard', '-o', "${distAbs}/install-windows.jar"
   inputs.files(fileTree("${stageRoot}/windows"), file("${izpackWork}/windows/5/install5.xml"), izpackPanelJar)
   outputs.file("${distAbs}/install-windows.jar")
+  workingDir "${izpackWork}/windows"
   doFirst {
     if (!new File("${iz5home}/lib").isDirectory()) {
       throw new GradleException(izpack5Missing)
     }
-    installerUtil.stageLangpacksAndFlags(workspaceRootAbs as String)
+    installerUtil.stageLangpacksAndFlags("${izpackWork}/windows" as String, workspaceRootAbs as String)
   }
 }
 
