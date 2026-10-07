@@ -5359,54 +5359,19 @@ public class ProfileOrganizer {
         if (now - _cachedBuildSuccessTime < BUILD_SUCCESS_CACHE_MS) {
             return _cachedBuildSuccess;
         }
-        double result = 1.0;
-        try {
-            RateStat eExpl = _context.statManager().getRate("tunnel.buildExploratoryExpire");
-            RateStat rExpl = _context.statManager().getRate("tunnel.buildExploratoryReject");
-            RateStat sExpl = _context.statManager().getRate("tunnel.buildExploratorySuccess");
-            RateStat eClient = _context.statManager().getRate("tunnel.buildClientExpire");
-            RateStat rClient = _context.statManager().getRate("tunnel.buildClientReject");
-            RateStat sClient = _context.statManager().getRate("tunnel.buildClientSuccess");
-            if (eExpl != null && rExpl != null && sExpl != null &&
-                eClient != null && rClient != null && sClient != null) {
-                result = buildSuccessRatio(eExpl.getRate(RateConstants.TEN_MINUTES),
-                                         rExpl.getRate(RateConstants.TEN_MINUTES),
-                                         sExpl.getRate(RateConstants.TEN_MINUTES),
-                                         eClient.getRate(RateConstants.TEN_MINUTES),
-                                         rClient.getRate(RateConstants.TEN_MINUTES),
-                                         sClient.getRate(RateConstants.TEN_MINUTES));
-            }
-        } catch (Exception e) { /* ignored */ }
+        // Single source of truth: see SystemVersion.getTunnelBuildSuccessRatio(). This used to
+        // read getCurrentEventCount() off the ten minute rate, which is the current *partial*
+        // period, so the value was a fraction of one bucket and drifted under the attack
+        // threshold on noise - switching off profile eviction and lengthening ghost cooldowns
+        // for as long as it held. Kept 1.0 for an absent or empty window, as before.
+        double result = SystemVersion.getTunnelBuildSuccessRatio(_context.statManager(),
+                                                                 SystemVersion.BUILD_SUCCESS_WINDOW_MS);
+        if (Double.isNaN(result)) {
+            result = 1.0;
+        }
         _cachedBuildSuccess = result;
         _cachedBuildSuccessTime = now;
         return result;
-    }
-
-    /**
-     *  Build-success ratio from the six TEN_MINUTES rates, 1.0 when any rate
-     *  is missing or the window is empty.
-     *
-     *  @param er exploratory expire rate
-     *  @param rr exploratory reject rate
-     *  @param sr exploratory success rate
-     *  @param erC client expire rate
-     *  @param rrC client reject rate
-     *  @param srC client success rate
-     *  @return the ratio in [0.0, 1.0], 1.0 when no data
-     *  @since 0.9.71+
-     */
-    static double buildSuccessRatio(Rate er, Rate rr, Rate sr, Rate erC, Rate rrC, Rate srC) {
-        if (er == null || rr == null || sr == null || erC == null || rrC == null || srC == null) {
-            return 1.0;
-        }
-        double expire = er.getCurrentEventCount() + erC.getCurrentEventCount();
-        double reject = rr.getCurrentEventCount() + rrC.getCurrentEventCount();
-        double success = sr.getCurrentEventCount() + srC.getCurrentEventCount();
-        double total = expire + reject + success;
-        if (total > 0) {
-            return success / total;
-        }
-        return 1.0;
     }
 
     /**

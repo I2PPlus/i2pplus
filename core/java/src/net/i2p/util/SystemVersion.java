@@ -1012,29 +1012,83 @@ public abstract class SystemVersion {
      * @since 0.9.58+
      */
     public static int getTunnelBuildSuccess() {
-        I2PAppContext context = I2PAppContext.getGlobalContext();
-        StatManager sm = context.statManager();
-        if (sm == null) {
-            return 0;
-        }
-        int RATE = 10 * 60 * 1000;
-        Rate explSuccess = getStatRate(sm, "tunnel.buildExploratorySuccess", RATE);
-        Rate explReject = getStatRate(sm, "tunnel.buildExploratoryReject", RATE);
-        Rate explExpire = getStatRate(sm, "tunnel.buildExploratoryExpire", RATE);
-        Rate clientSuccess = getStatRate(sm, "tunnel.buildClientSuccess", RATE);
-        Rate clientReject = getStatRate(sm, "tunnel.buildClientReject", RATE);
-        Rate clientExpire = getStatRate(sm, "tunnel.buildClientExpire", RATE);
-        if (explSuccess == null || explReject == null || explExpire == null ||
-            clientSuccess == null || clientReject == null || clientExpire == null) {
-            return 0;
-        }
-        int success = (int) explSuccess.getLastEventCount() + (int) clientSuccess.getLastEventCount();
-        int reject = (int) explReject.getLastEventCount() + (int) clientReject.getLastEventCount();
-        int expire = (int) explExpire.getLastEventCount() + (int) clientExpire.getLastEventCount();
-        int total = success + reject + expire;
-        if (total <= 0) {
-            return 0;
-        }
-        return (100 * success) / total;
+        double ratio = getTunnelBuildSuccessRatio(I2PAppContext.getGlobalContext().statManager(),
+                                                 BUILD_SUCCESS_WINDOW_MS);
+        return Double.isNaN(ratio) ? 0 : (int) Math.round(ratio * 100);
     }
+
+    /**
+     *  The canonical tunnel build success ratio: successes over all settled builds,
+     *  0.0 to 1.0, for a stated window.
+     *
+     *  <p>This is the single source of truth. Three implementations existed and none of them
+     *  agreed: {@code ProfileOrganizer} read {@code getCurrentEventCount()} - the
+     *  <em>current partial</em> period - while asking for the ten minute rate, so it sampled a
+     *  fraction of one bucket and threw the history away; the copy here read
+     *  {@code getLastEventCount()}, the last <em>completed</em> period; and the Tuner used a
+     *  different set of stats entirely on an hourly window. That value is not cosmetic - it
+     *  gates profile eviction, selects the ghost cooldown, and feeds
+     *  {@code ClientPeerSelector} first-hop selection - so a partial-period reading could
+     *  intermittently drop it under the attack threshold and switch all three to their
+     *  defensive behaviour on noise.
+     *
+     *  <p>Counts events over the last <em>completed</em> window rather than the current
+     *  partial one, so the reading does not depend on where in the period it was sampled.
+     *  Partial-period sampling was what made the old value swing, and swing under the attack
+     *  threshold, which switches off profile eviction and lengthens ghost cooldowns.
+     *
+     *  @param sm the stat manager, or null
+     *  @param windowMs the averaging window in milliseconds
+     *  @return the ratio, or NaN if the stats are absent or the window is empty
+     *  @since 0.9.71+
+     */
+    public static double getTunnelBuildSuccessRatio(StatManager sm, int windowMs) {
+        if (sm == null) {
+            return Double.NaN;
+        }
+        Rate es = getStatRate(sm, "tunnel.buildExploratorySuccess", windowMs);
+        Rate erExp = getStatRate(sm, "tunnel.buildExploratoryReject", windowMs);
+        Rate ee = getStatRate(sm, "tunnel.buildExploratoryExpire", windowMs);
+        Rate cs = getStatRate(sm, "tunnel.buildClientSuccess", windowMs);
+        Rate cr = getStatRate(sm, "tunnel.buildClientReject", windowMs);
+        Rate ce = getStatRate(sm, "tunnel.buildClientExpire", windowMs);
+        if (es == null || erExp == null || ee == null || cs == null || cr == null || ce == null) {
+            return Double.NaN;
+        }
+        // getLastEventCount(), not getAverageValue(): the average is of the recorded
+        // magnitude, and the three stats do not agree on one - success and reject record a
+        // round-trip time in ms while expire records a literal 1 - so an average would read
+        // 1.0 for expire no matter how many expiries happened. The event count over the last
+        // completed window is the quantity the ratio is actually about.
+        return buildSuccessRatio(es.getLastEventCount() + cs.getLastEventCount(),
+                                 erExp.getLastEventCount() + cr.getLastEventCount(),
+                                 ee.getLastEventCount() + ce.getLastEventCount());
+    }
+
+    /**
+     *  Successes over all settled builds. Pure arithmetic, so it is testable without stats.
+     *
+     *  @param success mean successes per period
+     *  @param reject mean rejections per period
+     *  @param expire mean expiries per period
+     *  @return the ratio, or NaN when nothing settled in the window
+     *  @since 0.9.71+
+     */
+    public static double buildSuccessRatio(double success, double reject, double expire) {
+        double total = success + reject + expire;
+        if (total <= 0) {
+            return Double.NaN;
+        }
+        return success / total;
+    }
+
+    /**
+     *  Default window for {@link #getTunnelBuildSuccessRatio}. Ten minutes: long enough that a
+     *  single bad minute is not mistaken for sustained failure, short enough to react within
+     *  one LeaseSet refresh cycle.
+     *
+     *  @since 0.9.71+
+     */
+    public static final int BUILD_SUCCESS_WINDOW_MS = 10 * 60 * 1000;
+
 }

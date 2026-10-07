@@ -263,6 +263,48 @@ public class EstablishmentManager {
      *  @since 0.9.71+
      */
     static final long CORRUPT_CONFIRM_LOG_INTERVAL_MS = 60 * 1000L;
+
+    /**
+     *  Minimum gap between inbound establishment give-up reports.  @since 0.9.71+
+     */
+    static final long INBOUND_GIVEUP_LOG_INTERVAL_MS = 60 * 1000L;
+    private static final AtomicLong _lastInboundGiveupLog = new AtomicLong();
+    private static final AtomicLong _inboundGiveupSuppressed = new AtomicLong();
+
+    /**
+     *  The deadline an inbound attempt was actually given.
+     *
+     *  <p>Inbound expiry has two branches: the base deadline, or - once a retry has been sent
+     *  and has itself not answered - a longer retry budget. Whichever is later is the deadline
+     *  that applied, and it is what the report has to name.
+     *
+     *  @param isRetrySent true if the attempt had already sent a retry
+     *  @param maxEstablishTime the base deadline
+     *  @param retrySentMaxTime the extended budget available after a retry
+     *  @return the effective deadline in milliseconds
+     *  @since 0.9.71+
+     */
+    static long inboundEstablishBudget(boolean isRetrySent, long maxEstablishTime, long retrySentMaxTime) {
+        return isRetrySent ? Math.max(maxEstablishTime, retrySentMaxTime) : maxEstablishTime;
+    }
+
+    /**
+     *  Whether to emit an inbound give-up report now, counting any skipped.  @since 0.9.71+
+     */
+    static boolean shouldLogInboundGiveup(long now) {
+        long last = _lastInboundGiveupLog.get();
+        if (now - last < INBOUND_GIVEUP_LOG_INTERVAL_MS) {
+            _inboundGiveupSuppressed.incrementAndGet();
+            return false;
+        }
+        _lastInboundGiveupLog.set(now);
+        return true;
+    }
+
+    /**
+     *  Inbound give-up events rate-limited away since the last report.  @since 0.9.71+
+     */
+    static long getInboundGiveupSuppressed() { return _inboundGiveupSuppressed.get(); }
     private static final AtomicLong _lastCorruptConfirmLog = new AtomicLong();
     private static final AtomicLong _corruptConfirmSuppressed = new AtomicLong();
 
@@ -2702,6 +2744,7 @@ public class EstablishmentManager {
         InboundEstablishState inboundState = null;
         boolean expired = false;
 
+        boolean isRetrySent = false;
         for (Iterator<InboundEstablishState> iter = _inboundStates.values().iterator(); iter.hasNext(); ) {
             InboundEstablishState cur = iter.next();
             InboundEstablishState.InboundState istate = cur.getState();
@@ -2711,14 +2754,23 @@ public class EstablishmentManager {
                 inboundState = cur;
                 break;
             } else if (hasInboundEstablishExpired(cur.getLifetime(now),
-                                                  istate == IB_STATE_RETRY_SENT,
+                                                  isRetrySent = istate == IB_STATE_RETRY_SENT,
                                                   MAX_IB_ESTABLISH_TIME.get(),
                                                   IB_RETRY_SENT_MAX_TIME)) {
-                if (_log.shouldWarn()) {
+                // Name the deadline that actually applied, not just the base one. Inbound
+                // expiry has two branches and this line used to report only the first, so a
+                // retried attempt - which lives to IB_RETRY_SENT_MAX_TIME - was logged as
+                // having been given the base budget, understating what it was allowed.
+                long budget = inboundEstablishBudget(isRetrySent, MAX_IB_ESTABLISH_TIME.get(),
+                                                     IB_RETRY_SENT_MAX_TIME);
+                if (_log.shouldWarn() && shouldLogInboundGiveup(_context.clock().now())) {
                     _log.warn("[SSU] Giving up on inbound establishment from "
                               + cur.getRemoteHostId() + " after " + cur.getLifetime(now)
                               + "ms in state " + istate
-                              + " (max " + MAX_IB_ESTABLISH_TIME.get() + "ms)");
+                              + " (budget " + budget + "ms, retried=" + isRetrySent
+                              + ", base=" + MAX_IB_ESTABLISH_TIME.get()
+                              + ", retryBudget=" + IB_RETRY_SENT_MAX_TIME
+                              + ", suppressed " + getInboundGiveupSuppressed() + ")");
                 }
                 iter.remove(); // took too long
                 inboundState = cur;
