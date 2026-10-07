@@ -3238,7 +3238,13 @@ public final class SVGGraphics2D extends Graphics2D {
         if (this.glowEnabled) {
             defs.append("<filter id=\"glow\" x=\"-40%\" y=\"-40%\" width=\"180%\" height=\"180%\" ")
                 .append("color-interpolation-filters=\"sRGB\">")
-                .append("<feGaussianBlur in=\"SourceAlpha\" stdDeviation=\"3\" result=\"blur\"/>")
+                // Blur SourceGraphic, not SourceAlpha: the halo has to carry the stroke's
+                // own colour. SourceAlpha is the alpha channel alone, so blurring it throws
+                // the colour away and the halo comes out black - which reads as a drop
+                // shadow against a light background rather than a glow, and as a muddy
+                // smudge even on the dark themes. Mirroring the line colour keeps it a
+                // halo of the line on every theme.
+                .append("<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"3\" result=\"blur\"/>")
                 .append("<feComponentTransfer in=\"blur\" result=\"fadedBlur\">")
                 .append("<feFuncA type=\"linear\" slope=\"0.7\"/>")
                 .append("</feComponentTransfer>")

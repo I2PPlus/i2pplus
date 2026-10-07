@@ -136,6 +136,59 @@ public final class GraphThemeColors {
      */
     public static final String VAR_PLOT_LINE_WIDTH_WIDE = "--graph_plotLineWidthWide";
 
+    /**
+     * Stroke width, in pixels, of a plot line on a narrow tile carrying condensed data.
+     *
+     * <p>Distinct from {@link #VAR_PLOT_LINE_WIDTH} because the ordinary weight is tuned for a
+     * series with room to separate. Pack the same number of points into a narrower frame and
+     * the polyline's segments crowd together, so the weight that reads well on a roomy plot
+     * fills in on a condensed one. Themes ship 2 here against 3 for the ordinary plot.
+     *
+     * @since 0.9.71+
+     */
+    public static final String VAR_PLOT_LINE_WIDTH_CONDENSED = "--graph_plotLineWidthCondensed";
+
+    /**
+     * Stroke width, in pixels, of the line drawn over a filled plot.
+     *
+     * <p>Its own variable because it is not the plot line. {@link #VAR_PLOT_LINE_WIDTH} and its
+     * siblings state how heavy a plot <em>line</em> is; this one states how heavy the edge over
+     * a fill is, and the two are chosen for different jobs. It used to be half the plot width,
+     * which meant a theme could not set a readable fill edge without also reweighting every
+     * line plot in the console.
+     *
+     * @since 0.9.71+
+     */
+    public static final String VAR_PLOT_LINE_WIDTH_FILLED = "--graph_plotLineWidthFilled";
+
+    /**
+     * Stroke width, in pixels, of the line over a filled plot on a frame past
+     * {@link #WIDE_WIDTH}.
+     *
+     * <p>The filled family needs its own wide variant for the same reason the plot family does:
+     * a longer series shows a thinner stroke's gaps more readily. Without it a wide filled
+     * graph was stuck on the ordinary filled weight, so raising
+     * {@code --graph_plotLineWidthWide} did nothing there - the two families read separate
+     * variables, so a theme could not widen one without widening the other.
+     *
+     * @since 0.9.71+
+     */
+    public static final String VAR_PLOT_LINE_WIDTH_FILLED_WIDE =
+            "--graph_plotLineWidthFilledWide";
+
+    /**
+     * Stroke width, in pixels, of the line over a filled plot on a narrow, condensed frame.
+     *
+     * <p>The third member of the filled family, matching the plot family's plain, wide and
+     * condensed. Without it the filled edge had only one weight, so a narrow filled graph drew
+     * the same edge as a roomy one - which is the crowding the condensed slot exists to answer,
+     * just on the filled path where it had no slot to answer it in.
+     *
+     * @since 0.9.71+
+     */
+    public static final String VAR_PLOT_LINE_WIDTH_FILLED_CONDENSED =
+            "--graph_plotLineWidthFilledCondensed";
+
 
 
     /**
@@ -149,6 +202,17 @@ public final class GraphThemeColors {
      * @since 0.9.71+
      */
     public static final int WIDE_WIDTH = 800;
+
+    /**
+     * Frame width, in pixels, at or below which a condensed plot takes
+     * {@link #VAR_PLOT_LINE_WIDTH_CONDENSED}.
+     *
+     * <p>A layout constant, like {@link #WIDE_WIDTH}: the question is whether the points have
+     * room to separate, which is a property of the frame rather than of the theme.
+     *
+     * @since 0.9.71+
+     */
+    public static final int CONDENSED_WIDTH = 400;
 
     /** Prefix of the per-plot stroke variables; {@code --graph_plotLine1}, {@code --graph_plotLine2}. */
     static final String VAR_PLOT_LINE_PREFIX = "--graph_plotLine";
@@ -330,8 +394,11 @@ public final class GraphThemeColors {
      * reasons to draw a thinner or thicker line - a dense tile, the sidebar sparkline - and
      * those stay in {@code GraphRenderer} rather than here: they are legibility decisions
      * about one layout, not something a theme picks.
+     *
+     * <p>Pinned to what every shipped theme declares, so a console whose stylesheet cannot be
+     * read draws its plots the same weight as one that can.
      */
-    private static final float PLOT_LINE_WIDTH_DEFAULT = 2f;
+    private static final float PLOT_LINE_WIDTH_DEFAULT = 3f;
 
     /**
      * Fallback plot-line stroke width past {@link #WIDE_WIDTH}, used only when a theme
@@ -340,8 +407,51 @@ public final class GraphThemeColors {
      * <p>Equal to {@link #PLOT_LINE_WIDTH_DEFAULT}, which is what the width rule did before
      * either variable existed. The two are separate so a theme can weight a long series more
      * heavily without changing the rest of the console.
+     *
+     * <p>Was 2.5 while every shipped theme declared 4, for the same reason as
+     * {@link #PLOT_LINE_WIDTH_DEFAULT}.
      */
-    private static final float PLOT_LINE_WIDTH_WIDE_DEFAULT = 2.5f;
+    private static final float PLOT_LINE_WIDTH_WIDE_DEFAULT = 4f;
+
+    /**
+     * Fallback plot-line stroke width for a narrow, condensed plot, used only when a theme
+     * declares no {@code --graph_plotLineWidthCondensed}.
+     *
+     * <p>Equal to {@link #PLOT_LINE_WIDTH_DEFAULT}, so a theme that says nothing about the
+     * condensed case gets the same weight as an ordinary plot and only the themes that
+     * declare the variable opt into the thinner condensed weight.
+     */
+    private static final float PLOT_LINE_WIDTH_CONDENSED_DEFAULT = 2f;
+
+    /**
+     * Fallback stroke width for the line over a filled plot, used only when a theme declares no
+     * {@code --graph_plotLineWidthFilled}.
+     *
+     * <p>What the old half-the-plot-width rule produced for every shipped theme, so a theme
+     * that omits the variable draws the same edge it drew before the variable existed.
+     */
+    private static final float PLOT_LINE_WIDTH_FILLED_DEFAULT = 1.5f;
+
+    /**
+     * Fallback for {@link #VAR_PLOT_LINE_WIDTH_FILLED_WIDE}, used only when a theme declares no
+     * such variable.
+     *
+     * <p>What the old half-the-plot-width rule produced for a wide plot of every shipped theme
+     * (4 &times; 0.5), so an ordinary theme draws the same wide filled edge it drew before the
+     * variable existed.
+     */
+    private static final float PLOT_LINE_WIDTH_FILLED_WIDE_DEFAULT = 2f;
+
+    /**
+     * Fallback for {@link #VAR_PLOT_LINE_WIDTH_FILLED_CONDENSED}, used only when a theme
+     * declares no such variable.
+     *
+     * <p>Two thirds of {@link #PLOT_LINE_WIDTH_FILLED_DEFAULT}, the same step the plot family
+     * takes from its ordinary width to its condensed one (2 of 3). The old coupled rule gave a
+     * condensed filled edge the ordinary filled weight, which is what made a narrow filled graph
+     * look heavy.
+     */
+    private static final float PLOT_LINE_WIDTH_FILLED_CONDENSED_DEFAULT = 1f;
 
     /**
      * Bounds on a declared stroke width: a hairline is not a line, and a width past the point
@@ -693,6 +803,64 @@ public final class GraphThemeColors {
      */
     public static float plotLineWidthWide(File themeDir, String theme) {
         return length(themeDir, theme, VAR_PLOT_LINE_WIDTH_WIDE, PLOT_LINE_WIDTH_WIDE_DEFAULT);
+    }
+
+    /**
+     * Stroke width of a plot line on a tile no wider than {@link #CONDENSED_WIDTH} that carries
+     * condensed data.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the width in pixels, never zero or negative
+     * @see #plotLineWidth(File, String)
+     * @since 0.9.71+
+     */
+    public static float plotLineWidthCondensed(File themeDir, String theme) {
+        return length(themeDir, theme, VAR_PLOT_LINE_WIDTH_CONDENSED, PLOT_LINE_WIDTH_CONDENSED_DEFAULT);
+    }
+
+    /**
+     * Stroke width of the line drawn over a filled plot.
+     *
+     * <p>Independent of {@link #plotLineWidth(File, String)} and its siblings: this is an edge
+     * on a fill, not a plot line, and the two are set for different reasons.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the width in pixels, never zero or negative
+     * @see #plotLineWidth(File, String)
+     * @since 0.9.71+
+     */
+    public static float plotLineWidthFilled(File themeDir, String theme) {
+        return length(themeDir, theme, VAR_PLOT_LINE_WIDTH_FILLED, PLOT_LINE_WIDTH_FILLED_DEFAULT);
+    }
+
+    /**
+     * Stroke width of the line over a filled plot on a frame wider than {@link #WIDE_WIDTH}.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the width in pixels, never zero or negative
+     * @see #plotLineWidthFilled(File, String)
+     * @since 0.9.71+
+     */
+    public static float plotLineWidthFilledWide(File themeDir, String theme) {
+        return length(themeDir, theme, VAR_PLOT_LINE_WIDTH_FILLED_WIDE,
+                      PLOT_LINE_WIDTH_FILLED_WIDE_DEFAULT);
+    }
+
+    /**
+     * Stroke width of the line over a filled plot on a narrow, condensed frame.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the width in pixels, never zero or negative
+     * @see #plotLineWidthFilled(File, String)
+     * @since 0.9.71+
+     */
+    public static float plotLineWidthFilledCondensed(File themeDir, String theme) {
+        return length(themeDir, theme, VAR_PLOT_LINE_WIDTH_FILLED_CONDENSED,
+                      PLOT_LINE_WIDTH_FILLED_CONDENSED_DEFAULT);
     }
 
 

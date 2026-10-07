@@ -282,8 +282,12 @@ keep in step; see [Defaults live in one place](#defaults-live-in-one-place).
   --graph_plotDash:1;            /* dot pattern, see below      */
 
   /* how heavy a plot line is drawn */
-  --graph_plotLineWidth:2;       /* up to 800px wide            */
-  --graph_plotLineWidthWide:2.5; /* past 800px wide             */
+  --graph_plotLineWidth:3;               /* up to 800px wide      */
+  --graph_plotLineWidthWide:4;           /* past 800px wide       */
+  --graph_plotLineWidthCondensed:2;      /* narrow and condensed  */
+  --graph_plotLineWidthFilled:1.5;       /* the edge over a fill  */
+  --graph_plotLineWidthFilledWide:2;     /* ...past 800px wide    */
+  --graph_plotLineWidthFilledCondensed:1;/* ...narrow, condensed  */
 
   /* text */
   --graph_textColor:#c9ceff;     /* labels, legend, title       */
@@ -338,7 +342,7 @@ fails the build if any group exceeds the limit, so that has to be fixed before i
 | ---- | --------- | -------- |
 | Colour | everything below except the dash and length ones | any CSS colour, see below |
 | Dash pair | `--graph_plotDash`, `--graph_gridMinorDash`, `--graph_gridMajorDash` | `1`, `1 3`, `1,3`, `0` |
-| Length | `--graph_plotLineWidth`, `--graph_plotLineWidthWide` | a bare number of pixels |
+| Length | `--graph_plotLineWidth`, `--graph_plotLineWidthWide`, `--graph_plotLineWidthCondensed`, `--graph_plotLineWidthFilled`, `--graph_plotLineWidthFilledWide`, `--graph_plotLineWidthFilledCondensed` | a bare number of pixels |
 | Colour list | `--graph_plotLine1/2`, `--graph_plotFill1/2` with 2+ colours | space-separated, see Gradients below |
 
 ### Colour syntax
@@ -429,45 +433,73 @@ Lists longer than two values are refused, not truncated. CSS would cycle an odd-
 `stroke-dasharray` to make it even, but the floor above is stated for one dot and one gap,
 and dropping the tail would render something the stylesheet never asked for.
 
+### Glow
+
+`routerconsole.graphGlow` (default on) adds a soft halo behind every stroked path. The halo is
+a blur of the line's **own** colour, not of its alpha channel, so it reads as a glow rather than
+as a shadow: blurring `SourceAlpha` discards the colour and produces a black blur, which is a
+drop shadow against a light background. This is why the halo needs no variable of its own —
+it follows whatever `--graph_plotLine1`/`2` are set to. Its strength, width and blur are the
+`--minigraph_glow_*` variables on the sidebar sparkline, which is a separate renderer
+(`miniGraph.js`, canvas rather than SVG) and does take them.
+
 ### Line width
 
-`--graph_plotLineWidth` sets the stroke weight of a plot line, and
-`--graph_plotLineWidthWide` replaces it past a frame width of **800px** — a layout constant
-rather than a theme choice, since a tile is drawn wider when the console has room and a longer
-series shows a thinner stroke's gaps more readily. The two are separate so a theme can weight
-a long plot more heavily without changing the rest of the console.
+Six variables, in two families of three. The **plot line** family says how heavy a plotted
+series is drawn:
 
-**These are seeded to `2` and `2.5`** in every shipped theme, and two things are worth knowing
-before you tune them:
+| Variable | Applies when |
+| -------- | ------------ |
+| `--graph_plotLineWidth` | any plot line |
+| `--graph_plotLineWidthWide` | frame width past **800px** |
+| `--graph_plotLineWidthCondensed` | frame width **400px or under**, and **180 or more** periods |
 
-- **A width of exactly `1` emits no SVG at all.** The writer suppresses `stroke-width:1` as the
-  default, so setting `1` produces output identical to leaving the variable out. Use `1.2` if
-  you want *barely* heavier and are surprised to get nothing.
+The **filled** family says how heavy the edge drawn *over a filled area* is, and applies when
+`routerconsole.graphFill=true`:
+
+| Variable | Applies when |
+| -------- | ------------ |
+| `--graph_plotLineWidthFilled` | any filled plot |
+| `--graph_plotLineWidthFilledWide` | frame width past **800px** |
+| `--graph_plotLineWidthFilledCondensed` | frame width **400px or under**, and **180 or more** periods |
+
+The 800px and 400px/180-period figures are layout constants, not theme choices — they live in
+`GraphRenderer` beside the lookup, since the question is whether the points have room to
+separate, which is a property of the frame rather than of the theme. The two families share
+those tests, so they switch at the same widths, but their **values are entirely independent**:
+the line over a fill is an edge on that fill, not a series in its own right, so it does not take
+its weight from the plot line above it.
+
+**The four shipped themes all seed these to `3`, `4`, `2`, `1.5`, `2` and `1`**, but nothing
+ties the themes together — each declares its own, and they may diverge. Three things are worth
+knowing before you tune them:
+
 - **The `Wide` value only applies past 800px, and a default tile is 400px wide.** It is
   unreachable until a user raises the graph width themselves, so treat it as opt-in for
   wide-screen layouts rather than something the standard console will show you.
+- **The condensed value needs both conditions.** A wide frame is never condensed and a short
+  series never is, so on a default 400px tile with the default 60 periods it will not apply.
+- **A value past `16`, or below `0.1`, is refused and falls back to the built-in default.** A
+  width that large covers the data it is meant to show, and one that small drops the line. The
+  fallback is silent, so a typo renders as the default rather than as an error — check the
+  spelling if a change seems to do nothing.
 
-A width past roughly `0.1`–`16` is refused and falls back, because a width that small drops
-the line and one that large covers the data it is meant to show.
+**Smoothing is on by default** (`routerconsole.graphSmooth=false` turns it off), and that also
+enables the downsampler, which caps plotted points at half the frame width. **Stepped plots
+look heavier than smoothed ones at the same width, and that is correct.** The emitted stylesheet
+asks for `shape-rendering:crispEdges` and `vector-effect:non-scaling-stroke`, so axis-aligned
+steps snap to the pixel grid while curves are resampled across it. Raise the width if you want
+a smoothed plot to match a stepped one visually; there is no compensation for it in the
+renderer. Note the same width serves both: the condensed value does not exempt smoothed plots,
+so a smoothed and a stepped plot of the same data are drawn at the same weight.
 
-**Stepped plots look heavier than smoothed ones at the same width, and that is correct.** The
-emitted stylesheet asks for `shape-rendering:crispEdges` and `vector-effect:non-scaling-stroke`,
-so axis-aligned steps snap to the pixel grid while curves are resampled across it. Raise the
-width if you want a smoothed plot to match a stepped one visually; there is no compensation
-for it in the renderer.
-
-Note that this governs **stroked plots only**. The default single-stat tile is a filled area
-with no outline at all, so there is nothing there for a width to control. The filled-path mode
-(`graphFill`) does draw an outline, and that one is **half** the plot line width rather than a
-constant — so a theme that draws heavy plots gets a proportionally heavy edge.
-
-Three further cases are **not** the theme's, and override whatever you declare:
+Two cases are **not** the theme's, and override whatever you declare:
 
 | Case | Width | Why |
 | ---- | ----- | --- |
-| A whole group on one axis | `1.5` | up to six plots share the axis and a heavier line merges them |
 | The sidebar sparkline | `3` | 250×50 and unlabelled, where a hairline nearly vanishes |
-| A tile carrying many periods | `1` | the plots are crowded, which is the grouped case's problem too |
+| A tile carrying many periods | `1` | 480+ periods on a tile 600px or under, or 720+ on any tile — the plots are crowded and any weight merges them |
+
 
 ### Fonts are not yours to set
 

@@ -62,6 +62,103 @@ public class GraphThemeColorsTest {
         return css;
     }
 
+    // ---- condensed plot width ----
+
+    /**
+     * The condensed slot has its own built-in default, independent of the ordinary plot weight.
+     *
+     * <p>Not pinned to the ordinary weight on purpose: the point of the variable is that a
+     * condensed plot is drawn thinner than a roomy one, so a fallback that simply copied the
+     * ordinary weight would make the variable a no-op for any theme that omits it.
+     */
+    @Test
+    public void theCondensedWidthHasItsOwnDefault() {
+        assertEquals(2f, GraphThemeColors.plotLineWidthCondensed(themeDir, "dark"), 0.0001f);
+    }
+
+    /**
+     * A width inside the bounds is used exactly as stated, at the bounds included.
+     *
+     * <p>The counterpart to {@link #anUnusableLineWidthFallsBack}: that one proves the guard
+     * rejects, this one proves it does not reject anything it should keep. The bounds are
+     * inclusive on both ends - {@code 0.1} and {@code 16} are declared widths, {@code 0.09} and
+     * {@code 16.1} are not.
+     */
+    @Test
+    public void aWidthInsideTheBoundsIsUsedAsStated() throws IOException {
+        for (String value : new String[] { "0.1", "1.5", "3", "16" }) {
+            writeTheme("dark", ":root{--graph_plotLineWidth:" + value + ";}");
+            // The cache keys on the file's last-modified stamp, so successive writes inside one
+            // mtime tick are invisible to it and a stale value comes back. Cleared per
+            // iteration rather than only in setUp, or the loop silently asserts the first value
+            // four times - which is exactly what it did before this was noticed.
+            GraphThemeColors.clearCache();
+            assertEquals("a declared width of " + value + " was not honoured",
+                         Float.parseFloat(value),
+                         GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
+        }
+    }
+
+    /** One step outside a bound is no opinion, and takes the built-in default. */
+    @Test
+    public void oneStepOutsideTheBoundsIsNotAWidth() throws IOException {
+        float fallback = GraphThemeColors.plotLineWidth(null, "noSuchTheme");
+        for (String value : new String[] { "0.09", "16.1" }) {
+            writeTheme("dark", ":root{--graph_plotLineWidth:" + value + ";}");
+            GraphThemeColors.clearCache();
+            assertEquals("an out-of-range width of " + value + " was used as stated",
+                         fallback, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
+        }
+    }
+
+    /** The filled family is three independent slots, none borrowing from the plot family. */
+    @Test
+    public void theFilledFamilyIsThreeIndependentSlots() throws IOException {
+        writeTheme("dark", ":root{--graph_plotLineWidth:3;--graph_plotLineWidthWide:4;"
+                            + "--graph_plotLineWidthCondensed:2;"
+                            + "--graph_plotLineWidthFilled:1.5;"
+                            + "--graph_plotLineWidthFilledWide:2.5;"
+                            + "--graph_plotLineWidthFilledCondensed:1;}");
+        assertEquals(3f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0.0001f);
+        assertEquals(4f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0.0001f);
+        assertEquals(2f, GraphThemeColors.plotLineWidthCondensed(themeDir, "dark"), 0.0001f);
+        assertEquals(1.5f, GraphThemeColors.plotLineWidthFilled(themeDir, "dark"), 0.0001f);
+        assertEquals(2.5f, GraphThemeColors.plotLineWidthFilledWide(themeDir, "dark"), 0.0001f);
+        assertEquals(1f, GraphThemeColors.plotLineWidthFilledCondensed(themeDir, "dark"), 0.0001f);
+    }
+
+    /** The filled plot's edge is its own slot, set apart from every plot-line width. */
+    @Test
+    public void aThemeMaySetTheFilledEdgeApartFromThePlotWidths() throws IOException {
+        writeTheme("dark", ":root{--graph_plotLineWidth:3;--graph_plotLineWidthWide:4;"
+                            + "--graph_plotLineWidthCondensed:2;"
+                            + "--graph_plotLineWidthFilled:1;}");
+        assertEquals(3f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0.0001f);
+        assertEquals(4f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0.0001f);
+        assertEquals(2f, GraphThemeColors.plotLineWidthCondensed(themeDir, "dark"), 0.0001f);
+        assertEquals(1f, GraphThemeColors.plotLineWidthFilled(themeDir, "dark"), 0.0001f);
+    }
+
+    /** A theme may weight the condensed case independently of the ordinary plot. */
+    @Test
+    public void aThemeMaySetTheCondensedWeightApartFromTheOrdinaryOne() throws IOException {
+        writeTheme("dark", ":root{--graph_plotLineWidth:3;--graph_plotLineWidthWide:4;"
+                            + "--graph_plotLineWidthCondensed:2;}");
+        assertEquals(3f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0.0001f);
+        assertEquals(4f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0.0001f);
+        assertEquals(2f, GraphThemeColors.plotLineWidthCondensed(themeDir, "dark"), 0.0001f);
+    }
+
+    /** The condensed width is its own slot: overriding it must not disturb the others. */
+    @Test
+    public void theCondensedOverrideLeavesTheOtherWidthsAlone() throws IOException {
+        writeTheme("light", ":root{--graph_plotLineWidth:3;--graph_plotLineWidthWide:4;"
+                             + "--graph_plotLineWidthCondensed:1;}");
+        assertEquals(3f, GraphThemeColors.plotLineWidth(themeDir, "light"), 0.0001f);
+        assertEquals(4f, GraphThemeColors.plotLineWidthWide(themeDir, "light"), 0.0001f);
+        assertEquals(1f, GraphThemeColors.plotLineWidthCondensed(themeDir, "light"), 0.0001f);
+    }
+
     // ---- defaults ----
 
     @Test
@@ -572,15 +669,30 @@ public class GraphThemeColorsTest {
      *
      * <p>Zero and a negative width would drop the line entirely, and a very wide one would
      * cover the data it is meant to show, so both are treated as no opinion.
+     *
+     * <p>Asserted against the no-theme answer rather than a literal. What this test is about is
+     * that the fallback <em>path</em> runs and yields whatever the built-in default is; pinning
+     * the number here as well only created a second, conflicting statement of what the default
+     * is. {@link #theLineWidthFallbackMatchesTheLightStylesheet} is where the value is pinned, to
+     * what the shipped themes declare.
      */
     @Test
     public void anUnusableLineWidthFallsBack() throws IOException {
-        writeTheme("dark", ":root{--graph_plotLineWidth:0;--graph_plotLineWidthWide:thick;}");
-        assertEquals(2f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
-        assertEquals(2.5f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0f);
-        writeTheme("dark", ":root{--graph_plotLineWidth:-1;--graph_plotLineWidthWide:999;}");
-        assertEquals(2f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
-        assertEquals(2.5f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0f);
+        float plain = GraphThemeColors.plotLineWidth(null, "noSuchTheme");
+        float wide = GraphThemeColors.plotLineWidthWide(null, "noSuchTheme");
+        float condensed = GraphThemeColors.plotLineWidthCondensed(null, "noSuchTheme");
+        for (String body : new String[] {
+                ":root{--graph_plotLineWidth:0;--graph_plotLineWidthWide:thick;"
+                        + "--graph_plotLineWidthCondensed:0;}",
+                ":root{--graph_plotLineWidth:-1;--graph_plotLineWidthWide:999;"
+                        + "--graph_plotLineWidthCondensed:-1;}",
+                ":root{--graph_plotLineWidth:thick;--graph_plotLineWidthWide:0;"
+                        + "--graph_plotLineWidthCondensed:999;}" }) {
+            writeTheme("dark", body);
+            assertEquals(plain, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
+            assertEquals(wide, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0f);
+            assertEquals(condensed, GraphThemeColors.plotLineWidthCondensed(themeDir, "dark"), 0f);
+        }
     }
 
     // ---- per-plot independence ----
@@ -658,26 +770,64 @@ public class GraphThemeColorsTest {
     }
 
     /**
-     * The fallback set is light's, so it must equal what light declares.
+     * Every shipped theme declares every plot-line width the renderer may ask for.
      *
-     * <p>Nothing keeps these in step automatically any more - the mirrored table is gone - so a
-     * change meant to move the whole console has to move the fallback too, and this is what
-     * notices when it does not.
+     * <p>Presence is the contract, not a value. A theme that omits one falls back to the
+     * built-in default, which is a separate question with its own test
+     * ({@link #anUnusableLineWidthFallsBack}). This one only notices a variable that has
+     * stopped being declared at all - which is how the condensed width went missing from
+     * every theme without anything failing.
      */
     @Test
-    public void theLineWidthFallbackMatchesTheLightStylesheet() throws IOException {
+    public void everyShippedThemeDeclaresEveryPlotLineWidth() throws IOException {
         File themes = sourceThemeDir();
         assumeTrue("theme sources not present in this layout", themes != null);
-        String text = new String(Files.readAllBytes(
-                new File(new File(themes, "light"), "console.css").toPath()),
-                StandardCharsets.UTF_8);
-        assertEquals("light declares a different plot line width than the built-in fallback",
-                     Float.parseFloat(declaredValue(text, GraphThemeColors.VAR_PLOT_LINE_WIDTH)),
-                     GraphThemeColors.plotLineWidth(null, "noSuchTheme"), 0f);
-        assertEquals("light declares a different wide line width than the built-in fallback",
-                     Float.parseFloat(declaredValue(
-                             text, GraphThemeColors.VAR_PLOT_LINE_WIDTH_WIDE)),
-                     GraphThemeColors.plotLineWidthWide(null, "noSuchTheme"), 0f);
+        for (String theme : new String[] { "light", "dark", "midnight", "classic" }) {
+            String text = new String(Files.readAllBytes(
+                    new File(new File(themes, theme), "console.css").toPath()),
+                    StandardCharsets.UTF_8);
+            for (String var : new String[] { GraphThemeColors.VAR_PLOT_LINE_WIDTH,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_WIDE,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_CONDENSED,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_FILLED,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_FILLED_WIDE,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_FILLED_CONDENSED }) {
+                assertNotNull(theme + "/console.css does not declare " + var,
+                              declaredValue(text, var));
+            }
+        }
+    }
+
+    /**
+     * A declared width has to be a usable one, or the theme is treated as having no opinion.
+     */
+    @Test
+    public void aShippedPlotLineWidthIsAUsableNumber() throws IOException {
+        File themes = sourceThemeDir();
+        assumeTrue("theme sources not present in this layout", themes != null);
+        for (String theme : new String[] { "light", "dark", "midnight", "classic" }) {
+            String text = new String(Files.readAllBytes(
+                    new File(new File(themes, theme), "console.css").toPath()),
+                    StandardCharsets.UTF_8);
+            for (String var : new String[] { GraphThemeColors.VAR_PLOT_LINE_WIDTH,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_WIDE,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_CONDENSED,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_FILLED,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_FILLED_WIDE,
+                                             GraphThemeColors.VAR_PLOT_LINE_WIDTH_FILLED_CONDENSED }) {
+                String declared = declaredValue(text, var);
+                assertNotNull(theme + "/console.css does not declare " + var, declared);
+                float parsed;
+                try {
+                    parsed = Float.parseFloat(declared);
+                } catch (NumberFormatException nfe) {
+                    throw new AssertionError(theme + " declares " + var + " as " + declared
+                                             + ", which is not a number");
+                }
+                assertTrue(theme + " declares " + var + " as " + declared + ", out of range",
+                           parsed > 0f && !Float.isNaN(parsed));
+            }
+        }
     }
 
     /** The wide width is the one a tile past the width threshold asks for. */

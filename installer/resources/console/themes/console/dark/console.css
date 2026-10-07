@@ -23,8 +23,12 @@
 --graph_edgeShade:#00000000;
 --graph_restartMarker:#dc1030dc;
 --graph_gridCompact:#f4f4be1e;
---graph_plotLineWidth:3;
+--graph_plotLineWidth:2;
 --graph_plotLineWidthWide:4;
+--graph_plotLineWidthCondensed:2;
+--graph_plotLineWidthFilled:1.5;
+--graph_plotLineWidthFilledWide:2;
+--graph_plotLineWidthFilledCondensed:1;
 --tunerGraph:#f60;
 --tier:linear-gradient(180deg,#397,#021);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);

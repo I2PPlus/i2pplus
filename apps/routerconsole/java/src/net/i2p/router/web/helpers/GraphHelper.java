@@ -90,7 +90,9 @@ public class GraphHelper extends FormHandler {
                                                    Boolean.toString(DEFAULT_HIDE_RESTARTS)));
         _persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         _graphGlow = _context.getBooleanPropertyDefaultTrue(PROP_GLOW);
-        _graphSmooth = _context.getBooleanProperty(PROP_SMOOTH);
+        // Default on: a bezier curve reads better than a staircase at every density the
+        // graphs page offers. Opt out with routerconsole.graphSmooth=false.
+        _graphSmooth = _context.getBooleanPropertyDefaultTrue(PROP_SMOOTH);
         _graphFill = _context.getBooleanProperty(PROP_FILL);
         _graphCombine = _context.getBooleanProperty(PROP_COMBINE);
         _useUtc = _context.getBooleanPropertyDefaultTrue(PROP_UTC);
@@ -757,7 +759,7 @@ public class GraphHelper extends FormHandler {
                                                        Boolean.toString(DEFAULT_HIDE_RESTARTS))) ||
             _persistent != _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT) ||
             _graphGlow != _context.getBooleanPropertyDefaultTrue(PROP_GLOW) ||
-            _graphSmooth != _context.getBooleanProperty(PROP_SMOOTH) ||
+            _graphSmooth != _context.getBooleanPropertyDefaultTrue(PROP_SMOOTH) ||
             _graphFill != _context.getBooleanProperty(PROP_FILL) ||
             _graphCombine != _context.getBooleanProperty(PROP_COMBINE) ||
             _useUtc != _context.getBooleanPropertyDefaultTrue(PROP_UTC)) {

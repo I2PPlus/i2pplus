@@ -75,43 +75,37 @@ class GraphRenderer {
     private static final Color SPARKLINE_AREA_COLOR = new Color(128, 128, 128, 128);
 
     /**
-     * Width of the outline drawn over a filled plot, as a fraction of the plot line width.
+     * Stroke width for the line overlaid on a filled plot.
      *
-     * <p>Thinner than the line mode on purpose: the outline's job is to give the fill an edge
-     * it can be read against, not to compete with the fill as a series of its own. A fraction
-     * rather than a constant so it tracks the theme - a theme that draws heavier plots gets a
-     * proportionally heavier edge, which is what makes the outline controllable at all.
+     * <p>The line drawn over a filled area is not the plot line, so
+     * {@code --graph_plotLineWidth} and its plain, wide and condensed siblings do not apply to
+     * it; it has {@code --graph_plotLineWidthFilled}. It used to be half the plot width, which
+     * tied an edge that exists to keep the fill readable to a weight chosen for a line that is
+     * not being drawn.
      *
+     * <p>Reads only the filled family. An edge on a fill does not take its weight from the plot
+     * line it sits on - letting it track that meant the two could never be set apart - but it
+     * does answer the same three questions the plot line does, through its own plain, wide and
+     * condensed variables. The width test is shared with {@link #lineWidth} so the two families
+     * switch at the same frame width; the values are not shared.
+     *
+     * @param cfg the render configuration
+     * @return stroke width in pixels
+     * @see GraphThemeColors#plotLineWidthFilled
      * @since 0.9.71+
      */
-    private static final float FILLED_LINE_WIDTH_RATIO = 0.5f;
-
-    /**
-     * The outline width for a filled plot on a frame.
-     *
-     * <p>Bypasses {@link #lineWidth}'s layout overrides deliberately: a fill is a deliberate
-     * choice by the theme-enabled {@code graphFill} mode, so a crowded tile thins the series
-     * itself and has no reason to thin the edge that keeps it legible.
-     */
     private float filledLineWidth(GraphRenderConfig cfg) {
-        float base = cfg.width > GraphThemeColors.WIDE_WIDTH
-                   ? GraphThemeColors.plotLineWidthWide(GraphThemeColors.installedThemeDir(),
-                                                         cfg.theme)
-                   : GraphThemeColors.plotLineWidth(GraphThemeColors.installedThemeDir(),
-                                                    cfg.theme);
-        return Math.max(MIN_LINE_WIDTH, base * FILLED_LINE_WIDTH_RATIO);
+        File themeDir = GraphThemeColors.installedThemeDir();
+        if (isCondensedTile(cfg)) {
+            return GraphThemeColors.plotLineWidthFilledCondensed(themeDir, cfg.theme);
+        }
+        return cfg.width > GraphThemeColors.WIDE_WIDTH
+             ? GraphThemeColors.plotLineWidthFilledWide(themeDir, cfg.theme)
+             : GraphThemeColors.plotLineWidthFilled(themeDir, cfg.theme);
     }
 
     /** Narrowest stroke a theme may ask for; below this a plot disappears. */
     private static final float MIN_LINE_WIDTH = 0.5f;
-
-    /**
-     * Stroke width when one axis carries a whole group of series.
-     *
-     * <p>A layout decision, not a theme choice: too heavy and the grouped lines merge into
-     * one mass, which defeats the point of grouping them. See {@link #lineWidth}.
-     */
-    private static final float ALL_LINES_WIDTH = 1.5f;
 
     /**
      * Stroke width for the sidebar sparkline.
@@ -390,8 +384,10 @@ class GraphRenderer {
         long start = end - (period * periodCount);
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
         boolean useUtc = _context.getBooleanProperty("routerconsole.graphUtc");
-        // Opt-in: default off keeps the staircase rendering
-        boolean smooth = _context.getBooleanProperty(PROP_SMOOTH);
+        // Default on: a bezier curve reads better than a staircase at every density the
+        // graphs page offers. Kept in step with GraphHelper's own default so the checkbox
+        // on the graphs page reflects what a graph will actually be drawn as.
+        boolean smooth = _context.getBooleanPropertyDefaultTrue(PROP_SMOOTH);
         // Opt-in: default off lets the y-axis follow the data instead of zero
         boolean forceZero = _context.getBooleanProperty(PROP_ZERO_BASE);
         String lang = Messages.getLanguage(_context);
@@ -783,10 +779,12 @@ class GraphRenderer {
         }
         def.datasource(cfg.plotName, cfg.path, cfg.plotName, GraphListener.CF, cfg.listener.getBackendFactory());
         if (cfg.fillSeries) {
-            // Filled-path mode: a translucent area with a thin solid line on top, so the
-            // outline still reads where the series crosses another one. Only the line
-            // carries the legend: a legend row is emitted per plot element that has one, so
-            // giving both the same text put the series name in the legend twice.
+            // Filled-path mode: a translucent area with a line drawn over it, so the series
+            // still has a readable edge where it crosses another. The area itself is not
+            // stroked - that would double the ink on the same edge. The line takes the filled
+            // width, not the plot width, since it is an edge on a fill rather than a series in
+            // its own right; only the line carries the legend, because a legend row is emitted
+            // per plot element that has text.
             def.area(cfg.plotName, plotPathPaint(cfg.theme, 0, cfg.height));
             def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l",
                      filledLineWidth(cfg), plotLineShade(cfg.theme, 0));
@@ -817,6 +815,14 @@ class GraphRenderer {
         } else {
             def.area(cfg.plotName, fill);
         }
+        // The area carries no stroke of its own - Area is not a Line, so the generator
+        // never takes a width from it - which left the primary's outline at the SVG
+        // default and outside the reach of every --graph_plotLineWidth* variable. Emit an
+        // explicit outline so the theme states this plot's weight like any other. The
+        // legend text goes on the line alone, as in the filled-path branch, or the series
+        // name appears twice.
+        def.line(cfg.plotName, paletteColor(cfg.theme, 0), "\\l", lineWidth(cfg),
+                 plotLineShade(cfg.theme, 0));
     }
 
     private void configureLegend(RrdGraphDef def, GraphRenderConfig cfg) {
@@ -942,23 +948,27 @@ class GraphRenderer {
      *       case is: the series is crowded.</li>
      * </ul>
      *
-     * <p>Everything else - an ordinary plot - takes its weight from the theme, which is why
-     * {@link #ALL_LINES_WIDTH} and its two siblings are constants here and not fallbacks in
-     * {@link GraphThemeColors}: a theme states how heavy its plots look, and the renderer
-     * keeps the three cases where too heavy would be wrong.
+     * <p>Everything else - an ordinary plot, including one carrying a group of series - takes
+     * its weight from the theme. Grouping used to short-circuit to a hard-coded
+     * {@code ALL_LINES_WIDTH} of 1.5 before any variable was read, which meant
+     * {@code --graph_plotLineWidth} and {@code --graph_plotLineWidthWide} never reached a
+     * combined graph and a theme had no way to weight one. The theme now governs, and the
+     * constants left here are the cases where a layout reason, not taste, sets the weight:
+     * a bare sparkline that a hairline would erase, and a tile crowded enough that any
+     * weight merges the series.
      *
      * @param cfg the render configuration
      * @return stroke width in pixels
      */
     private float lineWidth(GraphRenderConfig cfg) {
-        if (cfg.allLines) {
-            return ALL_LINES_WIDTH;
-        }
         if (isSparkline(cfg)) {
             return SPARKLINE_LINE_WIDTH;
         }
         if (isCrowdedTile(cfg)) {
             return CROWDED_LINE_WIDTH;
+        }
+        if (isCondensedTile(cfg)) {
+            return GraphThemeColors.plotLineWidthCondensed(GraphThemeColors.installedThemeDir(), cfg.theme);
         }
         return cfg.width > GraphThemeColors.WIDE_WIDTH
              ? GraphThemeColors.plotLineWidthWide(GraphThemeColors.installedThemeDir(), cfg.theme)
@@ -985,6 +995,34 @@ class GraphRenderer {
     private static boolean isCrowdedTile(GraphRenderConfig cfg) {
         return cfg.periodCount >= 720 || (cfg.periodCount >= 480 && cfg.width <= 600);
     }
+
+    /**
+     * Whether a tile is narrow and carrying condensed data, and so takes the theme's condensed
+     * plot width.
+     *
+     * <p>Separate from {@link #isCrowdedTile} because the two answer different questions.
+     * A crowded tile has enough periods that any width merges the series, so it takes a fixed
+     * hairline. A condensed tile is merely narrow for the number of periods it carries, so the
+     * weight stays the theme's to set - thinner than an ordinary plot, but not a hairline.
+     *
+     * <p>Deliberately independent of smoothing. Smoothing used to exempt a tile from this,
+     * because an unsmoothed polyline crowds where a rounded curve does not - but smoothing is
+     * itself only a default, and a stepped series is what a user asking for step gets. Gating
+     * on it meant the same tile was drawn at two different weights depending on a setting
+     * whose value nobody reading the graph could see.
+     */
+    static boolean isCondensedTile(GraphRenderConfig cfg) {
+        return cfg.width <= GraphThemeColors.CONDENSED_WIDTH
+               && cfg.periodCount >= CONDENSED_PERIODS;
+    }
+
+    /**
+     * Periods at or above which a narrow unsmoothed tile counts as condensed.
+     *
+     * <p>The graphs page's narrow variant packs a few hundred minutes into a sub-400px frame;
+     * well below this a narrow tile has room for its points to separate.
+     */
+    private static final int CONDENSED_PERIODS = 180;
 
 /**
      * The colour for an extra series: plot ordinal 1, i.e. the theme's second hue.
@@ -1438,7 +1476,7 @@ out.write(graph.getRrdGraphInfo().getBytes());
      * Immutable configuration for a single graph render pass.
      * Built by {@link #buildRenderConfig} and consumed by the various configure* methods.
      */
-    private static final class GraphRenderConfig {
+    static final class GraphRenderConfig {
         final long start;
         final long end;
         final long period;
