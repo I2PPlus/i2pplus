@@ -3231,16 +3231,23 @@ public final class SVGGraphics2D extends Graphics2D {
                 defs.append(b.toString());
             }
         }
+
         Theme theme = detectTheme(this.sb.toString());
         appendThemeDefs(theme, defs);
+
         if (this.glowEnabled) {
-            defs.append("<filter id=\"glow\" x=\"-20%\" y=\"-20%\" width=\"140%\" height=\"140%\">")
-                    .append("<feGaussianBlur in=\"SourceGraphic\" stdDeviation=\"3\" result=\"blur\"/>")
-                    .append("<feMerge>")
-                    .append("<feMergeNode in=\"blur\"/>")
-                    .append("<feMergeNode in=\"SourceGraphic\"/>")
-                    .append("</feMerge></filter>");
+            defs.append("<filter id=\"glow\" x=\"-40%\" y=\"-40%\" width=\"180%\" height=\"180%\" ")
+                .append("color-interpolation-filters=\"sRGB\">")
+                .append("<feGaussianBlur in=\"SourceAlpha\" stdDeviation=\"3\" result=\"blur\"/>")
+                .append("<feComponentTransfer in=\"blur\" result=\"fadedBlur\">")
+                .append("<feFuncA type=\"linear\" slope=\"0.7\"/>")
+                .append("</feComponentTransfer>")
+                .append("<feMerge>")
+                .append("<feMergeNode in=\"fadedBlur\"/>")
+                .append("<feMergeNode in=\"SourceGraphic\"/>")
+                .append("</feMerge></filter>");
         }
+
         defs.append(
                 "<link xmlns=\"http://www.w3.org/1999/xhtml\" rel=\"stylesheet\" type=\"text/css\"" +
                 " href=\"/themes/fonts/OpenSans.css\"/>");
