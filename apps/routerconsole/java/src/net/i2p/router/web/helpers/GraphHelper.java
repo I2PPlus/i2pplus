@@ -159,7 +159,36 @@ public class GraphHelper extends FormHandler {
      * setShowEvents.
      */
     public void setShowEvents(String b) {
-        _showEvents = !"false".equals(b);
+        _showEvents = resolveShowEvents(b, _showEvents);
+    }
+
+    /**
+     *  Resolves the requested events mode against the mode in force.
+     *
+     *  <p>An absent or empty parameter means "not specified", and the mode already in force -
+     *  which came from {@code routerconsole.graphEvents} - stands. It must not be read as a
+     *  request for events: the enlarged-graph link only emits {@code showEvents} when events
+     *  are on, so a time-mode link omits it, and the old {@code !"false".equals(b)} turned that
+     *  omission into {@code true}. Opening the larger view of a time graph silently switched it
+     *  to events and contradicted the configured default. The two URL-building sites disagreed
+     *  about whether the parameter is always present; this makes the reader tolerant of its
+     *  absence instead.
+     *
+     *  <p>The value is also parsed symmetrically with the way it is written. One link emits
+     *  {@code showEvents=1} and the image sources emit {@code showEvents=true|false}, but the
+     *  reader recognised only the literal string {@code "false"} - so {@code showEvents=0}, a
+     *  perfectly ordinary way to spell it, was read as a request for <em>events</em>.
+     *
+     *  @param param the request parameter, may be null or empty
+     *  @param current the mode currently in force
+     *  @return the mode to use
+     */
+    static boolean resolveShowEvents(String param, boolean current) {
+        if (param == null || param.isEmpty()) {return current;}
+        String v = param.trim();
+        if ("false".equalsIgnoreCase(v) || "0".equals(v) || "no".equalsIgnoreCase(v)) {return false;}
+        if ("true".equalsIgnoreCase(v) || "1".equals(v) || "yes".equalsIgnoreCase(v)) {return true;}
+        return current;
     }
 
     /**

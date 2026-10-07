@@ -5354,6 +5354,23 @@ public class ProfileOrganizer {
      *  @return the tunnel build success in [0.0, 1.0], 1.0 when no data
      *  @since 0.9.71+
      */
+    /**
+     *  Maps an unknown build-success reading onto a neutral 1.0.
+     *
+     *  <p>An absent stat, or a window in which nothing has settled yet, is not evidence of
+     *  failure. Reading it as anything else would trip {@link #isLowBuildSuccess()} and switch
+     *  off profile eviction, lengthen ghost cooldowns and put the first-hop selector into its
+     *  defensive path for no reason - so "unknown" has to arrive upstream of every one of those
+     *  as 1.0.
+     *
+     *  @param ratio the raw ratio, or NaN when unknown
+     *  @return {@code ratio}, or 1.0 when it is NaN
+     *  @since 0.9.71+
+     */
+    static double neutraliseUnknownBuildSuccess(double ratio) {
+        return Double.isNaN(ratio) ? 1.0 : ratio;
+    }
+
     public double getTunnelBuildSuccess() {
         long now = _context.clock().now();
         if (now - _cachedBuildSuccessTime < BUILD_SUCCESS_CACHE_MS) {
@@ -5364,11 +5381,9 @@ public class ProfileOrganizer {
         // period, so the value was a fraction of one bucket and drifted under the attack
         // threshold on noise - switching off profile eviction and lengthening ghost cooldowns
         // for as long as it held. Kept 1.0 for an absent or empty window, as before.
-        double result = SystemVersion.getTunnelBuildSuccessRatio(_context.statManager(),
-                                                                 SystemVersion.BUILD_SUCCESS_WINDOW_MS);
-        if (Double.isNaN(result)) {
-            result = 1.0;
-        }
+        double result = neutraliseUnknownBuildSuccess(
+            SystemVersion.getTunnelBuildSuccessRatio(_context.statManager(),
+                                                    SystemVersion.BUILD_SUCCESS_WINDOW_MS));
         _cachedBuildSuccess = result;
         _cachedBuildSuccessTime = now;
         return result;
