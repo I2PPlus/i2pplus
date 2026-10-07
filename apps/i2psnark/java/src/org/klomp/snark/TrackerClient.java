@@ -209,10 +209,12 @@ public class TrackerClient implements Runnable {
         }
     }
     /** Sleep after lots of fails — shortened from 10m so post-recovery
-     *  tracker retries fire within ~2m instead of waiting a full cycle. */
+     *  tracker retries fire within ~2m instead of waiting a full cycle.
+     */
     private static final int LONG_SLEEP = 2 * 60 * 1000;
     /** Max random spread added to the LONG_SLEEP failure floor so torrents
-     *  that failed together don't re-announce in lockstep @since 0.9.71+ */
+     *  that failed together don't re-announce in lockstep @since 0.9.71+
+     */
     private static final int LONG_SLEEP_JITTER = 30 * 1000;
 
     /**
@@ -272,11 +274,7 @@ public class TrackerClient implements Runnable {
      */
     public static final int PORT = 6881;
     private static final int DEFAULT_UDP_TRACKER_PORT = 6969;
-    private static final int MAX_TRACKERS = 12;
-    // tracker.welterde.i2p
-    private static final Hash DSA_ONLY_TRACKER =
-            ConvertToHash.getHash("cfmqlafjfmgkzbt4r3jsfyhgsr5abgxryl6fnz3d3y5a365di5aa.b32.i2p");
-
+    private static final int MAX_TRACKERS = 32;
     private final I2PSnarkUtil _util;
     // non-final for reinitialize()
     private MetaInfo meta;
@@ -660,19 +658,6 @@ public class TrackerClient implements Runnable {
             if (_log.shouldWarn())
                 _log.warn("Bad announce URL: [" + ann + "] \n* Torrent:" + snark.getBaseName());
             return false;
-        }
-        // comment this out if tracker.welterde.i2p upgrades
-        if (h.equals(DSA_ONLY_TRACKER)) {
-            Destination dest = _util.getMyDestination();
-            if (dest != null && dest.getSigType() != SigType.DSA_SHA1) {
-                if (_log.shouldWarn())
-                    _log.warn(
-                            "Skipping incompatible tracker: "
-                                    + ann
-                                    + "\n* Torrent: "
-                                    + snark.getBaseName());
-                return false;
-            }
         }
         if (existing.size() >= MAX_TRACKERS) {
             if (_log.shouldInfo())
