@@ -38,9 +38,22 @@ public class LogsHelperRewritesTest {
         "| INFO   | true false truely falsehood",
         "| ERROR  | [[&#10004;]]=[[&#10004;]] and [[&#10008;]]=[[&#10008;]]",
         "<a href=\"/x?a=1&amp;b=2\">click</a> and &lt;a href=x&gt;esc&lt;/a&gt;",
-        "| INFO   | " + "padding".repeat(50),
+        "| INFO   | " + repeat("padding", 50),
         "truefalse" + "]]" + ":  " + "false positives"
     };
+
+    /**
+     *  {@code String.repeat} is Java 11 and this module compiles at release 8.
+     *
+     *  @param s the string to repeat
+     *  @param n how many copies
+     *  @return s repeated n times
+     */
+    private static String repeat(String s, int n) {
+        StringBuilder sb = new StringBuilder(s.length() * n);
+        for (int i = 0; i < n; i++) {sb.append(s);}
+        return sb.toString();
+    }
 
     /** {@code formatMessages} rewrites A: escaped entities through the yes/no tick. */
     private static String referenceRewritesA(String msg) {
