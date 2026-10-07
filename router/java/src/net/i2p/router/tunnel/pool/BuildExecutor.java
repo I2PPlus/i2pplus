@@ -586,9 +586,11 @@ public class BuildExecutor implements Runnable {
         _context.statManager().createRequiredRateStat("tunnel.buildClientExpire", "No response to a client tunnel build request", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientReject", "Response time for a client tunnel build rejection (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildClientSuccess", "Response time for a successful client tunnel build (ms)", "Tunnels [Participating]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildClientSlow", "Client builds that took over 5s (the tail, not the mean)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryExpire", "No response to an exploratory tunnel build request", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratoryReject", "Response time for an exploratory tunnel build rejection (ms)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildExploratorySuccess", "Response time for a successful exploratory tunnel build (ms)", "Tunnels [Exploratory]", RATES);
+        _context.statManager().createRequiredRateStat("tunnel.buildExploratorySlow", "Exploratory builds that took over 5s (the tail, not the mean)", "Tunnels [Exploratory]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.buildRequestTime", "Time to build a tunnel request (ms)", "Tunnels [Participating]", RATES);
         _context.statManager().createRequiredRateStat("tunnel.concurrentBuilds", "How many builds are going at once", "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("tunnel.buildSuccessRate", "Tunnel build success rate (0-100)", "Tunnels", RATES);
@@ -923,6 +925,24 @@ public class BuildExecutor implements Runnable {
     private static final long LENGTH_STEP_MS = 5 * 1000L;
     /**  hop count at or below which no length adjustment applies  @since 0.9.71+ */
     private static final int LENGTH_BASELINE = 3;
+    /**
+     *  Build completion time above which a build counts as slow.
+     *
+     *  <p>Half the floor the build reply deadline is clamped to in
+     *  {@link #calculateAdaptiveTimeoutFromSuccess}. Half rather than the deadline itself, so the
+     *  count stays selective:
+     *  anything it records is a build that would have been at risk of expiring had the budget
+     *  been at its floor. If nearly every build were counted the stat would just mirror
+     *  {@code tunnel.buildClientSuccess} and say nothing new, and if none were it would be dead.
+     *
+     *  <p>This exists for the same reason as {@code udp.*EstablishSlow}. The success stats
+     *  record a duration but expose only a mean, and build latency is right-skewed, so the mean
+     *  says little about the builds that nearly timed out - which are exactly the ones a reply
+     *  budget has to cover.
+     *
+     *  @since 0.9.71+
+     */
+    static final long SLOW_BUILD_MS = 5 * 1000L;
     /**  cpu load above which the +2s load term applies  @since 0.9.71+ */
     private static final int CPU_LOAD_HIGH = 80;
     /**  cpu load above which the +3s load term applies  @since 0.9.71+ */

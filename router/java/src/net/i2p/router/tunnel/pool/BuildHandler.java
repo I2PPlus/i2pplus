@@ -829,8 +829,17 @@ public class BuildHandler implements Runnable {
                     }
                 }
                 long posRtt = Math.max(0, rtt);
-                if (cfg.getDestination() == null) {_context.statManager().addRateData("tunnel.buildExploratorySuccess", posRtt);}
-                else {_context.statManager().addRateData("tunnel.buildClientSuccess", posRtt);}
+                if (cfg.getDestination() == null) {
+                    _context.statManager().addRateData("tunnel.buildExploratorySuccess", posRtt);
+                    if (posRtt >= BuildExecutor.SLOW_BUILD_MS) {
+                        _context.statManager().addRateData("tunnel.buildExploratorySlow", posRtt);
+                    }
+                } else {
+                    _context.statManager().addRateData("tunnel.buildClientSuccess", posRtt);
+                    if (posRtt >= BuildExecutor.SLOW_BUILD_MS) {
+                        _context.statManager().addRateData("tunnel.buildClientSlow", posRtt);
+                    }
+                }
             } else {
                 // someone is no fun
                 _exec.buildComplete(cfg, REJECT);
