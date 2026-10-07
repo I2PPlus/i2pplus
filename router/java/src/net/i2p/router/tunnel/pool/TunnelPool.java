@@ -98,6 +98,10 @@ public class TunnelPool {
      *  @since 0.9.71+
      */
     private static final long BUILD_RATE_WINDOW_MS = 10 * 60 * 1000L;
+    /**
+     *  Minimum gap between repeated "not enough leases" reports from one pool.  @since 0.9.71+
+     */
+    private static final long SHORTFALL_LOG_INTERVAL_MS = 60 * 1000L;
     private final AtomicLong _windowAttempts = new AtomicLong();
     private final AtomicLong _windowTimeouts = new AtomicLong();
     private volatile long _windowStartMs;
@@ -2377,6 +2381,8 @@ public class TunnelPool {
     private boolean _hasGoodLeaseSet;
     /** True when last built LeaseSet had fewer leases than wanted — bypass cache */
     private boolean _hasIncompleteLeaseSet;
+    /**  when this pool last reported a materially short LeaseSet  @since 0.9.71+ */
+    private volatile long _lastShortfallLog;
     /**
      *  Whether this pool is struggling to meet its tunnel targets.
      *  Returns true if this pool can't meet its published LeaseSet target
@@ -3218,10 +3224,62 @@ public class TunnelPool {
      *
      *  @return the built LeaseSet, or null if there are no leases
      */
+    /**
+     *  Whether a published LeaseSet is too small to count as a working set.
+     *
+     *  <p>Half the target is the same line the pool's own "thin pool" fast-path uses
+     *  ({@code healthy < target / 2}), so the two signals now agree on which tier
+     *  matters instead of one covering everything and the other covering half of it.
+     *
+     *  @param leases number of leases actually assembled
+     *  @param wanted the target the pool was trying to reach
+     *  @return true if the set is below half of target
+     *  @since 0.9.71+
+     */
+    static boolean isMateriallyShort(int leases, int wanted) {
+        return wanted > 0 && leases * 2 < wanted;
+    }
+
+    /**
+     *  The smallest LeaseSet treated as usable for a given target.
+     *
+     *  @param wanted the target the pool was trying to reach
+     *  @return the half-target floor, rounded up
+     *  @since 0.9.71+
+     */
+    static int usableLeaseMinimum(int wanted) {
+        return (wanted + 1) / 2;
+    }
+
+    /**
+     *  Whether this pool may report a materially short LeaseSet again.
+     *
+     *  @param now current wall clock
+     *  @return true if the reporting interval has elapsed, and records the time
+     *  @since 0.9.71+
+     */
+    private boolean shouldLogShortfall(long now) {
+        long last = _lastShortfallLog;
+        if (now - last < SHORTFALL_LOG_INTERVAL_MS) {return false;}
+        _lastShortfallLog = now;
+        return true;
+    }
+
     private LeaseSet finalizeLeaseSet(TreeSet<Lease> leases, int wanted, long now) {
         if (leases.size() < wanted) {
-            if (_log.shouldInfo()) {
-                _log.info(toString() + "\n* Not enough leases to build full LeaseSet (" + leases.size() + "/" + wanted + " available)");
+            // The incomplete-set handling below runs for any shortfall, which is correct:
+            // even 7 of 8 is incomplete. Only the log is filtered, because it used to fire on
+            // every shortfall, so a working 6/8 or 7/8 LeaseSet reported identically to a
+            // crippled 1/8 one. Over a 14 minute window that made 56% of these lines
+            // non-actionable and buried the half that matter, and a single stuck pool emitted
+            // the identical line 44 times. Materially short pools now report at WARN, once a
+            // minute, carrying the minimum a usable set needs.
+            if (isMateriallyShort(leases.size(), wanted) && shouldLogShortfall(now)) {
+                if (_log.shouldWarn()) {
+                    _log.warn(toString() + "\n* Not enough leases to build full LeaseSet ("
+                              + leases.size() + "/" + wanted + " available, below the "
+                              + usableLeaseMinimum(wanted) + " needed for a usable set)");
+                }
             }
             _hasIncompleteLeaseSet = true;
             // Tell the pool manager: a pool that cannot fill its LeaseSet is a
@@ -6039,8 +6097,11 @@ public class TunnelPool {
           }
 
         // Fast-path: if healthy tunnels are below 50% of target, start builds immediately
-        // without waiting for the throttle. A thin pool is an emergency.
-        if (target > 0 && healthy < target / 2) {
+        // without waiting for the throttle. A thin pool is an emergency. Shared with the
+        // LeaseSet shortfall report so the two signals cannot drift apart; the old
+        // "healthy < target / 2" used integer division, so a target of 1 gave 0 and the
+        // emergency fast-path could never fire for it.
+        if (isMateriallyShort(healthy, target)) {
             if (_log.shouldWarn()) {
                 _log.warn(toString() + " -> Thin pool (" + healthy + "/" + target + " healthy) -> fast-path pre-build");
             }
