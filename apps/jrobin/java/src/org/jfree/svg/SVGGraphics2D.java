@@ -52,6 +52,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -783,22 +784,22 @@ public final class SVGGraphics2D extends Graphics2D {
             String ref = this.linearGradientPaints.get(key);
             if (ref == null) {
                 int count = this.linearGradientPaints.keySet().size();
-                String id = this.defsKeyPrefix + "lgp" + count;
-                this.elementIDs.add(id);
-                this.linearGradientPaints.put(key, id);
-                this.gradientPaintRef = id;
+                ref = this.defsKeyPrefix + "lgp" + count;
+                this.elementIDs.add(ref);
+                this.linearGradientPaints.put(key, ref);
             }
+            this.gradientPaintRef = ref;
         } else if (paint instanceof RadialGradientPaint) {
             RadialGradientPaint rgp = (RadialGradientPaint) paint;
             RadialGradientPaintKey key = new RadialGradientPaintKey(rgp);
             String ref = this.radialGradientPaints.get(key);
             if (ref == null) {
                 int count = this.radialGradientPaints.keySet().size();
-                String id = this.defsKeyPrefix + "rgp" + count;
-                this.elementIDs.add(id);
-                this.radialGradientPaints.put(key, id);
-                this.gradientPaintRef = id;
+                ref = this.defsKeyPrefix + "rgp" + count;
+                this.elementIDs.add(ref);
+                this.radialGradientPaints.put(key, ref);
             }
+            this.gradientPaintRef = ref;
         }
     }
 
@@ -2036,6 +2037,32 @@ public final class SVGGraphics2D extends Graphics2D {
         return doubleToString(d, transformDP);
     }
 
+    /**
+     * The {@code stop-opacity} for a gradient stop, or null when the stop is opaque.
+     *
+     * <p>Deliberately not {@link #transformDP(double)}: that rounds to {@link #transformDP}
+     * decimal places, which is zero by default because it is a <em>coordinate</em> setting.
+     * Alpha needs three places - a theme's fills run from #08 to #c0, i.e. 0.03 to 0.75, and
+     * rounding those to whole numbers wrote {@code stop-opacity="0."}, which is not a valid
+     * number and renders the stop as fully transparent. Every translucent gradient stop
+     * therefore vanished while a flat fill of the same colour, which goes through the separate
+     * opacity formatter, came out correctly.
+     *
+     * <p>Formatted in {@link Locale#US} so a locale with a comma decimal separator cannot
+     * produce an unparseable attribute, and trailing zeroes are trimmed so a fully opaque stop
+     * written by a caller that did not guard would still read as {@code 1}.
+     *
+     * @param color the stop's colour
+     * @return the opacity as a decimal string, or null when the colour is fully opaque
+     */
+    private static String stopOpacity(Color color) {
+        if (color.getAlpha() >= 255) {return null;}
+        String value = String.format(Locale.US, "%.3f", color.getAlpha() / 255.0);
+        // Strip trailing zeroes so 0.500 does not go out as such, and 1.000 cannot occur since
+        // the only fully opaque value short-circuits above.
+        return value.contains(".") ? value.replaceAll("0+$", "").replaceAll("\\.$", "") : value;
+    }
+
     private String geomDP(final double d) {
         return doubleToString(d, geometryDP);
     }
@@ -3236,9 +3263,14 @@ public final class SVGGraphics2D extends Graphics2D {
                         ".dash{stroke-opacity:.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,1}")
                 .append(".dmulti{stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1,3}")
                 .append(".line{stroke-opacity:.2;stroke-linecap:square}")
-                .append(".mono{font-family:FiraCode,monospace;font-weight:500}")
+                // The families come from the console's own font stylesheet, which this
+                // document links just above, so a graph matches the page it sits on and
+                // picking a different font set for the console moves the graphs too. The
+                // literals in var()'s second argument are for a document that failed to load
+                // that stylesheet: the graph still draws, in a generic face.
+                .append(".mono{font-family:var(--monospaced,monospace);font-weight:500}")
                 .append(".restart{stroke:#dc1030}")
-                .append(".sans{font-family:Open Sans,Segoe UI,Noto Sans,sans-serif}")
+                .append(".sans{font-family:var(--bodyfont,sans-serif)}")
                 .append(".s10{font-size:10px}")
                 .append(".s11{font-size:11px}")
                 .append(".s12{font-size:12px}")
@@ -3250,7 +3282,22 @@ public final class SVGGraphics2D extends Graphics2D {
             defs.append("path{shape-rendering:geometricPrecision}");
         }
         appendThemeCSSDefs(theme, defs);
-        defs.append("</style></defs>");
+        defs.append("</style>");
+        // The gradient definitions the elements above point at. These were being registered and
+        // referenced but never written, so any plot filled with a gradient emitted
+        // fill="url(#gp0)" with no matching element in the document and simply did not draw.
+        for (Map.Entry<GradientPaintKey, String> entry : this.gradientPaints.entrySet()) {
+            defs.append(getLinearGradientElement(entry.getValue(), entry.getKey().getPaint()));
+        }
+        for (Map.Entry<LinearGradientPaintKey, String> entry
+                : this.linearGradientPaints.entrySet()) {
+            defs.append(getLinearGradientElement(entry.getValue(), entry.getKey().getPaint()));
+        }
+        for (Map.Entry<RadialGradientPaintKey, String> entry
+                : this.radialGradientPaints.entrySet()) {
+            defs.append(getRadialGradientElement(entry.getValue(), entry.getKey().getPaint()));
+        }
+        defs.append("</defs>");
         svg.append(defs);
         svg.append(this.sb);
         svg.append("</svg>");
@@ -3322,15 +3369,13 @@ public final class SVGGraphics2D extends Graphics2D {
         Color c1 = paint.getColor1();
         b.append("<stop offset=\"0%\" stop-color=\"").append(rgbColorStr(c1)).append("\"");
         if (c1.getAlpha() < 255) {
-            double alphaPercent = c1.getAlpha() / 255.0;
-            b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
+            b.append(" stop-opacity=\"").append(stopOpacity(c1)).append("\"");
         }
         b.append("/>");
         Color c2 = paint.getColor2();
         b.append("<stop offset=\"100%\" stop-color=\"").append(rgbColorStr(c2)).append("\"");
         if (c2.getAlpha() < 255) {
-            double alphaPercent = c2.getAlpha() / 255.0;
-            b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
+            b.append(" stop-opacity=\"").append(stopOpacity(c2)).append("\"");
         }
         b.append("/>");
         return b.append("</linearGradient>").toString();
@@ -3366,8 +3411,7 @@ public final class SVGGraphics2D extends Graphics2D {
                     .append(rgbColorStr(c))
                     .append("\"");
             if (c.getAlpha() < 255) {
-                double alphaPercent = c.getAlpha() / 255.0;
-                b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
+                b.append(" stop-opacity=\"").append(stopOpacity(c)).append("\"");
             }
             b.append("/>");
         }
@@ -3418,8 +3462,7 @@ public final class SVGGraphics2D extends Graphics2D {
                     .append(rgbColorStr(c))
                     .append("\"");
             if (c.getAlpha() < 255) {
-                double alphaPercent = c.getAlpha() / 255.0;
-                b.append(" stop-opacity=\"").append(transformDP(alphaPercent)).append("\"");
+                b.append(" stop-opacity=\"").append(stopOpacity(c)).append("\"");
             }
             b.append("/>");
         }

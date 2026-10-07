@@ -47,7 +47,7 @@ public class ThemeTextColorTest {
     /**
      * The axis rules are text's neighbour and carry the same ink on every theme.
      *
-     * <p>Checked for equality, not just presence: {@code --graph_axis} is the theme's
+     * <p>Checked for equality, not just presence: {@code --graph_axisColor} is the theme's
      * statement of this colour, so a rule that softened it would be the serialiser
      * overriding the stylesheet rather than falling back to it.
      */
@@ -61,7 +61,7 @@ public class ThemeTextColorTest {
             String rule = style.substring(at, end);
             assertTrue(theme[0] + " .axis rule sets no stroke: " + rule,
                        rule.contains("stroke:"));
-            assertTrue(theme[0] + " axis is not " + theme[1] + ", its own --graph_axis: " + rule,
+            assertTrue(theme[0] + " axis is not " + theme[1] + ", its own --graph_axisColor: " + rule,
                        rule.contains("stroke:" + theme[1] + ";"));
         }
     }

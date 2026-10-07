@@ -2,6 +2,7 @@ package net.i2p.router.web;
 
 import java.awt.Color;
 import java.awt.GradientPaint;
+import java.awt.LinearGradientPaint;
 import java.awt.Paint;
 import java.awt.geom.Point2D;
 import java.io.File;
@@ -21,22 +22,39 @@ import net.i2p.I2PAppContext;
 import org.jfree.svg.SvgColor;
 
 /**
- * Plot colours for graph frames, overridable per theme with CSS custom properties.
+ * The display values a graph frame draws with, overridable per theme with CSS custom
+ * properties.
  *
- * <p>Only the two plot hues and the two plot fills are themeable. Gridlines, axes, tick
- * labels and the canvas stay as they were; a frame is small enough that those are
- * structural rather than decorative.
+ * <p>Seventeen variables cover every themed part of a tile: the two plot strokes and fills,
+ * the series dot pattern, both stroke widths, the text colour, the axis rules, both grids and
+ * their dot patterns, the plot background, the edge shading, the restart rule, and the
+ * gridline a tile too small for a minor grid keeps.
+ *
+ * <p>Fonts are the exception and are not here. A graph reads {@code --monospaced} and
+ * {@code --bodyfont} from the console's own font stylesheet, so a second pair here could only
+ * disagree with the page it is drawn on.
+ *
+ * <p><b>The stylesheet is the canonical statement of a theme's look.</b> The values held in
+ * this class are one fallback set - light's, because light is the console's default look -
+ * reached only when a theme's stylesheet declares nothing at all: an unknown theme name, or a
+ * layout with no stylesheet. Neither case has a theme identity to honour, so nothing here is
+ * per-theme; anything that genuinely differs between themes differs in the CSS.
  *
  * <p>A theme opts in by declaring variables in its {@code console.css}:
  * <pre>
  * :root{
- *   --graph_line_1:#64c8a0;
- *   --graph_path_1:#64c8a05a;
- *   --graph_dash:1.5;
+ *   --graph_plotLine1:#64c8a0;
+ *   --graph_plotFill1:#64c8a05a;
+ *   --graph_plotDash:1.5;
+ *   --graph_plotLineWidthWide:2.5;
  * }
  * </pre>
- * Anything absent keeps the built-in default, so no theme has to be edited and a typo in
- * one declaration costs that one colour rather than the whole frame.
+ * Anything absent keeps the built-in default, so no theme has to be edited and a typo in one
+ * declaration costs that one value rather than the whole frame.
+ *
+ * <p>Not every stroke width is the theme's: {@link GraphRenderer} overrides it for a grouped
+ * axis, a crowded tile and the sidebar sparkline, because those are legibility decisions about
+ * one layout rather than a look.
  *
  * <h2>Why the file is read server-side</h2>
  * A graph image is served as {@code <img src="/viewstat.jsp?...">}, which makes the SVG an
@@ -68,28 +86,75 @@ public final class GraphThemeColors {
     public static final String THEME_SUBDIR = "docs/themes/console";
 
     /** Dash length, in pixels, of the multi-plot dot pattern; zero asks for a solid line. */
-    public static final String VAR_DASH = "--graph_dash";
+    public static final String VAR_PLOT_DASH = "--graph_plotDash";
 
     /** Text colour: axis labels, tick labels, the legend and the title. */
-    public static final String VAR_FONT = "--graph_font";
+    public static final String VAR_TEXT_COLOR = "--graph_textColor";
 
     /** The two axis rules. */
-    public static final String VAR_AXIS = "--graph_axis";
+    public static final String VAR_AXIS_COLOR = "--graph_axisColor";
 
     /** The minor gridlines. */
-    public static final String VAR_GRID = "--graph_grid";
+    public static final String VAR_GRID_MINOR = "--graph_gridMinor";
 
     /** The major gridlines. */
-    public static final String VAR_MGRID = "--graph_mgrid";
+    public static final String VAR_GRID_MAJOR = "--graph_gridMajor";
 
     /** Dot length for the minor gridlines; zero asks for solid gridlines. */
-    public static final String VAR_GRID_DASH = "--graph_grid_dash";
+    public static final String VAR_GRID_MINOR_DASH = "--graph_gridMinorDash";
 
     /** Dot length for the major gridlines; zero asks for solid gridlines. */
-    public static final String VAR_MGRID_DASH = "--graph_mgrid_dash";
+    public static final String VAR_GRID_MAJOR_DASH = "--graph_gridMajorDash";
 
-    private static final String VAR_LINE_PREFIX = "--graph_line_";
-    private static final String VAR_PATH_PREFIX = "--graph_path_";
+    /** The plot area's own background, behind the gridlines. */
+    public static final String VAR_BACKGROUND = "--graph_background";
+
+    /** The shading band drawn along the bottom and left edges of the plot area. */
+    public static final String VAR_EDGE_SHADE = "--graph_edgeShade";
+
+    /** The vertical rule and legend entry marking a router restart. */
+    public static final String VAR_RESTART_MARKER = "--graph_restartMarker";
+
+    /**
+     * The gridline a tile too small for a minor grid keeps, which is not necessarily either
+     * of its two grids: the shipped themes split on which one they would rather drop.
+     */
+    public static final String VAR_GRID_COMPACT = "--graph_gridCompact";
+
+    /**
+     * Stroke width, in pixels, of a plot line on a tile up to {@link #WIDE_WIDTH}.
+     *
+     * @since 0.9.71+
+     */
+    public static final String VAR_PLOT_LINE_WIDTH = "--graph_plotLineWidth";
+
+    /**
+     * Stroke width, in pixels, of a plot line past {@link #WIDE_WIDTH}, where the series is
+     * long enough that a thinner stroke breaks up into dashes.
+     *
+     * @since 0.9.71+
+     */
+    public static final String VAR_PLOT_LINE_WIDTH_WIDE = "--graph_plotLineWidthWide";
+
+
+
+    /**
+     * Frame width, in pixels, past which {@link #VAR_PLOT_LINE_WIDTH_WIDE} replaces
+     * {@link #VAR_PLOT_LINE_WIDTH}.
+     *
+     * <p>A layout constant rather than a theme choice: a tile is drawn wider when the console
+     * has room for it, and a longer series shows a thinner stroke's gaps more readily, so the
+     * two are the same decision seen from either end.
+     *
+     * @since 0.9.71+
+     */
+    public static final int WIDE_WIDTH = 800;
+
+    /** Prefix of the per-plot stroke variables; {@code --graph_plotLine1}, {@code --graph_plotLine2}. */
+    static final String VAR_PLOT_LINE_PREFIX = "--graph_plotLine";
+
+    /** Prefix of the per-plot fill variables; {@code --graph_plotFill1}, {@code --graph_plotFill2}. */
+    static final String VAR_PLOT_FILL_PREFIX = "--graph_plotFill";
 
     /** Plots per frame. Two by contract: see {@link GraphGroups#MAX_SERIES}. */
     public static final int PLOTS = 2;
@@ -152,111 +217,138 @@ public final class GraphThemeColors {
     }
 
     /**
-     * The stroke for each theme and plot: a literal mirror of the {@code --graph_line_*}
-     * values the shipped stylesheets declare.
+     * Fallback stroke for each plot, used only when a theme declares no {@code --graph_plotLine<N>}.
      *
-     * <p>Listed rather than derived, because the variables are the canonical statement of a
-     * theme's palette. A derivation cannot also be canonical: a stylesheet may declare any
-     * colour it likes, and a frame drawn with no stylesheet has to come out the same as the
-     * same frame drawn with one.
-     *
-     * <p>Light, classic and midnight plot the two inks their minigraphs plot, so a frame on a
-     * console page reads as the same two series as the sparklines beside it. Dark states its
-     * own pair.
+     * <p>Light's pair, because light is the console's default look. A theme with a palette of
+     * its own states it in its own {@code console.css}, which is where the palette belongs: a
+     * derivation here could not also be canonical, since a stylesheet may declare any colour
+     * it likes.
      */
-    private static final Color[][] PLOT_LINE = {
-        { new Color(0x44, 0x88, 0xff), new Color(0x44, 0xaa, 0x88) },  // light, classic
-        { new Color(0x37, 0xc8, 0x8e, 0x99), new Color(0xc8, 0xc8, 0x37, 0x99) },  // dark
-        { new Color(0xff, 0x55, 0x00, 0x80), new Color(0x88, 0x00, 0x88, 0x80) },  // midnight
+    private static final Color[] PLOT_LINE = {
+        new Color(0x44, 0x88, 0xff, 0xaa), new Color(0x16, 0xc5, 0x99, 0xaa),
     };
 
     /**
-     * The fill for each theme and plot: a literal mirror of the {@code --graph_path_*}
-     * values the shipped stylesheets declare, alpha included.
+     * Fallback fill for each plot, used only when a theme declares no {@code --graph_plotFill<N>}.
+     *
+     * <p>Light's pair, alpha included, for the reason given on {@link #PLOT_LINE}.
      *
      * <p>The fills are translucent because a frame carries two of them and they overlap
      * wherever the series cross. At the 78-86% the fills used to carry, the crossing was so
      * nearly opaque that neither series read through it - the shape you most want to see was
      * the one you could not.
-     *
-     * <p>Alpha is the theme's own rather than one value for all of them, and no more than that:
-     * light and classic ask for half, dark a quarter, midnight a little under a fifth on the
-     * first fill and a little under a third on the second. Midnight's canvas is the darkest of
-     * the four, so the same translucency there reads stronger than it does on a light page, and
-     * a dark fill drawn on top of it barely reads at all.
      */
-    private static final Color[][] PLOT_FILL = {
-        { new Color(0x44, 0x88, 0xff, 0x80), new Color(0x44, 0xaa, 0x88, 0x80) },
-        { new Color(0x00, 0x48, 0x08, 0x40), new Color(0xc8, 0xc8, 0x37, 0x40) },
-        { new Color(0xff, 0x55, 0x00, 0x30), new Color(0x88, 0x00, 0x88, 0x50) },
+    private static final Color[] PLOT_FILL = {
+        new Color(0x44, 0x88, 0xff, 0x60), new Color(0x16, 0xc5, 0x99, 0x40),
     };
 
     /**
-     * Built-in stroke for a plot, from {@link #PLOT_LINE}.
+     * Fallback stroke for a plot.
      *
-     * @param themeIdx 0 for plain, 1 for dark, 2 for midnight
      * @param plot the plot ordinal
-     * @return the theme's stroke for that plot
+     * @return the built-in stroke, used when the theme declares no {@code --graph_plotLine<N>}
      */
-    private static Color defaultLine(int themeIdx, int plot) {
-        return PLOT_LINE[themeIdx][clampPlot(plot)];
+    private static Color defaultLine(int plot) {
+        return PLOT_LINE[clampPlot(plot)];
     }
 
     /**
-     * Built-in fill for a plot, from {@link #PLOT_FILL}.
+     * Fallback fill for a plot.
      *
-     * @param themeIdx 0 for plain, 1 for dark, 2 for midnight
      * @param plot the plot ordinal
-     * @return the theme's fill for that plot, alpha included
+     * @return the built-in fill, used when the theme declares no {@code --graph_plotFill<N>}
      */
-    private static Color defaultPath(int themeIdx, int plot) {
-        return PLOT_FILL[themeIdx][clampPlot(plot)];
+    private static Color defaultPath(int plot) {
+        return PLOT_FILL[clampPlot(plot)];
     }
 
-    /** Series dash on-length per theme; dark draws its series solid, the rest dotted. */
-    private static final float[] DEFAULT_DASH = { 1f, 0f, 1f };
+    /**
+     * Fallback series dot length, used only when a theme declares no {@code --graph_plotDash}.
+     *
+     * <p>Zero asks for a solid line, which is what a frame with no theme to be should draw.
+     * Every shipped theme asks for a solid series of its own, so none of them relies on it.
+     */
+    private static final float DEFAULT_DASH = 0f;
 
     /**
-     * Minor gridline dot and gap per theme.
-     *
-     * <p>Light and classic draw them solid; dark and midnight dash them, so a gridline reads
-     * as texture behind the series rather than as a rule competing with them.
+     * Fallback minor-gridline dot and gap, used only when a theme declares no
+     * {@code --graph_gridMinorDash}. A zero dot is a solid gridline.
      */
-    private static final float[][] GRID_DASH_DEFAULT = {
-        { 0f, 0f }, { 1f, 2f }, { 1f, 3f },
-    };
-
-    /** Major gridline dot and gap per theme; the same pattern as the minor grid's. */
-    private static final float[][] MGRID_DASH_DEFAULT = {
-        { 0f, 0f }, { 1f, 2f }, { 1f, 3f },
-    };
-
-    /** Text colour per theme, each matching the ink its page draws with. */
-    private static final Color[] FONT_DEFAULT = {
-        new Color(51, 51, 63), new Color(244, 244, 190), new Color(201, 206, 255),
-    };
-
-    /** Axis rule colour per theme, matching the text that sits on it. */
-    private static final Color[] AXIS_DEFAULT = {
-        new Color(51, 51, 63), new Color(244, 244, 190), new Color(201, 206, 255),
-    };
-
-    /** Minor gridline colour per theme, faint enough to sit behind the series. */
-    private static final Color[] GRID_DEFAULT = {
-        new Color(80, 80, 80, 0x32), new Color(244, 244, 190, 0x1e),
-        new Color(201, 206, 255, 0x20),
-    };
+    private static final float[] GRID_MINOR_DASH_DEFAULT = { 0f, 0f };
 
     /**
-     * Major gridline colour per theme, the one a theme wants read as a division.
-     *
-     * <p>Light picks a hue of its own to mark the division; dark and midnight keep the ink
-     * of their minor grid and give it twice the weight, which is the whole of the difference.
+     * Fallback major-gridline dot and gap, used only when a theme declares no
+     * {@code --graph_gridMajorDash}. A zero dot is a solid gridline.
      */
-    private static final Color[] MGRID_DEFAULT = {
-        new Color(0xff, 0x5b, 0x5b, 0x6e), new Color(0xc8, 0xc8, 0x00, 0x32),
-        new Color(201, 206, 255, 0x40),
-    };
+    private static final float[] GRID_MAJOR_DASH_DEFAULT = { 0f, 0f };
+
+    /** Fallback text colour, used only when a theme declares no {@code --graph_textColor}. */
+    private static final Color TEXT_COLOR_DEFAULT = new Color(51, 51, 63);
+
+    /**
+     * Fallback axis rule colour, used only when a theme declares no {@code --graph_axisColor}.
+     *
+     * <p>The text ink, since an axis carries the labels that sit along it.
+     */
+    private static final Color AXIS_COLOR_DEFAULT = new Color(51, 51, 63);
+
+    /**
+     * Fallback minor gridline colour, used only when a theme declares no {@code --graph_gridMinor}.
+     * Faint enough to sit behind the series.
+     */
+    private static final Color GRID_MINOR_DEFAULT = new Color(0xff, 0x5b, 0x5b, 0x33);
+
+    /**
+     * Fallback major gridline colour, used only when a theme declares no {@code --graph_gridMajor}.
+     * Twice the minor grid's weight, which is the whole of the difference from it.
+     */
+    private static final Color GRID_MAJOR_DEFAULT = new Color(0xff, 0x5b, 0x5b, 0x66);
+
+    /**
+     * Fallback plot background, used only when a theme declares no {@code --graph_background}.
+     * Opaque, since it is what a frame with no stylesheet sits on.
+     */
+    private static final Color BACKGROUND_DEFAULT = new Color(255, 255, 255);
+
+    /** Fallback edge shading, used only when a theme declares no {@code --graph_edgeShade}. */
+    private static final Color EDGE_SHADE_DEFAULT = new Color(255, 255, 255);
+
+    /** Fallback restart rule colour, used only when a theme declares no {@code --graph_restartMarker}. */
+    private static final Color RESTART_MARKER_DEFAULT = new Color(223, 13, 13);
+
+    /**
+     * Fallback gridline for a tile too small for a minor grid, used only when a theme declares
+     * no {@code --graph_gridCompact}. Light's, which is its major grid.
+     */
+    private static final Color GRID_COMPACT_DEFAULT = new Color(0xff, 0x5b, 0x5b, 0x66);
+
+    /**
+     * Fallback plot-line stroke width, used only when a theme declares no
+     * {@code --graph_plotLineWidth}.
+     *
+     * <p>Light's, and what every shipped theme declares today. The renderer has separate
+     * reasons to draw a thinner or thicker line - a dense tile, the sidebar sparkline - and
+     * those stay in {@code GraphRenderer} rather than here: they are legibility decisions
+     * about one layout, not something a theme picks.
+     */
+    private static final float PLOT_LINE_WIDTH_DEFAULT = 2f;
+
+    /**
+     * Fallback plot-line stroke width past {@link #WIDE_WIDTH}, used only when a theme
+     * declares no {@code --graph_plotLineWidthWide}.
+     *
+     * <p>Equal to {@link #PLOT_LINE_WIDTH_DEFAULT}, which is what the width rule did before
+     * either variable existed. The two are separate so a theme can weight a long series more
+     * heavily without changing the rest of the console.
+     */
+    private static final float PLOT_LINE_WIDTH_WIDE_DEFAULT = 2.5f;
+
+    /**
+     * Bounds on a declared stroke width: a hairline is not a line, and a width past the point
+     * of covering the data is not a theme's to choose.
+     */
+    private static final float MIN_LINE_WIDTH = 0.1f;
+    private static final float MAX_LINE_WIDTH = 16f;
 
     /** Longest dash array accepted: one dot and one gap. */
     private static final int MAX_DASH_VALUES = 2;
@@ -272,10 +364,47 @@ public final class GraphThemeColors {
      * @return the colour, never null; falls back to the built-in value
      */
     public static Color lineColor(File themeDir, String theme, int plot) {
-        String var = VAR_LINE_PREFIX + (plot + 1);
-        Color declared = declared(themeDir, theme, var);
+        String var = VAR_PLOT_LINE_PREFIX + (plot + 1);
+        // Read for its ink rather than as a plain colour, so a plot line declaring a list of
+        // stops reports its first one. That is the colour a legend swatch needs: a gradient
+        // cannot be shown in a swatch, and without this a themed list would silently leave the
+        // legend in the built-in colour instead of the theme's own.
+        Color declared = declaredInk(variables(themeDir, theme).get(var));
         // A theme that picked a colour picked it on purpose, so it is used as written.
-        return declared != null ? declared : defaultLine(themeIndex(theme), clampPlot(plot));
+        return declared != null ? declared : defaultLine(plot);
+    }
+
+    /**
+     * The stops that shade plot lines by their value, or null when lines are drawn flat.
+     *
+     * <p>A plot line's declaration is read for this as well as for {@link #lineColor}, so a
+     * theme opts in by naming two or more colours where it used to name one:
+     *
+     * <pre>
+     *   --graph_plotLine1:#2ec23e40 #f0000008 #d0000008;
+     * </pre>
+     *
+     * <p>The line is then drawn with a vertical gradient across the plot area, so the colour at
+     * a point is the colour for the value at that point - height <em>is</em> the value. The
+     * declared single colour still does its other jobs: it is the legend swatch, and it is what
+     * is drawn when the plot area is too short to span.
+     *
+     * <p>Read per plot, so the two lines on one axis are shaded independently like every other
+     * plot colour. A theme can shade one line by value and leave the other flat.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @param plot the plot ordinal, 0 for the first line and 1 for the second
+     * @return bottom-to-top stops, or null when the theme named one colour or fewer
+     * @since 0.9.71+
+     */
+    public static Color[] lineValueShade(File themeDir, String theme, int plot) {
+        String var = VAR_PLOT_LINE_PREFIX + (clampPlot(plot) + 1);
+        List<Color> stops = gradientStops(variables(themeDir, theme).get(var));
+        if (stops == null || stops.size() < 2) {
+            return null;
+        }
+        return stops.toArray(new Color[stops.size()]);
     }
 
     /**
@@ -291,9 +420,9 @@ public final class GraphThemeColors {
      * @return the colour, never null; falls back to the built-in value
      */
     public static Color pathColor(File themeDir, String theme, int plot) {
-        String var = VAR_PATH_PREFIX + (clampPlot(plot) + 1);
+        String var = VAR_PLOT_FILL_PREFIX + (clampPlot(plot) + 1);
         Color declared = declaredInk(variables(themeDir, theme).get(var));
-        return declared != null ? declared : defaultPath(themeIndex(theme), plot);
+        return declared != null ? declared : defaultPath(plot);
     }
 
     /**
@@ -305,8 +434,10 @@ public final class GraphThemeColors {
      * direction this class cannot honour is treated as no opinion rather than a guess, and
      * the fill comes out as its ink.
      *
-     * <p>Two stops is what a {@link GradientPaint} takes, so a third in a declaration is not
-     * painted; the wash runs between the first two.
+     * <p>Two stops are painted as a {@link GradientPaint} and three or more as a
+     * {@link LinearGradientPaint}, which is the only one of the two that holds an arbitrary
+     * number. Either way the stops are spread evenly down the span, so a third stop lands a
+     * third of the way down rather than wherever the declaration happened to say.
      *
      * @param themeDir the directory holding {@code <theme>/console.css} trees
      * @param theme the console theme name
@@ -316,28 +447,40 @@ public final class GraphThemeColors {
      * @since 0.9.71+
      */
     public static Paint pathPaint(File themeDir, String theme, int plot, int frameHeight) {
-        String var = VAR_PATH_PREFIX + (clampPlot(plot) + 1);
+        String var = VAR_PLOT_FILL_PREFIX + (clampPlot(plot) + 1);
         List<Color> stops = gradientStops(variables(themeDir, theme).get(var));
-        if (stops != null && stops.size() > 1) {
-            // A gradient whose endpoints coincide would be rejected as a zero-length span,
-            // and a frame is always at least one pixel tall.
-            double span = Math.max(1d, frameHeight);
+        if (stops == null || stops.size() < 2) {
+            return pathColor(themeDir, theme, plot);
+        }
+        // A gradient whose endpoints coincide would be rejected as a zero-length span,
+        // and a frame is always at least one pixel tall.
+        double span = Math.max(1d, frameHeight);
+        if (stops.size() == 2) {
             return new GradientPaint(new Point2D.Double(0, 0), stops.get(0),
                                      new Point2D.Double(0, span), stops.get(1));
         }
-        return pathColor(themeDir, theme, plot);
+        // Three or more stops need LinearGradientPaint: GradientPaint holds exactly two, so
+        // truncating would drop the stops a theme wrote in order to shape the falloff - the
+        // point of naming three is usually to fade out faster at the top.
+        float[] fractions = new float[stops.size()];
+        for (int i = 0; i < fractions.length; i++) {
+            fractions[i] = (float) i / (fractions.length - 1);
+        }
+        return new LinearGradientPaint(new Point2D.Double(0, 0),
+                                       new Point2D.Double(0, span), fractions,
+                                       stops.toArray(new Color[stops.size()]));
     }
 
     /**
      * The dot ink length for the pattern that distinguishes the second plot from the first.
      *
-     * <p>{@code --graph_dash} takes either a bare length or a CSS dash pair:
+     * <p>{@code --graph_plotDash} takes either a bare length or a CSS dash pair:
      * <pre>
-     *   --graph_dash:1        a 1px dot, gap derived from the line width
-     *   --graph_dash:1 3      a 1px dot followed by 3px of space
-     *   --graph_dash:1,3      the same, for a comma-separated habit
-     *   --graph_dash:0        no pattern at all: a solid line
-     *   --graph_dash:0 3      the same; a gap needs a dot to follow it
+     *   --graph_plotDash:1        a 1px dot, gap derived from the line width
+     *   --graph_plotDash:1 3      a 1px dot followed by 3px of space
+     *   --graph_plotDash:1,3      the same, for a comma-separated habit
+     *   --graph_plotDash:0        no pattern at all: a solid line
+     *   --graph_plotDash:0 3      the same; a gap needs a dot to follow it
      * </pre>
      *
      * @param themeDir the directory holding {@code <theme>/console.css} trees
@@ -367,18 +510,17 @@ public final class GraphThemeColors {
     }
 
     /**
-     * One frame element's colour: the theme's, or the built-in one for that theme.
+     * One frame element's colour: the theme's, or the built-in fallback.
      *
      * @param themeDir the directory holding {@code <theme>/console.css} trees
      * @param theme the console theme name
      * @param var the custom property the element reads
-     * @param defaults the built-in colour per theme, indexed by {@link #themeIndex}
+     * @param fallback the built-in colour, used when the theme declares nothing usable
      * @return the colour, never null
      */
-    private static Color element(File themeDir, String theme, String var, Color[] defaults) {
-        String v = variables(themeDir, theme).get(var);
-        Color declared = v != null ? SvgColor.parse(v) : null;
-        return declared != null ? declared : defaults[themeIndex(theme)];
+    private static Color element(File themeDir, String theme, String var, Color fallback) {
+        Color declared = declared(themeDir, theme, var);
+        return declared != null ? declared : fallback;
     }
 
     /**
@@ -389,8 +531,8 @@ public final class GraphThemeColors {
      * @return the colour, never null
      * @since 0.9.71+
      */
-    public static Color fontColor(File themeDir, String theme) {
-        return element(themeDir, theme, VAR_FONT, FONT_DEFAULT);
+    public static Color textColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_TEXT_COLOR, TEXT_COLOR_DEFAULT);
     }
 
     /**
@@ -402,7 +544,7 @@ public final class GraphThemeColors {
      * @since 0.9.71+
      */
     public static Color axisColor(File themeDir, String theme) {
-        return element(themeDir, theme, VAR_AXIS, AXIS_DEFAULT);
+        return element(themeDir, theme, VAR_AXIS_COLOR, AXIS_COLOR_DEFAULT);
     }
 
     /**
@@ -413,8 +555,8 @@ public final class GraphThemeColors {
      * @return the colour, never null
      * @since 0.9.71+
      */
-    public static Color gridColor(File themeDir, String theme) {
-        return element(themeDir, theme, VAR_GRID, GRID_DEFAULT);
+    public static Color gridMinorColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_GRID_MINOR, GRID_MINOR_DEFAULT);
     }
 
     /**
@@ -425,8 +567,8 @@ public final class GraphThemeColors {
      * @return the colour, never null
      * @since 0.9.71+
      */
-    public static Color mgridColor(File themeDir, String theme) {
-        return element(themeDir, theme, VAR_MGRID, MGRID_DEFAULT);
+    public static Color gridMajorColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_GRID_MAJOR, GRID_MAJOR_DEFAULT);
     }
 
     /**
@@ -437,8 +579,8 @@ public final class GraphThemeColors {
      * @return the dot length in pixels
      * @since 0.9.71+
      */
-    public static float gridDash(File themeDir, String theme) {
-        return dash(themeDir, theme, VAR_GRID_DASH, GRID_DASH_DEFAULT[themeIndex(theme)])[0];
+    public static float gridMinorDash(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_GRID_MINOR_DASH, GRID_MINOR_DASH_DEFAULT)[0];
     }
 
     /**
@@ -449,8 +591,8 @@ public final class GraphThemeColors {
      * @return the stated gap in pixels, or zero to derive one
      * @since 0.9.71+
      */
-    public static float gridDashGap(File themeDir, String theme) {
-        return dash(themeDir, theme, VAR_GRID_DASH, GRID_DASH_DEFAULT[themeIndex(theme)])[1];
+    public static float gridMinorDashGap(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_GRID_MINOR_DASH, GRID_MINOR_DASH_DEFAULT)[1];
     }
 
     /**
@@ -461,8 +603,8 @@ public final class GraphThemeColors {
      * @return the dot length in pixels
      * @since 0.9.71+
      */
-    public static float mgridDash(File themeDir, String theme) {
-        return dash(themeDir, theme, VAR_MGRID_DASH, MGRID_DASH_DEFAULT[themeIndex(theme)])[0];
+    public static float gridMajorDash(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_GRID_MAJOR_DASH, GRID_MAJOR_DASH_DEFAULT)[0];
     }
 
     /**
@@ -473,15 +615,118 @@ public final class GraphThemeColors {
      * @return the stated gap in pixels, or zero to derive one
      * @since 0.9.71+
      */
-    public static float mgridDashGap(File themeDir, String theme) {
-        return dash(themeDir, theme, VAR_MGRID_DASH, MGRID_DASH_DEFAULT[themeIndex(theme)])[1];
+    public static float gridMajorDashGap(File themeDir, String theme) {
+        return dash(themeDir, theme, VAR_GRID_MAJOR_DASH, GRID_MAJOR_DASH_DEFAULT)[1];
     }
+
+    /**
+     * The plot area's own background: the rectangle behind the gridlines.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color backgroundColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_BACKGROUND, BACKGROUND_DEFAULT);
+    }
+
+    /**
+     * The shading band along the bottom and left edges of the plot area.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null; fully transparent where a theme drops the band
+     * @since 0.9.71+
+     */
+    public static Color edgeShadeColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_EDGE_SHADE, EDGE_SHADE_DEFAULT);
+    }
+
+    /**
+     * The vertical rule and legend entry marking a router restart.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color restartMarkerColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_RESTART_MARKER, RESTART_MARKER_DEFAULT);
+    }
+
+    /**
+     * The gridline a tile too small for a minor grid keeps in place of the minor grid.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the colour, never null
+     * @since 0.9.71+
+     */
+    public static Color compactGridColor(File themeDir, String theme) {
+        return element(themeDir, theme, VAR_GRID_COMPACT, GRID_COMPACT_DEFAULT);
+    }
+
+    /**
+     * Stroke width of a plot line on a tile no wider than {@link #WIDE_WIDTH}.
+     *
+     * <p>A renderer decision outranks this one - see {@link GraphRenderer} for the dense-tile
+     * and sparkline widths - so a theme sets the weight of an ordinary plot, not every plot.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the width in pixels, never zero or negative
+     * @since 0.9.71+
+     */
+    public static float plotLineWidth(File themeDir, String theme) {
+        return length(themeDir, theme, VAR_PLOT_LINE_WIDTH, PLOT_LINE_WIDTH_DEFAULT);
+    }
+
+    /**
+     * Stroke width of a plot line on a tile wider than {@link #WIDE_WIDTH}.
+     *
+     * @param themeDir the directory holding {@code <theme>/console.css} trees
+     * @param theme the console theme name
+     * @return the width in pixels, never zero or negative
+     * @see #plotLineWidth(File, String)
+     * @since 0.9.71+
+     */
+    public static float plotLineWidthWide(File themeDir, String theme) {
+        return length(themeDir, theme, VAR_PLOT_LINE_WIDTH_WIDE, PLOT_LINE_WIDTH_WIDE_DEFAULT);
+    }
+
+
+
+    /**
+     * One declared length, bounded, or the built-in fallback.
+     *
+     * <p>An absent variable and an unusable one are the same case on purpose: both mean the
+     * theme has no opinion, so both fall back rather than failing the render.
+     *
+     * @param fallback the built-in width, used when the variable is absent or out of range
+     * @return the width in pixels, within {@link #MIN_LINE_WIDTH} and {@link #MAX_LINE_WIDTH}
+     */
+    private static float length(File themeDir, String theme, String var, float fallback) {
+        String v = variables(themeDir, theme).get(var);
+        if (v == null) {return fallback;}
+        float parsed;
+        try {
+            parsed = Float.parseFloat(v.trim());
+        } catch (NumberFormatException nfe) {
+            return fallback;
+        }
+        if (Float.isNaN(parsed) || parsed < MIN_LINE_WIDTH || parsed > MAX_LINE_WIDTH) {
+            return fallback;
+        }
+        return parsed;
+    }
+
 
     /**
      * Parse a dash variable into a dot length and a stated gap.
      *
-     * @param fallback the theme's built-in {@code {dot, gap}}, used when the variable is
-     *                 absent or unusable
+     * @param fallback the built-in {@code {dot, gap}}, used when the variable is absent or
+     *                 unusable
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
      *         zero meaning "derive it"; never null
      */
@@ -499,14 +744,14 @@ public final class GraphThemeColors {
     }
 
     /**
-     * Parse {@code --graph_dash} into a dot length and a stated gap.
+     * Parse {@code --graph_plotDash} into a dot length and a stated gap.
      *
      * @return {@code {dot, gap}}, with a dot of zero meaning "no pattern" and a gap of
      *         zero meaning "derive it"; never null
      */
     private static float[] dash(File themeDir, String theme) {
-        return dash(themeDir, theme, VAR_DASH,
-                    new float[] { DEFAULT_DASH[themeIndex(theme)], 0f });
+        return dash(themeDir, theme, VAR_PLOT_DASH,
+                    new float[] { DEFAULT_DASH, 0f });
     }
 
     /**
@@ -575,15 +820,68 @@ public final class GraphThemeColors {
     private static List<Color> gradientStops(String value) {
         if (value == null) {return null;}
         String text = value.trim();
-        if (!text.regionMatches(true, 0, LINEAR_GRADIENT, 0,
-                                LINEAR_GRADIENT.length())) {return null;}
-        int close = text.lastIndexOf(')');
-        if (close < LINEAR_GRADIENT.length()) {return null;}
+        if (text.regionMatches(true, 0, LINEAR_GRADIENT, 0, LINEAR_GRADIENT.length())) {
+            int close = text.lastIndexOf(')');
+            if (close < LINEAR_GRADIENT.length()) {return null;}
+            return parseStops(splitGradientStops(text.substring(LINEAR_GRADIENT.length(), close)),
+                              true);
+        }
+        // A bare list of two or more colours is a gradient, so a theme can shape a falloff
+        // without wrapping it. Space-separated rather than comma-separated because a colour
+        // may itself be a comma-separated function - rgba(0,0,0,.5) - and splitting on commas
+        // would cut one in half.
+        String[] terms = text.split("\\s+");
+        if (terms.length < 2) {return null;}
+        return parseStops(terms, false);
+    }
+
+    /**
+     * Split a gradient's own stop list on its commas, ignoring commas inside parentheses.
+     *
+     * <p>A plain split would cut {@code rgba(0,0,0,.5)} into three fragments that parse as
+     * nothing, which discarded the whole declaration and quietly drew a flat colour instead of
+     * the gradient that was asked for. Splitting on top-level commas only keeps a colour
+     * function intact, so the two spellings accept the same set of colours.
+     *
+     * @param body the text between {@code linear-gradient(} and its closing bracket
+     * @return the stop expressions, which still need their colour parsed
+     */
+    private static String[] splitGradientStops(String body) {
+        List<String> terms = new ArrayList<>();
+        int depth = 0;
+        int from = 0;
+        for (int i = 0; i < body.length(); i++) {
+            char c = body.charAt(i);
+            if (c == '(') {
+                depth++;
+            } else if (c == ')') {
+                depth--;
+            } else if (c == ',' && depth == 0) {
+                terms.add(body.substring(from, i));
+                from = i + 1;
+            }
+        }
+        terms.add(body.substring(from));
+        return terms.toArray(new String[terms.size()]);
+    }
+
+    /**
+     * Colours from already-split terms, dropping a direction keyword where one is allowed.
+     *
+     * @param gradient true for a {@code linear-gradient()} stop list, where a leading
+     *        direction keyword is allowed and has to be skipped
+     * @return the colours, or null when any term is unusable or nothing remains
+     */
+    private static List<Color> parseStops(String[] terms, boolean gradient) {
         List<Color> stops = new ArrayList<>();
-        for (String stop : text.substring(LINEAR_GRADIENT.length(), close).split(",")) {
-            String term = stop.trim();
-            if (term.isEmpty() || GRADIENT_DIRECTION.matcher(term).matches()) {continue;}
-            Color c = SvgColor.parse(term.split("\\s+")[0]);
+        for (String term : terms) {
+            String t = term.trim();
+            // Inside linear-gradient() a leading "to bottom" or "45deg" is a direction, and a
+            // bare list has no room for one, so it is only skipped in the former case.
+            if (t.isEmpty() || (gradient && GRADIENT_DIRECTION.matcher(t).matches())) {
+                continue;
+            }
+            Color c = SvgColor.parse(t.split("\\s+")[0]);
             // One unusable stop makes the whole declaration unusable: a wash with a hole in it
             // would render as something the stylesheet never asked for.
             if (c == null) {return null;}
@@ -605,13 +903,6 @@ public final class GraphThemeColors {
         } catch (RuntimeException re) {
             return null;
         }
-    }
-
-    /** Theme ordinal for the built-in tables; anything unrecognised is the plain theme. */
-    private static int themeIndex(String theme) {
-        if ("dark".equals(theme)) {return 1;}
-        if ("midnight".equals(theme)) {return 2;}
-        return 0;
     }
 
     /**

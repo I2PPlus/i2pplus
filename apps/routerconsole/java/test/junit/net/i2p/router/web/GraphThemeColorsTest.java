@@ -5,8 +5,15 @@ import java.awt.GradientPaint;
 import java.awt.Paint;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 import org.junit.After;
 import org.junit.Before;
@@ -69,7 +76,9 @@ public class GraphThemeColorsTest {
         assertFalse(new File(themeDir, "noSuchTheme").exists());
         assertNotNull(GraphThemeColors.lineColor(themeDir, "noSuchTheme", 0));
         assertNotNull(GraphThemeColors.pathColor(themeDir, "noSuchTheme", 1));
-        assertEquals(1f, GraphThemeColors.dashLength(themeDir, "noSuchTheme"), 0.001f);
+        // A name with no stylesheet behind it has no palette to honour, so it lands on the one
+        // built-in: a solid series line, as every shipped theme asks for of its own accord.
+        assertEquals(0f, GraphThemeColors.dashLength(themeDir, "noSuchTheme"), 0.001f);
     }
 
     @Test
@@ -84,15 +93,24 @@ public class GraphThemeColorsTest {
         assertNotNull(GraphThemeColors.lineColor(themeDir, null, 0));
     }
 
-    /** The three themes must stay visually distinct even with no overrides. */
+    /**
+     * With no stylesheet behind it a theme name is not a palette, so every name lands on the
+     * one built-in set.
+     *
+     * <p>There is deliberately nothing per-theme here. The built-ins exist for a stylesheet
+     * that is absent or empty - an unknown name, or a layout with no theme at all - and
+     * neither case has a look to honour. A theme that does have one states it in its own
+     * {@code console.css}, which {@link #everyShippedThemeDeclaresEveryGraphVariable} holds
+     * it to.
+     */
     @Test
-    public void theThreeThemesDifferByDefault() {
-        Color light = GraphThemeColors.lineColor(themeDir, "light", 0);
-        Color dark = GraphThemeColors.lineColor(themeDir, "dark", 0);
-        Color midnight = GraphThemeColors.lineColor(themeDir, "midnight", 0);
-        assertNotEquals(light, dark);
-        assertNotEquals(dark, midnight);
-        assertNotEquals(light, midnight);
+    public void everyThemeFallsBackToTheSameBuiltInLine() {
+        Color fallback = GraphThemeColors.lineColor(themeDir, "light", 0);
+        assertNotNull(fallback);
+        for (String theme : new String[] { "dark", "midnight", "classic", "noSuchTheme" }) {
+            assertEquals(theme + " must land on the one built-in line colour",
+                         fallback, GraphThemeColors.lineColor(themeDir, theme, 0));
+        }
     }
 
     /** The two plots on a frame must be tellable apart, or the legend lies. */
@@ -114,11 +132,11 @@ public class GraphThemeColorsTest {
     public void aThemeMayOverrideBothPlotsAndTheDash() throws IOException {
         writeTheme("dark",
             ":root{\n"
-          + "--graph_line_1:#0f9;\n"
-          + "--graph_line_2:rgba(255,0,0,.5);\n"
-          + "--graph_path_1:#00ff9980;\n"
-          + "--graph_path_2:#ee9d;\n"
-          + "--graph_dash:2.5;\n"
+          + "--graph_plotLine1:#0f9;\n"
+          + "--graph_plotLine2:rgba(255,0,0,.5);\n"
+          + "--graph_plotFill1:#00ff9980;\n"
+          + "--graph_plotFill2:#ee9d;\n"
+          + "--graph_plotDash:2.5;\n"
           + "}\n");
         assertEquals(new Color(0x00, 0xff, 0x99),
             GraphThemeColors.lineColor(themeDir, "dark", 0));
@@ -134,7 +152,7 @@ public class GraphThemeColorsTest {
 
     @Test
     public void anOverrideAppliesOnlyToItsOwnTheme() throws IOException {
-        writeTheme("dark", ":root{--graph_line_1:#0f9;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#0f9;}");
         assertEquals(new Color(0x00, 0xff, 0x99),
             GraphThemeColors.lineColor(themeDir, "dark", 0));
         assertNotEquals(GraphThemeColors.lineColor(themeDir, "dark", 0),
@@ -143,7 +161,7 @@ public class GraphThemeColorsTest {
 
     @Test
     public void aLaterDeclarationInTheSameFileWins() throws IOException {
-        writeTheme("dark", ":root{--graph_line_1:#0f9;} :root{--graph_line_1:#f00;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#0f9;} :root{--graph_plotLine1:#f00;}");
         assertEquals(new Color(255, 0, 0),
             GraphThemeColors.lineColor(themeDir, "dark", 0));
     }
@@ -152,7 +170,7 @@ public class GraphThemeColorsTest {
     @Test
     public void aMalformedValueFallsBackAndLeavesTheOtherSlotAlone() throws IOException {
         writeTheme("dark",
-            ":root{--graph_line_1:chartreuse;--graph_line_2:#00f;--graph_path_1:#zzz;}");
+            ":root{--graph_plotLine1:chartreuse;--graph_plotLine2:#00f;--graph_plotFill1:#zzz;}");
         // The built-in value has to come from a directory with no stylesheet in it, since
         // each theme's defaults differ and comparing across themes would prove nothing.
         File bare = folder.newFolder("bare");
@@ -166,45 +184,45 @@ public class GraphThemeColorsTest {
     }
 
     /**
-     * An unusable value falls back to what the theme's own stylesheet would have said.
+     * An unusable value falls back to the built-in, which asks for a solid series line.
      *
-     * <p>Dark draws its series solid, so its fallback is a zero dot rather than the 1px the
-     * dotted themes fall back to.
+     * <p>One value serves every theme, since the fallback is for a stylesheet that says
+     * nothing and a name alone is not a palette.
      */
     @Test
-    public void aMalformedDashFallsBackToTheThemeDefault() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:dotted;}");
+    public void aMalformedDashFallsBackToTheBuiltInDot() throws IOException {
+        writeTheme("dark", ":root{--graph_plotDash:dotted;}");
         assertEquals(0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
     }
 
     /** An absurd dash length would break the dot pattern, so it is rejected. */
     @Test
     public void anOutOfRangeDashFallsBack() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:5000;--graph_path_1:#0f9;}");
+        writeTheme("dark", ":root{--graph_plotDash:5000;--graph_plotFill1:#0f9;}");
         assertEquals(0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
-        writeTheme("midnight", ":root{--graph_dash:-2;}");
-        assertEquals(1f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
+        writeTheme("midnight", ":root{--graph_plotDash:-2;}");
+        assertEquals(0f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
     }
 
     /** Zero dot ink is the override for "no pattern": the reader reports it as asked. */
     @Test
     public void aZeroDashLengthAsksForASolidLine() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:0;}");
+        writeTheme("dark", ":root{--graph_plotDash:0;}");
         assertEquals(0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
         assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
 
-        writeTheme("midnight", ":root{--graph_dash:0 3;}");
+        writeTheme("midnight", ":root{--graph_plotDash:0 3;}");
         assertEquals("a gap beside a zero dot changes nothing",
                      0f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
 
-        writeTheme("light", ":root{--graph_dash:0,3;}");
+        writeTheme("light", ":root{--graph_plotDash:0,3;}");
         assertEquals(0f, GraphThemeColors.dashLength(themeDir, "light"), 0.001f);
     }
 
     /** A zero gap after a real dot derives the gap; it is not a solid-line request. */
     @Test
     public void aZeroGapAfterADotIsNotASolidRequest() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:1 0;}");
+        writeTheme("dark", ":root{--graph_plotDash:1 0;}");
         assertEquals(1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
         assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
     }
@@ -217,7 +235,7 @@ public class GraphThemeColorsTest {
      */
     @Test
     public void aBareDashLengthLeavesTheGapDerived() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:2;}");
+        writeTheme("dark", ":root{--graph_plotDash:2;}");
         assertEquals(2f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
         assertEquals("an unstated gap must stay unstated",
                      0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
@@ -226,29 +244,32 @@ public class GraphThemeColorsTest {
     /** "1 3" and "1,3" both mean a 1px dot then 3px of space. */
     @Test
     public void aDashPairStatesTheGap() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:1 3;}");
+        writeTheme("dark", ":root{--graph_plotDash:1 3;}");
         assertEquals(1f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
         assertEquals(3f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
 
-        writeTheme("midnight", ":root{--graph_dash:2,6;}");
+        writeTheme("midnight", ":root{--graph_plotDash:2,6;}");
         assertEquals(2f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
         assertEquals(6f, GraphThemeColors.dashGap(themeDir, "midnight"), 0.001f);
 
-        writeTheme("light", ":root{--graph_dash:  1.5 , 4 ;}");
+        writeTheme("light", ":root{--graph_plotDash:  1.5 , 4 ;}");
         assertEquals(1.5f, GraphThemeColors.dashLength(themeDir, "light"), 0.001f);
         assertEquals(4f, GraphThemeColors.dashGap(themeDir, "light"), 0.001f);
     }
 
     /**
-     * With no stylesheet the theme's built-in dot stands, and a zero dot leaves no gap to
-     * derive - there is no dot to separate.
+     * With no declaration the built-in dot stands, and a zero dot leaves no gap to derive -
+     * there is no dot to separate.
+     *
+     * <p>The same for every theme: the fallback is one value, not one per name, since it
+     * exists for a stylesheet that says nothing.
      */
     @Test
     public void noDashDeclarationMeansTheBuiltInDotAndADerivedGap() {
-        assertEquals(0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
-        assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
-        assertEquals("a dotted theme keeps its one-pixel dot",
-                     1f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
+        for (String theme : new String[] { "light", "dark", "midnight", "classic" }) {
+            assertEquals(theme + " dot", 0f, GraphThemeColors.dashLength(themeDir, theme), 0.001f);
+            assertEquals(theme + " gap", 0f, GraphThemeColors.dashGap(themeDir, theme), 0.001f);
+        }
     }
 
     /**
@@ -257,35 +278,35 @@ public class GraphThemeColorsTest {
      */
     @Test
     public void aTightGapIsPassedThroughForTheRendererToRaise() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:1 0.5;}");
+        writeTheme("dark", ":root{--graph_plotDash:1 0.5;}");
         assertEquals(0.5f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
     }
 
     @Test
     public void anUnusableDashFallsBackToTheDefault() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:dotted;}");
+        writeTheme("dark", ":root{--graph_plotDash:dotted;}");
         assertEquals(0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
         assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
 
-        writeTheme("midnight", ":root{--graph_dash:1 2 3;}");
+        writeTheme("midnight", ":root{--graph_plotDash:1 2 3;}");
         assertEquals("a three-value list is refused, not truncated",
-                     1f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
+                     0f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
         assertEquals(0f, GraphThemeColors.dashGap(themeDir, "midnight"), 0.001f);
     }
 
     @Test
     public void anOutOfRangeDashValueFallsBack() throws IOException {
-        writeTheme("dark", ":root{--graph_dash:100 3;}");
+        writeTheme("dark", ":root{--graph_plotDash:100 3;}");
         assertEquals("an absurd dot length is rejected, pair and all",
                      0f, GraphThemeColors.dashLength(themeDir, "dark"), 0.001f);
         assertEquals(0f, GraphThemeColors.dashGap(themeDir, "dark"), 0.001f);
 
-        writeTheme("midnight", ":root{--graph_dash:1 -3;}");
+        writeTheme("midnight", ":root{--graph_plotDash:1 -3;}");
         assertEquals("a negative gap is dropped, leaving the pair's dot",
                      1f, GraphThemeColors.dashLength(themeDir, "midnight"), 0.001f);
         assertEquals(0f, GraphThemeColors.dashGap(themeDir, "midnight"), 0.001f);
 
-        writeTheme("light", ":root{--graph_dash:1 9999;}");
+        writeTheme("light", ":root{--graph_plotDash:1 9999;}");
         assertEquals("an absurd gap is dropped",
                      0f, GraphThemeColors.dashGap(themeDir, "light"), 0.001f);
     }
@@ -314,11 +335,11 @@ public class GraphThemeColorsTest {
      */
     @Test
     public void editingAThemeTakesEffectWithoutARestart() throws IOException {
-        writeTheme("dark", ":root{--graph_line_1:#0f9;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#0f9;}");
         assertEquals(new Color(0x00, 0xff, 0x99),
                      GraphThemeColors.lineColor(themeDir, "dark", 0));
 
-        writeTheme("dark", ":root{--graph_line_1:#f00;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#f00;}");
         touch(new File(new File(themeDir, "dark"), "console.css"), 1_600_000_000_000L);
         assertEquals("the edit was not picked up",
                      new Color(255, 0, 0),
@@ -328,14 +349,14 @@ public class GraphThemeColorsTest {
     /** An unchanged file must keep serving the cached parse. */
     @Test
     public void anUnchangedStylesheetIsNotReparsed() throws IOException {
-        File css = writeTheme("dark", ":root{--graph_line_1:#0f9;}");
+        File css = writeTheme("dark", ":root{--graph_plotLine1:#0f9;}");
         long stamp = 1_600_000_000_000L;
         assertTrue("could not set the timestamp", css.setLastModified(stamp));
         assertEquals(new Color(0x00, 0xff, 0x99),
                      GraphThemeColors.lineColor(themeDir, "dark", 0));
         // Rewriting the identical bytes and restoring the same timestamp is, by definition,
         // no change; a repeated lookup must not disturb the value.
-        writeTheme("dark", ":root{--graph_line_1:#0f9;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#0f9;}");
         assertTrue(css.setLastModified(stamp));
         assertEquals(new Color(0x00, 0xff, 0x99),
                      GraphThemeColors.lineColor(themeDir, "dark", 0));
@@ -351,7 +372,7 @@ public class GraphThemeColorsTest {
         assertEquals("absent means the built-in default",
                      GraphThemeColors.lineColor(new File(themeDir, "elsewhere"), "midnight", 0),
                      GraphThemeColors.lineColor(themeDir, "midnight", 0));
-        writeTheme("midnight", ":root{--graph_line_1:#0f9;}");
+        writeTheme("midnight", ":root{--graph_plotLine1:#0f9;}");
         assertEquals("a stylesheet that appeared after startup was ignored",
                      new Color(0x00, 0xff, 0x99),
                      GraphThemeColors.lineColor(themeDir, "midnight", 0));
@@ -366,14 +387,14 @@ public class GraphThemeColorsTest {
     @Test
     public void theStylesheetIsRereadPeriodicallyEvenIfTheTimestampLooksUnchanged()
             throws IOException {
-        File css = writeTheme("dark", ":root{--graph_line_1:#0f9;}");
+        File css = writeTheme("dark", ":root{--graph_plotLine1:#0f9;}");
         long stamp = 1_600_000_000_000L;
         assertTrue(css.setLastModified(stamp));
         assertEquals(new Color(0x00, 0xff, 0x99),
                      GraphThemeColors.lineColor(themeDir, "dark", 0));
 
         // Rewrite different bytes but restore the timestamp, so only the clock can tell.
-        writeTheme("dark", ":root{--graph_line_1:#f00;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#f00;}");
         assertTrue(css.setLastModified(stamp));
         assertEquals("with a fresh-enough entry the old value stands",
                      new Color(0x00, 0xff, 0x99),
@@ -389,7 +410,7 @@ public class GraphThemeColorsTest {
     /** The re-read must be coalesced, so a page of tiles does not re-read per tile. */
     @Test
     public void oneReReadServesEveryTileOnThePage() throws IOException {
-        writeTheme("dark", ":root{--graph_line_1:#0f9;}");
+        writeTheme("dark", ":root{--graph_plotLine1:#0f9;}");
         GraphThemeColors.maxCacheAgeMs = 60_000L;
         // First lookup parses and stamps; the rest must reuse it even though the interval
         // is long, which is only true if parsedAt is updated by the first parse.
@@ -415,7 +436,7 @@ public class GraphThemeColorsTest {
      */
     @Test
     public void aFillMayBeAGradientWithAlphaOnEachStop() throws IOException {
-        writeTheme("light", ":root{--graph_path_1:linear-gradient(#48f5,#48f2);}");
+        writeTheme("light", ":root{--graph_plotFill1:linear-gradient(#48f5,#48f2);}");
         Paint paint = GraphThemeColors.pathPaint(themeDir, "light", 0, 100);
         assertTrue("a declared gradient must be painted as one, not as a flat colour: " + paint,
                    paint instanceof GradientPaint);
@@ -427,7 +448,7 @@ public class GraphThemeColorsTest {
     /** The wash runs over the frame's height, top to bottom. */
     @Test
     public void aGradientSpansTheFrameHeight() throws IOException {
-        writeTheme("light", ":root{--graph_path_1:linear-gradient(#f00,#00f);}");
+        writeTheme("light", ":root{--graph_plotFill1:linear-gradient(#f00,#00f);}");
         GradientPaint gradient =
             (GradientPaint) GraphThemeColors.pathPaint(themeDir, "light", 0, 120);
         assertEquals(0d, gradient.getPoint1().getY(), 0.001d);
@@ -437,7 +458,7 @@ public class GraphThemeColorsTest {
     /** A stated direction is skipped rather than obeyed: an area is a vertical wash. */
     @Test
     public void aStatedDirectionIsSkipped() throws IOException {
-        writeTheme("light", ":root{--graph_path_1:linear-gradient(to bottom,#f00 0%,#00f 100%);}");
+        writeTheme("light", ":root{--graph_plotFill1:linear-gradient(to bottom,#f00 0%,#00f 100%);}");
         Paint paint = GraphThemeColors.pathPaint(themeDir, "light", 0, 50);
         assertTrue("a direction and stop positions must not stop the wash being painted: " + paint,
                    paint instanceof GradientPaint);
@@ -453,12 +474,12 @@ public class GraphThemeColorsTest {
      */
     @Test
     public void aGradientNeedsTwoStopsAndEveryStopMustParse() throws IOException {
-        writeTheme("light", ":root{--graph_path_1:linear-gradient(#0f9);}");
+        writeTheme("light", ":root{--graph_plotFill1:linear-gradient(#0f9);}");
         assertEquals("a single stop is not a gradient",
                      new Color(0x00, 0xff, 0x99),
                      GraphThemeColors.pathPaint(themeDir, "light", 0, 80));
 
-        writeTheme("dark", ":root{--graph_path_1:linear-gradient(#f00, notacolour);}");
+        writeTheme("dark", ":root{--graph_plotFill1:linear-gradient(#f00, notacolour);}");
         assertEquals("a wash with an unreadable stop is not painted",
                      GraphThemeColors.pathColor(null, "dark", 0),
                      GraphThemeColors.pathPaint(themeDir, "dark", 0, 80));
@@ -467,7 +488,7 @@ public class GraphThemeColorsTest {
     /** A gradient has no single colour, so the ink callers want is its first stop. */
     @Test
     public void aGradientsInkIsItsFirstStop() throws IOException {
-        writeTheme("light", ":root{--graph_path_1:linear-gradient(#48f5,#48f2);}");
+        writeTheme("light", ":root{--graph_plotFill1:linear-gradient(#48f5,#48f2);}");
         assertEquals(new Color(0x44, 0x88, 0xff, 0x55),
                      GraphThemeColors.pathColor(themeDir, "light", 0));
     }
@@ -483,87 +504,238 @@ public class GraphThemeColorsTest {
      */
     @Test
     public void theFrameElementsAreThemeable() throws IOException {
-        writeTheme("midnight", ":root{--graph_font:#c9ceff;--graph_axis:#c9ceff80;"
-                               + "--graph_grid:#20408040;--graph_mgrid:#ff20c070;}");
-        assertEquals(new Color(0xc9, 0xce, 0xff), GraphThemeColors.fontColor(themeDir, "midnight"));
+        writeTheme("midnight", ":root{--graph_textColor:#c9ceff;--graph_axisColor:#c9ceff80;"
+                               + "--graph_gridMinor:#20408040;--graph_gridMajor:#ff20c070;}");
+        assertEquals(new Color(0xc9, 0xce, 0xff), GraphThemeColors.textColor(themeDir, "midnight"));
         assertEquals(new Color(0xc9, 0xce, 0xff, 0x80),
                      GraphThemeColors.axisColor(themeDir, "midnight"));
         assertEquals(new Color(0x20, 0x40, 0x80, 0x40),
-                     GraphThemeColors.gridColor(themeDir, "midnight"));
+                     GraphThemeColors.gridMinorColor(themeDir, "midnight"));
         assertEquals(new Color(0xff, 0x20, 0xc0, 0x70),
-                     GraphThemeColors.mgridColor(themeDir, "midnight"));
+                     GraphThemeColors.gridMajorColor(themeDir, "midnight"));
     }
 
-    /** A theme that states none of them gets a value per theme, never null and never shared. */
+    /**
+     * A theme that states none of the frame colours gets the one built-in set, never null.
+     *
+     * <p>Not one set per theme any more. The built-ins exist for a stylesheet that is absent
+     * or empty, and a theme name on its own is not a palette; a theme with a look of its own
+     * states it in its own {@code console.css}. Every shipped theme declares all of them.
+     */
     @Test
-    public void everyThemeHasItsOwnBuiltInFrameColours() {
-        for (String theme : new String[] { "light", "dark", "midnight", "noSuchTheme" }) {
-            assertNotNull(theme + " font", GraphThemeColors.fontColor(null, theme));
+    public void everyThemeFallsBackToTheSameBuiltInFrameColours() {
+        for (String theme : new String[] { "light", "dark", "midnight", "classic", "noSuchTheme" }) {
+            assertNotNull(theme + " font", GraphThemeColors.textColor(null, theme));
             assertNotNull(theme + " axis", GraphThemeColors.axisColor(null, theme));
-            assertNotNull(theme + " grid", GraphThemeColors.gridColor(null, theme));
-            assertNotNull(theme + " mgrid", GraphThemeColors.mgridColor(null, theme));
+            assertNotNull(theme + " grid", GraphThemeColors.gridMinorColor(null, theme));
+            assertNotNull(theme + " mgrid", GraphThemeColors.gridMajorColor(null, theme));
         }
-        assertNotEquals("midnight must not fall back to the plain theme's frame",
-                        GraphThemeColors.fontColor(null, "midnight"),
-                        GraphThemeColors.fontColor(null, "light"));
-        assertNotEquals("midnight's grid is its own, not the plain theme's",
-                        GraphThemeColors.gridColor(null, "midnight"),
-                        GraphThemeColors.gridColor(null, "light"));
+        assertEquals(GraphThemeColors.textColor(null, "light"),
+                     GraphThemeColors.textColor(null, "midnight"));
+        assertEquals(GraphThemeColors.gridMinorColor(null, "light"),
+                     GraphThemeColors.gridMinorColor(null, "midnight"));
+    }
+
+    /**
+     * The plot background, the edge shading, the restart rule and the compact-tile gridline are
+     * the theme's to state too.
+     *
+     * <p>Each of these was a constant the renderer chose by theme name, which put the palette
+     * in two places and let the two drift.
+     */
+    @Test
+    public void theRemainingFrameColoursAreThemeable() throws IOException {
+        writeTheme("midnight", ":root{--graph_background:#020018c0;--graph_edgeShade:#00000000;"
+                               + "--graph_restartMarker:#dc1030dc;--graph_gridCompact:#20408040;}");
+        assertEquals(new Color(0x02, 0x00, 0x18, 0xc0),
+                     GraphThemeColors.backgroundColor(themeDir, "midnight"));
+        assertEquals(new Color(0, 0, 0, 0),
+                     GraphThemeColors.edgeShadeColor(themeDir, "midnight"));
+        assertEquals(new Color(0xdc, 0x10, 0x30, 0xdc),
+                     GraphThemeColors.restartMarkerColor(themeDir, "midnight"));
+        assertEquals(new Color(0x20, 0x40, 0x80, 0x40),
+                     GraphThemeColors.compactGridColor(themeDir, "midnight"));
+    }
+
+    // ---- line width ----
+
+    /** A theme states how heavy its plots look; both widths are its own to pick. */
+    @Test
+    public void bothLineWidthsAreThemeable() throws IOException {
+        writeTheme("dark", ":root{--graph_plotLineWidth:1.25;--graph_plotLineWidthWide:3;}");
+        assertEquals(1.25f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
+        assertEquals(3f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0f);
+    }
+
+    /**
+     * A width that is absent, unparseable or out of range falls back rather than drawing.
+     *
+     * <p>Zero and a negative width would drop the line entirely, and a very wide one would
+     * cover the data it is meant to show, so both are treated as no opinion.
+     */
+    @Test
+    public void anUnusableLineWidthFallsBack() throws IOException {
+        writeTheme("dark", ":root{--graph_plotLineWidth:0;--graph_plotLineWidthWide:thick;}");
+        assertEquals(2f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
+        assertEquals(2.5f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0f);
+        writeTheme("dark", ":root{--graph_plotLineWidth:-1;--graph_plotLineWidthWide:999;}");
+        assertEquals(2f, GraphThemeColors.plotLineWidth(themeDir, "dark"), 0f);
+        assertEquals(2.5f, GraphThemeColors.plotLineWidthWide(themeDir, "dark"), 0f);
+    }
+
+    // ---- per-plot independence ----
+
+    /**
+     * Each of the four plot variables is read on its own.
+     *
+     * <p>These were not independent twice: the value-shade lookup once hardcoded the first
+     * plot, and the extra-series ordinal was computed separately for the colour and the fill
+     * and disagreed with the shade, so a series could take one plot's colour and another
+     * plot's gradient. Each case below sets exactly one of the four, so a lookup borrowing
+     * another's slot shows up as two slots shaded rather than one.
+     */
+    @Test
+    public void eachPlotVariableIsReadIndependently() throws IOException {
+        writeTheme("light", ":root{"
+                           + "--graph_plotLine1:#0f0 #f00;"
+                           + "--graph_plotLine2:#222;"
+                           + "--graph_plotFill1:#333;"
+                           + "--graph_plotFill2:#00f #f0f;}");
+        assertEquals("plot 1 line took the wrong slot", 2,
+                     GraphThemeColors.lineValueShade(themeDir, "light", 0).length);
+        assertNull("plot 2 line inherited plot 1's gradient",
+                   GraphThemeColors.lineValueShade(themeDir, "light", 1));
+        // Plot 1's fill is the flat #333; plot 2's is the gradient. Checked on plot 1 with the
+        // colour and on plot 2 with the paint, since a flat colour is the negative case.
+        assertEquals("plot 1 fill took the wrong slot", new Color(0x33, 0x33, 0x33),
+                     GraphThemeColors.pathColor(themeDir, "light", 0));
+        assertTrue("plot 2 fill took the wrong slot",
+                   GraphThemeColors.pathPaint(themeDir, "light", 1, 100) instanceof GradientPaint);
+    }
+
+    /** The mirror image, so a lookup cannot be reading only the first slot by accident. */
+    @Test
+    public void theSecondSlotIsReadOnItsOwnToo() throws IOException {
+        writeTheme("light", ":root{"
+                           + "--graph_plotLine1:#111;"
+                           + "--graph_plotLine2:#00f #f0f;"
+                           + "--graph_plotFill1:#333;"
+                           + "--graph_plotFill2:#444;}");
+        assertNull("plot 1 line borrowed plot 2's gradient",
+                   GraphThemeColors.lineValueShade(themeDir, "light", 0));
+        assertEquals("plot 2 line took the wrong slot", 2,
+                     GraphThemeColors.lineValueShade(themeDir, "light", 1).length);
+        assertEquals(new Color(0x44, 0x44, 0x44),
+                     GraphThemeColors.pathColor(themeDir, "light", 1));
+    }
+
+    /** A line's flat colour is the gradient's first stop, so the legend matches the theme. */
+    @Test
+    public void aShadedPlotStillReportsAFlatColourForItsLegend() throws IOException {
+        writeTheme("light", ":root{--graph_plotLine1:#2ec23e40 #f0000008;}");
+        assertEquals(new Color(0x2e, 0xc2, 0x3e, 0x40),
+                     GraphThemeColors.lineColor(themeDir, "light", 0));
+    }
+
+    /**
+     * An extra series' shading comes from its own plot's declaration.
+     *
+     * <p>The inverted-ordinal bug was invisible while every shipped theme draws both plots
+     * flat, because a flat plot has no stops to ask for. This writes a theme that shades slot 1
+     * and leaves slot 0 flat - the case that distinguishes the two - and checks that a lookup
+     * for an extra series resolves to slot 1.
+     */
+    @Test
+    public void anExtraSeriesResolvesTheSecondPlotsShading() throws IOException {
+        writeTheme("light", ":root{--graph_plotLine1:#4488ffaa;"
+                               + "--graph_plotLine2:#00f000 #f0f000;}");
+        Color[] shade = GraphThemeColors.lineValueShade(themeDir, "light", 1);
+        assertNotNull("the theme's second plot is not shaded, so this proves nothing", shade);
+        assertEquals(2, shade.length);
+        assertEquals("the first plot took the second's shading",
+                     new Color(0x44, 0x88, 0xff, 0xaa),
+                     GraphThemeColors.lineColor(themeDir, "light", 0));
+    }
+
+    /**
+     * The fallback set is light's, so it must equal what light declares.
+     *
+     * <p>Nothing keeps these in step automatically any more - the mirrored table is gone - so a
+     * change meant to move the whole console has to move the fallback too, and this is what
+     * notices when it does not.
+     */
+    @Test
+    public void theLineWidthFallbackMatchesTheLightStylesheet() throws IOException {
+        File themes = sourceThemeDir();
+        assumeTrue("theme sources not present in this layout", themes != null);
+        String text = new String(Files.readAllBytes(
+                new File(new File(themes, "light"), "console.css").toPath()),
+                StandardCharsets.UTF_8);
+        assertEquals("light declares a different plot line width than the built-in fallback",
+                     Float.parseFloat(declaredValue(text, GraphThemeColors.VAR_PLOT_LINE_WIDTH)),
+                     GraphThemeColors.plotLineWidth(null, "noSuchTheme"), 0f);
+        assertEquals("light declares a different wide line width than the built-in fallback",
+                     Float.parseFloat(declaredValue(
+                             text, GraphThemeColors.VAR_PLOT_LINE_WIDTH_WIDE)),
+                     GraphThemeColors.plotLineWidthWide(null, "noSuchTheme"), 0f);
+    }
+
+    /** The wide width is the one a tile past the width threshold asks for. */
+    @Test
+    public void theWideWidthThresholdIsAboveTheCommonTileWidth() {
+        assertEquals(800, GraphThemeColors.WIDE_WIDTH);
     }
 
     /** A stated colour is used as written, including its alpha. */
     @Test
     public void aStatedFrameColourKeepsItsAlpha() throws IOException {
-        writeTheme("light", ":root{--graph_mgrid:#f0a8;}");
+        writeTheme("light", ":root{--graph_gridMajor:#f0a8;}");
         assertEquals(new Color(0xff, 0x00, 0xaa, 0x88),
-                     GraphThemeColors.mgridColor(themeDir, "light"));
+                     GraphThemeColors.gridMajorColor(themeDir, "light"));
     }
 
     /** An unusable declaration is no declaration, so the built-in colour stands. */
     @Test
     public void anUnusableFrameColourFallsBack() throws IOException {
-        writeTheme("light", ":root{--graph_font:rebeccapurple;}");
-        assertEquals(GraphThemeColors.fontColor(null, "light"),
-                     GraphThemeColors.fontColor(themeDir, "light"));
+        writeTheme("light", ":root{--graph_textColor:rebeccapurple;}");
+        assertEquals(GraphThemeColors.textColor(null, "light"),
+                     GraphThemeColors.textColor(themeDir, "light"));
     }
 
     /** Both grids take a dot pattern, and either can be dashed while the other stays solid. */
     @Test
     public void eachGridTakesItsOwnDash() throws IOException {
-        writeTheme("dark", ":root{--graph_grid_dash:1 3;}");
-        assertEquals(1f, GraphThemeColors.gridDash(themeDir, "dark"), 0.001f);
-        assertEquals(3f, GraphThemeColors.gridDashGap(themeDir, "dark"), 0.001f);
-        assertEquals("the major grid keeps dark's own built-in pattern",
-                     1f, GraphThemeColors.mgridDash(themeDir, "dark"), 0.001f);
-        assertEquals(2f, GraphThemeColors.mgridDashGap(themeDir, "dark"), 0.001f);
+        writeTheme("dark", ":root{--graph_gridMinorDash:1 3;}");
+        assertEquals(1f, GraphThemeColors.gridMinorDash(themeDir, "dark"), 0.001f);
+        assertEquals(3f, GraphThemeColors.gridMinorDashGap(themeDir, "dark"), 0.001f);
+        assertEquals("the major grid keeps the built-in pattern, solid",
+                     0f, GraphThemeColors.gridMajorDash(themeDir, "dark"), 0.001f);
+        assertEquals(0f, GraphThemeColors.gridMajorDashGap(themeDir, "dark"), 0.001f);
 
-        writeTheme("midnight", ":root{--graph_mgrid_dash:2 5;}");
-        assertEquals("midnight's minor grid keeps its own built-in pattern",
-                     1f, GraphThemeColors.gridDash(themeDir, "midnight"), 0.001f);
-        assertEquals(2f, GraphThemeColors.mgridDash(themeDir, "midnight"), 0.001f);
-        assertEquals(5f, GraphThemeColors.mgridDashGap(themeDir, "midnight"), 0.001f);
+        writeTheme("midnight", ":root{--graph_gridMajorDash:2 5;}");
+        assertEquals("the minor grid keeps the built-in pattern, solid",
+                     0f, GraphThemeColors.gridMinorDash(themeDir, "midnight"), 0.001f);
+        assertEquals(0f, GraphThemeColors.gridMinorDashGap(themeDir, "midnight"), 0.001f);
+        assertEquals(2f, GraphThemeColors.gridMajorDash(themeDir, "midnight"), 0.001f);
+        assertEquals(5f, GraphThemeColors.gridMajorDashGap(themeDir, "midnight"), 0.001f);
     }
 
-    /** Gridline dashes go through the same length and gap rules as a series dash. */
     /**
-     * An unusable grid dash falls back to what the theme would have drawn anyway.
-     *
-     * <p>Which is not always solid: dark and midnight dash both grids, so their fallback is
-     * their own pattern, while light and classic draw theirs solid and fall back to solid.
+     * Gridline dashes go through the same length and gap rules as a series dash, so an
+     * unusable one falls back to the built-in pattern: a solid gridline, for every theme.
      */
     @Test
-    public void anUnusableGridDashFallsBackToTheThemePattern() throws IOException {
-        writeTheme("dark", ":root{--graph_grid_dash:1 2 3;}");
+    public void anUnusableGridDashFallsBackToTheBuiltInPattern() throws IOException {
+        writeTheme("dark", ":root{--graph_gridMinorDash:1 2 3;}");
         assertEquals("a three-value list is refused, not truncated",
-                     1f, GraphThemeColors.gridDash(themeDir, "dark"), 0.001f);
-        writeTheme("midnight", ":root{--graph_mgrid_dash:100;}");
-        assertEquals(1f, GraphThemeColors.mgridDash(themeDir, "midnight"), 0.001f);
-        writeTheme("light", ":root{--graph_grid_dash:-2;}");
-        assertEquals("light draws its grid solid",
-                     0f, GraphThemeColors.gridDash(themeDir, "light"), 0.001f);
+                     0f, GraphThemeColors.gridMinorDash(themeDir, "dark"), 0.001f);
+        writeTheme("midnight", ":root{--graph_gridMajorDash:100;}");
+        assertEquals(0f, GraphThemeColors.gridMajorDash(themeDir, "midnight"), 0.001f);
+        writeTheme("light", ":root{--graph_gridMinorDash:-2;}");
+        assertEquals(0f, GraphThemeColors.gridMinorDash(themeDir, "light"), 0.001f);
     }
 
-    // ---- the shipped themes must agree with the built-in defaults ----
+    // ---- the shipped themes ----
 
     /**
      * Locate the theme sources by walking up to the repository root.
@@ -597,32 +769,106 @@ public class GraphThemeColorsTest {
     }
 
     /**
-     * Each shipped theme declares the values the code would have used anyway.
+     * Every custom property the renderer reads, taken from the reader's own constants.
      *
-     * <p>This is the check that stops the two from drifting. The CSS exists so a theme
-     * author can find and change these colours, not to change how the console looks, so
-     * every declaration must resolve to exactly the built-in default. If someone edits a
-     * default in {@link GraphThemeColors} without updating the stylesheets, this fails.
+     * <p>Read by reflection rather than written out, so adding a variable to
+     * {@link GraphThemeColors} and forgetting a stylesheet is caught here instead of showing
+     * up as a graph quietly drawn in the fallback colour.
+     *
+     * @return the {@code --graph_*} names, including the numbered per-plot pair
+     * @throws IllegalAccessException if a constant cannot be read reflectively
+     */
+    private static String[] graphVariables() throws IllegalAccessException {
+        List<String> vars = new ArrayList<String>();
+        for (Field field : GraphThemeColors.class.getDeclaredFields()) {
+            int mods = field.getModifiers();
+            if (field.getType() == String.class && Modifier.isStatic(mods)
+                    && Modifier.isPublic(mods) && field.getName().startsWith("VAR_")) {
+                vars.add((String) field.get(null));
+            }
+        }
+        // The two per-plot prefixes are package-visible rather than public - they name a family
+        // of variables rather than one - so the numbered names are built out of them here.
+        for (int plot = 0; plot < GraphThemeColors.PLOTS; plot++) {
+            vars.add(GraphThemeColors.VAR_PLOT_LINE_PREFIX + (plot + 1));
+            vars.add(GraphThemeColors.VAR_PLOT_FILL_PREFIX + (plot + 1));
+        }
+        assertTrue("no graph variables found to check", vars.size() > 4);
+        return vars.toArray(new String[vars.size()]);
+    }
+
+    /** Whether a stylesheet declares the custom property on a line of its own. */
+    private static boolean declares(String css, String var) {
+        return Pattern.compile("(?m)^\\s*" + Pattern.quote(var) + "\\s*:").matcher(css).find();
+    }
+
+    /**
+     * Every variable the code reads must be declared by every shipped theme.
+     *
+     * <p>This is the invariant that replaced the old "the stylesheets agree with the built-in
+     * tables" check, and it is the one that matters now: the stylesheets are the canonical
+     * statement of a theme's palette and the built-ins are a single fallback for a theme that
+     * declares nothing. A shipped theme never wants that fallback, so a variable it forgets
+     * would silently render in light's colour while looking, from the stylesheet, like a
+     * deliberate choice. Pinning the declarations is what stops that.
      */
     @Test
-    public void shippedThemesMatchTheBuiltInDefaults() throws IOException {
+    public void everyShippedThemeDeclaresEveryGraphVariable()
+            throws IOException, IllegalAccessException {
         File themes = sourceThemeDir();
         assumeTrue("theme sources not present in this layout", themes != null);
-        File bare = folder.newFolder("defaults");
+        String[] vars = graphVariables();
         for (String theme : new String[] { "light", "dark", "midnight", "classic" }) {
-            assertTrue("missing theme " + theme, new File(themes, theme).isDirectory());
-            for (int plot = 0; plot < GraphThemeColors.PLOTS; plot++) {
-                assertEquals(theme + " line " + (plot + 1) + " differs from the default",
-                    GraphThemeColors.lineColor(bare, theme, plot),
-                    GraphThemeColors.lineColor(themes, theme, plot));
-                assertEquals(theme + " path " + (plot + 1) + " differs from the default",
-                    GraphThemeColors.pathColor(bare, theme, plot),
-                    GraphThemeColors.pathColor(themes, theme, plot));
+            File dir = new File(themes, theme);
+            assertTrue("missing theme " + theme, dir.isDirectory());
+            File css = new File(dir, "console.css");
+            assertTrue("missing " + theme + " stylesheet", css.isFile());
+            String text = new String(Files.readAllBytes(css.toPath()), StandardCharsets.UTF_8);
+            for (String var : vars) {
+                assertTrue(theme + " does not declare " + var, declares(text, var));
             }
-            assertEquals(theme + " dash differs from the default",
-                GraphThemeColors.dashLength(bare, theme),
-                GraphThemeColors.dashLength(themes, theme), 0.001f);
         }
+    }
+
+    /**
+     * The grid a too-small tile keeps must be one of that theme's own two grids.
+     *
+     * <p>When the minor grid is dropped, the surviving gridline used to be chosen in code by
+     * theme name - the minor colour on the dark themes, the major on the light ones - and is
+     * now stated by {@code --graph_gridCompact}. That moves the decision into the stylesheet,
+     * which is where it belongs, but nothing else checks it: the coverage test above only asks
+     * whether the variable is <em>declared</em>, so a theme could declare any colour at all and
+     * still pass. It did, briefly - dark and midnight were given light's minor, painting their
+     * small tiles a red gridline against a beige and a blue one respectively.
+     *
+     * <p>Copying one of the two grid colours is the whole of what this variable is for, so
+     * that is what it is held to.
+     */
+    @Test
+    public void everyThemeKeepsOneOfItsOwnGridsOnASmallTile()
+            throws IOException, IllegalAccessException {
+        File themes = sourceThemeDir();
+        assumeTrue("theme sources not present in this layout", themes != null);
+        for (String theme : new String[] { "light", "dark", "midnight", "classic" }) {
+            File css = new File(new File(themes, theme), "console.css");
+            String text = new String(Files.readAllBytes(css.toPath()), StandardCharsets.UTF_8);
+            String minor = declaredValue(text, GraphThemeColors.VAR_GRID_MINOR);
+            String major = declaredValue(text, GraphThemeColors.VAR_GRID_MAJOR);
+            String compact = declaredValue(text, GraphThemeColors.VAR_GRID_COMPACT);
+            assertNotNull(theme + " declares no minor grid", minor);
+            assertNotNull(theme + " declares no major grid", major);
+            assertNotNull(theme + " declares no compact grid", compact);
+            assertTrue(theme + " keeps '" + compact + "' on a small tile, which is neither its"
+                       + " minor grid (" + minor + ") nor its major (" + major + ")",
+                       compact.equalsIgnoreCase(minor) || compact.equalsIgnoreCase(major));
+        }
+    }
+
+    /** The value a stylesheet gives one custom property, or null when it declares none. */
+    private static String declaredValue(String css, String var) {
+        Matcher m = Pattern.compile("(?m)^\\s*" + Pattern.quote(var) + "\\s*:\\s*([^;]+);")
+            .matcher(css);
+        return m.find() ? m.group(1).trim() : null;
     }
 
     /**

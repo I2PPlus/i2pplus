@@ -1,6 +1,7 @@
 package org.rrd4j.graph;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -355,6 +356,42 @@ class RrdGraphGenerator {
         }
     }
     /**
+     * Build the vertical gradient that shades a series line by its value.
+     *
+     * <p>The gradient runs from the bottom of the plot area to the top, which is what makes it
+     * read by value rather than by position: a point's height above the baseline is its
+     * magnitude, so the paint at that height is the colour for that magnitude. Three or more
+     * stops need {@link LinearGradientPaint}, the only one of the two gradient types that holds
+     * an arbitrary number; either way the stops are spread evenly over the span.
+     *
+     * @param stops bottom-to-top colour stops, or null for a flat line
+     * @return the gradient paint, or null when no shading was asked for
+     */
+    private Paint valueShadePaint(Color[] stops) {
+        if (stops == null || stops.length < 2) {
+            return null;
+        }
+        // im.yorigin is the baseline; the plot area is ysize tall above it. Either dimension
+        // being zero or negative means there is no area to span, and a gradient across a
+        // zero-length span is rejected outright, so the line is left flat rather than lost.
+        double top = im.yorigin - im.ysize;
+        double bottom = im.yorigin;
+        if (im.ysize <= 0 || top >= bottom) {
+            return null;
+        }
+        if (stops.length == 2) {
+            return new GradientPaint(new Point2D.Double(0, top), stops[0],
+                                     new Point2D.Double(0, bottom), stops[stops.length - 1]);
+        }
+        float[] fractions = new float[stops.length];
+        for (int i = 0; i < fractions.length; i++) {
+            fractions[i] = (float) i / (fractions.length - 1);
+        }
+        return new LinearGradientPaint(new Point2D.Double(0, top),
+                                       new Point2D.Double(0, bottom), fractions, stops);
+    }
+
+    /**
      * Draw data
      */
 
@@ -394,10 +431,19 @@ class RrdGraphGenerator {
                     // stays solid, since dashes on it are noise rather than information.
                     Stroke lineStroke = RrdGraphConstants.seriesStroke(seriesCount,
                             ((Line) source).stroke.getLineWidth(), dashLength, dashGap);
+                    // A value shade is a vertical gradient across the plot area, which is what
+                    // makes it read by value: a point's height is its value. Built here rather
+                    // than by the caller because only this class knows where the plot area is,
+                    // once the title, legend and axis margins have taken their space. Per line,
+                    // so two plots on one axis can be shaded independently.
+                    Paint paint = valueShadePaint(((Line) source).valueShade);
+                    if (paint == null) {
+                        paint = source.color;
+                    }
                     if (smooth) {
-                        worker.drawPolylineSmooth(x, y, source.color, lineStroke);
+                        worker.drawPolylineSmooth(x, y, paint, lineStroke);
                     } else {
-                        worker.drawPolyline(x, y, source.color, lineStroke);
+                        worker.drawPolyline(x, y, paint, lineStroke);
                     }
                 } else if (Area.class.isAssignableFrom(source.getClass())) {
                     if (source.parent == null) {

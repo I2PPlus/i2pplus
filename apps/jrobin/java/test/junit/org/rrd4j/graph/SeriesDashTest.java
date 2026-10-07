@@ -106,7 +106,7 @@ public class SeriesDashTest {
                      0f, def.getSeriesDash(), 0f);
     }
 
-    // ---- an explicit gap, as a CSS "--graph_dash:1 3" pair states ----
+    // ---- an explicit gap, as a CSS "--graph_plotDash:1 3" pair states ----
 
     @Test
     public void aStatedGapIsHonouredWhenItIsWideEnough() {

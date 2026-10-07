@@ -266,48 +266,80 @@ Theme resources at `/themes/console/<theme>/images/thumbnail.png`, `favicon.svg`
 
 ## Graph Color Integration
 
-Graph images — the RRD plots on `graphs.jsp` — take four themeable colours: a stroke and a
-fill for each of the two lines a tile can carry. They also take the dot pattern that
-separates two lines sharing an axis. Declare them in your theme's `console.css`:
+Graph images — the RRD plots on `graphs.jsp` — take **seventeen** themeable values, and the
+stylesheet is the only place a theme states them. There is no per-theme table in the code to
+keep in step; see [Defaults live in one place](#defaults-live-in-one-place).
+
+### The full set
 
 ```css
 :root{
---graph_line_1:#37c88e;   /* stroke of the first line   */
---graph_line_2:#ff6710;   /* stroke of the second line  */
---graph_path_1:#004808dc; /* fill under the first line  */
---graph_path_2:#64c8a0dc; /* fill under the second line */
---graph_dash:1;           /* dot pattern, see below     */
+  /* the two plots */
+  --graph_plotLine1:#37c88e;     /* stroke of the first plot    */
+  --graph_plotLine2:#ff6710;     /* stroke of the second plot   */
+  --graph_plotFill1:#004808dc;   /* fill under the first plot   */
+  --graph_plotFill2:#64c8a0dc;   /* fill under the second plot  */
+  --graph_plotDash:1;            /* dot pattern, see below      */
+
+  /* how heavy a plot line is drawn */
+  --graph_plotLineWidth:2;       /* up to 800px wide            */
+  --graph_plotLineWidthWide:2.5; /* past 800px wide             */
+
+  /* text */
+  --graph_textColor:#c9ceff;     /* labels, legend, title       */
+  --graph_axisColor:#c9ceff;     /* the two axis rules          */
+
+  /* the grids */
+  --graph_gridMinor:#20408040;   /* minor gridlines             */
+  --graph_gridMajor:#ff20c070;   /* major gridlines             */
+  --graph_gridMinorDash:1 3;     /* minor gridline dot pattern  */
+  --graph_gridMajorDash:0;       /* solid major gridlines       */
+  --graph_gridCompact:#ff20c070; /* what a too-small tile keeps */
+
+  /* the plot area */
+  --graph_background:#000000c0; /* the plot and its margin ring */
+  --graph_edgeShade:#00000000;   /* shading along bottom and left */
+  --graph_restartMarker:#dc1030dc; /* the restart rule          */
 }
 ```
 
-### Why two lines, and why four colours
+### Why two plots, and why four colours
 
-**A graph tile draws at most two lines.** Three are too close together to tell apart at tile
+**A graph tile draws at most two plots.** Three are too close together to tell apart at tile
 size. Combined graphs therefore hold two stats at most (`GraphGroups.MAX_SERIES`), and any
 member past that limit gets a graph of its own rather than being squeezed in or dropped.
 
-**Each of those two lines can be drawn three ways:**
+**Each of those two plots can be drawn three ways:**
 
-| Mode                          | Drawn as                       |
-| ----------------------------- | ------------------------------ |
-| default, single stat          | a filled area                 |
-| line mode                     | a stroke                      |
+| Mode                          | Drawn as                         |
+| ----------------------------- | -------------------------------- |
+| default, single stat          | a filled area                   |
+| line mode                     | a stroke                        |
 | filled paths (`graphFill`)    | a filled area plus a thin stroke |
 
-So one line needs a colour for its stroke *and* a colour for its fill, and with two lines
-that is four values: `--graph_line_1` and `--graph_line_2` for the strokes,
-`--graph_path_1` and `--graph_path_2` for the fills. A given mode uses a subset, but every
-one of the four is read by some mode, which is why all four exist.
+So one plot needs a colour for its stroke *and* a colour for its fill, and with two that is
+four values: `--graph_plotLine1` / `--graph_plotLine2` for the strokes, `--graph_plotFill1` /
+`--graph_plotFill2` for the fills. A given mode uses a subset, but every one of the four is
+read by some mode, which is why all four exist.
 
-Note that the two are independent: `--graph_line_1` may be a saturated green while
-`--graph_path_1` is a dark translucent version of it. Choosing them separately is the point,
-because the fill sits under the line rather than being it.
+Note that the two are independent: `--graph_plotLine1` may be a saturated green while
+`--graph_plotFill1` is a dark translucent version of it. Choosing them separately is the
+point, because the fill sits under the line rather than being it.
 
-**The two-line limit is enforced above jrobin.** jrobin itself will draw any number of lines;
+**The two-plot limit is enforced above jrobin.** jrobin itself will draw any number of plots;
 the cap lives in the console's group registry, and `GraphThemeColors` clamps a plot ordinal
-past the second onto slot 2 rather than throwing. So a third line, should one ever appear,
+past the second onto slot 2 rather than throwing. So a third plot, should one ever appear,
 would collide on colour with the second — a visible bug rather than a crash. `GraphGroupsTest`
 fails the build if any group exceeds the limit, so that has to be fixed before it can happen.
+
+### Value syntax by kind
+
+| Kind | Variables | Accepted |
+| ---- | --------- | -------- |
+| Colour | everything below except the dash and length ones | any CSS colour, see below |
+| Dash pair | `--graph_plotDash`, `--graph_gridMinorDash`, `--graph_gridMajorDash` | `1`, `1 3`, `1,3`, `0` |
+| Length | `--graph_plotLineWidth`, `--graph_plotLineWidthWide` | a bare number of pixels |
+| Colour list | `--graph_plotLine1/2`, `--graph_plotFill1/2` with 2+ colours | space-separated, see Gradients below |
 
 ### Colour syntax
 
@@ -324,25 +356,66 @@ Any CSS colour is accepted, because the value is handed to `SvgColor.parse()`:
 
 Shorthand digits are doubled, per CSS, so `#ee9d` is `#eeee99dd` — not `#e9d9`.
 
-**Alpha belongs in the value.** There is deliberately no `--graph_path_alpha`: a second
-variable holding half of one colour is a second thing to forget when changing it. Write
-`#64c8a05a` or `rgba(100,200,160,.35)` and both halves travel together.
+### Gradients on fills and lines
+
+Both plot variables accept two or more colours, in which case they become a **vertical
+gradient** rather than a flat colour. Two spellings, equivalent:
+
+```css
+--graph_plotFill1:#2ec23e40 #f0000008 #d0000008;              /* bare list   */
+--graph_plotFill1:linear-gradient(#2ec23e40,#f0000008,#d0000008);  /* explicit */
+```
+
+Alpha needs no extra variable — put it in the colour, as `#2ec23e40` does. Both
+spellings accept 3/4/6/8-digit hex and `rgb()`/`rgba()`, in any mix. The bare list is split on
+**spaces**, because a colour may itself contain commas; the `linear-gradient(...)` form is split
+on top-level commas, so `rgba(46,194,62,.25)` stays intact.
+
+**Stops read bottom to top**: the first colour is the lowest value, the last the highest. This
+is the reverse of CSS, where `linear-gradient(to top, a, b)` puts `a` at the bottom, so a bare
+list here ascends where the equivalent CSS descends. Reversing your stops reverses the fade:
+
+```css
+--graph_plotLine1:#2ec23e40 #f0000008 #d0000008;   /* low is green, high is dark red */
+```
+
+All four are independent: shade one and leave the other flat, mix notations freely, or set any
+number of stops.
+
+On a **fill** the gradient spans the frame. On a **line** it spans the *plot area*, which is what
+makes the shading read by value — a point's height above the baseline is its magnitude, so the
+colour at that height is the colour for that value. The first colour is still what the legend
+swatch shows, since a swatch cannot show a gradient.
+
+Three limits:
+
+- **Stops are spread evenly.** Three land at 0%, 50% and 100%; there is no way to place one at
+  90%, and a fractional position inside a list is ignored.
+- **Direction is ignored.** The gradient is always vertical, since an area under a series is a
+  vertical wash. A stated `to right` or `45deg` is skipped rather than guessed at.
+- **One colour is not a gradient.** It stays flat, which is what makes naming two the way to opt
+  in.
+
+Before reaching for a line gradient, weigh that a value-shaded line no longer reads as one series
+colour — it becomes a heatmap treatment, which suits a single-series tile and muddies the
+two-series case where the plots are told apart by hue. It also sits awkwardly beside
+`--graph_plotDash`, the dot pattern that distinguishes a second plot on one axis.
 
 ### The dot pattern
 
-When two lines share an axis the second is drawn dotted, so the two stay separable where
-they cross. `--graph_dash` is the length of one dot, or a CSS dash pair:
+When two plots share an axis the second is drawn dotted, so the two stay separable where
+they cross. `--graph_plotDash` is the length of one dot, or a CSS dash pair:
 
 ```css
---graph_dash:1;      /* 1px dot, gap derived from the line width */
---graph_dash:1 3;    /* 1px dot, then 3px of space   */
---graph_dash:1,3;    /* identical; comma or space    */
---graph_dash:0;      /* no dots at all: solid lines  */
---graph_dash:0 3;    /* the same; a gap needs a dot to follow it */
+--graph_plotDash:1;      /* 1px dot, gap derived from the line width */
+--graph_plotDash:1 3;    /* 1px dot, then 3px of space   */
+--graph_plotDash:1,3;    /* identical; comma or space    */
+--graph_plotDash:0;      /* no dots at all: solid lines  */
+--graph_plotDash:0 3;    /* the same; a gap needs a dot to follow it */
 ```
 
-A dot length of zero is the way to turn the pattern off: both lines are drawn solid.
-A zero *gap* does not do that — `--graph_dash:1 0` keeps the dots and simply lets the
+A dot length of zero is the way to turn the pattern off: both plots are drawn solid.
+A zero *gap* does not do that — `--graph_plotDash:1 0` keeps the dots and simply lets the
 gap be derived, because the pair's second value is only spacing.
 
 Comma and space are interchangeable. A stated gap is honoured only when it leaves the dots
@@ -356,10 +429,72 @@ Lists longer than two values are refused, not truncated. CSS would cycle an odd-
 `stroke-dasharray` to make it even, but the floor above is stated for one dot and one gap,
 and dropping the tail would render something the stylesheet never asked for.
 
+### Line width
+
+`--graph_plotLineWidth` sets the stroke weight of a plot line, and
+`--graph_plotLineWidthWide` replaces it past a frame width of **800px** — a layout constant
+rather than a theme choice, since a tile is drawn wider when the console has room and a longer
+series shows a thinner stroke's gaps more readily. The two are separate so a theme can weight
+a long plot more heavily without changing the rest of the console.
+
+**These are seeded to `2` and `2.5`** in every shipped theme, and two things are worth knowing
+before you tune them:
+
+- **A width of exactly `1` emits no SVG at all.** The writer suppresses `stroke-width:1` as the
+  default, so setting `1` produces output identical to leaving the variable out. Use `1.2` if
+  you want *barely* heavier and are surprised to get nothing.
+- **The `Wide` value only applies past 800px, and a default tile is 400px wide.** It is
+  unreachable until a user raises the graph width themselves, so treat it as opt-in for
+  wide-screen layouts rather than something the standard console will show you.
+
+A width past roughly `0.1`–`16` is refused and falls back, because a width that small drops
+the line and one that large covers the data it is meant to show.
+
+**Stepped plots look heavier than smoothed ones at the same width, and that is correct.** The
+emitted stylesheet asks for `shape-rendering:crispEdges` and `vector-effect:non-scaling-stroke`,
+so axis-aligned steps snap to the pixel grid while curves are resampled across it. Raise the
+width if you want a smoothed plot to match a stepped one visually; there is no compensation
+for it in the renderer.
+
+Note that this governs **stroked plots only**. The default single-stat tile is a filled area
+with no outline at all, so there is nothing there for a width to control. The filled-path mode
+(`graphFill`) does draw an outline, and that one is **half** the plot line width rather than a
+constant — so a theme that draws heavy plots gets a proportionally heavy edge.
+
+Three further cases are **not** the theme's, and override whatever you declare:
+
+| Case | Width | Why |
+| ---- | ----- | --- |
+| A whole group on one axis | `1.5` | up to six plots share the axis and a heavier line merges them |
+| The sidebar sparkline | `3` | 250×50 and unlabelled, where a hairline nearly vanishes |
+| A tile carrying many periods | `1` | the plots are crowded, which is the grouped case's problem too |
+
+### Fonts are not yours to set
+
+A graph takes its faces from the console's own font variables, `--monospaced` for the axis
+labels, tick labels and units, and `--bodyfont` for the legend and title. Those live in
+`themes/fonts/*.css` and are what the rest of the console draws with, so a graph matches the
+page it sits on and changing the console's font set moves the graphs with it. There is
+deliberately no `--graph_fontFamily*` to set: a second pair could only disagree with the
+first.
+
+Each graph is served as an isolated document, so it cannot inherit the page's properties — it
+`<link>`s the font stylesheet instead, which is what lets `var()` resolve inside it. If that
+link is ever removed, the text falls back to `monospace`/`sans-serif` rather than losing its
+family, so a broken stylesheet degrades instead of blanking.
+
+Two escape hatches still exist, both deliberate and neither a theme property:
+
+- `routerconsole.graphFont.unit`, `.legend` and `.title` name a family outright, for an
+  installation that wants a different face from the one the console uses.
+- For `zh`, `jp` and `ko` the renderer picks a CJK face ahead of the generic one, because
+  those are the families that carry the glyphs at all. A console whose `--bodyfont` has no
+  CJK coverage still gets readable labels.
+
 ### Where the values are read, and why server-side
 
 Unlike the minigraph, which resolves `--minigraph_*` in the browser with
-`getComputedStyle`, graph colours are read by the **server**, in `GraphThemeColors.java`.
+`getComputedStyle`, graph values are read by the **server**, in `GraphThemeColors.java`.
 A graph is served as `<img src="/viewstat.jsp?stat=...">`, which makes the SVG an isolated
 document: page CSS does not reach inside it and page custom properties are invisible to it.
 Declaring the variables in the SVG itself would only let a user edit a file they cannot
@@ -369,7 +504,7 @@ values to the renderer.
 Consequences worth knowing:
 
 - The stylesheet is re-read when its last-modified timestamp changes, so **editing a theme and
-  refreshing the page is enough** to see the new colours - no router restart, matching how the
+  refreshing the page is enough** to see the new values - no router restart, matching how the
   minigraph behaves.
 - It is also re-read every 30 seconds regardless. That is the fallback for a filesystem that
   does not maintain last-modified reliably - a network mount, a container overlay - or whose
@@ -381,19 +516,37 @@ Consequences worth knowing:
 - A stylesheet missing when first asked about is remembered as missing, but re-checked on
   every lookup, so a theme deployed after startup still takes effect.
 
-Note that none of this involves the browser's copy of the stylesheet. The colours are resolved
+Note that none of this involves the browser's copy of the stylesheet. The values are resolved
 on the router, which reads the theme file itself; how the browser caches the same file for the
 rest of the page is a separate question.
-- Any slot a theme omits, or states something unparseable in, falls back to the built-in
-  value on its own. One bad declaration costs one colour, not the graph.
+- Any value a theme omits, or states something unparseable in, falls back to the built-in
+  value on its own. One bad declaration costs one value, not the graph.
 
-### Defaults live in two places, on purpose
+### Defaults live in one place
 
-The same values appear in `GraphThemeColors.java` and in every theme's `console.css`. The
-CSS copy exists so a theme author can *find* them; the code copy is the fallback for when no
-stylesheet can be read, which is the normal case in a source checkout where the theme lives
-under `installer/`. `GraphThemeColorsTest` asserts the two agree for every shipped theme, so
-editing one without the other fails the build rather than the console.
+`GraphThemeColors` holds a single fallback set, and it is **light's** — the console's default
+look. It is reached only when a theme's stylesheet declares nothing at all: an unknown theme
+name, or a layout with no stylesheet. Neither case has a theme identity to honour, so there is
+nothing per-theme about those values.
+
+This is deliberate. The same values used to appear in `GraphThemeColors.java` *and* in every
+theme's `console.css`, mirrored row for row, and a test asserted the two agreed. It worked
+until it didn't: the code copy drifted from the CSS, and the mirror had to be policed by a
+test that could only notice after the fact. With CSS as the sole statement of a theme's look,
+there is nothing to keep in step.
+
+Two tests guard this instead, and between them they catch the two ways this goes wrong:
+
+- `everyShippedThemeDeclaresEveryGraphVariable` — every `--graph_*` variable the code reads is
+  declared by every shipped theme. Catches a theme that omits one and would silently render in
+  light's value while looking, from its own stylesheet, like a deliberate choice.
+- `theLineWidthFallbackMatchesTheLightStylesheet` — the Java fallback equals what light
+  declares. Nothing keeps these in step automatically, so changing light's width without
+  changing the fallback would otherwise go unnoticed until some unthemed layout rendered at the
+  wrong weight.
+
+`everyThemeKeepsOneOfItsOwnGridsOnASmallTile` adds a third, narrower rule: a theme's
+`--graph_gridCompact` must equal one of its own two grids.
 
 ### The tuning-page history bar is a different mechanism
 
@@ -417,41 +570,34 @@ rename touched three places, all of which must agree or the bars go unpainted:
 no fallback in the `var()` call, so a theme that overrode the variable to nothing would leave
 those bars unpainted rather than falling back — keep the `shared.css` declaration.
 
-### Everything else on a graph
+### The grids
 
-The two plot colours and the dash pattern are the core of a tile, but they are not all of it.
-Text, the axis rules and both grids are themeable too, each with a built-in value per theme
-behind whatever the stylesheet says:
+`--graph_textColor` covers every glyph on the tile: axis labels, tick labels, the legend and
+the title. `--graph_gridMinorDash` and `--graph_gridMajorDash` take the same dot-and-gap form
+as `--graph_plotDash` and go through the same length rules, so a value too tight to keep the
+dots apart is dropped rather than drawn solid. The two grids are dashed independently, which
+is what lets a theme read its major divisions without weakening its minor ones.
 
-```css
-:root{
---graph_font:#c9ceff;        /* labels, legend, title     */
---graph_axis:#c9ceff;        /* the two axis rules        */
---graph_grid:#20408040;      /* minor gridlines           */
---graph_mgrid:#ff20c070;     /* major gridlines           */
---graph_grid_dash:1 3;       /* minor gridline dot pattern */
---graph_mgrid_dash:0;        /* solid major gridlines     */
-}
-```
-
-`--graph_font` covers every glyph on the tile: axis labels, tick labels, the legend and the
-title. `--graph_grid_dash` and `--graph_mgrid_dash` take the same dot-and-gap form as
-`--graph_dash` and go through the same length rules, so a value too tight to keep the dots
-apart is dropped rather than drawn solid. The two grids are dashed independently, which is
-what lets a theme read its major divisions without weakening its minor ones.
-
-On a tile too small for a grid to register, the minor grid is dropped and the major one kept
-— that is a size decision made in the renderer, and it holds for every theme.
+On a tile too small for a grid to register, the minor grid is dropped — a size decision made in
+the renderer, which holds for every theme. The gridline that survives comes from
+`--graph_gridCompact`, and need not be either of your two grids: light and classic keep their
+major, dark and midnight their minor. Set it to one of your own two or the shipped appearance
+changes; a third colour here is almost certainly a mistake.
 
 A tile smaller still, the wide sidebar sparkline, is deliberately a neutral grey rather than
-`--graph_path_1`, because it carries no legend and its colour must not read as a first plot.
+`--graph_plotFill1`, because it carries no legend and its colour must not read as a first plot.
 
 ### What is still not themeable
 
-The canvas, the frame, the arrow and the plot background stay in code per theme — in a tile
-that size they are structural rather than decorative.
+Only the fully transparent structural items and one deliberate neutral:
 
----
+| Item | Why not |
+| ---- | ------- |
+| Axis rules on a tile with no axes | hidden, so nothing to theme |
+| The plot frame | fully transparent on every theme |
+| The axis-break arrow | transparent; no theme draws it |
+| The minor grid on a too-small tile | replaced by `--graph_gridCompact` instead |
+| The sidebar sparkline fill | a neutral grey on purpose, so it does not read as a plot |
 
 ## Theme Picker UI
 
@@ -518,22 +664,25 @@ a:hover { color: var(--hover); }
 /* ... */
 ```
 
-Graph plot colours are optional — a theme that omits them gets the built-in defaults for
-that theme — but shipping them keeps the plots discoverable to whoever edits the theme next.
-Copy the block from an existing theme and adjust:
+Graph plot values are optional — a theme that omits one falls back to the built-in default —
+but shipping them keeps the plots discoverable to whoever edits the theme next. Copy the block
+from an existing theme and adjust:
 
 ```css
 :root{
---graph_line_1:#37c8a0;   /* copy the values from a theme you like, then vary them */
---graph_line_2:#f09060;
---graph_path_1:#0a4a20b0;
---graph_path_2:#64c8a0b0;
---graph_dash:1;
+--graph_plotLine1:#37c8a0;   /* copy the values from a theme you like, then vary them */
+--graph_plotLine2:#f09060;
+--graph_plotFill1:#0a4a20b0;
+--graph_plotFill2:#64c8a0b0;
+--graph_plotDash:1;
 }
 ```
 
-Keep `--graph_line_1` and `--graph_line_2` visibly different: they are the only thing
-distinguishing two lines that share an axis. See [Graph Color Integration](#graph-color-integration).
+Keep `--graph_plotLine1` and `--graph_plotLine2` visibly different: they are the only thing
+distinguishing two plots that share an axis. Copy the rest of the block too — a theme that
+declares only these still falls back on the other fourteen, which is a per-value cost rather
+than a broken plot, but not what anyone would call finished. See
+[Graph Color Integration](#graph-color-integration) for the full set.
 
 ### Step 4: Create theme images
 

@@ -1,6 +1,7 @@
 package org.rrd4j.graph;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -211,7 +212,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * Ink length of one dot in a series line, for
      * {@link RrdGraphConstants#COLOR_SERIES_DASH}. Kept out of {@link #colors} so that
      * array stays a {@code Paint[]} for the ten colour indices it has always held.
-     * Zero, as a theme's {@code --graph_dash:0} states, draws solid instead.
+     * Zero, as a theme's {@code --graph_plotDash:0} states, draws solid instead.
      */
     private float seriesDash = RrdGraphConstants.SERIES_DOT;
 
@@ -246,7 +247,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
     /**
      * Set the space drawn after each dot in a dotted series line.
      *
-     * <p>This is the second half of a CSS {@code --graph_dash:1 3} pair. A value that
+     * <p>This is the second half of a CSS {@code --graph_plotDash:1 3} pair. A value that
      * would let the dots merge is raised to the minimum by the renderer rather than
      * honoured, so a theme cannot accidentally turn a dotted line into a solid one.
      *
@@ -262,6 +263,7 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      * @since 0.9.71
      */
     public float getSeriesDashGap() {return seriesDashGap;}
+
     /** Whether to suppress the legend. */
     boolean noLegend = false;
     /** Whether to render only the graph (height &lt; 64). */
@@ -1777,6 +1779,41 @@ public class RrdGraphDef implements RrdGraphConstants, DataHolder {
      */
     public void line(String srcName, Paint color, String legend, float width) {
         line(srcName, color, legend, width, false);
+    }
+
+    /**
+     * Plots requested data as a line shaded by its value rather than drawn flat.
+     *
+     * <p>A vertical gradient across the plot area, so the colour at a point is the colour for
+     * the value at that point. The stops are per line, so two plots on one axis may be shaded
+     * independently - one shaded, one flat, if the caller asks for that.
+     *
+     * @param srcName Virtual source name
+     * @param color Line colour, used for the legend and wherever shading does not apply
+     * @param legend Legend text
+     * @param width Line width
+     * @param valueShade bottom-to-top colour stops, or null to draw the line flat
+     * @since 0.9.71
+     */
+    public void line(String srcName, Paint color, String legend, float width,
+                     Color[] valueShade) {
+        line(srcName, color, legend, width, false, valueShade);
+    }
+
+    /**
+     * Plots requested data as a line, with value shading and stacking both optional.
+     *
+     * @param stack true if the line will be stacked
+     * @param valueShade bottom-to-top colour stops, or null to draw the line flat
+     * @since 0.9.71
+     */
+    public void line(String srcName, Paint color, String legend, float width, boolean stack,
+                     Color[] valueShade) {
+        if (legend != null) {
+            comments.add(new LegendText(color, legend));
+        }
+        SourcedPlotElement parent = stack ? findParent() : null;
+        plotElements.add(new Line(srcName, color, new BasicStroke(width), parent, valueShade));
     }
 
     /**

@@ -8,17 +8,23 @@
 @import url(../images/itooplus.css);
 
 :root{
---graph_line_1:#37c88e80;
---graph_line_2:#c8c83780;
---graph_path_1:#2ec23e40;
---graph_path_2:#ffef0040;
---graph_dash:0;
---graph_font:#f4f4be;
---graph_axis:#f4f4be;
---graph_grid:#f4f4be1e;
---graph_mgrid:#c8c80032;
---graph_grid_dash:1 2;
---graph_mgrid_dash:1 2;
+--graph_plotLine1:#80c83780 #16503980;
+--graph_plotLine2:#c8373780 #64641b80;
+--graph_plotFill1:#5ad85a60 #59912260;
+--graph_plotFill2:#ff600060 #b3a70060;
+--graph_plotDash:0;
+--graph_textColor:#f4f4be;
+--graph_axisColor:#f4f4be;
+--graph_gridMinor:#f4f4be1e;
+--graph_gridMajor:#c8c80032;
+--graph_gridMinorDash:1 2;
+--graph_gridMajorDash:1 2;
+--graph_background:#000000c0;
+--graph_edgeShade:#00000000;
+--graph_restartMarker:#dc1030dc;
+--graph_gridCompact:#f4f4be1e;
+--graph_plotLineWidth:2;
+--graph_plotLineWidthWide:2.5;
 --tunerGraph:#f60;
 --tier:linear-gradient(180deg,#397,#021);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);

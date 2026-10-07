@@ -407,7 +407,7 @@ public interface RrdGraphConstants {
      * @param width requested line width in pixels
      * @param dashLength ink length of one dot; zero draws a solid line, and negative
      *                   values fall back to {@link #SERIES_DOT}
-     * @param dashGap space after the dot, as a CSS {@code --graph_dash} pair would state it.
+     * @param dashGap space after the dot, as a CSS {@code --graph_plotDash} pair would state it.
      *                Values at or below zero, or too small to keep the dots apart, fall
      *                back to the derived gap.
      * @return a solid stroke for a lone series or a zero dot length, otherwise round dots

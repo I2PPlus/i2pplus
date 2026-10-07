@@ -53,14 +53,18 @@ class GraphRenderer {
 
 
     private static final String DEFAULT_THEME = "dark";
+
+    /**
+     * Nothing drawn: the canvas margin, the chrome-less sidebar tiles' axes and the grid a
+     * tile too small for one cannot show anything against whatever the page puts behind.
+     */
     private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
-    private static final Color BACK_COLOR = new Color(255, 255, 255);
-    private static final Color BACK_COLOR_DARK = new Color(0, 0, 0, 192);
-    private static final Color SHADEA_COLOR = new Color(255, 255, 255);
-    private static final Color SHADEB_COLOR = new Color(255, 255, 255);
+
+    /** Minor grid colour for a tile with no room for a grid, which hides it outright. */
     private static final Color GRID_COLOR_HIDDEN = new Color(0, 0, 0, 0);
+
+    /** The plot border, which no theme draws; the gridlines carry the frame instead. */
     private static final Color FRAME_COLOR = new Color(0, 0, 0, 0);
-    private static final Color FRAME_COLOR_DARK = new Color(0, 0, 0, 0);
 
     /**
      * Fill for the wide, chrome-less sidebar sparkline.
@@ -71,31 +75,71 @@ class GraphRenderer {
     private static final Color SPARKLINE_AREA_COLOR = new Color(128, 128, 128, 128);
 
     /**
-     * Line width over a filled path. Thinner than the plain line mode so the outline
-     * reads as an edge to the fill rather than competing with it.
+     * Width of the outline drawn over a filled plot, as a fraction of the plot line width.
+     *
+     * <p>Thinner than the line mode on purpose: the outline's job is to give the fill an edge
+     * it can be read against, not to compete with the fill as a series of its own. A fraction
+     * rather than a constant so it tracks the theme - a theme that draws heavier plots gets a
+     * proportionally heavier edge, which is what makes the outline controllable at all.
      *
      * @since 0.9.71+
      */
-    private static final float FILLED_LINE_WIDTH = 1f;
+    private static final float FILLED_LINE_WIDTH_RATIO = 0.5f;
+
+    /**
+     * The outline width for a filled plot on a frame.
+     *
+     * <p>Bypasses {@link #lineWidth}'s layout overrides deliberately: a fill is a deliberate
+     * choice by the theme-enabled {@code graphFill} mode, so a crowded tile thins the series
+     * itself and has no reason to thin the edge that keeps it legible.
+     */
+    private float filledLineWidth(GraphRenderConfig cfg) {
+        float base = cfg.width > GraphThemeColors.WIDE_WIDTH
+                   ? GraphThemeColors.plotLineWidthWide(GraphThemeColors.installedThemeDir(),
+                                                         cfg.theme)
+                   : GraphThemeColors.plotLineWidth(GraphThemeColors.installedThemeDir(),
+                                                    cfg.theme);
+        return Math.max(MIN_LINE_WIDTH, base * FILLED_LINE_WIDTH_RATIO);
+    }
+
+    /** Narrowest stroke a theme may ask for; below this a plot disappears. */
+    private static final float MIN_LINE_WIDTH = 0.5f;
+
+    /**
+     * Stroke width when one axis carries a whole group of series.
+     *
+     * <p>A layout decision, not a theme choice: too heavy and the grouped lines merge into
+     * one mass, which defeats the point of grouping them. See {@link #lineWidth}.
+     */
+    private static final float ALL_LINES_WIDTH = 1.5f;
+
+    /**
+     * Stroke width for the sidebar sparkline.
+     *
+     * <p>A legibility decision: at 250x50 with nothing else drawn, a hairline nearly vanishes.
+     * See {@link #lineWidth}.
+     */
+    private static final float SPARKLINE_LINE_WIDTH = 3f;
+
+    /**
+     * Stroke width for a tile carrying enough periods that a heavier line would merge them.
+     *
+     * <p>A legibility decision, and the reason a theme's width is not obeyed unconditionally.
+     * See {@link #lineWidth}.
+     */
+    private static final float CROWDED_LINE_WIDTH = 1f;
 
     /** Whether to render every series as a filled path under a thin line. @since 0.9.71+ */
     private static final String PROP_FILL = "routerconsole.graphFill";
 
-
     /**
-     * Alpha applied to series lines on the dark themes: 0xAA, roughly two thirds opaque.
+     * The arrow on an axis break, which no theme draws.
      *
-     * <p>Fully opaque neon on a dark background reads as harsh, and when two lines cross
-     * the one underneath disappears. Two thirds keeps a line bright enough to lead the eye
-     * while leaving the crossing series visible through it. Only the stroke and the legend
-     * swatch are affected: rrd4j draws legend text in {@code ElementsNames.font}, not in
-     * the series colour.
+     * <p>Already rrd4j's own default, so setting it is stating the intent rather than
+     * changing anything - which is the point: it used to be set for two of the four themes
+     * only, implying the arrow was a dark-theme decision when it never was.
      */
-    private static final int SERIES_ALPHA_DARK = 0xAA;
-
-    private static final Color ARROW_COLOR_DARK = new Color(0, 0, 0, 0);
-    private static final Color RESTART_BAR_COLOR = new Color(223, 13, 13, 255);
-    private static final Color RESTART_BAR_COLOR_DARK = new Color(220, 16, 48, 220);
+    private static final Color ARROW_COLOR = new Color(0, 0, 0, 0);
 
     private static final boolean IS_WIN = SystemVersion.isWindows();
     private static final String PROP_SMOOTH = "routerconsole.graphSmooth";
@@ -745,9 +789,10 @@ class GraphRenderer {
             // giving both the same text put the series name in the legend twice.
             def.area(cfg.plotName, plotPathPaint(cfg.theme, 0, cfg.height));
             def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l",
-                     FILLED_LINE_WIDTH);
+                     filledLineWidth(cfg), plotLineShade(cfg.theme, 0));
         } else if (cfg.allLines) {
-            def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l", lineWidth(cfg));
+            def.line(cfg.plotName, paletteColor(cfg.theme, 0), cfg.descr + "\\l", lineWidth(cfg),
+                     plotLineShade(cfg.theme, 0));
         } else {
             configureArea(def, cfg);
         }
@@ -849,11 +894,14 @@ class GraphRenderer {
                            GraphListener.CF, lsnr.getBackendFactory());
             Color color = extraSeriesColor(cfg.theme, cfg.allLines, i);
             if (cfg.fillSeries) {
-                // Legend on the line only; see configureDataSources.
-                def.area(plotName, plotPathPaint(cfg.theme, Math.max(1, i), cfg.height));
-                def.line(plotName, color, descr + "\\l", FILLED_LINE_WIDTH);
+                // Legend on the line only; see configureDataSources. Shaded like the primary's
+                // outline, so a theme's value shading applies in this mode too.
+                def.area(plotName, plotPathPaint(cfg.theme, extraPlot(i), cfg.height));
+                def.line(plotName, color, descr + "\\l", filledLineWidth(cfg),
+                         plotLineShade(cfg.theme, extraPlot(i)));
             } else {
-                def.line(plotName, color, descr + "\\l", lineWidth(cfg));
+                def.line(plotName, color, descr + "\\l", lineWidth(cfg),
+                         plotLineShade(cfg.theme, extraPlot(i)));
             }
             if (summary) {
                 // Distinct ids: configureLegend already defines min/max/avg/last on the
@@ -882,24 +930,60 @@ class GraphRenderer {
     /**
      * Stroke width for a plotted series.
      *
-     * <p>Grouped graphs stack up to six lines on one axis and are drawn thinner, 1.5, so
-     * they stay separable and the dense case does not fill in. Legacy graphs keep the
-     * widths they always used.
+     * <p>Three cases are decided here rather than by the theme, because each is a fact about
+     * one layout rather than a look the console wants:
+     *
+     * <ul>
+     *   <li>Grouped graphs stack up to six lines on one axis and are drawn thinner so they
+     *       stay separable and the dense case does not fill in.</li>
+     *   <li>The sidebar sparkline is drawn thick because it is small and unlabelled, and a
+     *       hairline nearly vanishes at that size.</li>
+     *   <li>A tile carrying many periods is drawn thinner for the same reason the grouped
+     *       case is: the series is crowded.</li>
+     * </ul>
+     *
+     * <p>Everything else - an ordinary plot - takes its weight from the theme, which is why
+     * {@link #ALL_LINES_WIDTH} and its two siblings are constants here and not fallbacks in
+     * {@link GraphThemeColors}: a theme states how heavy its plots look, and the renderer
+     * keeps the three cases where too heavy would be wrong.
      *
      * @param cfg the render configuration
      * @return stroke width in pixels
      */
     private float lineWidth(GraphRenderConfig cfg) {
         if (cfg.allLines) {
-            return 1.5F;
+            return ALL_LINES_WIDTH;
         }
-        if (cfg.width == 250 && cfg.height == 50 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid) {
-            return 3F;
+        if (isSparkline(cfg)) {
+            return SPARKLINE_LINE_WIDTH;
         }
-        if (cfg.periodCount >= 720 || (cfg.periodCount >= 480 && cfg.width <= 600)) {
-            return 1F;
+        if (isCrowdedTile(cfg)) {
+            return CROWDED_LINE_WIDTH;
         }
-        return 2F;
+        return cfg.width > GraphThemeColors.WIDE_WIDTH
+             ? GraphThemeColors.plotLineWidthWide(GraphThemeColors.installedThemeDir(), cfg.theme)
+             : GraphThemeColors.plotLineWidth(GraphThemeColors.installedThemeDir(), cfg.theme);
+    }
+
+    /**
+     * Whether a frame is the wide, chrome-less sidebar sparkline.
+     *
+     * <p>Identified by its exact size with every other element hidden, which is the only
+     * combination the console requests and the only one drawn unlabelled.
+     */
+    private static boolean isSparkline(GraphRenderConfig cfg) {
+        return cfg.width == 250 && cfg.height == 50
+               && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid;
+    }
+
+    /**
+     * Whether a tile is carrying enough periods that a thicker line would merge them.
+     *
+     * <p>A wide tile keeps the thicker line because it has room to show the crowding; the
+     * narrow form is what needs thinning.
+     */
+    private static boolean isCrowdedTile(GraphRenderConfig cfg) {
+        return cfg.periodCount >= 720 || (cfg.periodCount >= 480 && cfg.width <= 600);
     }
 
 /**
@@ -916,7 +1000,49 @@ class GraphRenderer {
  * @return the colour for that series
  */
     static Color extraSeriesColor(String theme, boolean allLines, int extraIndex) {
-        return paletteColor(theme, Math.max(1, extraIndex));
+        return paletteColor(theme, extraPlot(extraIndex));
+    }
+
+    /**
+     * Which plot slot an extra series occupies.
+     *
+     * <p>The primary always takes slot 0, so extras start at 1 and, since a frame carries at
+     * most two plots, every extra past the first clamps onto slot 1.
+     *
+     * <p>Every per-plot lookup for an extra series goes through here — its stroke colour, its
+     * fill and its value shading. They used to compute the ordinal separately and one of them
+     * disagreed, which gave a series one plot's colour and another plot's gradient.
+     *
+     * @param extraIndex zero-based position among the extra series
+     * @return the plot ordinal, never less than 1
+     */
+    private static int extraPlot(int extraIndex) {
+        return Math.max(1, extraIndex);
+    }
+
+    /**
+     * Which plot slot an extra series occupies. Package-visible so a test can pin it.
+     *
+     * @param extraIndex zero-based position among the extra series
+     * @return the plot ordinal, never less than 1
+     */
+    static int extraPlotForTest(int extraIndex) {
+        return extraPlot(extraIndex);
+    }
+
+    /**
+     * The value-shade stops an extra series would be drawn with.
+     *
+     * <p>Exposed so a test can check that the extra series asks for its own plot's stops rather
+     * than a neighbouring plot's. Comparing colours could not catch that, because every shipped
+     * theme draws both plots flat and a flat plot has no stops to compare.
+     *
+     * @param theme console theme name
+     * @param extraIndex zero-based position among the extra series
+     * @return bottom-to-top stops, or null when that plot is flat
+     */
+    static Color[] extraLineShadeForTest(String theme, int extraIndex) {
+        return plotLineShade(theme, extraPlot(extraIndex));
     }
 
 
@@ -948,6 +1074,20 @@ class GraphRenderer {
                                           frameHeight);
     }
 
+    /**
+     * The stops that shade one plot line by its value, or null for a flat line.
+     *
+     * <p>Passed per line rather than set once on the definition, so two plots on one axis are
+     * shaded independently - the same independence their colours have.
+     *
+     * @param theme the console theme name
+     * @param plot the plot ordinal, 0 for the first line and 1 for the second
+     * @return bottom-to-top stops, or null when the theme named one colour or fewer
+     */
+    private static Color[] plotLineShade(String theme, int plot) {
+        return GraphThemeColors.lineValueShade(GraphThemeColors.installedThemeDir(), theme, plot);
+    }
+
     /** Package-visible accessor so tests can compare a series against the primary. */
     static Color paletteColorForTest(String theme) {
         return paletteColor(theme, 0);
@@ -958,7 +1098,8 @@ class GraphRenderer {
             cfg.timeLabel = cfg.useUtc ? " UTC" : "";
             cfg.legendSdf = cfg.useUtc ? UTC_DATE_FMT.get() : LOCAL_DATE_FMT.get();
             int count = 0;
-            cfg.restartColor = cfg.theme.equals("midnight") || cfg.theme.equals("dark") ? RESTART_BAR_COLOR_DARK : RESTART_BAR_COLOR;
+            cfg.restartColor = GraphThemeColors.restartMarkerColor(
+                    GraphThemeColors.installedThemeDir(), cfg.theme);
 
             Map<Long, String> events = ((RouterContext) _context).router().eventLog().getEvents(EventLog.STARTED, cfg.start);
             for (Map.Entry<Long, String> event : events.entrySet()) {
@@ -1045,7 +1186,7 @@ out.write(graph.getRrdGraphInfo().getBytes());
      * <p>A theme may state only the dot length, in which case jrobin derives the gap from
      * the stroke width. When it states a gap too, that value is used unless it would merge
      * the dots, which is decided in {@code RrdGraphConstants.minimumDashGap}. A dot length
-     * of zero, from {@code --graph_dash:0}, asks for a solid line and leaves no gap to set.
+     * of zero, from {@code --graph_plotDash:0}, asks for a solid line and leaves no gap to set.
      *
      * @since 0.9.71+
      */
@@ -1059,22 +1200,23 @@ out.write(graph.getRrdGraphInfo().getBytes());
     }
 
     /**
-     * Apply the theme-specific colours to the graph definition.
- *
-     * <p>Every one of them is the theme's to state, with a built-in value per theme behind it,
-     * so a frame reads as part of the page it is drawn on.
+     * Apply the theme's colours to the graph definition.
+     *
+     * <p>Every one of them is the theme's to state in its own {@code console.css}; this class
+     * holds only the fallbacks for a stylesheet that declares nothing, so a frame reads as
+     * part of the page it is drawn on.
      */
     private static void applyTheme(RrdGraphDef def, GraphRenderConfig cfg) {
         applyDash(def, cfg);
         File dir = GraphThemeColors.installedThemeDir();
-        Color font = GraphThemeColors.fontColor(dir, cfg.theme);
+        Color font = GraphThemeColors.textColor(dir, cfg.theme);
         Color axis = GraphThemeColors.axisColor(dir, cfg.theme);
-        Color grid = GraphThemeColors.gridColor(dir, cfg.theme);
-        Color mgrid = GraphThemeColors.mgridColor(dir, cfg.theme);
-        def.setGridStroke(gridStroke(GraphThemeColors.gridDash(dir, cfg.theme),
-                                     GraphThemeColors.gridDashGap(dir, cfg.theme)));
-        def.setMajorGridStroke(gridStroke(GraphThemeColors.mgridDash(dir, cfg.theme),
-                                          GraphThemeColors.mgridDashGap(dir, cfg.theme)));
+        Color grid = GraphThemeColors.gridMinorColor(dir, cfg.theme);
+        Color mgrid = GraphThemeColors.gridMajorColor(dir, cfg.theme);
+        def.setGridStroke(gridStroke(GraphThemeColors.gridMinorDash(dir, cfg.theme),
+                                     GraphThemeColors.gridMinorDashGap(dir, cfg.theme)));
+        def.setMajorGridStroke(gridStroke(GraphThemeColors.gridMajorDash(dir, cfg.theme),
+                                          GraphThemeColors.gridMajorDashGap(dir, cfg.theme)));
         def.setColor(ElementsNames.font, font);
         // sidebar minigraph
         if ((cfg.width == 250 && cfg.height == 50 && cfg.hideTitle && cfg.hideLegend && cfg.hideGrid)
@@ -1082,41 +1224,33 @@ out.write(graph.getRrdGraphInfo().getBytes());
             def.setColor(ElementsNames.xaxis, TRANSPARENT);
             def.setColor(ElementsNames.yaxis, TRANSPARENT);
             def.setColor(ElementsNames.frame, TRANSPARENT);
-        // Override defaults (dark themes)
         } else {
             def.setColor(ElementsNames.xaxis, axis);
             def.setColor(ElementsNames.yaxis, axis);
         }
-        if (isDarkTheme(cfg.theme)) {
-            def.setColor(ElementsNames.back, BACK_COLOR_DARK);
-            def.setColor(ElementsNames.canvas, TRANSPARENT);
-        } else {
-            def.setColor(ElementsNames.back, BACK_COLOR);
-        }
-        if (isDarkTheme(cfg.theme)) {
-            def.setColor(ElementsNames.shadea, TRANSPARENT);
-            def.setColor(ElementsNames.shadeb, TRANSPARENT);
-            def.setColor(ElementsNames.grid, grid);
-            def.setColor(ElementsNames.mgrid, mgrid);
-            def.setColor(ElementsNames.frame, FRAME_COLOR_DARK);
-            def.setColor(ElementsNames.arrow, ARROW_COLOR_DARK);
-        } else {
-            // Override defaults (light themes)
-            def.setColor(ElementsNames.shadea, SHADEA_COLOR);
-            def.setColor(ElementsNames.shadeb, SHADEB_COLOR);
-            def.setColor(ElementsNames.grid, grid);
-            def.setColor(ElementsNames.mgrid, mgrid);
-            def.setColor(ElementsNames.frame, FRAME_COLOR);
-        }
+        def.setColor(ElementsNames.back, GraphThemeColors.backgroundColor(dir, cfg.theme));
+        // The canvas is the margin ring around the plot, not the plot. It takes the same
+        // colour the plot does: in-page the console's graph container supplies the page behind
+        // the ring, and a standalone SVG has nothing else to draw an opaque ring on, so
+        // leaving it to rrd4j's default would make the same graph look different depending on
+        // how it was reached.
+        def.setColor(ElementsNames.canvas, GraphThemeColors.backgroundColor(dir, cfg.theme));
+        Color shade = GraphThemeColors.edgeShadeColor(dir, cfg.theme);
+        def.setColor(ElementsNames.shadea, shade);
+        def.setColor(ElementsNames.shadeb, shade);
+        def.setColor(ElementsNames.grid, grid);
+        def.setColor(ElementsNames.mgrid, mgrid);
+        def.setColor(ElementsNames.frame, FRAME_COLOR);
+        def.setColor(ElementsNames.arrow, ARROW_COLOR);
 
         if (cfg.width < 400 || cfg.height < 200 || cfg.periodCount < 120) {
-            // Too small for a grid to register: the minor grid goes and the labelled lines
-            // are left, which on the dark themes take the minor gridlines' colour rather
-            // than the major grid's. That asymmetry is the shipped behaviour and is kept
-            // deliberately - changing it altered how every small tile on the console looked.
+            // Too small for a grid to register: the minor grid goes and the labelled lines are
+            // left, in the theme's own compact gridline rather than either of its two grids.
+            // Which one that is differs per theme, so it is stated in the stylesheet; changing
+            // the asymmetry altered how every small tile on the console looked.
             def.setColor(ElementsNames.grid, GRID_COLOR_HIDDEN);
             def.setColor(ElementsNames.mgrid,
-                         isDarkTheme(cfg.theme) ? grid : mgrid);
+                         GraphThemeColors.compactGridColor(dir, cfg.theme));
         }
     }
 
@@ -1129,11 +1263,6 @@ out.write(graph.getRrdGraphInfo().getBytes());
      */
     private static Stroke gridStroke(float dot, float gap) {
         return RrdGraphConstants.gridStroke(1f, dot, gap);
-    }
-
-    /** Whether a theme draws on a dark canvas, which most of these colours depend on. */
-    private static boolean isDarkTheme(String theme) {
-        return "midnight".equals(theme) || "dark".equals(theme);
     }
 
     /**

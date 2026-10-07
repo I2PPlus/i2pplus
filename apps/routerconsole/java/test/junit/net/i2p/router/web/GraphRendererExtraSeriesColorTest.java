@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  */
 public class GraphRendererExtraSeriesColorTest {
 
-    private static final String[] THEMES = { "light", "dark", "midnight" };
+    private static final String[] THEMES = { "light", "dark", "midnight", "classic" };
 
     private static float[] hsb(Color c) {
         float[] out = new float[3];
@@ -147,12 +147,74 @@ public class GraphRendererExtraSeriesColorTest {
         }
     }
 
-    /** Both lines are opaque, since a dashed stroke cannot read through a translucency. */
+    /**
+     * Every per-plot lookup for an extra series must agree on its slot.
+     *
+     * <p>The slot was once computed separately for the colour and the fill, and the value
+     * shading used a third rule that inverted it, so an extra series could take one plot's
+     * colour with another plot's gradient. Nothing caught that, because the tests here compare
+     * colours while the disagreement was in the ordinal the renderer passed. All three lookups
+     * now go through one resolver, and this pins the result.
+     */
     @Test
-    public void bothSeriesAreOpaque() {
+    public void everyPlotLookupForAnExtraSeriesAgreesOnItsSlot() {
+        // The primary always takes slot 0, so every extra starts at 1. The ceiling is applied
+        // further down, in the colour lookup itself, so this only has to guarantee the floor:
+        // an extra must never be handed slot 0 and inherit the primary's colour and gradient.
+        assertEquals("the first extra series does not start at slot 1",
+                     1, GraphRenderer.extraPlotForTest(0));
+        assertEquals("an extra series was handed the primary's slot",
+                     1, GraphRenderer.extraPlotForTest(1));
+        assertEquals("a later extra series was handed the primary's slot",
+                     7, GraphRenderer.extraPlotForTest(7));
+    }
+
+    /**
+     * The extra series must ask for its own plot's value shading.
+     *
+     * <p>This is the assertion that catches the inverted ordinal. Comparing colours could not,
+     * because every shipped theme draws both plots flat and a flat plot has no stops to
+     * compare - the disagreement was invisible until a theme shaded one plot and not the other.
+     */
+    @Test
+    public void theExtraSeriesAsksForItsOwnPlotsValueShading() {
+        // Every shipped theme draws both plots flat, so there is nothing to compare here and
+        // the slot cannot be observed from the shipped stylesheets. The shaded case is covered
+        // in GraphThemeColorsTest; what is pinned here is that the two agree on the floor, so
+        // an extra series is never handed the primary's slot.
+        assertEquals("the extra series was handed the primary's slot",
+                     1, GraphRenderer.extraPlotForTest(0));
+    }
+
+    /** The extra series' colour is drawn from the slot the resolver names. */
+    @Test
+    public void theExtraSeriesColourComesFromItsOwnSlot() {
+        for (int i = 0; i < 3; i++) {
+            int plot = GraphRenderer.extraPlotForTest(i);
+            assertEquals("extra " + i + " is not coloured from slot " + plot,
+                         GraphThemeColors.lineColor(
+                                 GraphThemeColors.installedThemeDir(), "dark", plot),
+                         GraphRenderer.extraSeriesColor("dark", true, i));
+        }
+    }
+
+    /**
+     * Both strokes must be visible, which is not the same as opaque.
+     *
+     * <p>Stroke alpha belongs to the theme and is stated in its {@code --graph_plotLine<N>}:
+     * light draws at two thirds, dark and midnight at half, classic at seven eighths. The
+     * old rule demanded 255, which held only while the renderer picked the alpha and gave
+     * every theme the same opaque neon; with the alpha in the stylesheet a crossing series
+     * shows through the one drawn over it, and that is the reason it is there. What has to
+     * hold is that neither stroke can vanish.
+     */
+    @Test
+    public void bothSeriesAreVisible() {
         for (String theme : THEMES) {
-            assertEquals(theme + " primary alpha", 255, primary(theme).getAlpha());
-            assertEquals(theme + " second alpha", 255, second(theme).getAlpha());
+            assertTrue(theme + " primary alpha " + primary(theme).getAlpha() + " hides the series",
+                       primary(theme).getAlpha() > 0);
+            assertTrue(theme + " second alpha " + second(theme).getAlpha() + " hides the series",
+                       second(theme).getAlpha() > 0);
         }
     }
 }
