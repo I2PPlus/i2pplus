@@ -561,9 +561,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * when diagnosing the estimator at DEBUG but noise on an operator-facing summary row, so the
      * I2PSnark netstatus debug section uses this form instead of {@link #toString()}.
      *
-     * <p>Values are separated by a bullet, and the string carries a leading bullet, matching the
-     * multi-value debug spans in {@code KRPC}. Inline HTML is deliberate: this method exists only
-     * for that single debug row.
+     * <p>Values are separated by a bullet, matching the multi-value debug spans in {@code KRPC}.
+     * Inline HTML is deliberate: this method exists only for that single debug row.
      *
      * @return formatted status string with bandwidth and limit only
      * @since 0.9.71+
@@ -571,8 +570,9 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     public String toStringShort() {
         String bullet = "&nbsp;&bullet;&nbsp;";
         StringBuilder buf = new StringBuilder(128);
-        buf.append(bullet).append(DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false)).append("Bytes/s")
+        buf.append(DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false)).append("Bytes/s")
            .append(bullet).append("Limit: ").append(DataHelper.formatSize2Decimal(_bandwidthBps, false)).append("Bytes/s");
         return buf.toString();
     }
+
 }
