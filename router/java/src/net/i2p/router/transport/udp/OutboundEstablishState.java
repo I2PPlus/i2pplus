@@ -570,6 +570,21 @@ class OutboundEstablishState {
     public synchronized long getNextSendTime() { return _nextSend; }
 
     /**
+     *  Whether the state machine has already scheduled a resend.
+     *
+     *  <p>Derived rather than counted: the first send stamps {@code _lastSend} with the
+     *  same clock reading as {@code _establishBegin}, so a strictly later stamp means a
+     *  subsequent send. This is what lets the establishment deadline be extended only
+     *  once retransmission has genuinely failed, instead of holding every attempt - the
+     *  overwhelming majority of which are a peer that is simply not there - to the longer
+     *  budget.
+     *
+     *  @return true if anything has been sent since the state was created
+     *  @since 0.9.71+
+     */
+    public synchronized boolean hasRetried() { return _lastSend > _establishBegin; }
+
+    /**
      *  This should be what the state is currently indexed by in the _outboundStates table.
      *  Beware -
      *  During introduction, this is a router hash.

@@ -235,6 +235,21 @@ public class EstablishmentManager {
      */
     private static final long IB_RETRY_SENT_MAX_TIME = 5 * InboundEstablishState.RETRANSMIT_DELAY;
 
+    /**
+     *  Extra establishment budget granted to an outbound attempt once a resend has been
+     *  scheduled and still failed.
+     *
+     *  <p>Additive rather than an absolute like the inbound {@code IB_RETRY_SENT_MAX_TIME}.
+     *  The inbound figure is 5x its retransmit delay, but the outbound delay is 300ms
+     *  against the inbound 1000ms, so 5x would be 1500ms - already below the base
+     *  deadline and therefore incapable of ever binding. An additive extension expresses
+     *  the same intent at either delay: give a peer that missed our first messages more
+     *  room, without extending the attempts that never got a reply to begin with.
+     *
+     *  @since 0.9.71+
+     */
+    private static final long OB_RETRY_EXTRA_MS = 2 * 1000L;
+
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
@@ -685,6 +700,29 @@ public class EstablishmentManager {
      *  @return true if the inbound state should be expired
      *  @since 0.9.71
      */
+    /**
+     *  Whether an outbound establishment attempt has run out of time.
+     *
+     *  <p>Mirrors {@link #hasInboundEstablishExpired} for the outbound direction, which
+     *  until now had no equivalent: the outbound deadline was a flat
+     *  {@code lifetime >= MAX_OB_ESTABLISH_TIME} with no retry grace, while the inbound
+     *  side got up to {@code IB_RETRY_SENT_MAX_TIME} once a retry was sent. That made the
+     *  direction which retransmits three times faster (300ms against 1000ms) the one
+     *  held to the shorter patience, and it is the direction the SSU2 token exchange -
+     *  one round trip more than SSU1 - runs through.
+     *
+     *  @param lifetime how long the attempt has been alive, in milliseconds
+     *  @param hasRetried true if a resend has already been scheduled
+     *  @param maxEstablishTime the base deadline, normally {@code MAX_OB_ESTABLISH_TIME}
+     *  @param retryExtraMs additional budget granted once a resend has failed
+     *  @return true if the attempt should be abandoned
+     *  @since 0.9.71+
+     */
+    static boolean hasOutboundEstablishExpired(long lifetime, boolean hasRetried,
+                                               long maxEstablishTime, long retryExtraMs) {
+        return lifetime >= maxEstablishTime + (hasRetried ? retryExtraMs : 0);
+    }
+
     static boolean hasInboundEstablishExpired(long lifetime, boolean isRetrySent,
                                               long maxEstablishTime, long retrySentMaxTime) {
         return lifetime > maxEstablishTime ||
@@ -2696,17 +2734,20 @@ public class EstablishmentManager {
                 iter.remove();
                 outboundState = cur;
                 break;
-            } else if (cur.getLifetime(now) >= MAX_OB_ESTABLISH_TIME.get()) {
+            } else if (hasOutboundEstablishExpired(cur.getLifetime(now), cur.hasRetried(),
+                                                   MAX_OB_ESTABLISH_TIME.get(), OB_RETRY_EXTRA_MS)) {
                 // took too long. Record it: without this the give-up is only visible via
                 // processExpired()'s DEBUG line, which is conditional on a live introduction
                 // having been removed and is off at any sane log level. A build that dies here
                 // is booked against the peer as a timeout, so an unrecorded give-up makes our
                 // own impatience look like a slow peer.
                 if (_log.shouldWarn()) {
+                    long budget = MAX_OB_ESTABLISH_TIME.get()
+                                  + (cur.hasRetried() ? OB_RETRY_EXTRA_MS : 0);
                     _log.warn("[SSU] Giving up on outbound establishment to "
                               + cur.getRemoteAddress() + " after " + cur.getLifetime(now)
                               + "ms in state " + cur.getState()
-                              + " (max " + MAX_OB_ESTABLISH_TIME.get() + "ms)");
+                              + " (budget " + budget + "ms, retried=" + cur.hasRetried() + ")");
                 }
                 iter.remove();
                 outboundState = cur;
