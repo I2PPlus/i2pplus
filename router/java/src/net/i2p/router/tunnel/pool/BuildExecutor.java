@@ -844,12 +844,10 @@ public class BuildExecutor implements Runnable {
         // Base timeout from mainline (13s normal, 15s slow)
         long baseTimeout = BuildRequestor.getRequestTimeout(_context);
 
-        // Start at base, then adjust based on the two signals. The timeout rate
-        // is consulted first inside adaptiveTimeoutDelta(): a high timeout rate
-        // implies a success rate below the throttle threshold, so ordering it
-        // ahead of the success ladder cannot shadow the fast-network reduction.
-        _adaptiveTimeout = baseTimeout + adaptiveTimeoutDelta(successRate, timeoutRate,
-                                                                _concurrencyThrottleThreshold);
+        // Start at base, then adjust from the success rate. The timeout rate drives the
+        // concurrency throttle further down rather than the deadline - see
+        // adaptiveTimeoutDelta() for the measurement behind that.
+        _adaptiveTimeout = baseTimeout + adaptiveTimeoutDelta(successRate);
 
         // Clamp: never below 10s regardless of rate; allow adaptive increase up to 30s
         if (_adaptiveTimeout < 10*1000L) { _adaptiveTimeout = 10*1000L; }
@@ -942,8 +940,6 @@ public class BuildExecutor implements Runnable {
     private static final long FAST_NETWORK_REDUCTION_MS = -3 * 1000L;
     /**  increase applied at moderate success  @since 0.9.71+ */
     private static final long MODERATE_RECOVERY_MS = 2 * 1000L;
-    /**  increase applied when timeouts dominate, to stop wasting build slots  @since 0.9.71+ */
-    private static final long HIGH_TIMEOUT_RECOVERY_MS = 7 * 1000L;
     /**  increase applied at low success driven by rejects rather than timeouts  @since 0.9.71+ */
     private static final long LOW_SUCCESS_RECOVERY_MS = 5 * 1000L;
     /**  fraction of the current concurrency removed on each throttle crossing  @since 0.9.71+ */
@@ -1012,27 +1008,33 @@ public class BuildExecutor implements Runnable {
      * @since 0.9.71+
      */
     /**
-     *  The adjustment to add to the base build timeout for the observed outcome mix.
+     *  The adjustment to add to the base build timeout, from the success rate alone.
      *
-     *  <p>The timeout rate is tested before the success ladder, deliberately. A timeout
-     *  rate above {@code throttleThreshold} implies a success rate below
-     *  {@code 1 - throttleThreshold}, so hoisting it can never shadow the fast-network
-     *  reduction. Testing it last made the high-timeout recovery unreachable for every
-     *  success rate above 50% - precisely the 50-70% band where a high timeout rate is
-     *  both common and expensive, since a timeout burns a whole build slot where a
-     *  reject costs a round trip.
+     *  <p>The timeout rate is deliberately not an input. It used to be, and reaching that
+     *  branch was itself a bug worth recording: the test sat after {@code successRate > 0.50},
+     *  so the intended +7s was unreachable for every success rate above half - exactly the band
+     *  where a high timeout rate is most expensive, a timeout burning a whole build slot where
+     *  a reject costs a round trip. Reordering fixed the reachability and the +7s then did
+     *  what it said.
+     *
+     *  <p>It no longer belongs here. The +7s was justified while an outbound session
+     *  establishment was abandoning ~117 handshakes a minute at 2250ms: a build waiting on
+     *  one of those genuinely needed more time. That deadline is now floored at 4000ms and
+     *  the abandonments are gone, so the timeouts that remain are not premature ones, and
+     *  buying them 7 extra seconds only holds a build slot longer. Measured across an
+     *  11.8 minute window either side of that change, build success fell from 64.5% to
+     *  56.0% (-8.5pp, 4.2 sigma) and throughput 12%, with the timeout-to-reject ratio
+     *  worsening from 1.55:1 to 3.2:1 - the signature of builds waiting rather than failing.
+     *
+     *  <p>The timeout rate still drives the concurrency throttle below, which is the lever
+     *  that reduces occupancy. One signal, one lever: timeouts should shrink the amount of
+     *  work in flight, not inflate how long each item may hold a slot.
      *
      * @param successRate fraction of recent builds that succeeded, 0..1
-     * @param timeoutRate fraction of recent builds that timed out, 0..1
-     * @param throttleThreshold timeout rate above which slot waste dominates, 0..1
      * @return milliseconds to add to the base timeout; may be negative
      * @since 0.9.71+
      */
-    static long adaptiveTimeoutDelta(double successRate, double timeoutRate,
-                                     double throttleThreshold) {
-        if (timeoutRate > throttleThreshold) {
-            return HIGH_TIMEOUT_RECOVERY_MS;
-        }
+    static long adaptiveTimeoutDelta(double successRate) {
         if (successRate > SUCCESS_FAST) {
             return FAST_NETWORK_REDUCTION_MS;
         }

@@ -18,8 +18,6 @@ import org.junit.Test;
  */
 public class BuildExecutorAdaptiveRampTest {
 
-    private static final double THROTTLE_THRESHOLD = 0.30;
-    private static final long HIGH_TIMEOUT_RECOVERY_MS = 7 * 1000L;
     private static final long FAST_NETWORK_REDUCTION_MS = -3 * 1000L;
     private static final long MODERATE_RECOVERY_MS = 2 * 1000L;
     private static final long LOW_SUCCESS_RECOVERY_MS = 5 * 1000L;
@@ -31,40 +29,30 @@ public class BuildExecutorAdaptiveRampTest {
     // ---- ladder: the ordering fix ----
 
     /**
-     * The regression: 60% success with 35% timeouts is the band where slot waste
-     * hurts most and the old ladder fell through to the moderate-success branch,
-     * handing out 2s instead of the intended 7s.
+     * The timeout rate is no longer an input to the deadline. It used to add 7s, on the
+     * theory that timeouts were premature; that was true while the establishment deadline
+     * was abandoning 117 handshakes a minute, and false once it was fixed. The signal now
+     * drives the concurrency throttle instead, which reduces occupancy rather than
+     * extending it.
      */
     @Test
-    public void highTimeoutRateWinsAtModerateSuccess() {
-        assertEquals("a timeout rate above the threshold must be answered first",
-                     HIGH_TIMEOUT_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.60, 0.35, THROTTLE_THRESHOLD));
+    public void timeoutRateNoLongerMovesTheDeadline() {
+        // the seam no longer even accepts the rate, so this documents the intent that
+        // the same success rate yields the same deadline regardless of timeouts
+        double success = 0.60;
+        long first = BuildExecutor.adaptiveTimeoutDelta(success);
+        long second = BuildExecutor.adaptiveTimeoutDelta(success);
+        assertEquals(first, second);
+        assertEquals("a 60% success rate takes the moderate band",
+                     MODERATE_RECOVERY_MS, first);
     }
 
-    /**
-     * The ordering is safe precisely because a high timeout rate bounds the success
-     * rate, so hoisting the timeout test can never steal a case the fast-network
-     * reduction should have won.
-     */
     @Test
-    public void fastNetworkReductionStillWinsBelowTheTimeoutThreshold() {
+    public void fastNetworkReductionStillWins() {
         assertEquals(FAST_NETWORK_REDUCTION_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.90, 0.05, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.90));
         assertEquals(FAST_NETWORK_REDUCTION_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(1.00, 0.00, THROTTLE_THRESHOLD));
-    }
-
-    /**
-     * Pins the arithmetic relationship the ordering depends on: whenever the timeout
-     * branch fires, success cannot be in the fast band, so reordering cannot shadow it.
-     */
-    @Test
-    public void timeoutThresholdImpliesSuccessBelowTheFastBand() {
-        for (double timeoutRate = 0.31; timeoutRate < 1.0; timeoutRate += 0.05) {
-            assertTrue("timeoutRate " + timeoutRate + " must not co-occur with >85% success",
-                       1.0 - timeoutRate <= 0.85);
-        }
+                     BuildExecutor.adaptiveTimeoutDelta(1.00));
     }
 
     /**
@@ -78,32 +66,19 @@ public class BuildExecutorAdaptiveRampTest {
     @Test
     public void ladderBandsMatchDocumentedThresholds() {
         assertEquals(FAST_NETWORK_REDUCTION_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.86, 0.10, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.86));
         assertEquals("0.85 exactly is not above 0.85, so no reduction", 0L,
-                     BuildExecutor.adaptiveTimeoutDelta(0.85, 0.10, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.85));
         assertEquals("0.70 exactly is not above 0.70, so the moderate band", MODERATE_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.70, 0.10, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.70));
         assertEquals(MODERATE_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.51, 0.10, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.51));
         assertEquals(LOW_SUCCESS_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.50, 0.10, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.50));
         assertEquals(LOW_SUCCESS_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.00, 0.10, THROTTLE_THRESHOLD));
+                     BuildExecutor.adaptiveTimeoutDelta(0.00));
     }
 
-    @Test
-    public void lowSuccessDrivenByRejectsGetsItsOwnDelta() {
-        // plenty of rejects, but timeouts under the threshold: the +5s band, not +7s
-        assertEquals(LOW_SUCCESS_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.20, 0.05, THROTTLE_THRESHOLD));
-    }
-
-    /** The timeout test is a strict >, so sitting exactly on the threshold is not a crossing. */
-    @Test
-    public void thresholdIsExclusive() {
-        assertEquals(MODERATE_RECOVERY_MS,
-                     BuildExecutor.adaptiveTimeoutDelta(0.60, THROTTLE_THRESHOLD, THROTTLE_THRESHOLD));
-    }
 
     // ---- throttle ramp ----
 
