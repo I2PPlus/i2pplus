@@ -2548,7 +2548,16 @@ public class ProfileOrganizer {
         // Don't evict under network stress — profile churn makes recovery harder
         if (isLowBuildSuccess()) {
             if (_log.shouldWarn()) {
-                _log.warn("Low tunnel build success — skipping profile eviction to preserve peer data");
+                // Report the value, not just that it was low. This guard sits on a composite
+                // of six rate stats (expire/reject/success, client and exploratory), and counting
+                // build events straight from the log implied a ratio near 0.56 - comfortably above
+                // ATTACK_THRESHOLD - while this branch fired over two thousand times. Both cannot be
+                // true, and the warning offered no way to tell which number was wrong. Suppressing
+                // eviction is not cheap to be wrong about: the profile database stops being pruned
+                // for as long as the condition holds.
+                _log.warn("Low tunnel build success (" + getTunnelBuildSuccess()
+                          + " < " + ATTACK_THRESHOLD
+                          + ") — skipping profile eviction to preserve peer data");
             }
             return;
         }
