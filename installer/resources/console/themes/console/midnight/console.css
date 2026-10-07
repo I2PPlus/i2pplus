@@ -24,8 +24,8 @@
 --graph_edgeShade:#00000000;
 --graph_restartMarker:#dc1030dc;
 --graph_gridCompact:#c9ceff20;
---graph_plotLineWidth:2;
---graph_plotLineWidthWide:2.5;
+--graph_plotLineWidth:3;
+--graph_plotLineWidthWide:4;
 --box:linear-gradient(180deg,#020020,#000);
 --btn_sidebar:linear-gradient(90deg,#0000,rgba(96,0,96,.1),#0000),linear-gradient(180deg,#322d52,#1e1b31 50%,#141221 50%,#0a0910);
 --label_hover:var(--btn_hover_radial),linear-gradient(180deg,#1e0b28 50%,#0a030d 50%);

@@ -21,8 +21,8 @@
 --graph_edgeShade:#ffffff;
 --graph_restartMarker:#df0d0d;
 --graph_gridCompact:#ff5b5b6e;
---graph_plotLineWidth:2;
---graph_plotLineWidthWide:2.5;
+--graph_plotLineWidth:3;
+--graph_plotLineWidthWide:4;
 --bgpos_info:no-repeat 15px center/28px;
 --grid:repeating-linear-gradient(90deg,#0000 15px,rgba(120,120,255,.5) 16px,#0000 16px,#0000 30px),repeating-linear-gradient(to top,#0000 11px,rgba(120,120,255,.5) 12px,rgba(255,255,255,0) 12px,rgba(255,255,255,0) 24px);
 --pre:repeating-linear-gradient(180deg,#7878ff33,#d2d2ff66 1px,#d2d2ff66 19px,#7878ff33 19px,#f0f0ff66 20px,#f0f0ff66 40px);

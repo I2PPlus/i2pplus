@@ -21,8 +21,8 @@
 --graph_edgeShade:#ffffff;
 --graph_restartMarker:#df0d0d;
 --graph_gridCompact:#ff5b5b66;
---graph_plotLineWidth:2;
---graph_plotLineWidthWide:2.5;
+--graph_plotLineWidth:3;
+--graph_plotLineWidthWide:4;
 --tier:linear-gradient(180deg,#fff,#dbecff);
 --isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
 --isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
