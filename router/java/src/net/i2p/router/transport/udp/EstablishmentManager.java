@@ -2592,6 +2592,12 @@ public class EstablishmentManager {
                                                   istate == IB_STATE_RETRY_SENT,
                                                   MAX_IB_ESTABLISH_TIME.get(),
                                                   IB_RETRY_SENT_MAX_TIME)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU] Giving up on inbound establishment from "
+                              + cur.getRemoteHostId() + " after " + cur.getLifetime(now)
+                              + "ms in state " + istate
+                              + " (max " + MAX_IB_ESTABLISH_TIME.get() + "ms)");
+                }
                 iter.remove(); // took too long
                 inboundState = cur;
                 expired = true;
@@ -2691,7 +2697,17 @@ public class EstablishmentManager {
                 outboundState = cur;
                 break;
             } else if (cur.getLifetime(now) >= MAX_OB_ESTABLISH_TIME.get()) {
-                // took too long
+                // took too long. Record it: without this the give-up is only visible via
+                // processExpired()'s DEBUG line, which is conditional on a live introduction
+                // having been removed and is off at any sane log level. A build that dies here
+                // is booked against the peer as a timeout, so an unrecorded give-up makes our
+                // own impatience look like a slow peer.
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU] Giving up on outbound establishment to "
+                              + cur.getRemoteAddress() + " after " + cur.getLifetime(now)
+                              + "ms in state " + cur.getState()
+                              + " (max " + MAX_OB_ESTABLISH_TIME.get() + "ms)");
+                }
                 iter.remove();
                 outboundState = cur;
                 break;
