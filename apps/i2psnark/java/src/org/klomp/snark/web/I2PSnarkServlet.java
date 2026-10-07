@@ -1952,9 +1952,9 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</th><th class=tAction>");
 
             if (fc.dht != null && !"2".equals(fc.peerParam)) {
-                out.write("<a id=debugMode href=\"?p=2\" title=\"" + toggleDebug + "\">" + debugModeText + "</a>");
+                out.write("<a id=debugMode href=\"?p=2\" title=\"" + toggleDebug + "\" data-debug-label=\"" + debugModeText + "\" data-normal-label=\"" + normalModeText + "\">" + debugModeText + "</a>");
             } else if (fc.dht != null) {
-                out.write("<a id=debugMode href=\"?p\" title=\"" + toggleDebug + "\">" + normalModeText + "</a>");
+                out.write("<a id=debugMode href=\"?p\" title=\"" + toggleDebug + "\" data-debug-label=\"" + debugModeText + "\" data-normal-label=\"" + normalModeText + "\">" + normalModeText + "</a>");
             }
 
             out.write("</th>");
