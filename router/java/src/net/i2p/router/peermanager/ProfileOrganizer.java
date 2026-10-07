@@ -58,6 +58,12 @@ import net.i2p.util.SystemVersion;
  * 4. Each surviving profile is evaluated via lockedPromoteProfileToTiers()
  * 5. If fast/high-cap tiers fall below minimum thresholds, fallback passes fill gaps
  * (with selectability checks to prevent selecting unusable peers)
+ * <p>
+ * A promotion whose RouterInfo has aged past {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}
+ * and which has no proof of life is held back: the peer is left out of the tier
+ * until a newer publication arrives on its own. Nothing is fetched on the peer's
+ * behalf, unless holding the promotion would starve the tier it would have joined —
+ * see {@link #shouldDeferPromotionOnStaleRouterInfo}.
  *
  * Concurrency: ReentrantReadWriteLock protects all tier maps.
  * reorganize() acquires the write lock; selection methods use the read lock.
@@ -121,6 +127,15 @@ public class ProfileOrganizer {
 
     /** Window used by {@link #getActiveProfileCount()}, in ms. */
     private static final long ACTIVE_WINDOW_MS = 60 * 60 * 1000L;
+
+    /**
+     *  Per-cycle bounds and counters for the promotion deferral on a stale
+     *  RouterInfo.  A cycle is opened by {@link #lockedRebuildTiers} and its
+     *  counters are published by {@link #recordRouterInfoRefreshStats} before the
+     *  reorg write lock is released.
+     *  @since 0.9.72
+     */
+    private final RouterInfoRefresher _refresher = new RouterInfoRefresher();
 
     /**
      * Whether a profile shows activity within the active window: a peer test counted as active, a
@@ -226,6 +241,32 @@ public class ProfileOrganizer {
      * DEFAULT_MAX_ROUTERINFO_AGE_HOURS.
      */
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
+    /**
+     *  RouterInfo age past which a tier promotion is held back, in ms.
+     *
+     *  <p>Separate from {@link #PROP_MAX_ROUTERINFO_AGE_HOURS}, which is the bar
+     *  a RouterInfo must clear to be selected at all. That bar is deliberately
+     *  loose (2h) because a proof of life can stand in for a fresh RouterInfo;
+     *  this one is a promotion-time policy with no such fallback, so it is set
+     *  where the RouterInfo itself is likely to have been superseded: routers
+     *  republish hourly, so anything older than one publishing interval has a
+     *  good chance of describing a peer that has since changed.
+     *
+     *  <p>Holding a promotion costs the peer a tier slot and nothing else — no
+     *  lookup is issued, so the only way a held peer re-enters is by being
+     *  republished to, or by showing proof of life.
+     *
+     *  <p>Set to 0 or less to disable the deferral entirely, which restores plain
+     *  promotion on whatever the netdb holds.
+     *
+     *  @since 0.9.72
+     */
+    public static final String PROP_ROUTERINFO_REFRESH_AGE_MS = "profileOrganizer.routerInfoRefreshAgeMs";
+    /**
+     *  One hour, i.e. one republish interval.
+     *  @since 0.9.72
+     */
+    public static final long DEFAULT_ROUTERINFO_REFRESH_AGE_MS = 60 * 60 * 1000L;
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
     /**
@@ -504,6 +545,15 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.fastOrHighCapProfileCount",
                 "Number of fast or high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
+        // Promotion deferral on a stale RouterInfo. peer.routerInfoRefreshNeeded and
+        // peer.promotedStaleRouterInfo are the hypothesis counters: together they
+        // say how many promotions are being held, and how many are going ahead on a
+        // RouterInfo already known to be stale. Neither implies any network work —
+        // a held promotion is only a peer the tier does not have yet.
+        _context.statManager().createRequiredRateStat("peer.routerInfoRefreshNeeded",
+                "Tier promotions held back for a stale RouterInfo (both tiers counted)", "Peers", RATES);
+        _context.statManager().createRequiredRateStat("peer.promotedStaleRouterInfo",
+                "Tier promotions accepted on a stale RouterInfo by the starvation guard", "Peers", RATES);
     }
 
     /**
@@ -1782,6 +1832,11 @@ public class ProfileOrganizer {
             // Step 4: Reinsert all active profiles and assign tiers
             lockedRebuildTiers(newStrictCapacityOrder, buildSuccess);
 
+            // Step 4a: Publish the promotion-deferral counters the rebuild opened
+            // its cycle for. Read still under the write lock, so the numbers
+            // reported belong to this cycle and to no other.
+            recordRouterInfoRefreshStats();
+
             // Step 5: Fallback to ensure minimum fast peers
             int added = fillFastTierFallbacks(now, newStrictCapacityOrder, buildSuccess);
 
@@ -1953,6 +2008,15 @@ public class ProfileOrganizer {
     /**
      *  Reinserts all active profiles into the tier maps.  Must be called with
      *  the write lock held.
+     *
+     *  <p>Also opens the promotion-deferral cycle, which the tier rebuild is the
+     *  only place that can judge: a promotion is the moment a stale RouterInfo
+     *  starts costing something, and this loop is the sole promotion path that
+     *  sees the whole profile population at once.
+     *
+     *  @param candidates the surviving profile set
+     *  @param buildSuccess cached tunnel build success ratio
+     *  @since 0.9.72
      */
     private void lockedRebuildTiers(Set<PeerProfile> candidates, double buildSuccess) {
         // Fetched once for the whole rebuild; lockedPlaceProfile() would otherwise
@@ -1960,8 +2024,13 @@ public class ProfileOrganizer {
         int known = _context.netDb().getKnownRouters();
         int active = _context.commSystem().countActivePeers();
         int minHighCap = getMinimumHighCapacityPeers(known);
+        int minFast = getMinimumFastPeers(known);
         int maxFast = getMaximumFastPeers(known, active);
         int maxHighCap = getMaximumHighCapPeers(known, active);
+        // The tier minimums are the starvation floors: they are what the fallback
+        // passes below drive the tiers back up to, so holding a promotion back
+        // while the tier is under one would only compete with those passes.
+        _refresher.beginCycle(getRouterInfoRefreshAgeMs(), minFast, minHighCap);
         for (PeerProfile profile : candidates) {
             lockedPlaceProfile(profile, buildSuccess, minHighCap, maxFast, maxHighCap);
         }
@@ -3758,6 +3827,15 @@ public class ProfileOrganizer {
      * active peer count, neither of which changes during a pass, so the caller
      * fetches them once for the whole scan.
      *
+* <p>A promotion whose RouterInfo is older than
+     * {@link #PROP_ROUTERINFO_REFRESH_AGE_MS} and which has no proof of life is
+     * held back, leaving the peer out of the tier — see
+     * {@link #holdPromotionForRefresh}. No lookup is issued on its behalf, so a
+     * held peer re-enters only by being republished to, or by showing life.
+     * {@link #promoteToFillTiers}, which fills gaps from the incremental
+     * add/remove paths rather than from the rebuild walk, applies the same
+     * per-peer gates and so inherits the same hold.
+     *
      * @param profile the profile to evaluate
      * @param buildSuccess cached tunnel build success ratio
      * @param minHighCap minimum high-capacity peers, fetched once per scan
@@ -3801,6 +3879,12 @@ public class ProfileOrganizer {
         // state is persisted.
         clearLossIfReadmitted(profile);
 
+        // Only the peers that clear every gate above reach this line, so the
+        // staleness test costs one netDb map lookup for a candidate that was
+        // actually going to be promoted.
+        long now = _context.clock().now();
+        boolean staleRouterInfo = promotionNeedsRouterInfoRefresh(profile, now);
+
         double effectiveCapThreshold = Math.max(_thresholdCapacityValue, CapacityCalculator.GROWTH_FACTOR);
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
@@ -3817,7 +3901,9 @@ public class ProfileOrganizer {
             boolean hasCapacity = profile.getCapacityValue() >= effectiveCapThreshold;
             boolean tierRoom = !hcTight && (hcNeedsFilling || hcHasRoom);
             boolean noRecentBlock = !(!hcTight && recentFailures);
-            if (noRecentBlock && (hasCapacity || tierRoom) && isHighBandwidthCapable(peer)) {
+            if (noRecentBlock && (hasCapacity || tierRoom) && isHighBandwidthCapable(peer) &&
+                !holdPromotionForRefresh(peer, staleRouterInfo, _highCapacityPeers.size(),
+                                         _refresher.highCapFloor())) {
                 _highCapacityPeers.put(peer, profile);
             }
         }
@@ -3833,28 +3919,34 @@ public class ProfileOrganizer {
             boolean hasProvenThroughput = profile.getPeakTunnel1mThroughputKBps() > 0;
             boolean alreadyHighCap = _highCapacityPeers.containsKey(peer);
             boolean fastQuality = _fastQualityCount >= MIN_FAST_QUALITY_COUNT;
+            // The three admission paths decide whether this peer is a fast-tier
+            // candidate at all; the stale-RouterInfo hold is applied to the
+            // decision rather than to the branch, so a peer these paths would
+            // have dropped is not counted as a deferral.
+            boolean fastCandidate;
             if (!recentFailures && alreadyHighCap &&
                 (profile.isLowLatency() || !profile.hasBeenTested())) {
                 // High-cap responsive: peer is in high-cap (X/P/O or
                 // capacity-qualified) and is low-latency or untested.
                 // Tested-but-slow peers are excluded — their bandwidth
                 // tier is real, but their responsiveness isn't.
-                putFastPeer(peer, profile);
+                fastCandidate = true;
             } else if (fastQuality) {
                 // Quality mode: all tests passing — peer test, active,
                 // no recent failures, AND proven throughput (or already high-cap)
-                if (profile.isLowLatency() && profile.getIsActive() &&
-                    !recentFailures && (hasProvenThroughput || alreadyHighCap)) {
-                    putFastPeer(peer, profile);
-                }
+                fastCandidate = profile.isLowLatency() && profile.getIsActive() &&
+                                !recentFailures && (hasProvenThroughput || alreadyHighCap);
             } else {
                 // Filling mode: speed-based or low-latency bypass, but still reject recent failures
-                if (!recentFailures &&
-                    ((profile.getSpeedValue() >= effectiveSpeedThreshold &&
-                     (profile.getIsActive() || hasProvenThroughput)) ||
-                    profile.isLowLatency())) {
-                    putFastPeer(peer, profile);
-                }
+                fastCandidate = !recentFailures &&
+                                ((profile.getSpeedValue() >= effectiveSpeedThreshold &&
+                                  (profile.getIsActive() || hasProvenThroughput)) ||
+                                 profile.isLowLatency());
+            }
+            if (fastCandidate &&
+                !holdPromotionForRefresh(peer, staleRouterInfo, _fastPeers.size(),
+                                         _refresher.fastFloor())) {
+                putFastPeer(peer, profile);
             }
         }
 
@@ -3862,6 +3954,148 @@ public class ProfileOrganizer {
         if (!_wellIntegratedPeers.containsKey(peer) &&
             profile.getIntegrationValue() >= _thresholdIntegrationValue) {
             _wellIntegratedPeers.put(peer, profile);
+        }
+    }
+
+    /**
+     *  Whether this peer's stored RouterInfo is stale enough that promoting on it
+     *  risks a build failure.
+     *
+     *  <p>Reads the same staleness notion {@link #hasValidRouterInfo} uses — older
+     *  than the threshold and no proof of life — against the shorter
+     *  {@link #PROP_ROUTERINFO_REFRESH_AGE_MS}. Proof of life exempts working
+     *  peers, which is what keeps the affected population small: a peer we have
+     *  talked to in the last hour is judged on what it just told us, not on how
+     *  old its last publication is.
+     *
+     *  @param profile the profile being promoted
+     *  @param now current time in ms
+     *  @return whether the stored RouterInfo is too old to promote on
+     *  @since 0.9.72
+     */
+    private boolean promotionNeedsRouterInfoRefresh(PeerProfile profile, long now) {
+        // No open cycle means no hold, so skip the netDb read entirely: with the
+        // property disabled this costs nothing per candidate.
+        if (!_refresher.isDeferring()) return false;
+        if (profile == null) return false;
+        RouterInfo info = lookupRouterInfoUnvalidated(profile.getPeer());
+        return needsRouterInfoRefresh(info, profile, now, _refresher.refreshAgeMs());
+    }
+
+    /**
+     *  Whether a RouterInfo is old enough that promoting on it risks a build
+     *  failure: published before the threshold and no proof of life.
+     *
+     *  <p>An absent RouterInfo is not stale, it is missing, and is not this
+     *  predicate's business: {@link #isHighBandwidthCapable} and
+     *  {@link #isFastTierCapable} already refuse to promote a peer with no
+     *  RouterInfo at all, so there is no promotion here to hold.
+     *
+     *  <p>Pure decision — no context access, safe for unit tests.
+     *
+     *  @param info the peer's stored RouterInfo, may be null
+     *  @param profile the peer profile supplying proof of life, may be null
+     *  @param now current time in ms
+     *  @param refreshAgeMs staleness threshold in ms
+     *  @return whether the RouterInfo is too stale to promote on
+     *  @since 0.9.72
+     */
+    static boolean needsRouterInfoRefresh(RouterInfo info, PeerProfile profile, long now, long refreshAgeMs) {
+        if (info == null) return false;
+        if (refreshAgeMs <= 0) return false;
+        if (info.getPublished() >= now - refreshAgeMs) return false;
+        return !hasRecentProofOfLife(profile, now);
+    }
+
+    /**
+     *  Apply the hold to one tier insert: leave the peer out of the tier, or let
+     *  it in.
+     *
+     *  <p>The starvation guard is the reason this is not a plain veto.  A tier
+     *  that is already at its configured minimum is one the fallback passes
+     *  would defend anyway, so leaving a stale peer out of it costs nothing
+     *  there.  Below the minimum the hold would compete with those passes for
+     *  the same candidates and the tier could end up short, which is the worse
+     *  of the two failures: a stale promotion risks one bad build, an empty tier
+     *  sends every build back to the general pool.  When the guard opens, the
+     *  promotion is counted so the team can see exactly how often that happens.
+     *
+     *  @param peer the peer being promoted
+     *  @param staleRouterInfo whether the peer carries a stale RouterInfo
+     *  @param tierSize current size of the tier being joined
+     *  @param safeFloor size at or above which this tier can leave it out
+     *  @return whether the promotion must be held back
+     *  @since 0.9.72
+     */
+    private boolean holdPromotionForRefresh(Hash peer, boolean staleRouterInfo, int tierSize,
+                                            int safeFloor) {
+        if (!staleRouterInfo) return false;
+        if (!_refresher.isDeferring()) return false;
+        if (shouldDeferPromotionOnStaleRouterInfo(tierSize, safeFloor)) {
+            _refresher.noteDeferral();
+            return true;
+        }
+        if (_log.shouldDebug()) {
+            _log.debug("Promoting peer [" + peer.toBase32().substring(0, 6) +
+                       "] on a stale RouterInfo: tier at " + tierSize + " below floor " + safeFloor);
+        }
+        _refresher.noteStalePromotion();
+        return false;
+    }
+
+    /**
+     *  Whether a promotion may be held back on a stale RouterInfo without
+     *  risking the tier it would join.
+     *
+     *  <p>The floor is the tier's configured minimum, which is also what
+     *  {@link #fillFastTierFallbacks} and {@link #fillHighCapFallback} drive the
+     *  tier back up to and what {@link #restorePreservedPeers} protects at half.
+     *  At or above the minimum the tier can afford to leave the peer out; below
+     *  it, it cannot.
+     *
+     *  <p>Pure decision — no context access, safe for unit tests.
+     *
+     *  @param tierSize current size of the tier the peer would join
+     *  @param safeFloor size at or above which the tier can leave it out
+     *  @return whether the promotion should be held back
+     *  @since 0.9.72
+     */
+    static boolean shouldDeferPromotionOnStaleRouterInfo(int tierSize, int safeFloor) {
+        return tierSize >= safeFloor;
+    }
+
+    /**
+     *  RouterInfo age past which a promotion is held back, in ms.  Read once per
+     *  reorganisation cycle rather than cached per candidate, because that is
+     *  the only place it is consulted.
+     *
+     *  @return the staleness threshold in ms; &lt;= 0 disables the hold
+     *  @since 0.9.72
+     */
+    private long getRouterInfoRefreshAgeMs() {
+        return _context.getProperty(PROP_ROUTERINFO_REFRESH_AGE_MS, DEFAULT_ROUTERINFO_REFRESH_AGE_MS);
+    }
+
+    /**
+     *  Publish the promotion-deferral counters for the cycle just finished.
+     *
+     *  <p>{@code peer.routerInfoRefreshNeeded} is a population, so it is written
+     *  every cycle including zero — a flat zero line is the signal that nothing
+     *  is being held back. The stale-promotion count is an event count and
+     *  follows the existing convention of writing nothing when it is zero.
+     *
+     *  @since 0.9.72
+     */
+    private void recordRouterInfoRefreshStats() {
+        int deferred = _refresher.deferredCount();
+        _context.statManager().addRateData("peer.routerInfoRefreshNeeded", deferred);
+        int stale = _refresher.promotedStaleCount();
+        if (stale > 0) {
+            _context.statManager().addRateData("peer.promotedStaleRouterInfo", stale);
+        }
+        if (_log.shouldInfo() && (deferred > 0 || stale > 0)) {
+            _log.info("Stale RouterInfo hold: " + deferred + " promotions held, " + stale +
+                      " promoted on a stale RouterInfo");
         }
     }
 
