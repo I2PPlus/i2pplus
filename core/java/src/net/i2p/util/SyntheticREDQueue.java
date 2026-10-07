@@ -524,7 +524,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
         _lastQueueUpdateTime = time;
 
         if (_log.shouldDebug()) {
-            _log.debug("Queue update - deltaT: " + originalDeltaT + " newData: " + originalNewDataSize + " newQueueSize: " + newQueueSize + " queueSizeEstimate: " + _queueSizeEstimate + " " + this);
+            _log.debug("Queue update - deltaT: " + originalDeltaT + " newData: " + originalNewDataSize +
+                       " newQueueSize: " + newQueueSize + " queueSizeEstimate: " + _queueSizeEstimate + " " + this);
         }
     }
 
@@ -541,13 +542,37 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     }
 
     /**
-     * Returns a human-readable string displaying the current bandwidth and queue size estimates,
-     * formatted for debugging or informational output.
+     * Returns a human-readable string displaying the current bandwidth and queue size
+     * estimates, formatted for DEBUG logging.
      *
      * @return formatted status string including bandwidth and average queue size
      */
     @Override
     public String toString() {
-        return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") + (_avgQueueSize > 0 ? "Average Queue Size / " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") + "Limit: " + DataHelper.formatSize2Decimal( _bandwidthBps, false) + "Bytes/s";
+        return "\n* " + (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
+               "Bytes/s " : "") + (_avgQueueSize > 0 ?
+               "Average Queue Size: " : "") + (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + "B / " : "") +
+               "Limit: " + DataHelper.formatSize2Decimal( _bandwidthBps, false) + "Bytes/s";
+    }
+
+    /**
+     * Returns a cut-down status string with the bandwidth estimate and the configured limit,
+     * omitting the average queue size. The queue size is an internal RED estimator depth, useful
+     * when diagnosing the estimator at DEBUG but noise on an operator-facing summary row, so the
+     * I2PSnark netstatus debug section uses this form instead of {@link #toString()}.
+     *
+     * <p>Values are separated by a bullet, and the string carries a leading bullet, matching the
+     * multi-value debug spans in {@code KRPC}. Inline HTML is deliberate: this method exists only
+     * for that single debug row.
+     *
+     * @return formatted status string with bandwidth and limit only
+     * @since 0.9.71+
+     */
+    public String toStringShort() {
+        String bullet = "&nbsp;&bullet;&nbsp;";
+        StringBuilder buf = new StringBuilder(128);
+        buf.append(bullet).append(DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false)).append("Bytes/s")
+           .append(bullet).append("Limit: ").append(DataHelper.formatSize2Decimal(_bandwidthBps, false)).append("Bytes/s");
+        return buf.toString();
     }
 }
