@@ -102,11 +102,14 @@ public class LocaleWebAppHandler extends HandlerWrapper
                     }
                 }
             }
-        } else if (pathInContext.startsWith("/js/")) {
-            // war internal
-            httpResponse.setCharacterEncoding("ISO-8859-1");
-        } else if (pathInContext.endsWith(".css")) {
-            // war internal
+        } else if (pathInContext.startsWith("/js/") || pathInContext.endsWith(".css")) {
+            // war internal. Every .js and .css under the war is UTF-8 on disk, so say so:
+            // the default here is ISO-8859-1, which turns each non-ASCII byte of a UTF-8
+            // sequence into its own Latin-1 character. vdomParser.js carries the whole
+            // named-entity table (nbsp, thinsp, ndash, bull, aacute...) as raw literals,
+            // and morphdom.js and tunnels.js have non-ASCII too, so a Latin-1 label makes
+            // the browser decode those literals as mojibake and the auto-refreshed cells
+            // render wrong. Matches the .css case added in 79dd448087.
             httpResponse.setCharacterEncoding("UTF-8");
         }
         super.handle(newPath, baseRequest, httpRequest, httpResponse);
