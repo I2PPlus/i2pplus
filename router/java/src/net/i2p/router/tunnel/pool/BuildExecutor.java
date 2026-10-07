@@ -844,31 +844,12 @@ public class BuildExecutor implements Runnable {
         // Base timeout from mainline (13s normal, 15s slow)
         long baseTimeout = BuildRequestor.getRequestTimeout(_context);
 
-        // Start at base, then adjust marginally based on success rate.
-        // Under high timeout rates (>30%), give builds more time to complete
-        // instead of timing them out prematurely, which wastes the build slot.
-        _adaptiveTimeout = baseTimeout;
-
-        if (successRate > 0.85) {
-            // High success — network is fast. Reduce slightly.
-            _adaptiveTimeout += -3 * 1000L;  // -3s
-        } else if (successRate > 0.70) {
-            // Good success — keep near base.
-            _adaptiveTimeout += 0;
-        } else if (successRate > 0.50) {
-            // Moderate success — modest increase.
-            _adaptiveTimeout += 2 * 1000L;  // +2s
-        } else if (timeoutRate > _concurrencyThrottleThreshold) {
-            // High timeout rate — increase timeout significantly to reduce
-            // spurious timeouts that waste build slots and drive the
-            // cascade further.  The concurrency throttle (below) handles
-            // the root cause (too many concurrent builds); this reduces
-            // the symptom (premature timeout expiry).
-            _adaptiveTimeout += 7 * 1000L;  // +7s
-        } else {
-            // Low success — increase to give slow builds more time.
-            _adaptiveTimeout += 5 * 1000L;  // +5s
-        }
+        // Start at base, then adjust based on the two signals. The timeout rate
+        // is consulted first inside adaptiveTimeoutDelta(): a high timeout rate
+        // implies a success rate below the throttle threshold, so ordering it
+        // ahead of the success ladder cannot shadow the fast-network reduction.
+        _adaptiveTimeout = baseTimeout + adaptiveTimeoutDelta(successRate, timeoutRate,
+                                                                _concurrencyThrottleThreshold);
 
         // Clamp: never below 10s regardless of rate; allow adaptive increase up to 30s
         if (_adaptiveTimeout < 10*1000L) { _adaptiveTimeout = 10*1000L; }
@@ -881,20 +862,18 @@ public class BuildExecutor implements Runnable {
         // per-build success rate at the cost of slower aggregate build speed.
         int baseMax = getMaxConcurrentBuilds();
         if (timeoutRate > _concurrencyThrottleThreshold) {
-            // Throttle: reduce by 20% per threshold crossing (floored at 60% of base).
-            // Softer step (was 75%/50%) to avoid over-throttling on transient spikes.
-            int throttled = (int) (baseMax * 0.80);
-            throttled = Math.max(throttled, (int) (baseMax * 0.60));
+            // Throttle: cut the CURRENT value by 20%, floored at 60% of base, so
+            // a sustained timeout storm walks concurrency down to the floor
+            // instead of pinning at a single shallow step.
+            int throttled = throttledConcurrency(_adaptiveMaxConcurrentBuilds, baseMax);
             if (_adaptiveMaxConcurrentBuilds > throttled) {
                 _adaptiveMaxConcurrentBuilds = throttled;
             }
         } else if (timeoutRate < _concurrencyRestoreThreshold &&
                    successRate > _concurrencyRestoreSuccessThreshold) {
-            // Restore: increase by 25% toward base (never exceed base).
-            // Faster recovery (was 10%) to avoid prolonged throttling after
-            // a transient spike subsides.
-            int restored = _adaptiveMaxConcurrentBuilds + Math.max(1, baseMax / 4);
-            _adaptiveMaxConcurrentBuilds = Math.min(restored, baseMax);
+            // Restore: a small step toward base, so recovery ramps instead of
+            // snapping back to full concurrency and re-triggering the throttle.
+            _adaptiveMaxConcurrentBuilds = restoredConcurrency(_adaptiveMaxConcurrentBuilds, baseMax);
         }
 
         // Also calculate adaptive first-hop timeout based on first-hop success rate
@@ -952,6 +931,27 @@ public class BuildExecutor implements Runnable {
     private static final int CPU_LOAD_CRITICAL = 90;
     /**  ms added to the base timeout for the longer outbound reply path  @since 0.9.71+ */
     private static final long OUTBOUND_EXTRA_MS = 8 * 1000L;
+
+    /**  success rate above which the network is answering fast enough to shave time off  @since 0.9.71+ */
+    private static final double SUCCESS_FAST = 0.85;
+    /**  success rate above which the base timeout is left alone  @since 0.9.71+ */
+    private static final double SUCCESS_GOOD = 0.70;
+    /**  success rate above which a modest timeout increase applies  @since 0.9.71+ */
+    private static final double SUCCESS_MODERATE = 0.50;
+    /**  reduction applied when the network is fast  @since 0.9.71+ */
+    private static final long FAST_NETWORK_REDUCTION_MS = -3 * 1000L;
+    /**  increase applied at moderate success  @since 0.9.71+ */
+    private static final long MODERATE_RECOVERY_MS = 2 * 1000L;
+    /**  increase applied when timeouts dominate, to stop wasting build slots  @since 0.9.71+ */
+    private static final long HIGH_TIMEOUT_RECOVERY_MS = 7 * 1000L;
+    /**  increase applied at low success driven by rejects rather than timeouts  @since 0.9.71+ */
+    private static final long LOW_SUCCESS_RECOVERY_MS = 5 * 1000L;
+    /**  fraction of the current concurrency removed on each throttle crossing  @since 0.9.71+ */
+    private static final double THROTTLE_FACTOR = 0.80;
+    /**  fraction of base concurrency the throttle may not go below  @since 0.9.71+ */
+    private static final double THROTTLE_FLOOR_RATIO = 0.60;
+    /**  base concurrency is restored in 1/THROTTLE_RESTORE_DIVISOR steps  @since 0.9.71+ */
+    private static final int THROTTLE_RESTORE_DIVISOR = 16;
 
     /**
      * Calculate adaptive timeout based on tunnel characteristics and network conditions.
@@ -1011,6 +1011,84 @@ public class BuildExecutor implements Runnable {
      * @return the adaptive timeout in milliseconds, never above 45s
      * @since 0.9.71+
      */
+    /**
+     *  The adjustment to add to the base build timeout for the observed outcome mix.
+     *
+     *  <p>The timeout rate is tested before the success ladder, deliberately. A timeout
+     *  rate above {@code throttleThreshold} implies a success rate below
+     *  {@code 1 - throttleThreshold}, so hoisting it can never shadow the fast-network
+     *  reduction. Testing it last made the high-timeout recovery unreachable for every
+     *  success rate above 50% - precisely the 50-70% band where a high timeout rate is
+     *  both common and expensive, since a timeout burns a whole build slot where a
+     *  reject costs a round trip.
+     *
+     * @param successRate fraction of recent builds that succeeded, 0..1
+     * @param timeoutRate fraction of recent builds that timed out, 0..1
+     * @param throttleThreshold timeout rate above which slot waste dominates, 0..1
+     * @return milliseconds to add to the base timeout; may be negative
+     * @since 0.9.71+
+     */
+    static long adaptiveTimeoutDelta(double successRate, double timeoutRate,
+                                     double throttleThreshold) {
+        if (timeoutRate > throttleThreshold) {
+            return HIGH_TIMEOUT_RECOVERY_MS;
+        }
+        if (successRate > SUCCESS_FAST) {
+            return FAST_NETWORK_REDUCTION_MS;
+        }
+        if (successRate > SUCCESS_GOOD) {
+            return 0;
+        }
+        if (successRate > SUCCESS_MODERATE) {
+            return MODERATE_RECOVERY_MS;
+        }
+        return LOW_SUCCESS_RECOVERY_MS;
+    }
+
+    /**
+     *  The concurrency ceiling for one throttle crossing: 20% off the current value,
+     *  never below 60% of base.
+     *
+     *  <p>Scaling the current value rather than the base is what makes this a ramp. The
+     *  previous form took 80% of base and clamped with 60% of base, and since 0.8x is
+     *  always greater than 0.6x the clamp could never bind: the value was pinned at a
+     *  single shallow step and the documented floor was unreachable. Repeated crossings
+     *  now walk 96 to 76 to 60 to 57 and stop.
+     *
+     * @param current current adaptive concurrency ceiling
+     * @param base the unthrottled configured ceiling
+     * @return the reduced ceiling, never above {@code current}
+     * @since 0.9.71+
+     */
+    static int throttledConcurrency(int current, int base) {
+        int next = (int) (current * THROTTLE_FACTOR);
+        int floor = (int) (base * THROTTLE_FLOOR_RATIO);
+        // min() with current as well as the floor: when current already sits below the
+        // floor the floor must not hand back a value above it. The caller only ever
+        // lowers the ceiling, so this is unreachable today, but the seam is documented
+        // as never exceeding its input and should hold to that on its own.
+        return Math.min(current, Math.max(next, floor));
+    }
+
+    /**
+     *  The concurrency ceiling for one restore step: a small step toward base.
+     *
+     *  <p>Stepping by a sixteenth rather than a quarter keeps recovery slower than the
+     *  20% the throttle removes, so a transient spike does not put the router back at
+     *  full concurrency and straight into another throttle crossing. The previous
+     *  quarter-step reached base from a single 20% cut in one window, which made the
+     *  throttle and the restore symmetric and the control oscillatory.
+     *
+     * @param current current adaptive concurrency ceiling
+     * @param base the unthrottled configured ceiling
+     * @return the increased ceiling, never above {@code base}
+     * @since 0.9.71+
+     */
+    static int restoredConcurrency(int current, int base) {
+        int step = Math.max(1, base / THROTTLE_RESTORE_DIVISOR);
+        return Math.min(current + step, base);
+    }
+
     static long computeAdaptiveTimeout(long baseTimeout, int length, boolean isInbound,
                                        int cpuLoad, long rttFloor) {
         long result = baseTimeout;
