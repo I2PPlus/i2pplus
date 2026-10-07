@@ -15,10 +15,10 @@
 --graph_plotDash:0;
 --graph_textColor:#f4f4be;
 --graph_axisColor:#f4f4be;
---graph_gridMinor:#f4f4be1e;
+--graph_gridMinor:#f4f4be0f;
 --graph_gridMajor:#c8c80032;
---graph_gridMinorDash:1 2;
---graph_gridMajorDash:1 2;
+--graph_gridMinorDash:1;
+--graph_gridMajorDash:1;
 --graph_background:#000000c0;
 --graph_edgeShade:#00000000;
 --graph_restartMarker:#dc1030dc;
