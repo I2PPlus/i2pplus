@@ -470,9 +470,12 @@ those tests, so they switch at the same widths, but their **values are entirely 
 the line over a fill is an edge on that fill, not a series in its own right, so it does not take
 its weight from the plot line above it.
 
-**The four shipped themes all seed these to `3`, `4`, `2`, `1.5`, `2` and `1`**, but nothing
-ties the themes together — each declares its own, and they may diverge. Three things are worth
-knowing before you tune them:
+**When a theme declares none of these, the built-in defaults are `3`, `4`, `2`, `1.5`, `2` and
+`1`.** Every shipped theme declares all six rather than relying on those, and they do not
+agree with each other — three of them use the defaults, while `dark` draws lighter at `2` and
+`2.5`. Nothing ties the themes together, so read the value out of the theme you are editing
+rather than assuming a number here. Three further things are worth knowing before you tune
+them:
 
 - **The `Wide` value only applies past 800px, and a default tile is 400px wide.** It is
   unreachable until a user raises the graph width themselves, so treat it as opt-in for
