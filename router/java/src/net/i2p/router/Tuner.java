@@ -3135,13 +3135,53 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * Tunes MAX_OB_ESTABLISH_TIME based on outbound establish time stat.
      * Target: ~4x observed average outbound establish time with floor.
      */
+    /**
+     *  Lowest value either establish-timeout param may be tuned to.
+     *
+     *  <p>Measured on a live router: at 2250 the outbound path abandoned roughly 117
+     *  session establishments per minute, every one expiring on the deadline rather than
+     *  on an observed peer failure, and 99.6% of them inside the SSU2 token exchange,
+     *  which costs one round trip more than SSU1. Raising the budget to 5000 took that to
+     *  zero - but build success fell from 64.5% to 56.0% and throughput 12%, because the
+     *  patience moves out of the establishment path and into the build slot. 4000 is the
+     *  compromise: comfortably above the value known to be harmful, below the one where
+     *  slot occupancy starts costing builds. The original floor of 1500 sat well below the
+     *  harmful value, so a slider drag or a restore-defaults could silently reintroduce
+     *  the failure.
+     *
+     *  @since 0.9.71+
+     */
+    public static final int ESTABLISH_TIMEOUT_MIN = 4000;
+
+    /**
+     *  Target establish timeout for an observed mean handshake duration.
+     *
+     *  <p>Four times the observed mean, floored by the param's own minimum. The floor must
+     *  come from {@code min} rather than a literal: a hardcoded floor here can sit far
+     *  below the value the setter enforces, and {@link BaseParam#clamp} walks the stored
+     *  value toward the target by {@code _step} without consulting {@code min} at all - so
+     *  the stored value would drift down while the runtime value stayed clamped, leaving
+     *  the console permanently displaying a number the router was not using.
+     *
+     *  @param observed mean successful handshake duration in ms, or NaN if unknown
+     *  @param min the param's configured minimum
+     *  @return the target in ms, never below {@code min}
+     *  @since 0.9.71+
+     */
+    static int establishTimeoutTarget(double observed, int min) {
+        if (Double.isNaN(observed)) {
+            return min;
+        }
+        return Math.max(min, (int) (observed * 4));
+    }
+
     private class ObEstablishTimeParam extends BaseParam {
 
         ObEstablishTimeParam() {
             super("MAX_OB_ESTABLISH_TIME", "Outbound establish timeout (ms)",
                   SUB_TRANSPORT,
 
-                  1500, 5000, 250, "udp.outboundEstablishTime", _context);
+                  ESTABLISH_TIMEOUT_MIN, 10000, 250, "udp.outboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -3178,7 +3218,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (Double.isNaN(observed)) {
                 target = current;
             } else {
-                target = Math.max(1500, (int) (observed * 4));
+                target = establishTimeoutTarget(observed, _min);
             }
 
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)
@@ -3201,7 +3241,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("MAX_IB_ESTABLISH_TIME", "Inbound establish timeout (ms)",
                   SUB_TRANSPORT,
 
-                  1500, 5000, 250, "udp.inboundEstablishTime", _context);
+                  ESTABLISH_TIMEOUT_MIN, 10000, 250, "udp.inboundEstablishTime", _context);
         }
 
         protected void applyValue(int value) {
@@ -3238,7 +3278,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             if (Double.isNaN(observed)) {
                 target = current;
             } else {
-                target = Math.max(1500, (int) (observed * 4));
+                target = establishTimeoutTarget(observed, _min);  // see ObEstablishTimeParam
             }
 
             if (current >= target * 0.5 && current <= target * 1.5 && !hasEstablishFailures)

@@ -251,7 +251,11 @@ public class UDPTransport extends TransportImpl {
      * @param ms the outbound establish timeout, bounded 1500-5000ms
      */
     public static void setMaxObEstablishTime(long ms) {
-        EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(Math.max(1500, Math.min(5000, ms)));
+        // Floor is Tuner.ESTABLISH_TIMEOUT_MIN: below roughly this value the deadline,
+        // not the peer, is what ends an establishment, and the resulting build timeouts
+        // get charged to the peer's name.
+        EstablishmentManager.MAX_OB_ESTABLISH_TIME.set(
+            Math.max(Tuner.ESTABLISH_TIMEOUT_MIN, Math.min(10000, ms)));
     }
 
     /**
@@ -264,7 +268,8 @@ public class UDPTransport extends TransportImpl {
      * @param ms the inbound establish timeout, bounded 1500-5000ms
      */
     public static void setMaxIbEstablishTime(long ms) {
-        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(Math.max(1500, Math.min(5000, ms)));
+        EstablishmentManager.MAX_IB_ESTABLISH_TIME.set(
+            Math.max(Tuner.ESTABLISH_TIMEOUT_MIN, Math.min(10000, ms)));
     }
 
     /**
