@@ -3,7 +3,10 @@ package org.rrd4j.graph;
 import java.awt.Font;
 import java.awt.Paint;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents the time axis (x-axis) in RRD graphs. Handles time-based grid lines, labels, and tick
@@ -93,11 +96,39 @@ class TimeAxis extends Axis {
 
         drawMinorTicks();
         drawMajorTicks();
-        drawMinorGrids();
+        // The major unit is a whole multiple of the minor unit in every tick setting, so
+        // every major position is also a minor position. The minor pass therefore has to
+        // leave the major positions alone, or each major gridline gets emitted twice, once
+        // by each pass, drawn on top of itself. Collected only when the minor grid will
+        // actually draw, since that is the only consumer.
+        drawMinorGrids(gdef.noMinorGrid ? Collections.emptySet() : collectMajorGridX());
         drawMajorGrids();
         drawLabels();
 
         return true;
+    }
+
+    /**
+     * Walks the major unit positions and returns the x coordinates they land on.
+     *
+     * <p>Collected before anything is drawn so the minor pass can leave them alone. Keyed on
+     * the mapped x rather than on the timestamp because the major unit can be a month or a
+     * year, which has no fixed length in seconds to test a position against.
+     *
+     * @return the x coordinates claimed by a major gridline, never null
+     * @since 0.9.71+
+     */
+    private Set<Integer> collectMajorGridX() {
+        Set<Integer> xs = new HashSet<>();
+        adjustStartingTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
+        for (int status = getTimeShift(); status <= 0; status = getTimeShift()) {
+            if (status == 0) {
+                long time = calendar.getTime().getTime() / 1000L;
+                xs.add(mapper.xtr(time));
+            }
+            findNextTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
+        }
+        return xs;
     }
     /**
      * Draw minor ticks
@@ -138,10 +169,11 @@ class TimeAxis extends Axis {
         }
     }
     /**
-     * Draw minor grids
+     * Draw minor grids, skipping any position a major gridline already claimed.
+     *
+     * @param majorX x coordinates owned by the major grid, drawn by {@link #drawMajorGrids()}
      */
-
-    private void drawMinorGrids() {
+    private void drawMinorGrids(Set<Integer> majorX) {
         if (!gdef.noMinorGrid) {
             adjustStartingTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
             Paint color = gdef.getColor(ElementsNames.grid);
@@ -150,7 +182,9 @@ class TimeAxis extends Axis {
                 if (status == 0) {
                     long time = calendar.getTime().getTime() / 1000L;
                     int x = mapper.xtr(time);
-                    worker.drawLine(x, y0, x, y1, color, gdef.majorGridStroke);
+                    if (!majorX.contains(x)) {
+                        worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
+                    }
                 }
                 findNextTime(tickSetting.minorUnit, tickSetting.minorUnitCount);
             }
@@ -168,7 +202,7 @@ class TimeAxis extends Axis {
             if (status == 0) {
                 long time = calendar.getTime().getTime() / 1000L;
                 int x = mapper.xtr(time);
-                worker.drawLine(x, y0, x, y1, color, gdef.gridStroke);
+                worker.drawLine(x, y0, x, y1, color, gdef.majorGridStroke);
             }
             findNextTime(tickSetting.majorUnit, tickSetting.majorUnitCount);
         }
