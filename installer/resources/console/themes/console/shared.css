@@ -3,10 +3,10 @@
 
 :root{--tunerGraph:#292}
 iframe{border:0}
-html:not(.en) #graphs label input,html:not(.en) #graphs label select{margin:0 6px 2px 2px}
-html:not(.en) #graphs .nowrap{min-width:600px;font-size:90%}
-html:not(.en) #graphs .nowrap b{min-width:200px}
-html:not(.en) #graphs .optionlist{columns:600px auto}
+html:not([lang=en]) #graphs label input,html:not([lang=en]) #graphs label select{margin:0 6px 2px 2px}
+html:not([lang=en]) #graphs .nowrap{min-width:600px;font-size:90%}
+html:not([lang=en]) #graphs .nowrap b{min-width:200px}
+html:not([lang=en]) #graphs .optionlist{columns:600px auto}
 .leaseset .ekey,.leaseset .stype{margin-left:2px!important;float:right}
 .expanded #ffstatus,#ffconf:hover #ffstatus{opacity:0}
 .hasExpandedElement #floodfillconfig{margin-bottom:-1px;display:table!important}
