@@ -1700,7 +1700,7 @@ class TunnelRenderer {
         out.write("<th class=inCount title=\"" + _t("Inbound") + ": " + _t("Active / Configured") + "\">" +
                    inCount + sep + inWanted + "</th>");
         out.write("<th class=outCount title=\"" + _t("Outbound") + ": " + _t("Active / Configured") + "\">" +
-                   outCount + sep + outWanted + "</th><th id=sep></th>");
+                   outCount + sep + outWanted + "</th><th class=sep></th>");
         out.write("<th class=\"inBuild" + (buildIn ? " building" : "") + "\" title=\"" + _t("Inbound") +
                   ": " + _t("Building") + "&hellip;\">" + inBuilding + "</th>");
         out.write("<th class=\"outBuild" + (buildOut ? " building" : "") + "\"  title=\"" + _t("Outbound") +
