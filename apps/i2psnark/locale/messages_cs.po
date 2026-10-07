@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "Torrent se všemi díly: NyaaTorrents."
 
 msgid "ETA"
-msgstr "Plán dokončení"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "Recept"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Míra stahování"
 
 msgid "TX"
-msgstr "Léčebný postup NOS"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Míra nahrávání"

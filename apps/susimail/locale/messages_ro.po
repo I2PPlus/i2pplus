@@ -279,10 +279,10 @@ msgid "To"
 msgstr "Pentru"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Subiect"

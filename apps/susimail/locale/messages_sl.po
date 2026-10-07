@@ -282,10 +282,10 @@ msgid "To"
 msgstr "Za"
 
 msgid "Cc"
-msgstr "Kp"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Skp"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Naslov"

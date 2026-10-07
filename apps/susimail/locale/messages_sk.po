@@ -276,10 +276,10 @@ msgid "To"
 msgstr "Komu"
 
 msgid "Cc"
-msgstr "Kópia"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Skrytá kópia"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Predmet"

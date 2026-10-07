@@ -1294,7 +1294,7 @@ msgid "Sidebar"
 msgstr "Pasek boczny"
 
 msgid "UI"
-msgstr "Interfejs"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tunele"
@@ -3445,7 +3445,7 @@ msgid "Messages sent"
 msgstr "Wiadomości wysłane"
 
 msgid "TX"
-msgstr "Teksas"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Wiadomości otrzymane"
@@ -4692,7 +4692,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "ŚREDNIE"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "ŚREDNIA"
@@ -4707,7 +4707,7 @@ msgid "Routers"
 msgstr "Routery"
 
 msgid "n/a"
-msgstr "n/d"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Ostatnie wyszukiwanie powiodło się"
@@ -8254,7 +8254,7 @@ msgid "The I2P Client Protocol (I2CP) enables external applications (clients) to
 msgstr "Protokół Klienta I2P (I2CP) umożliwia zewnętrznym aplikacjom (klientom) komunikację z I2P za pośrednictwem jednego gniazda TCP, domyślnie używając portu 7654. Aby uzyskać więcej informacji, zobacz <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>dokumentację online</a>."
 
 msgid "I2NP"
-msgstr "Protokół Sieci I2P (I2NP)"
+msgstr "I2NP"
 
 msgid "The I2P Network Protocol (I2NP) manages the routing and mixing of messages between routers, in addition to the transport selection (where more than one is supported) when communicating with a peer. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "Protokół Sieci I2P (I2NP) zarządza trasowaniem i mieszaniem wiadomości między routerami, oprócz wyboru transportu (jeśli jest obsługiwany więcej niż jeden) podczas komunikacji z równorzędnym węzłem. Aby uzyskać więcej informacji, zobacz <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>dokumentację online</a>."

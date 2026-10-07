@@ -1300,7 +1300,7 @@ msgid "Sidebar"
 msgstr "แถบด้านข้าง"
 
 msgid "UI"
-msgstr "ส่วนติดต่อผู้ใช้"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "อุโมงคม"
@@ -2245,7 +2245,7 @@ msgid "Configuration"
 msgstr "การกำหนดค่า"
 
 msgid "FAQ"
-msgstr "คำถามที่พบบ่อย"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "APIแบบJSON-RPC"
@@ -4690,7 +4690,7 @@ msgid "MIN"
 msgstr "ต่ำสุด"
 
 msgid "AVG"
-msgstr "เฉลี่ย"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "ค่ามัธยฐาน"
@@ -4705,7 +4705,7 @@ msgid "Routers"
 msgstr "เราเตอร์"
 
 msgid "n/a"
-msgstr "ไม่มีข้อมูล"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "การค้นหาล่าสุดสำเร็จ"

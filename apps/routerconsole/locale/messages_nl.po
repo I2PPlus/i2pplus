@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "Zijbalk"
 
 msgid "UI"
-msgstr "gebruikersinterface"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tunnels"
@@ -2236,7 +2236,7 @@ msgid "Configuration"
 msgstr "Configuratie"
 
 msgid "FAQ"
-msgstr "VGV"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC-API"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "Gemiddeld"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIAAN"
@@ -4696,7 +4696,7 @@ msgid "Routers"
 msgstr "Routers"
 
 msgid "n/a"
-msgstr "nvt"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Laatste zoekopdracht succesvol"

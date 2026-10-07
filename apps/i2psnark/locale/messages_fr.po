@@ -1033,16 +1033,16 @@ msgid "Torrent"
 msgstr "Torrent"
 
 msgid "ETA"
-msgstr "Fin prévue"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "Récep."
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Débit de récep."
 
 msgid "TX"
-msgstr "Trans."
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Débit de trans."

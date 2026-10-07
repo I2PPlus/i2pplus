@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "Seitenleiste"
 
 msgid "UI"
-msgstr "Benutzerschnittstelle"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tunnel"
@@ -3439,13 +3439,13 @@ msgid "Messages sent"
 msgstr "Nachrichten gesendet"
 
 msgid "TX"
-msgstr "gesendet"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Nachrichten empfangen"
 
 msgid "RX"
-msgstr "empfangen"
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "Nachrichten in der Warteschlange, die an den Peer gesendet werden sollen"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "Durchschnittlich"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MITTLERE"
@@ -4696,7 +4696,7 @@ msgid "Routers"
 msgstr "Router"
 
 msgid "n/a"
-msgstr "nicht verfügbar"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Letzte Suche erfolgreich"

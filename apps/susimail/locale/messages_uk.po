@@ -282,7 +282,7 @@ msgid "Cc"
 msgstr "Cc"
 
 msgid "Bcc"
-msgstr "Прихована копія"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Тема"

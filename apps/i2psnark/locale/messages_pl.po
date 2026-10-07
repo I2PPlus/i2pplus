@@ -1034,7 +1034,7 @@ msgid "Torrent"
 msgstr "Potok"
 
 msgid "ETA"
-msgstr "Pozostało"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"
@@ -1043,7 +1043,7 @@ msgid "RX Rate"
 msgstr "↓"
 
 msgid "TX"
-msgstr "Teksas"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "↑"

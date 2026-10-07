@@ -4690,7 +4690,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIAN"

@@ -1299,7 +1299,7 @@ msgid "Sidebar"
 msgstr "Barra lateral"
 
 msgid "UI"
-msgstr "IU"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Túneis"
@@ -2300,7 +2300,7 @@ msgid "Configuration"
 msgstr "Configuração"
 
 msgid "FAQ"
-msgstr "FAQs"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -3505,7 +3505,7 @@ msgid "Messages sent"
 msgstr "Mensagens enviadas"
 
 msgid "TX"
-msgstr "Texas"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Mensagens recebidas"
@@ -4757,7 +4757,7 @@ msgid "MIN"
 msgstr "MÍNIMO"
 
 msgid "AVG"
-msgstr "MÉDIA"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIANA"
@@ -4772,7 +4772,7 @@ msgid "Routers"
 msgstr "Roteadores"
 
 msgid "n/a"
-msgstr "indisponível"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Última pesquisa bem-sucedida"

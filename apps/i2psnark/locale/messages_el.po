@@ -1034,7 +1034,7 @@ msgid "Torrent"
 msgstr "Χείμαρος"
 
 msgid "ETA"
-msgstr "ΕΤΑ"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"
@@ -1043,7 +1043,7 @@ msgid "RX Rate"
 msgstr "Ρυθμός λήψης"
 
 msgid "TX"
-msgstr "Αποστολή"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Επιτόκιο φόρτωσης"

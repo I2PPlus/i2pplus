@@ -273,10 +273,10 @@ msgid "To"
 msgstr "宛先"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "件名"

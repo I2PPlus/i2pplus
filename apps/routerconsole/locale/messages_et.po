@@ -1292,7 +1292,7 @@ msgid "Sidebar"
 msgstr "külgriba"
 
 msgid "UI"
-msgstr "Kasutajaliides"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tunnelid"
@@ -2237,7 +2237,7 @@ msgid "Configuration"
 msgstr "Häälestus"
 
 msgid "FAQ"
-msgstr "KKK"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -4697,7 +4697,7 @@ msgid "Routers"
 msgstr "ruuterid"
 
 msgid "n/a"
-msgstr "puudub"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Viimane otsing õnnestus"

@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "نوار کناری"
 
 msgid "UI"
-msgstr "رابط کاربری"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "تونل ها"
@@ -2236,7 +2236,7 @@ msgid "Configuration"
 msgstr "پیکربندی"
 
 msgid "FAQ"
-msgstr "سوال‌های متداول"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "دقیقه"
 
 msgid "AVG"
-msgstr "میانگین"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "میانه"
@@ -5754,7 +5754,7 @@ msgid "Endpoint"
 msgstr "نقطه پایانی"
 
 msgid "ms"
-msgstr "میلی‌ثانیه"
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "آزمایش موفق"

@@ -271,10 +271,10 @@ msgid "To"
 msgstr "到"
 
 msgid "Cc"
-msgstr "副本"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "密件副本"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "主旨"

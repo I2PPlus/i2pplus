@@ -276,10 +276,10 @@ msgid "To"
 msgstr "Kime"
 
 msgid "Cc"
-msgstr "Kopya"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Gizli Kopya"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Konu"

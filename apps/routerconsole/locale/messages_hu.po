@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "Oldalsáv"
 
 msgid "UI"
-msgstr "Kezelőfelület"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Alagút"
@@ -2236,7 +2236,7 @@ msgid "Configuration"
 msgstr "Beállítások"
 
 msgid "FAQ"
-msgstr "GYIK"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -3439,13 +3439,13 @@ msgid "Messages sent"
 msgstr "Üzenetek elküldve"
 
 msgid "TX"
-msgstr "Küldött"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Üzenetek érkeztek"
 
 msgid "RX"
-msgstr "Fogadott"
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "Sorba állított üzenetek küldendő partnernek"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIÁN"
@@ -4696,7 +4696,7 @@ msgid "Routers"
 msgstr "Routerek"
 
 msgid "n/a"
-msgstr "nem elérhető"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Az utolsó keresés sikeres volt"

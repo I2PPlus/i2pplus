@@ -273,10 +273,10 @@ msgid "To"
 msgstr "수취자:"
 
 msgid "Cc"
-msgstr "참조"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "숨은참조"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "제목"

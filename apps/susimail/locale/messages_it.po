@@ -276,10 +276,10 @@ msgid "To"
 msgstr "A"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Ccn"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Oggetto"

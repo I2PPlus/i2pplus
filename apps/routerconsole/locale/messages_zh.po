@@ -1288,7 +1288,7 @@ msgid "Sidebar"
 msgstr "侧栏"
 
 msgid "UI"
-msgstr "用户界面"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "隧道"
@@ -2230,7 +2230,7 @@ msgid "Configuration"
 msgstr "设置"
 
 msgid "FAQ"
-msgstr "常见问题"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -3433,13 +3433,13 @@ msgid "Messages sent"
 msgstr "发送信息"
 
 msgid "TX"
-msgstr "发包"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "信息已接收"
 
 msgid "RX"
-msgstr "接包"
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "给对等节点的消息队列"
@@ -4670,7 +4670,7 @@ msgid "MIN"
 msgstr "最小"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "中位数"
@@ -4685,7 +4685,7 @@ msgid "Routers"
 msgstr "包括非泛洪路由器"
 
 msgid "n/a"
-msgstr "不适用"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "最后一次查询成功"
@@ -5743,7 +5743,7 @@ msgid "Endpoint"
 msgstr "出站终端"
 
 msgid "ms"
-msgstr "毫秒"
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "测试成功"

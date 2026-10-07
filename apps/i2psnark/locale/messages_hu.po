@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "Torrent"
 
 msgid "ETA"
-msgstr "BIE"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "Be"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Letöltési arány"
 
 msgid "TX"
-msgstr "Ki"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "TX sebesség"

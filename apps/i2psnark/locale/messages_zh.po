@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "种子"
 
 msgid "ETA"
-msgstr "预计剩余时间"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "已接收"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "接收速度"
 
 msgid "TX"
-msgstr "已发送"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "发送速度"

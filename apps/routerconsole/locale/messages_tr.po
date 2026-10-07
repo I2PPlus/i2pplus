@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "Yan Çubuk"
 
 msgid "UI"
-msgstr "Arayüz"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tüneller"
@@ -2236,7 +2236,7 @@ msgid "Configuration"
 msgstr "Yapılandırma"
 
 msgid "FAQ"
-msgstr "SSS"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API''si"
@@ -3439,7 +3439,7 @@ msgid "Messages sent"
 msgstr "Gönderilen mesajlar"
 
 msgid "TX"
-msgstr "Teksas"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Alınan mesajlar"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "DAKİKA"
 
 msgid "AVG"
-msgstr "ORTA"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDYAN"
@@ -4696,7 +4696,7 @@ msgid "Routers"
 msgstr "Yönlendiriciler"
 
 msgid "n/a"
-msgstr "kullanılamaz"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Son arama başarılı"

@@ -1294,7 +1294,7 @@ msgid "Sidebar"
 msgstr "Боковая панель"
 
 msgid "UI"
-msgstr "Интерфейс"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Туннели"
@@ -2242,7 +2242,7 @@ msgid "Configuration"
 msgstr "Конфигурация"
 
 msgid "FAQ"
-msgstr "ЧАВо"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -3445,13 +3445,13 @@ msgid "Messages sent"
 msgstr "Сообщения отправлены"
 
 msgid "TX"
-msgstr "Передано"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Полученные сообщения"
 
 msgid "RX"
-msgstr "Принято"
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "Сообщения в очереди для отправки одноранговому узлу"
@@ -4707,7 +4707,7 @@ msgid "Routers"
 msgstr "Маршрутизаторы"
 
 msgid "n/a"
-msgstr "н/д"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Последний поиск успешно"
@@ -5765,7 +5765,7 @@ msgid "Endpoint"
 msgstr "Конечная точка"
 
 msgid "ms"
-msgstr "мс"
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Тест успешен"

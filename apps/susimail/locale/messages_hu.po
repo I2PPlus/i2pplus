@@ -276,10 +276,10 @@ msgid "To"
 msgstr "Ide"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Titkos másolat"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Tárgy"

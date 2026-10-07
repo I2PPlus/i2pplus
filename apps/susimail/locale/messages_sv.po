@@ -276,10 +276,10 @@ msgid "To"
 msgstr "Till"
 
 msgid "Cc"
-msgstr "Kopia"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Blindkopia"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Ämne"

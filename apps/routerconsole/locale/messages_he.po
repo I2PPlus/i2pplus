@@ -2245,7 +2245,7 @@ msgid "Configuration"
 msgstr "הגדרות"
 
 msgid "FAQ"
-msgstr "שאלות נפוצות"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -4690,7 +4690,7 @@ msgid "MIN"
 msgstr "מזערי"
 
 msgid "AVG"
-msgstr "ממוצע"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "חציוני"
@@ -4705,7 +4705,7 @@ msgid "Routers"
 msgstr "נתבים"
 
 msgid "n/a"
-msgstr "לא רלוונטי"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "החיפוש האחרון הצליח"

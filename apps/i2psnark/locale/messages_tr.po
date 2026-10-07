@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "Torrent"
 
 msgid "ETA"
-msgstr "KAL"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "ALI"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "ALI Hızı"
 
 msgid "TX"
-msgstr "GÖN"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "GÖN Hızı"

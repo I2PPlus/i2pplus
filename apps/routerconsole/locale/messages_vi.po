@@ -1288,7 +1288,7 @@ msgid "Sidebar"
 msgstr "Thanh bên"
 
 msgid "UI"
-msgstr "Giao diện người dùng"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Đường hầm"
@@ -2230,7 +2230,7 @@ msgid "Configuration"
 msgstr "Cấu hình"
 
 msgid "FAQ"
-msgstr "Câu Hỏi Thường Gặp"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -4670,7 +4670,7 @@ msgid "MIN"
 msgstr "PHÚT"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "TRUNG BÌNH"
@@ -4685,7 +4685,7 @@ msgid "Routers"
 msgstr "Bộ định tuyến"
 
 msgid "n/a"
-msgstr "chưa rõ"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Tra cứu lần cuối thành công"

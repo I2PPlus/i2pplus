@@ -1034,7 +1034,7 @@ msgid "Torrent"
 msgstr "Torrent"
 
 msgid "ETA"
-msgstr "Förväntas klar"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"

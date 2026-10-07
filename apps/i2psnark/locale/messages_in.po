@@ -1034,7 +1034,7 @@ msgid "Torrent"
 msgstr "torrent"
 
 msgid "ETA"
-msgstr "Waktu selesai"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"
@@ -1043,7 +1043,7 @@ msgid "RX Rate"
 msgstr "Tingkat RX"
 
 msgid "TX"
-msgstr "terima kasih"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Tingkat TX"

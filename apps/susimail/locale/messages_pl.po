@@ -282,10 +282,10 @@ msgid "To"
 msgstr "Do"
 
 msgid "Cc"
-msgstr "DW"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "UDW"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Temat"

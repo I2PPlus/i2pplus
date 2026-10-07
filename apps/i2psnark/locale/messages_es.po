@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "Torrente"
 
 msgid "ETA"
-msgstr "Llegada"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "Receptor"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Tasa de descarga"
 
 msgid "TX"
-msgstr "Transmisor"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Tasa de subida"

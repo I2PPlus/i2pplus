@@ -285,10 +285,10 @@ msgid "To"
 msgstr "אל"
 
 msgid "Cc"
-msgstr "Cc"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Bcc"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "נושא"

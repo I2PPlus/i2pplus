@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "Barra lateral"
 
 msgid "UI"
-msgstr "Interfície"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Túnnels"
@@ -2236,7 +2236,7 @@ msgid "Configuration"
 msgstr "Configuració"
 
 msgid "FAQ"
-msgstr "PMF"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "API JSON-RPC"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "MÍN"
 
 msgid "AVG"
-msgstr "MITJ"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIANA"
@@ -4696,7 +4696,7 @@ msgid "Routers"
 msgstr "Routers"
 
 msgid "n/a"
-msgstr "n/d"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "La darrera cerca ha tingut èxit"

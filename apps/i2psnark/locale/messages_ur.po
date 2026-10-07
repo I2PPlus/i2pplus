@@ -1043,7 +1043,7 @@ msgid "Torrent"
 msgstr "torrent"
 
 msgid "ETA"
-msgstr "تخمینی وقت"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"

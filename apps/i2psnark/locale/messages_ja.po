@@ -1034,7 +1034,7 @@ msgid "Torrent"
 msgstr "トレント"
 
 msgid "ETA"
-msgstr "到着予定時刻"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"

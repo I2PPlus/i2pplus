@@ -279,7 +279,7 @@ msgid "Cc"
 msgstr "Cc"
 
 msgid "Bcc"
-msgstr "Cci"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Objet"

@@ -1037,7 +1037,7 @@ msgid "ETA"
 msgstr "ETA"
 
 msgid "RX"
-msgstr "IAMSE,bilag V"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Download sats"

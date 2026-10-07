@@ -1034,7 +1034,7 @@ msgid "Torrent"
 msgstr "Torrent"
 
 msgid "ETA"
-msgstr "verwachte aankomsttijd"
+msgstr "ETA"
 
 msgid "RX"
 msgstr "RX"

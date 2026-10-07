@@ -1294,7 +1294,7 @@ msgid "Sidebar"
 msgstr "Bara laterală"
 
 msgid "UI"
-msgstr "ObservaÅ£ie"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tuneluri"
@@ -4692,7 +4692,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "Mediană"
@@ -4707,7 +4707,7 @@ msgid "Routers"
 msgstr "Routere"
 
 msgid "n/a"
-msgstr "Nu se aplică"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Ultima căutare reușită"
@@ -8254,7 +8254,7 @@ msgid "The I2P Client Protocol (I2CP) enables external applications (clients) to
 msgstr "Protocolul client I2P (I2CP) permite aplicațiilor externe (cliști) să comunice cu I2P prin intermediul unui singur socket TCP, folosind în mod implicit portul 7654. Pentru mai multe informații, consultați <a href=https://geti2p.net/en/docs/protocol/i2cp class='sitelink external' target=_blank rel=noreferrer>documentația online</a>."
 
 msgid "I2NP"
-msgstr "Protocolul de rețea I2P (I2NP)"
+msgstr "I2NP"
 
 msgid "The I2P Network Protocol (I2NP) manages the routing and mixing of messages between routers, in addition to the transport selection (where more than one is supported) when communicating with a peer. For more information, see the <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "Protocolul de rețea I2P (I2NP) gestionează rutarea și amestecarea mesajelor între rutere, în plus față de selectarea transportului (unde este susținut mai mult de unul) atunci când comunicați cu un partener. Pentru mai multe informații, consultați <a href=https://geti2p.net/en/docs/protocol/i2np class='sitelink external' target=_blank rel=noreferrer>documentația online</a>."

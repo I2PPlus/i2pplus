@@ -1297,7 +1297,7 @@ msgid "Sidebar"
 msgstr "Stranica"
 
 msgid "UI"
-msgstr "uporabniški vmesnik"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tuneli"
@@ -4703,7 +4703,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "POVP."
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIAN"
@@ -4718,7 +4718,7 @@ msgid "Routers"
 msgstr "Usmerjevalniki"
 
 msgid "n/a"
-msgstr "pole saadaval"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Zadnje iskanje je uspešno"

@@ -4690,7 +4690,7 @@ msgid "MIN"
 msgstr "MIN"
 
 msgid "AVG"
-msgstr "AVG"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MEDIAN"
@@ -4705,7 +4705,7 @@ msgid "Routers"
 msgstr "روٹرز"
 
 msgid "n/a"
-msgstr "لاگو نہیں"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "آخری تلاش کامیاب"

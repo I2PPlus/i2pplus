@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "Torrent"
 
 msgid "ETA"
-msgstr "voraussichtliche Ankunftszeit"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "Empf."
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Übertragungsrate für den Empfang"
 
 msgid "TX"
-msgstr "Send."
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Übertragungsrate fürs Senden"

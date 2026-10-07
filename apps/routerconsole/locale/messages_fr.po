@@ -1291,7 +1291,7 @@ msgid "Sidebar"
 msgstr "Barre latérale"
 
 msgid "UI"
-msgstr "Interface utilisateur"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Tunnels"
@@ -3439,13 +3439,13 @@ msgid "Messages sent"
 msgstr "Messages envoyés"
 
 msgid "TX"
-msgstr "Trans."
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Messages reçus"
 
 msgid "RX"
-msgstr "Récep."
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "Messages en file d''attente à envoyer à un homologue"
@@ -4021,7 +4021,7 @@ msgid "Network Reachability"
 msgstr "Accessibilité du réseau"
 
 msgid "News &amp; Updates"
-msgstr "Nouvelles et mises à jour"
+msgstr "Actualités"
 
 msgid "Restart Status"
 msgstr "Redémarrer l''état"
@@ -4681,7 +4681,7 @@ msgid "MIN"
 msgstr "MINIMUM"
 
 msgid "AVG"
-msgstr "MOYENNE"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "MÉDIANE"
@@ -4696,7 +4696,7 @@ msgid "Routers"
 msgstr "Routeurs"
 
 msgid "n/a"
-msgstr "n.d."
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Dernière recherche réussie"

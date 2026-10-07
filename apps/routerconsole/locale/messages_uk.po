@@ -1294,7 +1294,7 @@ msgid "Sidebar"
 msgstr "Бічна панель"
 
 msgid "UI"
-msgstr "Інтерфейс"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "Тунелі"
@@ -3445,13 +3445,13 @@ msgid "Messages sent"
 msgstr "Повідомлення надіслані"
 
 msgid "TX"
-msgstr "Передано"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "Отримані повідомлення"
 
 msgid "RX"
-msgstr "Прийнято"
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "Повідомлення в черзі для надсилання Peer"
@@ -4692,7 +4692,7 @@ msgid "MIN"
 msgstr "МІН"
 
 msgid "AVG"
-msgstr "СЕР"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "МЕДІАН"
@@ -4707,7 +4707,7 @@ msgid "Routers"
 msgstr "Маршрутизатори"
 
 msgid "n/a"
-msgstr "немає даних"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Останній успішний пошук"
@@ -5765,7 +5765,7 @@ msgid "Endpoint"
 msgstr "Кінцева точка"
 
 msgid "ms"
-msgstr "мс"
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "Тест успішний"

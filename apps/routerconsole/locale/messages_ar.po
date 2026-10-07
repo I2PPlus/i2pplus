@@ -4725,7 +4725,7 @@ msgid "MIN"
 msgstr "دقيقة"
 
 msgid "AVG"
-msgstr "متوسط"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "متوسط"

@@ -282,10 +282,10 @@ msgid "To"
 msgstr "Кому"
 
 msgid "Cc"
-msgstr "Копия"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Скрытая копия"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Тема"

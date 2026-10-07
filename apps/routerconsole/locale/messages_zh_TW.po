@@ -2228,7 +2228,7 @@ msgid "Configuration"
 msgstr "組態"
 
 msgid "FAQ"
-msgstr "常見問題"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -4668,7 +4668,7 @@ msgid "MIN"
 msgstr "最小"
 
 msgid "AVG"
-msgstr "平均"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "中位數"
@@ -4683,7 +4683,7 @@ msgid "Routers"
 msgstr "路由器"
 
 msgid "n/a"
-msgstr "不適用"
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "上次查詢成功"
@@ -5741,7 +5741,7 @@ msgid "Endpoint"
 msgstr "端點"
 
 msgid "ms"
-msgstr "毫秒"
+msgstr "ms"
 
 msgid "Test successful"
 msgstr "測試成功"

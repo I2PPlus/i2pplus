@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "টরেন্ট"
 
 msgid "ETA"
-msgstr "আনুমানিক সময় বাকি"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "গৃহীত"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "প্রাপ্তি হার"
 
 msgid "TX"
-msgstr "প্রেরিত"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "প্রেরণ হার"

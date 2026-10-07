@@ -3511,7 +3511,7 @@ msgid "Messages received"
 msgstr "Beskeder modtaget"
 
 msgid "RX"
-msgstr "IAMSE,bilag V"
+msgstr "RX"
 
 msgid "Queued messages to send to peer"
 msgstr "Beskeder i kø for at sende til peer"
@@ -4772,7 +4772,7 @@ msgid "Routers"
 msgstr "Routere"
 
 msgid "n/a"
-msgstr "Ikke tingængelig "
+msgstr "n/a"
 
 msgid "Last lookup successful"
 msgstr "Sidste opslag lykkedes"

@@ -1288,7 +1288,7 @@ msgid "Sidebar"
 msgstr "사이드 바"
 
 msgid "UI"
-msgstr "사용자 인터페이스"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "터널"
@@ -3433,7 +3433,7 @@ msgid "Messages sent"
 msgstr "메시지 전송됨"
 
 msgid "TX"
-msgstr "텍사스"
+msgstr "TX"
 
 msgid "Messages received"
 msgstr "메시지 수신됨"
@@ -4670,7 +4670,7 @@ msgid "MIN"
 msgstr "분"
 
 msgid "AVG"
-msgstr "평균"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "중앙값"

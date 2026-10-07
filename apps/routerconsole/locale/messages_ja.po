@@ -1288,7 +1288,7 @@ msgid "Sidebar"
 msgstr "サイドバー"
 
 msgid "UI"
-msgstr "インターフェース"
+msgstr "UI"
 
 msgid "Tunnels"
 msgstr "トンネル"
@@ -2230,7 +2230,7 @@ msgid "Configuration"
 msgstr "設定"
 
 msgid "FAQ"
-msgstr "よくある質問"
+msgstr "FAQ"
 
 msgid "JSON-RPC API"
 msgstr "JSON-RPC API"
@@ -4670,7 +4670,7 @@ msgid "MIN"
 msgstr "分"
 
 msgid "AVG"
-msgstr "平均"
+msgstr "Avg"
 
 msgid "MEDIAN"
 msgstr "中央値"

@@ -1043,7 +1043,7 @@ msgid "RX Rate"
 msgstr "Velocità ricezione (RX)"
 
 msgid "TX"
-msgstr "Texas"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Velocità trasmissione (TX)"

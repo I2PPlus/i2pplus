@@ -276,10 +276,10 @@ msgid "To"
 msgstr "Saaja"
 
 msgid "Cc"
-msgstr "Koopia"
+msgstr "CC"
 
 msgid "Bcc"
-msgstr "Salvesta koopia"
+msgstr "BCC"
 
 msgid "Subject"
 msgstr "Teema"

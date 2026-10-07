@@ -1034,16 +1034,16 @@ msgid "Torrent"
 msgstr "Торрент"
 
 msgid "ETA"
-msgstr "Залишилось"
+msgstr "ETA"
 
 msgid "RX"
-msgstr "Прийнято"
+msgstr "RX"
 
 msgid "RX Rate"
 msgstr "Швидкість прийому"
 
 msgid "TX"
-msgstr "Передано"
+msgstr "TX"
 
 msgid "TX Rate"
 msgstr "Швидкість передачі"
