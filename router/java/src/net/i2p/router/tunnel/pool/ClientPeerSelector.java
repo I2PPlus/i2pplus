@@ -39,6 +39,49 @@ class ClientPeerSelector extends TunnelPeerSelector {
     private static final int ESTABLISHED_PREF_ATTEMPTS = 3;
     /** First-hop quality attempts before accepting any tier-passing peer. */
     private static final int CONNECTING_PREF_ATTEMPTS = 5;
+    /**
+     *  How many first-hop candidates to fetch at once.
+     *
+     *  <p>The quality loop can only iterate while it has a candidate to reject, so asking the
+     *  tiers for exactly one left it a single attempt per refill and the 16-attempt budget went
+     *  largely unspent. A small batch lets one tier scan serve several attempts. Only the
+     *  accepted peer is kept — see the trim after the loop — so the rest never reach the tunnel.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int FIRST_HOP_CANDIDATES = 4;
+    /**
+     *  Build success below which the first hop draws on both the Fast and HighCapacity tiers.
+     *
+     *  <p>The two tiers hold different peers: Fast is speed-ranked, HighCapacity is
+     *  proven-reliability. Below this the network is not delivering often enough for the
+     *  distinction to earn its cost, and taking from only one of them needlessly halves the
+     *  pool.
+     *
+     *  @since 0.9.71+
+     */
+    static final double WIDEN_BUILD_SUCCESS = 0.50;
+    /**
+     *  Fast-tier size below which the first hop draws on both tiers regardless of build success.
+     *
+     *  <p>A small Fast tier cannot supply {@link #FIRST_HOP_CANDIDATES} candidates however
+     *  healthy the network looks, so the batch is worth completing from the other tier even when
+     *  success is high. The same 300 marks the point where cross-pool diversity engages, so both
+     *  decisions agree on what counts as a large enough Fast tier.
+     *
+     *  @since 0.9.71+
+     */
+    static final int WIDEN_FAST_PEERS = 300;
+    /**
+     *  Build success below which the first-hop quality loop starts one tier lower, accepting
+     *  peers with only a connecting transport session rather than requiring an established one.
+     *
+     *  <p>Distinct from {@link #WIDEN_BUILD_SUCCESS}: this widens the <em>transport</em>
+     *  requirement, which costs build latency, so it waits until success is closer to healthy.
+     *
+     *  @since 0.9.71+
+     */
+    static final double CONNECTING_PREF_BUILD_SUCCESS = 0.60;
     /** How often the accepted-first-hop tier line may be written, per tier. @since 0.9.71+ */
     private static final long TIER_LOG_INTERVAL_MS = 60L * 1000;
     /** Last write time per accepted tier key, for rate limiting. @since 0.9.71+ */
@@ -201,11 +244,37 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 rv = applyShortfallFallbacks(settings, rv, length, params, ex);
                 if (rv.isEmpty()) {return Collections.emptyList();}
             }
+            // P7: finalizeSelection re-checks ghosts and banlist after the ladder has
+            // approved a selection, so a peer that turned unusable mid-selection shrinks
+            // it — and an all-ghost result empties it.  Emptied here there is no retry
+            // left: the selection is discarded and the cycle builds nothing.  Redraw once
+            // with the unusable peers excluded, which is what selectHopsWithRetry already
+            // does for the pre-ladder case; without this the same ghost set costs a build
+            // every cycle for as long as the mark lasts.
+            List<Hash> preFinalize = rv;
+            rv = finalizeSelection(settings, rv, isInbound);
+            if (rv.isEmpty() && !preFinalize.isEmpty()) {
+                List<Hash> unusable = new ArrayList<>(preFinalize);
+                if (log.shouldDebug()) {
+                    log.debug("CPS finalize emptied an approved selection (" + unusable.size() +
+                              " unusable peers) -> redrawing once with them excluded");
+                }
+                SelectionExclusions retry = buildExclusions(settings, isInbound,
+                                                            params.buildSuccess, length);
+                retry.exclude.addAll(unusable);
+                rv = selectHopsWithRetry(settings, length, params, retry);
+                if (rv.size() < length) {
+                    rv = applyShortfallFallbacks(settings, rv, length, params, retry);
+                }
+                if (!rv.isEmpty()) {
+                    rv = finalizeSelection(settings, rv, isInbound);
+                }
+                ex = retry;
+            }
         } else {
             rv = new ArrayList<>(1);
+            rv = finalizeSelection(settings, rv, isInbound);
         }
-        int approved = rv.size();
-        rv = finalizeSelection(settings, rv, isInbound);
         // finalizeSelection's own ghost/banned safety net runs after the
         // shortfall ladder, so it can shrink a size the ladder already
         // approved. Never emit a peer that turned unusable mid-selection:
@@ -222,6 +291,8 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         // kept peers tripping the reliability gate. Only a structurally
         // unusable selection is discarded.
         int min = minRequestedLength(settings);
+        // Pre-finalize size, for the debug line only; finalizeSelection may have redrawn.
+        int approved = rv.size();
         if (shouldDiscardShortSelection(rv.size(), min)) {
             if (log.shouldWarn()) {
                 log.warn("CPS selection unusable for " + settings.getDestinationNickname() +
@@ -233,7 +304,7 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         if (log.shouldDebug() && rv.size() - 1 < min) {
             log.debug("CPS accepting short selection for " + settings.getDestinationNickname() +
                       " (" + (isInbound ? "in" : "out") + "): " + (rv.size() - 1) +
-                      "/" + min + " hops, " + approved + " approved before finalize");
+                      "/" + min + " hops, " + approved + " approved");
         }
         return rv;
     }
@@ -307,7 +378,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     /** Single-hop or multi-hop selection for one tunnel length. Never null. */
     private List<Hash> selectHops(TunnelPoolSettings settings, int length, SelectionParams params,
                                   SelectionExclusions ex) {
-        ArraySet<Hash> matches = new ArraySet<>(length);
+        // Room for the hops plus the first-hop candidate batch. ArraySet is fixed-capacity
+        // and throws SetFullException on overflow, so the batch size has to be
+        // accounted for here or a short tunnel overflows on the first hop fetch.
+        ArraySet<Hash> matches = new ArraySet<>(length + FIRST_HOP_CANDIDATES);
         if (length == 1) {return selectSingleHop(settings, length, params, ex, matches);}
         return selectMultiHop(settings, length, params, ex, matches);
     }
@@ -316,9 +390,19 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
     private SelectionParams computeSelectionParams(TunnelPoolSettings settings, int length, boolean isInbound) {
         // Cache buildSuccess to avoid repeated expensive calls
         double buildSuccess = ctx.profileOrganizer().getTunnelBuildSuccess();
-        // Under stress (< 40% build success), prefer HighCapacity peers over
-        // FastPeers — speed-ranked peers are often overloaded/rejecting while
-        // HighCapacity peers have proven reliability in completed tunnels.
+        // Three separate build-success decisions, deliberately at different thresholds:
+        //   useHighCapPrimary (< 40%) — which tier LEADS the first-hop batch, and which
+        //     one the stress fallbacks trust. Speed-ranked peers overload and reject
+        //     while HighCapacity peers have completed tunnels, so below this the proven
+        //     ranking leads.
+        //   shouldWidenBothTiers (< 50%, or Fast < 300) — whether the batch is completed
+        //     from BOTH tiers instead of one. See selectFirstHop.
+        //   CONNECTING_PREF_BUILD_SUCCESS (< 60%) — whether the quality loop may accept a
+        //     merely connecting peer on its first attempts.
+        // Ordered most-degraded first, so recovery unwinds them in reverse: HighCapacity
+        // leads, then the batch widens to both tiers, and only then is the transport bar
+        // relaxed. A router must never narrow its peer pool while simultaneously asking
+        // more of each peer.
         boolean useHighCapPrimary = buildSuccess < ATTACK_THRESHOLD;
         String strat = getStrategy();
         if (STRATEGY_RELIABILITY.equals(strat)) {
@@ -858,22 +942,41 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         }
         // Prefer vetted HighCap/Fast peers first — they've been tested
         // and are more reliable for tunnel builds than random connected peers.
+        //
+        // A batch rather than one peer: the quality loop below can only iterate
+        // while `matches` is non-empty, so fetching exactly one candidate means
+        // one attempt per refill and the 16-attempt budget goes largely unspent.
+        // One tier scan then serves several attempts. Only the accepted peer
+        // survives — see trimToAcceptedFirstHop — so the extra candidates never
+        // reach the tunnel.
+        //
+        // When shouldWidenBothTiers says so, the batch is completed from the
+        // other tier rather than left short: Fast is speed-ranked and
+        // HighCapacity is proven-reliability, and neither ranking is trustworthy
+        // enough when success is low or the Fast tier is small to justify
+        // choosing between them.
         if (matches.isEmpty()) {
+            boolean widen = shouldWidenBothTiers(params.buildSuccess,
+                                              ctx.profileOrganizer().getFastPeerCount());
             if (params.useHighCapPrimary) {
-                ctx.profileOrganizer().selectHighCapacityPeers(1, exclude, matches, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectHighCapacityPeers(FIRST_HOP_CANDIDATES, exclude, matches, params.ipRestriction, params.ipSet);
+                if (widen) {
+                    topUpFromFastTier(params, exclude, matches);
+                }
                 if (matches.isEmpty()) {
-                    ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
+                    ctx.profileOrganizer().selectNotFailingPeers(FIRST_HOP_CANDIDATES, exclude, matches, false, 0, null);
                 }
             } else {
-                // Under moderate stress (success < 70%), widen candidate pool
-                // by using high-capacity slice instead of fast-only slice.
-                ctx.profileOrganizer().selectFastPeers(1, exclude, matches, params.ipRestriction, params.ipSet);
+                ctx.profileOrganizer().selectFastPeers(FIRST_HOP_CANDIDATES, exclude, matches, params.ipRestriction, params.ipSet);
+                if (widen) {
+                    topUpFromHighCapacityTier(params, exclude, matches);
+                }
             }
         }
         // Fallback to connected peers. KeepAlive job maintains active peer count
         // at all uptimes, so no startup leniency needed.
         if (matches.isEmpty()) {
-            ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, matches, 0, null);
+            ctx.profileOrganizer().selectActiveNotFailingPeers(FIRST_HOP_CANDIDATES, exclude, matches, 0, null);
         }
         if (matches.isEmpty()) {
             ctx.profileOrganizer().selectNotFailingPeers(1, exclude, matches, false, 0, null);
@@ -900,6 +1003,13 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
                 }
             }
         }
+        // First-hop quality-loop bookkeeping, hoisted so the trim below can see the
+        // outcome whether or not the loop ran. qualityAttempts counts the loop's
+        // attempts across both the batch and any refills.
+        int qualityAttempts = 0;
+        Hash acceptedFirstHop = null;
+        int acceptedTier = -1;
+        int acceptedAttempt = -1;
         // Post-selection first-hop quality check.
         // Hard-fail gates: first-hop-failing peers, stale peers —
         // always reject regardless of startup state. Peers that
@@ -910,25 +1020,20 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         // no transport session; only fall back to any selectable peer
         // when connected candidates are exhausted.
         if (!matches.isEmpty()) {
-            // First-hop quality: prefer connected/established peers.
-            // 33/min first-hop failures mean we're selecting peers
-            // that look fast on paper but can't actually receive the build.
-            // More attempts = higher chance of finding a connected peer.
-            // Raised from 8 to 16 to reduce starvation when many peers
-            // are on first-hop cooldown or stale during degradation.
-            int qualityAttempts = 0;
+            // First-hop quality: prefer connected/established peers. Without this the
+            // selector picks peers that look fast on paper but cannot actually receive
+            // the build, and each rejection burns an attempt. Sixteen attempts, since a
+            // single bad candidate otherwise costs the whole slot.
             int refills = 0;
             boolean inStartup = isStartupGracePeriod(ctx);
             // When very few candidates remain, start at tier 1 (accept
             // connecting) rather than tier 0 (accept any) to still
             // prefer peers with an active transport session.
-            // Under moderate stress (success < 70%), also start at tier 1
-            // to widen the acceptable peer pool faster and reduce
-            // first-hop selection starvation.
-            int tier = (matches.size() < 3 || params.buildSuccess < 0.70) ? 1 : 0;
-            Hash acceptedFirstHop = null;
-            int acceptedTier = -1;
-            int acceptedAttempt = -1;
+            // Below CONNECTING_PREF_BUILD_SUCCESS (60%) also start at tier 1,
+            // widening the acceptable pool faster than the attempt ladder
+            // would reach it on its own.
+            int tier = (matches.size() < 3
+                      || params.buildSuccess < CONNECTING_PREF_BUILD_SUCCESS) ? 1 : 0;
             while (qualityAttempts < 16 && !matches.isEmpty()) {
                 qualityAttempts++;
                 tier = firstHopQualityTier(qualityAttempts, inStartup, tier);
@@ -1002,16 +1107,20 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
             }
             logAcceptedFirstHopTier(ctx, acceptedFirstHop, acceptedTier, acceptedAttempt,
                                     qualityAttempts, matches.size(), params.buildSuccess);
-            // Fallback: if quality loop exhausted all candidates without
-            // finding a suitable peer, accept the last remaining candidate
-            // rather than returning empty — one attempt with a mediocre
-            // peer is better than zero build attempts per cycle.
-            if (matches.isEmpty() && qualityAttempts >= 16) {
-                if (log.shouldDebug()) {
-                    log.debug("First-hop quality loop exhausted " + qualityAttempts +
-                              " candidates without a match; build will be attempted " +
-                              "with a degraded candidate if available");
-                }
+        }
+        // Keep only the accepted candidate. The batch is an input to the quality loop, not a
+        // set of hops: every caller does rv.addAll(matches), so leaving the rejects in place
+        // would splice 2-3 unvetted peers into the tunnel path. The accepted peer is first by
+        // construction, since the loop takes matches.iterator().next() each attempt.
+        trimToAcceptedFirstHop(matches, acceptedFirstHop);
+        // Fallback: if the quality loop exhausted every candidate without finding a suitable
+        // peer, accept whatever remains rather than returning empty — one attempt with a
+        // mediocre peer beats zero build attempts per cycle.
+        if (matches.isEmpty() && qualityAttempts >= 16) {
+            if (log.shouldDebug()) {
+                log.debug("First-hop quality loop exhausted " + qualityAttempts +
+                          " candidates without a match; build will be attempted " +
+                          "with a degraded candidate if available");
             }
         }
         // preConnectTo: warm up the transport session so the TBR delivery
@@ -1030,6 +1139,81 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         }
         // Shortfall fallback below reuses the (wrapped) exclude
         ex.exclude = exclude;
+    }
+
+    /**
+     *  Reduce a first-hop candidate batch to the single peer the quality loop accepted.
+     *
+     *  <p>When the loop accepted a candidate it is the one to keep, and it is the head of the set
+     *  because every attempt takes {@code iterator().next()}. When nothing was accepted the loop
+     *  has already ejected everything it vetted and rejected, so whatever remains was never
+     *  cleared — kept deliberately rather than discarded, since returning empty costs the cycle
+     *  a build outright.
+     *
+     *  <p>No side effects beyond the set, so unit tests exercise it directly.
+     *
+     *  @param matches the candidate batch, modified to hold at most the accepted peer
+     *  @param accepted the peer the quality loop accepted, or null if none was
+     *  @since 0.9.71+
+     */
+    static void trimToAcceptedFirstHop(ArraySet<Hash> matches, Hash accepted) {
+        if (matches.size() <= 1) {
+            return;
+        }
+        Hash keep = accepted;
+        if (keep == null && !matches.isEmpty()) {
+            keep = matches.get(0);
+        }
+        for (Hash candidate : new ArrayList<>(matches)) {
+            if (!candidate.equals(keep)) {
+                matches.remove(candidate);
+            }
+        }
+    }
+
+    /**
+     *  Whether the first hop should draw candidates from both the Fast and HighCapacity tiers.
+     *
+     *  <p>True when the network is struggling, or when the Fast tier is too small to fill the
+     *  candidate batch on its own. Either way, taking from one tier alone needlessly shrinks the
+     *  pool the quality loop chooses from.
+     *
+     *  <p>Pure decision — no context access, safe for unit tests.
+     *
+     *  @param buildSuccess the build success ratio in [0.0, 1.0]
+     *  @param fastPeers the current Fast-tier size
+     *  @return whether to take candidates from both tiers
+     *  @since 0.9.71+
+     */
+    static boolean shouldWidenBothTiers(double buildSuccess, int fastPeers) {
+        // NaN means no data yet, which is the startup case: treat it as struggling, matching
+        // how every other gate here reads an unknown ratio.
+        if (Double.isNaN(buildSuccess) || buildSuccess < WIDEN_BUILD_SUCCESS) {
+            return true;
+        }
+        return fastPeers < WIDEN_FAST_PEERS;
+    }
+
+    /**
+     *  Add Fast-tier candidates until the batch is full, used when the first hop is widening
+     *  past the HighCapacity tier it started from.
+     *
+     *  <p>Requests only the shortfall so the batch stays at
+     *  {@link #FIRST_HOP_CANDIDATES} in total rather than doubling.
+     */
+    private void topUpFromFastTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
+        int need = FIRST_HOP_CANDIDATES - matches.size();
+        if (need > 0) {
+            ctx.profileOrganizer().selectFastPeers(need, exclude, matches, params.ipRestriction, params.ipSet);
+        }
+    }
+
+    /** Add HighCapacity-tier candidates until the batch is full. See {@link #topUpFromFastTier}. */
+    private void topUpFromHighCapacityTier(SelectionParams params, Set<Hash> exclude, ArraySet<Hash> matches) {
+        int need = FIRST_HOP_CANDIDATES - matches.size();
+        if (need > 0) {
+            ctx.profileOrganizer().selectHighCapacityPeers(need, exclude, matches, params.ipRestriction, params.ipSet);
+        }
     }
 
     /**
@@ -1323,7 +1507,10 @@ private final Map<String, Long> _tierLogCount = new ConcurrentHashMap<>(8);
         // role checks, not from a generic tier.  It sits at the end of rv, so
         // filling it before the middle hops preserves [endpoint .. first hop].
         if (ex.firstHop == null) {
-            ArraySet<Hash> matches = new ArraySet<Hash>(1);
+            // selectFirstHop fills a candidate batch, so this cannot be capacity 1:
+            // ArraySet is fixed-capacity and overflow throws. Trimmed to one by
+            // selectFirstHop before it is used as a hop.
+            ArraySet<Hash> matches = new ArraySet<Hash>(FIRST_HOP_CANDIDATES);
             selectFirstHop(length, params, settings.getRandomKey(), ex, matches);
             matches.remove(ctx.routerHash());
             if (!matches.isEmpty()) {

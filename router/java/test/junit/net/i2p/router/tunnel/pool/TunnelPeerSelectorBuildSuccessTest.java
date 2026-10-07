@@ -53,6 +53,45 @@ public class TunnelPeerSelectorBuildSuccessTest {
         assertEquals("EFG", TunnelPeerSelector.relaxedExcludeCaps("MEFGN", 0.2, HOUR_MS));
     }
 
+    /**
+     * P4: the caps latch between the enter and exit thresholds.
+     *
+     * <p>The prior form derived the decision from buildSuccess alone, so the
+     * {@code >= 0.44} arm was dead code — it could only assign false to a variable already
+     * false — and the {@code [0.40, 0.44)} band was not a dead zone but the strict side of
+     * a 0.40 threshold. Success oscillating across 0.40 therefore flipped the caps on every
+     * crossing. Passing the prior state makes the band real.
+     */
+    @Test
+    public void testRelaxedExcludeCaps_HoldsInsideTheHysteresisBand() {
+        String configured = "MNODP";
+        // Enter relaxation below ATTACK_THRESHOLD.
+        assertEquals("", TunnelPeerSelector.relaxedExcludeCaps(configured, 0.39, HOUR_MS, false));
+        // Rising back inside the band keeps it relaxed — this is the latch.
+        assertEquals("", TunnelPeerSelector.relaxedExcludeCaps(configured, 0.42, HOUR_MS, true));
+        // The exit threshold releases the latch, so the band is (0.40, 0.44).
+        assertEquals(configured,
+                     TunnelPeerSelector.relaxedExcludeCaps(
+                             configured, TunnelPeerSelector.ATTACK_RELAX_EXIT, HOUR_MS, true));
+        // Not latched, the same ratio enforces them: the band only holds once entered.
+        assertEquals(configured,
+                     TunnelPeerSelector.relaxedExcludeCaps(configured, 0.42, HOUR_MS, false));
+    }
+
+    /** Startup relaxes without consulting the latch, on either latch state. */
+    @Test
+    public void testRelaxedExcludeCaps_StartupRelaxesRegardlessOfLatch() {
+        assertEquals("", TunnelPeerSelector.relaxedExcludeCaps("MNODP", 0.90, 1000L, false));
+        assertEquals("", TunnelPeerSelector.relaxedExcludeCaps("MNODP", 0.90, 1000L, true));
+    }
+
+    /** The exit threshold must sit above the entry one, or the latch is not a latch. */
+    @Test
+    public void testRelaxedExcludeCaps_ExitIsAboveEntry() {
+        assertTrue("relaxing must need more recovery than it did to trigger",
+                   TunnelPeerSelector.ATTACK_RELAX_EXIT > TunnelPeerSelector.ATTACK_THRESHOLD);
+    }
+
     @Test
     public void testRelaxedExcludeCaps_NoDataRelaxes() {
         assertEquals("ABC", TunnelPeerSelector.relaxedExcludeCaps("ABCD", 0.0, HOUR_MS));

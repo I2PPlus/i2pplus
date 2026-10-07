@@ -2,6 +2,7 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -75,6 +76,17 @@ import net.i2p.util.SystemVersion;
     private final Map<Hash, Long> _exploratoryCooldowns = new ConcurrentHashMap<>();
 
     /**
+     *  Peers from the last selection that were all ghosts, handed to the redraw in
+     *  {@link #selectPeers(TunnelPoolSettings)}.
+     *
+     *  <p>A field rather than a return value because the ghost filter sits deep inside
+     *  {@link #selectPeersInternal} and the retry belongs beside the existing cooldown
+     *  retry, in the one method that already sequences attempts. Per-thread: two selections
+     *  in flight must not exchange the set they were told to avoid.
+     */
+    private final ThreadLocal<Set<Hash>> _lastAllGhostSelection = new ThreadLocal<Set<Hash>>();
+
+    /**
      *  ExploratoryPeerSelector.
      */
     public ExploratoryPeerSelector(RouterContext context) {
@@ -100,13 +112,33 @@ import net.i2p.util.SystemVersion;
             return Collections.emptyList();
         }
 
-        List<Hash> rv = selectPeersInternal(settings, length, true);
+        // Tracked so the ghost retry below reuses the same cooldown decision rather than
+        // silently re-enabling cooldowns on the redraw.
+        boolean includeCooldownsPass = true;
+        List<Hash> rv = selectPeersInternal(settings, length, includeCooldownsPass);
         if (rv != null && rv.size() == 1 && length > 0) {
             // All candidates were excluded by selection cooldowns.
             // Retry once without cooldowns rather than starving the pool.
             if (log.shouldDebug())
                 log.debug("EPS all candidates on cooldown, retrying without cooldowns");
-            rv = selectPeersInternal(settings, length, false);
+            includeCooldownsPass = false;
+            rv = selectPeersInternal(settings, length, includeCooldownsPass);
+        }
+        // Ghost retry: if every peer drawn was a ghost, draw again with those peers
+        // excluded rather than restoring them. Restoring dispatched the build through
+        // peers just measured as failing, and did so deterministically, so the next
+        // cycle drew the same ghosts and burned another attempt.
+        Set<Hash> ghosted = _lastAllGhostSelection.get();
+        _lastAllGhostSelection.remove();
+        if (ghosted != null && rv != null && rv.isEmpty()) {
+            if (log.shouldDebug()) {
+                log.debug("EPS every peer was a ghost (" + ghosted.size() +
+                          "), retrying without them");
+            }
+            rv = selectPeersInternal(settings, length, includeCooldownsPass, ghosted);
+            if (rv == null) {
+                return Collections.emptyList();
+            }
         }
         if (rv == null) {
             // checkTunnel() rejected the selection — honor the never-null
@@ -128,11 +160,35 @@ import net.i2p.util.SystemVersion;
      *  @return ordered list of Hash objects (ENDPOINT FIRST), or null if no
      *          peers are available or checkTunnel fails
      */
-    private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length, boolean includeCooldowns) {
+    private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length,
+                                          boolean includeCooldowns) {
+        return selectPeersInternal(settings, length, includeCooldowns, null);
+    }
+
+    /**
+     *  Select peers, additionally excluding a set the caller has decided on.
+     *
+     *  <p>Used for the ghost retry: the client pools exclude peers that turned out to be
+     *  ghosts and redraw, so exploratory has to be able to do the same rather than restore
+     *  a selection the peer measurements just rejected.
+     *
+     *  @param settings the tunnel pool settings
+     *  @param length the desired tunnel length
+     *  @param includeCooldowns whether to exclude peers on selection cooldown
+     *  @param alsoExclude peers to exclude on top of the usual set, or null
+     *  @return ordered list of Hash objects (ENDPOINT FIRST), or null if no peers are
+     *          available or checkTunnel fails
+     *  @since 0.9.71+
+     */
+    private List<Hash> selectPeersInternal(TunnelPoolSettings settings, int length,
+                                          boolean includeCooldowns, Set<Hash> alsoExclude) {
         boolean isInbound = settings.isInbound();
         long now = ctx.clock().now();
         Set<Hash> exclude = getExclude(isInbound, true);
         exclude.add(ctx.routerHash());
+        if (alsoExclude != null) {
+            exclude.addAll(alsoExclude);
+        }
         // Exclude peers on selection cooldown to ensure diversity.
         // Own map: peers that failed checkTunnel here.  Shared map: peers
         // failed by client pools or rejected at tunnel reuse.
@@ -350,6 +406,16 @@ import net.i2p.util.SystemVersion;
                 if (log.shouldInfo())
                     log.info("EPS SHCP " + length + (isInbound ? " IB " : " OB ") + formatExcludedPeers(exclude));
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
+                // Same widening rule as the client pools: when the network is struggling
+                // or the Fast tier is small, complete the draw from Fast rather than
+                // returning a short selection built from one tier. Shares
+                // shouldWidenBothTiers with ClientPeerSelector so the two cannot disagree.
+                if (matches.size() < length && ClientPeerSelector.shouldWidenBothTiers(
+                        ctx.profileOrganizer().getTunnelBuildSuccess(),
+                        ctx.profileOrganizer().getFastPeerCount())) {
+                    ctx.profileOrganizer().selectFastPeers(length - matches.size(), exclude,
+                                                          matches, ipRestriction, ipSet);
+                }
             } else {
                 // As of 0.9.23, we include a max of 2 not failing peers,
                 // to improve build success on 3-hop tunnels.
@@ -391,18 +457,22 @@ import net.i2p.util.SystemVersion;
         // waste build attempts and test cycles.  Client pools already filter
         // these (ClientPeerSelector.filterGhostPeers); apply the same here so
         // exploratory builds do not keep hammering the same failing peers.
-        // Fall back to the original selection if every peer is a ghost, so we
-        // never fail the build entirely.
+        //
+        // When every peer is a ghost this now excludes them and redraws, which is
+        // what the client pools do.  It used to restore the original selection, on
+        // the reasoning that "never fail the build entirely" was the worse outcome —
+        // but that dispatches the build through the very peers just measured as
+        // failing, and it did so deterministically, so the next cycle drew the same
+        // ghosts and burned another attempt.  A redraw can also fail; it simply does
+        // not do so for a reason we already know.
         TunnelManagerFacade tmf = ctx.tunnelManager();
         GhostPeerManager ghostManager = tmf.getGhostPeerManager();
         if (ghostManager != null && rv.size() > 1) {
             List<Hash> before = new ArrayList<>(rv);
             rv.removeIf(peer -> ghostManager.isGhost(peer));
             if (rv.isEmpty()) {
-                rv.addAll(before);
-                if (log.shouldWarn()) {
-                    log.warn("EPS all selected peers were ghosts -> keeping original selection");
-                }
+                // Recorded rather than restored: selectPeers() retries from these.
+                _lastAllGhostSelection.set(new HashSet<>(before));
             } else if (rv.size() != before.size() && log.shouldDebug()) {
                 log.debug("EPS ghost-filtered " + (before.size() - rv.size()) + " peer(s)");
             }

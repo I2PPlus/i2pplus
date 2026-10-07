@@ -1083,9 +1083,42 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     private static String getEffectiveExcludeCaps(RouterContext ctx, double buildSuccess) {
         String configured = getExcludeCaps(ctx);
-        String relaxed = relaxedExcludeCaps(configured, buildSuccess, ctx.router().getUptime());
+        long uptime = ctx.router() != null ? ctx.router().getUptime() : 0L;
+        boolean wasRelaxed = _excludeCapsRelaxed;
+        String relaxed = relaxedExcludeCaps(configured, buildSuccess, uptime, wasRelaxed);
+        // Latch only what this decision actually changed. STARTUP relaxes without
+        // latching, so the first post-startup reading starts from a clean threshold
+        // rather than inheriting a relaxation no ratio ever justified.
+        if (uptime <= 0 || uptime >= STARTUP_WARNING_SUPPRESS_MS) {
+            _excludeCapsRelaxed = wasRelaxed
+                    ? buildSuccess < ATTACK_RELAX_EXIT
+                    : buildSuccess < ATTACK_THRESHOLD;
+        }
         return relaxed != null ? relaxed : configured;
     }
+
+    /**
+     *  Whether the exclude caps are currently relaxed, and by how much build success
+     *  has to recover before they are enforced again.
+     *
+     *  <p>Wider than {@link #ATTACK_THRESHOLD} on purpose: relaxing the caps widens
+     *  the peer pool, which raises build success, which would otherwise release the
+     *  relaxation immediately and put the caps back — a loop that ratchets the peer
+     *  pool between wide and narrow several times a minute. The gap is what lets the
+     *  widening actually take hold.
+     *
+     *  @since 0.9.71+
+     */
+    static final double ATTACK_RELAX_EXIT = 0.44;
+
+    /**
+     *  Latch for the exclude-cap relaxation, shared by every selection.
+     *
+     *  <p>Process-wide on purpose: the caps are a property of the router's current
+     *  state, not of one selection, so two concurrent selections must not disagree
+     *  about whether the pool is relaxed.
+     */
+    private static volatile boolean _excludeCapsRelaxed;
 
     /**
      *  Strip the M, N, O, D, P capability exclusions from the configured caps
@@ -1101,26 +1134,62 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @return the configured caps with M/N/O/D/P removed when relaxing, otherwise unchanged
      */
     static String relaxedExcludeCaps(String configured, double buildSuccess, long uptimeMs) {
+        return relaxedExcludeCaps(configured, buildSuccess, uptimeMs, false);
+    }
+
+    /**
+     *  Strip the M, N, O, D, P capability exclusions from the configured caps
+     *  when the build success ratio is below {@link #ATTACK_THRESHOLD} or the
+     *  router is within its first {@link #STARTUP_WARNING_SUPPRESS_MS} of
+     *  uptime (when the ratio is not yet meaningful).  A ratio of 0.0 (no
+     *  data) relaxes as well, matching the conservative startup behavior.
+     *
+     *  <p><b>P4:</b> {@code alreadyRelaxed} is the latch, and this is where the
+     *  hysteresis actually lives.  The previous form derived the decision from
+     *  {@code buildSuccess} alone, which is a plain threshold wearing
+     *  hysteresis's clothes — the {@code buildSuccess >= 0.44} arm could only
+     *  assign {@code false} to a variable already {@code false}, so it was dead
+     *  code and the {@code [0.40, 0.44)} band was not a dead zone but the
+     *  strict side of a 0.40 threshold.  Build success oscillating across 0.40
+     *  therefore flipped the caps on every crossing.  Passing the prior state
+     *  makes the band real: enter below {@link #ATTACK_THRESHOLD}, leave at or
+     *  above {@link #ATTACK_RELAX_EXIT}, hold in between.
+     *
+     *  Pure decision — no context access and no shared state, safe for unit tests.
+     *
+     *  @param configured the configured exclude caps, possibly null or empty
+     *  @param buildSuccess the build success ratio in [0.0, 1.0]
+     *  @param uptimeMs router uptime in milliseconds
+     *  @param alreadyRelaxed whether the caps were already relaxed, i.e. the latch state
+     *         from the previous decision
+     *  @return the configured caps with M/N/O/D/P removed when relaxing, otherwise unchanged
+     *  @since 0.9.71+ four-argument form carries the hysteresis latch
+     */
+    static String relaxedExcludeCaps(String configured, double buildSuccess, long uptimeMs,
+                                     boolean alreadyRelaxed) {
         if (configured == null || configured.isEmpty()) {
             return configured;
         }
 
-        // Two-level hysteresis: ATTACK (enter <0.40, exit >=0.44) and
-        // STARTUP (always relax during first 5 min).  The 4% hysteresis
-        // band prevents flapping when buildSuccess oscillates around 0.40.
-        boolean shouldRelax = false;
+        // STARTUP always relaxes: build success is not yet meaningful.
         if (uptimeMs > 0 && uptimeMs < STARTUP_WARNING_SUPPRESS_MS) {
-            shouldRelax = true;
-        } else if (buildSuccess < ATTACK_THRESHOLD) {
-            shouldRelax = true;
-        } else if (buildSuccess >= 0.44) {
-            shouldRelax = false;
+            return stripCaps(configured);
         }
-
-        if (!shouldRelax) {
+        // Hysteresis: a latched relaxation is only released once the ratio has
+        // recovered past the wider exit threshold.
+        // The latch band is therefore (ATTACK_THRESHOLD, ATTACK_RELAX_EXIT): entry is
+        // strict below the lower threshold, exit is at the upper one.
+        boolean relax = alreadyRelaxed
+                      ? buildSuccess < ATTACK_RELAX_EXIT
+                      : buildSuccess < ATTACK_THRESHOLD;
+        if (!relax) {
             return configured;
         }
+        return stripCaps(configured);
+    }
 
+    /** Remove the M/N/O/D/P capability exclusions, leaving every other cap intact. */
+    private static String stripCaps(String configured) {
         // Remove M, N, O, D, P from exclusions
         StringBuilder adjusted = new StringBuilder();
         for (int i = 0; i < configured.length(); i++) {
