@@ -251,6 +251,64 @@ public class EstablishmentManager {
     private static final long OB_RETRY_EXTRA_MS = 2 * 1000L;
 
     /**
+     *  Minimum gap between "Corrupt SessionConfirmed" reports.
+     *
+     *  <p>This one warning was 9.2% of an entire log - roughly 180 lines a minute - and it
+     *  carries no reason, so the volume bought no information. Two causes are folded into
+     *  this one catch: a peer that legitimately failed the handshake and then sent
+     *  SessionConfirmed anyway, which throws IllegalStateException on an already-FAILED
+     *  state and is ordinary race behaviour; and a genuine key or payload rejection. They
+     *  need opposite responses, so the reason is now reported and repeats are counted.
+     *
+     *  @since 0.9.71+
+     */
+    static final long CORRUPT_CONFIRM_LOG_INTERVAL_MS = 60 * 1000L;
+    private static final AtomicLong _lastCorruptConfirmLog = new AtomicLong();
+    private static final AtomicLong _corruptConfirmSuppressed = new AtomicLong();
+
+    /**
+     *  Whether to emit a corrupt-SessionConfirmed report now, counting any skipped.
+     *
+     *  @param now current wall clock
+     *  @return true if this caller should log; false if the event was only counted
+     *  @since 0.9.71+
+     */
+    static boolean shouldLogCorruptConfirm(long now) {
+        long last = _lastCorruptConfirmLog.get();
+        if (now - last < CORRUPT_CONFIRM_LOG_INTERVAL_MS) {
+            _corruptConfirmSuppressed.incrementAndGet();
+            return false;
+        }
+        _lastCorruptConfirmLog.set(now);
+        return true;
+    }
+
+    /**
+     *  How many corrupt-SessionConfirmed events were rate-limited away.
+     *
+     *  @return suppressed event count since the last emitted report
+     *  @since 0.9.71+
+     */
+    static long getCorruptConfirmSuppressed() { return _corruptConfirmSuppressed.get(); }
+
+    /**
+     *  The reason a SessionConfirmed was rejected, for the log line.
+     *
+     *  @param e the exception thrown out of the handshake
+     *  @return a short, single-line description including the exception type
+     *  @since 0.9.71+
+     */
+    static String corruptConfirmReason(Throwable e) {
+        if (e == null) {return "unknown";}
+        String msg = e.getMessage();
+        if (msg == null || msg.isEmpty()) {return e.getClass().getSimpleName();}
+        // the handshake state carries long chains; keep it to one readable line
+        msg = msg.replace('\n', ' ').replace('\r', ' ').trim();
+        if (msg.length() > 120) {msg = msg.substring(0, 120) + "...";}
+        return e.getClass().getSimpleName() + ": " + msg;
+    }
+
+    /**
      *  Completion time above which a handshake counts as slow.
      *
      *  <p>The recorded {@code udp.*EstablishTime} stats only expose a mean, and the mean is
@@ -1454,8 +1512,10 @@ public class EstablishmentManager {
         try {state.receiveSessionConfirmed(packet);}
         catch (RuntimeException e) {
             if (state != null && !isPeerBanned(state)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU] Corrupt SessionConfirmed received from " + state);
+                if (_log.shouldWarn() && shouldLogCorruptConfirm(_context.clock().now())) {
+                    _log.warn("[SSU] Corrupt SessionConfirmed received from " + state
+                              + " -> " + corruptConfirmReason(e)
+                              + " (suppressed " + getCorruptConfirmSuppressed() + ")");
                 }
                 // Track probing attempts
                 _context.banlist().badPacket(state.getRemoteHostId().toString(), null);

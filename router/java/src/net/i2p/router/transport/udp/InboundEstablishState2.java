@@ -1068,8 +1068,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } catch (RuntimeException re) {
             // HandshakeState throws IllegalStateException when state is FAILED,
             // IllegalArgumentException for low-order/invalid Curve25519 keys, etc.
-            if (_log.shouldWarn()) {
-                _log.warn("[SSU] Corrupt SessionConfirmed received from " + this);
+            long now = _context.clock().now();
+            if (_log.shouldWarn() && EstablishmentManager.shouldLogCorruptConfirm(now)) {
+                // The reason matters: an already-FAILED state is an ordinary race with a
+                // peer that gave up on us first, while a key or payload rejection is a
+                // real protocol failure. They were indistinguishable in the log.
+                _log.warn("[SSU] Corrupt SessionConfirmed received from " + this
+                          + " -> " + EstablishmentManager.corruptConfirmReason(re)
+                          + " (suppressed " + EstablishmentManager.getCorruptConfirmSuppressed() + ")");
             }
             // Track probing attempts (skip if already blocklisted)
             if (!_context.blocklist().isBlocklisted(Addresses.toString(_aliceIP))) {
