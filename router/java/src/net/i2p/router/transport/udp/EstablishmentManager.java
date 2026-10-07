@@ -250,6 +250,20 @@ public class EstablishmentManager {
      */
     private static final long OB_RETRY_EXTRA_MS = 2 * 1000L;
 
+    /**
+     *  Completion time above which a handshake counts as slow.
+     *
+     *  <p>The recorded {@code udp.*EstablishTime} stats only expose a mean, and the mean is
+     *  useless for sizing the deadline: measured live, successful outbound handshakes
+     *  average 196ms, so 4x the mean targets 784ms - below the 2250 that abandoned 117
+     *  handshakes a minute. Latency here is heavily right-skewed, and the abandonments came
+     *  from the tail, not the body. This threshold marks the tail so a tuner has something
+     *  to read. It sits a quarter of the validated floor, so a healthy link records none.
+     *
+     *  @since 0.9.71+
+     */
+    static final long SLOW_ESTABLISH_MS = 1000L;
+
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final long OB_MESSAGE_TIMEOUT = 2500L;
 
@@ -302,6 +316,8 @@ public class EstablishmentManager {
                                                              ctx.bandwidthLimiter().getOutboundKBytesPerSecond() / 2));
         _context.statManager().createRequiredRateStat("udp.inboundEstablishTime", "Time to establish new inbound session (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRequiredRateStat("udp.outboundEstablishTime", "Time to establish new outbound session (ms)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("udp.outboundEstablishSlow", "Outbound sessions that took over 1s to establish (tail, not mean)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
+        _context.statManager().createRequiredRateStat("udp.inboundEstablishSlow", "Inbound sessions that took over 1s to establish (tail, not mean)", "Transport [UDP]", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         _context.statManager().createRateStat("udp.sendIntroRelayTimeout", "Relay request timeouts before response (target or intro peer offline)", "Transport [UDP]", UDPTransport.RATES);
         _context.statManager().createRateStat("udp.establishDropped", "Dropped an inbound establish message", "Transport [UDP]", UDPTransport.RATES);
                      _context.statManager().createRequiredRateStat("udp.establishRejected", "Pending outbound connections when we refuse to add any more", "Transport [UDP]", UDPTransport.RATES);
@@ -1734,7 +1750,11 @@ public class EstablishmentManager {
         boolean isIPv6 = state.getSentIP().length == 16;
         _transport.inboundConnectionReceived(isIPv6);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
-        _context.statManager().addRateData("udp.inboundEstablishTime", state.getLifetime());
+        long ibLifetime = state.getLifetime();
+        _context.statManager().addRateData("udp.inboundEstablishTime", ibLifetime);
+        if (ibLifetime >= SLOW_ESTABLISH_MS) {
+            _context.statManager().addRateData("udp.inboundEstablishSlow", ibLifetime);
+        }
         sendInboundComplete(peer);
         OutNetMessage msg;
         while ((msg = state.getNextQueuedMessage()) != null) {
@@ -1803,7 +1823,11 @@ public class EstablishmentManager {
         _transport.addRemotePeerState(peer);
         _transport.setIP(remote.calculateHash(), state.getSentIP());
 
-        _context.statManager().addRateData("udp.outboundEstablishTime", state.getLifetime(now));
+        long obLifetime = state.getLifetime(now);
+        _context.statManager().addRateData("udp.outboundEstablishTime", obLifetime);
+        if (obLifetime >= SLOW_ESTABLISH_MS) {
+            _context.statManager().addRateData("udp.outboundEstablishSlow", obLifetime);
+        }
         DatabaseStoreMessage dbsm = null;
 
         List<OutNetMessage> msgs = new ArrayList<>(8);
