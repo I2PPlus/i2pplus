@@ -2897,6 +2897,18 @@ public class TunnelPool {
             // proof the tunnel works, so publishing it is safe; it fills the
             // LeaseSet to the configured target instead of leaving it short.
             List<TunnelInfo> provenUntested = collectTrafficProvenUntested(tunnels, expireAfter);
+            // These can already be in goodTunnels: when the pool has no GOOD tunnel at all,
+            // isEligibleForLease() admits UNTESTED ones, so collectLeaseTunnels() has already
+            // picked up every tunnel this method is about to return. Adding them again inflated
+            // the offered list, which the lease set then collapsed back by identity - so the
+            // top-up filled nothing and the shortfall it exists to close stayed open. Dropping
+            // what is already selected also makes the arithmetic count distinct tunnels, which
+            // is what wantedLeases means.
+            Set<Long> selected = new HashSet<>();
+            for (TunnelInfo tunnel : goodTunnels) {
+                selected.add(leaseKeyOf(tunnel));
+            }
+            provenUntested.removeIf(tunnel -> selected.contains(leaseKeyOf(tunnel)));
             int remaining = wantedLeases - goodTunnels.size();
             if (provenUntested.size() > remaining) {
                 provenUntested = new ArrayList<>(provenUntested.subList(0, remaining));
@@ -2906,6 +2918,15 @@ public class TunnelPool {
         }
 
         TreeSet<Lease> leases = buildLeases(goodTunnels, selection.zeroHop);
+        // A lease count below the tunnels that went in means the set threw one away, which is a
+        // bug and not a supply problem. The shortfall below logs the two identically, so without
+        // this a set that silently collapsed to one lease looked exactly like a pool starved of
+        // tunnels - which is how a whole LeaseSet went out carrying one tunnel.
+        int contributed = goodTunnels.size() + (selection.zeroHop != null ? 1 : 0);
+        if (leases.size() < contributed && _log.shouldWarn()) {
+            _log.warn(toString() + "\n* BUG: LeaseSet kept " + leases.size() + " of "
+                     + contributed + " tunnels — a lease was dropped during assembly");
+        }
         if (!leases.isEmpty()) {
             _hasGoodLeaseSet = true;
         }
@@ -3077,7 +3098,32 @@ public class TunnelPool {
      *  Assemble the Lease objects for the selected tunnels: the single
      *  zero-hop lease (if any), then the quality-sorted GOOD tunnels.
      */
-    private TreeSet<Lease> buildLeases(List<TunnelInfo> goodTunnels, TunnelInfo zeroHopTunnel) {
+    /**
+     *  Assemble the LeaseSet from the tunnels that qualify for it.
+     *
+     *  <p>Package-visible so the assembly can be exercised directly: the guarantee that matters
+     *  here is that every tunnel offered yields a lease, and that is a property of this method
+     *  rather than of the tunnels the router happened to build when the test ran.
+     *
+     *  @param goodTunnels the tunnels to advertise, best first
+     *  @param zeroHopTunnel the zero-hop tunnel if one is in use, else null
+     *  @return the leases, ordered by the pool's lease comparator
+     */
+    /**
+     *  The identity a lease for this tunnel is keyed on: its receive tunnel id.
+     *
+     *  <p>Two tunnels sharing a receive tunnel id are the same lease, so this is what decides
+     *  whether an offered tunnel adds anything.
+     *
+     *  @param tunnel the tunnel to identify
+     *  @return the receive tunnel id, or -1 when the tunnel has none
+     */
+    private static long leaseKeyOf(TunnelInfo tunnel) {
+        TunnelId inId = tunnel.getReceiveTunnelId(0);
+        return inId == null ? -1L : inId.getTunnelId();
+    }
+
+    TreeSet<Lease> buildLeases(List<TunnelInfo> goodTunnels, TunnelInfo zeroHopTunnel) {
         TreeSet<Lease> leases = new TreeSet<>(new LeaseComparator());
         if (zeroHopTunnel != null) {
             Lease lease = buildLeaseFromTunnel(zeroHopTunnel);
@@ -4182,17 +4228,61 @@ public class TunnelPool {
      * but we use latest expiration first, since we need to sort them by that anyway.
      *
      */
-    private static class LeaseComparator implements Comparator<Lease>, Serializable {
+    static class LeaseComparator implements Comparator<Lease>, Serializable {
         private static final long serialVersionUID = 1L;
         /**
-         * Compare leases by end time, latest first.
+         * Order leases by end time, breaking ties on tunnel identity.
+         *
+         * <p>Ordering by end time is the point of this comparator: a tunnel set that has not
+         * changed has to serialise to the same LeaseSet, or the router republishes identical
+         * leases and the floodfill does needless work.
+         *
+         * <p>The tie-break is not cosmetic, it is the whole correctness of the LeaseSet.
+         * A {@link TreeSet} discards any element its comparator calls equal, and end times
+         * collide constantly: {@link #computeLeaseEndDate} clamps to {@code now + maxLeaseMs}
+         * and floors at {@code now + 60s} from a single {@code now} taken for the whole build,
+         * so every tunnel in a batch that outruns the lease cap lands on the very same instant.
+         * Comparing end time alone therefore collapsed a pool of eight tunnels to a one-lease
+         * LeaseSet, published as such, and a destination advertised through a single tunnel
+         * reads as unreachable to everyone else. Breaking ties on tunnel id and gateway keeps
+         * the ordering stable while making the comparator agree with {@link Lease#equals}, so
+         * the set can no longer silently lose leases.
          */
         public int compare(Lease l, Lease r) {
+            if (l == r) {return 0;}
             long lt = l.getEndTime();
             long rt = r.getEndTime();
             if (rt > lt) {return 1;}
             if (rt < lt) {return -1;}
-            return 0;
+            // Neither key is ever null on a lease that came out of buildLeaseFromTunnel, which
+            // refuses to build one, but a comparator that throws while a LeaseSet is being
+            // assembled would be a far worse failure than an arbitrary tie-break.
+            TunnelId lid = l.getTunnelId(), rid = r.getTunnelId();
+            int c = Long.compare(lid == null ? -1 : lid.getTunnelId(),
+                                 rid == null ? -1 : rid.getTunnelId());
+            if (c != 0) {return c;}
+            Hash lgw = l.getGateway(), rgw = r.getGateway();
+            return compareBytes(lgw == null ? null : lgw.getData(),
+                                rgw == null ? null : rgw.getData());
+        }
+
+        /**
+         *  Lexicographic byte comparison, so two distinct gateways always order.
+         *
+         *  @param a first value, may be null
+         *  @param b second value, may be null
+         *  @return 0 only when the two values are equal, null included
+         */
+        private static int compareBytes(byte[] a, byte[] b) {
+            if (a == b) {return 0;}
+            if (a == null) {return -1;}
+            if (b == null) {return 1;}
+            int n = Math.min(a.length, b.length);
+            for (int i = 0; i < n; i++) {
+                int d = (a[i] & 0xff) - (b[i] & 0xff);
+                if (d != 0) {return d;}
+            }
+            return a.length - b.length;
         }
     }
 
