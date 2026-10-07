@@ -8,9 +8,9 @@
 @import url(../images/itooplus.css);
 
 :root{
---graph_plotLine1:#80c83780 #16503980;
---graph_plotLine2:#c8373780 #64641b80;
---graph_plotFill1:#5ad85a60 #59912260;
+--graph_plotLine1:#80c837d0 #165039d0;
+--graph_plotLine2:#c83737d0 #64641bd0;
+--graph_plotFill1:#5cd65c60 #14521460;
 --graph_plotFill2:#ff600060 #b3a70060;
 --graph_plotDash:0;
 --graph_textColor:#f4f4be;
