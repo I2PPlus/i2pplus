@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -1169,6 +1170,181 @@ public class BuildExecutor implements Runnable {
      *  @param cfg the expired build's config
      *  @since 0.9.71+
      */
+    /** Interval between emitted build-expiry reports. */
+    private static final long BUILD_EXPIRY_LOG_INTERVAL_MS = 60 * 1000L;
+    private static final AtomicLong _lastBuildExpiryLog = new AtomicLong();
+    private static final AtomicLong _buildExpirySuppressed = new AtomicLong();
+
+    /**
+     *  Hop was never assigned a peer.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_NEVER_ASSIGNED = "never assigned";
+
+    /**
+     *  This router sits at the gateway index it is expected to occupy.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_SELF_EXPECTED = "this router (expected)";
+
+    /**
+     *  This router sits at a hop index other than the gateway slot - never legitimate.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_SELF_UNEXPECTED = "this router (UNEXPECTED)";
+
+    /**
+     *  The peer is on record as unreachable: selection admitted a peer we had already
+     *  written off, so the eligibility filter failed to fire.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_UNREACHABLE = "unreachable";
+
+    /**
+     *  The peer holds an established connection but did not answer the build request.
+     *
+     *  <p>This is the signature that recency and reachability filtering cannot address: the
+     *  peer accepts the connection and then ignores build requests, so it looks healthy to
+     *  every filter that exists and still consumes a share of the timeout budget.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_ESTABLISHED_SILENT = "established, silent";
+
+    /**
+     *  The peer never finished a handshake, so it never had a session to answer over.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_HANDSHAKE_UNFINISHED = "handshake unfinished";
+
+    /**
+     *  The peer is reachable and has been heard from; nothing distinguishes it.
+     *
+     * @since 0.9.71+
+     */
+    static final String HOP_REACHABLE = "reachable";
+
+    /**
+     *  Reduce one hop of an expired build to a single classification token.
+     *
+     *  <p>Order matters: an unreachable peer is reported as such even if a connection flag is
+     *  also set, because "we already know this peer is dead" is the more actionable fact and
+     *  the one that indicts selection rather than the peer.
+     *
+     * @param assigned whether a peer was assigned to this hop
+     * @param isUs whether the assigned peer is this router
+     * @param isGateway whether this hop is the one where we are the gateway
+     * @param unreachable whether the peer is on record as unreachable
+     * @param established whether the peer holds an established connection
+     * @param connecting whether the peer is still handshaking
+     * @return one of the {@code HOP_*} constants, never null
+     * @since 0.9.71+
+     */
+    static String classifyExpiredHop(boolean assigned, boolean isUs, boolean isGateway,
+                                     boolean unreachable, boolean established, boolean connecting) {
+        if (!assigned) { return HOP_NEVER_ASSIGNED; }
+        if (isUs) { return isGateway ? HOP_SELF_EXPECTED : HOP_SELF_UNEXPECTED; }
+        if (unreachable) { return HOP_UNREACHABLE; }
+        if (established) { return HOP_ESTABLISHED_SILENT; }
+        if (connecting) { return HOP_HANDSHAKE_UNFINISHED; }
+        return HOP_REACHABLE;
+    }
+
+    /**
+     *  Whether a classification describes a hop whose state explains, or at least indicts,
+     *  the expiry - as opposed to a hop that was simply the gateway slot or an ordinary peer.
+     *
+     * @param classification a token returned by {@link #classifyExpiredHop}
+     * @return true when the classification is actionable for diagnosis
+     * @since 0.9.71+
+     */
+    static boolean isActionableHop(String classification) {
+        return HOP_UNREACHABLE.equals(classification)
+            || HOP_ESTABLISHED_SILENT.equals(classification)
+            || HOP_HANDSHAKE_UNFINISHED.equals(classification)
+            || HOP_NEVER_ASSIGNED.equals(classification)
+            || HOP_SELF_UNEXPECTED.equals(classification);
+    }
+
+    /**
+     *  Rate-limit the per-expiry report.
+     *
+     *  <p>Expired builds arrive at roughly twenty a minute on a degraded router, which is far
+     *  too often to read individually but not often enough to summarise losslessly. One
+     *  representative report a minute is enough to identify which pattern dominates; the
+     *  suppressed count keeps the remainder accounted for.
+     *
+     * @param now current time in milliseconds
+     * @return true when this expiry should be reported
+     * @since 0.9.71+
+     */
+    private boolean shouldLogBuildExpiry(long now) {
+        long last = _lastBuildExpiryLog.get();
+        if (now - last < BUILD_EXPIRY_LOG_INTERVAL_MS) {
+            _buildExpirySuppressed.incrementAndGet();
+            return false;
+        }
+        _lastBuildExpiryLog.set(now);
+        return true;
+    }
+
+    /**
+     *  Report an expired build on a single line, naming every hop and its state.
+     *
+     *  <p>Build timeouts are the largest unexplained loss on this router - roughly twice the
+     *  rejection rate - and the DEBUG dump that already existed could not be read, because
+     *  the class logs at INFO in practice and a six-line dump per expiry at twenty expiries a
+     *  minute would be unreadable anyway. This is the same content compressed to one line,
+     *  with the gateway index marked so "the gateway or the far end" is answerable directly.
+     *
+     * @param cfg the expired build's config
+     * @since 0.9.71+
+     */
+    private void logExpiredBuildWarn(TunnelCreatorConfig cfg) {
+        CommSystemFacade commSystem = _context.commSystem();
+        long now = _context.clock().now();
+        int length = cfg.getLength();
+        Hash us = _context.routerHash();
+        int gatewayHop = gatewayHopIndex(cfg, length);
+        String destination = cfg.getDestinationNickname();
+        StringBuilder buf = new StringBuilder(192);
+        buf.append("Build expired unanswered: ");
+        buf.append(cfg.isInbound() ? "inbound" : "outbound");
+        buf.append(' ').append(destination != null ? destination : "exploratory");
+        buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
+        buf.append(", gateway=Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
+        for (int hop = 0; hop < length; hop++) {
+            Hash peer = cfg.getPeer(hop);
+            boolean assigned = (peer != null);
+            boolean isUs = assigned && us != null && us.equals(peer);
+            String classification = classifyExpiredHop(assigned, isUs, hop == gatewayHop,
+                assigned && !isUs && commSystem.wasUnreachable(peer),
+                assigned && !isUs && commSystem.isEstablished(peer),
+                assigned && !isUs && commSystem.isConnecting(peer));
+            buf.append(" | Hop").append(hop).append('=');
+            if (assigned && !isUs) {
+                PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(peer);
+                long lastHeardFrom = (profile != null) ? profile.getLastHeardFrom() : 0;
+                buf.append(peer.toBase64(), 0, 6);
+                buf.append(' ').append(classification);
+                buf.append(" heard ");
+                buf.append(lastHeardFrom > 0 ? describeAge(now - lastHeardFrom) + " ago" : "never");
+            } else {
+                buf.append(classification);
+            }
+        }
+        long suppressed = _buildExpirySuppressed.getAndSet(0);
+        if (suppressed > 0) {
+            buf.append(" (suppressed ").append(suppressed).append(')');
+        }
+        _log.warn(buf.toString());
+    }
+
     private void logExpiredPeers(TunnelCreatorConfig cfg) {
         CommSystemFacade commSystem = _context.commSystem();
         long now = _context.clock().now();
@@ -1445,6 +1621,8 @@ public class BuildExecutor implements Runnable {
                 } else {
                     _context.statManager().addRateData("tunnel.buildClientExpire", 1);
                 }
+                if (_log.shouldWarn() && shouldLogBuildExpiry(_context.clock().now()))
+                    logExpiredBuildWarn(cfg);
                 if (_log.shouldDebug())
                     logExpiredPeers(cfg);
             }
