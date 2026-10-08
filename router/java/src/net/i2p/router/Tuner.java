@@ -9129,7 +9129,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             super("i2p.tunnel.build.requestTimeout", "Build request reply timeout (ms)",
                   SUB_ROUTER,
 
-                  5000, 15000, 1000, "tunnel.buildTimeoutRate", _context);
+                  // Ceiling raised from 15000 to 30000 so it matches the clamp
+                  // calculateAdaptiveTimeoutFromSuccess() already applies to the adaptive value.
+                  // The two disagreed: the ladder would allow 30s while every one of this
+                  // parameter's increase paths is Math.min(_max, ...), so the autotuner could
+                  // never reach the range the ladder permitted and sat pinned at its ceiling
+                  // whenever the timeout rate was high - which it is, at roughly 60%. Measured
+                  // build durations put p90 at 12.2s and the slowest at 25.4s against a 17s
+                  // inbound budget, so the ceiling was genuinely below the tail it was meant
+                  // to accommodate. One layer's ceiling should not silently cap the other's.
+                  5000, 30000, 1000, "tunnel.buildTimeoutRate", _context);
         }
 
         protected void applyValue(int value) {
