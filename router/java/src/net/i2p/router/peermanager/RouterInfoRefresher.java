@@ -114,6 +114,39 @@ class RouterInfoRefresher {
 
     /** Most peers whose RouterInfo refresh may be requested in one drain. */
     static final int MAX_ADDRESS_REFRESHES = 16;
+    /**
+     *  Peers looked up per drain when catching up on profiles loaded without a
+     *  RouterInfo, giving roughly 64 lookups a minute.
+     *
+     *  <p>Faster than {@link #MAX_ADDRESS_REFRESHES} on purpose. That cap is sized for
+     *  held promotion candidates, a trickle of a few per reorganize; a router coming
+     *  back from downtime may hold thousands of profiles whose RouterInfo has since
+     *  expired, and at 16 a minute they would stay unusable for hours. Each lookup is a
+     *  fire-and-forget {@code lookupRouterInfo}, and the netdb negatively caches
+     *  known-dead keys, so peers that never come back cost little on repeat.
+     *
+     *  @since 0.9.72
+     */
+    static final int MISSING_ROUTERINFO_BATCH = 32;
+    /**
+     *  Minimum gap between missing-RouterInfo drains, in ms.
+     *
+     *  <p>Sets the rate at {@link #MISSING_ROUTERINFO_BATCH} per interval, about 64 a
+     *  minute, so a couple of thousand profiles take roughly half an hour to recover.
+     *
+     *  @since 0.9.72
+     */
+    static final long MISSING_ROUTERINFO_MIN_INTERVAL_MS = 30 * 1000L;
+    /**
+     *  Ceiling on remembered peers missing a RouterInfo.
+     *
+     *  <p>The set is a recovery list, not a backlog to be worked off exhaustively. Past
+     *  this size the extra peers are not worth the memory and the lookups: they are
+     *  peers the netdb has already stopped telling us about.
+     *
+     *  @since 0.9.72
+     */
+    static final int MAX_MISSING_ROUTERINFO = 4096;
 
     /** Minimum gap between drains, so repeated reorgs cannot stack requests. */
     static final long ADDRESS_REFRESH_MIN_INTERVAL_MS = 60 * 1000L;
@@ -196,4 +229,70 @@ class RouterInfoRefresher {
 
     /** Peers waiting for a lookup. */
     synchronized int getAddressRefreshPending() { return _addressRefreshQueue.size(); }
+
+    // ---- profiles loaded with no RouterInfo ---------------------------------
+
+    /** Peers whose stored profile was loaded while the netdb held no RouterInfo for them. */
+    private final java.util.Set<net.i2p.data.Hash> _missingRouterInfo = new java.util.HashSet<>(256);
+    /** Peers dropped because the missing-RouterInfo set was already at its cap. */
+    private int _missingRouterInfoDropped;
+    /** When the set was last drained, to hold the batch to its interval. */
+    private long _lastMissingDrain;
+
+    /**
+     *  Note that a stored profile was loaded for a peer the netdb cannot resolve.
+     *
+     *  <p>Until the RouterInfo comes back the profile is inert: peer selection needs an
+     *  address to send to, and {@link ProfileOrganizer#isExcludedFromProfiling(Hash)}
+     *  declines to profile a peer with no RouterInfo. The capacity, latency and
+     *  acceptance history in the file is then retained but unused, which only pays off
+     *  if something goes and fetches the RouterInfo again.
+     *
+     *  @param peer the peer whose profile was loaded
+     *  @return true if the peer was recorded, false if the set was already full
+     *  @since 0.9.72
+     */
+    synchronized boolean noteMissingRouterInfo(net.i2p.data.Hash peer) {
+        if (peer == null) {return false;}
+        if (_missingRouterInfo.size() >= MAX_MISSING_ROUTERINFO) {
+            _missingRouterInfoDropped++;
+            return false;
+        }
+        return _missingRouterInfo.add(peer);
+    }
+
+    /**
+     *  Whether enough time has passed to drain the missing-RouterInfo set.
+     *
+     *  @param now current time in milliseconds
+     *  @return true if the drain interval has elapsed
+     *  @since 0.9.72
+     */
+    synchronized boolean mayDrainMissingRouterInfo(long now) {
+        return now - _lastMissingDrain >= MISSING_ROUTERINFO_MIN_INTERVAL_MS;
+    }
+
+    /**
+     *  Hand over up to one batch of peers to look up, removing them from the set.
+     *
+     *  @param now current time in milliseconds
+     *  @return the peers to look up, possibly empty
+     *  @since 0.9.72
+     */
+    synchronized java.util.List<net.i2p.data.Hash> takeMissingRouterInfoBatch(long now) {
+        java.util.List<net.i2p.data.Hash> batch = new java.util.ArrayList<>(MISSING_ROUTERINFO_BATCH);
+        for (java.util.Iterator<net.i2p.data.Hash> it = _missingRouterInfo.iterator();
+             it.hasNext() && batch.size() < MISSING_ROUTERINFO_BATCH; ) {
+            batch.add(it.next());
+            it.remove();
+        }
+        _lastMissingDrain = (now == 0 ? 1 : now);
+        return batch;
+    }
+
+    /** Peers dropped because the missing-RouterInfo set was already at its cap. */
+    synchronized int getMissingRouterInfoDropped() { return _missingRouterInfoDropped; }
+
+    /** Peers still waiting for their RouterInfo to be requested. */
+    synchronized int getMissingRouterInfoPending() { return _missingRouterInfo.size(); }
 }

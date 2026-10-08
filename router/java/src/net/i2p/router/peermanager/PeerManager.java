@@ -70,6 +70,13 @@ class PeerManager {
     private static final long STORE_TIME = 15*60*1000L; // how frequently we write profiles to disk
     // for profiles stored to disk
     private static final long EXPIRE_AGE = 7*24*60*60*1000L;
+    /**
+     *  Timeout for a RouterInfo lookup issued on behalf of a stored profile whose peer
+     *  the netdb cannot resolve, in ms.
+     *
+     *  @since 0.9.72
+     */
+    private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
 
     /**
      * TRACKED_CAPS.
@@ -314,8 +321,71 @@ class PeerManager {
      *  This may take a long time - 30 seconds or more
      */
     void loadProfiles() {
-        List<PeerProfile> profiles = _persistenceHelper.readProfiles();
+        // Peers whose profile survived but whose RouterInfo the netdb cannot supply.
+        // Collected during the read so the drain below knows what to go and fetch.
+        Set<Hash> missingRouterInfo = new HashSet<>(256);
+        _persistenceHelper.setMissingRouterInfoSink(missingRouterInfo);
+        List<PeerProfile> profiles;
+        try {
+            profiles = _persistenceHelper.readProfiles();
+        } finally {
+            _persistenceHelper.setMissingRouterInfoSink(null);
+        }
         for (PeerProfile prof : profiles) {_organizer.addProfile(prof);}
+
+        int noted = 0;
+        for (Hash peer : missingRouterInfo) {
+            if (_organizer.noteMissingRouterInfo(peer)) {noted++;}
+        }
+        if (noted > 0 && _log.shouldInfo()) {
+            _log.info("Loaded " + noted + " profiles whose RouterInfo is missing; " +
+                      "requesting them in batches of " +
+                      RouterInfoRefresher.MISSING_ROUTERINFO_BATCH);
+        }
+        if (noted > 0) {new MissingRouterInfoDrain().schedule(0);}
+    }
+
+    /**
+     *  Requests RouterInfos for stored profiles whose peer the netdb cannot resolve.
+     *
+     *  <p>Scheduled once loading finishes, then every
+     *  {@link RouterInfoRefresher#MISSING_ROUTERINFO_MIN_INTERVAL_MS}. The lookups are
+     *  fire-and-forget, so the timer thread only issues them and returns; the netdb
+     *  negatively caches keys it has already failed to resolve, so a peer that never
+     *  comes back is cheap to keep skipping.
+     *
+     *  @since 0.9.72
+     */
+    private class MissingRouterInfoDrain extends SimpleTimer2.TimedEvent {
+
+        MissingRouterInfoDrain() {super(_context.simpleTimer2(), 0);}
+
+        @Override
+        public void timeReached() {
+            long now = _context.clock().now();
+            try {
+                if (_organizer.mayDrainMissingRouterInfo(now)) {
+                    List<Hash> batch = _organizer.takeMissingRouterInfoBatch(now);
+                    for (Hash peer : batch) {
+                        // null, null: fire and forget. A reply arrives through the netdb
+                        // rather than a callback, and a failed lookup is negatively cached.
+                        _context.netDb().lookupRouterInfo(peer, null, null,
+                                                          ADDRESS_REFRESH_TIMEOUT_MS);
+                    }
+                    if (!batch.isEmpty()) {
+                        _context.statManager().addRateData("peermanager.routerInfoRequested", batch.size());
+                    }
+                }
+                int pending = _organizer.getMissingRouterInfoPending();
+                if (pending > 0) {reschedule(RouterInfoRefresher.MISSING_ROUTERINFO_MIN_INTERVAL_MS);}
+                else if (_log.shouldInfo()) {
+                    _log.info("Finished requesting RouterInfos for stored profiles");
+                }
+            } catch (RuntimeException re) {
+                _log.log(Log.WARN, "Missing-RouterInfo drain failed", re);
+                reschedule(RouterInfoRefresher.MISSING_ROUTERINFO_MIN_INTERVAL_MS);
+            }
+        }
     }
 
     /**

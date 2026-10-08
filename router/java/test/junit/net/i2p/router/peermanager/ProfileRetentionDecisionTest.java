@@ -211,4 +211,46 @@ public class ProfileRetentionDecisionTest {
         assertEquals("and never trimmed below the floor",
                      0, ProfilePersistenceHelper.surplusToDelete(3104, FLOOR, 3104));
     }
+
+    // ---- recovering profiles we chose to keep -------------------------------
+
+    /**
+     *  Keeping a profile whose peer has no RouterInfo only pays off if the RouterInfo is
+     *  fetched again, so the load records those peers and a timer requests them. These
+     *  pin the accounting the drain depends on: the batch size, the interval that sets
+     *  the rate, and the ceiling that stops the recovery list becoming a backlog.
+     */
+    @Test
+    public void missingRouterInfoRateIsSixtyFourPerMinute() {
+        assertEquals("32 per 30s",
+                     64, RouterInfoRefresher.MISSING_ROUTERINFO_BATCH * 2);
+        assertEquals(30_000L, RouterInfoRefresher.MISSING_ROUTERINFO_MIN_INTERVAL_MS);
+    }
+
+    /**
+     *  The recovery list is bounded. A router returning from long downtime can hold
+     *  thousands of profiles whose RouterInfo has expired, and working through every one
+     *  would spend lookups on peers the netdb has stopped advertising.
+     */
+    @Test
+    public void theRecoveryListIsCapped() {
+        assertTrue("cap must exceed one batch, or the list can never drain",
+                   RouterInfoRefresher.MAX_MISSING_ROUTERINFO >
+                   RouterInfoRefresher.MISSING_ROUTERINFO_BATCH);
+        assertTrue("cap must stay a sane memory bound",
+                   RouterInfoRefresher.MAX_MISSING_ROUTERINFO <= 16384);
+    }
+
+    /**
+     *  Startup catch-up has its own budget. The held-peer refresher is sized for a
+     *  trickle of promotion candidates, and sharing its cap would make both paths
+     *  contend for one drain.
+     */
+    @Test
+    public void startupCatchUpDoesNotShareTheHeldPeerBudget() {
+        assertEquals(16, RouterInfoRefresher.MAX_ADDRESS_REFRESHES);
+        assertTrue("catch-up must be at least as fast as the held-peer path",
+                   RouterInfoRefresher.MISSING_ROUTERINFO_BATCH >
+                   RouterInfoRefresher.MAX_ADDRESS_REFRESHES);
+    }
 }

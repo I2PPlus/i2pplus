@@ -643,6 +643,13 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.fastOrHighCapProfileCount",
                 "Number of fast or high-capacity peers", "Peers", RATES);
         _context.statManager().createRequiredRateStat("peer.qualityPeerCount", "Peers with good acceptance + recent activity", "Peers", RATES);
+        // Profile files held on disk. Fed from CoalesceStatsEvent on its short cycle,
+        // from the count the persistence helper tracks, so it rises as profiles are
+        // stored and falls only when the retention rules delete a file.
+        _context.statManager().createRequiredRateStat("peer.storedProfileCount", "Profile files retained on disk", "Peers", RATES);
+        // Reorganize passes that gave up rather than block on the write lock. Sustained
+        // non-zero means reorganize is contending and tier decisions are being skipped.
+        _context.statManager().createRequiredRateStat("peer.reorganizeLockFailures", "Reorganize passes skipped on lock contention", "Peers", RATES);
         // Promotion deferral on a stale RouterInfo. peer.routerInfoRefreshNeeded and
         // peer.promotedStaleRouterInfo are the hypothesis counters: together they
         // say how many promotions are being held, and how many are going ahead on a
@@ -1429,7 +1436,7 @@ public class ProfileOrganizer {
      * @param ipSet subnets already represented in this tunnel, consulted only
      *              when mask is non-zero
      * @param preferUnproven if true, prioritize peers with no tunnel test history
-     *        so they accumulate profiling data through exploratory builds
+     *                       so they accumulate profiling data through exploratory builds
      */
      private void selectAllNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                       int mask, MaskedIPSet ipSet, double buildSuccess, boolean preferUnproven) {
@@ -2196,8 +2203,8 @@ public class ProfileOrganizer {
      *                      ({@link #_thresholdRTT}); its own scaling amplifies the
      *                      typical pool latency so the ceiling tracks the network
      * @return the selection ceiling in ms; never below {@link #AUTO_RTT_FLOOR_MS}
-     *         and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
-     *         (no measurement yet) returns the floor so nothing is over-trimmed.
+     *             and never above {@link #AUTO_RTT_CAP_MS}. A boundary at or below 0
+     *             (no measurement yet) returns the floor so nothing is over-trimmed.
      * @since 0.9.71+
      */
     static long computeFastRttCeiling(double boundaryRttMs) {
@@ -2749,9 +2756,9 @@ public class ProfileOrganizer {
      *  @param highCapPeers the current high-cap tier map
      *  @param activeThreshold the activity window cutoff (now - 48h)
      *  @param fastPeerLimit fast tier size at or below which its members keep
-     *         eviction protection; above it, fast members are evictable like any other
+     *                       eviction protection; above it, fast members are evictable like any other
      *  @param highCapacityLimit high-cap tier size at or below which its members
-     *         keep eviction protection; above it, high-cap members are evictable
+     *                           keep eviction protection; above it, high-cap members are evictable
      *  @return whether the profile may be evicted
      *  @since 0.9.71+
      */
@@ -4046,7 +4053,7 @@ public class ProfileOrganizer {
      *  @param maxFast maximum fast peers
      *  @param maxHighCap maximum high-capacity peers
      *  @return true only if promotion was held because the RouterInfo has no
-     *          usable transport address; false for every other outcome
+     *               usable transport address; false for every other outcome
      *  @since 0.9.71+
      */
     private boolean lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess,
@@ -4829,6 +4836,49 @@ public class ProfileOrganizer {
 
     /** Timeout for a RouterInfo lookup issued on behalf of a held peer. */
     private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
+
+    /**
+     *  Record that a stored profile was loaded for a peer the netdb cannot resolve.
+     *
+     *  @param peer the peer whose RouterInfo is missing
+     *  @return true if recorded, false if the recovery list was already full
+     *  @since 0.9.72
+     */
+    boolean noteMissingRouterInfo(Hash peer) { return _refresher.noteMissingRouterInfo(peer); }
+
+    /**
+     *  Whether enough time has passed to request the next batch of missing RouterInfos.
+     *
+     *  @param now current time in milliseconds
+     *  @return true if the drain interval has elapsed
+     *  @since 0.9.72
+     */
+    boolean mayDrainMissingRouterInfo(long now) { return _refresher.mayDrainMissingRouterInfo(now); }
+
+    /**
+     *  Hand over the next batch of peers whose RouterInfo should be requested.
+     *
+     *  @param now current time in milliseconds
+     *  @return the peers to look up, possibly empty
+     *  @since 0.9.72
+     */
+    List<Hash> takeMissingRouterInfoBatch(long now) { return _refresher.takeMissingRouterInfoBatch(now); }
+
+    /**
+     *  Peers still waiting for their RouterInfo to be requested.
+     *
+     *  @return the number pending
+     *  @since 0.9.72
+     */
+    int getMissingRouterInfoPending() { return _refresher.getMissingRouterInfoPending(); }
+
+    /**
+     *  Peers not recorded because the recovery list was full.
+     *
+     *  @return the number dropped
+     *  @since 0.9.72
+     */
+    int getMissingRouterInfoDropped() { return _refresher.getMissingRouterInfoDropped(); }
 
     /**
      * Batch-demote peers from fast/high-cap tiers under a single write lock.

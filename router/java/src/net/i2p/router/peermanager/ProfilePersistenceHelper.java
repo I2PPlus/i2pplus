@@ -462,10 +462,22 @@ class ProfilePersistenceHelper {
             String caps = "";
 
             if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
+            // No RouterInfo is not a reason to destroy the file. A peer drops out of the
+            // network database routinely and for a long time: its RouterInfo expires,
+            // it is offline, or the netdb has not repopulated it yet. Deleting here meant
+            // a peer's entire learned history - capacity, latency, acceptance history -
+            // was destroyed the first time it was missing, and silently, since this branch
+            // logged at DEBUG. The file is kept; whether the profile is used is decided by
+            // ProfileOrganizer.isExcludedFromProfiling(), which already declines to profile
+            // a peer with no RouterInfo. Retention is decided below, by recorded activity.
             else {
-                if (_log.shouldDebug()) {_log.debug("Deleting profile without RouterInfo: " + file.getName());}
-                file.delete();
-                return null;
+                // Hand the peer to the caller so the RouterInfo can be requested again.
+                // The profile is kept and is not used until it arrives, so this is what
+                // makes keeping the file worth anything.
+                if (_missingRouterInfo != null) {_missingRouterInfo.add(peer);}
+                if (_log.shouldDebug()) {
+                    _log.debug("Keeping profile without RouterInfo, requesting it: " + file.getName());
+                }
             }
 
             if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff && lastHeardAbout <= cutoff) {
@@ -637,6 +649,27 @@ class ProfilePersistenceHelper {
         }
     }
 
+    /**
+     *  Peers whose profile was loaded while the netdb held no RouterInfo, collected
+     *  during {@link #readProfiles()}.
+     *
+     *  <p>These profiles are kept on disk but inert until the RouterInfo is fetched
+     *  again, so the caller needs the list to go and request it. Empty when no
+     *  collection has been supplied.
+     *
+     *  @since 0.9.72
+     */
+    private Set<Hash> _missingRouterInfo;
+
+    /**
+     *  Supply the set to collect peers-without-RouterInfo into.
+     *
+     *  @param missingRouterInfo the set to fill during {@link #readProfiles()},
+     *                           or null to collect nothing
+     *  @since 0.9.72
+     */
+    void setMissingRouterInfoSink(Set<Hash> missingRouterInfo) { _missingRouterInfo = missingRouterInfo; }
+
     private Hash getHash(String name) {
         if (name.length() < PREFIX.length() + 44)
             return null;
@@ -674,7 +707,7 @@ class ProfilePersistenceHelper {
      *
      *  @param absentFromNetDb true if no usable RouterInfo is held for the peer
      *  @param lastActivity newest of last-sent-successfully, last-heard-from and
-     *         last-heard-about, or 0 if the profile records none
+     *                      last-heard-about, or 0 if the profile records none
      *  @param now current time in ms
      *  @param staleAge age beyond which an absent peer is treated as gone, in ms
      *  @return true if the file may be deleted regardless of store size
@@ -704,7 +737,7 @@ class ProfilePersistenceHelper {
      *  @param retentionFloor file count to keep, exclusive of stale profiles
      *  @param surplusAvailable surplus profiles not already counted as stale
      *  @return number of surplus files to delete, never negative and never more
-     *         than {@code surplusAvailable}
+     *                 than {@code surplusAvailable}
      *  @since 0.9.71+
      */
     static int surplusToDelete(int storedFiles, int retentionFloor, int surplusAvailable) {

@@ -109,6 +109,11 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("tunnel.promotionHeldNoAddress", _x("Tier promotions held back for a peer with no usable address"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("tunnel.promotionRefreshIssued", _x("RouterInfo refreshes issued for peers held out of the tiers"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("peermanager.tiersUnderfilled", _x("Tier scans that left the fast or high-capacity tier short of target"), "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        // RouterInfos requested for stored profiles whose peer the netdb could not resolve
+        // at load. Non-zero only during the startup recovery that follows loading, and
+        // sustained non-zero means peers are being profiled faster than their RouterInfos
+        // can be re-fetched.
+        sm.createRequiredRateStat("peermanager.routerInfoRequested", _x("RouterInfos requested for stored profiles that had none"), "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("streaming.duplicateCloseSent", _x("Duplicate CLOSE safety-net messages sent"), "Streaming", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         // Describe the stat itself; the JVM ceiling is secondary detail. Using the ceiling
         // as the whole description left the stat unexplained on /configstats, and left it
