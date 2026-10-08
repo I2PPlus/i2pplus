@@ -2086,10 +2086,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @since 0.9.71+
      */
     static boolean hasValidTransportAddress(RouterInfo ri) {
-        for (RouterAddress ra : ri.getAddresses()) {
-            if (isUsableRouterAddress(ra)) {return true;}
-        }
-        return false;
+        return TransportUtil.hasUsableTransportAddress(ri);
     }
 
     /**
@@ -2133,23 +2130,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  @since 0.9.71+ (extracted from hasValidTransportAddress)
      */
     static boolean isUsableRouterAddress(RouterAddress ra) {
-        String style = ra.getTransportStyle();
-        byte[] ip = ra.getIP();
-        int port = ra.getPort();
-        if ("SSU".equals(style)) {
-            if (!"2".equals(ra.getOption("v")))
-                return false;
-            if (ip != null && TransportUtil.isValidPort(port))
-                return true;
-            return ra.getOption("itag0") != null;
-        } else if ("SSU2".equals(style)) {
-            if (ip != null && TransportUtil.isValidPort(port))
-                return true;
-            return ra.getOption("itag0") != null;
-        } else if ("NTCP".equals(style) || "NTCP2".equals(style)) {
-            return ip != null && TransportUtil.isValidPort(port);
-        }
-        return false;
+        return TransportUtil.isUsableRouterAddress(ra);
     }
 
     /**

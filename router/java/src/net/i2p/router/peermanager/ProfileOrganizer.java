@@ -3931,6 +3931,18 @@ public class ProfileOrganizer {
         long now = _context.clock().now();
         boolean staleRouterInfo = promotionNeedsRouterInfoRefresh(profile, now);
 
+        // A peer whose RouterInfo has no usable address left cannot be selected for a
+        // build or pre-connected to, so promoting it only manufactures a candidate that is
+        // guaranteed to fail. That failure then demotes the peer and promoteToFillTiers()
+        // promotes the next equally-stale one, which is the treadmill this gate stops.
+        if (hasNoUsableTransport(peer)) {
+            _context.statManager().addRateData("tunnel.promotionHeldNoAddress", 1);
+            if (_log.shouldDebug())
+                _log.debug("Holding promotion for [" + peer.toBase32().substring(0, 6) +
+                           "]: RouterInfo has no usable transport address");
+            return;
+        }
+
         double effectiveCapThreshold = Math.max(_thresholdCapacityValue, CapacityCalculator.GROWTH_FACTOR);
         double effectiveSpeedThreshold = _thresholdSpeedValue;
 
@@ -4019,6 +4031,25 @@ public class ProfileOrganizer {
      *  @return whether the stored RouterInfo is too old to promote on
      *  @since 0.9.72
      */
+    /**
+     *  Does this peer's RouterInfo carry no address we could still send to?
+     *
+     *  <p>Reads the netdb unvalidated, matching what selection and the build requestor do, so
+     *  the gate cannot reject a peer on stricter grounds than the path that would later use
+     *  it. A missing entry counts as "no usable address": we cannot prove otherwise, and
+     *  promoting an unverifiable peer is precisely the case this gate exists to stop.
+     *
+     * @param peer the candidate
+     * @return true if the peer should be held out of the selection tiers
+     * @since 0.9.71+
+     */
+    private boolean hasNoUsableTransport(Hash peer) {
+        if (peer == null || peer.equals(_context.routerHash())) { return false; }
+        DatabaseEntry de = _context.netDb().lookupLocallyWithoutValidation(peer);
+        if (de == null || de.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) { return true; }
+        return !TransportUtil.hasUsableTransportAddress((RouterInfo) de);
+    }
+
     private boolean promotionNeedsRouterInfoRefresh(PeerProfile profile, long now) {
         // No open cycle means no hold, so skip the netDb read entirely: with the
         // property disabled this costs nothing per candidate.

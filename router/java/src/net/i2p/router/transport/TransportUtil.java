@@ -201,6 +201,64 @@ public abstract class TransportUtil {
     }
 
     /**
+     *  Is the RouterAddress usable for tunnel building?
+     *
+     *  <p>SSU requires protocol v2 plus a valid IP/port or an introduction; SSU2 requires a
+     *  valid IP/port or an introduction; NTCP/NTCP2 require a valid IP/port.
+     *
+     *  <p>Lives here rather than in {@code TunnelPeerSelector} because both the tunnel
+     *  selectors and {@code ProfileOrganizer} need it, and the latter must not reach into
+     *  {@code tunnel.pool} — that package already depends on {@code peermanager}, so the
+     *  reverse edge would close a cycle.
+     *
+     *  <p>Pure decision: no context access, safe for unit tests.
+     *
+     *  @param ra the router address to check (non-null)
+     *  @return true if the address is usable
+     *  @since 0.9.71+ (moved from TunnelPeerSelector)
+     */
+    public static boolean isUsableRouterAddress(RouterAddress ra) {
+        String style = ra.getTransportStyle();
+        byte[] ip = ra.getIP();
+        int port = ra.getPort();
+        if ("SSU".equals(style)) {
+            if (!"2".equals(ra.getOption("v")))
+                return false;
+            if (ip != null && TransportUtil.isValidPort(port))
+                return true;
+            return ra.getOption("itag0") != null;
+        } else if ("SSU2".equals(style)) {
+            if (ip != null && TransportUtil.isValidPort(port))
+                return true;
+            return ra.getOption("itag0") != null;
+        } else if ("NTCP".equals(style) || "NTCP2".equals(style)) {
+            return ip != null && TransportUtil.isValidPort(port);
+        }
+        return false;
+    }
+
+    /**
+     *  Does this RouterInfo carry at least one address we could still send to?
+     *
+     *  <p>A peer whose addresses have all expired or become unusable cannot be selected for
+     *  a build and cannot be pre-connected to, so admitting it to a selection tier only
+     *  produces a candidate that is guaranteed to fail. Gate promotion on this.
+     *
+     *  <p>Pure decision: takes the RouterInfo rather than consulting the netdb, so callers
+     *  holding an entry do not pay for a second lookup.
+     *
+     *  @param ri the router info to check (non-null)
+     *  @return true if at least one address is usable
+     *  @since 0.9.71+
+     */
+    public static boolean hasUsableTransportAddress(net.i2p.data.router.RouterInfo ri) {
+        for (RouterAddress ra : ri.getAddresses()) {
+            if (isUsableRouterAddress(ra)) {return true;}
+        }
+        return false;
+    }
+
+    /**
      * Whether the address is an in-network Yggdrasil address.
      * @return whether yggdrasil
      * @since 0.9.49
