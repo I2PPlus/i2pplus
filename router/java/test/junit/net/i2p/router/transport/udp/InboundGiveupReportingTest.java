@@ -9,23 +9,28 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.junit.Test;
 
 /**
- * Reporting for inbound establishment give-ups.
+ * The inbound establishment deadline, and how it is reported.
  *
- * <p>The outbound path was instrumented first because it was the one losing 117 handshakes a
- * minute. Inbound was left as a bare warning naming only the base deadline, which is the wrong
- * number for a retried attempt: inbound expiry has two branches, and a retried attempt lives to
- * {@code IB_RETRY_SENT_MAX_TIME}. So a give-up at 5000ms was reported as having been given a
- * 4000ms budget - the report understated the allowance, and said nothing about which branch
- * fired.
+ * <p>Inbound expiry was a disjunction: {@code lifetime > base || (retried && lifetime >=
+ * retryBudget)}. The first clause expires the attempt at the base by itself, so the retry clause
+ * could only ever matter when the retry budget was the smaller of the two - and then it made a
+ * retried attempt die <em>sooner</em>. It never granted the extra patience that
+ * {@code IB_RETRY_SENT_MAX_TIME} exists to provide. Observed live with a 4000ms base and a
+ * 3750ms retry budget: a retried attempt was abandoned at 3751ms.
+ *
+ * <p>The predicate now takes its deadline from {@code inboundEstablishBudget}, so the deadline
+ * applied and the deadline reported are the same value by construction.
  *
  * @since 0.9.71+
  */
 public class InboundGiveupReportingTest {
 
+    /** The floor the establish-timeout params now enforce. */
     private static final long BASE = 4000L;
-    private static final long RETRY_BUDGET = 5000L;   // 5 * RETRANSMIT_DELAY when isSlow
+    /** Five retransmit delays, as {@code IB_RETRY_SENT_MAX_TIME} computes it. */
+    private static final long RETRY_BUDGET = 3750L;
 
-    // ---- the applicable budget ----
+    // ---- the deadline ----
 
     @Test
     public void withoutARetryTheBudgetIsTheBase() {
@@ -33,47 +38,64 @@ public class InboundGiveupReportingTest {
     }
 
     @Test
-    public void withARetryTheBudgetIsTheLongerOne() {
-        assertEquals(RETRY_BUDGET,
-                     EstablishmentManager.inboundEstablishBudget(true, BASE, RETRY_BUDGET));
+    public void withARetryTheBudgetIsAtLeastTheBase() {
+        assertTrue("retrying must never shorten the attempt",
+                   EstablishmentManager.inboundEstablishBudget(true, BASE, RETRY_BUDGET) >= BASE);
     }
 
     /**
-     * The defect being fixed: a retried attempt must never be reported as having been given
-     * less than it was allowed. The old line always printed the base figure, so whenever the
-     * retry budget was the larger of the two, the report understated the deadline.
+     * The regression, as observed live. With the retry budget below the base, the old disjunction
+     * expired the attempt at the retry budget - here 3751ms - while the report named the base.
      */
     @Test
-    public void aRetriedAttemptIsNeverReportedAsTheBaseBudget() {
-        for (long retry : new long[]{1000, 3000, 4000, 4001, 5000, 9000}) {
-            long reported = EstablishmentManager.inboundEstablishBudget(true, BASE, retry);
-            assertTrue("retried budget " + retry + " reported as " + reported,
-                       reported >= BASE);
+    public void aRetryBudgetBelowTheBaseDoesNotShortenTheAttempt() {
+        long budget = EstablishmentManager.inboundEstablishBudget(true, BASE, RETRY_BUDGET);
+        assertEquals("the base wins when it is already the later deadline", BASE, budget);
+        assertFalse("and the attempt must outlive the retry budget",
+                    EstablishmentManager.hasInboundEstablishExpired(3751, true, BASE, RETRY_BUDGET));
+    }
+
+    /**
+     * When the retry budget does exceed the base, the attempt gets the longer deadline - which is
+     * the entire reason the retry branch and {@code IB_RETRY_SENT_MAX_TIME} exist.
+     */
+    @Test
+    public void aRetryBudgetAboveTheBaseExtendsTheAttempt() {
+        long retryBudget = 5000L;
+        assertEquals(retryBudget, EstablishmentManager.inboundEstablishBudget(true, BASE, retryBudget));
+        assertTrue("just inside the base still has to be alive",
+                   !EstablishmentManager.hasInboundEstablishExpired(BASE + 1, true, BASE, retryBudget));
+        assertTrue("past the extended deadline it must expire",
+                   EstablishmentManager.hasInboundEstablishExpired(retryBudget + 1, true, BASE, retryBudget));
+    }
+
+    /** The whole point of the fix: retrying must never cost an attempt its original budget. */
+    @Test
+    public void retryingNeverExpiresEarlierThanNotRetrying() {
+        for (long retry : new long[]{1000, 3000, 3750, 4000, 4001, 5000, 9000}) {
+            for (long lifetime = 0; lifetime <= 2 * retry; lifetime += 250) {
+                boolean plain = EstablishmentManager.hasInboundEstablishExpired(lifetime, false, BASE, retry);
+                boolean withRetry = EstablishmentManager.hasInboundEstablishExpired(lifetime, true, BASE, retry);
+                assertFalse("retrying expired earlier at lifetime=" + lifetime + " retry=" + retry,
+                            withRetry && !plain);
+            }
         }
     }
 
-    /** When the base is already the longer of the two, the retry branch changes nothing. */
-    @Test
-    public void baseWinsWhenItIsAlreadyLonger() {
-        assertEquals(9000, EstablishmentManager.inboundEstablishBudget(true, 9000, 5000));
-    }
-
     /**
-     * The budget has to agree with the predicate that decides expiry, or the log names a
-     * deadline the code did not apply.
+     * The reported deadline and the one the predicate applied must be the same value. This is
+     * what failed live: a give-up at 3751ms reported as "budget 4000ms".
      */
     @Test
-    public void budgetAgreesWithTheExpiryPredicate() {
-        for (long lifetime = 0; lifetime <= 2 * RETRY_BUDGET; lifetime += 37) {
-            for (boolean retried : new boolean[]{false, true}) {
-                boolean expired = EstablishmentManager.hasInboundEstablishExpired(
-                    lifetime, retried, BASE, RETRY_BUDGET);
-                long budget = EstablishmentManager.inboundEstablishBudget(retried, BASE, RETRY_BUDGET);
-                if (expired) {
-                    assertTrue("lifetime=" + lifetime + " retried=" + retried
-                               + " expired but budget " + budget + " allows more",
-                               lifetime >= budget || (retried && lifetime > BASE));
-                }
+    public void reportedBudgetIsTheOneThatExpired() {
+        for (boolean retried : new boolean[]{false, true}) {
+            long budget = EstablishmentManager.inboundEstablishBudget(retried, BASE, RETRY_BUDGET);
+            long justPast = budget + 1;
+            assertTrue("a reported budget of " + budget + " must actually expire the attempt",
+                       EstablishmentManager.hasInboundEstablishExpired(justPast, retried, BASE, RETRY_BUDGET));
+            if (budget > 0) {
+                assertFalse("and must not expire the attempt before it",
+                            EstablishmentManager.hasInboundEstablishExpired(budget - 1, retried, BASE, RETRY_BUDGET));
             }
         }
     }

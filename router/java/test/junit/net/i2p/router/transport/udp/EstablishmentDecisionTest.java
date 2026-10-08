@@ -354,10 +354,18 @@ public class EstablishmentDecisionTest {
         // past the overall cap: always expired
         assertTrue(EstablishmentManager.hasInboundEstablishExpired(5001L, false, 5000L, 5000L));
         assertTrue(EstablishmentManager.hasInboundEstablishExpired(9000L, true, 5000L, 5000L));
-        // retry-sent limit only applies to retry-sent states
-        // boundary: exactly at the retry limit expires a retry-sent state
-        assertTrue(EstablishmentManager.hasInboundEstablishExpired(5000L, true, 5000L, 5000L));
-        assertFalse(EstablishmentManager.hasInboundEstablishExpired(4999L, true, 5000L, 5000L));
+        // The deadline is max(base, retrySentMaxTime) and expiry is strictly past it. Previously
+        // the two clauses disagreed on the boundary - the base used > and the retry clause >= -
+        // which is what let the retry clause fire early and shorten a retried attempt instead of
+        // extending it. With the clauses unified, an attempt at exactly the deadline is still alive.
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(5000L, true, 5000L, 5000L));
+        assertTrue(EstablishmentManager.hasInboundEstablishExpired(5001L, true, 5000L, 5000L));
+        // a retry budget above the base extends a retry-sent attempt rather than shortening it
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(5001L, true, 4000L, 8000L));
+        assertTrue(EstablishmentManager.hasInboundEstablishExpired(8001L, true, 4000L, 8000L));
+        // and never shortens one when it is the smaller of the two
+        assertFalse(EstablishmentManager.hasInboundEstablishExpired(3751L, true, 4000L, 3750L));
+        assertTrue(EstablishmentManager.hasInboundEstablishExpired(4001L, true, 4000L, 3750L));
         // a non-retry state past the retry-sent cap but under the overall cap survives
         assertFalse(EstablishmentManager.hasInboundEstablishExpired(4999L, false, 5000L, 5000L));
     }

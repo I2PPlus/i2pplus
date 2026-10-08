@@ -274,9 +274,15 @@ public class EstablishmentManager {
     /**
      *  The deadline an inbound attempt was actually given.
      *
-     *  <p>Inbound expiry has two branches: the base deadline, or - once a retry has been sent
-     *  and has itself not answered - a longer retry budget. Whichever is later is the deadline
-     *  that applied, and it is what the report has to name.
+     *  <p>This was written as a disjunction - {@code lifetime > base || (retried && lifetime >=
+     *  retryBudget)} - which never extended anything. The first clause expires the attempt at the
+     *  base on its own, so the second could only matter when the retry budget was the smaller of
+     *  the two, and then it made a retried attempt die <em>sooner</em>. Observed live: with a
+     *  4000ms base and a 3750ms retry budget, a retried attempt died at 3751ms.
+     *
+     *  <p>The predicate now asks this method for the deadline, so the two cannot disagree and the
+     *  retry budget means what {@code IB_RETRY_SENT_MAX_TIME} exists for: five retransmit delays
+     *  of extra patience for an attempt that has already tried again.
      *
      *  @param isRetrySent true if the attempt had already sent a retry
      *  @param maxEstablishTime the base deadline
@@ -841,8 +847,7 @@ public class EstablishmentManager {
 
     static boolean hasInboundEstablishExpired(long lifetime, boolean isRetrySent,
                                               long maxEstablishTime, long retrySentMaxTime) {
-        return lifetime > maxEstablishTime ||
-               (isRetrySent && lifetime >= retrySentMaxTime);
+        return lifetime > inboundEstablishBudget(isRetrySent, maxEstablishTime, retrySentMaxTime);
     }
 
     /**
