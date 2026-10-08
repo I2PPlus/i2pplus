@@ -265,6 +265,27 @@ public class EstablishmentManager {
     static final long CORRUPT_CONFIRM_LOG_INTERVAL_MS = 60 * 1000L;
 
     /**
+     *  The inbound establishment base deadline, as the Tuner has it set.
+     *
+     *  <p>Exposed so the inbound state machine can schedule its next send from the same budget
+     *  the expiry check uses. When those two were derived independently they drifted, and a state
+     *  could become due for a retransmission while still short of its deadline - which the
+     *  establisher then spun through, retransmitting and logging at WARN on every pass.
+     *
+     *  @return the base deadline in milliseconds
+     *  @since 0.9.71+
+     */
+    static long getMaxIbEstablishTime() { return MAX_IB_ESTABLISH_TIME.get(); }
+
+    /**
+     *  The extended budget an inbound attempt gets once it has sent a retry.
+     *
+     *  @return the retry budget in milliseconds
+     *  @since 0.9.71+
+     */
+    static long getIbRetrySentMaxTime() { return IB_RETRY_SENT_MAX_TIME; }
+
+    /**
      *  Minimum gap between inbound establishment give-up reports.  @since 0.9.71+
      */
     static final long INBOUND_GIVEUP_LOG_INTERVAL_MS = 60 * 1000L;

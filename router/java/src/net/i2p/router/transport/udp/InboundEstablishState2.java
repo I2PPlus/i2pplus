@@ -907,10 +907,20 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         _lastSend = _context.clock().now();
         if (_currentState == InboundState.IB_STATE_RETRY_SENT) {
-            // We received a retransmtted token request and resent the retry.
-            // Won't really be retransmitted, they have 5 sec to respond
-            // ensure we expire before retransmitting
-            _nextSend = _establishBegin + (5 * RETRANSMIT_DELAY);
+            // We received a retransmitted token request and resent the retry.
+            // It will not really be retransmitted; the peer has a few seconds to respond.
+            //
+            // Schedule the next send at the attempt's own expiry, not at a flat five retransmit
+            // delays. Those two used to coincide by accident - with the deadline computed as the
+            // earlier of the base and the retry budget, 4000 and 3750 resolved to 3750 - and
+            // when they drifted apart the state became due for a resend while still short of its
+            // deadline, so the establisher spun through the gap retransmitting and logging at WARN
+            // on every pass: 790k lines in six seconds. Deriving next-send from the same budget
+            // the expiry uses keeps them identical, so a state is never both due and unexpired.
+            _nextSend = _establishBegin + EstablishmentManager.inboundEstablishBudget(
+                            _currentState == InboundState.IB_STATE_RETRY_SENT,
+                            EstablishmentManager.getMaxIbEstablishTime(),
+                            EstablishmentManager.getIbRetrySentMaxTime()) + 1;
             if (_log.shouldWarn())
                 _log.warn("[SSU] Retransmit RETRY on " + this);
         } else {
