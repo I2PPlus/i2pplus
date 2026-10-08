@@ -31,5 +31,6 @@
 <script src=/js/lazyload.js></script>
 <script src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 <noscript><style>#allgraphs,#gform,#graphConfigs{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
+<script src="/js/graphTooltip.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 </body>
 </html>

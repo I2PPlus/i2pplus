@@ -28,5 +28,6 @@
 <div class=main id=graph_single>
 <jsp:getProperty name="graphHelper" property="singleStat"/>
 </div>
+<script src="/js/graphTooltip.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
 </body>
 </html>

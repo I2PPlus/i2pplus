@@ -72,6 +72,21 @@
                     response.setContentType("text/xml; charset=utf-8");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + stat + ".xml\"");
                     rendered = graphGen.getXML(rate, stream);
+                } else if ("meta".equalsIgnoreCase(format)) {
+                    // Plot geometry and series as JSON, for a cursor readout. A graph is
+                    // served as an <img>, which makes its SVG an isolated document, so the
+                    // numbers cannot be read out of the image and have to be asked for.
+                    response.setContentType("application/json; charset=utf-8");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setHeader("Cache-Control", "private, no-cache, max-age=14400");
+                    response.setHeader("X-Content-Type-Options", "nosniff");
+                    if (isGroup) {
+                        rendered = graphGen.renderGroupedGraphMeta(stream, stat, enabledStats, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, !hideRestarts);
+                    } else {
+                        rendered = fakeBw
+                            ? graphGen.renderCombinedGraphMeta(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, !hideRestarts)
+                            : graphGen.renderGraphMeta(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, !hideRestarts);
+                    }
                 } else {
                     response.setContentType("image/svg+xml");
                     response.setCharacterEncoding("UTF-8");

@@ -67,6 +67,11 @@ public class RrdGraph implements RrdGraphConstants {
         }
         info = generator.info;
         im = generator.im;
+        // Recorded before the worker goes away: a client that only wants the numbers
+        // (a cursor tooltip, say) should not have to parse the rendered image for them.
+        RrdGraphMeta meta = new RrdGraphMeta();
+        meta.populate(generator.im, gdef.plotElements);
+        info.setMeta(meta);
     }
 
     private static ImageWorker generateImageWorker(

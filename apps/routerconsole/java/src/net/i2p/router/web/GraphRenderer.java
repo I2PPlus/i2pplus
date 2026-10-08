@@ -37,6 +37,8 @@ import org.rrd4j.graph.ElementsNames;
 import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphConstants;
 import org.rrd4j.graph.RrdGraphDef;
+import org.rrd4j.graph.RrdGraphInfo;
+import org.rrd4j.graph.RrdGraphMeta;
 import org.rrd4j.graph.SVGImageWorker;
 
 /**
@@ -251,10 +253,36 @@ class GraphRenderer {
             String titleOverride,
             boolean showRestarts)
             throws IOException {
+        render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, endp,
+               showCredit, lsnr2, titleOverride, showRestarts, false);
+    }
+
+    /**
+     * As {@link #render}, but optionally emitting the plot metadata rather than the image.
+     *
+     * @param meta true to write the geometry and series as JSON instead of drawing
+     * @since 0.9.71+
+     */
+    public void render(
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int endp,
+            boolean showCredit,
+            GraphListener lsnr2,
+            String titleOverride,
+            boolean showRestarts,
+            boolean meta)
+            throws IOException {
         GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
                 showEvents, periodCount, endp, showCredit,
                 (lsnr2 != null ? java.util.Collections.singletonList(lsnr2) : null),
-                titleOverride, showRestarts);
+                titleOverride, showRestarts, false, meta);
         RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
         configureDownsampler(def, cfg);
         configureTimeZone(def, cfg.useUtc);
@@ -302,8 +330,35 @@ class GraphRenderer {
             String titleOverride,
             boolean showRestarts)
             throws IOException {
+        render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, endp,
+               showCredit, extras, titleOverride, showRestarts, false);
+    }
+
+    /**
+     * As {@link #render}, but optionally emitting the plot metadata rather than the image.
+     *
+     * @param meta true to write the geometry and series as JSON instead of drawing
+     * @since 0.9.71+
+     */
+    public void render(
+            OutputStream out,
+            int width,
+            int height,
+            boolean hideLegend,
+            boolean hideGrid,
+            boolean hideTitle,
+            boolean showEvents,
+            int periodCount,
+            int endp,
+            boolean showCredit,
+            List<GraphListener> extras,
+            String titleOverride,
+            boolean showRestarts,
+            boolean meta)
+            throws IOException {
         GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
-                showEvents, periodCount, endp, showCredit, extras, titleOverride, showRestarts);
+                showEvents, periodCount, endp, showCredit, extras, titleOverride, showRestarts,
+                false, meta);
         RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
         configureDownsampler(def, cfg);
         configureTimeZone(def, cfg.useUtc);
@@ -335,8 +390,23 @@ class GraphRenderer {
                             boolean hideTitle, boolean showEvents, int periodCount, int endp,
                             boolean showCredit, List<GraphListener> extras, String titleOverride,
                             boolean showRestarts) throws IOException {
+        renderLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                    endp, showCredit, extras, titleOverride, showRestarts, false);
+    }
+
+    /**
+     * As {@link #renderLines}, but optionally emitting the plot metadata rather than the image.
+     *
+     * @param meta true to write the geometry and series as JSON instead of drawing
+     * @since 0.9.71+
+     */
+    public void renderLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                            boolean hideTitle, boolean showEvents, int periodCount, int endp,
+                            boolean showCredit, List<GraphListener> extras, String titleOverride,
+                            boolean showRestarts, boolean meta) throws IOException {
         GraphRenderConfig cfg = buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle,
-                showEvents, periodCount, endp, showCredit, extras, titleOverride, showRestarts, true);
+                showEvents, periodCount, endp, showCredit, extras, titleOverride, showRestarts,
+                true, meta);
         RrdGraphDef def = new RrdGraphDef(cfg.start / 1000, cfg.end / 1000);
         configureDownsampler(def, cfg);
         configureTimeZone(def, cfg.useUtc);
@@ -362,7 +432,7 @@ class GraphRenderer {
             boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
             boolean showCredit, List<GraphListener> extras, String titleOverride, boolean showRestarts) {
         return buildRenderConfig(width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                                 endp, showCredit, extras, titleOverride, showRestarts, false);
+                                 endp, showCredit, extras, titleOverride, showRestarts, false, false);
     }
 
     /**
@@ -371,7 +441,7 @@ class GraphRenderer {
     private GraphRenderConfig buildRenderConfig(int width, int height, boolean hideLegend,
             boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount, int endp,
             boolean showCredit, List<GraphListener> extras, String titleOverride, boolean showRestarts,
-            boolean allLines) {
+            boolean allLines, boolean meta) {
         long begin = System.currentTimeMillis();
         long end = Math.min(_listener.now(), begin - GraphListener.GRAPH_END_OFFSET_SECONDS * 1000);
         long period = _listener.getRate().getPeriod();
@@ -413,6 +483,7 @@ class GraphRenderer {
                 .rate(_listener.getRate())
                 .extras(extras)
                 .allLines(allLines)
+                .meta(meta)
                 .fillSeries(_context.getBooleanProperty(PROP_FILL))
                 .useUtc(useUtc)
                 .smooth(smooth)
@@ -1215,7 +1286,17 @@ class GraphRenderer {
             _log.error("Error rendering graph (not disabling — transient)", e);
             throw new IOException("Error rendering graph", e);
         }
-out.write(graph.getRrdGraphInfo().getBytes());
+        RrdGraphInfo info = graph.getRrdGraphInfo();
+        if (cfg.meta) {
+            // A client that wants a cursor readout cannot read the numbers out of the
+            // image: an SVG loaded via <img> is an isolated document. Ask for them
+            // instead of drawing, and skip the bytes entirely.
+            RrdGraphMeta meta = info.getMeta();
+            if (meta == null || !meta.isInvertible()) { throw new IOException("No graph data"); }
+            out.write(meta.toJson().getBytes("UTF-8"));
+            return;
+        }
+        out.write(info.getBytes());
     }
 
     /**
@@ -1507,6 +1588,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
         final boolean smooth;
         /** True to keep the historical zero-floored y-axis ({@link #PROP_ZERO_BASE}). */
         final boolean forceZero;
+        /** Emit the plot geometry and series as JSON instead of drawing. @since 0.9.71+ */
+        final boolean meta;
         final String lang;
         final GraphListener listener;
 
@@ -1561,6 +1644,7 @@ out.write(graph.getRrdGraphInfo().getBytes());
             this.fillSeries = b.fillSeries;
             this.useUtc = b.useUtc;
             this.smooth = b.smooth;
+            this.meta = b.meta;
             this.forceZero = b.forceZero;
             // Derived here so every legend/signature path prints a
             // consistent date suffix, never a literal "null"
@@ -1594,6 +1678,8 @@ out.write(graph.getRrdGraphInfo().getBytes());
             boolean fillSeries;
             boolean useUtc;
             boolean smooth;
+            /** Emit the plot geometry and series as JSON instead of drawing the image. */
+            boolean meta;
             boolean forceZero;
             String lang;
             GraphListener listener;
@@ -1645,6 +1731,14 @@ out.write(graph.getRrdGraphInfo().getBytes());
             }
             Builder useUtc(boolean v) { useUtc = v; return this; }
             Builder smooth(boolean v) { smooth = v; return this; }
+
+            /**
+             * Ask for the plot metadata rather than a drawing.
+             *
+             * @param v true to emit JSON
+             * @return this builder
+             */
+            Builder meta(boolean v) { meta = v; return this; }
             Builder forceZero(boolean v) { forceZero = v; return this; }
             Builder lang(String v) { lang = v; return this; }
             Builder listener(GraphListener v) { listener = v; return this; }

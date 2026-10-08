@@ -913,7 +913,29 @@ public class GraphListener implements RateSummaryListener {
             throw new IOException("No RRD, check logs for previous errors");
         }
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                         end, showCredit, lsnr2, titleOverride, showRestarts);
+                         end, showCredit, lsnr2, titleOverride, showRestarts, false);
+    }
+
+    /**
+     *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON
+     *  rather than drawing the graph.
+     *
+     *  <p>A graph is served as an {@code <img>}, so its SVG is an isolated document and a
+     *  client cannot read the numbers out of it. This is the separate request that carries
+     *  them, for a cursor readout.
+     *
+     *  @param meta true to write the metadata instead of the image
+     *  @since 0.9.71+
+     */
+    public void renderGraphMeta(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                           boolean hideTitle, boolean showEvents, int periodCount,
+                            int end, boolean showCredit, GraphListener lsnr2, String titleOverride,
+                            boolean showRestarts, boolean meta) throws IOException {
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
+        _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                         end, showCredit, lsnr2, titleOverride, showRestarts, meta);
     }
 
     /**
@@ -934,7 +956,24 @@ public class GraphListener implements RateSummaryListener {
             throw new IOException("No RRD, check logs for previous errors");
         }
         _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                         end, showCredit, extras, titleOverride, showRestarts);
+                         end, showCredit, extras, titleOverride, showRestarts, false);
+    }
+
+    /**
+     *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
+     *
+     *  @param meta true to write the metadata instead of the image
+     *  @since 0.9.71+
+     */
+    public void renderGraphMeta(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                           boolean hideTitle, boolean showEvents, int periodCount,
+                            int end, boolean showCredit, List<GraphListener> extras, String titleOverride,
+                            boolean showRestarts, boolean meta) throws IOException {
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
+        _renderer.render(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                         end, showCredit, extras, titleOverride, showRestarts, meta);
     }
 
     /**
@@ -955,7 +994,24 @@ public class GraphListener implements RateSummaryListener {
             throw new IOException("No RRD, check logs for previous errors");
         }
         _renderer.renderLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
-                              end, showCredit, extras, titleOverride, showRestarts);
+                              end, showCredit, extras, titleOverride, showRestarts, false);
+    }
+
+    /**
+     *  As {@link #renderGraphLines}, but emitting the plot geometry and series as JSON.
+     *
+     *  @param meta true to write the metadata instead of the image
+     *  @since 0.9.71+
+     */
+    public void renderGraphMetaLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
+                                boolean hideTitle, boolean showEvents, int periodCount,
+                                int end, boolean showCredit, List<GraphListener> extras, String titleOverride,
+                                boolean showRestarts, boolean meta) throws IOException {
+        if (_renderer == null || _db == null) {
+            throw new IOException("No RRD, check logs for previous errors");
+        }
+        _renderer.renderLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount,
+                              end, showCredit, extras, titleOverride, showRestarts, meta);
     }
 
     /**

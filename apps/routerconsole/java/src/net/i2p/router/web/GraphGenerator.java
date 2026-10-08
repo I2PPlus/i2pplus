@@ -1499,12 +1499,41 @@ public class GraphGenerator implements Runnable, ClientApp {
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                           boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
                                           int end, boolean showCredit, boolean showRestarts) throws IOException {
+        return renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                           periodCount, end, showCredit, showRestarts, false);
+    }
+
+    /**
+     *  A single stat's metadata, as JSON.
+     *
+     *  @return true on success, false if the stat is not currently renderable
+     *  @since 0.9.71+
+     */
+    public boolean renderGraphMeta(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                          int end, boolean showCredit, boolean showRestarts)
+                                   throws IOException {
+        return renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                           periodCount, end, showCredit, showRestarts, true);
+    }
+
+    /**
+     *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
+     *
+     *  @param meta true to write the metadata instead of the image
+     *  @return true on success, false if the stat is not currently renderable
+     *  @since 0.9.71+
+     */
+    public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
+                                          boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
+                                          int end, boolean showCredit, boolean showRestarts,
+                                          boolean meta) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
             try {
                 return locked_renderGraph(rate, out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                         periodCount, end, showCredit, showRestarts);
+                                         periodCount, end, showCredit, showRestarts, meta);
             } catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -1552,7 +1581,8 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     private boolean locked_renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
                                         boolean hideGrid, boolean hideTitle, boolean showEvents, int periodCount,
-                                        int end, boolean showCredit, boolean showRestarts) throws IOException {
+                                        int end, boolean showCredit, boolean showRestarts,
+                                        boolean meta) throws IOException {
         if (width > MAX_X) {width = MAX_X;}
         else if (width <= 0) {width = DEFAULT_X;}
         if (height > MAX_Y) {height = MAX_Y;}
@@ -1564,8 +1594,8 @@ GraphListener lsnr = _listenerByRate.get(rate);
             // the same as the same stat plotted beside another. An area under a lone line
             // carries no extra information and made one-stat and two-stat graphs read as
             // different kinds of chart.
-            lsnr.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                    periodCount, end, showCredit, Collections.emptyList(), null, showRestarts);
+            lsnr.renderGraphMetaLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                    periodCount, end, showCredit, Collections.emptyList(), null, showRestarts, meta);
             return true;
         }
         // A detached listener would throw from renderGraph, which propagates out
@@ -1656,10 +1686,39 @@ GraphListener lsnr = _listenerByRate.get(rate);
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                    boolean hideGrid, boolean hideTitle, boolean showEvents,
                                    int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
+        return renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                  periodCount, end, showCredit, showRestarts, false);
+    }
+
+    /**
+     *  The two-data bandwidth graph's metadata, as JSON.
+     *
+     *  @return true on success
+     *  @since 0.9.71+
+     */
+    public boolean renderCombinedGraphMeta(OutputStream out, int width, int height, boolean hideLegend,
+                                   boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                   int periodCount, int end, boolean showCredit, boolean showRestarts)
+                                   throws IOException {
+        return renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                  periodCount, end, showCredit, showRestarts, true);
+    }
+
+    /**
+     *  As {@link #renderCombinedGraph}, but emitting the plot geometry and series as JSON.
+     *
+     *  @param meta true to write the metadata instead of the image
+     *  @return true on success
+     *  @since 0.9.71+
+     */
+    public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
+                                   boolean hideGrid, boolean hideTitle, boolean showEvents,
+                                   int periodCount, int end, boolean showCredit, boolean showRestarts,
+                                   boolean meta) throws IOException {
         try {
             try {_sem.acquire();}
             catch (InterruptedException ie) { Thread.currentThread().interrupt(); /* ignored */ }
-            try {return locked_renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, showRestarts);}
+            try {return locked_renderCombinedGraph(out, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit, showRestarts, meta);}
             catch (NoClassDefFoundError ncdfe) {
                 setDisabled();
                 String s = "Error rendering - disabling graph generation.";
@@ -1704,7 +1763,8 @@ GraphListener lsnr = _listenerByRate.get(rate);
      */
     private boolean locked_renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
                                            boolean hideGrid, boolean hideTitle, boolean showEvents,
-                                           int periodCount, int end, boolean showCredit, boolean showRestarts) throws IOException {
+                                           int periodCount, int end, boolean showCredit, boolean showRestarts,
+                                           boolean meta) throws IOException {
 
         // go to some trouble to see if we have the data for the combined bw graph
         GraphListener txLsnr = null;
@@ -1727,12 +1787,12 @@ GraphListener lsnr = _listenerByRate.get(rate);
         // other multi-series graph uses because this goes down the same path.
         List<GraphListener> rxSeries = Collections.singletonList(rxLsnr);
         if (hideTitle) {
-            txLsnr.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                    periodCount, end, showCredit, rxSeries, null, showRestarts);
+            txLsnr.renderGraphMetaLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                    periodCount, end, showCredit, rxSeries, null, showRestarts, meta);
         } else {
-            txLsnr.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+            txLsnr.renderGraphMetaLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
                                     periodCount, end, showCredit, rxSeries,
-                                    "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"), showRestarts);
+                                    "[" + _t("Router") + "] " + _t("Bandwidth usage").replace("usage", "Usage"), showRestarts, meta);
         }
         return true;
     }
@@ -1806,6 +1866,39 @@ GraphListener lsnr = _listenerByRate.get(rate);
                                       boolean hideTitle, boolean showEvents, int periodCount,
                                       int end, boolean showCredit, boolean showRestarts)
                                       throws IOException {
+        renderGroupedGraph(out, groupId, enabledStats, width, height, hideLegend, hideGrid, hideTitle,
+                           showEvents, periodCount, end, showCredit, showRestarts, false);
+        return true;
+    }
+
+    /**
+     *  A grouped graph's metadata, as JSON.
+     *
+     *  @return true on success
+     *  @since 0.9.71+
+     */
+    public boolean renderGroupedGraphMeta(OutputStream out, String groupId, Set<String> enabledStats,
+                                      int width, int height, boolean hideLegend, boolean hideGrid,
+                                      boolean hideTitle, boolean showEvents, int periodCount,
+                                      int end, boolean showCredit, boolean showRestarts)
+                                      throws IOException {
+        renderGroupedGraph(out, groupId, enabledStats, width, height, hideLegend, hideGrid, hideTitle,
+                           showEvents, periodCount, end, showCredit, showRestarts, true);
+        return true;
+    }
+
+    /**
+     *  As {@link #renderGroupedGraph}, but emitting the plot geometry and series as JSON.
+     *
+     *  @param meta true to write the metadata instead of the image
+     *  @return true on success
+     *  @since 0.9.71+
+     */
+    public boolean renderGroupedGraph(OutputStream out, String groupId, Set<String> enabledStats,
+                                      int width, int height, boolean hideLegend, boolean hideGrid,
+                                      boolean hideTitle, boolean showEvents, int periodCount,
+                                      int end, boolean showCredit, boolean showRestarts, boolean meta)
+                                      throws IOException {
         List<GraphListener> members = getGroupListeners(groupId, enabledStats);
         if (members.size() < 2) {
             return false;
@@ -1820,8 +1913,8 @@ GraphListener lsnr = _listenerByRate.get(rate);
         // group. A filled area under a lone line carries no extra information, and mixing
         // filled and line rendering made one-stat and multi-stat graphs read as different
         // kinds of chart rather than as the same chart at different sizes.
-        primary.renderGraphLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
-                                periodCount, end, showCredit, members, title, showRestarts);
+        primary.renderGraphMetaLines(out, width, height, hideLegend, hideGrid, hideTitle, showEvents,
+                                periodCount, end, showCredit, members, title, showRestarts, meta);
         return true;
     }
 

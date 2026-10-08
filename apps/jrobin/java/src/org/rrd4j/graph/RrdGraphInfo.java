@@ -15,10 +15,32 @@ public class RrdGraphInfo {
     Supplier<Integer> bytesCount;
     String imgInfo;
     private final List<String> printLines = new ArrayList<>();
+    private RrdGraphMeta meta;
 
     /** Prevent instantiation */
     RrdGraphInfo() {
         // cannot instantiate this class
+    }
+
+    /**
+     * Attaches the plot geometry and series for this render.
+     *
+     * @param meta the metadata, never null
+     */
+    void setMeta(RrdGraphMeta meta) {
+        this.meta = meta;
+    }
+
+    /**
+     * The plot geometry and series, for a client that wants to invert a cursor
+     * position into a time and a value. Absent when the graph was not rendered
+     * through this package.
+     *
+     * @return the metadata, or null when none was recorded
+     * @since 0.9.71+
+     */
+    public RrdGraphMeta getMeta() {
+        return meta;
     }
     /**
      * Add print line
