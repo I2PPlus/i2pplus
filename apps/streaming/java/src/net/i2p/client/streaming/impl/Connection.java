@@ -2353,6 +2353,8 @@ class Connection {
      *  Retransmits are done in ResendPacketEvent below.
      *  Resets, pings, and pongs are done elsewhere in this class,
      *  or in ConnectionManager or ConnectionHandler.
+     *
+     *  @param packet the packet to send, or null to send nothing
      */
     void sendPacket(PacketLocal packet) {
         if (packet == null) {
@@ -2459,6 +2461,9 @@ class Connection {
      *  next ack is processed. This is safe because acks are serialized on the
      *  receive thread; do not retain a reference across calls.
      *
+     *  @param ackThrough highest sequence number the peer acknowledged
+     *  @param nacks sequence numbers the peer rejected; when non-empty the
+     *         highest-acked advances only to just below the lowest of these
      *  @return List of packets acked for the first time (empty if none);
      *          a shared mutable buffer, not a fresh copy
      */
@@ -2669,14 +2674,56 @@ class Connection {
      *  Idempotent: only the first call sets the timestamp.
      */
     public void notifyCloseSent() {
-        if (!_closeSentOn.compareAndSet(0, _context.clock().now()) && _log.shouldWarn()) {
+        if (!_closeSentOn.compareAndSet(0, _context.clock().now())) {
             // Idempotent: CAS prevents duplicate timestamp; the output stream is already
             // closed, so subsequent packets (e.g. from ackImmediately()) are ack-only
             // and do not carry the CLOSE flag. This log is a safety net for unexpected
             // code paths that bypass the CLOSE-flag guard in ConnectionDataReceiver.
-            _log.warn("Duplicate CLOSE sent: " + toString());
+            //
+            // The condition is already handled correctly, so a WARN per occurrence is noise
+            // rather than signal — measured at roughly one per second under an ordinary
+            // streaming workload, which is enough to bury the warnings that matter. Count it
+            // every time, report it occasionally, and let the suppressed total stay visible.
+            long now = _context.clock().now();
+            long duplicate = _duplicateCloseSent.incrementAndGet();
+            _context.statManager().addRateData("streaming.duplicateCloseSent", 1);
+            if (_log.shouldWarn() && shouldLogDuplicateClose(now)) {
+                long suppressed = _duplicateCloseSuppressed.getAndSet(0);
+                _log.warn("Duplicate CLOSE sent: " + toString()
+                          + " (" + duplicate + " total"
+                          + (suppressed > 0 ? ", " + suppressed + " suppressed since last report" : "")
+                          + ")");
+            }
         }
         // that's it, wait for notifyLastPacketAcked() or closeReceived()
+    }
+
+    /** Interval between "Duplicate CLOSE sent" reports. */
+    private static final long DUPLICATE_CLOSE_LOG_INTERVAL_MS = 60 * 1000L;
+
+    /** Duplicate-close notifications seen since startup. */
+    private static final AtomicLong _duplicateCloseSent = new AtomicLong();
+
+    /** Notifications suppressed since the last emitted report. */
+    private static final AtomicLong _duplicateCloseSuppressed = new AtomicLong();
+
+    /** When the last report was emitted. */
+    private static final AtomicLong _lastDuplicateCloseLog = new AtomicLong();
+
+    /**
+     *  Rate-limit the duplicate-close report.
+     *
+     *  @param now current time in milliseconds
+     *  @return true if this occurrence should be reported
+     */
+    private static boolean shouldLogDuplicateClose(long now) {
+        long last = _lastDuplicateCloseLog.get();
+        if (now - last < DUPLICATE_CLOSE_LOG_INTERVAL_MS) {
+            _duplicateCloseSuppressed.incrementAndGet();
+            return false;
+        }
+        _lastDuplicateCloseLog.set(now);
+        return true;
     }
 
     /**
@@ -3131,7 +3178,12 @@ class Connection {
      */
     public void setOptions(ConnectionOptions opts) {_options = opts;}
 
-    /** @since 0.9.21 */
+    /**
+     * Manager that owns this connection.
+     *
+     * @return the connection manager
+     * @since 0.9.21
+     */
     public ConnectionManager getConnectionManager() {return _connectionManager;}
 
     /**
