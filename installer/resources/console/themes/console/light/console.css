@@ -27,6 +27,10 @@
 --graph_plotLineWidthFilled:1.5;
 --graph_plotLineWidthFilledWide:2;
 --graph_plotLineWidthFilledCondensed:1;
+--graphTooltipCrosshair:#8888;
+--graphTooltipLevel:#8888;
+--graphTooltipBg:#ffd;
+--graphTooltipInk:#333;
 --tier:linear-gradient(180deg,#fff,#dbecff);
 --isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
 --isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
