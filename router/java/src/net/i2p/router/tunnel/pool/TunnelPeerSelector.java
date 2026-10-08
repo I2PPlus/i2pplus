@@ -266,6 +266,12 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** How often to send keepalive pings to established Fast/HighCap peers */
     private static final long KEEPALIVE_INTERVAL_MS = 15_000; // More frequent keepalives
 
+    /** Peers requested per tier (fast, high-capacity) in a keepalive cycle. */
+    private static final int KEEPALIVE_TARGET_TIERS = 200;
+
+    /** Most peers acted on in one cycle, bounding a cycle's cost. */
+    private static final int KEEPALIVE_ACTION_BUDGET = 200;
+
     /** Tracks last keepalive send time per peer */
     private static final ConcurrentHashMap<Hash, Long> _lastKeepAlive = new ConcurrentHashMap<>(512);
 
@@ -2178,10 +2184,122 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * @param ctx the router context
      * @param peer hash of the peer to connect to
      */
-    protected static void preConnectTo(RouterContext ctx, Hash peer) {
+    /**
+     *  What a pre-connect probe actually achieved.
+     *
+     *  <p>Returned so a caller can tell "the peer was asked and the transport took the message"
+     *  from "the peer was never really asked", which the previous {@code void} signature made
+     *  indistinguishable. Only the latter means anything about the peer.
+     *
+     * @since 0.9.71+
+     */
+    enum PreConnectOutcome {
+
+        /** The transport accepted the message, which forces a connection attempt. */
+        SENT,
+
+        /** No RouterInfo in the netdb, so there was nothing to address. */
+        NO_ROUTERINFO,
+
+        /** The RouterInfo is present but every address in it is unusable or expired. */
+        NO_USABLE_ADDRESS,
+
+        /** No transport accepted the message. */
+        NO_TRANSPORT_AVAILABLE
+    }
+
+    /**
+     *  Per-cycle tally of why keepalive did not act on the peers it selected.
+     *
+     *  <p>Added because the candidate pool was observed shrinking from roughly 400 delivered
+     *  peers per cycle to roughly 210, and the pre-existing log line only reported how many
+     *  peers were kept alive, never how many were dropped on the way. Without a reason for each
+     *  drop, an eroding pool and a busy pool look identical from the outside.
+     *
+     *  <p>{@link #describe} is pure so the summary can be asserted in a test without a router.
+     *
+     * @since 0.9.71+
+     */
+    static final class KeepAliveTally {
+
+        /** Peers the selector asked for, before any filtering. */
+        int requested;
+
+        /** Peers that survived selection and are eligible for keepalive. */
+        int delivered;
+
+        /** Acted on: sent a keepalive DLM. */
+        int keepalived;
+
+        /** Acted on: started an establishment. */
+        int preConnected;
+
+        /** Skipped: recorded as a recent first-hop failure and still in cooldown. */
+        int skipCooldown;
+
+        /** Skipped: no contact within the activity window. */
+        int skipStale;
+
+        /** Skipped: already serviced inside this keepalive interval. */
+        int skipRecent;
+
+        /** Skipped: no RouterInfo to address. */
+        int skipNoRouterInfo;
+
+        /** Skipped: RouterInfo present but no usable transport address. */
+        int skipNoAddress;
+
+        /** Skipped: no transport available to accept the probe. */
+        int skipNoTransport;
+
+        /** Never reached: the per-cycle action budget was already spent. */
+        int unprocessed;
+
+        /**
+         *  Summarise the cycle.
+         *
+         *  @param aggressive whether this was an aggressive cycle
+         *  @return a single line naming delivered vs requested and every skip reason
+         */
+        String describe(boolean aggressive) {
+            StringBuilder buf = new StringBuilder(160);
+            buf.append("KeepAlive: ").append(keepalived).append(" keepalives, ")
+               .append(preConnected).append(" pre-connects (")
+               .append(aggressive ? "aggressive" : "normal").append(", ")
+               .append(delivered).append(" delivered of ").append(requested)
+               .append(" requested) skipped: cooldown=").append(skipCooldown)
+               .append(" stale=").append(skipStale)
+               .append(" recent=").append(skipRecent)
+               .append(" noRouterInfo=").append(skipNoRouterInfo)
+               .append(" noAddress=").append(skipNoAddress)
+               .append(" noTransport=").append(skipNoTransport)
+               .append(" unprocessed=").append(unprocessed);
+            return buf.toString();
+        }
+
+        /**
+         *  Peers selected but never acted on for any reason.
+         *
+         *  <p>Every selected peer must land in exactly one bucket, so this is the check that
+         *  the accounting has not lost a path.
+         *
+         *  @return the number of delivered peers with no recorded disposition
+         */
+        int unaccounted() {
+            int acted = keepalived + preConnected;
+            int skipped = skipCooldown + skipStale + skipRecent + skipNoRouterInfo
+                          + skipNoAddress + skipNoTransport;
+            // unprocessed counts as a disposition: the budget was spent before this peer
+            // was reached, which is different from falling through every branch but is
+            // still accounted for.
+            return delivered - acted - skipped - unprocessed;
+        }
+    }
+
+    protected static PreConnectOutcome preConnectTo(RouterContext ctx, Hash peer) {
         RouterInfo ri = lookupRouterInfoUnvalidated(ctx, peer);
         if (ri == null)
-            return;
+            return PreConnectOutcome.NO_ROUTERINFO;
         // Skip peers with no valid transport addresses to avoid triggering
         // bans in EstablishmentManager.establish() or NTCPTransport.send().
         // Tested against the RouterInfo already fetched above rather than
@@ -2194,7 +2312,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
             if (log.shouldInfo())
                 log.info("Skipping pre-connect to " + peer.toBase64().substring(0,6) +
                          " — no valid SSU or NTCP address");
-            return;
+            return PreConnectOutcome.NO_USABLE_ADDRESS;
         }
         long lifetime = ctx.clock().now() + 30*1000L;
         // Use a DatabaseLookupMessage (peer looks up its own RouterInfo and replies)
@@ -2215,12 +2333,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // connection establishment — same approach as TransportManager.establishTo().
         Transport udp = ctx.commSystem().getTransports().get("SSU");
         if (udp != null) {
-            try { udp.send(onm); noteFirstHopRtt(ctx, peer, udp); return; } catch (Exception e) { /* ignored */ }
+            try { udp.send(onm); noteFirstHopRtt(ctx, peer, udp); return PreConnectOutcome.SENT; }
+            catch (Exception e) { /* ignored */ }
         }
         Transport ntcp = ctx.commSystem().getTransports().get("NTCP");
         if (ntcp != null) {
-            try { ntcp.send(onm); noteFirstHopRtt(ctx, peer, ntcp); } catch (Exception e) { /* ignored */ }
+            try { ntcp.send(onm); noteFirstHopRtt(ctx, peer, ntcp); return PreConnectOutcome.SENT; }
+            catch (Exception e) { /* ignored */ }
         }
+        return PreConnectOutcome.NO_TRANSPORT_AVAILABLE;
     }
 
     /**
@@ -2607,33 +2728,48 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // alive for the top-tier peers that builds actually need.
         Set<Hash> targets = new HashSet<>(256);
         // Must use mutable set — lockedSelectPeers may add to the exclude set
-        rctx.profileOrganizer().selectFastPeers(200, new HashSet<>(4), targets);
+        rctx.profileOrganizer().selectFastPeers(KEEPALIVE_TARGET_TIERS, new HashSet<>(4), targets);
         // Also add top HighCap to cover more candidates
-        rctx.profileOrganizer().selectHighCapacityPeers(200, targets, targets);
+        rctx.profileOrganizer().selectHighCapacityPeers(KEEPALIVE_TARGET_TIERS, targets, targets);
         // Remove self
         targets.remove(rctx.routerHash());
 
-        if (targets.isEmpty())
-            return;
+        KeepAliveTally tally = new KeepAliveTally();
+        tally.requested = 2 * KEEPALIVE_TARGET_TIERS;
+        tally.delivered = targets.size();
 
-        int keepalived = 0;
-        int preConnected = 0;
+        if (targets.isEmpty()) {
+            if (log.shouldInfo())
+                log.info(tally.describe(aggressive));
+            return;
+        }
 
         for (Hash peer : targets) {
-            if (keepalived + preConnected >= 200)
-                break; // per-cycle budget
+            if (tally.keepalived + tally.preConnected >= KEEPALIVE_ACTION_BUDGET) {
+                // Per-cycle budget spent. The peers left are not rejected for any
+                // fault of their own, so count them separately: a cycle that keeps
+                // hitting the budget is a cycle that is not servicing its pool.
+                tally.unprocessed++;
+                continue;
+            }
 
             // Skip peers in first-hop fail cooldown — they've proven unreachable recently
-            if (isFirstHopFailing(rctx, peer))
+            if (isFirstHopFailing(rctx, peer)) {
+                tally.skipCooldown++;
                 continue;
+            }
 
             // Skip stale peers — no activity in the last activity window
-            if (isStalePeer(rctx, peer, buildSuccess))
+            if (isStalePeer(rctx, peer, buildSuccess)) {
+                tally.skipStale++;
                 continue;
+            }
 
             Long lastKa = _lastKeepAlive.get(peer);
-            if (lastKa != null && now - lastKa < KEEPALIVE_INTERVAL_MS)
+            if (lastKa != null && now - lastKa < KEEPALIVE_INTERVAL_MS) {
+                tally.skipRecent++;
                 continue;
+            }
 
             boolean established = rctx.commSystem().isEstablished(peer);
 
@@ -2642,7 +2778,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 // For established peers, transport.send() just enqueues to fragments with
                 // no establishment overhead.
                 RouterInfo ri = lookupRouterInfoUnvalidated(rctx, peer);
-                if (ri == null) continue;
+                if (ri == null) { tally.skipNoRouterInfo++; continue; }
                 long lifetime = now + 30*1000L;
                 DatabaseLookupMessage dlm = new DatabaseLookupMessage(rctx, true);
                 dlm.setFrom(rctx.routerHash());
@@ -2660,20 +2796,23 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
                 if (!sent && ntcp != null) {
                     try { ntcp.send(onm); sent = true; } catch (Exception e) { /* ignored */ }
                 }
-                if (sent) { keepalived++; _lastKeepAlive.put(peer, now); }
+                if (sent) { tally.keepalived++; _lastKeepAlive.put(peer, now); }
+                else { tally.skipNoTransport++; }
             } else if (aggressive) {
                 // Peer not connected and pools are depleted — proactively start
                 // establishment so it's ready when the next build runs.
-                preConnectTo(rctx, peer);
-                preConnected++;
-                _lastKeepAlive.put(peer, now);
+                PreConnectOutcome outcome = preConnectTo(rctx, peer);
+                switch (outcome) {
+                    case SENT: tally.preConnected++; _lastKeepAlive.put(peer, now); break;
+                    case NO_ROUTERINFO: tally.skipNoRouterInfo++; break;
+                    case NO_USABLE_ADDRESS: tally.skipNoAddress++; break;
+                    default: tally.skipNoTransport++; break;
+                }
             }
         }
 
-        if (log.shouldInfo() && (keepalived + preConnected > 0)) {
-            log.info("KeepAlive: " + keepalived + " keepalives, " + preConnected +
-                     " pre-connects (" + (aggressive ? "aggressive" : "normal") +
-                     ", " + targets.size() + " targets)");
+        if (log.shouldInfo()) {
+            log.info(tally.describe(aggressive));
         }
     }
 
