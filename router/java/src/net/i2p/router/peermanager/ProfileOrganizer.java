@@ -74,6 +74,26 @@ public class ProfileOrganizer {
     public static final double ATTACK_THRESHOLD = 0.40;
     private static final Comparator<PeerProfile> CAPACITY_COMPARATOR =
             Comparator.comparingDouble(PeerProfile::getCapacityValue);
+    /**
+     * Eviction order: least recently active first, then lowest capacity.
+     *
+     * <p>Activity is the newest of last-sent-successfully, last-heard-from and
+     * last-heard-about, matching {@link #isStaleAbsentPeer}. Ties fall through to
+     * {@link #CAPACITY_COMPARATOR} so two equally idle peers are separated on what
+     * else is known about them rather than on map order.
+     *
+     * @since 0.9.71+
+     */
+    private static final Comparator<PeerProfile> STALENESS_THEN_CAPACITY =
+        (a, b) -> {
+            long actA = a.getLastSendSuccessful();
+            long actB = b.getLastSendSuccessful();
+            actA = Math.max(actA, Math.max(a.getLastHeardFrom(), a.getLastHeardAbout()));
+            actB = Math.max(actB, Math.max(b.getLastHeardFrom(), b.getLastHeardAbout()));
+            int byAge = Long.compare(actA, actB);
+            if (byAge != 0) {return byAge;}
+            return Double.compare(a.getCapacityValue(), b.getCapacityValue());
+        };
     private final Log _log;
     private final RouterContext _context;
     private final Map<Hash, PeerProfile> _fastPeers;
@@ -218,7 +238,7 @@ public class ProfileOrganizer {
     private final InverseCapacityComparator _comp;
 
     /**
-     * PROP_MINIMUM_FAST_PEERS.
+     *  Property key naming the fast tier's refill target.
      */
     public static final String PROP_MINIMUM_FAST_PEERS = "profileOrganizer.minFastPeers";
     /**
@@ -227,7 +247,7 @@ public class ProfileOrganizer {
      */
     static final int SCALING_THRESHOLD = 3000;
     /**
-     * _defaultMinFastPeers.
+     *  Fast tier refill target, in peers, as last configured or autotuned.
      */
     public static volatile int _defaultMinFastPeers = 1000;
     /**
@@ -246,11 +266,12 @@ public class ProfileOrganizer {
     public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
     /**
-     * PROP_MAX_ROUTERINFO_AGE_HOURS.
+     *  Property key naming the RouterInfo age past which a promotion is held back,
+     *  in hours.
      */
     public static final String PROP_MAX_ROUTERINFO_AGE_HOURS = "profileOrganizer.maxRouterInfoAgeHours";
     /**
-     * DEFAULT_MAX_ROUTERINFO_AGE_HOURS.
+     *  Default RouterInfo age past which a tier promotion is held back, in hours.
      */
     public static final int DEFAULT_MAX_ROUTERINFO_AGE_HOURS = 2;
     /**
@@ -282,11 +303,11 @@ public class ProfileOrganizer {
     private static final long STARTUP_GRACE_PERIOD_MS = 10 * 60 * 1000L;
     private static final long PROOF_OF_LIFE_WINDOW_MS = 60 * 60 * 1000L;
     /**
-     * PROP_MAXIMUM_FAST_PEERS.
+     *  Property key naming the fast tier's ceiling.
      */
     public static final String PROP_MAXIMUM_FAST_PEERS = "profileOrganizer.maxFastPeers";
     /**
-     * _defaultMaxFastPeers.
+     *  Fast tier ceiling, in peers.
      */
     public static volatile int _defaultMaxFastPeers = 2000;
     /**
@@ -305,15 +326,15 @@ public class ProfileOrganizer {
     public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
 
     /**
-     * PROP_MINIMUM_HIGH_CAPACITY_PEERS.
+     *  Property key naming the high-capacity tier's refill target.
      */
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
     /**
-     * DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS.
+     *  Default high-capacity tier refill target, in peers.
      */
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 1000;
     /**
-     * _defaultMinHighCapPeers.
+     *  High-capacity tier refill target, in peers, as last configured or autotuned.
      */
     public static volatile int _defaultMinHighCapPeers = DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
     /**
@@ -331,11 +352,11 @@ public class ProfileOrganizer {
      */
     public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(3000, val)); }
     /**
-     * PROP_MAXIMUM_HIGH_CAPACITY_PEERS.
+     *  Property key naming the high-capacity tier's ceiling.
      */
     public static final String PROP_MAXIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.maxHighCapacityPeers";
     /**
-     * _defaultMaxHighCapPeers.
+     *  High-capacity tier ceiling, in peers.
      */
     public static volatile int _defaultMaxHighCapPeers = 3000;
     /**
@@ -522,11 +543,35 @@ public class ProfileOrganizer {
      */
     public static void setDefaultMaxProfiles(int val) { _defaultMaxProfiles = Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, val)); }
     /**
-     * ABSOLUTE_MAX_PROFILES.
+     *  Ceiling on profiles held in memory, in profiles.
+     *
+     *  <p>Bounds the RAM store only. What is kept <em>on disk</em> is governed
+     *  separately by {@link #MAX_STORED_PROFILE_FILES}, so raising this to let the
+     *  router use more of its persisted knowledge does not shorten the retention of
+     *  that knowledge across a restart.
      */
     public static final int ABSOLUTE_MAX_PROFILES = 8000;
     /**
-     * MIN_MAX_PROFILES.
+     * Profile files retained on disk before surplus ones are trimmed.
+     *
+     * <p>Deliberately a different number, and a different concern, from
+     * {@link #ABSOLUTE_MAX_PROFILES}: that one bounds profiles held in memory,
+     * this one bounds what is kept on disk so it survives a restart. Using one
+     * constant for both meant that lowering the disk floor would silently lower
+     * the memory ceiling too.
+     *
+     * <p>Below this count no file is deleted unless the peer is genuinely stale,
+     * so the floor costs nothing while the store is smaller than it and only
+     * starts trimming once the store exceeds it.
+     *
+     * @since 0.9.71+
+     */
+    public static final int MAX_STORED_PROFILE_FILES = 5000;
+    /**
+     *  Floor for the in-memory profile cap, in profiles.
+     *
+     *  <p>Low enough that a small-heap router still runs; {@link #getDefaultMaxProfiles()}
+     *  returns this instead of {@link #ABSOLUTE_MAX_PROFILES} on a slow system.
      */
     public static final int MIN_MAX_PROFILES = 800;
 
@@ -2498,24 +2543,28 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Remove stale profile files for peers outside the active set when over the cap.
+     * Remove profile files that are no longer worth keeping: those whose peer is
+     * genuinely stale at any size, and those beyond the disk retention floor.
+     *
+     * <p>See {@link ProfilePersistenceHelper#purgeExcessProfiles} for the two rules and
+     * why neither lets a recently active peer be deleted for its bandwidth tier.
      */
     public void purgeStaleProfileFiles() {
-        int maxProfiles = ABSOLUTE_MAX_PROFILES;
+        int retentionFloor = MAX_STORED_PROFILE_FILES;
 
-        // selectAllPeers() materializes every tracked hash and purgeExcessProfiles()
-        // only acts above the cap, so skip both while the known on-disk count is
-        // well under it. The 10% margin covers the count being stale: it is
-        // refreshed only on the store/load/delete cycle (every STORE_TIME, 15
-        // min) while reorganize runs every 30-250s.
+        // selectAllPeers() materializes every tracked hash and the purge only acts on
+        // files outside it, so skip both while the known on-disk count is well under the
+        // floor. The 10% margin covers the count being stale: it is refreshed only on the
+        // store/load/delete cycle (every STORE_TIME, 15 min) while reorganize runs every
+        // 30-250s. It also defers genuinely-stale cleanup below the margin, which is the
+        // conservative direction: files are retained rather than deleted early.
         int stored = getStoredProfileCount();
-        if (stored > 0 && stored <= maxProfiles * 9 / 10) return;
+        if (stored > 0 && stored <= retentionFloor * 9 / 10) return;
 
-        // Get all currently active peers (those we keep in memory)
+        // Peers still held in memory, whose files must survive.
         Set<Hash> activePeers = selectAllPeers(); // includes fast, high-cap, not-failing
 
-        // Let persistence helper delete files NOT in activePeers, if over cap
-        _persistenceHelper.purgeExcessProfiles(activePeers, maxProfiles);
+        _persistenceHelper.purgeExcessProfiles(activePeers, retentionFloor);
     }
 
     /**
@@ -2632,8 +2681,12 @@ public class ProfileOrganizer {
             }
         }
 
-        // Sort by capacity (lowest first) → evict low-capacity, inactive peers first
-        candidates.sort(CAPACITY_COMPARATOR);
+        // Order by staleness first, capacity as the tiebreak: evict the peers we have
+        // learned least about recently, and among equally stale ones those we learned
+        // least about overall. Capacity alone was the previous key, which ranked a peer
+        // contacted yesterday beside one untouched for a month and let the older survive
+        // on a capacity margin.
+        candidates.sort(STALENESS_THEN_CAPACITY);
 
         int toEvict = _notFailingPeers.size() - maxProfiles;
         int evicted = 0;
@@ -2950,29 +3003,43 @@ public class ProfileOrganizer {
      *  Check if a peer should be excluded from profiling.
      *  Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
      *
+     *  <p>This is the single gate in front of profile creation, and it covers all
+     *  three ways one can be made: {@link #getOrCreateProfileNonblocking},
+     *  {@link #addProfile} (which is how stored profiles are loaded at startup), and
+     *  the periodic sweep. A peer failing it therefore has no profile at all, so it
+     *  costs no RAM and cannot be written to disk.
+     *
+     *  <p>The bandwidth half of this check was documented here but never performed:
+     *  the body tested only the no-tunnels capability, while the tier test sat in
+     *  {@link #isLowBandwidthTier} with no caller in the codebase. Peers advertising
+     *  K, L, M or Unknown were profiled, tracked and persisted despite advertising
+     *  that they will not usefully host a tunnel.
+     *
      *  @param peer the peer hash
      *  @return true if the peer should not be profiled
      *  @since 0.9.70+
      */
     boolean isExcludedFromProfiling(Hash peer) {
         RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
-        if (peerInfo == null) return true;
-        String caps = peerInfo.getCapabilities();
-        return caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
+        if (peerInfo == null) {return true;}
+        return isExcludedFromProfiling(peerInfo.getCapabilities(), peerInfo.getBandwidthTier());
     }
 
     /**
-     *  Check if a peer is in a low bandwidth tier (K, L, M, or Unknown).
+     *  Should a peer advertising these capabilities and bandwidth tier be profiled?
      *
-     *  @param peer the peer hash
-     *  @return true if the peer should be excluded from profiling
-     *  @since 0.9.70+
+     *  <p>Pure decision form of {@link #isExcludedFromProfiling(Hash)}, so the rule
+     *  can be pinned without a RouterInfo or a network database.
+     *
+     *  @param capabilities the peer's advertised capabilities, never null
+     *  @param bandwidthTier the peer's advertised bandwidth tier
+     *  @return true if no profile should be created for the peer
+     *  @since 0.9.71+
      */
-    boolean isLowBandwidthTier(Hash peer) {
-        RouterInfo peerInfo = lookupRouterInfoUnvalidated(peer);
-        if (peerInfo == null) return true; // no RouterInfo, assume low bandwidth
-        String tier = peerInfo.getBandwidthTier();
-        return isLowBandwidthTierName(tier);
+    static boolean isExcludedFromProfiling(String capabilities, String bandwidthTier) {
+        if (capabilities == null) {return true;}
+        if (capabilities.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {return true;}
+        return isLowBandwidthTierName(bandwidthTier);
     }
 
     /**
@@ -4120,7 +4187,7 @@ public class ProfileOrganizer {
      *  it. A missing entry counts as "no usable address": we cannot prove otherwise, and
      *  promoting an unverifiable peer is precisely the case this gate exists to stop.
      *
-     * @param peer the candidate
+     * @param peer hash of the candidate under consideration
      * @return true if the peer should be held out of the selection tiers
      * @since 0.9.71+
      */

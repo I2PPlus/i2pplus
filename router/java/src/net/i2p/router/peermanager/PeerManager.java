@@ -244,9 +244,36 @@ class PeerManager {
         // Gossip-only profiles (Tier 3) are kept in memory briefly but never written to disk.
         if (prof.getLastSendSuccessful() > 0 || prof.getLastHeardFrom() > 0) {
             long latestActivity = Math.max(prof.getLastSendSuccessful(), prof.getLastHeardFrom());
-            if (latestActivity > cutoff && _persistenceHelper.writeProfile(prof)) {return true;}
+            if (latestActivity > cutoff && !isLowBandwidthPeer(peer) &&
+                _persistenceHelper.writeProfile(prof)) {return true;}
         }
         return false;
+    }
+
+    /**
+     *  Is this peer in a bandwidth tier too low to be worth remembering across a
+     *  restart?
+     *
+     *  <p>K, L, M and Unknown are the tiers a peer advertises when it cannot or will
+     *  not commit bandwidth. Their profiles are still tracked in memory, where they
+     *  matter to selection and to the fast/high-cap tiers; what is not worth the
+     *  disk is the persisted history of a peer whose RouterInfo already tells us it
+     *  will not host a tunnel usefully.
+     *
+     *  <p>A missing or unreadable RouterInfo is <em>not</em> treated as low
+     *  bandwidth: absence of evidence is not evidence, and refusing to persist a peer
+     *  we simply have not looked up yet would discard the very profiles a floodfill
+     *  lookup would then have to rebuild.
+     *
+     *  @param peer hash of the peer to classify
+     *  @return true if the peer advertises K, L, M or Unknown bandwidth
+     *  @since 0.9.71+
+     */
+    private boolean isLowBandwidthPeer(Hash peer) {
+        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        if (info == null) {return false;}
+        String tier = info.getBandwidthTier();
+        return "K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier);
     }
 
     /**

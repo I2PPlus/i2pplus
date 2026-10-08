@@ -366,6 +366,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
+         * Empty table; threads are admitted by the first
+         * {@link #beginCycle(long[], int)}.
+         */
+        ThreadCpuTable() {}
+
+        /**
          * Start a sample cycle: carry stage and CPU baseline forward for the
          * given live thread ids and make them the table's contents.
          *
@@ -444,7 +450,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                 _live.cpu[idx] = cpu;
         }
 
-        /** Number of live threads currently tracked. */
+        /**
+         * Number of live threads currently tracked.
+         *
+         * @return count of occupied slots in the live generation
+         */
         int size() { return _live.size; }
 
         private static int hash(long id) {
@@ -701,9 +711,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     private static final int EDH_PRECALC_MAX = Math.max(16384, 1024 * XDH_FACTOR);
 
     /**
-     * Compute a system-scaled value: base * factor, bounded by min and max.
-     * Factor is max(memFactor, coreFactor), halved for slow systems.
-     */
+         * Compute a system-scaled value: base * factor, bounded by min and max.
+         * Factor is max(memFactor, coreFactor), halved for slow systems.
+         *
+         * @param base unscaled value for the detected hardware
+         * @param hardMin floor the result is clamped to
+         * @param hardMax ceiling the result is clamped to
+         * @return the scaled value, constrained to [hardMin, hardMax]
+         */
     static int scaleForSystem(int base, int hardMin, int hardMax) {
         int factor = Math.max(MEM_FACTOR, CORE_FACTOR);
         if (IS_SLOW) factor = Math.max(1, factor / 2);
@@ -810,12 +825,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** Read a property value. */
+        /**
+         * Read a property value.
+         *
+         * @param key property key
+         * @return the stored value, or null if the key is unset
+         */
         String getProperty(String key) {
             return _props.getProperty(key);
         }
 
-        /** Read an integer property value. */
+        /**
+         * Read an integer property value.
+         *
+         * @param key property key
+         * @param defaultVal value to return when the key is unset or unparseable
+         * @return the stored value as an int, or defaultVal
+         */
         int getInt(String key, int defaultVal) {
             String val = _props.getProperty(key);
             if (val != null) {
@@ -836,7 +862,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             _dirty = true;
         }
 
-        /** Autotune config file. */
+        /**
+         * Autotune config file.
+         *
+         * @return the backing file, which need not exist until the first save
+         */
         File getFile() { return _file; }
     }
 
@@ -1413,6 +1443,14 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /** Detailed metric labels. */
         public final String[] details;
 
+        /**
+         * A snapshot of one subsystem's health for display.
+         *
+         * @param name subsystem identifier
+         * @param label human-readable subsystem label
+         * @param score health score, clamped into 0.0-1.0
+         * @param details metric labels behind the score, or null for none
+         */
         SubsystemScore(String name, String label, double score, String[] details) {
             this.name = name;
             this.label = label;
@@ -1785,6 +1823,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @param description human-readable label shown in Tuner UI (e.g. "Socket connect timeout (ms)")
          *                    — keep short, include unit in parens; same convention for all new params
          * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
+         * @param defaultMin minimum allowed value
+         * @param defaultMax maximum allowed value
+         * @param defaultStep tuning step size
+         * @param statName router stat name for observed feedback
+         * @param ctx router context
          */
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
@@ -1795,7 +1838,15 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * A tunable parameter with the given name, description and subsystem.
          *
+         * @param name internal property key
+         * @param description human-readable label
          * @param subsystem subsystem identifier (e.g. "i2ptunnel", "streaming")
+         * @param defaultMin minimum allowed value
+         * @param defaultMax maximum allowed value
+         * @param defaultStep tuning step size
+         * @param statName router stat name for observed feedback
+         * @param ctx router context
+         * @param autotune autotune config, or null for shared
          */
         protected BaseParam(String name, String description, String subsystem,
                             int defaultMin, int defaultMax,
@@ -1982,6 +2033,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Current share bandwidth in bytes per second.
          * Useful for params whose ranges should scale with bandwidth.
          *
+         * @param ctx router context
          * @return the share bps
          * @since 0.9.70+
          */
@@ -1993,6 +2045,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default min — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultMin.
          *
+         * @param ctx router context
          * @return the default min
          * @since 0.9.70+
          */
@@ -2002,6 +2055,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default max — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultMax.
          *
+         * @param ctx router context
          * @return the default max
          * @since 0.9.70+
          */
@@ -2010,6 +2064,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         /**
          * Transit bandwidth threshold for "heavy" — 80% of configured share bandwidth.
          * Replaces the old hardcoded 50 KB/s which was far too low for any real router.
+         * @param ctx router context
          * @return the heavy transit threshold
          * @since 0.9.70+
          */
@@ -2019,6 +2074,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Transit bandwidth threshold for "sustained heavy" — 50% of configured share.
+         * @param ctx router context
          * @return the sustained heavy transit threshold
          * @since 0.9.70+
          */
@@ -2030,6 +2086,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * Effective default step — override for bandwidth-scaled params.
          * Called by refreshRanges() instead of _defaultStep.
          *
+         * @param ctx router context
          * @return the default step
          * @since 0.9.70+
          */
@@ -2044,6 +2101,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * persisted value to the new range if it was set before a code
          * change lowered the max.
          *
+         * @param ctx router context
          * @since 0.9.70+
          */
         public void refreshRanges(RouterContext ctx) {
@@ -2089,6 +2147,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *  reported once per param at DEBUG, and WARN stays free for things
          *  that actually need attention.
          *
+         *  @param ctx router context
          *  @since 0.9.70+
          */
         public void refreshDefault(RouterContext ctx) {
@@ -2151,7 +2210,11 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             }
         }
 
-        /** The current system health score for this update cycle. */
+        /**
+         * The current system health score for this update cycle.
+         *
+         * @param health health snapshot computed by the tuner
+         */
         void setHealth(SystemHealth health) { _health = health; }
 
         /**
@@ -2479,6 +2542,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP reader pool utilization (0.0-1.0).
+         * @param ctx router context
          * @return the reader utilization
          * @since 0.9.70+
          */
@@ -2489,6 +2553,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP writer pool utilization (0.0-1.0).
+         * @param ctx router context
          * @return the writer utilization
          * @since 0.9.70+
          */
@@ -2499,6 +2564,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * NTCP send finisher pool utilization (0.0-1.0).
+         * @param ctx router context
          * @return the send finisher utilization
          * @since 0.9.70+
          */
@@ -2509,6 +2575,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * UDP packet handler pool utilization (0.0-1.0).
+         * @param ctx router context
          * @return the packet handler utilization
          * @since 0.9.70+
          */
@@ -2519,6 +2586,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * UDP message receiver pool utilization (0.0-1.0).
+         * @param ctx router context
          * @return the message receiver utilization
          * @since 0.9.70+
          */
@@ -2529,6 +2597,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Tunnel pumper pool utilization (0.0-1.0).
+         * @param ctx router context
          * @return the pumper utilization
          * @since 0.9.70+
          */
@@ -2544,6 +2613,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
         /**
          * Record history.
+         *
+         * @param observed the stat reading this value was judged against
          */
         protected void recordHistory(double observed) {
             if (_historyCount < MAX_HISTORY) {
@@ -8776,26 +8847,45 @@ public class Tuner extends SimpleTimer2.TimedEvent {
             return rate.getAverageValue();
         }
 
-        /** Compute the target value based on observed stat and configured limits. */
+        /**
+         *  Compute the target value from memory headroom.
+         *
+         *  <p>This parameter bounds a memory store, so memory is the only input it
+         *  needs. It previously took {@code peer.fastPeerCount} and an hourly
+         *  profile-count trend instead, which made it a memory cap governed by peer
+         *  quality: raising it required more than 30% of the current cap to be fast
+         *  peers, so a router holding 1594 profiles and 375 fast peers could never
+         *  raise its own cap. {@link ProfileOrganizer#enforceProfileCap()} then
+         *  pinned the store one profile above the cap and evicted continuously to
+         *  stay there, shedding roughly 80 profiles a minute against a network
+         *  database of more than 5000 peers. The cap could not respond to the churn
+         *  because the churn was the reason the gate never opened.
+         *
+         *  <p>Peer count is retained only as a tiebreak on how much headroom to
+         *   grant, so a growing profile store is not penalised while memory is free
+         *  and a shrinking one is not expanded while memory is tight.
+         *
+         *  @param observed current value of the bound stat, {@code peer.activeProfileCount}
+         *  @return the target profile count
+         *  @since 0.9.71+
+         */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
-            // observed = peer.activeProfileCount (active profiles in RAM)
-            // Cross-refs: fastPeerCount (peer quality)
-            // Hourly trend: confirm profile count trend isn't just a short-term spike
-            double fastPeers = getAdditionalStat(_context, "peer.fastPeerCount");
-            double hourlyProfiles = getAdditionalStatHourly(_context, _statName);
+            double memPressure = getMemoryPressure();
 
-            boolean manyFastPeers = !Double.isNaN(fastPeers) && fastPeers > current * 0.3;
-            // Confirm sustained high profile count
-            boolean sustainedHighProfiles = !Double.isNaN(hourlyProfiles) && hourlyProfiles > current * 0.8;
+            // Memory is short: give the profiles back immediately, regardless of how
+            // many peers we would like to remember.
+            if (memPressure > 0.85) { return Math.max(_min, current - _step * 2); }
 
-            // Near cap + healthy fast peers = increase capacity
-            // Require sustained trend to avoid over-reacting to brief spikes
-            if (observed > current * 0.9 && manyFastPeers && sustainedHighProfiles)
-                return Math.min(_max, current + _step);
+            // Memory is comfortable. There is no reason to hold the cap down, so let
+            // it reach the ceiling the heap can support and stay there. Stopping short
+            // of _max here is what produced the permanent churn: the cap parked at an
+            // arbitrary mid-range value with the store pinned against it.
+            if (memPressure < 0.60) { return _max; }
 
-            // Well below cap = decrease capacity (save memory)
-            if (observed < current * 0.4)
+            // 60-85% used: no strong signal either way. Hold unless the store is
+            // nearly empty, in which case reclaim.
+            if (!Double.isNaN(observed) && observed < current * 0.2)
                 return Math.max(_min, current - _step);
 
             return current;
@@ -12455,14 +12545,22 @@ protected int computeTarget(double observed) {
         private double _score = Double.NaN;
         private final long _uptime;
 
-        /** System health */
+        /**
+         * System health
+         *
+         * @param ctx router context
+         */
         SystemHealth(RouterContext ctx) {
             _ctx = ctx;
             _uptime = ctx.router().getUptime();
             compute();
         }
 
-        /** Computed score. */
+        /**
+         * Computed score.
+         *
+         * @return the health score, where 1.0 is healthy and lower is worse
+         */
         double getScore() { return _score; }
 
         /**
@@ -12754,6 +12852,7 @@ protected int computeTarget(double observed) {
         /** Share of the fast or high-capacity tier that ghost exclusions may consume
          *  before the factor starts to bite, and the share at which it bottoms out. */
         static final double GHOST_TIER_FREE = 0.10;
+        /** Share of the tier at which the ghost-exclusion factor bottoms out at 0.0. */
         static final double GHOST_TIER_ZERO = 0.25;
 
         /**

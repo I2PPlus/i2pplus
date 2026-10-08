@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -40,6 +41,21 @@ import net.i2p.util.SystemVersion;
 class ProfilePersistenceHelper {
     private final Log _log;
     private final RouterContext _context;
+
+    /**
+     *  Age beyond which a peer that is also absent from the network database is
+     *  treated as gone, making its profile file deletable at any store size.
+     *
+     *  <p>Seven days. The previous logic used a 24-hour activity threshold and
+     *  separately deleted K/L/M/Unknown bandwidth peers regardless of age, so a peer
+     *  merely quiet overnight could lose its learned history. Those peers are no
+     *  longer written at all; this threshold now governs only what is left on disk
+     *  from before that. A peer that has been out of the network for a week will not
+     *  be selected by a RouterInfo that has since expired anyway.
+     *
+     *  @since 0.9.71+
+     */
+    static final long STALE_PROFILE_AGE_MS = 7 * 24 * 60 * 60 * 1000L;
 
     /**
      * PROP_PEER_PROFILE_DIR.
@@ -644,111 +660,189 @@ class ProfilePersistenceHelper {
     }
 
     /**
-     * Delete profile files not in 'keepPeers', if total file count > maxProfiles.
-     * Deletes oldest or least relevant first (based on file mtime if no RouterInfo).
-     * Prioritizes deletion: Tier 3 (Gossip) > Tier 2 (Passive) > Tier 1 (Active).
-     * Tier 1 profiles are protected and only deleted as absolute last resort.
+     *  Is a profile file genuinely stale, and therefore deletable whatever the
+     *  store size?
+     *
+     *  <p>Both conditions are required. Absence from the network database alone
+     *  means the RouterInfo expired, which happens routinely while a peer is
+     *  offline for an hour; inactivity alone means the peer has not been heard
+     *  from recently, which is equally routine. Only the conjunction identifies a
+     *  profile whose peer has been gone long enough that its learned history is
+     *  worth nothing.
+     *
+     *  <p>Pure decision, safe for unit tests.
+     *
+     *  @param absentFromNetDb true if no usable RouterInfo is held for the peer
+     *  @param lastActivity newest of last-sent-successfully, last-heard-from and
+     *         last-heard-about, or 0 if the profile records none
+     *  @param now current time in ms
+     *  @param staleAge age beyond which an absent peer is treated as gone, in ms
+     *  @return true if the file may be deleted regardless of store size
+     *  @since 0.9.71+
      */
-    public void purgeExcessProfiles(Set<Hash> keepPeers, int maxProfiles) {
-        List<File> files = selectFiles();
-        if (files.size() <= maxProfiles || keepPeers == null) {
-            setStoredProfileCount(files.size());
-            return; // within limit
-        }
+    static boolean isGenuinelyStale(boolean absentFromNetDb, long lastActivity,
+                                    long now, long staleAge) {
+        if (!absentFromNetDb) {return false;}
+        // A profile recording no activity at all is the oldest possible state and
+        // is treated as long-stale, matching the RAM-side isStaleAbsentPeer().
+        if (lastActivity <= 0) {return true;}
+        return now - lastActivity > staleAge;
+    }
 
-        // Build list of candidates for deletion
-        List<FileMetadata> candidates = new ArrayList<>();
-        List<FileMetadata> tier1Candidates = new ArrayList<>(); // Protected, deleted last resort
-        long now = System.currentTimeMillis();
-        long activeThreshold = now - (24 * 60 * 60 * 1000L); // 24 hours
-        int deleted = 0;
+    /**
+     *  How many surplus (non-stale) profiles to delete to bring the store back
+     *  to the retention floor.
+     *
+     *  <p>Stale profiles are deleted independently of this, so this counts only
+     *  the additional trimming that the store being over its floor justifies. It
+     *  is zero below the floor, which is what makes "never delete below the floor
+     *  unless genuinely stale" hold regardless of how many profiles are active.
+     *
+     *  <p>Pure decision, safe for unit tests.
+     *
+     *  @param storedFiles profile files currently on disk
+     *  @param retentionFloor file count to keep, exclusive of stale profiles
+     *  @param surplusAvailable surplus profiles not already counted as stale
+     *  @return number of surplus files to delete, never negative and never more
+     *         than {@code surplusAvailable}
+     *  @since 0.9.71+
+     */
+    static int surplusToDelete(int storedFiles, int retentionFloor, int surplusAvailable) {
+        if (surplusAvailable <= 0) {return 0;}
+        int over = storedFiles - retentionFloor;
+        if (over <= 0) {return 0;}
+        return Math.min(over, surplusAvailable);
+    }
+
+    /**
+     *  Delete profile files that are no longer worth keeping.
+     *
+     *  <p>Two rules, in this order:
+     *  <ol>
+     *  <li>a profile that is {@linkplain #isGenuinelyStale genuinely stale} is
+     *      deleted at any store size, oldest first;
+     *  <li>a profile that is merely surplus is deleted only while the store is
+     *      above {@code retentionFloor}, least-recently-active first.
+     *  </ol>
+     *  Staleness therefore decides <em>whether</em> a file may go and the store size
+     *  decides only <em>how many</em>.
+     *
+     *  <p>Low-bandwidth peers are excluded where it belongs, on the write path in
+     *  {@code PeerManager.storeProfile()}, so no K/L/M/Unknown profile is created in
+     *  the first place. This method used to remove them instead, ahead of any age
+     *  check, which deleted the file of a peer heard from minutes earlier and only
+     *  by accident got the right answer: files already on disk from before that
+     *  check existed still age out here, through the stale bucket or the surplus
+     *  trim.
+     *
+     *  <p>Ordering uses the profile's own recorded activity rather than the file's
+     *  modification time, because profiles are rewritten whenever they are stored
+     *  and so carry a fresh mtime even for a peer long gone.
+     *
+     *  @param keepPeers peers whose files must be preserved, may be null
+     *  @param retentionFloor file count to keep before trimming surplus
+     *  @since 0.9.71+
+     */
+    public void purgeExcessProfiles(Set<Hash> keepPeers, int retentionFloor) {
+        List<File> files = selectFiles();
+        int stored = files.size();
+        setStoredProfileCount(stored);
+        if (keepPeers == null) {return;}
+
+        long now = _context.clock().now();
+        List<FileMetadata> stale = new ArrayList<>();
+        List<FileMetadata> surplus = new ArrayList<>();
 
         for (File f : files) {
             Hash peer = getHash(f.getName());
             if (peer == null || keepPeers.contains(peer)) {
-                continue; // protected
+                continue; // in memory, so still in use
             }
 
-            // Try to check RouterInfo for bandwidth tier (K/L/M/Unknown = delete)
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-            if (info != null) {
-                String tier = info.getBandwidthTier();
-                if ("K".equals(tier) || "L".equals(tier) || "M".equals(tier) || "Unknown".equals(tier)) {
-                    f.delete();
-                    deleted++;
-                    continue;
-                }
-            }
-
-            // Determine interaction tier for prioritization
-            int tier = 3; // Default: Gossip
+            long lastActivity = 0;
+            boolean readable = true;
             try {
                 Properties props = new Properties();
                 loadProps(props, f);
-                long lastSent = getLong(props, "lastSentToSuccessfully");
-                long lastHeard = getLong(props, "lastHeardFrom");
-                if (lastSent > 0) {
-                    tier = 1; // Active
-                } else if (lastHeard > 0) {
-                    tier = 2; // Passive
-                }
-                // Keep recently active ones regardless of tier
-                if (lastSent >= activeThreshold || lastHeard >= activeThreshold) {
-                    continue;
-                }
-            } catch (IOException e) {
-                if (_log.shouldDebug()) _log.debug("Failed to read profile " + f, e);
+                lastActivity = newestOf(getLong(props, "lastSentToSuccessfully"),
+                                       getLong(props, "lastHeardFrom"),
+                                       getLong(props, "lastHeardAbout"));
+            } catch (IOException ioe) {
+                // An unreadable profile carries no history worth keeping, but it is
+                // not evidence of a stale peer either, so it stays surplus rather
+                // than being deleted outright.
+                readable = false;
+                if (_log.shouldDebug()) {_log.debug("Failed to read profile " + f, ioe);}
             }
 
-            FileMetadata fm = new FileMetadata(f, f.lastModified(), tier);
-            if (tier == 1) {
-                tier1Candidates.add(fm); // Tier 1 protected
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+            boolean absent = (info == null);
+            if (readable && isGenuinelyStale(absent, lastActivity, now, STALE_PROFILE_AGE_MS)) {
+                stale.add(new FileMetadata(f, lastActivity, true));
             } else {
-                candidates.add(fm);
+                surplus.add(new FileMetadata(f, lastActivity, false));
             }
         }
 
-        // Delete Tier 3 and Tier 2 first
-        int overage = files.size() - maxProfiles;
-        if (overage <= 0) {
-            setStoredProfileCount(files.size() - deleted);
-            return;
+        // Least recently active first in both buckets: an old peer is worth less
+        // than a recent one at equal staleness.
+        stale.sort(FileMetadata.BY_AGE);
+        surplus.sort(FileMetadata.BY_AGE);
+
+        int deleted = 0;
+        int staleDeleted = 0;
+        for (FileMetadata fm : stale) {
+            if (fm.file.delete()) {deleted++; staleDeleted++;}
+        }
+        int trim = surplusToDelete(stored - deleted, retentionFloor, surplus.size());
+        int surplusDeleted = 0;
+        for (int i = 0; i < trim; i++) {
+            if (surplus.get(i).file.delete()) {deleted++; surplusDeleted++;}
         }
 
-        // Sort: Tier 3 (Gossip) first, then Tier 2 (Passive), oldest first
-        candidates.sort((a, b) -> {
-            if (a.tier != b.tier) return Integer.compare(a.tier, b.tier);
-            return Long.compare(a.lastModified, b.lastModified);
-        });
-
-        int toDelete = Math.min(overage, candidates.size());
-        for (int i = 0; i < toDelete; i++) {
-            candidates.get(i).file.delete();
+        if (_log.shouldInfo() && deleted > 0) {
+            _log.info("Purged " + deleted + " of " + stored + " profile files (" +
+                      staleDeleted + " genuinely stale, " + surplusDeleted +
+                      " surplus, floor " + retentionFloor + ")");
         }
-
-        // Only if still over limit, delete Tier 1 (Active) profiles as last resort
-        overage = files.size() - toDelete - maxProfiles;
-        if (overage > 0 && !tier1Candidates.isEmpty()) {
-            tier1Candidates.sort((a, b) -> Long.compare(a.lastModified, b.lastModified));
-            int tier1ToDelete = Math.min(overage, tier1Candidates.size());
-            for (int i = 0; i < tier1ToDelete; i++) {
-                tier1Candidates.get(i).file.delete();
-            }
-            toDelete += tier1ToDelete;
-        }
-
-        if (_log.shouldInfo() && toDelete > 0) {
-            _log.info("Purged " + toDelete + " stale profile files from disk");
-        }
-        setStoredProfileCount(files.size() - deleted - toDelete);
+        setStoredProfileCount(stored - deleted);
     }
 
-    // Helper class
-    private static class FileMetadata {
-        final File file;
-        final long lastModified;
-        final int tier; // 1=Active, 2=Passive, 3=Gossip
-        FileMetadata(File f, long lm, int t) { file = f; lastModified = lm; tier = t; }
+    /**
+     *  Newest of three timestamps, treating absent (0) as oldest.
+     *
+     *  @param a first timestamp, 0 if unknown
+     *  @param b second timestamp, 0 if unknown
+     *  @param c third timestamp, 0 if unknown
+     *  @return the largest non-zero value, or 0 if all are 0
+     */
+    private static long newestOf(long a, long b, long c) {
+        long newest = Math.max(a, Math.max(b, c));
+        return newest;
+    }
+
+    /**
+     *  A profile file considered for deletion, with the age that decides its order.
+     *
+     *  @since 0.9.71+
+     */
+    private static final class FileMetadata {
+
+        /** Least recently active first. */
+        static final Comparator<FileMetadata> BY_AGE =
+            (a, b) -> Long.compare(a.lastActivity, b.lastActivity);
+
+        private final File file;
+        /** Newest recorded activity, or 0 if the profile records none. */
+        private final long lastActivity;
+        /** Whether the peer is genuinely stale rather than merely surplus. */
+        private final boolean stale;
+
+        FileMetadata(File f, long lastActivity, boolean stale) {
+            file = f;
+            this.lastActivity = lastActivity;
+            this.stale = stale;
+        }
     }
 
 }
