@@ -296,9 +296,13 @@ public class RequestThrottler {
     // Sustained load tracking — timestamp when load first exceeded threshold
     private volatile long _moderateLoadStart;
 
+    /** Whether count-based transit throttling applies when the property is unset. */
     static final boolean DEFAULT_SHOULD_THROTTLE = true;
+    /** Enables counting transit requests and rejecting or dropping over-limit peers. */
     static final String PROP_SHOULD_THROTTLE = "router.enableTransitThrottle";
+    /** Whether a versionless peer is disconnected when the property is unset. */
     static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    /** Enables scheduling a disconnect for a peer that joins with no version. */
     static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
     /**

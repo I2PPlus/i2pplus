@@ -17,6 +17,7 @@ import net.i2p.util.Translate;
  *
  */
 public class RouterThrottleImpl implements RouterThrottle {
+    /** Router context, used for the job queue, tunnel counts, bandwidth limits and rates. */
     protected final RouterContext _context;
     private final Log _log;
     private volatile String _tunnelStatus;
@@ -25,14 +26,23 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** Arbitrary hard limit - if it's taking this long to get to a job, we're congested. */
     private static final long JOB_LAG_LIMIT_NETWORK = 3*1000L;
 
+    /** Property name for the participating tunnel cap. */
     public static final String PROP_MAX_TUNNELS = "router.maxParticipatingTunnels";
     /** Default maximum tunnels, adjusted by system speed and memory. */
     public static volatile int defaultMaxTunnels = SystemVersion.isSlow() ? 3*1000 :
                                                   SystemVersion.getMaxMemory() < 512*1024*1024L ? 5*1000 :
                                                   SystemVersion.getCores() >= 8 ? 12*1000 : 8*1000;
-    /** @since 0.9.70+ */
+    /**
+     * Participating tunnel cap in force when the property is unset.
+     * @return the default tunnel count
+     * @since 0.9.70+
+     */
     public static int getDefaultMaxTunnels() { return defaultMaxTunnels; }
-    /** @since 0.9.70+ */
+    /**
+     * Set the default tunnel cap, clamped to 500..20000.
+     * @param val participating tunnels to use when the property is unset
+     * @since 0.9.70+
+     */
     public static void setDefaultMaxTunnels(int val) { defaultMaxTunnels = Math.max(500, Math.min(20000, val)); }
     private static final String PROP_MAX_PROCESSINGTIME = "router.defaultProcessingTimeThrottle";
     private static final long DEFAULT_REJECT_STARTUP_TIME = 3*60*1000L;
@@ -64,6 +74,10 @@ public class RouterThrottleImpl implements RouterThrottle {
     private static final int PREPROCESSED_SIZE = 1024;
 
 
+    /**
+     * Create a throttle and schedule the reset of the "starting up" tunnel status.
+     * @param context the router context
+     */
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(RouterThrottleImpl.class);
@@ -322,6 +336,7 @@ public class RouterThrottleImpl implements RouterThrottle {
      * participating tunnel count and total outbound bandwidth share.
      * This ensures a minimum allocation even when many tunnels are hosted.
      *
+     * @param ctx the router context supplying bandwidth, share percentage and tunnel count
      * @return minimum bytes per second to allocate per tunnel
      */
     public static int getMinBandwidthFloorPerTunnel(RouterContext ctx) {

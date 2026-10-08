@@ -25,6 +25,9 @@ import net.i2p.data.DataStructure;
  */
 class SortHelper {
 
+    /** Utility class holding only static methods. */
+    SortHelper() {}
+
     /**
      *  Sort based on the Hash of the DataStructure.
      *  Warning - relatively slow.
@@ -33,6 +36,8 @@ class SortHelper {
      *  Why? Just because it has to be consistent so signing will work.
      *  DEPRECATED - Only used by RouterInfo.
      *
+     *  @param <T> the DataStructure subtype being ordered
+     *  @param dataStructures the structures to order, or null to get an empty result
      *  @return a new list
      */
     public static <T extends DataStructure> List<T> sortStructures(Collection<T> dataStructures) {
@@ -52,6 +57,7 @@ class SortHelper {
      *  See above.
      *  DEPRECATED - Only used by RouterInfo.
      *
+     *  @param dataStructures the list to reorder in place by hash
      *  @since 0.9
      */
     static void sortStructureList(List<? extends DataStructure> dataStructures) {

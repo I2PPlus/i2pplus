@@ -27,6 +27,12 @@ import net.i2p.stat.Rate;
  *  {@code setXxx()} accessors; preferences are read from context properties.
  */
 public class GraphHelper extends FormHandler {
+
+    /**
+     * Leaves the form state unset; setContextId() supplies the context and preferences.
+     */
+    public GraphHelper() {}
+
     private int _periodCount;
     private boolean _showEvents;
     private int _width;
@@ -112,7 +118,11 @@ public class GraphHelper extends FormHandler {
         return "<noscript><meta http-equiv=refresh content=" + (_refreshDelaySeconds - 3) + "></noscript>";
     }
 
-    /** @return the configured graph refresh delay, in seconds */
+    /**
+     * The refresh delay the current render should actually use, in seconds.
+     *
+     * @return the delay in seconds, or -1 when graph generation is unavailable
+     */
     public int getRefreshValue() {
         return effectiveRefresh(_refreshDelaySeconds, GraphGenerator.isDisabled(_context));
     }
@@ -138,18 +148,33 @@ public class GraphHelper extends FormHandler {
 
     /**
      * setPeriodCount.
+     *
+     * @param str period count in minutes; non-numeric text is ignored and numbers
+     *            are clamped to MIN_C..MAX_C
      */
     public void setPeriodCount(String str) {
         setC(str);
     }
 
-    /** @since 0.9 */
+    /**
+     * Ends the view window that many periods before the most recent one.
+     *
+     * @param str how many periods back to end, so 0 ends at the latest period;
+     *            non-numeric text is ignored
+     * @since 0.9
+     */
     public void setE(String str) {
         try {_end = Math.max(0, Integer.parseInt(str));}
         catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.9 shorter parameter */
+    /**
+     * Shorter form of {@link #setPeriodCount} bound to the c= URL parameter.
+     *
+     * @param str period count in minutes; non-numeric text is ignored and numbers
+     *            are clamped to MIN_C..MAX_C
+     * @since 0.9
+     */
     public void setC(String str) {
         try {_periodCount = Math.max(MIN_C, Math.min(Integer.parseInt(str), MAX_C));}
         catch (NumberFormatException nfe) { /* ignored */ }
@@ -157,6 +182,9 @@ public class GraphHelper extends FormHandler {
 
     /**
      * setShowEvents.
+     *
+     * @param b true to plot individual events, false to plot averages; an absent,
+     *          empty or unrecognised value leaves the current mode in force
      */
     public void setShowEvents(String b) {
         _showEvents = resolveShowEvents(b, _showEvents);
@@ -193,12 +221,21 @@ public class GraphHelper extends FormHandler {
 
     /**
      * setHeight.
+     *
+     * @param str image height in pixels; non-numeric text is ignored and numbers
+     *            are clamped to MIN_Y..MAX_Y
      */
     public void setHeight(String str) {
         setH(str);
     }
 
-    /** @since 0.9 shorter parameter */
+    /**
+     * Shorter form of {@link #setHeight} bound to the h= URL parameter.
+     *
+     * @param str image height in pixels; non-numeric text is ignored and numbers
+     *            are clamped to MIN_Y..MAX_Y
+     * @since 0.9
+     */
     public void setH(String str) {
         try {_height = Math.max(MIN_Y, Math.min(Integer.parseInt(str), MAX_Y));}
         catch (NumberFormatException nfe) { /* ignored */ }
@@ -206,12 +243,21 @@ public class GraphHelper extends FormHandler {
 
     /**
      * setWidth.
+     *
+     * @param str image width in pixels; non-numeric text is ignored and numbers
+     *            are clamped to MIN_X..MAX_X
      */
     public void setWidth(String str) {
         setW(str);
     }
 
-    /** @since 0.9 shorter parameter */
+    /**
+     * Shorter form of {@link #setWidth} bound to the w= URL parameter.
+     *
+     * @param str image width in pixels; non-numeric text is ignored and numbers
+     *            are clamped to MIN_X..MAX_X
+     * @since 0.9
+     */
     public void setW(String str) {
         try {_width = Math.max(MIN_X, Math.min(Integer.parseInt(str), MAX_X));}
         catch (NumberFormatException nfe) { /* ignored */ }
@@ -219,6 +265,10 @@ public class GraphHelper extends FormHandler {
 
     /**
      * setRefreshDelay.
+     *
+     * @param str refresh delay in seconds; a positive value is raised to
+     *            MIN_REFRESH, zero or negative selects never refresh, and
+     *            non-numeric text is ignored
      */
     public void setRefreshDelay(String str) {
         try {
@@ -228,21 +278,64 @@ public class GraphHelper extends FormHandler {
         } catch (NumberFormatException nfe) { /* ignored */ }
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Enables storing graph data on disk; the submitted value is not examined.
+     *
+     * @param foo the persistent checkbox value, ignored
+     * @since 0.8.7
+     */
     public void setPersistent(String foo) {_persistent = true;}
 
-    /** @since 0.9.70+ */
+    /**
+     * Sets the glow effect drawn around graph lines.
+     *
+     * @param foo only the exact text {@code false} turns the glow off; any other
+     *            value enables it
+     * @since 0.9.70+
+     */
     public void setGraphGlow(String foo) {_graphGlow = !"false".equals(foo);}
+
+    /**
+     * Sets bezier curves in place of a staircase plot.
+     *
+     * @param foo only the exact text {@code false} turns smoothing off; any other
+     *            value enables it
+     */
     public void setGraphSmooth(String foo) {_graphSmooth = !"false".equals(foo);}
+
+    /**
+     * Sets whether graphs are drawn with filled areas.
+     *
+     * @param foo only the exact text {@code false} turns filling off; any other
+     *            value enables it
+     */
     public void setGraphFill(String foo) {_graphFill = !"false".equals(foo);}
 
-    /** @since 0.9.71+ */
+    /**
+     * Sets whether related stats are merged into one overlaid plot.
+     *
+     * @param foo only the exact text {@code false} turns combining off; any other
+     *            value enables it
+     * @since 0.9.71+
+     */
     public void setGraphCombine(String foo) {_graphCombine = !"false".equals(foo);}
 
-    /** @since 0.9.70+ */
+    /**
+     * Sets whether graph axes are labelled in UTC instead of local time.
+     *
+     * @param foo only the exact text {@code false} turns UTC off; any other
+     *            value enables it
+     * @since 0.9.70+
+     */
     public void setUseUtc(String foo) {_useUtc = !"false".equals(foo);}
 
-    /** @since 0.9.32 */
+    /**
+     * Sets whether the legend is suppressed on graphs.
+     *
+     * @param foo {@code true} hides the legend and {@code false} shows it; any
+     *            other value leaves the current setting alone
+     * @since 0.9.32
+     */
     public void setHideLegend(String foo) {
         if ("true".equalsIgnoreCase(foo)) {
             _graphHideLegend = true;
@@ -253,7 +346,13 @@ public class GraphHelper extends FormHandler {
         }
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Sets whether restart markers are suppressed on graphs.
+     *
+     * @param foo {@code true} suppresses them and {@code false} restores them;
+     *            any other value leaves the current setting alone
+     * @since 0.9.70+
+     */
     public void setHideRestarts(String foo) {
         if ("true".equalsIgnoreCase(foo)) {
             _graphHideRestarts = true;
@@ -264,11 +363,15 @@ public class GraphHelper extends FormHandler {
 
     /**
      *  For single stat page
+     *  @param stat the rate name to plot, or a group id when combining is on
      *  @since 0.9
      */
     public void setStat(String stat) {_stat = stat;}
 
     /**
+     * The thumbnail list for the graphs page, one anchor-wrapped image per enabled
+     * stat plus a tile per active group.
+     *
      * @return the images
      */
     public String getImages() {
@@ -445,7 +548,11 @@ public class GraphHelper extends FormHandler {
         return names;
     }
 
-    /** @return the number of configured graph listeners, or 0 if graphs are disabled */
+    /**
+     * How many graphs the configured listeners will draw.
+     *
+     * @return the number of configured graph listeners, or 0 if graphs are disabled
+     */
     public int countGraphs() {
         GraphGenerator ss = GraphGenerator.instance(_context);
         if (ss == null) {return 0;}
@@ -608,6 +715,8 @@ public class GraphHelper extends FormHandler {
     private static final int[] times = { 5, 10, 15, 30, 60, 2*60, 5*60, 10*60, 30*60, 60*60, -1 };
 
     /**
+     * The graph display configuration form posted to /graphs.
+     *
      * @return the form
      */
     public String getForm() {

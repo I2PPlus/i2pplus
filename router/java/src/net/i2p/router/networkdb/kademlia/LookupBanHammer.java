@@ -30,10 +30,16 @@ class LookupBanHammer {
     private static final long BURST_WINDOW_MS = 1000L;
     private static final long BAN_DURATION_MS = 5 * 60 * 1000L;
     private static volatile int _maxEntries = 50000;
+    /**
+     * Interval between cleanup passes in milliseconds. The first pass is
+     * scheduled with CLEAN_TIME instead, so this only governs rescheduling
+     * and can be retuned at runtime.
+     */
     static volatile long _cleanTimeMs = CLEAN_TIME;
 
     private final Cleaner _cleaner;
 
+    /** Create the tracker maps and schedule the first cleanup pass. */
     LookupBanHammer() {
         burstTimestamps = new ConcurrentHashMap<ReplyTunnel, ConcurrentLinkedDeque<Long>>();
         banExpiration = new ConcurrentHashMap<ReplyTunnel, Long>();
@@ -41,21 +47,38 @@ class LookupBanHammer {
         _cleaner.schedule(CLEAN_TIME);
     }
 
+    /** Stop the periodic cleanup. */
     void cancel() { _cleaner.cancel(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the cap on tracked (peer, tunnel) pairs, clamped to 1000..200000.
+     * @param max requested cap on the number of tracked pairs
+     * @since 0.9.70+
+     */
     static void setMaxEntries(int max) {
         _maxEntries = Math.max(1000, Math.min(200000, max));
     }
 
+    /**
+     * Read the cap last set by setMaxEntries().
+     * @return cap on the number of tracked (peer, tunnel) pairs
+     */
     static int getMaxEntries() { return _maxEntries; }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the cleanup interval, clamped to 5000..120000 ms.
+     * @param ms requested interval between cleanup passes, in milliseconds
+     * @since 0.9.70+
+     */
     static void setCleanTimeMs(long ms) {
         _cleanTimeMs = Math.max(5000, Math.min(120000, ms));
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the burst ban threshold, clamped to 2..100.
+     * @param t lookups allowed within the 1-second burst window before a ban is imposed
+     * @since 0.9.70+
+     */
     static void setBurstThreshold(int t) {
         _burstThreshold = Math.max(2, Math.min(100, t));
     }

@@ -3043,7 +3043,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Handles the "Stop_" action to stop a torrent by action token.
      *
-     * @param action the action string starting with "Stop_"
+     * @param action the tracker action to perform, as submitted by the form string starting with "Stop_"
      */
     private void handleStop(String action) {
         String token = action.substring(5);
@@ -3054,7 +3054,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Handles the "Start_" action to start a torrent by action token.
      *
-     * @param action the action string starting with "Start_"
+     * @param action the tracker action to perform, as submitted by the form string starting with "Start_"
      */
     private void handleStart(String action) {
         Snark snark = resolveTorrentByToken(action.substring(6));
@@ -3655,7 +3655,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Process tracker form submission.
      *
-     * @param action the action
+     * @param action the tracker action to perform, as submitted by the form
      * @param req the request
      */
     private void processTrackerForm(String action, HttpServletRequest req) {
@@ -3737,7 +3737,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Process torrent create filter form submission.
      *
-     * @param action the action
+     * @param action the tracker action to perform, as submitted by the form
      * @param req the request
      */
     private void processTorrentCreateFilterForm(String action, HttpServletRequest req) {

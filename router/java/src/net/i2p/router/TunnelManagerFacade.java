@@ -120,22 +120,63 @@ public interface TunnelManagerFacade extends Service {
      */
     public TunnelInfo selectOutboundTunnel(Hash destination, Hash closestTo);
 
-    /** Is a tunnel a valid member of the pool? */
+    /**
+     * Is a tunnel a valid member of the pool?
+     *
+     * @param client hash of the destination whose pool is checked
+     * @param tunnel candidate, rejected if failed or expired
+     * @return true only if unfailed, unexpired and listed in that client's
+     *              inbound or outbound pool, matching the tunnel's direction
+     */
     public boolean isValidTunnel(Hash client, TunnelInfo tunnel);
 
-    /** How many tunnels are we participating in? */
+    /**
+     * How many tunnels are we participating in?
+     *
+     * @return number of tunnels where we are a gateway or an endpoint
+     */
     public int getParticipatingCount();
-    /** How many free inbound tunnels do we have available? */
+    /**
+     * How many free inbound tunnels do we have available?
+     *
+     * @return number of valid, unfailed inbound exploratory tunnels
+     */
     public int getFreeTunnelCount();
-    /** How many outbound tunnels do we have available? */
+    /**
+     * How many outbound tunnels do we have available?
+     *
+     * @return number of valid, unfailed outbound exploratory tunnels
+     */
     public int getOutboundTunnelCount();
-    /** How many free inbound client tunnels do we have available? */
+    /**
+     * How many free inbound client tunnels do we have available?
+     *
+     * @return total over all destinations of GOOD (tested and passed)
+     *               inbound client tunnels
+     */
     public int getInboundClientTunnelCount();
-    /** How many outbound client tunnels do we have available? */
+    /**
+     * How many outbound client tunnels do we have available?
+     *
+     * @return total over all destinations of GOOD (tested and passed)
+     *               outbound client tunnels
+     */
     public int getOutboundClientTunnelCount();
-    /** How many outbound client tunnels in this pool? */
+    /**
+     * How many outbound client tunnels in this pool?
+     *
+     * @param destination hash of the destination owning the outbound pool
+     * @return GOOD tunnel count, or the count including untested tunnels
+     *              while bootstrapping, or 0 if no pool is registered
+     */
     public int getOutboundClientTunnelCount(Hash destination);
-    /** How many inbound client tunnels in this pool? */
+    /**
+     * How many inbound client tunnels in this pool?
+     *
+     * @param destination hash of the destination owning the inbound pool
+     * @return GOOD tunnel count, or the count including untested tunnels
+     *              while bootstrapping, or 0 if no pool is registered
+     */
     public int getInboundClientTunnelCount(Hash destination);
     /**
      * The share ratio of tunnel bandwidth allocated to the network.
@@ -144,10 +185,19 @@ public interface TunnelManagerFacade extends Service {
      */
     public double getShareRatio();
 
-    /** When does the last tunnel we are participating in expire? */
+    /**
+     * When does the last tunnel we are participating in expire?
+     *
+     * @return expiration of the latest-expiring participating tunnel in
+     *                    milliseconds since the epoch, or -1 if we participate in none
+     */
     public long getLastParticipatingExpiration();
 
-    /** Count how many inbound tunnel requests we have received but not yet processed */
+    /**
+     * Count how many inbound tunnel requests we have received but not yet processed
+     *
+     * @return number of inbound build requests waiting in the queue
+     */
     public int getInboundBuildQueueSize();
 
     /**
@@ -161,12 +211,17 @@ public interface TunnelManagerFacade extends Service {
      * The client connected (or updated their settings), so make sure we have the tunnels
      * for them, and whenever necessary, ask them to authorize leases.
      *
+     * @param client connecting destination, whose hash keys the pools created here
+     * @param settings per-destination inbound and outbound pool settings, which
+     *                 replace those of any pools that already exist
      */
     public void buildTunnels(Destination client, ClientTunnelSettings settings);
 
     /**
      *  Must be called AFTER deregistration by the client manager.
      *
+     *  @param client destination whose pools are scheduled for removal, deferred
+     *                so its tunnels keep operating until they expire
      *  @since 0.9.48
      */
     public void removeTunnels(Destination client);
@@ -175,6 +230,9 @@ public interface TunnelManagerFacade extends Service {
      *  Add another destination to the same tunnels.
      *  Must have same encryption key and a different signing key.
      *
+     *  @param dest alias destination, which gets its own pools flagged as aliased
+     *  @param settings settings for the alias pools, retained under the primary hash
+     *  @param existingClient primary destination whose tunnels are being shared
      *  @throws IllegalArgumentException if not
      *  @return success
      *  @since 0.9.21
@@ -184,6 +242,7 @@ public interface TunnelManagerFacade extends Service {
     /**
      *  Remove another destination to the same tunnels.
      *
+     *  @param dest alias destination to drop from the primary's alias set
      *  @since 0.9.21
      */
     public void removeAlias(Destination dest);
@@ -240,20 +299,42 @@ public interface TunnelManagerFacade extends Service {
      * @param settings the outbound settings
      */
     public void setOutboundSettings(Hash client, TunnelPoolSettings settings);
-    /** For TunnelRenderer in router console */
+    /**
+     * For TunnelRenderer in router console
+     *
+     * @param out list that the client inbound, client outbound and both
+     *            exploratory pools are appended to
+     */
     public void listPools(List<TunnelPool> out);
-    /** For TunnelRenderer in router console */
+    /**
+     * For TunnelRenderer in router console
+     *
+     * @return snapshot of the inbound pools, keyed by destination hash
+     */
     public Map<Hash, TunnelPool> getInboundClientPools();
-    /** For TunnelRenderer in router console */
+    /**
+     * For TunnelRenderer in router console
+     *
+     * @return snapshot of the outbound pools, keyed by destination hash
+     */
     public Map<Hash, TunnelPool> getOutboundClientPools();
-    /** For TunnelRenderer in router console */
+    /**
+     * For TunnelRenderer in router console
+     *
+     * @return the shared inbound exploratory pool, never null
+     */
     public TunnelPool getInboundExploratoryPool();
-    /** For TunnelRenderer in router console */
+    /**
+     * For TunnelRenderer in router console
+     *
+     * @return the shared outbound exploratory pool, never null
+     */
     public TunnelPool getOutboundExploratoryPool();
 
     /**
      *  Inbound tunnel pool for the given client, or null if none.
      *
+     *  @param client hash of the destination that owns the pool
      *  @return pool or null
      *  @since 0.9.34
      */
@@ -262,6 +343,7 @@ public interface TunnelManagerFacade extends Service {
     /**
      *  Outbound tunnel pool for the given client, or null if none.
      *
+     *  @param client hash of the destination that owns the pool
      *  @return pool or null
      *  @since 0.9.34
      */
@@ -290,7 +372,13 @@ public interface TunnelManagerFacade extends Service {
      */
     public int ensurePoolsFor(Hash client);
 
-    /** @since 0.8.13 */
+    /**
+     * Fail every tunnel that depends on a peer we can no longer reach:
+     * outbound tunnels with it as first hop, inbound tunnels with it as last hop.
+     *
+     * @param peer hash of the unreachable peer
+     * @since 0.8.13
+     */
     public void fail(Hash peer);
 
     /**

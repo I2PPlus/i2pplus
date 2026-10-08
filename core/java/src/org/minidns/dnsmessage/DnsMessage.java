@@ -1325,7 +1325,7 @@ public class DnsMessage {
         /**
          * Set the question part of this message.
          *
-         * @param questions The questions.
+         * @param questions questions this message asks, replacing any already set
          * @return a reference to this builder.
          */
         public Builder setQuestions(List<Question> questions) {
@@ -1336,7 +1336,7 @@ public class DnsMessage {
         /**
          * Set the question part of this message.
          *
-         * @param question The question.
+         * @param question the single question this message asks
          * @return a reference to this builder.
          */
         public Builder setQuestion(Question question) {

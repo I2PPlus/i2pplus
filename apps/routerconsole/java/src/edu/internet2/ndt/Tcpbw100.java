@@ -270,6 +270,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * Tcpbw100.
+     *
+     * @param useSSL true to run the test over SSL, loading the certificates/ndt keystore
      */
     public Tcpbw100(boolean useSSL) {
         super();
@@ -294,6 +296,9 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      *  bigly
+     *
+     * @param args -s to use SSL, then the hostname and an optional client id
+     * @return the started applet, already shown in its own window
      * @throws IllegalArgumentException on bad hostname
      */
     public static Tcpbw100 mainSupport(String[] args) {
@@ -322,67 +327,99 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * get_c2sspd.
+     *
+     * @return the outbound throughput in MiB using base 10, 0 until a test runs
      */
     public String get_c2sspd() {return Double.toString((pub_c2sspd));} // Expressed as MiB using base 10
     /**
      * get_s2cspd.
+     *
+     * @return the inbound throughput in MiB using base 10, 0 until a test runs
      */
     public String get_s2cspd() {return Double.toString(pub_s2cspd);} // Expressed as MiB using base 10
     /**
      * get_CurRwinRcvd.
+     *
+     * @return the current TCP receive window in bytes, 0 until the server reports it
      */
     public String get_CurRwinRcvd() {return Integer.toString(pub_CurRwinRcvd);}
     /**
      * get_MaxRwinRcvd.
+     *
+     * @return the largest receive window seen in bytes, 0 until the server reports it
      */
     public String get_MaxRwinRcvd() {return Integer.toString(pub_MaxRwinRcvd);}
     /**
      * get_Ping.
+     *
+     * @return the minimum round trip time in milliseconds, 0 until the server reports it
      */
     public String get_Ping() {return Integer.toString(pub_MinRTT);}
     /**
      * get_MaxRTT.
+     *
+     * @return the maximum round trip time in milliseconds, 0 until the server reports it
      */
     public String get_MaxRTT() {return Integer.toString(pub_MaxRTT);}
     /**
      * get_loss.
+     *
+     * @return the packet loss as a fraction from 0 to 1, 0 until the server reports it
      */
     public String get_loss() {return Double.toString(pub_loss);}
     /**
      * get_avgrtt.
+     *
+     * @return the average round trip time in milliseconds, 0 until the server reports it
      */
     public String get_avgrtt() {return Double.toString(pub_avgrtt);}
     /**
      * get_CurRTO.
+     *
+     * @return the current retransmission timeout in milliseconds, 0 until reported
      */
     public String get_CurRTO() {return Integer.toString(pub_CurRTO);}
     /**
      * get_SACKsRcvd.
+     *
+     * @return the number of selective acknowledgement packets received
      */
     public String get_SACKsRcvd() {return Integer.toString(pub_SACKsRcvd);}
     /**
      * get_osVer.
+     *
+     * @return the client OS version, "unknown" until the client reports it
      */
     public String get_osVer() {return pub_osVer;}
     /**
      * get_pluginVer.
+     *
+     * @return the client plugin version, "unknown" until the client reports it
      */
     public String get_pluginVer() {return pub_pluginVer;}
     /**
      * get_host.
+     *
+     * @return the host the test ran against, "unknown" until set
      */
     public String get_host() {return pub_host;}
     /**
      * get_osName.
+     *
+     * @return the client OS name, "unknown" until the client reports it
      */
     public String get_osName() {return pub_osName;}
     /**
      * get_osArch.
+     *
+     * @return the client OS architecture, "unknown" until the client reports it
      */
     public String get_osArch() {return pub_osArch;}
 
     /**
      * get_mismatch.
+     *
+     * @return "yes" if the server reported a speed mismatch, otherwise "no"
      */
     public String get_mismatch() {
         String result;
@@ -393,6 +430,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * get_Bad_cable.
+     *
+     * @return "yes" if the server flagged a bad cable, otherwise "no"
      */
     public String get_Bad_cable() {
         String result;
@@ -403,6 +442,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * get_congestion.
+     *
+     * @return "yes" if the server flagged congestion, otherwise "no"
      */
     public String get_congestion() {
         String result;
@@ -413,43 +454,61 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * get_cwndtime.
+     *
+     * @return the fraction of the run spent limited by the congestion window
      */
     public String get_cwndtime() {return Double.toString(pub_cwndtime);}
     /**
      * get_AccessTech.
+     *
+     * @return the access technology the server detected, "unknown" until reported
      */
     public String get_AccessTech() {return pub_AccessTech;}
     /**
      * get_rcvrLimiting.
+     *
+     * @return the percentage of the run the receive buffer was too small
      */
     public String get_rcvrLimiting() {return Double.toString(pub_pctRcvrLimited);}
 
     /**
      * get_optimalRcvrBuffer.
+     *
+     * @return the largest receive window scaled by 1024, the suggested buffer size in KiB
      */
     public String get_optimalRcvrBuffer() {
-        return Integer.toString(pub_MaxRwinRcvd * NDTConstants.KILO_BITS); //buffer size in bits
+        return Integer.toString(pub_MaxRwinRcvd * NDTConstants.KILO_BITS); //buffer size in KiB
     }
 
     /**
      * get_clientIP.
+     *
+     * @return the client IP as the server saw it, "unknown" until reported
      */
     public String get_clientIP() {return pub_clientIP;}
     /**
      * get_natStatus.
+     *
+     * @return the NAT type the server detected, "unknown" until reported
      */
     public String get_natStatus() {return pub_natBox;}
     /**
      * get_DupAcksOut.
+     *
+     * @return the number of duplicate acknowledgements sent
      */
     public String get_DupAcksOut() {return Integer.toString(pub_DupAcksOut);}
     /**
      * get_DupAcksIn.
+     *
+     * @return the number of duplicate acknowledgements received
      */
     public String get_DupAcksIn() {return Integer.toString(pub_DupAcksIn);}
 
     /**
      * get_TimeStamp.
+     *
+     * @return the server timestamp, or "unknown" if it sent none
      */
     public String get_TimeStamp() {
         String result = "unknown";
@@ -460,35 +519,51 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     // get PC buffer imposed throughput limit
     /**
      * get_PcBuffSpdLimit.
+     *
+     * @return the throughput ceiling the local receive buffer imposes, in bytes per second
      */
     public String get_PcBuffSpdLimit() {return Double.toString(rwin / rttsec);}
     /**
      * get_jitter.
+     *
+     * @return the spread between the maximum and minimum round trip times, in milliseconds
      */
     public String get_jitter() {return Integer.toString((pub_MaxRTT - pub_MinRTT));}
     /**
      * get_WaitSec.
+     *
+     * @return the estimated stall time in seconds, the current RTO times the timeout count
      */
     public String get_WaitSec() {return Integer.toString((pub_CurRTO * pub_Timeouts) / 1000);}
     /**
      * get_errmsg.
+     *
+     * @return the error from the last run, "Test not run." if there was none
      */
     public String get_errmsg() {return pub_errmsg;}
     /**
      * get_diagnosis.
+     *
+     * @return the diagnosis from the last run, "Test not run." if there was none
      */
     public String get_diagnosis() {return pub_diagnosis;}
     /**
      * get_statistics.
+     *
+     * @return the statistics from the last run, "Test not run." if there was none
      */
     public String get_statistics() {return pub_statistics;}
     /**
      * get_status.
+     *
+     * @return the test status, "notStarted" until the run begins
      */
     public String get_status() {return pub_status;}
 
     /**
      * get_instSpeed.
+     *
+     * @return the speed since the last sample, in bits per millisecond
      */
     public String get_instSpeed() {
         //Get speed in bits, hence multiply by 8 for byte->bit conversion
@@ -548,6 +623,8 @@ public class Tcpbw100 extends JApplet implements ActionListener {
 
     /**
      * isTestInProgress.
+     *
+     * @return whether a test run is in progress right now
      */
     public boolean isTestInProgress() {return _bTestInProgress.get();}
 
@@ -558,6 +635,11 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * enabled so that results can be viewed in detail.
      */
     class TestWorker implements Runnable {
+
+        /**
+         * TestWorker.
+         */
+        TestWorker() {}
         // I2P
         /**
          * run.
@@ -853,15 +935,25 @@ public class Tcpbw100 extends JApplet implements ActionListener {
     /**
      *  I2P
      *  Translated status, not HTML escaped.
+     *
+     * @return the current status line, localized and not HTML escaped
      */
     public synchronized String getStatus() {return _displayStatus;}
 
     /**
      * test_mid.
+     *
+     * @param paramProtoObj Protocol Object used to exchange messages
+     * @return boolean, true if test was not completed, false if test was completed.
+     * @throws IOException when sending/receiving messages from server fails
      */
     public boolean test_mid(Protocol paramProtoObj) throws IOException {return false;}
     /**
      * test_sfw.
+     *
+     * @param protocolObj Protocol Object used to exchange messages
+     * @return boolean, true if test was not completed, false if test was completed.
+     * @throws IOException when sending/receiving messages from server fails
      */
     public boolean test_sfw(Protocol protocolObj) throws IOException {return false;}
 
@@ -1284,6 +1376,7 @@ public class Tcpbw100 extends JApplet implements ActionListener {
      * gets included along with the overall set of test results.
      *
      * @param paramProtoObj Protocol Object used to exchange protocol messages
+     * @param application the META information to send alongside the test results
      * @return boolean, true if test was completed, false if test is incomplete.
      * @throws IOException When sending/receiving messages from server fails
      * @see Protocol#recv_msg(Message msgParam)
@@ -2521,6 +2614,10 @@ public class Tcpbw100 extends JApplet implements ActionListener {
         }
     }
 
+    /**
+     * Runs the configured tests on a daemon thread in a private daemon thread group,
+     * so an uncaught error is logged rather than reaching the default handler.
+     */
     public synchronized void runIt() {
         _thread_group = new
         ThreadGroup("NDT") {

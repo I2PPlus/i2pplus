@@ -126,6 +126,22 @@ public class SearchJob extends JobImpl {
     /**
      * Create a new search for the routingKey specified
      *
+     * @param context router context supplying the clock, log and job queue
+     * @param facade network database the search reads peers and entries from
+     * @param key hash being searched for; a null hash, or one with no data,
+     *            is rejected
+     * @param onSuccess job queued once the value is found, may be null
+     * @param onFailure job queued once the search is abandoned, may be null
+     * @param timeoutMs milliseconds before the search gives up; the expiration
+     *                  is computed as now plus this
+     * @param keepStats true to record this search's outcome and duration in the
+     *                  success/failure rate stats
+     * @param isLease true when the target is a LeaseSet, selecting the wider
+     *                breadth, tunnel-routed queries and LeaseSet storage on
+     *                success; false for exploratory searches
+     * @param msgIDBloomXor value XOR'ed with the message ID of each outgoing
+     *                      message, so it does not match the peer's bloom filter
+     * @throws IllegalArgumentException if the key is null or has no data
      */
     public SearchJob(RouterContext context, KademliaNetworkDatabaseFacade facade, Hash key,
                      Job onSuccess, Job onFailure, long timeoutMs, boolean keepStats, boolean isLease, long msgIDBloomXor) {
@@ -184,7 +200,13 @@ public class SearchJob extends JobImpl {
     /** Whether to query only floodfill peers by default. */
     private static final boolean DEFAULT_FLOODFILL_ONLY = true;
 
-    /** This is now misnamed, as it is only used to determine whether to return floodfill peers only */
+    /**
+     * This is now misnamed, as it is only used to determine whether to return floodfill peers only
+     *
+     * @param ctx router context whose properties decide the floodfill restriction
+     * @return false whenever floodfill is enabled or the explore-when-floodfill
+     *               property is not "true", otherwise the netDb.floodfillOnly property
+     */
     static boolean onlyQueryFloodfillPeers(RouterContext ctx) {
         String forceExplore = ctx.getProperty("router.exploreWhenFloodfill");
         // If we are floodfill, we want the FloodfillPeerSelector (in add()) to include
@@ -203,7 +225,15 @@ public class SearchJob extends JobImpl {
     /** Minimum timeout in ms */
     static final long MIN_TIMEOUT = 2*1000L;
 
-    /** Per-peer timeout adjusted for floodfill and remaining time. */
+    /**
+     * Per-peer timeout adjusted for floodfill and remaining time.
+     *
+     * @param peer router hash whose peer timeout is being looked up, used only
+     *             once floodfill peers are exhausted
+     * @return the peer's own timeout in ms, or the fixed floodfill timeout while
+     *             floodfill queries remain, shortened so it never runs past the
+     *             search deadline but never below 2s
+     */
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
         if (_floodfillPeersExhausted && _floodfillSearchesOutstanding <= 0) {timeout = _facade.getPeerTimeout(peer);}
@@ -271,7 +301,14 @@ public class SearchJob extends JobImpl {
      */
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
 
-    /** Max # of concurrent searches */
+    /**
+     * Max # of concurrent searches
+     *
+     * @return how many peers may be queried at once: 1 while overloaded (job
+     *             queue lag above 500ms, message delay above 800ms or CPU load
+     *             above 80), else the greater of half the cores and 8 for a LeaseSet
+     *             search, or a third of the cores and 3 otherwise
+     */
     protected int getBredth() {
         boolean isOverloaded = getContext().jobQueue().getMaxLag() > 500 ||
                                getContext().throttle().getMessageDelay() > 800 ||
@@ -421,6 +458,9 @@ public class SearchJob extends JobImpl {
     /**
      * Send a search to the given peer
      *
+     * @param router peer to query; ignored if it is us, and otherwise routed
+     *               through a tunnel unless an established session to it makes a
+     *               direct send cheaper
      */
     protected void sendSearch(RouterInfo router) {
         if (router.getIdentity().equals(getContext().router().getRouterInfo().getIdentity())) {
@@ -452,6 +492,9 @@ public class SearchJob extends JobImpl {
      * We're (probably) searching for a LeaseSet, so to be (overly) cautious, we're sending
      * the request out through a tunnel w/ reply back through another tunnel.
      *
+     * @param router peer to query, which must have both an inbound exploratory
+     *               tunnel for replies and an outbound exploratory tunnel
+     *               available or the peer is marked failed
      */
     protected void sendLeaseSearch(RouterInfo router) {
         Hash to = router.getIdentity().getHash();
@@ -495,7 +538,12 @@ public class SearchJob extends JobImpl {
         getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnelId, to);
     }
 
-    /** We're searching for a router, so we can just send direct */
+    /**
+     * We're searching for a router, so we can just send direct
+     *
+     * @param router peer to query directly, using its own recorded timeout and
+     *               sending no reply tunnel
+     */
     protected void sendRouterSearch(RouterInfo router) {
         Hash to = router.getIdentity().getHash();
         int timeout = _facade.getPeerTimeout(to);
@@ -541,7 +589,13 @@ public class SearchJob extends JobImpl {
         throw new UnsupportedOperationException("See ExploreJob");
     }
 
-    /** Found a reply */
+    /**
+     * Found a reply
+     *
+     * @param message search reply received from the peer
+     * @param peer router hash that sent it, which is cleared from the pending
+     *             set and recorded as having replied
+     */
     void replyFound(DatabaseSearchReplyMessage message, Hash peer) {
         long duration = _state.replyFound(peer);
         // this processing can take a while, so split 'er up
@@ -556,6 +610,8 @@ public class SearchJob extends JobImpl {
      * We've gotten a search reply that contained the specified
      * number of peers that we didn't know about before.
      *
+     * @param numNewPeers count of previously unknown peers the reply carried;
+     *                    ignored here, subclasses use it to record the discovery
      */
     protected void newPeersFound(int numNewPeers) { /* No-op - intentionally empty */ }
 
@@ -577,7 +633,7 @@ public class SearchJob extends JobImpl {
          * Mark the peer as failed for this search.
          *
          * @param enclosingContext the router context
-         * @param peer the peer
+         * @param peer peer that was sent the search and is penalized on timeout
          */
         public FailedJob(RouterContext enclosingContext, RouterInfo peer) {
             this(enclosingContext, peer, true);
@@ -586,6 +642,11 @@ public class SearchJob extends JobImpl {
          * Allow the choice as to whether failed searches should count against
          * the peer (such as if we search for a random key)
          *
+         * @param enclosingContext router context for the job queue and clock
+         * @param peer peer the search was sent to, which is marked failed when
+         *             the timeout runs out
+         * @param penalizePeer true to record the timeout against the peer
+         *                     profile, false for searches of a random key
          */
         public FailedJob(RouterContext enclosingContext, RouterInfo peer, boolean penalizePeer) {
             super(enclosingContext);
@@ -768,7 +829,19 @@ public class SearchJob extends JobImpl {
         handleDeferred(false);
     }
 
-    /** Add a deferred search to run on completion of this search. */
+    /**
+     * Add a deferred search to run on completion of this search.
+     *
+     * @param onFind job to run if this search succeeds
+     * @param onFail job to run if this search fails, or is still unfinished when
+     *               the deadline passes
+     * @param expiration absolute time in ms since the epoch after which the
+     *                   deferred search is failed rather than waited on
+     * @param isLease whether the deferred search targets a LeaseSet, forwarded
+     *                to the replacement search if this one has already completed
+     * @return how many searches are now deferred, or 0 if this search had already
+     *             completed, in which case a replacement search is started instead
+     */
     public int addDeferred(Job onFind, Job onFail, long expiration, boolean isLease) {
         Search search = new Search(onFind, onFail, expiration, isLease);
         boolean ok = true;
@@ -858,6 +931,7 @@ public class SearchJob extends JobImpl {
     /**
      * Whether the peer was already queried.
      *
+     * @param peer router hash to look for in the attempted set
      * @return true if peer was already queried
      */
     boolean wasAttempted(Hash peer) {return _state.wasAttempted(peer);}
@@ -872,6 +946,8 @@ public class SearchJob extends JobImpl {
     /**
      * Adds a peer to the search.
      *
+     * @param peer router hash to add to the kbuckets, and to queue for
+     *             exploration if it was not already there
      * @return true if peer was new
      */
     boolean add(Hash peer) {

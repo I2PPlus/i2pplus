@@ -19,18 +19,37 @@ import net.i2p.router.update.ConsoleUpdateManager;
 public class NewsHelper extends ContentHelper {
 
     /**
+     *  Leaves the context unset; setContextId() must supply it first.
+     */
+    public NewsHelper() {}
+
+    /**
      * PROP_LAST_UPDATE_TIME.
      */
     public static final String PROP_LAST_UPDATE_TIME = "router.updateLastDownloaded";
     /** @since 0.8.12 */
     private static final String PROP_LAST_HIDDEN = "routerconsole.newsLastHidden";
-    /** @since 0.9.4 */
+    /**
+     *  When news was last fetched, in milliseconds since the epoch
+     *  @since 0.9.4
+     */
     public static final String PROP_LAST_CHECKED = "routerconsole.newsLastChecked";
-    /** @since 0.9.4 */
+    /**
+     *  Last-Modified stamp of the news actually downloaded, in milliseconds
+     *  since the epoch
+     *  @since 0.9.4
+     */
     public static final String PROP_LAST_UPDATED = "routerconsole.newsLastUpdated";
-    /** @since 0.9.55 */
+    /**
+     *  Last-Modified stamp of the fetch that first added an entry, in
+     *  milliseconds since the epoch
+     *  @since 0.9.55
+     */
     public static final String PROP_LAST_NEW_ENTRY = "routerconsole.newsLastNewEntry";
-    /** @since 0.9.62 */
+    /**
+     *  Console language the news was last downloaded in
+     *  @since 0.9.62
+     */
     public static final String PROP_LAST_LANG = "routerconsole.newsLastLanguage";
     /**
      * Default true
@@ -166,6 +185,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      * Will be false if already downloaded or if dev update disabled.
+     * @param ctx the router context, consulted for router.updateUnsigned
      * @return whether unsigned update available
      * @since 0.9.4 moved from NewsFetcher
      */
@@ -177,6 +197,7 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     *  The version of the unsigned update on offer
      *  @return null if none
      *  @since 0.9.4 moved from NewsFetcher
      */
@@ -199,6 +220,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      * Will be false if already downloaded or if dev update disabled.
+     * @param ctx the router context, consulted for router.updateDevSU3
      * @return whether dev s u3 update available
      * @since 0.9.20
      */
@@ -210,6 +232,7 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     *  The version of the development SU3 update on offer
      *  @return null if none
      *  @since 0.9.20
      */
@@ -247,6 +270,7 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     *  The update manager's own status line
      *  @return "" if none
      *  @since 0.9.4 moved from UpdateHelper
      */
@@ -276,6 +300,8 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     * Whether the news file is newer than the stamp saved when it was hidden
+     * @param ctx the router context to read the hidden-news stamp from
      * @return whether show news
      * @since 0.9.4
      */
@@ -289,6 +315,7 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  Save config with the timestamp of the current news to hide, or 0 to show
+     *  @param yes true to show the news, false to stamp it as hidden
      *  @since 0.8.12
      */
     public void showNews(boolean yes) {
@@ -297,6 +324,8 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  Save config with the timestamp of the current news to hide, or 0 to show
+     *  @param ctx the router context whose config is updated
+     *  @param yes true to show the news, false to stamp it as hidden
      *  @since 0.9.4
      */
     public static void showNews(RouterContext ctx, boolean yes) {
@@ -305,7 +334,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  @return HTML
+     *  The news and update status block: how long ago news was last fetched and
+     *  updated, which update is on offer, and links to hide or show the news.
+     *  @return the rendered status block
      *  @since 0.9.4 moved from NewsFetcher
      */
     public String status() {
@@ -313,7 +344,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  @return HTML
+     *  The news and update status block.
+     *  @param ctx the router context supplying the news and update state
+     *  @return the rendered status block
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static String status(RouterContext ctx) {
@@ -321,7 +354,10 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
-     *  @return HTML
+     *  The news and update status block.
+     *  @param ctx the router context supplying the news and update state
+     *  @param session the caller's session, not consulted while rendering
+     *  @return the rendered status block
      *  @since 0.9.69
      */
     public static String status(RouterContext ctx, HttpSession session) {
@@ -372,6 +408,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     *  Whether installing an update is blocked outright
+     *  @param ctx the router context supplying the update and base dir settings
+     *  @return true if updates are disabled or the base dir is not writable
      *  @since 0.9.4 moved from NewsFetcher
      */
     public static boolean dontInstall(RouterContext ctx) {
@@ -379,6 +418,8 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     * Whether updating has been switched off in the config
+     * @param ctx the router context consulted for router.updateDisabled
      * @return whether update disabled
      * @since 0.9.9
      */
@@ -387,6 +428,8 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     * Whether an update could not be written even if it were allowed
+     * @param ctx the router context supplying the base dir to test
      * @return whether base readonly
      * @since 0.9.9
      */
@@ -397,6 +440,9 @@ public class NewsHelper extends ContentHelper {
     }
 
     /**
+     *  When news was last fetched, whether or not anything changed
+     *  @param ctx the router context to read the fetch stamp from
+     *  @return milliseconds since the epoch, or 0 if never fetched
      *  @since 0.9.4
      */
     public static long lastChecked(RouterContext ctx) {
@@ -405,6 +451,8 @@ public class NewsHelper extends ContentHelper {
 
     /**
      *  When the news was last downloaded
+     *  @param ctx the router context to read the stamp from and save it to
+     *  @return milliseconds since the epoch, or 0 if unknown
      *  @since 0.9.4
      */
     public static long lastUpdated(RouterContext ctx) {

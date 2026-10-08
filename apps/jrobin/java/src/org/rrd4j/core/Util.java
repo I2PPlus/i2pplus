@@ -221,7 +221,7 @@ public class Util {
     /**
      * Returns <code>Calendar</code> object for the given Date object
      *
-     * @param date Date object
+     * @param date instant to build the calendar from, in the default time zone
      * @return Corresponding Calendar object.
      */
     public static Calendar getCalendar(Date date) {
@@ -233,7 +233,7 @@ public class Util {
     /**
      * Returns timestamp (unix epoch) for the given Date object
      *
-     * @param date Date object
+     * @param date instant to build the calendar from, in the default time zone
      * @return Corresponding timestamp (without milliseconds)
      */
     public static long getTimestamp(Date date) {
@@ -256,11 +256,11 @@ public class Util {
      *
      * <p>The date is resolved in the current time zone
      *
-     * @param year Year
+     * @param year calendar year
      * @param month Month (zero-based)
      * @param day Day in month
-     * @param hour Hour
-     * @param min Minute
+     * @param hour hour of day, 0-23
+     * @param min minute within the hour, 0-59
      * @return Corresponding timestamp
      */
     public static long getTimestamp(int year, int month, int day, int hour, int min) {
@@ -275,7 +275,7 @@ public class Util {
      *
      * <p>The date is resolved in the current time zone
      *
-     * @param year Year
+     * @param year calendar year
      * @param month Month (zero-based)
      * @param day Day in month
      * @return Corresponding timestamp

@@ -649,7 +649,7 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @param cause classification from {@link #classifyStaleness}
      *  @param coalesceDelta times the rate coalesced since the listener attached
      *  @return {@link StaleCause#RATE_IDLE} for a never-written listener whose rate has not
-     *          coalesced, otherwise cause unchanged
+     *                 coalesced, otherwise cause unchanged
      *  @since 0.9.71+
      */
     static StaleCause refineForIdleRate(StaleCause cause, long coalesceDelta) {
@@ -957,7 +957,8 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  the replacement re-opens the same file, and the stale entry leaves the listener
      *  list so it keeps counting only what actually records.
      *
-     *  @param rate the rate to record
+     *  @param rate the series being rebuilt; re-opens its RRD file and names
+     *              the rate in the log line
      *  @param lsnr the listener being replaced, or null if the map lost it
      *  @param why short reason for the log line
      *  @return true if a replacement listener is now recording
@@ -981,7 +982,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      *  Name a rate for a log line, tolerating a Rate with no stat behind it.
      *
-     *  @param rate the rate
+     *  @param rate the rate to name, which may be null or have no stat behind it
      *  @return the rate's stat name and period
      */
     private static String rateName(Rate rate) {

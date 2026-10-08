@@ -67,7 +67,7 @@ public class ProfileManagerImpl implements ProfileManager {
      * The check is left in place deliberately: dropping it would leave a lossy
      * peer in the fast/high-cap tiers until the next reorganize judged it.
      *
-     * @param peer the peer
+     * @param peer hash of the peer the loss was measured on
      * @param ratio retransmitted / transmitted packets, 0.0 = healthy
      * @since 0.9.71+
      */

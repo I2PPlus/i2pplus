@@ -153,13 +153,25 @@ public class EstablishmentManager {
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
     private static volatile int _defaultLowMaxConcurrentEstablish = SystemVersion.isSlow() ? 128 : 512;
     private static volatile int _defaultHighMaxConcurrentEstablish = SystemVersion.isSlow() ? 256 : 2048;
-    /** The default low max concurrent establish */
+    /**
+     * The default low max concurrent establish
+     * @return the default cap on concurrent outbound sessions before scaling
+     */
     public static int getDefaultLowMaxConcurrentEstablish() { return _defaultLowMaxConcurrentEstablish; }
-    /** The default low max concurrent establish, bounded 32-4096 */
+    /**
+     * The default low max concurrent establish, bounded 32-4096
+     * @param val the desired max concurrent outbound sessions, clamped to 32-4096
+     */
     public static void setDefaultLowMaxConcurrentEstablish(int val) { _defaultLowMaxConcurrentEstablish = Math.max(32, Math.min(4096, val)); }
-    /** The default high max concurrent establish */
+    /**
+     * The default high max concurrent establish
+     * @return the default ceiling on concurrent outbound sessions
+     */
     public static int getDefaultHighMaxConcurrentEstablish() { return _defaultHighMaxConcurrentEstablish; }
-    /** The default high max concurrent establish, bounded 64-8192 */
+    /**
+     * The default high max concurrent establish, bounded 64-8192
+     * @param val the desired max concurrent outbound sessions, clamped to 64-8192
+     */
     public static void setDefaultHighMaxConcurrentEstablish(int val) { _defaultHighMaxConcurrentEstablish = Math.max(64, Math.min(8192, val)); }
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     /** Tuned max concurrent establish, -1 = use config. Set by Tuner. @since 0.9.71+ */
@@ -316,7 +328,11 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Whether to emit an inbound give-up report now, counting any skipped.  @since 0.9.71+
+     *  Whether to emit an inbound give-up report now, counting any skipped.
+     *
+     *  @param now current time
+     *  @return true if the caller should log; false if the event was only counted
+     *  @since 0.9.71+
      */
     static boolean shouldLogInboundGiveup(long now) {
         long last = _lastInboundGiveupLog.get();
@@ -329,7 +345,10 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Inbound give-up events rate-limited away since the last report.  @since 0.9.71+
+     *  Inbound give-up events rate-limited away since the last report.
+     *
+     *  @return the number of suppressed give-up events
+     *  @since 0.9.71+
      */
     static long getInboundGiveupSuppressed() { return _inboundGiveupSuppressed.get(); }
     private static final AtomicLong _lastCorruptConfirmLog = new AtomicLong();
@@ -413,6 +432,8 @@ public class EstablishmentManager {
 
     /**
      * Creates the establishment manager.
+     * @param ctx the router context
+     * @param transport the transport we establish sessions for
      */
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
@@ -489,6 +510,7 @@ public class EstablishmentManager {
 
     /**
      * Grab the active establishing state
+     * @param from the peer's IP and port, keying the inbound state map
      * @return null if none
      */
     InboundEstablishState getInboundState(RemoteHostId from) {
@@ -497,6 +519,7 @@ public class EstablishmentManager {
 
     /**
      * Grab the active establishing state
+     * @param from the peer's IP and port, tried against the claimed and hash-keyed maps
      * @return null if none
      */
     OutboundEstablishState getOutboundState(RemoteHostId from) {
@@ -766,7 +789,7 @@ public class EstablishmentManager {
      *  except operating on the already-extracted address bytes.
      *
      *  @param ip the address bytes, may be null
-     *  @param port the port
+     *  @param port the claimed UDP port, valid 1-65535
      *  @return true if the address can be used
      *  @since 0.9.71
      */
@@ -832,18 +855,6 @@ public class EstablishmentManager {
     }
 
     /**
-     *  Has the inbound establish state lived long enough to be expired, either
-     *  past the overall establish cap or, when we are waiting for a session
-     *  request after sending a retry, past the retry-sent limit?
-     *
-     *  @param lifetime how long the state has existed
-     *  @param isRetrySent true if the state is waiting in IB_STATE_RETRY_SENT
-     *  @param maxEstablishTime the overall inbound establish cap
-     *  @param retrySentMaxTime the extra cap applied only to retry-sent states
-     *  @return true if the inbound state should be expired
-     *  @since 0.9.71
-     */
-    /**
      *  Whether an outbound establishment attempt has run out of time.
      *
      *  <p>Mirrors {@link #hasInboundEstablishExpired} for the outbound direction, which
@@ -866,6 +877,18 @@ public class EstablishmentManager {
         return lifetime >= maxEstablishTime + (hasRetried ? retryExtraMs : 0);
     }
 
+    /**
+     *  Has the inbound establish state lived long enough to be expired, either
+     *  past the overall establish cap or, when we are waiting for a session
+     *  request after sending a retry, past the retry-sent limit?
+     *
+     *  @param lifetime how long the state has existed, in milliseconds
+     *  @param isRetrySent true if the state is waiting in IB_STATE_RETRY_SENT
+     *  @param maxEstablishTime the overall inbound establish cap
+     *  @param retrySentMaxTime the extra cap applied only to retry-sent states
+     *  @return true if the inbound state should be expired
+     *  @since 0.9.71
+     */
     static boolean hasInboundEstablishExpired(long lifetime, boolean isRetrySent,
                                               long maxEstablishTime, long retrySentMaxTime) {
         return lifetime > inboundEstablishBudget(isRetrySent, maxEstablishTime, retrySentMaxTime);
@@ -964,6 +987,8 @@ public class EstablishmentManager {
      *  the message is failed.
      *
      *  Note - if we go back to multiple PacketHandler threads, this may need more locking.
+     *
+     *  @param msg the outbound message to send, queued if we are at the concurrency limit
      */
     public void establish(OutNetMessage msg) {establish(msg, true);}
 
@@ -1370,6 +1395,7 @@ public class EstablishmentManager {
      * Got a SessionRequest OR a TokenRequest (initiates an inbound establishment)
      *
      * SSU 2 only.
+     * @param from the sender's IP and port, not yet a trusted peer identity
      * @param state as looked up in PacketHandler, but null unless retransmitted or retry sent
      * @param packet header decrypted only
      * @since 0.9.54
@@ -1643,6 +1669,8 @@ public class EstablishmentManager {
      * Got a Retry (in response to our outbound SessionRequest or TokenRequest)
      *
      * SSU 2 only.
+     * @param state the outbound attempt that our Retry went to, null if we sent none
+     * @param packet header decrypted only, the Retry itself is parsed by the state
      * @since 0.9.54
      */
     void receiveRetry(OutboundEstablishState2 state, UDPPacket packet) {
@@ -1676,6 +1704,8 @@ public class EstablishmentManager {
      *
      * SSU 2
      *
+     * @param from the sender, logged only - the authenticated state decides what to drop
+     * @param state the established session to tear down
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from, PeerState state) {
@@ -1689,6 +1719,8 @@ public class EstablishmentManager {
      *
      * SSU 2
      *
+     * @param from the sender, which keys the outbound state to abandon
+     * @param state the outbound attempt being torn down
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from, OutboundEstablishState state) {
@@ -1716,6 +1748,7 @@ public class EstablishmentManager {
      *
      * SSU 2
      *
+     * @param from the unauthenticated sender, logged only as it may be spoofed
      * @since 0.8.1
      */
     void receiveSessionDestroy(RemoteHostId from) {
@@ -1781,6 +1814,7 @@ public class EstablishmentManager {
      * A data packet arrived on an outbound connection being established, which
      * means its complete (yay!).  This is a blocking call, more than I'd like...
      *
+     * @param state the outbound attempt that completed, removed from the pending maps
      * @return the new PeerState
      */
     PeerState receiveData(OutboundEstablishState state) {
@@ -2282,6 +2316,9 @@ public class EstablishmentManager {
      *
      *  SSU 2 only.
      *
+     *  @param bob the introducer's established session, we are answering its relay
+     *  @param nonce matches the live introduction we sent, keys the pending outbound state
+     *  @param code 0 if Charlie accepted, 1-63 if the introducer rejected, 64+ if Charlie rejected
      *  @param data including nonce, including token if code == 0
      *  @since 0.9.55
      */
@@ -2703,6 +2740,9 @@ public class EstablishmentManager {
      *  Are IP and port valid? This is only for checking the relay response.
      *  Allow IPv6 as of 0.9.50.
      *  Refuse anybody in the same /16
+     *  @param ip the address from the relay response, IPv4 or IPv6, may be null
+     *  @param port the claimed port, must be a valid 1-65535
+     *  @return true if the address is routable, blocklist-free and not in our own /16
      *  @since 0.9.3, pkg private since 0.9.45 for PacketBuider
      */
     boolean isValid(byte[] ip, int port) {
@@ -3061,6 +3101,7 @@ public class EstablishmentManager {
     /**
      *  Remember a token that can be used later to connect to the peer
      *
+     *  @param peer the peer's address and port, which keys the stored token
      *  @param token nonzero
      *  @param expires absolute time
      *  @since 0.9.54
@@ -3080,6 +3121,7 @@ public class EstablishmentManager {
     /**
      *  Token to connect to the peer.
      *
+     *  @param peer the peer's address and port, consuming any stored token
      *  @return 0 if none available
      *  @since 0.9.54
      */
@@ -3104,6 +3146,7 @@ public class EstablishmentManager {
     /**
      *  Remove our tokens for this length
      *
+     *  @param isIPv6 true if the new address is 16 bytes, false if 4
      *  @since 0.9.54
      */
     public void ipChanged(boolean isIPv6) {
@@ -3167,6 +3210,7 @@ public class EstablishmentManager {
     /**
      * Token that can be used later for the peer to connect to us
      *
+     * @param peer the peer's address and port, at most one live token per peer
      * @return the inbound token
      * @since 0.9.54
      */
@@ -3177,6 +3221,7 @@ public class EstablishmentManager {
     /**
      *  Token that can be used later for the peer to connect to us.
      *
+     *  @param peer the peer's address and port, at most one live token per peer
      *  @param expiration time from now, will be reduced if necessary based on cache eviction time.
      *  @return non-null
      *  @since 0.9.55
@@ -3220,7 +3265,9 @@ public class EstablishmentManager {
     /**
      *  Is the token from this peer valid?
      *
-     *  @return valid
+     *  @param peer the peer's address and port, keying the stored token
+     *  @param token the offered value, a match consumes the stored token; 0 always fails
+     *  @return true if it matched and has not expired
      *  @since 0.9.54
      */
     public boolean isInboundTokenValid(RemoteHostId peer, long token) {
@@ -3251,18 +3298,32 @@ public class EstablishmentManager {
         /**
          *  Token for the given value and expiration.
          *
+         *  @param tok nonzero value we later match an inbound request against
          *  @param exp absolute time, not relative to now
+         *  @param now absolute time the token was issued, for expiry reporting
          */
         public Token(long tok, long exp, long now) {
             token = tok;
             expires = (int) (exp >> 10);
             added = (int) (now >> 10);
         }
-        /** The token value */
+        /**
+         *  The token value
+         *
+         *  @return the opaque value we match an incoming request against
+         */
         public long getToken() {return token;}
-        /** The expiration time */
+        /**
+         *  The expiration time
+         *
+         *  @return the absolute time after which the token is no longer accepted
+         */
         public long getExpiration() {return (expires & 0xFFFFFFFFL) << 10;}
-        /** When this token was added */
+        /**
+         *  When this token was added
+         *
+         *  @return the absolute time the token was issued
+         */
         public long getWhenAdded() {return (added & 0xFFFFFFFFL) << 10;}
         /** String representation */
         public String toString() {
@@ -3776,6 +3837,9 @@ public class EstablishmentManager {
 
     /**
      * The reason string for an SSU termination code.
+     *
+     * @param reasonCode the 1-byte termination code, one of the SSU2Util.REASON_ constants
+     * @return the reason text, or "Unknown error" for an unrecognized code
      */
     public static String parseReason(int reasonCode) {
         switch (reasonCode) {

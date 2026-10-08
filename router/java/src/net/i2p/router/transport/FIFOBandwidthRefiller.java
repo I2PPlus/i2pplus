@@ -130,17 +130,26 @@ public class FIFOBandwidthRefiller implements Runnable {
     /**
      * How often we replenish the queues.
      * The bandwidth limiter will get an update this often (ms)
-     * @return whether slow
      */
     private static volatile long _replenishFrequency = SystemVersion.isSlow() || SystemVersion.getCPULoadAvg() > 80 ? 100 : 20;
 
-    /** The replenish frequency in ms. */
+    /**
+     * How often the queues are replenished.
+     * @return the replenish frequency in ms
+     */
     public static long getReplenishFrequency() { return _replenishFrequency; }
 
-    /** The replenish frequency in ms, bounded 5-200. */
+    /**
+     * Set the replenish frequency, bounded to 5..200 ms.
+     * @param ms requested interval between queue replenishments, in milliseconds
+     */
     public static void setReplenishFrequency(long ms) { _replenishFrequency = Math.max(5, Math.min(200, ms)); }
 
-    /** Refiller keeping the given limiter's queues full. */
+    /**
+     * Refiller keeping the given limiter's queues full.
+     * @param context the router context supplying the log and the stats
+     * @param limiter the limiter whose queues are replenished
+     */
     FIFOBandwidthRefiller(RouterContext context, FIFOBandwidthLimiter limiter) {
         _limiter = limiter;
         _context = context;
@@ -359,9 +368,25 @@ public class FIFOBandwidthRefiller implements Runnable {
         }
     }
 
+    /**
+     * Configured outbound bandwidth.
+     * @return the configured outbound bandwidth in KBps
+     */
     int getOutboundKBytesPerSecond() { return _outboundKBytesPerSecond; }
+    /**
+     * Configured inbound bandwidth.
+     * @return the configured inbound bandwidth in KBps
+     */
     int getInboundKBytesPerSecond() { return _inboundKBytesPerSecond; }
+    /**
+     * Configured outbound burst bandwidth.
+     * @return the configured outbound burst bandwidth in KBps
+     */
     int getOutboundBurstKBytesPerSecond() { return _outboundBurstKBytesPerSecond; }
+    /**
+     * Configured inbound burst bandwidth.
+     * @return the configured inbound burst bandwidth in KBps
+     */
     int getInboundBurstKBytesPerSecond() { return _inboundBurstKBytesPerSecond; }
 
     /**
@@ -388,7 +413,6 @@ public class FIFOBandwidthRefiller implements Runnable {
      *  @param size bytes
      *  @param factor multiplier of size for the drop calculation, 1 for no adjustment
      *  @return true for accepted, false for drop
-     *  @return the result
      */
     boolean incrementParticipatingMessageBytesIn(int size, float factor) {
         return _partBWEIn == null || _partBWEIn.offer(size, factor);
@@ -414,7 +438,9 @@ public class FIFOBandwidthRefiller implements Runnable {
     }
 
     /**
-     *  In Bytes per second
+     *  Cap on bytes per second available to participating tunnels.
+     *
+     *  @return the cap in Bps, or the outbound default before the queue exists
      *  @since 0.9.68
      */
     int getMaxShareBandwidth() {

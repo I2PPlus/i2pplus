@@ -476,6 +476,7 @@ public class BuildExecutor implements Runnable {
 
     /**
      *  Package-visible for tests: returns how many results are in the window.
+     *  @return number of results recorded so far, saturating at the 100-slot window
      *  @since 0.9.71+
      */
     int getWindowCount() { return Math.min(_windowWriteIndex.get(), WINDOW_SIZE); }
@@ -1112,6 +1113,21 @@ public class BuildExecutor implements Runnable {
         return Math.min(current + step, base);
     }
 
+    /**
+     *  Scale a base build timeout for hop count, system load and direction.
+     *
+     *  <p>The length, load and direction terms are added to the base, then the
+     *  measured RTT floor replaces the sum if it is larger, so a peer that
+     *  cannot answer within its own round trip still gets its chance.
+     *
+     *  @param baseTimeout  starting budget in milliseconds
+     *  @param length  tunnel hop count; each hop past the 3-hop baseline adds 5s
+     *  @param isInbound  true for inbound pools, which skip the 8s outbound term
+     *  @param cpuLoad  system load as a percentage; over 80 adds 2s, over 90 adds 3s
+     *  @param rttFloor  measured RTT floor in milliseconds, overriding the sum when larger
+     *  @return the adjusted timeout in milliseconds, capped at 45s
+     *  @since 0.9.71+
+     */
     static long computeAdaptiveTimeout(long baseTimeout, int length, boolean isInbound,
                                        int cpuLoad, long rttFloor) {
         long result = baseTimeout;
@@ -2586,8 +2602,8 @@ public class BuildExecutor implements Runnable {
     /**
      * Log that a peer did not reply to a tunnel build request.
      *
-     * @param tunnel the tunnel
-     * @param peer the peer
+     * @param tunnel  reply message ID of the unanswered build request
+     * @param peer  hop that was contacted and stayed silent
      */
     private void didNotReply(long tunnel, Hash peer) {
         if (_log.shouldDebug()) {
@@ -3049,13 +3065,45 @@ public class BuildExecutor implements Runnable {
      *  Immutable result of {@link BuildExecutor#countExpiryBuckets(List, long)}.
      */
     static class ExpiryBuckets {
+        /**  zero-hop fallback tunnels, which never fill a deficit  */
         public final int fallbackCount;
+        /**
+         *  Tunnels per expiry window, cumulative: {@code expire30s} covers the
+         *  already-expired through 30s out, each later field the band above the
+         *  previous one, and {@code expireLater} everything beyond 330s.
+         */
         public final int expire30s, expire90s, expire150s, expire210s, expire270s, expire330s, expireLater;
+        /**
+         *  GOOD-status subsets of the matching expiry window above, in the same
+         *  order, for proactive replacement.
+         */
         public final int goodExpire30s, goodExpire90s, goodExpire150s, goodExpire210s, goodExpire270s,
                          goodExpire330s, goodExpireLater;
+        /**  GOOD-status tunnels across every expiry window, fallbacks excluded  */
         public final int goodCount;
+        /**  summed average latency of the GOOD tunnels, in milliseconds  */
         public final long totalLatency;
 
+        /**
+         *  Assign the bucket counts; see {@link #countExpiryBuckets} for how they are derived.
+         *  @param fallbackCount  zero-hop fallback tunnels, which never fill a deficit
+         * @param expire30s  tunnels already expired or expiring within 30s of now
+         * @param expire90s  tunnels expiring after 30s but within 90s
+         * @param expire150s  tunnels expiring after 90s but within 150s
+         * @param expire210s  tunnels expiring after 150s but within 210s
+         * @param expire270s  tunnels expiring after 210s but within 270s
+         * @param expire330s  tunnels expiring after 270s but within 330s
+         * @param expireLater  tunnels expiring more than 330s out
+         * @param goodExpire30s  GOOD-status tunnels within 30s of expiry
+         * @param goodExpire90s  GOOD-status tunnels expiring after 30s but within 90s
+         * @param goodExpire150s  GOOD-status tunnels expiring after 90s but within 150s
+         * @param goodExpire210s  GOOD-status tunnels expiring after 150s but within 210s
+         * @param goodExpire270s  GOOD-status tunnels expiring after 210s but within 270s
+         * @param goodExpire330s  GOOD-status tunnels expiring after 270s but within 330s
+         * @param goodExpireLater  GOOD-status tunnels expiring more than 330s out
+         * @param goodCount  GOOD-status tunnels across every expiry window
+         * @param totalLatency  summed average latency of the GOOD tunnels, in milliseconds
+         */
         ExpiryBuckets(int fallbackCount, int expire30s, int expire90s, int expire150s, int expire210s,
                       int expire270s, int expire330s, int expireLater, int goodExpire30s, int goodExpire90s,
                       int goodExpire150s, int goodExpire210s, int goodExpire270s, int goodExpire330s,

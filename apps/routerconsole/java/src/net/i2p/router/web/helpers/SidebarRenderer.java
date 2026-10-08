@@ -82,6 +82,9 @@ class SidebarRenderer {
 
     /**
      *  Create the renderer bound to the helper that supplies sidebar data.
+     *
+     *  @param context the router context to read router state from
+     *  @param helper the helper that supplies sidebar data and settings
      */
     public SidebarRenderer(RouterContext context, SidebarHelper helper) {
         _context = context;
@@ -90,12 +93,17 @@ class SidebarRenderer {
 
     /**
      *  True if the router is a floodfill router.
+     *
+     *  @return whether the router is a floodfill
      */
     public boolean floodfillEnabled() {return _context.netDb().floodfillEnabled();}
 
     /**
      *  Note - Ensure all links in here are absolute, as the summary bar may be displayed
      *  on lower-level directory errors.
+     *
+     *  @param out the writer the summary bar markup is written to
+     *  @throws IOException if the writer rejects the summary bar
      */
     public void renderSummaryHTML(Writer out) throws IOException {
         String requestURI = _helper.getRequestURI();
@@ -168,6 +176,7 @@ class SidebarRenderer {
 
     /**
      * renderHelpAndFAQHTML.
+     * @return the section markup
      */
     public String renderHelpAndFAQHTML() {
         StringBuilder buf = new StringBuilder(512);
@@ -271,6 +280,7 @@ class SidebarRenderer {
 
     /**
      * renderI2PServicesHTML.
+     * @return the section markup
      */
     public String renderI2PServicesHTML() {
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
@@ -397,6 +407,7 @@ class SidebarRenderer {
     /**
      *  Get the local eepsite URL from the port mapper.
      *
+     *  @param pm the port mapper to resolve the eepsite port against
      *  @return null if none
      *  @since 0.9.43 split out from above, used by HomeHelper, fixed for IPv6
      */
@@ -430,6 +441,7 @@ class SidebarRenderer {
 
     /**
      * renderClockHTML.
+     * @return the section markup
      */
     public String renderClockHTML() {
         try {
@@ -441,6 +453,7 @@ class SidebarRenderer {
 
     /**
      * renderI2PInternalsHTML.
+     * @return the section markup
      */
     public String renderI2PInternalsHTML() {
         StringBuilder buf = new StringBuilder(512);
@@ -613,6 +626,7 @@ class SidebarRenderer {
 
     /**
      * renderAdvancedHTML.
+     * @return the section markup
      */
     public String renderAdvancedHTML() {
         StringBuilder buf = new StringBuilder(512);
@@ -705,6 +719,7 @@ class SidebarRenderer {
 
     /**
      * renderRouterInfoHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderRouterInfoHTML() {
         if (_helper == null) {return "";}
@@ -740,6 +755,7 @@ class SidebarRenderer {
 
     /**
      * renderShortRouterInfoHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderShortRouterInfoHTML() {
         if (_helper == null) {return "";}
@@ -758,7 +774,12 @@ class SidebarRenderer {
             + "</span></td></tr>\n</table>\n";
     }
 
-    /** @since 0.9.32 */
+    /**
+     * The detailed router information table: identity, version and uptime.
+     *
+     * @return the section markup, empty when no helper is bound
+     * @since 0.9.32
+     */
     public String renderAdvancedRouterInfoHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
@@ -827,13 +848,23 @@ class SidebarRenderer {
         return buf.toString();
     }
 
-    /** @since 0.9.57+ */
+    /**
+     * The memory usage bar.
+     *
+     * @return the memory bar markup, empty when no helper is bound
+     * @since 0.9.57+
+     */
     public String renderMemoryBarHTML() {
         if (_helper == null) {return "";}
         return _helper.getMemoryBar();
     }
 
-    /** @since 0.9.57+ */
+    /**
+     * The CPU load bar.
+     *
+     * @return the CPU bar markup, empty when no helper is bound
+     * @since 0.9.57+
+     */
     public String renderCPUBarHTML() {
         if (_helper == null) {return "";}
         return _helper.getCPUBar();
@@ -841,6 +872,7 @@ class SidebarRenderer {
 
     /**
      * renderNetworkReachabilityHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderNetworkReachabilityHTML() {
         if (_helper == null) {return "";}
@@ -958,6 +990,7 @@ class SidebarRenderer {
 
     /**
      * renderUpdateStatusHTML.
+     * @return the section markup
      */
     public String renderUpdateStatusHTML() {
         String updateStatus = _helper.getUpdateStatus();
@@ -980,6 +1013,7 @@ class SidebarRenderer {
 
     /**
      * renderRestartStatusHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderRestartStatusHTML() {
         if (_helper == null) {return "";}
@@ -988,6 +1022,7 @@ class SidebarRenderer {
 
     /**
      * renderPeersHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderPeersHTML() {
         if (_helper == null) {return "";}
@@ -1092,6 +1127,7 @@ class SidebarRenderer {
 
     /**
      * renderFirewallAndReseedStatusHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderFirewallAndReseedStatusHTML() {
         if (_helper == null) {return "";}
@@ -1100,6 +1136,7 @@ class SidebarRenderer {
 
     /**
      * renderBandwidthHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderBandwidthHTML() {
         if (_helper == null) {return "";}
@@ -1156,6 +1193,8 @@ class SidebarRenderer {
      *  Renders the sidebar bandwidth graph HTML. When routerconsole.sidebarGraphLegacy
      *  is false, emits data-rx/data-tx attributes for the dual-baseline canvas renderer
      *  (inbound inverted top, outbound normal bottom). Otherwise, serves the RRD4J SVG.
+     *  @return the graph markup: data attributes for the canvas renderer,
+     *              or an RRD4J SVG in legacy mode
      *  @since 0.9.32
      */
     public String renderBandwidthGraphHTML() {
@@ -1267,6 +1306,7 @@ class SidebarRenderer {
 
     /**
      * renderTunnelsHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderTunnelsHTML() {
         if (_helper == null) {return "";}
@@ -1401,6 +1441,7 @@ class SidebarRenderer {
 
     /**
      * renderCongestionHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderCongestionHTML() {
         if (_helper == null) {return "";}
@@ -1501,6 +1542,7 @@ class SidebarRenderer {
 
     /**
      * renderTunnelStatusHTML.
+     * @return the section markup, empty when no helper is bound
      */
     @SuppressWarnings("PMD.AvoidUnnecessaryStringBuilderCreation")
     public String renderTunnelStatusHTML() {
@@ -1539,13 +1581,20 @@ class SidebarRenderer {
 
     /**
      * renderDestinationsHTML.
+     * @return the section markup, empty when no helper is bound
      */
     public String renderDestinationsHTML() {
         if (_helper == null) {return "";}
         return _helper.getDestinations();
     }
 
-    /** @since 0.9.1 */
+    /**
+     * The newest news headlines, at most three and none older than 60 days.
+     *
+     * @return the section markup, empty when no helper is bound or the
+     *             current news has already been hidden
+     * @since 0.9.1
+     */
     public String renderNewsHeadingsHTML() {
         if (_helper == null) {return "";}
         NewsHelper newshelper = _helper.getNewsHelper();

@@ -19,6 +19,11 @@ import net.i2p.data.router.RouterInfo;
  */
 class NTCP2Payload {
 
+    /**
+     *  Not instantiated - every member below is static.
+     */
+    NTCP2Payload() {}
+
     /** Block header size in bytes */
     public static final int BLOCK_HEADER_SIZE = 3;
 
@@ -37,26 +42,38 @@ class NTCP2Payload {
     public interface PayloadCallback {
         /**
          * Receive the data/time block.
+         * @param time milliseconds since the epoch, as sent in the block
+         * @throws DataFormatException if the callback cannot process the block
          */
         public void gotDateTime(long time) throws DataFormatException;
 
         /**
          * Receive an I2NP message block.
+         * @param msg the message, already deserialized out of the frame
+         * @throws I2NPMessageException if the callback cannot process the message
          */
         public void gotI2NP(I2NPMessage msg) throws I2NPMessageException;
 
         /**
+         *  Receive an options block, the peer's padding negotiation parameters.
+         *  @param options the option bytes, copied out of the frame
          *  @param isHandshake true only for message 3 part 2
+         *  @throws DataFormatException if the callback cannot process the block
          */
         public void gotOptions(byte[] options, boolean isHandshake) throws DataFormatException;
 
         /**
+         *  Receive a RouterInfo block.
          *  @param ri will already be validated
          *  @param isHandshake true only for message 3 part 2
+         *  @param flood true if the flag byte asks the receiver to flood this RouterInfo
+         *  @throws DataFormatException if the RouterInfo is rejected, e.g. an unpublished date
          */
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException;
 
         /**
+         *  Receive a termination block, the peer is closing the connection.
+         *  @param reason the termination reason code
          *  @param lastReceived in theory could wrap around to negative, but very unlikely
          */
         public void gotTermination(int reason, long lastReceived);
@@ -70,6 +87,8 @@ class NTCP2Payload {
 
         /**
          * Receive an unknown block type.
+         * @param type the block type byte from the block header
+         * @param len the block length in bytes, not counting the 3-byte header
          */
         public void gotUnknown(int type, int len);
     }
@@ -77,6 +96,12 @@ class NTCP2Payload {
     /**
      *  Incoming payload. Calls the callback for each received block.
      *
+     *  @param ctx used to deserialize the RouterInfo and I2NP blocks
+     *  @param cb receives each block in the order it appears in the frame
+     *  @param payload the frame bytes, holding a sequence of blocks
+     *  @param off index in payload of the first block's type byte
+     *  @param length how many bytes of payload to parse, bounding the block walk
+     *  @param isHandshake true only for message 3 part 2, which allows only RouterInfo, options and padding
      *  @return number of blocks processed
      *  @throws IOException on major errors
      *  @throws DataFormatException on parsing of individual blocks
@@ -251,7 +276,11 @@ class NTCP2Payload {
     }
 
     /**
+     *  Write the blocks out to the frame, in list order.
+     *
      *  @param payload writes to it starting at off
+     *  @param off index in payload to write the first block's header at
+     *  @param blocks each one written at the offset the previous one ended at
      *  @return the new offset
      */
     public static int writePayload(byte[] payload, int off, List<Block> blocks) {
@@ -270,12 +299,18 @@ class NTCP2Payload {
 
         /**
          * Block.
+         * @param ttype the block type byte, written as the first header byte
          */
         public Block(int ttype) {
             type = ttype;
         }
 
-        /** Write the block to the target array, returning the new offset */
+        /**
+         * Write the block to the target array, returning the new offset.
+         * @param tgt the destination array
+         * @param off index in tgt to write the 3-byte block header at
+         * @return the offset just past the block's data
+         */
         public int write(byte[] tgt, int off) {
             tgt[off++] = (byte) type;
             // we do it this way so we don't call getDataLength(),
@@ -287,6 +322,8 @@ class NTCP2Payload {
         }
 
         /**
+         *  How many bytes the whole block occupies in a frame.
+         *
          *  @return the size of the block, including the 3 byte header (type and size)
          */
         public int getTotalLength() {
@@ -294,11 +331,18 @@ class NTCP2Payload {
         }
 
         /**
+         *  Size of the data, which becomes the length field of the block header.
+         *
          *  @return the size of the block, NOT including the 3 byte header (type and size)
          */
         public abstract int getDataLength();
 
-        /** Write the block data to the target array, returning the new offset */
+        /**
+         * Write the block data to the target array, returning the new offset.
+         * @param tgt the destination array
+         * @param off index in tgt to write the data at, past the 3-byte header
+         * @return the offset just past the written data
+         */
         public abstract int writeData(byte[] tgt, int off);
 
         /**
@@ -319,6 +363,8 @@ class NTCP2Payload {
 
         /**
          * RIBlock.
+         * @param ri the RouterInfo to serialize into the block
+         * @param flood true to set the flag byte asking the receiver to flood it
          */
         public RIBlock(RouterInfo ri, boolean flood) {
             super(BLOCK_ROUTERINFO);
@@ -352,6 +398,7 @@ class NTCP2Payload {
 
         /**
          * I2NPBlock.
+         * @param msg the message to write, whose size less 7 bytes becomes the block data
          */
         public I2NPBlock(I2NPMessage msg) {
             super(BLOCK_I2NP);
@@ -360,6 +407,7 @@ class NTCP2Payload {
 
         /**
          * Set the message, for reuse of a pooled block.
+         * @param msg the message to write in place of the current one
          * @since 0.9.71+
          */
         void setMessage(I2NPMessage msg) {
@@ -389,12 +437,19 @@ class NTCP2Payload {
         private int sz;
         private final I2PAppContext ctx;
 
-        /** With zero-filled data. */
+        /**
+         * With zero-filled data.
+         * @param size number of padding bytes to write, not counting the 3-byte header
+         */
         public PaddingBlock(int size) {
             this(null, size);
         }
 
-        /** With random data. */
+        /**
+         * With random data.
+         * @param context supplies the random source for the padding, null to zero-fill
+         * @param size number of padding bytes to write, not counting the 3-byte header
+         */
         public PaddingBlock(I2PAppContext context, int size) {
             super(BLOCK_PADDING);
             sz = size;
@@ -403,6 +458,7 @@ class NTCP2Payload {
 
         /**
          * Set the size, for reuse of a pooled block.
+         * @param size number of padding bytes to write, not counting the 3-byte header
          * @since 0.9.71+
          */
         void setSize(int size) {
@@ -438,6 +494,7 @@ class NTCP2Payload {
 
         /**
          * DateTimeBlock.
+         * @param ctx clock source for the timestamp the block carries
          */
         public DateTimeBlock(I2PAppContext ctx) {
             super(BLOCK_DATETIME);
@@ -469,6 +526,7 @@ class NTCP2Payload {
 
         /**
          * OptionsBlock.
+         * @param options the option bytes, copied into the block verbatim
          */
         public OptionsBlock(byte[] options) {
             super(BLOCK_OPTIONS);
@@ -501,6 +559,8 @@ class NTCP2Payload {
 
         /**
          * TerminationBlock.
+         * @param reason termination reason code (0-255)
+         * @param lastReceived count of valid frames the peer has received from us
          */
         public TerminationBlock(int reason, long lastReceived) {
             super(BLOCK_TERMINATION);

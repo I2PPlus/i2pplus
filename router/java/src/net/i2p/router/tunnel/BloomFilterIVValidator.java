@@ -115,6 +115,8 @@ public class BloomFilterIVValidator implements IVValidator {
     /**
      *  Memory this filter may claim, as a fraction of the heap, with a floor so
      *  a small heap still gets a usable filter.
+     *
+     *  @return the budget in bytes, never below the 1 MB floor
      */
     public static long filterBudgetBytes() {
         long budget = (long) (SystemVersion.getMaxMemory() * FILTER_HEAP_FRACTION);
@@ -162,7 +164,8 @@ public class BloomFilterIVValidator implements IVValidator {
      *  boundary and at most one step at a time.
      *
      *  @param m the new exponent, 0 to switch to the memory-proportional set
-     *  @param KBps the configured share, carried through for the set's sizing
+     *  @param KBps the configured share in KBps, not consulted here; the set's
+     *              cap comes from the heap budget
      *  @since 0.9.71+
      */
     public void reconfigure(int m, int KBps) {
@@ -218,14 +221,38 @@ public class BloomFilterIVValidator implements IVValidator {
         private final RouterContext _ctx;
         private int _KBps;
 
+        /**
+         *  Bind the sizer to the validator whose filter it will resize, keeping
+         *  the share bandwidth to hand back on a resize.
+         *
+         *  @param validator the validator this policy retunes
+         *  @param ctx router context, held for the sizer but not read by it
+         *  @param KBps configured share bandwidth in KBps, retained for
+         *              reconfigure()
+         */
         public IVFilterSizer(BloomFilterIVValidator validator, RouterContext ctx, int KBps) {
             _validator = validator;
             _ctx = ctx;
             _KBps = KBps;
         }
 
+        /**
+         *  The validator the sizing decisions are applied through.
+         *
+         *  @return the validator this policy retunes
+         */
         public BloomFilterIVValidator getValidator() { return _validator; }
+        /**
+         *  Share bandwidth retained for the next resize.
+         *
+         *  @return configured share bandwidth in KBps
+         */
         public int getKBps() { return _KBps; }
+        /**
+         *  Replace the share bandwidth that the next resize is handed.
+         *
+         *  @param KBps configured share bandwidth in KBps
+         */
         public void setKBps(int KBps) { _KBps = KBps; }
 
         /**

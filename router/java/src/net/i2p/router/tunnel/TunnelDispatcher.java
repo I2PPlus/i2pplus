@@ -734,6 +734,7 @@ public class TunnelDispatcher implements Service {
     /**
      * We are the inbound gateway in this tunnel, and did not create it
      *
+     * @param cfg config for the tunnel we're joining as inbound gateway
      * @return true if successful, false if tunnel ID is a duplicate
      */
     public boolean joinInboundGateway(HopConfig cfg) {
@@ -826,6 +827,10 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Remove a tunnel we created
+     *
+     * @param cfg the tunnel being dropped, whose direction picks the outbound
+     *            gateway or inbound participant map it is removed from, and
+     *            whose message and failure counts are recorded in the stats
      */
     public void remove(TunnelCreatorConfig cfg) {
         if (cfg.isInbound()) {
@@ -866,6 +871,10 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Remove a tunnel we're participating in
+     *
+     * @param cfg the tunnel being dropped, identified by its receive tunnel;
+     *            releases its allocated bandwidth, null is ignored, and a
+     *            second removal of the same config is a no-op
      */
     public void remove(HopConfig cfg) {
         if (cfg == null) return;
@@ -918,6 +927,9 @@ public class TunnelDispatcher implements Service {
     /**
      * Free allocated bandwidth for a tunnel.
      * Called when dropping idle tunnels.
+     *
+     * @param bw bytes per second to give back to the participating allocation;
+     *           0 or less is ignored so the total can never go negative
      */
     public void freeBandwidth(int bw) {
         if (bw > 0) {
@@ -928,6 +940,9 @@ public class TunnelDispatcher implements Service {
     /**
      * Remove a tunnel from the expiration queue.
      * Called when dropping idle tunnels to prevent memory leaks.
+     *
+     * @param cfg tunnel to stop tracking for expiry, matched by identity;
+     *            null is ignored
      */
     public void removeFromExpirationQueue(HopConfig cfg) {
         if (cfg != null) {
@@ -937,6 +952,10 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Dispatch a TunnelDataMessage to the appropriate participant or endpoint
+     *
+     * @param msg transit message to deliver, routed by its tunnel ID
+     * @param recvFrom hash of the peer that sent it, recorded in the dispatch
+     *                 log and passed on for profile accounting
      */
     public void dispatch(TunnelDataMessage msg, Hash recvFrom) {
         byte[] data = msg.getData();
@@ -972,6 +991,10 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Dispatch a TunnelGatewayMessage to the appropriate gateway
+     *
+     * @param msg gateway message wrapping the I2NP message to forward; both its
+     *            own and the wrapped expiration must fall within
+     *            -CLOCK_FUDGE_FACTOR and +MAX_FUTURE_EXPIRATION of now
      */
     public void dispatch(TunnelGatewayMessage msg) {
         TunnelId id = msg.getTunnelId();
@@ -1023,6 +1046,13 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Dispatch an outbound message through a tunnel.
+     *
+     * @param msg message to send; an already expired one is dropped, and a
+     *            short expiration is extended to at least 20s for transit
+     * @param outboundTunnel send tunnel to hand the message to, which must
+     *                       exist or the message is dropped
+     * @param targetPeer hash of the eventual destination, passed to the gateway
+     *                   for per-peer limits and message history
      * @return true if the message was accepted by the tunnel gateway, false if dropped
      */
     public boolean dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, Hash targetPeer) {
@@ -1031,6 +1061,16 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Dispatch an outbound message through a tunnel.
+     *
+     * @param msg message to send; an already expired one is dropped, and a
+     *            short expiration is extended to at least 20s for transit
+     * @param outboundTunnel send tunnel to hand the message to, which must
+     *                       exist or the message is dropped
+     * @param targetTunnel tunnel of a target that is itself reachable, or null
+     *                     for an ordinary peer destination; a non-null value
+     *                     also marks the dispatch as tunnel-targeted in the stats
+     * @param targetPeer hash of the eventual destination, passed to the gateway
+     *                   for per-peer limits and message history
      * @return true if the message was accepted by the tunnel gateway, false if dropped
      */
     public boolean dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, TunnelId targetTunnel, Hash targetPeer) {
@@ -1109,6 +1149,9 @@ public class TunnelDispatcher implements Service {
     /**
      * The participating tunnels for console display.
      * Filters out tunnels that are > 30 seconds past expiration.
+     *
+     * @return snapshot list of the participating tunnel configs still within
+     *                  30s of their expiration
      */
     public List<HopConfig> listParticipatingTunnels() {
         List<HopConfig> tunnels = new ArrayList<>();
@@ -1125,6 +1168,10 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Update stats for participating tunnels
+     *
+     * @param ms length in ms of the coalescing interval the counters cover;
+     *           also the averaging period applied to the message rates, so the
+     *           per-tunnel average is scaled to a 10 minute figure
      */
     public void updateParticipatingStats(int ms) {
         int partCount = _context.tunnelManager().getParticipatingCount();
@@ -1162,10 +1209,10 @@ public class TunnelDispatcher implements Service {
     }
 
 /**
- * Update cached transit throttle factors from router properties.
- *
- * @since 0.9.70+
- */
+     * Update cached transit throttle factors from router properties.
+     *
+     * @since 0.9.70+
+     */
     void updateThrottleFactors() {
         _transitThrottleFactor = getTransitThrottleFactor(_context, 0.95f);
         _inboundTransitThrottleFactor = getTransitThrottleFactor(_context, 0.0f);
@@ -1173,8 +1220,15 @@ public class TunnelDispatcher implements Service {
 
     /**
      * Implement RED (Random Early Discard) to enforce bandwidth limits.
-     * Only active when queue size > minThreshold (congestion).
-     * When queue > maxThreshold, ALL messages are dropped (regardless of factor).
+     * Only active when queue size &gt; minThreshold (congestion).
+     * When queue &gt; maxThreshold, ALL messages are dropped (regardless of factor).
+     *
+     * @param loc role of the sender in the tunnel, used for logging only
+     * @param type message type, used for logging only
+     * @param length message size in bytes; 0 or less is never dropped
+     * @param bwe per-tunnel estimator consulted before the global limit, may be
+     *            null to skip the per-tunnel check
+     * @return true to drop, false to accept
      */
     boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
         if (length <= 0) return false;
@@ -1254,6 +1308,11 @@ public class TunnelDispatcher implements Service {
      * Scales with allocation: higher share = higher per-tunnel cap.
      * Uses outbound bandwidth only — on floodfill routers inbound is far
      * smaller than outbound and would create an artificial bottleneck.
+     *
+     * @param loc role in the tunnel, currently unused; the cap depends only on
+     *            the outbound rate and our share percentage
+     * @return cap in bytes per second, floored at 10KB (30KB or 50KB for the
+     *             larger allocation tiers) once the computed value exceeds 256KB
      */
     int getMaxPerTunnelBandwidth(Location loc) {
         int outKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
@@ -1316,6 +1375,9 @@ public class TunnelDispatcher implements Service {
 
     /**
      * The current bandwidth share in KBps.
+     *
+     * @param ctx router context whose bandwidth limiter and share percentage
+     *            are read
      * @return the share bandwidth
      */
     public static int getShareBandwidth(RouterContext ctx) {
@@ -1409,25 +1471,61 @@ public class TunnelDispatcher implements Service {
 
     // ==================== Tuner delegation ====================
 
-    /** @since 0.9.70+ */
+    /**
+     * The delay before an idle gateway pumper is requeued.
+     *
+     * @return the requeue delay in ms
+     * @since 0.9.70+
+     */
     public static long getRequeueTime() { return TunnelGatewayPumper.getRequeueTime(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The delay before an idle gateway pumper is requeued.
+     *
+     * @param ms delay in ms, clamped to [10, 200]
+     * @since 0.9.70+
+     */
     public static void setRequeueTime(long ms) { TunnelGatewayPumper.setRequeueTime(ms); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap on messages a single outbound pump pass may handle.
+     *
+     * @return the max outbound messages per pump
+     * @since 0.9.70+
+     */
     public static int getMaxObMsgsPerPump() { return PumpedTunnelGateway.getMaxObMsgsPerPump(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The capacity given to each gateway pumper's queue.
+     *
+     * @return the per-pumper queue capacity
+     * @since 0.9.70+
+     */
     public static int getPumperQueueCapacity() { return TunnelGatewayPumper.getQueueCapacity(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The capacity given to each gateway pumper's queue.
+     *
+     * @param value capacity, clamped to [64, 4096]; takes effect on the next
+     *              pumper, existing queues are untouched
+     * @since 0.9.70+
+     */
     public static void setPumperQueueCapacity(int value) { TunnelGatewayPumper.setQueueCapacity(value); }
 
-    /** @since 0.9.70+ */
+    /**
+     * Apply a new capacity to the running pumper instance's queue.
+     *
+     * @param value capacity to resize to
+     * @since 0.9.70+
+     */
     public static void resizePumperQueue(int value) { TunnelGatewayPumper.resizeRunningQueue(value); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap on how many gateway pumper threads may run.
+     *
+     * @return the max pumper threads
+     * @since 0.9.70+
+     */
     public static int getPumperMaxThreads() { return TunnelGatewayPumper.getMaxPumpers(); }
 
     /**
@@ -1439,18 +1537,43 @@ public class TunnelDispatcher implements Service {
      */
     public static double getPumperUtilization() { return TunnelGatewayPumper.getUtilization(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap on how many gateway pumper threads may run.
+     *
+     * @param value thread count, clamped to [2, 16]
+     * @since 0.9.70+
+     */
     public static void setPumperMaxThreads(int value) { TunnelGatewayPumper.setMaxPumpers(value); }
 
-    /** @since 0.9.70+ */
+    /**
+     * Change the thread count of the running pumper instance.
+     *
+     * @param value desired thread count, applied to the live instance
+     * @since 0.9.70+
+     */
     public static void adjustPumperThreads(int value) { TunnelGatewayPumper.adjustRunningThreads(value); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap on messages a single outbound pump pass may handle.
+     *
+     * @param val messages per pump, clamped to [8, 1024]
+     * @since 0.9.70+
+     */
     public static void setMaxObMsgsPerPump(int val) { PumpedTunnelGateway.setMaxObMsgsPerPump(val); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap on messages a single inbound pump pass may handle.
+     *
+     * @return the max inbound messages per pump
+     * @since 0.9.70+
+     */
     public static int getMaxIbMsgsPerPump() { return PumpedTunnelGateway.getMaxIbMsgsPerPump(); }
 
-    /** @since 0.9.70+ */
+    /**
+     * The cap on messages a single inbound pump pass may handle.
+     *
+     * @param val messages per pump, clamped to [8, 1024]
+     * @since 0.9.70+
+     */
     public static void setMaxIbMsgsPerPump(int val) { PumpedTunnelGateway.setMaxIbMsgsPerPump(val); }
 }

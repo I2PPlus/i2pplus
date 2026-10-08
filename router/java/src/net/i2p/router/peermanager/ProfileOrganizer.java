@@ -1201,7 +1201,7 @@ public class ProfileOrganizer {
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet mutable set tracking already-selected subnets
      * @param preferUnproven if true, prioritize peers with no tunnel
-     *        test history so they accumulate profiling data
+     *                       test history so they accumulate profiling data
      */
     public void selectNotFailingPeers(int howMany, Set<Hash> exclude, Set<Hash> matches, boolean onlyNotFailing,
                                     int mask, MaskedIPSet ipSet, boolean preferUnproven) {
@@ -1427,7 +1427,7 @@ public class ProfileOrganizer {
      * @param onlyNotFailing if true, exclude peers already in high-capacity tier
      * @param mask bitmask length for /n diversity restriction (0 to disable)
      * @param ipSet subnets already represented in this tunnel, consulted only
-     *        when mask is non-zero
+     *              when mask is non-zero
      * @param preferUnproven if true, prioritize peers with no tunnel test history
      *        so they accumulate profiling data through exploratory builds
      */
@@ -2017,7 +2017,7 @@ public class ProfileOrganizer {
      *  Pure decision — no context access, safe for unit tests.
      *
      *  @param profile profile to test; its expiration window is picked from its
-     *         the newest activity timestamp
+     *                 the newest activity timestamp
      *  @param now current time in ms
      *  @param expireActive active-tier window in ms
      *  @param expirePassive passive-tier window in ms
@@ -2446,7 +2446,7 @@ public class ProfileOrganizer {
      *  @param buildSuccess the build success ratio in [0.0, 1.0]
      *  @param now current time in ms
      *  @param highCap whether restoring the high-cap tier (loss-demotion
-     *         gate instead of loss probation)
+     *                 gate instead of loss probation)
      *  @return whether the peer may be restored
      *  @since 0.9.71+
      */
@@ -2608,7 +2608,7 @@ public class ProfileOrganizer {
      *  The scan is over a primitive array the sort above already walked.
      *
      *  @param capacities the capacities; the caller holds them sorted, but the
-     *         count does not depend on their order
+     *                    count does not depend on their order
      *  @param meanCapacity the mean to compare against
      *  @return the number of entries greater than the mean, never negative
      *  @since 0.9.71+
@@ -2700,7 +2700,19 @@ public class ProfileOrganizer {
             _notFailingPeers.remove(peer);
             _notFailingPeersList.remove(peer); // O(n), but acceptable for rare eviction
             _strictCapacityOrder.remove(profile);
-            // Note: _fastPeers / _highCapacityPeers already excluded above
+            // A tier member is only evictable while its tier is over the limit, per
+            // isEvictable() below, so it can be evicted here with the tier entry still
+            // live. Left alone, that entry would keep selecting a peer whose profile has
+            // left _notFailingPeers and therefore no longer has its capacity value or
+            // peer-test times refreshed. Drop it, through removeFastPeer() rather than
+            // _fastPeers.remove() so _fastQualityCount stays in step; it gates promotion
+            // at MIN_FAST_QUALITY_COUNT and drifts silently if incremented by hand.
+            //
+            // No replacement is promoted: the store is over the cap that excluded this
+            // peer, so promoting another would evict one to add one, indefinitely.
+            // The next reorganize refills the tiers through its own fallbacks.
+            removeFastPeer(peer);
+            _highCapacityPeers.remove(peer);
 
             evicted++;
         }
@@ -2736,8 +2748,10 @@ public class ProfileOrganizer {
      *  @param fastPeers the current fast tier map
      *  @param highCapPeers the current high-cap tier map
      *  @param activeThreshold the activity window cutoff (now - 48h)
-     *  @param fastPeerLimit fast tier size threshold for protection
-     *  @param highCapacityLimit high-cap tier size threshold for protection
+     *  @param fastPeerLimit fast tier size at or below which its members keep
+     *         eviction protection; above it, fast members are evictable like any other
+     *  @param highCapacityLimit high-cap tier size at or below which its members
+     *         keep eviction protection; above it, high-cap members are evictable
      *  @return whether the profile may be evicted
      *  @since 0.9.71+
      */

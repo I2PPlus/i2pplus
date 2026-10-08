@@ -19,6 +19,10 @@ import net.i2p.util.SystemVersion;
  * Copied and modded from I2PTunnel IndexBean (GPL)
  */
 public class CSSHelper extends HelperBase {
+
+    /** The context is injected by setContextId(), not by the ctor */
+    public CSSHelper() {}
+
     private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(CSSHelper.class);
     private static final Pattern LANG_PATTERN = Pattern.compile("[a-zA-Z_]");
     private static final Pattern SPACE_SPLIT = Pattern.compile("\\s+");
@@ -32,7 +36,10 @@ public class CSSHelper extends HelperBase {
      * PROP_THEME_NAME.
      */
     public static final String PROP_THEME_NAME = "routerconsole.theme";
-    /**  @since 0.9.33 moved from ConfigUIHelper */
+    /**
+     *  Prefix for the per-theme properties mapping a theme name to its directory
+     *  @since 0.9.33 moved from ConfigUIHelper
+     */
     public static final String PROP_THEME_PFX = PROP_THEME_NAME + '.';
     /**
      * DEFAULT_THEME.
@@ -64,9 +71,11 @@ public class CSSHelper extends HelperBase {
      * PROP_FORCE_MOBILE_CONSOLE.
      */
     public static final String PROP_FORCE_MOBILE_CONSOLE = "routerconsole.forceMobileConsole";
-    /** @since 0.9.32 */
+    /** Whether apps open inside a console IFrame instead of replacing the console
+     *  @since 0.9.32 */
     public static final String PROP_EMBED_APPS = "routerconsole.embedApps";
-    /** @since 0.9.59+ */
+    /** Whether the console uses the Sora display font instead of Open Sans
+     *  @since 0.9.59+ */
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     /**
      * DEFAULT_ENABLE_SORA_FONT.
@@ -77,29 +86,37 @@ public class CSSHelper extends HelperBase {
     private static final String[] _recentNonces = new String[2];
     private static long lastRotation;
     private static final long NONCE_ROTATION_MS = 5 * (long) 60 * 1000; // 5 minutes
-    /** @since 0.9.67+ */
+    /** Whether the sidebar is unified with the main content column
+     *  @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     /**
      * DEFAULT_UNIFIED_SIDEBAR.
      */
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
-    /** @since 0.9.68+ */
+    /** Whether a sidebar shorter than the viewport sticks to the top while scrolling
+     *  @since 0.9.68+ */
     public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
     /**
      * DEFAULT_STICKY_SIDEBAR.
      */
     public static final boolean DEFAULT_STICKY_SIDEBAR = true;
-    /** @since 0.9.70+ */
+    /** true = legacy RRD4J minigraph renderer; false = dual-baseline canvas
+     *  @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_LEGACY = "routerconsole.sidebarGraphLegacy";
-    /** @since 0.9.70+ — default true for legacy RRD4J; set false for dual-baseline canvas */
+    /** Default true for legacy RRD4J; set false for dual-baseline canvas
+     *  @since 0.9.70+ */
     public static final boolean DEFAULT_SIDEBAR_GRAPH_LEGACY = true;
-    /** @since 0.9.70+ — graph time period in minutes (2–30, default 20) */
+    /** Sidebar graph time period in minutes (2–30, default 20)
+     *  @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_MINUTES = "routerconsole.sidebarGraphMinutes";
-    /** @since 0.9.70+ — true = split display (inbound top, outbound bottom); false = overlay */
+    /** true = split display (inbound top, outbound bottom); false = overlay
+     *  @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_SPLIT = "routerconsole.sidebarGraphSplit";
-    /** @since 0.9.70+ — graph render direction: "ltr" or "rtl" */
+    /** Sidebar graph render direction: "ltr" or "rtl"
+     *  @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_DIRECTION = "routerconsole.sidebarGraphDirection";
-    /** @since 0.9.70+ — true = continuous scrolling graph; false = full-buffer redraw (default) */
+    /** true = continuous scrolling graph; false = full-buffer redraw (default)
+     *  @since 0.9.70+ */
     public static final String PROP_SIDEBAR_GRAPH_CONTINUOUS = "routerconsole.sidebarGraphContinuous";
 
     /** Session-bound nonce for CSRF protection, replaces static nonces @since 0.9.69 */
@@ -249,7 +266,9 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * @return the theme
+     *  Theme directory prefix, forced to classic for pre-Trident/6 IE
+     *  @param userAgent the request User-Agent header, null for a normal browser
+     *  @return the theme path to prepend to console CSS and image references
      */
     public String getTheme(String userAgent) {
         String url = BASE_THEME_PATH;
@@ -268,12 +287,14 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Returns whether app embedding is enabled or disabled
+     * @return true to open apps in a console IFrame, false to replace the console
      * @since 0.9.32
      */
     public boolean embedApps() {return _context.getBooleanProperty(PROP_EMBED_APPS);}
 
     /**
      * Returns whether we should use Sora display font
+     * @return true to use Sora, false for Open Sans
      * @since 0.9.59+
      */
     public boolean useSoraDisplayFont() {return _context.getBooleanProperty(PROP_ENABLE_SORA_FONT);}
@@ -290,18 +311,21 @@ public class CSSHelper extends HelperBase {
 
     /**
      * Returns whether we should use a unified sidebar
+     * @return true if explicitly enabled, false otherwise
      * @since 0.9.67+
      */
     public boolean useUnifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
 
     /**
      * Returns whether we should use a unified sidebar
+     * @return true unless the user has explicitly turned the unified sidebar off
      * @since 0.9.67+
      */
     public boolean enableUnifiedSidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_UNIFIED_SIDEBAR);}
 
     /**
      * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport
+     * @return true if explicitly enabled, false otherwise
      * @since 0.9.68+
      */
     public boolean useStickySidebar() {return _context.getBooleanProperty(PROP_STICKY_SIDEBAR);}
@@ -310,6 +334,7 @@ public class CSSHelper extends HelperBase {
      * Returns whether to use the legacy RRD4J minigraph renderer.
      * When false, the new dual-baseline canvas renderer is used with
      * inbound spiking upward (top half) and outbound downward (bottom half).
+     * @return true for RRD4J, false for the canvas renderer
      * @since 0.9.70+
      */
     public boolean useLegacySidebarGraph() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_LEGACY);}
@@ -327,6 +352,7 @@ public class CSSHelper extends HelperBase {
     /**
      * Returns whether the sidebar graph uses split mode (inbound top, outbound bottom).
      * When false, overlay mode is used (both lines from top).
+     * @return true unless the user has explicitly turned split mode off
      * @since 0.9.70+
      */
     public boolean useSidebarGraphSplit() {return _context.getBooleanPropertyDefaultTrue(PROP_SIDEBAR_GRAPH_SPLIT);}
@@ -334,6 +360,7 @@ public class CSSHelper extends HelperBase {
     /**
      * Returns whether the sidebar graph uses continuous scroll mode.
      * When enabled, the graph scrolls left as new data arrives.
+     * @return true for continuous scrolling, false to redraw the whole buffer
      * @since 0.9.70+
      */
     public boolean useSidebarGraphContinuous() {return _context.getBooleanProperty(PROP_SIDEBAR_GRAPH_CONTINUOUS);}
@@ -349,7 +376,8 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
-     * Returns whether we should use a unified sidebar
+     * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport
+     * @return true unless the user has explicitly turned the sticky sidebar off
      * @since 0.9.68+
      */
     public boolean enableStickySidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_STICKY_SIDEBAR);}
@@ -400,7 +428,10 @@ public class CSSHelper extends HelperBase {
      */
     public boolean shouldSendXFrame() {return !_context.getBooleanProperty(PROP_XFRAME);}
 
-    /** change refresh and save it */
+    /**
+     *  change refresh and save it, "0" also disables the refresh entirely
+     *  @param r the new refresh period in seconds
+     */
     public void setRefresh(String r) {
         try {
             if (r.equals("0")) {_context.router().saveConfig(PROP_DISABLE_REFRESH, "true");}
@@ -409,7 +440,10 @@ public class CSSHelper extends HelperBase {
         } catch (RuntimeException e) { /* ignored */ }
     }
 
-    /** @return refresh time in seconds, as a string */
+    /**
+     *  The summary page refresh period, floored at 5s under heavy CPU load
+     *  @return refresh time in seconds, as a string, or "3600" when refresh is disabled
+     */
     public String getRefresh() {
         String r = _context.getProperty(PROP_REFRESH, DEFAULT_REFRESH);
         if (r.equals("0")) {r = "3600";}
@@ -421,6 +455,7 @@ public class CSSHelper extends HelperBase {
 
     /**
      * change disable refresh boolean and save it
+     * @param r "0" to disable the refresh, anything else to re-enable it
      * @since 0.9.1
      */
     public void setDisableRefresh(String r) {
@@ -430,12 +465,17 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
+     * Is the summary page refresh turned off?
      * @return true if refresh is disabled
      * @since 0.9.1
      */
     public boolean getDisableRefresh() {return _context.getBooleanProperty(PROP_DISABLE_REFRESH);}
 
-    /** translate the title and display consistently */
+    /**
+     *  translate the title and display consistently
+     *  @param s the raw page title
+     *  @return a complete title element, prefixed by routerconsole.pageTitlePrefix if set
+     */
     public String title(String s) {
         StringBuilder buf = new StringBuilder(128);
         String lang = _context.getProperty("routerconsole.lang");
@@ -456,6 +496,8 @@ public class CSSHelper extends HelperBase {
 
     /**
      *  Should we allow a refreshing IFrame?
+     *  @param ua the request User-Agent header, null to allow the IFrame
+     *  @return false if the mobile console is forced or the browser is too small
      *  @since 0.8.5
      */
     public boolean allowIFrame(String ua) {
@@ -474,6 +516,7 @@ public class CSSHelper extends HelperBase {
     }
 
     /**
+     * Are the advanced console settings pages shown?
      * @return whether advanced mode
      */
     public boolean isAdvancedMode() {
@@ -484,8 +527,14 @@ public class CSSHelper extends HelperBase {
      * https://www.javatpoint.com/java-program-to-capitalize-each-word-in-string
      */
     public static class StringFormatter {
+
+        /** All methods are static; the ctor exists only for javadoc */
+        public StringFormatter() {}
+
         /**
          * capitalizeWord.
+         * @param str the words to capitalize
+         * @return the string with an upper case first letter in every word
          */
         public static String capitalizeWord(String str) {
             if (str == null || str.isEmpty()) return str;

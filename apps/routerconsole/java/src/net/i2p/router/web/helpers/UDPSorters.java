@@ -13,6 +13,9 @@ import net.i2p.router.transport.udp.PeerState;
  */
 class UDPSorters {
 
+    /** Instances are never needed; this is a holder for the flags and comparators. */
+    UDPSorters() {}
+
     /** Sort by peer hash */
     static final int FLAG_ALPHA = 0;
     /** Sort by inbound idle time */
@@ -46,7 +49,13 @@ class UDPSorters {
     /** Sort by uptime */
     static final int FLAG_UPTIME = 16;
 
-    /** @return a comparator for the given sort flag */
+    /**
+     * Select the comparator for a column, reversing it for a descending sort.
+     * @param sortFlags  one of the FLAG_ columns in this class; the magnitude
+     *                   picks the comparator and the sign sets the direction
+     * @return comparator ordering PeerState by that column, or descending if
+     *                    sortFlags is negative; FLAG_ALPHA is the fallback
+     */
     static Comparator<PeerState> getComparator(int sortFlags) {
         Comparator<PeerState> rv;
         switch (Math.abs(sortFlags)) {
@@ -110,13 +119,19 @@ class UDPSorters {
      * Comparator for sorting UDP peers by peer hash in ascending order.
      * @since 0.9.33
      */
-    static class AlphaComparator extends PeerComparator {}
+    static class AlphaComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        AlphaComparator() {}
+    }
 
     /**
      * Comparator for sorting UDP peers by inbound idle time in ascending order.
      * @since 0.9.33
      */
     static class IdleInComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        IdleInComparator() {}
+
         /**
          * compare.
          */
@@ -133,6 +148,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class IdleOutComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        IdleOutComparator() {}
+
         /**
          * compare.
          */
@@ -150,6 +168,9 @@ class UDPSorters {
      */
     static class RateInComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
+
+        /** Default constructor; snapshots the clock for the bps comparison. */
+        RateInComparator() {}
 
         /**
          * compare.
@@ -169,6 +190,9 @@ class UDPSorters {
     static class RateOutComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
+        /** Default constructor; snapshots the clock for the bps comparison. */
+        RateOutComparator() {}
+
         /**
          * compare.
          */
@@ -185,6 +209,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class UptimeComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        UptimeComparator() {}
+
         /**
          * compare.
          */
@@ -201,6 +228,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class SkewComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        SkewComparator() {}
+
         /**
          * compare.
          */
@@ -217,6 +247,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class CwndComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        CwndComparator() {}
+
         /**
          * compare.
          */
@@ -233,6 +266,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class SsthreshComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        SsthreshComparator() {}
+
         /**
          * compare.
          */
@@ -249,6 +285,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RTTComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        RTTComparator() {}
+
         /**
          * compare.
          */
@@ -265,6 +304,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RTOComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        RTOComparator() {}
+
         /**
          * compare.
          */
@@ -281,6 +323,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class MTUComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        MTUComparator() {}
+
         /**
          * compare.
          */
@@ -300,6 +345,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class SendCountComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        SendCountComparator() {}
+
         /**
          * compare.
          */
@@ -316,6 +364,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class RecvCountComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        RecvCountComparator() {}
+
         /**
          * compare.
          */
@@ -332,6 +383,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class ResendComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        ResendComparator() {}
+
         /**
          * compare.
          */
@@ -348,6 +402,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class DupComparator extends PeerComparator {
+        /** Default constructor; no state beyond the superclass. */
+        DupComparator() {}
+
         /**
          * compare.
          */
@@ -364,6 +421,9 @@ class UDPSorters {
      * @since 0.9.33
      */
     static class PeerComparator implements Comparator<PeerState>, Serializable {
+        /** Default constructor; the comparison reads the peers and holds no state. */
+        PeerComparator() {}
+
         /**
          * compare.
          */
@@ -373,7 +433,18 @@ class UDPSorters {
         }
     }
 
-    /** Append sort toggle links to a buffer */
+    /**
+     * Append the pair of sort arrows for one column, marking the live direction
+     * of a column that is currently sorted on.
+     * @param buf  buffer receiving the spans and anchors
+     * @param urlBase  page path the links point at, without a query string;
+     *                 this appends the "?transport=ssu&amp;sort=N" part
+     * @param sortFlags  column and direction currently in effect, as passed to
+     *                   {@link #getComparator}
+     * @param descr  localized link title, used for both arrows
+     * @param ascending  column this control toggles; FLAG_ALPHA (0) emits a
+     *                   single descending link instead of a toggle
+     */
     static void appendSortLinks(StringBuilder buf, String urlBase, int sortFlags, String descr, int ascending) {
         if (ascending == FLAG_ALPHA) { // 0
             buf.append("<span class=\"sortdown\"><a href=\"").append(urlBase).append("?transport=ssu&amp;sort=0\" title=\"")

@@ -18,8 +18,10 @@ import net.i2p.util.Log;
  *
  */
 class HopProcessor {
+    /** Router or client context, supplying the log and the AES engine. */
     protected final I2PAppContext _context;
     private final Log _log;
+    /** Config for this hop, holding the IV and layer keys and the expected previous hop. */
     protected final HopConfig _config;
     private final IVValidator _validator;
 
@@ -32,6 +34,12 @@ class HopProcessor {
      */
     static final int IV_LENGTH = 16;
 
+    /**
+     * Create a processor for a single hop of a tunnel.
+     * @param ctx the router or client context
+     * @param config this hop's tunnel config
+     * @param validator checks that the message IV is one we have not seen
+     */
     public HopProcessor(I2PAppContext ctx, HopConfig config, IVValidator validator) {
         _context = ctx;
         _log = ctx.logManager().getLog(HopProcessor.class);

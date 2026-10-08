@@ -13,23 +13,45 @@ public class ConfigBanHelper extends HelperBase {
      */
     public ConfigBanHelper() {}
 
+    /** Offenses allowed inside the window before an offender is banned, as a count (default 3) */
     public static final String PROP_MAX_OFFENSES = "router.banlist.maxOffenses";
+    /** Window in milliseconds over which offenses accumulate toward a ban (default 15 minutes) */
     public static final String PROP_OFFENSE_WINDOW = "router.banlist.offenseWindow";
+    /** Milliseconds after startup during which offenses are not tracked (default 3 minutes) */
     public static final String PROP_STARTUP_GRACE = "router.banlist.startupGrace";
+    /** Milliseconds a bad packet offender stays banned (default 60 minutes) */
     public static final String PROP_BAD_PACKET_DURATION = "router.banlist.badPacketDuration";
+    /** Set to false to stop banning IPs that send malformed packets; default true */
     public static final String PROP_ENABLE_BAD_PACKET_BAN = "router.banlist.enableBadPacketBan";
+    /** Set to false to stop banning peers seen with corrupt transport connections; default true */
     public static final String PROP_ENABLE_CORRUPT_CONNECTION_BAN = "router.banlist.enableCorruptConnectionBan";
+    /** Set to false to stop banning peers abusing port hopping; default true */
     public static final String PROP_ENABLE_PORT_HOPPING_BAN = "router.banlist.enablePortHoppingBan";
+    /** Set to false to stop loading the subscription blocklist; default true */
     public static final String PROP_ENABLE_BLOCKLIST = "router.blocklist.enable";
+    /** Set to false to stop merging the Tor exit node list into the blocklist; default true */
     public static final String PROP_ENABLE_TOR_BLOCKLIST = "router.blocklistTor.enable";
+    /** Set to true to filter out RouterInfos from the blocked country list; default false */
     public static final String PROP_ENABLE_COUNTRY_BAN = "router.blocklistCountries.enable";
+    /** Set to true to ban XG routers, which take no transit; default false */
     public static final String PROP_ENABLE_XG_BAN = "router.banlistXG";
+    /** Set to false to stop banning unreachable low bandwidth routers; default true */
     public static final String PROP_ENABLE_LU_BAN = "router.banlistLU";
+    /** Set to true to refuse RouterInfos published in our own country; default false */
     public static final String PROP_ENABLE_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
+    /**
+     * Capability ban patterns separated by commas or whitespace; each one bans routers carrying
+     * all of its characters, and a trailing '!' group exempts matches, as in "G!f". Empty bans
+     * nothing
+     */
     public static final String PROP_CUSTOM_CAPABILITY_BANS = "router.banlistCapabilities";
+    /** Two letter country codes to refuse RouterInfos from, comma or space separated */
     public static final String PROP_COUNTRY_CODES = "router.blockCountries";
+    /** Set to false to stop banning floodfills that fail to respond; default true */
     public static final String PROP_ENABLE_UNRESPONSIVE_FLOODFILL_BAN = "router.banlist.enableUnresponsiveFloodfillBan";
+    /** Set to false to stop banning routers publishing no version; default true */
     public static final String PROP_ENABLE_NO_VERSION_BAN = "router.banlist.enableNoVersionBan";
+    /** Set to false to stop banning peers demanding excess tunnels; default true */
     public static final String PROP_ENABLE_EXCESSIVE_TUNNEL_REQUESTS_BAN = "router.banlist.enableExcessiveTunnelRequestsBan";
     /** When false, peers seen only as transit next hops are exempt from policy bans */
     public static final String PROP_BAN_NEXT_HOP = "router.banlist.banNextHop";

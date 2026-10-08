@@ -38,6 +38,9 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class WebAppStarter {
 
+    /** All methods are static; the ctor exists only for javadoc */
+    public WebAppStarter() {}
+
     private static final Map<String, Long> warModTimes = new ConcurrentHashMap<>();
     /** Init parameters for webapps */
     static final Map<String, String> INIT_PARAMS = new HashMap<>(4);
@@ -100,6 +103,10 @@ public class WebAppStarter {
      *
      *  As of 0.9.34, the appName will be registered with the PortMapper.
      *
+     *  @param ctx router context supplying the temp dir, logging and PortMapper
+     *  @param server the running console webapp collection to add the context to
+     *  @param appName context path and registered service name, e.g. "i2psnark"
+     *  @param warPath path to the war file
      *  @throws Exception just about anything, caller would be wise to catch Throwable
      *  @since 0.9.33
      */
@@ -114,6 +121,10 @@ public class WebAppStarter {
      *
      *  The appName will be registered with the PortMapper.
      *
+     *  @param ctx router context supplying the temp dir, logging and PortMapper
+     *  @param server the running console webapp collection to add the context to
+     *  @param appName context path and registered service name, e.g. "i2psnark"
+     *  @param warPath path to the war file
      *  @param pluginName may be null, will look for console/webapps.config in that plugin
      *  @throws Exception just about anything, caller would be wise to catch Throwable
      *  @since 0.9.53 added pluginName param
@@ -140,6 +151,14 @@ public class WebAppStarter {
      *  add but don't start
      *  This is used only by RouterConsoleRunner, which adds all the webapps first
      *  and then starts all at once.
+     *
+     *  @param ctx router context supplying the temp dir, logging and PortMapper
+     *  @param server the running console webapp collection to add the context to
+     *  @param appName context path, e.g. "i2psnark"
+     *  @param warPath path to the war file, replaced by a fresh temp copy if the war was modified
+     *  @param tmpdir jetty work directory for this context, created if it does not exist
+     *  @return the added but unstarted context
+     *  @throws IOException if the war is missing or cannot be copied for reloading
      */
     static WebAppContext addWebApp(RouterContext ctx, ContextHandlerCollection server,
                                    String appName, String warPath, File tmpdir) throws IOException {
@@ -194,6 +213,10 @@ public class WebAppStarter {
     }
 
     /**
+     *  Choose the Jetty configuration classes, adding annotation scanning only when asked.
+     *  WebAppConfiguration is always added last so the console passwords are read.
+     *
+     *  @param wac the context to configure
      *  @param scanAnnotations Should we check for Servlet 3.0 annotations?
      *                         The war MUST be set to extract (due to Jetty bug),
      *                         and annotation classes MUST be available
@@ -236,6 +259,8 @@ public class WebAppStarter {
      *  Warning, this will NOT work during shutdown, because
      *  the console is already unregistered.
      *
+     *  @param ctx router context supplying the PortMapper
+     *  @param appName context path, e.g. "i2psnark"
      *  @since 0.9.33
      */
     public static void stopWebApp(RouterContext ctx, String appName) {
@@ -259,6 +284,10 @@ public class WebAppStarter {
     /**
      *  Stop it and remove the context.
      *  Throws just about anything, caller would be wise to catch Throwable
+     *  @param ctx router context supplying the PortMapper
+     *  @param s the Jetty server holding the console contexts, so this also works
+     *           during shutdown after the console has been unregistered
+     *  @param appName context path, e.g. "i2psnark"
      *  @since 0.9.41
      */
     static void stopWebApp(RouterContext ctx, Server s, String appName) {
@@ -286,6 +315,8 @@ public class WebAppStarter {
      * Warning, this will NOT work during shutdown, because
      * the console is already unregistered.
      *
+     * @param ctx router context used to locate the console server
+     * @param appName context path, e.g. "i2psnark"
      * @return whether web app running
      * @since 0.9.33
      */
@@ -298,6 +329,9 @@ public class WebAppStarter {
 
     /**
      *  Determine if a webapp is running
+     *  @param s the Jetty server holding the console contexts
+     *  @param appName context path, e.g. "i2psnark"
+     *  @return true if the context exists and has been started
      *  @since 0.9.41
      */
     static boolean isWebAppRunning(Server s, String appName) {
@@ -311,6 +345,9 @@ public class WebAppStarter {
      *  Warning, this will NOT work during shutdown, because
      *  the console is already unregistered.
      *
+     *  @param ctx router context used to locate the console server
+     *  @param appName context path, e.g. "i2psnark"
+     *  @return the context, or null if the console server or the webapp is not found
      *  @since Jetty 6
      */
     static ContextHandler getWebApp(I2PAppContext ctx, String appName) {
@@ -322,6 +359,9 @@ public class WebAppStarter {
 
     /**
      *  Find a webapp by name
+     *  @param s the Jetty server holding the console contexts
+     *  @param appName context path, e.g. "i2psnark"
+     *  @return the context, or null if the console server or the webapp is not found
      *  @since 0.9.41
      */
     static ContextHandler getWebApp(Server s, String appName) {
@@ -356,6 +396,7 @@ public class WebAppStarter {
      * Warning, this will NOT work during shutdown, because
      * the console is already unregistered.
      *
+     * @param ctx router context used to locate the console server
      * @return the console server
      * @since 0.9.33
      */

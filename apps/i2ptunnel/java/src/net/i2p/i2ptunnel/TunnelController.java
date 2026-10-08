@@ -89,22 +89,40 @@ public class TunnelController implements Logging {
     /** Key backup directory name. */
     public static final String KEY_BACKUP_DIR = "i2ptunnel-keyBackup";
 
-    /** Tunnel configuration property names. */
+    /*
+     * Tunnel configuration property names.
+     */
+    /** Human-readable description, shown in the tunnel list. */
     public static final String PROP_DESCR = "description";
+    /** Base64-encoded I2P destination, for the client types that require one. */
     public static final String PROP_DEST = "targetDestination";
+    /** Host the router's I2CP listener is on. */
     public static final String PROP_I2CP_HOST = "i2cpHost";
+    /** Port the router's I2CP listener is on. */
     public static final String PROP_I2CP_PORT = "i2cpPort";
+    /** Local interface the tunnel binds its localhost side to. */
     public static final String PROP_INTFC = "interface";
+    /** Path to the private key file, which may be relative. */
     public static final String PROP_FILE = "privKeyFile";
+    /** Local port the tunnel's localhost side listens on. */
     public static final String PROP_LISTEN_PORT = "listenPort";
+    /** Display name of the tunnel. */
     public static final String PROP_NAME = "name";
+    /** Comma-separated proxy list to chain a client tunnel through. */
     public static final String PROP_PROXIES = "proxyList";
+    /** "true" to let client tunnels share tunnels with each other. */
     public static final String PROP_SHARED = "sharedClient";
+    /** Host sent in the HTTP Host header while spoofing. */
     public static final String PROP_SPOOFED_HOST = "spoofedHost";
+    /** "true" to start the tunnel when the router starts. */
     public static final String PROP_START = "startOnLoad";
+    /** Host or IP address of the target on the localhost side. */
     public static final String PROP_TARGET_HOST = "targetHost";
+    /** Port of the target on the localhost side. */
     public static final String PROP_TARGET_PORT = "targetPort";
+    /** Tunnel type, one of the TYPE_ values below. */
     public static final String PROP_TYPE = "type";
+    /** Path to the streaming filter definition file. */
     public static final String PROP_FILTER = "filterDefinition";
         /** Configuration file property. */
         public static final String PROP_CONFIG_FILE = "configFile";
@@ -151,23 +169,38 @@ public class TunnelController implements Logging {
     /** Default maximum shutdown delay in seconds */
     public static final int DEFAULT_SHUTDOWN_DELAY_MAX = 0;
 
-    /**
+    /*
      * Streaming connection limit properties, moved from TunnelConfig.
      */
+    /** Per-source connection limit over a one-minute window. */
     public static final String PROP_MAX_CONNS_MIN = "i2p.streaming.maxConnsPerMinute";
+    /** Per-source connection limit over a one-hour window. */
     public static final String PROP_MAX_CONNS_HOUR = "i2p.streaming.maxConnsPerHour";
+    /** Per-source connection limit over a one-day window. */
     public static final String PROP_MAX_CONNS_DAY = "i2p.streaming.maxConnsPerDay";
+    /** Connection limit summed over all sources over a one-minute window. */
     public static final String PROP_MAX_TOTAL_CONNS_MIN = "i2p.streaming.maxTotalConnsPerMinute";
+    /** Connection limit summed over all sources over a one-hour window. */
     public static final String PROP_MAX_TOTAL_CONNS_HOUR = "i2p.streaming.maxTotalConnsPerHour";
+    /** Connection limit summed over all sources over a one-day window. */
     public static final String PROP_MAX_TOTAL_CONNS_DAY = "i2p.streaming.maxTotalConnsPerDay";
+    /** Maximum streams open on the tunnel at once. */
     public static final String PROP_MAX_STREAMS = "i2p.streaming.maxConcurrentStreams";
+    /** Set "true" once the user has chosen a limit, so the defaults are not written over it. */
     public static final String PROP_LIMITS_SET = "i2p.streaming.limitsManuallySet";
+    /** Per-source connection limit over a one-minute window, used when unset. */
     public static final int DEFAULT_MAX_CONNS_MIN = 200;
+    /** Per-source connection limit over a one-hour window, used when unset. */
     public static final int DEFAULT_MAX_CONNS_HOUR = 1200;
+    /** Per-source connection limit over a one-day window, used when unset. */
     public static final int DEFAULT_MAX_CONNS_DAY = 4000;
+    /** All-source connection limit over a one-minute window, used when unset. */
     public static final int DEFAULT_MAX_TOTAL_CONNS_MIN = 800;
+    /** All-source connection limit over a one-hour window, used when unset. */
     public static final int DEFAULT_MAX_TOTAL_CONNS_HOUR = 4800;
+    /** All-source connection limit over a one-day window, used when unset. */
     public static final int DEFAULT_MAX_TOTAL_CONNS_DAY = 19200;
+    /** Maximum concurrent streams used when unset. */
     public static final int DEFAULT_MAX_STREAMS = 400;
 
         /** Streaming limit action property. */
@@ -207,16 +240,28 @@ public class TunnelController implements Logging {
 
         private static final String OPT_PRIORITY = PFX_OPTION + "outbound.priority";
 
-    /** Tunnel type values. */
+    /*
+     * Tunnel type values.
+     */
+    /** Outbound HTTP CONNECT proxy for tunnelling, optionally via an outproxy. */
     public static final String TYPE_CONNECT = "connectclient";
+    /** HTTP server that also runs a proxy port on the same destination. */
     public static final String TYPE_HTTP_BIDIR_SERVER = "httpbidirserver";
+    /** Outbound HTTP proxy. */
     public static final String TYPE_HTTP_CLIENT = "httpclient";
+    /** HTTP server forwarding requests to a localhost target, spoofing the Host header. */
     public static final String TYPE_HTTP_SERVER = "httpserver";
+    /** Outbound IRC client. */
     public static final String TYPE_IRC_CLIENT = "ircclient";
+    /** IRC server forwarding to a localhost target. */
     public static final String TYPE_IRC_SERVER = "ircserver";
+    /** Outbound SOCKS4a/5 proxy. */
     public static final String TYPE_SOCKS = "sockstunnel";
+    /** Outbound SOCKS proxy that also runs the IRC filters over the connection. */
     public static final String TYPE_SOCKS_IRC = "socksirctunnel";
+    /** Client listening on a local port and forwarding to a fixed destination. */
     public static final String TYPE_STD_CLIENT = "client";
+    /** Server forwarding incoming streams to a localhost host and port. */
     public static final String TYPE_STD_SERVER = "server";
     /** Client in the UI and I2P side but a server on the localhost side */
     public static final String TYPE_STREAMR_CLIENT = "streamrclient";
@@ -772,7 +817,7 @@ public class TunnelController implements Logging {
      *  Defaults in config properties are not honored.
      *
      *  @return keys with the "option." prefix stripped, non-null
-     *   Much better than getClientOptions()
+     *               Much better than getClientOptions()
      */
     public Properties getClientOptionProps() {
         Properties opts = new Properties();
@@ -999,6 +1044,11 @@ public class TunnelController implements Logging {
 
     /**
      *  As of 0.9.1, updates the options on an existing session
+     *
+     *  @param config  key=value mapping for all tunnels; only the entries whose
+     *                 key starts with prefix are taken
+     *  @param prefix  tunnel's key prefix, stripped from the keys it matched; an
+     *                 empty prefix takes config as-is
      */
     public void setConfig(Properties config, String prefix) {
         Properties props = filterProperties(config, prefix);
@@ -1222,7 +1272,8 @@ public class TunnelController implements Logging {
 
     /**
      *  The tunnel config, with each key prefixed, or a copy if the prefix is empty.
-     *  @return a copy
+     *  @param prefix  prepended to every key; an empty prefix copies the keys as-is
+     *  @return a new Properties, never the live config
      */
     public Properties getConfig(String prefix) {
         Properties rv = new Properties();
@@ -1249,6 +1300,7 @@ public class TunnelController implements Logging {
     /**
      *  Set the config file. Only do this if previously null.
      *
+     *  @param file  where this tunnel's config was loaded from, for saving later
      */
     public void setConfigFile(File file) { _configFile = file; }
 
@@ -1299,6 +1351,7 @@ public class TunnelController implements Logging {
      *  Note that a streamr client is a UI and I2P client but a server on the localhost side.
      *  Note that a streamr server is a UI and I2P server but a client on the localhost side.
      *
+     *  @param type  one of the TYPE_ values, or null when unset
      *  @return false if type == null
      */
     public static boolean isClient(String type) {
@@ -1375,7 +1428,11 @@ public class TunnelController implements Logging {
      */
     public String getProxyList() { return _config.getProperty(PROP_PROXIES); }
 
-    /** default true for clients, always false for servers */
+    /**
+     *  Whether this tunnel shares its tunnels with other client tunnels.
+     *  @return "true" or "false" as a string, never null; server types always
+     *          report "false" and a client with the property unset reports "true"
+     */
     public String getSharedClient() {
          if (!isClient())
              return "false";
@@ -1542,7 +1599,10 @@ public class TunnelController implements Logging {
         return true;
     }
 
-        /** Changes the tunnel state and notifies any waiting threads. */
+        /**
+         * Changes the tunnel state and notifies any waiting threads.
+         * @param state the new value for {@link #getState()}
+         */
         public synchronized void changeState(TunnelState state) {
         _state = state;
         notifyAll();

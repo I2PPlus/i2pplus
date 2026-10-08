@@ -51,6 +51,9 @@ class RateStatMeanBatch {
     private final LongAdder _durationSum = new LongAdder();
     private final LongAdder _count = new LongAdder();
 
+    /** Start with no pending samples. */
+    RateStatMeanBatch() {}
+
     /**
      *  Sample a level with no event duration.
      *
@@ -73,17 +76,29 @@ class RateStatMeanBatch {
         _count.increment();
     }
 
-    /** @return how many samples are waiting to be flushed */
+    /**
+     *  Samples accumulated since the last flush.
+     *
+     *  @return the number of unflushed samples
+     */
     long pendingCount() {
         return _count.sum();
     }
 
-    /** @return the mean sampled value since the last flush, 0 when nothing is pending */
+    /**
+     *  Mean of the values sampled since the last flush, truncated toward zero.
+     *
+     *  @return the mean sampled value, 0 when nothing is pending
+     */
     long meanValue() {
         return meanOf(_valueSum.sum(), _count.sum());
     }
 
-    /** @return the mean event duration since the last flush, 0 when nothing is pending */
+    /**
+     *  Mean of the durations sampled since the last flush, truncated toward zero.
+     *
+     *  @return the mean event duration, 0 when nothing is pending
+     */
     long meanEventDuration() {
         return meanOf(_durationSum.sum(), _count.sum());
     }

@@ -27,6 +27,12 @@ public abstract class Variable {
         /** timestamp. */
         public final long timestamp;
 
+        /**
+         * Pairs a computed value with the timestamp of the point it came from.
+         *
+         * @param timestamp seconds since epoch, or 0 to mark the value as not time stamped
+         * @param value computed value, NaN when nothing could be computed
+         */
         Value(long timestamp, double value) {
             this.value = value;
             this.timestamp = timestamp;
@@ -47,9 +53,12 @@ public abstract class Variable {
      * Used to calculate the needed value from a source, this method call the abstract method {@link
      * #fill(long[], double[], long, long)}.
      *
-     * @param s
-     * @param start
-     * @param end
+     * <p>Only the points whose step interval overlaps the window are passed on; a {@link VDef}
+     * source is instead kept or discarded as a whole, based on where its value is stamped.
+     *
+     * @param s source supplying the timestamped values to compute over
+     * @param start lower bound of the window, in seconds since epoch
+     * @param end upper bound of the window, in seconds since epoch
      */
     void calculate(Source s, long start, long end) {
         long step = s.timestamps[1] - s.timestamps[0];
@@ -102,7 +111,11 @@ public abstract class Variable {
         }
     }
 
-    /** getValue. */
+    /**
+     * Returns the value left by the last {@link #calculate} call.
+     *
+     * @return the computed value, {@link #INVALIDVALUE} if the source held no point in the window
+     */
     public Value getValue() {
         assert val != null : "Used before calculation";
         return val;
@@ -125,6 +138,9 @@ public abstract class Variable {
 
     /** Find the first valid data point and it's timestamp */
     public static class FIRST extends Variable {
+        /**
+         * Creates a selector for the earliest non-NaN point inside the window, with its timestamp.
+         */
         public FIRST() {}
 
         @Override
@@ -140,6 +156,7 @@ public abstract class Variable {
 
     /** Find the first last valid point and it's timestamp */
     public static class LAST extends Variable {
+        /** Creates a selector for the last non-NaN point, with its timestamp. */
         public LAST() {}
 
         @Override
@@ -153,8 +170,11 @@ public abstract class Variable {
         }
     }
 
-    /** The smallest of the data points and it's time stamp (the first one) is stored. */
+    /** The smallest of the data points, stamped with the latest point attaining it. */
     public static class MIN extends Variable {
+        /**
+         * Creates a selector for the smallest point, stamped with the latest point attaining it.
+         */
         public MIN() {}
 
         @Override
@@ -174,8 +194,11 @@ public abstract class Variable {
         }
     }
 
-    /** The biggest of the data points and it's time stamp (the first one) is stored. */
+    /** The biggest of the data points, stamped with the latest point attaining it. */
     public static class MAX extends Variable {
+        /**
+         * Creates a selector for the biggest point, stamped with the latest point attaining it.
+         */
         public MAX() {}
 
         @Override
@@ -197,6 +220,10 @@ public abstract class Variable {
 
     /** Calculate the sum of the data points. */
     public static class TOTAL extends Variable {
+        /**
+         * Creates a selector for the total: the points summed and scaled by the interval between
+         * the first two timestamps.
+         */
         public TOTAL() {}
 
         @Override
@@ -212,6 +239,7 @@ public abstract class Variable {
 
     /** Calculate the average of the data points. */
     public static class AVERAGE extends Variable {
+        /** Creates a selector for the arithmetic mean of the non-NaN points. */
         public AVERAGE() {}
 
         @Override
@@ -235,6 +263,7 @@ public abstract class Variable {
 
     /** Calculate the standard deviation for the data point. */
     public static class STDDEV extends Variable {
+        /** Creates a selector for the sample standard deviation of the non-NaN points. */
         public STDDEV() {}
 
         @Override
@@ -272,8 +301,12 @@ public abstract class Variable {
         final double value;
 
         /**
-         * Position (unused, for sorting tie-break ordering) @param timestamp the timestamp @param value the value.
-         * @param pos position (unused, for sorting tie-break ordering) @param timestamp the timestamp @param value the value
+         * Stores one data point's timestamp and value, to be ranked for percentile calculations.
+         *
+         * @param pos currently unused, kept for the historical signature; ordering comes from
+         *            {@link ComparPercentElemen}
+         * @param timestamp seconds since epoch of the sampled point
+         * @param value sampled value; NaN sorts below every finite value
          */
         PercentElem(int pos, long timestamp, double value) {
             this.timestamp = timestamp;
@@ -306,6 +339,10 @@ public abstract class Variable {
 
     /** The sort used by rrdtool for percent, where NaN &lt; -INF &lt; finite values &lt; INF */
     static final class ComparPercentElemen implements Comparator<PercentElem>, Serializable {
+
+        /** Creates a comparator; no state is held between comparisons. */
+        ComparPercentElemen() {}
+
         @Override
         public int compare(PercentElem arg0, PercentElem arg1) {
             if (Double.isNaN(arg0.value) && Double.isNaN(arg1.value))
@@ -329,18 +366,32 @@ public abstract class Variable {
         /** Whether to include NaN values in calculation */
         private final boolean withNaN;
 
-        /** PERCENTILE. */
+        /**
+         * Creates a percentile calculation.
+         *
+         * @param percentile rank to report, 0 for the smallest point through 100 for the largest
+         * @param withNaN whether gap entries take part in the ranking; being ranked below every
+         *                finite point, they push the reported value up when included
+         */
         protected PERCENTILE(float percentile, boolean withNaN) {
             this.percentile = percentile;
             this.withNaN = withNaN;
         }
 
-        /** PERCENTILE. */
+        /**
+         * Creates a percentile calculation that lets gap entries count in the ranking.
+         *
+         * @param percentile rank to report, 0 for the smallest point through 100 for the largest
+         */
         public PERCENTILE(double percentile) {
             this((float) percentile, true);
         }
 
-        /** PERCENTILE. */
+        /**
+         * Creates a percentile calculation that lets gap entries count in the ranking.
+         *
+         * @param percentile rank to report, 0 for the smallest point through 100 for the largest
+         */
         public PERCENTILE(float percentile) {
             this(percentile, true);
         }
@@ -368,16 +419,23 @@ public abstract class Variable {
             return new Value(0, Double.NaN);
         }
     }
-    /** PERCENTILENAN class. */
-
+    /** Percentile calculation that leaves gap entries out of the ranking. */
     public static class PERCENTILENAN extends PERCENTILE {
 
-        /** PERCENTILENAN. */
+        /**
+         * Creates a percentile calculation that ignores gap entries.
+         *
+         * @param percentile rank to report, 0 for the smallest point through 100 for the largest
+         */
         public PERCENTILENAN(float percentile) {
             super(percentile, false);
         }
 
-        /** PERCENTILENAN. */
+        /**
+         * Creates a percentile calculation that ignores gap entries.
+         *
+         * @param percentile rank to report, 0 for the smallest point through 100 for the largest
+         */
         public PERCENTILENAN(double percentile) {
             super((float) percentile, false);
         }
@@ -385,6 +443,7 @@ public abstract class Variable {
 
     /** Calculate the slop of the least squares line. */
     public static class LSLSLOPE extends Variable {
+        /** Creates a selector for the slope of a least squares line, in units per interval. */
         public LSLSLOPE() {}
 
         @Override
@@ -421,6 +480,7 @@ public abstract class Variable {
 
     /** Calculate the y-intercept of the least squares line. */
     public static class LSLINT extends Variable {
+        /** Creates a selector for the y-intercept of a least squares line. */
         public LSLINT() {}
 
         @Override
@@ -459,6 +519,7 @@ public abstract class Variable {
 
     /** Calculate the correlation coefficient of the least squares line. */
     public static class LSLCORREL extends Variable {
+        /** Creates a selector for the correlation coefficient of a least squares line. */
         public LSLCORREL() {}
 
         @Override

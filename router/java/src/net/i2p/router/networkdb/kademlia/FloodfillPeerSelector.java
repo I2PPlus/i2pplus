@@ -88,6 +88,8 @@ public class FloodfillPeerSelector extends PeerSelector {
 
     /**
      * FloodfillPeerSelector.
+     * @param ctx the router context
+     * @param facade the network database to select peers from
      */
     public FloodfillPeerSelector(RouterContext ctx, KademliaNetworkDatabaseFacade facade) {
         super(ctx);
@@ -251,8 +253,10 @@ public class FloodfillPeerSelector extends PeerSelector {
      *  Returns new list, may be modified.
      *
      *  @param key the ROUTING key (NOT the original key)
+     *  @param howMany the maximum number of peers to return
      *  @param toIgnore can be null
      *  @param kbuckets now unused
+     *  @return the selected peers, ordered best first, never null
      */
     List<Hash> selectFloodfillParticipants(Hash key, int howMany, Set<Hash> toIgnore, KBucketSet<Hash> kbuckets) {
         if (toIgnore == null) {toIgnore = Collections.singleton(_context.routerHash());}
@@ -367,9 +371,19 @@ public class FloodfillPeerSelector extends PeerSelector {
 
     /**
      *  Classification result for floodfill peer selection.
+     *
      *  @since 0.9.71+
      */
-    public enum PeerClass { GOOD, OK, BAD, UNKNOWN }
+    public enum PeerClass {
+        /** Fresh database response time and no recent failures. */
+        GOOD,
+        /** No recent failures, but outside the {@link #GOOD} thresholds. */
+        OK,
+        /** Fails an eligibility gate, or has recent failures. */
+        BAD,
+        /** No database history yet, so the peer cannot be judged. */
+        UNKNOWN
+    }
 
     /**
      *  Byte count matched when fingerprinting a peer for same-subnet

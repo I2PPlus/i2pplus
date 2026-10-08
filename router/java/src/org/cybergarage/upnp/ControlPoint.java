@@ -833,7 +833,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      *  Subscribe to a service, renewing an existing subscription if there is one.
      *
-     *  @param service the service to subscribe to
+     *  @param service the UPnP service whose subscription is being renewed to subscribe to
      *  @param timeout the requested lifetime in seconds
      *  @return true if successful
      */
@@ -861,7 +861,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      *  Subscribe to a service with an infinite lifetime.
      *
-     *  @param service the service to subscribe to
+     *  @param service the UPnP service whose subscription is being renewed to subscribe to
      *  @return true if successful
      */
     public boolean subscribe(Service service) {
@@ -871,7 +871,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      *  Renew an existing subscription to a service.
      *
-     *  @param service the service
+     *  @param service the UPnP service whose subscription is being renewed
      *  @param uuid the subscription ID
      *  @param timeout the requested lifetime in seconds
      *  @return true if successful
@@ -894,7 +894,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      *  Renew an existing subscription to a service with an infinite lifetime.
      *
-     *  @param service the service
+     *  @param service the UPnP service whose subscription is being renewed
      *  @param uuid the subscription ID
      *  @return true if successful
      */
@@ -905,7 +905,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      *  Check whether this control point holds a subscription to a service.
      *
-     *  @param service the service
+     *  @param service the UPnP service whose subscription is being renewed
      *  @return true if subscribed
      */
     public boolean isSubscribed(Service service) {
@@ -916,7 +916,7 @@ public class ControlPoint implements HTTPRequestListener {
     /**
      *  Cancel a subscription to a service.
      *
-     *  @param service the service
+     *  @param service the UPnP service whose subscription is being renewed
      *  @return true if successful
      */
     public boolean unsubscribe(Service service) {
