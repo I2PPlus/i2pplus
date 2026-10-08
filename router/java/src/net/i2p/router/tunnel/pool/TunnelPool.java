@@ -2238,7 +2238,7 @@ public class TunnelPool {
 
     /**
      *  How many tunnels could still be advertised right now, on the same bar
-     *  {@link #selectLeaseTunnels} applies.
+     *  {@code selectLeaseTunnels} applies, matching the wording of the sibling prune path.
      *
      *  @param tunnels the pool's tunnels
      *  @param toRemove already-scheduled prunes, excluded
@@ -3464,7 +3464,7 @@ public class TunnelPool {
     /**
      *  Name the hops of a failed tunnel so a data-phase failure is attributable.
      *
-     *  <p>{@link TunnelInfo#toString()} identifies the tunnel only by nickname,
+     *  <p>{@code TunnelInfo#toString()} identifies the tunnel only by nickname,
      *  which for a client tunnel is the destination nickname — so every soft
      *  failure in a pool looked identical and there was no way to tell whether
      *  one peer was failing repeatedly or the failures were spread across the

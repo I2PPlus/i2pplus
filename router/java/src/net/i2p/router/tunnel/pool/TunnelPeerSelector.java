@@ -2395,7 +2395,6 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  cannot disagree with this ladder.
      *
      *  @param ctx the router context
-     *  @param buildSuccess ignored; retained for source compatibility
      *  @return activity window in milliseconds
      *  @since 0.9.71+
      */

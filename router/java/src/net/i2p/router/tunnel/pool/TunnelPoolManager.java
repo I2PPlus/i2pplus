@@ -978,7 +978,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      *  already in use, and a peer that never answers produces no reply to
      *  blame. This job supplies that missing signal by pre-connecting to a
      *  bounded slice and letting
-     *  {@link TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
+     *  {@code TunnelPeerSelector.PreConnectFailJob} demote whatever fails.
      *
      *  <p>Sweep, pause, sweep: each pass probes at most
      *  {@link #PROBE_BATCH} peers and then waits {@link #PROBE_INTERVAL}, so the

@@ -208,7 +208,8 @@ public class ProfileOrganizer {
      * Average peer test response time across fast peers with data, computed
      * during each reorganize.  Used by {@link PeerProfile#recalculateLowLatency()}
      * to tighten the low-latency threshold to 1.5× the cohort average when the
-     * fast tier has sufficient data ({@value ClientPeerSelector#CROSS_POOL_DIVERSITY_THRESHOLD}).
+     * fast tier has sufficient data
+     * ({@value net.i2p.router.tunnel.pool.ClientPeerSelector#CROSS_POOL_DIVERSITY_THRESHOLD}).
      *
      * @since 0.9.71+
      */
@@ -3336,9 +3337,10 @@ public class ProfileOrganizer {
      *  <p>This loop is the reason the peer-selection callers may size a fixed-capacity
      *  {@link net.i2p.util.ArraySet} to exactly the number of peers they asked for:
      *  <ul>
-     *  <li>{@link ClientPeerSelector} builds four fallback sets as
+     *  <li>{@link net.i2p.router.tunnel.pool.ClientPeerSelector} builds four fallback sets as
      *      {@code new ArraySet<>(needed)} and passes {@code needed} as {@code howMany}.
-     *  <li>{@link ExploratoryPeerSelector} builds {@code new ArraySet<>(1)} and asks for one peer.
+     *  <li>{@link net.i2p.router.tunnel.pool.ExploratoryPeerSelector} builds
+     *      {@code new ArraySet<>(1)} and asks for one peer.
      *  </ul>
      *  An {@link net.i2p.util.ArraySet} throws {@code SetFullException} once written past its
      *  capacity, so if this loop ever wrote more than {@code howMany} entries those callers
@@ -3625,7 +3627,7 @@ public class ProfileOrganizer {
      *  {@link #MAX_LIFETIME_FAILURE_RATIO}.  Between
      *  {@link #SOFT_FAILURE_PENALTY_THRESHOLD} and the hard cap, peers are not
      *  excluded but receive a selection priority penalty (handled by the caller
-     *  via {@link #getExcessiveFailurePenalty(Hash)}).
+     *  via {@link #getExcessiveFailurePenalty(Hash, PeerProfile)}).
      *  <p>
      *  The blame system (tunnelFailed()) only increments statistics — it never
      *  bans.  Without this check, peers with 200+ failures keep getting selected

@@ -160,9 +160,6 @@ public class RrdDefTemplate extends XmlTemplate {
      * org.rrd4j.core.XmlTemplate#setVariable(String, String) setVariable()} methods. Once this
      * method returns, all placeholder values are preserved. To remove them all, call inherited
      * {@link org.rrd4j.core.XmlTemplate#clearValues() clearValues()} method explicitly.
-     *
-     * <p>
-     *
      * @return RrdDef object constructed from the underlying XML template, with all placeholders
      *     replaced with real values. This object can be passed to the constructor of the new RrdDb
      *     object.

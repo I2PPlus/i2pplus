@@ -208,8 +208,6 @@ public class Header implements RrdUpdater<Header> {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * <p>Copies object's internal state to another Header object.
      */
     public void copyStateTo(Header header) throws IOException {

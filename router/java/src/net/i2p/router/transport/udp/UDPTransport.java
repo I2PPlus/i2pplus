@@ -1947,7 +1947,6 @@ public class UDPTransport extends TransportImpl {
      * For /peers UI only. Not a public API, not for external use.
      *
      * @return not a copy, do not modify
-     * @return not a copy, do not modify
      * @since 0.9.31
      */
     public Collection<PeerState> getPeers() {

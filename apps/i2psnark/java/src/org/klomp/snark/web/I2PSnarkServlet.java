@@ -6655,7 +6655,7 @@ public class I2PSnarkServlet extends BasicServlet {
  * Icon name registered for a lower-cased path's file extension.
  *
  * <p>A single map lookup replaces a scan of every registered suffix. The two
- * forms agree because no key in {@link IconMaps#SUFFIX_ICON_MAP} is a suffix
+ * forms agree because no key in {@code IconMaps.SUFFIX_ICON_MAP} is a suffix
  * of another, so at most one key can match and it must start at the path's
  * last dot - exactly the substring taken here. A dotless path matches nothing
  * either way, and a dot-leading name such as ".exe" yields itself.

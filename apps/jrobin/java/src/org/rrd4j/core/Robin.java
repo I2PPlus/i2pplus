@@ -75,8 +75,6 @@ public interface Robin extends RrdUpdater<Robin> {
     int getSize();
 
     /**
-     * {@inheritDoc}
-     *
      * <p>Copies object's internal state to another Robin object.
      */
     void copyStateTo(Robin other) throws IOException;

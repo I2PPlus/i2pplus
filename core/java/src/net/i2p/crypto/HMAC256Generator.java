@@ -136,7 +136,7 @@ public final class HMAC256Generator extends HMACGenerator {
      *  Per the JCA contract, {@link Mac#reset()} "resets this Mac object to
      *  the state it was in when previously initialized via a call to
      *  init(Key)", so it clears the message state without re-running the
-     *  ipad/opad key schedule that {@link Mac#init(javax.crypto.Key)} does.
+     *  ipad/opad key schedule that {@link Mac#init(java.security.Key)} does.
      *  That is all a pooled Mac needs, because every caller of acquire() must
      *  init() before use, and engineInit() overwrites all 64 bytes of both
      *  k_ipad and k_opad, so the previous key schedule cannot leak into the

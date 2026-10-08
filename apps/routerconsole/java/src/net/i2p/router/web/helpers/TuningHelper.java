@@ -35,7 +35,8 @@ public class TuningHelper extends HelperBase {
 
     // human-readable labels for raw param names
     /** Param name to human label. Package-private so the conformance test can
-     *  verify the two maps stay in step; see {@link TuningHelperParamConformanceTest}. */
+     *  verify the two maps stay in step; see {@code TuningHelperParamConformanceTest},
+     *  which lives in the test tree and so is not on the javadoc classpath. */
     static final Map<String, String> DISPLAY_NAMES = new HashMap<>();
     static {
         DISPLAY_NAMES.put("ACK_FREQUENCY", _x("Acknowledgement Frequency"));

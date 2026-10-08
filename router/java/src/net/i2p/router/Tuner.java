@@ -210,7 +210,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /**
      * Stage a thread belongs to, by name.  First match in {@link #CPU_STAGES}
      * order wins, and it is the prefix, not the full name, that names the stat
-     * and the {@link StageCpu} entry.
+     * and the {@code StageCpu} entry.
      *
      * @param threadName a live thread's name, never null
      * @return index into {@link #CPU_STAGES}, or {@link ThreadCpuTable#NO_STAGE}
@@ -5847,7 +5847,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      *
      * <p>Increases when push time is high and CPU/system have headroom.
      * Decreases when push time is low and no heavy transit. Supports
-     * dynamic thread addition/removal via {@link PacketHandler#adjustThreads()}.
+     * dynamic thread addition/removal via
+     * {@link net.i2p.router.transport.udp.PacketHandler#adjustThreads()}.
      *
      * @since 0.9.70+
      */
@@ -7878,7 +7879,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * default from this value and force-applies it on the first tick, so reporting
          * 0 here would clamp the default to {@code _min} (16) and silently cripple a
          * healthy tracker to 16 concurrent streams. Instead we report the top of the
-         * working range ({@link ConnectionOptions#getMaxMaxConcurrentStreams()}):
+         * working range ({@code ConnectionOptions#getMaxMaxConcurrentStreams()}):
          * first tick then sees initial == runtime == ceiling and the Tuner stays
          * unarmed until real saturation produces a target below the ceiling.
          *

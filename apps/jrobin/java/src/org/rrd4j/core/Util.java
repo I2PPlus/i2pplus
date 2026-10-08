@@ -289,7 +289,6 @@ public class Util {
      *
      * @param atStyleTimeSpec at-style time specification. For the complete explanation of the
      *     syntax allowed see RRDTool's <code>rrdfetch</code> man page.
-     *     <p>
      * @return timestamp in seconds since epoch.
      */
     public static long getTimestamp(String atStyleTimeSpec) {
@@ -307,10 +306,8 @@ public class Util {
      *
      * @param atStyleTimeSpec1 Starting at-style time specification. For the complete explanation of
      *     the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
-     *     <p>
      * @param atStyleTimeSpec2 Ending at-style time specification. For the complete explanation of
      *     the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
-     *     <p>
      * @return An array of two longs representing starting and ending timestamp in seconds since
      *     epoch.
      */

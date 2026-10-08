@@ -2013,7 +2013,8 @@ class Connection {
      * worst-case retransmit budget, measured from CREATION?
      *
      * <p>The worst case is one transmission per RTO for the full per-packet
-     * retransmit budget ({@code maxResends * maxRto}). Anchoring the budget at
+     * retransmit budget, which the caller computes from the configured
+     * {@code maxResends * maxRto} before calling. Anchoring the budget at
      * the packet's creation (instead of its last transmission) gives a fixed
      * wall-clock deadline that retransmission activity cannot extend: an
      * established connection in resume mode keeps retransmitting a
@@ -2023,8 +2024,9 @@ class Connection {
      * retried forever. An exact-inequality comparison keeps a live path on the
      * budget boundary from being killed.
      *
-     * @param maxResends configured per-packet retransmit budget (&gt; 0)
-     * @param maxRto configured maximum single retransmit timeout in ms (&gt; 0)
+     * @param budgetMs the worst-case in-flight budget in ms, computed by the
+     *                caller as the retransmit budget times the maximum single
+     *                retransmit timeout; {@code <= 0} disables the check
      * @param now current time in ms since epoch
      * @param createdOn creation time of the oldest packet, in ms since epoch
      *                  (PacketLocal.getCreatedOn()), or &lt;= 0 if unknown

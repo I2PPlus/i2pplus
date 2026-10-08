@@ -110,8 +110,6 @@ public class ArcState implements RrdUpdater<ArcState> {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * <p>Copies object's internal state to another ArcState object.
      */
     public void copyStateTo(ArcState arcState) throws IOException {

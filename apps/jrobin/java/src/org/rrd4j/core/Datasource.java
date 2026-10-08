@@ -309,8 +309,6 @@ public class Datasource implements RrdUpdater<Datasource> {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * <p>Copies object's internal state to another Datasource object.
      */
     public void copyStateTo(Datasource datasource) throws IOException {

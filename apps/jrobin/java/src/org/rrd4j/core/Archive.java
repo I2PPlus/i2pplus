@@ -415,8 +415,6 @@ public class Archive implements RrdUpdater<Archive> {
     }
 
     /**
-     * {@inheritDoc}
-     *
      * <p>Copies object's internal state to another Archive object.
      */
     public void copyStateTo(Archive arc) throws IOException {

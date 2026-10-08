@@ -183,8 +183,6 @@ public abstract class RrdBackendFactory implements Closeable {
      *
      * <p>It also clear the list of actives factories and set it to the default factory.
      *
-     * <p>
-     *
      * @deprecated Uses active factory instead
      * @param factoryName Name of the default factory..
      */

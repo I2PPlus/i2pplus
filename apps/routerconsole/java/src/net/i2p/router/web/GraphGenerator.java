@@ -533,6 +533,26 @@ public class GraphGenerator implements Runnable, ClientApp {
     private static final String staleAgeSinceLastWriteAttach = "since the listener attached";
 
     /**
+     *  Decide whether a listener is stalled, and why, assuming the coalesce sweep has
+     *  run recently enough to have fed these rates.
+     *
+     *  @param detached {@link GraphListener#isDetached()} - the RRD is closed
+     *  @param registered {@link GraphListener#isRegistered()} - the Rate still points at the listener
+     *  @param lastUpdateSuccess wall-clock ms of the last successful write, or 0 if none
+     *  @param now current wall-clock ms
+     *  @param startedMs wall-clock ms when graphing began
+     *  @param ratePeriod the rate's period in ms
+     *  @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
+     *  @see #classifyStaleness(boolean, boolean, long, long, long, long, boolean)
+     *  @since 0.9.71+
+     */
+    static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
+                                        long now, long startedMs, long ratePeriod) {
+        return classifyStaleness(detached, registered, lastUpdateSuccess, now, startedMs,
+                                 ratePeriod, false);
+    }
+
+    /**
      *  Decide whether a listener is stalled, and why.
      *
      *  <p>Pure decision logic, split out of the sync task so the thresholds can be pinned
@@ -549,12 +569,6 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @return {@link StaleCause#OK} when there is nothing to report, otherwise the cause
      *  @since 0.9.71+
      */
-    static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
-                                        long now, long startedMs, long ratePeriod) {
-        return classifyStaleness(detached, registered, lastUpdateSuccess, now, startedMs,
-                                 ratePeriod, false);
-    }
-
     static StaleCause classifyStaleness(boolean detached, boolean registered, long lastUpdateSuccess,
                                         long now, long startedMs, long ratePeriod,
                                         boolean coalesceStalled) {
