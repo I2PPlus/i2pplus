@@ -154,10 +154,16 @@ function attach(el, container) {
  */
 function setVisible(parts, visible) {
   if (!parts) { return; }
-  parts.crosshair.hidden = !visible;
-  parts.readout.hidden = !visible;
-  for (const m of parts.marks) { m.hidden = !visible; }
-  for (const l of parts.levels) { l.hidden = !visible; }
+  // Guarded per member, not just per object. This is the hide path: it runs on pointer-leave
+  // and on scroll and resize, so a throw here surfaces in the console as an uncaught TypeError
+  // and, worse, leaves the overlay stuck on screen because the hides after the missing member
+  // never run. An element that is absent is not a reason to abandon the rest.
+  for (const key of ["crosshair", "readout"]) {
+    const el = parts[key];
+    if (el) { el.hidden = !visible; }
+  }
+  for (const m of parts.marks || []) { m.hidden = !visible; }
+  for (const l of parts.levels || []) { l.hidden = !visible; }
 }
 
 /**
@@ -376,11 +382,13 @@ export function placeOverlay(parts, img, meta, hit) {
   const plotTop = m.rect.top - m.originY + top * m.scaleY;
   const plotHeight = height * m.scaleY;
 
-  parts.crosshair.hidden = false;
-  // translate3d keeps the move on the compositor: no layout, no repaint of the graph.
-  parts.crosshair.style.height = Math.round(plotHeight) + "px";
-  parts.crosshair.style.transform =
-    "translate3d(" + Math.round(anchorX) + "px," + Math.round(plotTop) + "px,0)";
+  if (parts.crosshair) {
+    parts.crosshair.hidden = false;
+    // translate3d keeps the move on the compositor: no layout, no repaint of the graph.
+    parts.crosshair.style.height = Math.round(plotHeight) + "px";
+    parts.crosshair.style.transform =
+      "translate3d(" + Math.round(anchorX) + "px," + Math.round(plotTop) + "px,0)";
+  }
 
   // One mark and one level line per series, in the same order as the values in the readout, so
   // every number reported has both a point and a level pointing at it.
