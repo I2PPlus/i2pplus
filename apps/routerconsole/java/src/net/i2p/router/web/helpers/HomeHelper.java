@@ -1,9 +1,11 @@
 package net.i2p.router.web.helpers;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import net.i2p.data.DataHelper;
@@ -327,7 +329,40 @@ public class HomeHelper extends HelperBase {
         String config = _context.getProperty(prop, dflt);
         Collection<App> apps = buildApps(_context, config);
         if (toAdd != null) {apps.addAll(toAdd);}
+        if (PROP_FAVORITES.equals(prop)) {apps = hideUnreachable(apps);}
         return renderApps(apps);
+    }
+
+    /**
+     *  Drop sites that are gone from the Sites of Interest listing.
+     *
+     *  <p>Applies only to the favourites shown on the home and sitemap pages. The config
+     *  table is left complete so a link that is merely down can still be seen and removed.
+     *
+     *  <p>A site is dropped when the naming service cannot resolve it, or when the addressbook
+     *  checker's last probe of it failed. A site that resolves but has not been probed yet is
+     *  kept, so a cold results file does not empty the page. Links that are not I2P names -
+     *  clearnet, and the console's own paths - are never dropped, since neither source can
+     *  judge them.
+     *
+     *  @param apps the configured links
+     *  @return those that should still be shown
+     *  @since 0.9.71+
+     */
+    private Collection<App> hideUnreachable(Collection<App> apps) {
+        if (apps == null || apps.isEmpty()) { return apps; }
+        Map<String, Boolean> probed = HostCheckStatus.probed(_context.getRouterDir());
+        List<App> keep = new ArrayList<>(apps.size());
+        for (App app : apps) {
+            String host = HostCheckStatus.hostFromUrl(app.url);
+            if (host == null || !HostCheckStatus.isI2pHost(host)) {
+                keep.add(app);
+                continue;
+            }
+            boolean inAddressbook = _context.namingService().lookup(host) != null;
+            if (!HostCheckStatus.isDown(host, inAddressbook, probed)) { keep.add(app); }
+        }
+        return keep;
     }
 
     private String configTable(String prop, String dflt) {
