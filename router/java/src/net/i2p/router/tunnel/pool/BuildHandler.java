@@ -712,14 +712,15 @@ public class BuildHandler implements Runnable {
      * Blocking call to handle a single inbound reply
      */
     private void handleReply(TunnelBuildReplyMessage msg, PooledTunnelCreatorConfig cfg, long delay) {
-        // From the config's own creation time, not from its expiry minus ten minutes.
-        // The expiry carries the tunnel stagger - BuildExecutor's own note at its expiry
-        // bookkeeping says so, and that code uses creation time for exactly this reason -
-        // so subtracting a flat ten minutes yielded dispatch + stagger and under-reported every
-        // build by up to 300ms per second of stagger, clamping to zero once stagger exceeded the
-        // real duration. Slow builds were therefore recorded as fast ones, which is backwards for
-        // a stat whose whole purpose is finding them. getCreationTime() is stamped when the
-        // config is built, immediately before dispatch.
+        // From the config's own creation time, not from its expiry minus ten minutes. The expiry
+        // carries the tunnel stagger - BuildExecutor's own note in its expiry bookkeeping says
+        // so, and that code uses creation time for exactly this reason. Subtracting a flat ten
+        // minutes therefore yielded dispatch + stagger, under-reporting every build by the whole
+        // stagger - up to 300 seconds - and clamping to zero as soon as the stagger exceeded the
+        // real duration. Measured across 1809 replies that was not a rare tail: the stat recorded
+        // zero for every one, so "Response time for a successful client tunnel build" carried no
+        // information at all, and the slow-build marker derived from it could never fire.
+        // getCreationTime() is stamped when the config is built, immediately before dispatch.
         long requestedOn = cfg.getCreationTime();
         long rtt = System.currentTimeMillis() - requestedOn;
         if (rtt < 0) {rtt = 0;}
