@@ -111,4 +111,89 @@ class RouterInfoRefresher {
      *  @since 0.9.72
      */
     int promotedStaleCount() { return _promotedStale; }
+
+    /** Most peers whose RouterInfo refresh may be requested in one drain. */
+    static final int MAX_ADDRESS_REFRESHES = 16;
+
+    /** Minimum gap between drains, so repeated reorgs cannot stack requests. */
+    static final long ADDRESS_REFRESH_MIN_INTERVAL_MS = 60 * 1000L;
+
+    /**
+     *  Peers whose promotion was held for want of a usable address, awaiting a lookup.
+     *
+     *  <p>Enqueued from the promotion scan, which runs under the reorganize write lock, and
+     *  drained after that lock is released, so adds and the poll can overlap across threads.
+     *  The methods below are therefore synchronized: the critical sections are a single add or
+     *  a bounded poll, with no network work and no callbacks inside, so the lock is cheap and
+     *  carries no ordering relationship with the reorganize lock.
+     */
+    private final java.util.ArrayDeque<net.i2p.data.Hash> _addressRefreshQueue =
+        new java.util.ArrayDeque<net.i2p.data.Hash>();
+
+    /** Lookups requested and dropped because the queue or the interval was full. */
+    private int _addressRefreshDropped;
+
+    /** When the last drain ran. */
+    private long _lastAddressRefreshDrain;
+
+    /**
+     *  Ask for a RouterInfo lookup for a peer held out of the tiers for want of a usable
+     *  address.
+     *
+     *  <p>A held peer cannot be refreshed directly - that is precisely why it is held, since
+     *  it has no address to send to - so the only way to re-qualify it is an iterative lookup
+     *  via other routers. This only records the request; {@link #drainAddressRefreshes}
+     *  issues it, because the scan that fills this queue runs under the reorganize write lock
+     *  and must not do network work there.
+     *
+     *  <p>Bounded by {@link #MAX_ADDRESS_REFRESHES}, so a scan over thousands of profiles
+     *  cannot enqueue thousands of lookups.
+     *
+     *  @param peer the held peer
+     *  @return true if the request was recorded
+     */
+    synchronized boolean requestAddressRefresh(net.i2p.data.Hash peer) {
+        if (peer == null || _addressRefreshQueue.size() >= MAX_ADDRESS_REFRESHES) {
+            _addressRefreshDropped++;
+            return false;
+        }
+        if (_addressRefreshQueue.contains(peer)) { return false; }
+        _addressRefreshQueue.add(peer);
+        return true;
+    }
+
+    /**
+     *  Whether enough time has passed since the last drain to issue another batch.
+     *
+     *  @param now current time in milliseconds
+     *  @return true if a drain may run
+     */
+    boolean mayDrainAddressRefreshes(long now) {
+        // Zero means "never drained". Without this test the first drain is refused for the
+        // first interval after startup, because a zero sentinel reads as a real timestamp.
+        if (_lastAddressRefreshDrain == 0) { return true; }
+        return now - _lastAddressRefreshDrain >= ADDRESS_REFRESH_MIN_INTERVAL_MS;
+    }
+
+    /**
+     *  Hand over the queued peers, oldest first, clearing the queue.
+     *
+     *  @param now current time in milliseconds
+     *  @return the peers to look up, possibly empty
+     */
+    synchronized java.util.List<net.i2p.data.Hash> takeAddressRefreshBatch(long now) {
+        java.util.List<net.i2p.data.Hash> batch =
+            new java.util.ArrayList<net.i2p.data.Hash>(MAX_ADDRESS_REFRESHES);
+        while (!_addressRefreshQueue.isEmpty() && batch.size() < MAX_ADDRESS_REFRESHES) {
+            batch.add(_addressRefreshQueue.poll());
+        }
+        _lastAddressRefreshDrain = (now == 0) ? 1 : now;
+        return batch;
+    }
+
+    /** Peers dropped because the queue or the interval was full. */
+    synchronized int getAddressRefreshDropped() { return _addressRefreshDropped; }
+
+    /** Peers waiting for a lookup. */
+    synchronized int getAddressRefreshPending() { return _addressRefreshQueue.size(); }
 }

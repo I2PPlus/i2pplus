@@ -1903,7 +1903,7 @@ public class ProfileOrganizer {
             purgeStaleProfileFiles();
 
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -2702,7 +2702,7 @@ public class ProfileOrganizer {
             if (_log.shouldInfo())
                 _log.info("Evicted " + toRemove.size() + " stale profiles (not in netdb) from RAM");
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -3937,6 +3937,7 @@ public class ProfileOrganizer {
         // promotes the next equally-stale one, which is the treadmill this gate stops.
         if (hasNoUsableTransport(peer)) {
             _context.statManager().addRateData("tunnel.promotionHeldNoAddress", 1);
+            _refresher.requestAddressRefresh(peer);
             if (_log.shouldDebug())
                 _log.debug("Holding promotion for [" + peer.toBase32().substring(0, 6) +
                            "]: RouterInfo has no usable transport address");
@@ -4230,15 +4231,25 @@ public class ProfileOrganizer {
         // otherwise re-read router statistics for every candidate.
         double buildSuccess = getTunnelBuildSuccess();
 
+        // Why the tiers came up short. Short because there were no candidates is a discovery
+        // problem; short because every candidate was gated is a policy problem, and the two
+        // need different fixes. From outside they are indistinguishable, so count both.
+        int examined = 0;
+        int alreadyTiered = 0;
+        int heldNoAddress = 0;
+
         for (PeerProfile profile : _strictCapacityOrder) {
             if (_fastPeers.size() >= fastTarget && _highCapacityPeers.size() >= highCapTarget)
                 break;
 
             Hash peer = profile.getPeer();
+            examined++;
             boolean wasFast = _fastPeers.containsKey(peer);
             boolean wasHighCap = _highCapacityPeers.containsKey(peer);
-            if (wasFast && wasHighCap)
+            if (wasFast && wasHighCap) {
+                alreadyTiered++;
                 continue;
+            }
 
             // Use live profile from _notFailingPeers, which has current
             // capacityBonus, capacityValue, etc. — the TreeSet's copy may be stale
@@ -4264,6 +4275,46 @@ public class ProfileOrganizer {
                 }
             }
         }
+
+        if (_fastPeers.size() < fastTarget || _highCapacityPeers.size() < highCapTarget) {
+            _context.statManager().addRateData("peermanager.tiersUnderfilled", 1);
+            if (_log.shouldInfo())
+                _log.info(describeTierFill("promoteToFillTiers",
+                                           _fastPeers.size(), fastTarget,
+                                           _highCapacityPeers.size(), highCapTarget,
+                                           examined, alreadyTiered, heldNoAddress));
+        }
+    }
+
+    /**
+     *  Summarise why the selection tiers could not be filled.
+     *
+     *  <p>Short because there were no candidates left to try is a discovery problem; short
+     *  because every candidate was gated out is a policy problem. Those call for different
+     *  fixes, and from outside the reorg they look identical, so the breakdown is reported
+     *  rather than inferred.
+     *
+     *  @param where the caller, for attribution
+     *  @param fast the fast-tier size achieved
+     *  @param fastTarget the fast-tier size wanted
+     *  @param highCap the high-capacity-tier size achieved
+     *  @param highCapTarget the high-capacity-tier size wanted
+     *  @param examined candidates walked
+     *  @param alreadyTiered candidates skipped because already in both tiers
+     *  @param heldNoAddress candidates that cleared every gate except having no usable address
+     *  @return a single line naming the shortfall and its causes
+     *  @since 0.9.71+
+     */
+    static String describeTierFill(String where, int fast, int fastTarget,
+                                   int highCap, int highCapTarget,
+                                   int examined, int alreadyTiered, int heldNoAddress) {
+        return "Tiers underfilled in " + where
+               + ": fast=" + fast + "/" + fastTarget
+               + " highCap=" + highCap + "/" + highCapTarget
+               + " examined=" + examined
+               + " alreadyTiered=" + alreadyTiered
+               + " heldNoAddress=" + heldNoAddress
+               + " (heldNoAddress>0 means a policy gate, examined==0 means no candidates)";
     }
 
     /**
@@ -4287,7 +4338,7 @@ public class ProfileOrganizer {
                     promoteToFillTiers();
                 }
             } finally {
-                releaseWriteLock();
+                releaseWriteLockAndRefresh();
             }
         }
     }
@@ -4311,7 +4362,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4335,7 +4386,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4363,7 +4414,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4397,7 +4448,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4457,7 +4508,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4481,7 +4532,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4546,9 +4597,54 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
+
+    /**
+     *  Release the reorganize write lock, then refresh peers held out of the tiers.
+     *
+     *  <p>The single exit point for every path that runs a tier refill under the lock. Doing
+     *  the refresh here rather than at each call site is deliberate: a call site that forgot
+     *  it would leave the queue to fill and never drain, and there were ten of them. It has to
+     *  be here, and not inside {@link #promoteToFillTiers}, because a refill runs with the
+     *  lock held and issuing a lookup is network work that must never run under it.
+     *
+     * @since 0.9.71+
+     */
+    private void releaseWriteLockAndRefresh() {
+        releaseWriteLock();
+        refreshHeldPeers();
+    }
+
+    /**
+     *  Issue RouterInfo lookups for peers held out of the tiers for want of a usable address.
+     *
+     *  <p>Called after the reorganize write lock is released. Doubly bounded - a per-drain
+     *  batch and a minimum interval between drains - so neither a large scan nor a burst of
+     *  demotions can turn this into a request flood.
+     *
+     * @since 0.9.71+
+     */
+    private void refreshHeldPeers() {
+        long now = _context.clock().now();
+        if (!_refresher.mayDrainAddressRefreshes(now)) { return; }
+        List<Hash> batch = _refresher.takeAddressRefreshBatch(now);
+        if (batch.isEmpty()) { return; }
+        for (Hash peer : batch) {
+            try {
+                _context.netDb().lookupRouterInfo(peer, null, null, ADDRESS_REFRESH_TIMEOUT_MS);
+            } catch (RuntimeException re) {
+                // a lookup that cannot be started is not worth aborting the batch over
+                _log.log(Log.WARN, "Could not refresh held peer [" +
+                          peer.toBase32().substring(0, 6) + "]", re);
+            }
+        }
+        _context.statManager().addRateData("tunnel.promotionRefreshIssued", batch.size());
+    }
+
+    /** Timeout for a RouterInfo lookup issued on behalf of a held peer. */
+    private static final long ADDRESS_REFRESH_TIMEOUT_MS = 30 * 1000L;
 
     /**
      * Batch-demote peers from fast/high-cap tiers under a single write lock.
@@ -4579,7 +4675,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4607,7 +4703,7 @@ public class ProfileOrganizer {
                 _log.info("Batch demoted " + removed + " of " + peers.size() + " peers from fast tier (kept in high-cap)");
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
@@ -4701,7 +4797,7 @@ public class ProfileOrganizer {
                 promoteToFillTiers();
             }
         } finally {
-            releaseWriteLock();
+            releaseWriteLockAndRefresh();
         }
     }
 
