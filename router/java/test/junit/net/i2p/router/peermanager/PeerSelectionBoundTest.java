@@ -1,6 +1,8 @@
-package net.i2p.router.peermanizer;
+package net.i2p.router.peermanager;
 
 import static net.i2p.router.peermanager.ProfileOrganizer.pickLowestPriority;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -10,7 +12,6 @@ import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.util.ArraySet;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -31,12 +32,6 @@ import org.junit.Test;
  * check it without a running router. It is pinned here instead, on {@link Hash} values only, so
  * the test needs no {@code RouterContext} and cannot be skipped the way a
  * {@code PeerProfile}-based test silently can.
- *
- * <p>Two toolchain notes, both load-bearing rather than stylistic. The method is reached through
- * a static import: under this compiler a qualified {@code ProfileOrganizer.pickLowestPriority(...)}
- * call from a same-package test fails to resolve the class at all, and the static import is what
- * makes it visible. And only one static import may be present — adding a second one for
- * {@code org.junit.Assert} breaks the first — so assertions go through {@link Assert} instead.
  *
  * @since 0.9.71+
  */
@@ -70,8 +65,8 @@ public class PeerSelectionBoundTest {
     public void picksNeverExceedHowMany() {
         Set<Hash> matches = new HashSet<>();
         int picked = pickLowestPriority(cands(5000), priorities(5000), HOW_MANY, matches);
-        Assert.assertEquals(HOW_MANY, picked);
-        Assert.assertEquals(HOW_MANY, matches.size());
+        assertEquals(HOW_MANY, picked);
+        assertEquals(HOW_MANY, matches.size());
     }
 
     /**
@@ -84,7 +79,7 @@ public class PeerSelectionBoundTest {
         int needed = 3;
         ArraySet<Hash> matches = new ArraySet<>(needed);
         pickLowestPriority(cands(5000), priorities(5000), needed, matches);
-        Assert.assertEquals(needed, matches.size());
+        assertEquals(needed, matches.size());
     }
 
     /** A capacity-1 set, as ExploratoryPeerSelector builds, asking for one peer. */
@@ -92,7 +87,7 @@ public class PeerSelectionBoundTest {
     public void doesNotOverflowACapacityOneArraySet() {
         ArraySet<Hash> matches = new ArraySet<>(1);
         pickLowestPriority(cands(200), priorities(200), 1, matches);
-        Assert.assertEquals(1, matches.size());
+        assertEquals(1, matches.size());
     }
 
     /** Asking for more peers than exist yields every candidate and no exception. */
@@ -101,8 +96,8 @@ public class PeerSelectionBoundTest {
         List<Hash> cands = cands(4);
         Set<Hash> matches = new HashSet<>();
         int picked = pickLowestPriority(cands, priorities(4), 50, matches);
-        Assert.assertEquals(4, picked);
-        Assert.assertEquals(new HashSet<>(cands), matches);
+        assertEquals(4, picked);
+        assertEquals(new HashSet<>(cands), matches);
     }
 
     /** A duplicate pick would defeat the point of the set and inflate the caller's count. */
@@ -110,7 +105,7 @@ public class PeerSelectionBoundTest {
     public void picksAreDistinct() {
         Set<Hash> matches = new HashSet<>();
         pickLowestPriority(cands(1000), priorities(1000), 8, matches);
-        Assert.assertEquals(8, matches.size());
+        assertEquals(8, matches.size());
     }
 
     /** Ties everywhere must not collapse the result or spin on one candidate. */
@@ -119,8 +114,8 @@ public class PeerSelectionBoundTest {
         float[] flat = new float[50];
         Set<Hash> matches = new HashSet<>();
         int picked = pickLowestPriority(cands(50), flat, 6, matches);
-        Assert.assertEquals(6, picked);
-        Assert.assertEquals(6, matches.size());
+        assertEquals(6, picked);
+        assertEquals(6, matches.size());
     }
 
     /** The chosen peers must be real candidates, not something invented by the loop. */
@@ -129,7 +124,7 @@ public class PeerSelectionBoundTest {
         Set<Hash> pool = new HashSet<>(cands(200));
         Set<Hash> matches = new HashSet<>();
         pickLowestPriority(cands(200), priorities(200), HOW_MANY, matches);
-        Assert.assertTrue(pool.containsAll(matches));
+        assertTrue(pool.containsAll(matches));
     }
 
     /** Lowest priority wins, which is the whole point of the method. */
@@ -141,8 +136,8 @@ public class PeerSelectionBoundTest {
         Hash lowest = cands.get(4);
         Set<Hash> matches = new HashSet<>();
         pickLowestPriority(cands, new float[] {5f, 4f, 3f, 2f, 1f}, 1, matches);
-        Assert.assertEquals(1, matches.size());
-        Assert.assertTrue("the lowest priority should win", matches.contains(lowest));
+        assertEquals(1, matches.size());
+        assertTrue("the lowest priority should win", matches.contains(lowest));
     }
 
     // ---- degenerate inputs --------------------------------------------------
@@ -150,31 +145,31 @@ public class PeerSelectionBoundTest {
     @Test
     public void askingForNothingPicksNothing() {
         Set<Hash> matches = new HashSet<>();
-        Assert.assertEquals(0, pickLowestPriority(cands(100), priorities(100), 0, matches));
-        Assert.assertTrue(matches.isEmpty());
+        assertEquals(0, pickLowestPriority(cands(100), priorities(100), 0, matches));
+        assertTrue(matches.isEmpty());
     }
 
     /** A negative request is nonsense but must not become an index error or a huge write. */
     @Test
     public void negativeHowManyPicksNothing() {
         Set<Hash> matches = new HashSet<>();
-        Assert.assertEquals(0, pickLowestPriority(cands(100), priorities(100), -5, matches));
-        Assert.assertTrue(matches.isEmpty());
+        assertEquals(0, pickLowestPriority(cands(100), priorities(100), -5, matches));
+        assertTrue(matches.isEmpty());
     }
 
     @Test
     public void emptyCandidatesPickNothing() {
         Set<Hash> matches = new HashSet<>();
-        Assert.assertEquals(0, pickLowestPriority(new ArrayList<Hash>(), new float[0], 3, matches));
-        Assert.assertTrue(matches.isEmpty());
+        assertEquals(0, pickLowestPriority(new ArrayList<Hash>(), new float[0], 3, matches));
+        assertTrue(matches.isEmpty());
     }
 
     @Test
     public void singleCandidateIsPicked() {
         Set<Hash> only = new HashSet<>(cands(1));
         Set<Hash> matches = new HashSet<>();
-        Assert.assertEquals(1, pickLowestPriority(new ArrayList<>(only), priorities(1), 3, matches));
-        Assert.assertEquals(only, matches);
+        assertEquals(1, pickLowestPriority(new ArrayList<>(only), priorities(1), 3, matches));
+        assertEquals(only, matches);
     }
 
     /**
@@ -189,8 +184,8 @@ public class PeerSelectionBoundTest {
         Set<Hash> matches = new HashSet<>();
         matches.add(best);
         int picked = pickLowestPriority(cands, priorities(10), 3, matches);
-        Assert.assertEquals("the pre-seeded best peer was already present", 2, picked);
-        Assert.assertEquals(3, matches.size());
+        assertEquals("the pre-seeded best peer was already present", 2, picked);
+        assertEquals(3, matches.size());
     }
 
     /**
@@ -204,13 +199,13 @@ public class PeerSelectionBoundTest {
                 int expected = Math.min(howMany, candidateCount);
                 String ctx = "howMany=" + howMany + " candidates=" + candidateCount;
                 Set<Hash> asHashSet = new HashSet<>();
-                Assert.assertEquals(ctx, expected,
+                assertEquals(ctx, expected,
                     pickLowestPriority(cands(candidateCount), priorities(candidateCount), howMany, asHashSet));
-                Assert.assertEquals(ctx, expected, asHashSet.size());
+                assertEquals(ctx, expected, asHashSet.size());
                 if (expected > 0) {
                     ArraySet<Hash> asArraySet = new ArraySet<>(expected);
                     pickLowestPriority(cands(candidateCount), priorities(candidateCount), howMany, asArraySet);
-                    Assert.assertEquals(ctx, expected, asArraySet.size());
+                    assertEquals(ctx, expected, asArraySet.size());
                 }
             }
         }
