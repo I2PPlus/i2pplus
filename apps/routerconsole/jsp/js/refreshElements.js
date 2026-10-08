@@ -167,6 +167,36 @@ function realizeVdom(vnode) {
 }
 
 /**
+ * A stable position key for an element: the chain of child indices below its
+ * nearest identified ancestor, or below the document root when it has none.
+ *
+ * <p>Used to pair a live element with the response element that stands in the
+ * same place. Pairing by index within the selector's match list was wrong on a
+ * page whose rows come and go: one tunnel appearing or closing shifted every
+ * match after it, so each cell was morphed against its neighbour's data and
+ * cells that had no measurement were written over cells that did. Keys only
+ * match when the structure genuinely lines up, so a drifted section is left
+ * alone for the page to repair wholesale instead of being silently corrupted.
+ *
+ * @param {Element} el - the element to key
+ * @returns {string} the position key
+ */
+function positionKey(el) {
+  const parts = [];
+  let node = el;
+  while (node && node.nodeType === 1) {
+    const parent = node.parentElement;
+    if (!parent) { break; }
+    parts.unshift(Array.prototype.indexOf.call(parent.children, node));
+    // Stop climbing at an identified ancestor: everything above it is the page
+    // skeleton, and everything below it is the part that shifts.
+    if (parent.id) { break; }
+    node = parent;
+  }
+  return parts.join("/");
+}
+
+/**
  * Sets up periodic element refresh using a SharedWorker for fetch requests.
  * Automatically pauses when the document is hidden and resumes on visibility.
  * Each call registers an independent loop; multiple calls may run concurrently.
@@ -294,8 +324,11 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
    * Patch the document from a fetched response with morphdom (no row diff).
    * The response arrived as VDOM from the diff worker; the fragment roots are
    * realized into a detached container before the selectors are matched.
-   * Selectors that match the DOM but not the response are reported via an
-   * elementsMissing event so the page can fall back to a container refresh.
+   * Elements are paired by position key rather than by match index, so a section
+   * that grew or shrank leaves the other sections untouched instead of shifting
+   * every pairing after it. Selectors that match the DOM but not the response
+   * are reported via an elementsMissing event so the page can fall back to a
+   * container refresh.
    * @function patchResponse
    * @param {Object} vdom - The parsed fragment VDOM (nodeName "#document")
    * @returns {void}
@@ -308,6 +341,12 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
       const el = realizeVdom(kids[i]);
       if (el) { container.appendChild(el); }
     }
+    // Snapshot before morphing: morphdom moves nodes out of the source subtree
+    // into the live DOM, so the fragment is drained by the time the loop below
+    // finishes. A caller repairing from detail.fragment needs the untouched
+    // tree - handed the drained one it would reinstall a skeleton of the page
+    // with every text node missing.
+    const pristine = includeContainer ? container.cloneNode(true) : null;
     const missing = [];
     selectors.forEach(selector => {
       const targetElements = document.querySelectorAll(selector);
@@ -318,26 +357,32 @@ export function refreshElements(targetSelectors, url, delay, immediate = false, 
         missing.push(selector);
         return;
       }
-      targetElements.forEach((targetElement, index) => {
-        const targetElementResponse = targetElementsResponse[index];
-        if (targetElement && targetElementResponse) {
-          morphdom(targetElement, targetElementResponse, {
-            onBeforeElUpdated: (fromEl, toEl) => {
-              if (fromEl.isEqualNode(toEl)) { return false; }
-              return true;
-            },
-            onNodeAdded: (el) => {
-              if (el.classList && el.classList.contains("lazy")) { lazyAdded = true; }
-            }
-          });
-        }
+      const responseByKey = new Map();
+      targetElementsResponse.forEach(el => {
+        responseByKey.set(positionKey(el), el);
+      });
+      targetElements.forEach(targetElement => {
+        const targetElementResponse = responseByKey.get(positionKey(targetElement));
+        // No counterpart at this position means the section's structure drifted.
+        // Leave the stale element rather than pair it with whatever shifted into
+        // this slot; the page's own fallback handles the structural change.
+        if (!targetElementResponse) { return; }
+        morphdom(targetElement, targetElementResponse, {
+          onBeforeElUpdated: (fromEl, toEl) => {
+            if (fromEl.isEqualNode(toEl)) { return false; }
+            return true;
+          },
+          onNodeAdded: (el) => {
+            if (el.classList && el.classList.contains("lazy")) { lazyAdded = true; }
+          }
+        });
       });
     });
     if (missing.length > 0) {
       document.dispatchEvent(new CustomEvent("elementsMissing", { detail: { selectors: missing } }));
     }
     if (lazyAdded) { document.dispatchEvent(new Event("elementsPatched")); }
-    dispatchDone(includeContainer ? container : null);
+    dispatchDone(pristine);
   }
 
   fetchWorker.port.onmessage = function(e) {

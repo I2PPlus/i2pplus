@@ -10,6 +10,7 @@
 
 import "./pure/uiLogic.test.js";
 import "./dom/refreshPayload.test.js";
+import "./dom/refreshElementsPositionKey.test.js";
 import "./dom/esmScriptTags.test.js";
 import "./dom/toggleDebug.test.js";
 import "./dom/vdomParser.test.js";
