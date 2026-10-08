@@ -3316,6 +3316,7 @@ public class ProfileOrganizer {
         float moderateThreshold = getModerateLossyThreshold(_context);
         float demoteThreshold = getLossyThreshold(_context);
         ThreadLocalRandom rnd = ThreadLocalRandom.current();
+        List<Hash> keys = new ArrayList<>(sz);
         for (int i = 0; i < sz; i++) {
             PeerProfile profile = candidates.get(i).getValue();
             float lat = profile.getPeerTestTimeAverage();
@@ -3324,18 +3325,52 @@ public class ProfileOrganizer {
                 prio *= LOSSY_SELECTION_PENALTY;
             }
             priority[i] = prio;
+            keys.add(candidates.get(i).getKey());
         }
+        pickLowestPriority(keys, priority, howMany, matches);
+    }
+
+    /**
+     *  Choose up to {@code howMany} candidates in ascending priority order.
+     *
+     *  <p>This loop is the reason the peer-selection callers may size a fixed-capacity
+     *  {@link net.i2p.util.ArraySet} to exactly the number of peers they asked for:
+     *  <ul>
+     *  <li>{@link ClientPeerSelector} builds four fallback sets as
+     *      {@code new ArraySet<>(needed)} and passes {@code needed} as {@code howMany}.
+     *  <li>{@link ExploratoryPeerSelector} builds {@code new ArraySet<>(1)} and asks for one peer.
+     *  </ul>
+     *  An {@link net.i2p.util.ArraySet} throws {@code SetFullException} once written past its
+     *  capacity, so if this loop ever wrote more than {@code howMany} entries those callers
+     *  would throw at runtime rather than degrade. The bound {@code s < howMany && s < sz} is
+     *  therefore load-bearing, and it is pinned by
+     *  {@code PeerSelectionBoundTest.picksNeverExceedHowMany} and its neighbours.
+     *
+     *  <p>Distinctness falls out of the swap rather than from a membership test: the chosen
+     *  entry is moved to index {@code s} and the next inner scan starts at {@code s + 1}, so an
+     *  entry already picked can never be revisited. {@code candidates} and {@code priority} are
+     *  reordered in place to achieve that, which is why both are taken as mutable.
+     *
+     * @param candidates peer hashes, reordered in place
+     * @param priority per-candidate score, parallel to {@code candidates}, reordered in place
+     * @param howMany maximum entries to choose; values below one choose nothing
+     * @param matches receives the chosen hashes
+     * @return how many entries were actually added to {@code matches}
+     * @since 0.9.71+
+     */
+    public static int pickLowestPriority(List<Hash> candidates, float[] priority, int howMany, Set<Hash> matches) {
+        int sz = candidates.size();
+        int picked = 0;
         for (int s = 0; s < howMany && s < sz; s++) {
             int best = s;
             for (int i = s + 1; i < sz; i++) {
-                if (priority[i] < priority[best]) best = i;
+                if (priority[i] < priority[best]) { best = i; }
             }
-            matches.add(candidates.get(best).getKey());
-            float tmp = priority[s]; priority[s] = priority[best]; priority[best] = tmp;
-            Map.Entry<Hash, PeerProfile> tmpE = candidates.get(s);
-            candidates.set(s, candidates.get(best));
-            candidates.set(best, tmpE);
+            if (matches.add(candidates.get(best))) { picked++; }
+            float tmpP = priority[s]; priority[s] = priority[best]; priority[best] = tmpP;
+            Hash tmpH = candidates.get(s); candidates.set(s, candidates.get(best)); candidates.set(best, tmpH);
         }
+        return picked;
     }
 
 /**
