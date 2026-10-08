@@ -169,18 +169,27 @@ public class I2PSnarkUtil implements DisconnectListener {
     private String _apiKey;
     private static final int EEPGET_CONNECT_TIMEOUT = 75 * 1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 30 * 1000;
+    /** Default for the collapsible page panels: start them collapsed */
     public static final boolean DEFAULT_COLLAPSE_PANELS = true;
+    /** Default for the torrents-page status filter: hide it */
     public static final boolean DEFAULT_SHOW_STATUSFILTER = false;
+    /** Default for the image lightbox viewer: load it */
     public static final boolean DEFAULT_ENABLE_LIGHTBOX = true;
+    /** Default for the add-torrent and create-torrent forms: show them only on page one */
     public static final boolean DEFAULT_ENABLE_ADDCREATE = false;
+    /** Default for open trackers: announce to them as backups */
     public static final boolean DEFAULT_USE_OPENTRACKERS = true;
+    /** Default for inbound tunnels: a fixed hop count */
     public static final boolean DEFAULT_VARY_INBOUND_HOPS = false;
+    /** Default for outbound tunnels: a fixed hop count */
     public static final boolean DEFAULT_VARY_OUTBOUND_HOPS = false;
+    /** Ceiling on the peers one torrent will hold at once */
     public static final int MAX_CONNECTIONS = 300; // per torrent
     /**
      * Bandwidth throttle property.
      */
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
+    /** Default for the DHT: participate in it */
     public static final boolean DEFAULT_USE_DHT = true;
     /**
      * User agent for eepget requests.
@@ -212,6 +221,12 @@ public class I2PSnarkUtil implements DisconnectListener {
                         "outbound.quantity"
                     });
 
+    /**
+     * Create a utility instance bound to the given context, with the default
+     * base name and no disconnect listener.
+     *
+     * @param ctx the I2P context to take logging, randomness and the temp directory from
+     */
     public I2PSnarkUtil(I2PAppContext ctx) {
         this(ctx, "i2psnark", null);
     }
@@ -219,7 +234,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Create a utility instance bound to the given context.
      *
+     * @param ctx the I2P context to take logging, randomness and the temp directory from
      * @param baseName generally "i2psnark"
+     * @param discon notified when the I2CP session drops, or null for no callback
      * @since Jetty 7
      */
     public I2PSnarkUtil(I2PAppContext ctx, String baseName, DisconnectListener discon) {
@@ -305,6 +322,11 @@ public class I2PSnarkUtil implements DisconnectListener {
         setMaxUpBW(_maxUpBW); // This updates the session options and tells the router
     }
 
+    /**
+     * Set the maximum number of uploaders per torrent.
+     *
+     * @param limit the maximum number of uploaders
+     */
     public void setMaxUploaders(int limit) {
         _maxUploaders = limit;
     }
@@ -332,6 +354,11 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
+    /**
+     * Set the maximum number of connections per torrent.
+     *
+     * @param limit the maximum number of connections
+     */
     public void setMaxConnections(int limit) {
         _maxConnections = limit;
     }
@@ -534,6 +561,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether files in the data directory are world-readable.
      *
+     * @param yes true to make data directory files world-readable
      * @since 0.8.9
      */
     public void setFilesPublic(boolean yes) {
@@ -553,6 +581,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether new torrents preallocate their storage files.
      *
+     * @param yes true to preallocate storage for new torrents
      * @since 0.9.66+
      */
     public void setPreallocateFiles(boolean yes) {
@@ -573,6 +602,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether to preserve original torrent file names.
      *
+     * @param yes true to keep the torrent's own file names, false to remap to a safe charset
      * @since 0.9.71+
      */
     public void setPreserveFileNames(boolean yes) {
@@ -585,6 +615,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Set by SnarkManager when the config is loaded or re-read; consumed
      * by Storage when creating torrents.
      *
+     * @return whether new torrents are padded
      * @since 0.9.71+
      */
     public boolean getShouldPadFiles() {
@@ -594,6 +625,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Sets whether BEP 47 padding files are added to new torrents.
      *
+     * @param yes true to pad new torrents so each file ends on a piece boundary
      * @since 0.9.71+
      */
     public void setShouldPadFiles(boolean yes) {
@@ -617,6 +649,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Sets the staging directory (or null to disable the feature). The value
      * should already be trimmed and unquoted.
      *
+     * @param tempDir staging directory, already trimmed and unquoted, or null to disable
      * @since 0.9.71+
      */
     public void setTempDirProp(String tempDir) {
@@ -646,6 +679,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Maximum number of files a torrent may contain.
      *
+     * @param max the maximum number of files, raised to 1 if less
      * @since 0.9.58
      */
     public void setMaxFilesPerTorrent(int max) {
@@ -720,6 +754,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether hops are randomly varied for inbound torrent tunnels.
      *
+     * @param yes true to randomize the hop count of inbound torrent tunnels
      * @since 0.9.64+
      */
     public void setVaryInboundHops(boolean yes) {
@@ -727,13 +762,20 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether hops are randomly varied for outbound torrent tunnels.
+     *
+     * @param yes true to randomize the hop count of outbound torrent tunnels
      * @since 0.9.64+
      */
     public void setVaryOutboundHops(boolean yes) {
         _varyOutboundHops = yes;
     }
 
-    /** Connect to the router, if we aren't already */
+    /**
+     * Connect to the router, if we aren't already
+     *
+     * @return true if connected
+     */
     public synchronized boolean connect() {
         if (_manager == null) {
             _connecting = true;
@@ -883,6 +925,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Whether each torrent runs on its own destination.
      *
+     * @return whether each torrent runs on its own destination
      * @since 0.9.71+
      */
     public boolean getMultiDest() {
@@ -899,6 +942,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * it a lookup's arrival and expiry could time a reduction into a pool that a torrent is
      * about to need.
      *
+     * @return whether a lookup is outstanding
      * @since 0.9.71+
      */
     public boolean isLookupPending() {
@@ -927,6 +971,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether each torrent runs on its own destination. Also reapplies the DHT
+     * serving mode, which in multi-dest mode answers no tracker queries.
+     *
+     * @param multiDest true to give each torrent a destination of its own
      * @since 0.9.71+
      */
     public void setMultiDest(boolean multiDest) {
@@ -1238,6 +1286,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Remove and destroy the destination for a torrent, destroying a pooled destination
      * only when its last torrent is removed.
      *
+     * @param key Base64 encoding of the torrent's info hash
      * @since 0.9.71+
      */
     public void removeTorrentDest(String key) {
@@ -1255,6 +1304,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * All active transient destinations, for the tunnel quantity ramp in the IdleChecker.
      *
+     * @return all active transient destinations, never null
      * @since 0.9.71+
      */
     public Collection<TorrentDest> getTorrentDests() {
@@ -1388,6 +1438,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Full Base64 of the destination for the torrent.
      *
+     * @param ih the torrent's info hash, or null for the shared destination
      * @return the destination string, or the shared destination string
      * @since 0.9.71+
      */
@@ -1484,6 +1535,11 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _udpTracker;
     }
 
+    /**
+     * Whether the shared I2CP session is up.
+     *
+     * @return whether connected
+     */
     public boolean connected() {
         return _manager != null;
     }
@@ -1552,7 +1608,14 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _startedTime;
     }
 
-    /** Connect to the given destination */
+    /**
+     * Connect to the given peer over the shared destination.
+     *
+     * @param peer the peer to dial, whose destination must not be ours or banlisted
+     * @return the connected socket, or null if the connection could not be established
+     * @throws IOException if the socket manager is missing, or the peer is us, banlisted,
+     *         or unreachable
+     */
     I2PSocket connect(PeerID peer) throws IOException {
         return connect(peer, _manager, getMyDestination());
     }
@@ -1561,7 +1624,11 @@ public class I2PSnarkUtil implements DisconnectListener {
      * Connect to the given destination through the torrent's own destination, or the shared
      * destination if multi-dest is disabled or the torrent has no destination yet.
      *
+     * @param peer the peer to dial, whose destination must not be ours or banlisted
      * @param ih the torrent's info hash
+     * @return the connected socket, or null if the connection could not be established
+     * @throws IOException if the socket manager is missing, or the peer is us, banlisted,
+     *         or unreachable
      * @since 0.9.71+
      */
     I2PSocket connect(PeerID peer, byte[] ih) throws IOException {
@@ -1623,7 +1690,12 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
-    /** Fetch the given URL, returning the file it is stored in, or null on error. No retries. */
+    /**
+     * Fetch the given URL, returning the file it is stored in, or null on error. No retries.
+     *
+     * @param url the URL to fetch
+     * @return the file it is stored in, or null on error
+     */
     public File get(String url) {
         return get(url, true, 0);
     }
@@ -1631,6 +1703,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Fetch the given URL to a file.
      *
+     * @param url the URL to fetch
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @return the file it is stored in, or null on error
      */
@@ -1641,6 +1714,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Fetch the given URL to a file.
      *
+     * @param url the URL to fetch
      * @param retries if &gt; 0, set timeout to a few seconds
      * @return the file it is stored in, or null on error
      */
@@ -1649,10 +1723,13 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
-     * Fetch the given URL through the torrent's own destination.
+     * Fetch the given URL through the torrent's own destination, which must
+     * already exist or nothing is fetched.
      *
-     * @param ih the torrent's info hash
+     * @param url the URL to fetch
+     * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &gt; 0, set timeout to a few seconds
+     * @param ih the torrent's info hash
      * @return the file it is stored in, or null on error
      * @since 0.9.71+
      */
@@ -1667,6 +1744,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Fetch the given URL to a file.
      *
+     * @param url the URL to fetch
      * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &gt; 0, set timeout to a few seconds
      * @return the file it is stored in, or null on error
@@ -1778,6 +1856,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Fetch to memory
      *
+     * @param url the URL to fetch
+     * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &lt; 0, set timeout to a few seconds
      * @param initialSize buffer size
      * @param maxSize fails if greater
@@ -1821,6 +1901,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Fetch to memory through the torrent's own destination.
      *
+     * @param url the URL to fetch
+     * @param rewrite if true, convert http://KEY.i2p/foo/announce to http://i2p/KEY/foo/announce
      * @param retries if &lt; 0, set timeout to a few seconds
      * @param initialSize buffer size
      * @param maxSize fails if greater
@@ -1953,7 +2035,13 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     private static final int BASE32_HASH_LENGTH = 52; // 1 + Hash.HASH_LENGTH * 8 / 5
 
-    /** Base64 Hash or Hash.i2p or name.i2p using naming service */
+    /**
+     * Base64 Hash or Hash.i2p or name.i2p using naming service
+     *
+     * @param ip destination string: base64, a .b32.i2p address, or a name.i2p hostname
+     *         resolved through the naming service
+     * @return the Destination, or null if it cannot be parsed or the name does not resolve
+     */
     Destination getDestination(String ip) {
         if (ip == null) return null;
         if (ip.endsWith(".i2p")) {
@@ -2018,6 +2106,10 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Given http://KEY.i2p/foo/announce turn it into http://i2p/KEY/foo/announce Given
      * http://tracker.blah.i2p/foo/announce leave it alone
+     *
+     * @param origAnnounce the tracker's announce URL, expected to begin with "http://"
+     * @return the URL with the key moved into the path, or the input unchanged when the
+     *         host is too short to be a full destination key
      */
     String rewriteAnnounce(String origAnnounce) {
         int destStart = "http://".length();
@@ -2115,6 +2207,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * Is this announce URL probably for an open tracker?
      *
+     * @param url announce URL, whose host is matched against the known open trackers
      * @return whether known open tracker
      * @since 0.9.17
      */
@@ -2138,6 +2231,11 @@ public class I2PSnarkUtil implements DisconnectListener {
         return _openTrackers;
     }
 
+    /**
+     * Whether open trackers are used as backups.
+     *
+     * @param yes true to announce to the open trackers as backups
+     */
     public void setUseOpenTrackers(boolean yes) {
         _shouldUseOT = yes;
     }
@@ -2179,6 +2277,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether to announce to UDP trackers, and to run the UDP tracker client.
+     *
+     * @param yes true to use UDP trackers
      * @since 0.9.67
      */
     public void setUDPEnabled(boolean yes) {
@@ -2186,6 +2287,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether UDP trackers are used.
+     *
+     * @return whether udp trackers are enabled
      * @since 0.9.67
      */
     public boolean udpEnabled() {
@@ -2193,6 +2297,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether to collect and show peer ratings.
+     *
+     * @param yes true to collect ratings
      * @since 0.9.31
      */
     public void setRatingsEnabled(boolean yes) {
@@ -2200,6 +2307,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether peer ratings are collected and shown.
+     *
+     * @return whether ratings are enabled
      * @since 0.9.31
      */
     public boolean ratingsEnabled() {
@@ -2207,6 +2317,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether to fetch and show peer comments.
+     *
+     * @param yes true to fetch comments
      * @since 0.9.31
      */
     public void setCommentsEnabled(boolean yes) {
@@ -2214,6 +2327,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether peer comments are fetched and shown.
+     *
+     * @return whether comments are enabled
      * @since 0.9.31
      */
     public boolean commentsEnabled() {
@@ -2221,6 +2337,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Set the name to post comments and ratings under.
+     *
+     * @param name the author name shown on our own comments and ratings
      * @since 0.9.31
      */
     public void setCommentsName(String name) {
@@ -2238,6 +2357,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether any peer-supplied data is fetched, that is comments or ratings.
+     *
+     * @return whether comments or ratings are enabled
      * @since 0.9.31
      */
     public boolean utCommentsEnabled() {
@@ -2245,6 +2367,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the page panels start collapsed.
+     *
+     * @return whether panels start collapsed
      * @since 0.9.32
      */
     public boolean collapsePanels() {
@@ -2252,6 +2377,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the page panels start collapsed.
+     *
+     * @param yes true to start the panels collapsed
      * @since 0.9.32
      */
     public void setCollapsePanels(boolean yes) {
@@ -2259,6 +2387,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the torrents-page status filter is shown.
+     *
+     * @return whether the status filter is shown
      * @since 0.9.34+
      */
     public boolean showStatusFilter() {
@@ -2266,6 +2397,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the torrents-page status filter is shown.
+     *
+     * @param yes true to show the status filter
      * @since 0.9.34+
      */
     public void setShowStatusFilter(boolean yes) {
@@ -2273,6 +2407,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the image lightbox viewer is loaded.
+     *
+     * @return whether the lightbox is enabled
      * @since 0.9.34+
      */
     public boolean enableLightbox() {
@@ -2280,6 +2417,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the image lightbox viewer is loaded.
+     *
+     * @param yes true to load the lightbox viewer
      * @since 0.9.34
      */
     public void setEnableLightbox(boolean yes) {
@@ -2287,6 +2427,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the add-torrent and create-torrent forms show past page one.
+     *
+     * @return whether the add/create forms are enabled
      * @since 0.9.38+
      */
     public boolean enableAddCreate() {
@@ -2294,6 +2437,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the add-torrent and create-torrent forms show past page one.
+     *
+     * @param yes true to keep the add/create forms on every page
      * @since 0.9.38+
      */
     public void setEnableAddCreate(boolean yes) {
@@ -2301,6 +2447,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the hop count of inbound torrent tunnels is randomized.
+     *
+     * @return whether inbound hop counts vary
      * @since 0.9.64+
      */
     public boolean enableVaryInboundHops() {
@@ -2308,6 +2457,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the hop count of outbound torrent tunnels is randomized.
+     *
+     * @return whether outbound hop counts vary
      * @since 0.9.64+
      */
     public boolean enableVaryOutboundHops() {
@@ -2315,6 +2467,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the hop count of inbound torrent tunnels is randomized.
+     *
+     * @param yes true to randomize the inbound hop count
      * @since 0.9.64+
      */
     public void setEnableVaryInboundHops(boolean yes) {
@@ -2322,6 +2477,9 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /**
+     * Whether the hop count of outbound torrent tunnels is randomized.
+     *
+     * @param yes true to randomize the outbound hop count
      * @since 0.9.64+
      */
     public void setEnableVaryOutboundHops(boolean yes) {
@@ -2349,6 +2507,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      *
      * @param s may be null
      * @param dflt returned on failure
+     * @return the parsed value, or dflt if s is null or not an int
      * @since 0.9.71+
      */
     public static int parseInt(String s, int dflt) {
@@ -2362,6 +2521,7 @@ public class I2PSnarkUtil implements DisconnectListener {
      *
      * @param s may be null
      * @param dflt returned on failure
+     * @return the parsed value, or dflt if s is null or not a long
      * @since 0.9.71+
      */
     public static long parseLong(String s, long dflt) {
@@ -2375,6 +2535,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     /**
      * A translated string for the given key.
      *
+     * @param key the message bundle key to look up
      * @return the translated string, in the routerconsole.lang property if set,
      *         else the current locale
      */
@@ -2397,7 +2558,16 @@ public class I2PSnarkUtil implements DisconnectListener {
         return Translate.getString(s, o, _context, BUNDLE_NAME);
     }
 
-    /** {0} and {1} */
+    /**
+     * Translate a string with two parameters. Like the single-parameter form
+     * this is a lot more expensive than getString(s, ctx), so use sparingly.
+     *
+     * @param s string to be translated containing {0} and {1} Single quotes
+     *     must be doubled, i.e. ' -&gt; '' in the string.
+     * @param o first parameter, not translated
+     * @param o2 second parameter, not translated
+     * @return the string
+     */
     public String getString(String s, Object o, Object o2) {
         return Translate.getString(s, o, o2, _context, BUNDLE_NAME);
     }

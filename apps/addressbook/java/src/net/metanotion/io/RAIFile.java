@@ -32,7 +32,13 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
         this.w = true;
     }
 
-    /** @param read must be true */
+    /**
+     *  Opens the file, deriving the open mode from the flags.
+     *  @param file the file to open
+     *  @param read must be true
+     *  @param write true to open the file for writing
+     *  @throws FileNotFoundException if the file cannot be opened
+     */
     public RAIFile(File file, boolean read, boolean write) throws FileNotFoundException {
         this.f = file;
         this.r = read;

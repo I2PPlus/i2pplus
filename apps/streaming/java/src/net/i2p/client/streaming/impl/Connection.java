@@ -236,7 +236,7 @@ class Connection {
     /**
      *  Set when a soft failure triggers an immediate retransmit pass,
      *  so the next send through {@link PacketQueue#enqueue(PacketLocal)}
-     *  uses {@link SendMessageOptions#setFreshConnection(true)} to rotate
+     *  uses {@link net.i2p.client.SendMessageOptions#setFreshConnection(boolean)} to rotate
      *  to a different outbound tunnel instead of retrying the same
      *  (possibly sick) tunnel that caused the stall.  Only the first
      *  packet in a soft-failure pass carries the marker; subsequent
@@ -328,10 +328,11 @@ class Connection {
      *  preserves the display stats with a fraction of the Rate lock traffic. */
     private static final int TELEMETRY_SAMPLE_PERIOD = 16;
     /** Sample counters for the choke-size stats (one per call site).
-     *  Monotonic per connection: the emission test is a mask on the counter,
-     *  so a counter that resets can only fire again once it has climbed back
-     *  to the next multiple of the period. */
+     *  Monotonic per connection: the emission test is a threshold on the counter,
+     *  so a counter that resets can only fire again once it has climbed back to
+     *  the period. */
     private int _chokeSizeBeginCnt;
+    /** Counts completed releases, driving the stream.chokeSizeEnd sample. */
     private int _chokeSizeEndCnt;
 
     // ---------------------------------------------------------------------
@@ -450,15 +451,27 @@ class Connection {
     /** Atomic long. */
     private final AtomicLong _lifetimeDupBytesSent = new AtomicLong();
 
-    /** @since 0.9.70+ */
+    /**
+     * Default resend delay (i2p.streaming.maxResendDelay) in ms.
+     * @return the router-wide resend delay default in ms
+     * @since 0.9.70+
+     */
     public static int getMaxResendDelay() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.maxResendDelay", 20*1000);
     }
-    /** @since 0.9.70+ */
+    /**
+     * Default resend delay (i2p.streaming.minResendDelay) in ms.
+     * @return the router-wide resend delay floor in ms
+     * @since 0.9.70+
+     */
     public static int getMinResendDelay() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.minResendDelay", 100);
     }
-    /** @since 0.9.70+ */
+    /**
+     * Idle time after which an established connection is dropped (i2p.streaming.disconnectTimeout) in ms.
+     * @return the disconnect timeout in ms
+     * @since 0.9.70+
+     */
     public static int getDisconnectTimeout() {
         return I2PAppContext.getGlobalContext().getProperty("i2p.streaming.disconnectTimeout", 2*60*1000);
     }
@@ -502,12 +515,20 @@ class Connection {
      */
     private static volatile int connectTimeoutMultiplier = 100;
 
-    /** @since 0.9.70+ */
+    /**
+     * Set the connect timeout multiplier, clamped to [30, 200] percent.
+     * @param pct the multiplier percentage (100 = no scaling)
+     * @since 0.9.70+
+     */
     static void setConnectTimeoutMultiplier(int pct) {
         connectTimeoutMultiplier = Math.max(30, Math.min(200, pct));
     }
 
-    /** @since 0.9.70+ */
+    /**
+     * Current Tuner-scaled connect timeout percentage.
+     * @return the connect timeout multiplier percentage (100 = no scaling)
+     * @since 0.9.70+
+     */
     static int getConnectTimeoutMultiplier() {
         return connectTimeoutMultiplier;
     }
@@ -570,11 +591,23 @@ class Connection {
      */
     public static final int ABSOLUTE_MAX_WINDOW = 8192;
 
-    /** @since 0.9.70+ mutable for adaptive tuning via Tuner */
+    /**
+     * Window ceiling floor shared by every stream, in messages; the per-stream
+     * ceiling builds up from this before any BDP term.
+     * @since 0.9.70+ mutable for adaptive tuning via Tuner
+     */
     private static volatile int maxWindowSize = MAX_WINDOW_SIZE_DEFAULT;
-    /** @since 0.9.70+ */
+    /**
+     * Ceiling floor every stream ramps at least to, whatever its own BDP says.
+     * @return the Tuner-managed global window ceiling, in messages
+     * @since 0.9.70+
+     */
     public static int getGlobalMaxWindowSize() { return maxWindowSize; }
-    /** @since 0.9.70+ */
+    /**
+     * Raise or lower the ceiling floor shared by every stream.
+     * @param val the global window ceiling in messages, clamped to [128, ABSOLUTE_MAX_WINDOW]
+     * @since 0.9.70+
+     */
     public static void setGlobalMaxWindowSize(int val) {
         maxWindowSize = Math.max(128, Math.min(ABSOLUTE_MAX_WINDOW, val));
     }
@@ -697,6 +730,24 @@ class Connection {
     }
 
     /**
+     *  Whether this firing should produce a stall warning, given the latch state.
+     *
+     *  <p>The stall condition holds for as long as the path is stuck and the timer
+     *  keeps firing, so an unconditional warning emits once per RTO tick. That produced
+     *  over 90,000 identical lines in under an hour here, which is worse than no report
+     *  at all: it buries the lines that carry signal and trains the reader to skip the
+     *  class. One line per episode, and an INFO when it ends.
+     *
+     *  @param stallDetached true when this firing meets the stall condition
+     *  @param alreadyLogged true when this episode has already been reported
+     *  @return true only on the rising edge of a stall
+     *  @since 0.9.71+
+     */
+    static boolean shouldLogStallEdge(boolean stallDetached, boolean alreadyLogged) {
+        return stallDetached && !alreadyLogged;
+    }
+
+    /**
      * Delay before the next retransmit-timer fire.
      *
      * <p>An overdue head-of-line packet is worth exactly one immediate attempt.
@@ -717,24 +768,6 @@ class Connection {
      *        this overdue episode
      * @return delay in ms; 0 requests an immediate fire
      */
-    /**
-     *  Whether this firing should produce a stall warning, given the latch state.
-     *
-     *  <p>The stall condition holds for as long as the path is stuck and the timer
-     *  keeps firing, so an unconditional warning emits once per RTO tick. That produced
-     *  over 90,000 identical lines in under an hour here, which is worse than no report
-     *  at all: it buries the lines that carry signal and trains the reader to skip the
-     *  class. One line per episode, and an INFO when it ends.
-     *
-     *  @param stallDetached true when this firing meets the stall condition
-     *  @param alreadyLogged true when this episode has already been reported
-     *  @return true only on the rising edge of a stall
-     *  @since 0.9.71+
-     */
-    static boolean shouldLogStallEdge(boolean stallDetached, boolean alreadyLogged) {
-        return stallDetached && !alreadyLogged;
-    }
-
     static int nextRetransmitDelay(long now, long oldestLastSend, long rto,
                                    boolean immediateAlreadyFired) {
         long deadline = (oldestLastSend > 0) ? Math.max(now, oldestLastSend + rto) : now + rto;
@@ -973,13 +1006,29 @@ class Connection {
      * @since 0.9.70+
      */
     private static volatile int maxRetransmissions = 32;
-    /** @since 0.9.70+ */
+    /**
+     * Maximum packets to retransmit per timer fire.
+     * @return the resend batch size cap
+     * @since 0.9.70+
+     */
     public static int getMaxRetransmissionsStatic() { return maxRetransmissions; }
-    /** @since 0.9.70+ */
+    /**
+     * Resend batch size cap, clamped to [8, 128] packets.
+     * @param val the resend batch size cap in packets
+     * @since 0.9.70+
+     */
     public static void setMaxRetransmissions(int val) { maxRetransmissions = Math.max(8, Math.min(128, val)); }
-    /** @since 0.9.70+ */
+    /**
+     * Configured give-up count for an unacknowledged SYN.
+     * @return the SYN give-up count before {@link #getMaxSynSends()} scaling
+     * @since 0.9.70+
+     */
     public static int getMaxSynResendsStatic() { return maxSynResends; }
-    /** @since 0.9.70+ */
+    /**
+     * Configured SYN give-up count, clamped to [3, 16].
+     * @param val the SYN give-up count
+     * @since 0.9.70+
+     */
     public static void setMaxSynResends(int val) { maxSynResends = Math.max(3, Math.min(16, val)); }
 
     /**
@@ -993,21 +1042,28 @@ class Connection {
      * Returns true if the next send should use a fresh connection
      * (tunnel rotation). Cleared on read so only the first send
      * in a soft-failure pass triggers rotation.
+     * @return true if the next send should rotate to a fresh connection
      * @since 0.9.71+
      */
     synchronized boolean isNextSendFreshConnection() { return _nextSendFreshConnection; }
-    /** @since 0.9.71+ */
+    /**
+     * Clears the pending tunnel-rotation flag, so the next soft-failure pass
+     * does not rotate again.
+     * @since 0.9.71+
+     */
     synchronized void clearNextSendFreshConnection() { _nextSendFreshConnection = false; }
     /**
      * Returns the current retransmit count (consecutive retransmit
      * timer firings without ACK progress). Used by external callers
      * to detect stalled downloads.
+     * @return the consecutive no-progress retransmit firings
      * @since 0.9.71+
      */
     synchronized int getRetransmitCount() { return _retransmitCount; }
     /**
      * Returns true if the retransmit count exceeds the stall threshold,
      * indicating a stalled download on a slow/lossy path.
+     * @return true when two or more firings have passed with no ACK progress
      * @since 0.9.71+
      */
     synchronized boolean isRetransmitStall() { return _retransmitCount >= 2; }
@@ -1015,6 +1071,7 @@ class Connection {
     /**
      *  Returns the number of milliseconds between the last send
      *  and now, for external stall detection callers.
+     *  @return milliseconds elapsed since the last send
      *  @since 0.9.71+
      */
     long getTimeSinceLastSend() { return _context.clock().now() - _lastSendTime; }
@@ -1117,7 +1174,15 @@ class Connection {
 
     /**
      *  Constructor for this connection.
-     *  @param opts may be null
+     *  @param ctx router context
+     *  @param manager the owning connection manager
+     *  @param session the I2P session this connection runs over
+     *  @param chooser scheduler used for delayed connects
+     *  @param timer the shared timer that drives this connection's events
+     *  @param queue the outbound packet queue
+     *  @param handler the inbound packet handler
+     *  @param opts per-connection options; may be null, a default set is created
+     *  @param isInbound true for a connection we accepted rather than dialled
      */
     public Connection(I2PAppContext ctx, ConnectionManager manager,
                       I2PSession session, SchedulerChooser chooser,
@@ -1187,6 +1252,9 @@ class Connection {
     /**
      * Calculate pacing rate based on current congestion window and RTT.
      * Rate = (cwnd * mss) / rtt to smooth transmission.
+     * @return the pacing rate in bytes per second, never below
+     *         {@link ConnectionOptions#getMinPacingRate()}, or {@link Long#MAX_VALUE}
+     *         when the RTT, window or MSS is still unset (pacing disabled)
      */
     private long calculatePacingRate() {
         int cwnd = _options.getWindowSize();
@@ -1219,6 +1287,7 @@ class Connection {
     /**
      * Calculate delay needed for pacing based on packet size and current rate.
      * Pacing delay = (packetSize / rate) - timeSinceLastPacket.
+     * @param packetSize size in bytes of the packet about to go out
      * @return delay in ms, 0 if no pacing needed
      */
     private long calculatePacingDelay(int packetSize) {
@@ -1230,7 +1299,12 @@ class Connection {
     }
 
     /**
-     * Same as above but recomputes live to avoid stale-RTT pacing.
+     * Same as above, but for a rate the caller has already computed.
+     *
+     * @param packetSize size in bytes of the packet about to go out
+     * @param pacingRate rate in bytes per second; must be a real rate, as the
+     *        {@link Long#MAX_VALUE} "no pacing" sentinel is screened by the caller
+     * @return delay in ms, 0 if no pacing needed
      */
     private long calculatePacingDelay(int packetSize, long pacingRate) {
         synchronized (_pacingLock) {
@@ -1245,6 +1319,9 @@ class Connection {
     }
 
     /**
+     * Current slow-start threshold: the window at which congestion avoidance
+     * takes over from exponential slow start.
+     * @return the slow-start threshold in messages
      * @since 0.9.46
      */
     int getSSThresh() {return _ssthresh;}
@@ -1311,6 +1388,9 @@ class Connection {
      * @param timeoutMs 0 or negative means wait forever, 5 minutes max
      * @return true if the packet should be sent, false for a fatal error
      *         will return false after 5 minutes even if timeoutMs is &lt;= 0.
+     * @throws IOException if the peer reset the connection, or either side closed
+     *         the socket, while waiting for a window slot
+     * @throws InterruptedException if interrupted while waiting on the window lock
      */
     public boolean packetSendChoke(long timeoutMs) throws IOException, InterruptedException {
         long start = _context.clock().now();
@@ -1391,7 +1471,13 @@ class Connection {
         }
     }
 
-    /** Connected or error. */
+    /**
+     * Assert the connection is still usable, throwing instead of reporting it.
+     *
+     * @return true, always; unusable connections throw rather than return false
+     * @throws IOException if the peer reset, the socket closed, or the output
+     *         stream closed
+     */
     private boolean isConnectedOrError() throws IOException {
         if (!_connected.get()) {
             if (getResetReceived()) {throw new I2PSocketException(I2PSocketException.STATUS_CONNECTION_RESET);}
@@ -1455,6 +1541,8 @@ class Connection {
         final long at;
 
         /**
+         * Immutable ceiling/timestamp pair, published in one shot.
+         *
          * @param ceiling computed ceiling in messages
          * @param at router-clock ms of the sample
          */
@@ -1804,6 +1892,11 @@ class Connection {
      */
     private class FloorCheckEvent extends SimpleTimer2.TimedEvent {
 
+        /**
+         * Bind to the connection's shared timer with a 500ms reschedule
+         * threshold, so re-arming within that window of the pending fire is
+         * coalesced instead of churning the timer.
+         */
         FloorCheckEvent() {
             super(_timer);
             setFuzz(500);
@@ -1814,7 +1907,11 @@ class Connection {
             schedule(FLOOR_SAMPLE_MS);
         }
 
-        /** Reschedule on the next sample boundary. */
+        /**
+         * Reschedule on the next sample boundary.
+         *
+         * @param delay wait in ms until the next evaluation
+         */
         void scheduleCheck(long delay) {
             schedule(delay);
         }
@@ -2354,7 +2451,8 @@ class Connection {
      *  Resets, pings, and pongs are done elsewhere in this class,
      *  or in ConnectionManager or ConnectionHandler.
      *
-     *  @param packet the packet to send, or null to send nothing
+     *  @param packet the ACK or data packet to send for the first time;
+     *         null is ignored
      */
     void sendPacket(PacketLocal packet) {
         if (packet == null) {
@@ -2461,9 +2559,11 @@ class Connection {
      *  next ack is processed. This is safe because acks are serialized on the
      *  receive thread; do not retain a reference across calls.
      *
-     *  @param ackThrough highest sequence number the peer acknowledged
-     *  @param nacks sequence numbers the peer rejected; when non-empty the
-     *         highest-acked advances only to just below the lowest of these
+     *  @param ackThrough the highest packet sequence number the peer has
+     *         received contiguously; anything lower counts as ACKed unless
+     *         NACKed
+     *  @param nacks sequence numbers explicitly reported as lost, or null or
+     *         empty if the peer sent none
      *  @return List of packets acked for the first time (empty if none);
      *          a shared mutable buffer, not a fresh copy
      */
@@ -3010,6 +3110,9 @@ class Connection {
 
     /** Disconnect scheduled event. */
     private class DisconnectEvent extends SimpleTimer2.TimedEvent {
+        /**
+         * Log that the TIME-WAIT window opened on this connection.
+         */
         DisconnectEvent() {
             super();
             if (_log.shouldInfo()) {
@@ -3025,6 +3128,7 @@ class Connection {
     /**
      *  Called from SchedulerImpl
      *
+     *  @param msToWait wait in ms before the ConEvent releases its waiters
      *  @since 0.9.23 moved here so we can use our timer
      */
     public void scheduleConnectionEvent(long msToWait) {
@@ -3045,7 +3149,11 @@ class Connection {
      */
     public synchronized Destination getRemotePeer() {return _remotePeer;}
 
-    /** Remote peer string. */
+    /**
+     * Short label for the remote peer, for log lines.
+     * @return the first 8 base32 chars of the peer hash in brackets,
+     *         or "[Unknown]" while the peer is still unset
+     */
     private synchronized String getRemotePeerString() {
         if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase32().substring(0,8) + "]";}
         else {return "[Unknown]";}
@@ -3179,9 +3287,8 @@ class Connection {
     public void setOptions(ConnectionOptions opts) {_options = opts;}
 
     /**
-     * Manager that owns this connection.
-     *
-     * @return the connection manager
+     * The ConnectionManager that created this connection.
+     * @return the owning connection manager
      * @since 0.9.21
      */
     public ConnectionManager getConnectionManager() {return _connectionManager;}
@@ -3339,6 +3446,9 @@ class Connection {
      *  If the next send time is currently &lt; 0 (i.e. "never"),
      *  this will set it to the time specified, but not later than
      *  options.getSendAckDelay() from now (1000 ms)
+     *
+     *  @param when the desired send time in ms since the epoch, or &lt; 0 for
+     *         "never"
      */
     public void setNextSendTime(long when) {
         synchronized(_nextSendLock) {
@@ -3537,6 +3647,7 @@ if (!on) {
     /**
      * For ConnectionPacketHandler.adjustWindow()
      *
+     * @return the monitor guarding the outbound window map
      * @since 0.9.71
      */
     public Object getWindowLock() {return _outboundPacketsLock;}
@@ -4001,6 +4112,11 @@ if (!on) {
 
         /**
          * Schedule the retransmit timer if it is not already running.
+         *
+         * @param delay how long from now to wait before firing the retransmit
+         *             (ms), normally the packet's timeout
+         * @return true if the timer was armed, false if one was already
+         *         running and the pending schedule was left untouched
          */
         public synchronized boolean scheduleIfNotRunning(long delay) {
             if (_scheduled) {return false;}
@@ -4027,6 +4143,8 @@ if (!on) {
 
         /**
          * Push back the retransmission timeout to the given RTO.
+         *
+         * @param rto the new retransmission timeout (ms)
          */
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
@@ -4398,7 +4516,13 @@ synchronized boolean checkRetransmitStall() {
                                           _retransmitStallSince, RETRANSMIT_STALL_MS);
         }
 
-        /** Ms since the current no-forward-progress run began, or 0 if none. */
+        /**
+         * Length of the current run of retransmit firings without forward ACK
+         * progress.
+         *
+         * @param now the clock reading to measure from (ms since the epoch)
+         * @return ms elapsed since the run began, or 0 if none is in progress
+         */
         synchronized long getRetransmitStallAgeMs(long now) {
             return _retransmitStallSince <= 0 ? 0 : Math.max(0, now - _retransmitStallSince);
         }
@@ -4587,6 +4711,8 @@ synchronized boolean checkRetransmitStall() {
 
     /**
      * A new ResendPacketEvent from the pool or a fresh instance.
+     * @param packet the packet the event will retransmit
+     * @return the reused-or-new event, already bound to that packet
      * @since 0.9.46
      */
     ResendPacketEvent newResendPacketEvent(PacketLocal packet) {
@@ -4602,12 +4728,18 @@ synchronized boolean checkRetransmitStall() {
     /** Pool of reusable ResendPacketEvent instances for fast retransmit. */
     private final ConcurrentLinkedQueue<ResendPacketEvent> _resendEventPool = new ConcurrentLinkedQueue<>();
 
+    /**
+     * Timer event that resends a single outbound packet when it fires and then
+     * offers itself back to {@code _resendEventPool} for reuse.
+     */
     class ResendPacketEvent extends SimpleTimer2.TimedEvent {
         /** The packet to retransmit. */
         private PacketLocal _packet;
 
         /**
-         * ResendPacketEvent.
+         * Bind the event to a packet and the router's shared timer.
+         *
+         * @param packet the packet to retransmit when the event fires
          */
         public ResendPacketEvent(PacketLocal packet) {
             super(_timer);
@@ -4624,6 +4756,7 @@ synchronized boolean checkRetransmitStall() {
         }
 
         /**
+         * Fire an immediate retransmit instead of waiting out the current RTO.
          * @since 0.9.46
          */
         void fastRetransmit() {reschedule(0);}

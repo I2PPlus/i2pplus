@@ -377,7 +377,7 @@ public class OutboundCache {
      * @param now current time in ms
      * @param lastValid last time a valid LeaseSet was observed, or null (epoch ms)
      * @param lastLookup last time a real lookup started, or null (epoch ms)
-     * @param transientGraceMs treat as transient gap if now - lastValid <= this
+     * @param transientGraceMs treat as transient gap if now - lastValid &lt;= this
      * @param probeIntervalMs minimum gap between real lookups for a transient gap
      * @return true if the send should be skipped (dieFatal), false to probe
      * @since 0.9.71+

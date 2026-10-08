@@ -123,7 +123,9 @@ public class GraphGenerator implements Runnable, ClientApp {
     private int _ticks;
 
     /**
-     * GraphGenerator.
+     *  Installs the rrd4j log bridge and the shutdown hook. Recording starts in run().
+     *
+     *  @param ctx the router context, for properties, stats, the log and the app manager
      */
     public GraphGenerator(RouterContext ctx) {
         _context = ctx;
@@ -156,8 +158,11 @@ public class GraphGenerator implements Runnable, ClientApp {
     }
 
     /**
-     * @return null if disabled
-     * @since 0.9.38
+     *  The generator registered with the app manager, which only exists while it is running.
+     *
+     *  @param ctx the context whose app manager holds the registration
+     *  @return null if disabled
+     *  @since 0.9.38
      */
     public static GraphGenerator instance(I2PAppContext ctx) {
         ClientApp app = ctx.clientAppManager().getRegisteredApp(NAME);
@@ -404,6 +409,8 @@ public class GraphGenerator implements Runnable, ClientApp {
          *
          *  <p>Everything except {@link #OK} and {@link #RATE_IDLE}: an idle rate records
          *  nothing because nothing is happening, not because recording is broken.
+         *
+         *  @return true unless the cause is OK or an idle rate
          */
         boolean isFault() {return this != OK && this != RATE_IDLE;}
     }
@@ -438,7 +445,11 @@ public class GraphGenerator implements Runnable, ClientApp {
         private final List<String> _names = new ArrayList<>(4);
         private int _unnamed;
 
-        /** @param cause the cause this tally counts */
+        /**
+         * An empty tally for one cause.
+         *
+         * @param cause the cause this tally counts
+         */
         CauseTally(StaleCause cause) {
             _cause = cause;
         }
@@ -479,7 +490,11 @@ public class GraphGenerator implements Runnable, ClientApp {
             }
         }
 
-        /** @return number of listeners attributed to this cause */
+        /**
+         * How many listeners this cause has been blamed for.
+         *
+         * @return number of listeners attributed to this cause
+         */
         int count() { return _count; }
 
         /**
@@ -661,6 +676,17 @@ public class GraphGenerator implements Runnable, ClientApp {
                                new CauseTally(StaleCause.COALESCE_STALLED));
     }
 
+    /**
+     *  Compose the write-stall log line, counting the coalesce fault alongside the
+     *  per-listener causes.
+     *
+     *  @param totalListeners number of listeners being tracked
+     *  @param neverWritten tally for {@link StaleCause#NEVER_WRITTEN}
+     *  @param unregistered tally for {@link StaleCause#UNREGISTERED}
+     *  @param writesStopped tally for {@link StaleCause#WRITES_STOPPED}
+     *  @param coalesceStalled tally for {@link StaleCause#COALESCE_STALLED}
+     *  @return a single-line message beginning "RRD data stalled:"
+     */
     static String formatStaleness(int totalListeners, CauseTally neverWritten,
                                   CauseTally unregistered, CauseTally writesStopped,
                                   CauseTally coalesceStalled) {
@@ -1060,7 +1086,11 @@ public class GraphGenerator implements Runnable, ClientApp {
         /** No tracked rate coalesced at all, so nothing is being produced to lose. */
         COALESCING_STOPPED;
 
-        /** @return the wording to put in the report for this mechanism */
+        /**
+         *  Name this mechanism for the operator.
+         *
+         *  @return the wording to put in the report for this mechanism
+         */
         String describe() {
             switch (this) {
                 case DELIVERY_BACKED_UP:
@@ -1296,10 +1326,18 @@ public class GraphGenerator implements Runnable, ClientApp {
      *  @since 0.9.71+
      */
     static final class ReportThrottle {
+        /** One per reported condition, so each carries its own last report and signature. */
+        ReportThrottle() {}
+
         private long _lastMs;
         private long _lastSignature;
 
         /**
+         *  Decide whether this report is due, and remember the decision.
+         *
+         *  <p>Synchronized because the stall report is reached from the 90s sync task and
+         *  the 10s watchdog, which run on different threads.
+         *
          *  @param now current wall-clock ms
          *  @param signature value identifying the state being reported
          *  @param minIntervalMs shortest gap between two identical reports
@@ -1340,13 +1378,20 @@ public class GraphGenerator implements Runnable, ClientApp {
         }
     }
 
-    /** @since 0.9.38 */
+    /**
+     *  Whether graph generation is currently switched off.
+     *
+     *  @param ctx the context whose app manager holds the registration
+     *  @return true if no generator is registered, so nothing is being recorded
+     *  @since 0.9.38
+     */
     public static boolean isDisabled(I2PAppContext ctx) {
         return ctx.clientAppManager().getRegisteredApp(NAME) == null;
     }
 
     /**
      * Disable graph generation until restart
+     * @param ctx the context whose registered generator is stopped
      * @since 0.9.6
      */
     static void setDisabled(I2PAppContext ctx) {
@@ -1404,7 +1449,11 @@ public class GraphGenerator implements Runnable, ClientApp {
      */
     public List<GraphListener> getListeners() { return _listeners; }
 
-    /**  @since 0.9.33 */
+    /**
+     *  The stats graphed when stat.summaries is unset, as statName.period pairs.
+     *
+     *  @since 0.9.33
+     */
     public static final String DEFAULT_DATABASES = "bw.sendRate.60000" +
                                                    ",bw.recvRate.60000" +
                                                    ",jobQueue.jobLag.60000" +
@@ -1415,7 +1464,12 @@ public class GraphGenerator implements Runnable, ClientApp {
                                                    ",tunnel.tunnelBuildSuccessAvg.60000" +
                                                    ",tunnel.testSuccessTime.60000";
 
-    /** @since 0.9.62+ */
+    /**
+     *  How many stats are being recorded right now.
+     *
+     *  @return the number of live listeners
+     *  @since 0.9.62+
+     */
     public int countGraphs() {return _listeners.size();}
 
     private String adjustDatabases(String oldSpecs) {
@@ -1520,7 +1574,20 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      *  A single stat's metadata, as JSON.
      *
+     *  @param rate the rate to graph
+     *  @param out the output stream to write the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @return true on success, false if the stat is not currently renderable
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderGraphMeta(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
@@ -1534,8 +1601,21 @@ public class GraphGenerator implements Runnable, ClientApp {
     /**
      *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
      *
+     *  @param rate the rate to graph
+     *  @param out the output stream to write the image or the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @param meta true to write the metadata instead of the image
      *  @return true on success, false if the stat is not currently renderable
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderGraph(Rate rate, OutputStream out, int width, int height, boolean hideLegend,
@@ -1707,7 +1787,19 @@ GraphListener lsnr = _listenerByRate.get(rate);
     /**
      *  The two-data bandwidth graph's metadata, as JSON.
      *
+     *  @param out the output stream to write the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @return true on success
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderCombinedGraphMeta(OutputStream out, int width, int height, boolean hideLegend,
@@ -1721,8 +1813,20 @@ GraphListener lsnr = _listenerByRate.get(rate);
     /**
      *  As {@link #renderCombinedGraph}, but emitting the plot geometry and series as JSON.
      *
+     *  @param out the output stream to write the image or the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @param meta true to write the metadata instead of the image
      *  @return true on success
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderCombinedGraph(OutputStream out, int width, int height, boolean hideLegend,
@@ -1812,9 +1916,14 @@ GraphListener lsnr = _listenerByRate.get(rate);
     }
 
     /**
-     * @param specs statName.period,statName.period,statName.period
-     * @return list of Rate objects
-     * @since 0.9.33
+     *  Resolve a stat.summaries string to the Rates it names.
+     *
+     *  <p>A token that is not statName.period, names an unknown stat or carries a
+     *  non-numeric period is skipped rather than failing the sync tick.
+     *
+     *  @param specs statName.period,statName.period,statName.period
+     *  @return list of Rate objects
+     *  @since 0.9.33
      */
     public Set<Rate> parseSpecs(String specs) {
         if (specs == null) {return Collections.emptySet();}
@@ -1870,9 +1979,21 @@ GraphListener lsnr = _listenerByRate.get(rate);
     /**
      *  Render a combined graph for one group.
      *
+     *  @param out the output stream to write the graph image to
      *  @param groupId a group id from {@link GraphGroups}
      *  @param enabledStats stat names enabled by the user, without period suffixes
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @return true if a graph was written; false when the group had too few usable members
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderGroupedGraph(OutputStream out, String groupId, Set<String> enabledStats,
@@ -1888,7 +2009,21 @@ GraphListener lsnr = _listenerByRate.get(rate);
     /**
      *  A grouped graph's metadata, as JSON.
      *
+     *  @param out the output stream to write the metadata to
+     *  @param groupId a group id from {@link GraphGroups}
+     *  @param enabledStats stat names enabled by the user, without period suffixes
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @return true on success
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderGroupedGraphMeta(OutputStream out, String groupId, Set<String> enabledStats,
@@ -1904,8 +2039,22 @@ GraphListener lsnr = _listenerByRate.get(rate);
     /**
      *  As {@link #renderGroupedGraph}, but emitting the plot geometry and series as JSON.
      *
+     *  @param out the output stream to write the image or the metadata to
+     *  @param groupId a group id from {@link GraphGroups}
+     *  @param enabledStats stat names enabled by the user, without period suffixes
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now to end at
+     *  @param showCredit if true, keep the signature line
+     *  @param showRestarts if true, draw the vertical restart lines and &quot;Router restarted&quot; label
      *  @param meta true to write the metadata instead of the image
      *  @return true on success
+     *  @throws IOException if rendering fails
      *  @since 0.9.71+
      */
     public boolean renderGroupedGraph(OutputStream out, String groupId, Set<String> enabledStats,

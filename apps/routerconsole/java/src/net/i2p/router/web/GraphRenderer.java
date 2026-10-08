@@ -182,7 +182,10 @@ class GraphRenderer {
     private static final List<String> FONTLIST = Arrays.asList(GE.getAvailableFontFamilyNames());
 
     /**
-     * GraphRenderer.
+     * Binds a renderer to the listener whose RRD it draws.
+     *
+     * @param ctx the app context, for console properties, logging and translations
+     * @param lsnr the listener supplying the RRD, the rate and the router clock
      */
     public GraphRenderer(I2PAppContext ctx, GraphListener lsnr) {
         _log = ctx.logManager().getLog(GraphRenderer.class);
@@ -191,16 +194,29 @@ class GraphRenderer {
     }
 
     /**
-     * render.
+     * Renders the whole archive at the default size, with legend, grid and title.
+     *
+     * @param out where the SVG is written
+     * @throws IOException if the graph cannot be produced
      */
     public void render(OutputStream out) throws IOException {
         render(out, DEFAULT_X, DEFAULT_Y, false, false, false, false, -1, 0, false);
     }
 
     /**
-     *  Single graph.
+     *  Single graph, drawn as a filled area under a line.
      *
+     *  @param out where the SVG is written
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend true to omit the legend
+     *  @param hideGrid true to omit the grid lines
+     *  @param hideTitle true to omit the derived title
+     *  @param showEvents true to plot the event count rather than the stat
+     *  @param periodCount periods in the window; zero or more than the archive draws all of them
      *  @param endp number of periods before now
+     *  @param showCredit true to show the signature line
+     *  @throws IOException if the graph cannot be produced
      */
     public void render(
             OutputStream out,
@@ -233,9 +249,20 @@ class GraphRenderer {
     /**
      *  Single or two-data-source graph.
      *
+     *  @param out where the SVG is written
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend true to omit the legend
+     *  @param hideGrid true to omit the grid lines
+     *  @param hideTitle true to omit the derived title
+     *  @param showEvents true to plot the event count rather than the stat
+     *  @param periodCount periods in the window; zero or more than the archive draws all of them
+     *  @param endp number of periods before now
+     *  @param showCredit true to show the signature line
      *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
      *  @param titleOverride If non-null, overrides the title
      *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  @throws IOException if the graph cannot be produced
      *  @since 0.9.6 consolidated from GraphGenerator for bw.combined
      */
     public void render(
@@ -260,7 +287,21 @@ class GraphRenderer {
     /**
      * As {@link #render}, but optionally emitting the plot metadata rather than the image.
      *
+     * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
+     * @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
+     * @param titleOverride title to draw, or null for the primary stat description
+     * @param showRestarts true to draw a vertical line per router restart
      * @param meta true to write the geometry and series as JSON instead of drawing
+     * @throws IOException if the graph cannot be produced
      * @since 0.9.71+
      */
     public void render(
@@ -310,8 +351,18 @@ class GraphRenderer {
      * drawn as a line, never an area, and is named in the legend.
      *
      * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
      * @param extras extra series in legend order, or null or empty for none
      * @param titleOverride title to draw, or null for the primary stat description
+     * @param showRestarts true to draw a vertical line per router restart
      * @throws IOException if the graph cannot be produced
      * @since 0.9.71+
      */
@@ -337,7 +388,21 @@ class GraphRenderer {
     /**
      * As {@link #render}, but optionally emitting the plot metadata rather than the image.
      *
+     * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
+     * @param extras extra series in legend order, or null or empty for none
+     * @param titleOverride title to draw, or null for the primary stat description
+     * @param showRestarts true to draw a vertical line per router restart
      * @param meta true to write the geometry and series as JSON instead of drawing
+     * @throws IOException if the graph cannot be produced
      * @since 0.9.71+
      */
     public void render(
@@ -383,6 +448,20 @@ class GraphRenderer {
      * <p>Used for combined graphs. Filling the primary would put a solid block behind the
      * other series and hide any that cross it, which defeats the point of overlaying them.
      *
+     * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
+     * @param extras extra series in legend order, or null or empty for none
+     * @param titleOverride title to draw, or null for the primary stat description
+     * @param showRestarts true to draw a vertical line per router restart
+     * @throws IOException if the graph cannot be produced
      * @see #render(OutputStream, int, int, boolean, boolean, boolean, boolean, int, int, boolean, List, String, boolean)
      * @since 0.9.71+
      */
@@ -397,7 +476,21 @@ class GraphRenderer {
     /**
      * As {@link #renderLines}, but optionally emitting the plot metadata rather than the image.
      *
+     * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
+     * @param showEvents true to plot the event count rather than the stat
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param endp number of periods before now
+     * @param showCredit true to show the signature line
+     * @param extras extra series in legend order, or null or empty for none
+     * @param titleOverride title to draw, or null for the primary stat description
+     * @param showRestarts true to draw a vertical line per router restart
      * @param meta true to write the geometry and series as JSON instead of drawing
+     * @throws IOException if the graph cannot be produced
      * @since 0.9.71+
      */
     public void renderLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -913,13 +1006,23 @@ class GraphRenderer {
         }
     }
 
-/**
+    /**
      * Render a combined graph of several stats as overlaid lines.
      *
      * @param out where the SVG is written
+     * @param width image width in pixels
+     * @param height image height in pixels
+     * @param hideLegend true to omit the legend
+     * @param hideGrid true to omit the grid lines
+     * @param hideTitle true to omit the derived title
      * @param showEvents unused; event mode is not supported for combined graphs
+     * @param periodCount periods in the window; zero or more than the archive draws all of them
+     * @param end number of periods before now
+     * @param showCredit true to show the signature line
      * @param primary the series drawn first; also supplies the axis range
      * @param extras the remaining series, in legend order
+     * @param titleOverride title to draw, or null for the primary stat description
+     * @param showRestarts true to draw a vertical line per router restart
      * @return true if a graph was written
      * @throws IOException if the graph cannot be produced
      * @since 0.9.71+
@@ -1081,6 +1184,9 @@ class GraphRenderer {
      * itself only a default, and a stepped series is what a user asking for step gets. Gating
      * on it meant the same tile was drawn at two different weights depending on a setting
      * whose value nobody reading the graph could see.
+     *
+     * @param cfg the render configuration
+     * @return true if a narrow, period-dense tile takes the theme's condensed plot width
      */
     static boolean isCondensedTile(GraphRenderConfig cfg) {
         return cfg.width <= GraphThemeColors.CONDENSED_WIDTH
@@ -1197,7 +1303,12 @@ class GraphRenderer {
         return GraphThemeColors.lineValueShade(GraphThemeColors.installedThemeDir(), theme, plot);
     }
 
-    /** Package-visible accessor so tests can compare a series against the primary. */
+    /**
+     * Package-visible accessor so tests can compare a series against the primary.
+     *
+     * @param theme console theme name
+     * @return the first plot's stroke colour, never null
+     */
     static Color paletteColorForTest(String theme) {
         return paletteColor(theme, 0);
     }
@@ -1558,20 +1669,35 @@ class GraphRenderer {
      * Built by {@link #buildRenderConfig} and consumed by the various configure* methods.
      */
     static final class GraphRenderConfig {
+        /** Window start, in wall-clock ms. */
         final long start;
+        /** Window end, in wall-clock ms: now, less the render offset and any endp. */
         final long end;
+        /** The rate's period in ms, which is also the archive step. */
         final long period;
+        /** Frame width in pixels, which the downsampling budget is derived from. */
         final int width;
+        /** Frame height in pixels, which a value gradient spans. */
         final int height;
+        /** Periods in the window, already clamped to the number the archive holds. */
         final int periodCount;
+        /** Console theme name every colour, font and width is read from. */
         final String theme;
+        /** True to omit the legend, and with it the summary block and the restart markers. */
         final boolean hideLegend;
+        /** True to omit the grid lines. */
         final boolean hideGrid;
+        /** True to omit the title derived from the stat name. */
         final boolean hideTitle;
+        /** True to plot the event count instead of the stat itself. */
         final boolean showEvents;
+        /** True to keep rrd4j's signature line. */
         final boolean showCredit;
+        /** True to rule off each router restart inside the window. */
         final boolean showRestarts;
+        /** Title to draw, or null to derive one from the stat name. */
         final String titleOverride;
+        /** The tracked rate, for its period, stat name and description. */
         final Rate rate;
         /** Extra series of a combined graph, in legend order; empty for a single-stat graph. */
         final List<GraphListener> extras;
@@ -1584,39 +1710,62 @@ class GraphRenderer {
         final boolean allLines;
         /** Render every series as a translucent filled path under a thin line. @since 0.9.71+ */
         final boolean fillSeries;
+        /** True to label the axis and the dates in UTC. */
         final boolean useUtc;
+        /** True to interpolate between samples instead of stepping. */
         final boolean smooth;
         /** True to keep the historical zero-floored y-axis ({@link #PROP_ZERO_BASE}). */
         final boolean forceZero;
         /** Emit the plot geometry and series as JSON instead of drawing. @since 0.9.71+ */
         final boolean meta;
+        /** Active UI language code, which selects the fonts and the translated title. */
         final String lang;
+        /** The listener holding the RRD: the datasource, the archive rows and the clock. */
         final GraphListener listener;
 
         // Computed fields (filled by builders)
+        /** Title derived from the rate stat name. */
         String derivedTitle;
+        /** True to format values with no decimals, for counts and percentages. */
         boolean noDecimalPlace;
+        /** True to format values with one decimal; two when both decimal flags are false. */
         boolean singleDecimalPlace;
-        int base; // 1000 or 1024
+        /** 1000 or 1024, the divisor the stat's value format scales by. */
+        int base;
+        /** Font for the axis ticks and the unit text. */
         Font small;
+        /** Font for the legend rows. */
         Font legend;
+        /** Font for the title. */
         Font title;
+        /** rrd4j format string the legend's min/max/avg/now figures are printed with. */
         String numberFormat;
+        /** Theme colour of the restart rules. */
         Color restartColor;
+        /** Date format for the legend and signature lines, UTC-aware when useUtc is set. */
         SimpleDateFormat legendSdf;
         /** Date suffix for the legend/signature; " UTC" when rendering in UTC.
          *  Derived from useUtc here so every path prints a consistent label,
          *  never a literal "null".
          */
         String timeLabel;
+        /** Datasource id plotted as the primary series. */
         String plotName;
+        /** Legend description of the primary series. */
         String descr;
+        /** Path of the primary listener's RRD file. */
         String path;
+        /** The primary listener's datasource ids: index 0 is the stat, 1 the event count. */
         String[] dsNames;
+        /** Unused; the extra series of a combined graph are configured from {@link #extras}. */
         String plotName2;
+        /** Unused; the extra series take their legend description from their own listeners. */
         String descr2;
+        /** Unused; the extra series take their RRD path from their own listeners. */
         String path2;
+        /** Unused; the extra series read their datasource ids from their own listeners. */
         String[] dsNames2;
+        /** Unused; each series takes its stroke width from the theme at draw time. */
         int linewidth;
         /** Smallest finite value in the plotted window, NaN until resolved. */
         double dataMin;
@@ -1653,54 +1802,192 @@ class GraphRenderer {
             this.listener = b.listener;
         }
 
+        /**
+         * Starts the configuration for one render pass.
+         *
+         * @return an empty builder
+         */
         static Builder builder() {
             return new Builder();
         }
 
+        /** Mutable counterpart of {@link GraphRenderConfig}; every setter returns itself. */
         static final class Builder {
+            /** Obtained from {@link GraphRenderConfig#builder()}, the only place one is made. */
+            Builder() {}
+
+            /** Window start, in wall-clock ms. */
             long start;
+            /** Window end, in wall-clock ms. */
             long end;
+            /** The rate's period in ms, which is also the archive step. */
             long period;
+            /** Frame width in pixels. */
             int width;
+            /** Frame height in pixels. */
             int height;
+            /** Periods in the window. */
             int periodCount;
+            /** Console theme name every colour, font and width is read from. */
             String theme;
+            /** True to omit the legend, and with it the summary block and the restart markers. */
             boolean hideLegend;
+            /** True to omit the grid lines. */
             boolean hideGrid;
+            /** True to omit the title derived from the stat name. */
             boolean hideTitle;
+            /** True to plot the event count instead of the stat itself. */
             boolean showEvents;
+            /** True to keep rrd4j's signature line. */
             boolean showCredit;
+            /** True to rule off each router restart inside the window. */
             boolean showRestarts;
+            /** Title to draw, or null to derive one from the stat name. */
             String titleOverride;
+            /** The tracked rate, for its period, stat name and description. */
             Rate rate;
+            /** Extra series of a combined graph, in legend order. */
             List<GraphListener> extras;
+            /** True to draw the primary as a line rather than a filled area. */
             boolean allLines;
+            /** True to render every series as a filled path under a thin line. */
             boolean fillSeries;
+            /** True to label the axis and the dates in UTC. */
             boolean useUtc;
+            /** True to interpolate between samples instead of stepping. */
             boolean smooth;
             /** Emit the plot geometry and series as JSON instead of drawing the image. */
             boolean meta;
+            /** True to keep the historical zero-floored y-axis. */
             boolean forceZero;
+            /** Active UI language code, which selects the fonts and the translated title. */
             String lang;
+            /** The listener holding the RRD: the datasource, the archive rows and the clock. */
             GraphListener listener;
 
+            /**
+             * Sets when the plotted window begins.
+             *
+             * @param v window start, in wall-clock ms
+             * @return this builder
+             */
             Builder start(long v) { start = v; return this; }
+
+            /**
+             * Sets when the plotted window ends.
+             *
+             * @param v window end, in wall-clock ms
+             * @return this builder
+             */
             Builder end(long v) { end = v; return this; }
+
+            /**
+             * Sets the archive step the window is measured in.
+             *
+             * @param v the rate's period in ms, which is also the archive step
+             * @return this builder
+             */
             Builder period(long v) { period = v; return this; }
+
+            /**
+             * Sets the frame width.
+             *
+             * @param v frame width in pixels
+             * @return this builder
+             */
             Builder width(int v) { width = v; return this; }
+
+            /**
+             * Sets the frame height.
+             *
+             * @param v frame height in pixels
+             * @return this builder
+             */
             Builder height(int v) { height = v; return this; }
+
+            /**
+             * Sets how many periods the window covers.
+             *
+             * @param v periods in the window
+             * @return this builder
+             */
             Builder periodCount(int v) { periodCount = v; return this; }
+
+            /**
+             * Selects the theme the frame is drawn in.
+             *
+             * @param v console theme name every colour, font and width is read from
+             * @return this builder
+             */
             Builder theme(String v) { theme = v; return this; }
+
+            /**
+             * Chooses whether the legend, and everything drawn with it, is omitted.
+             *
+             * @param v true to omit the legend and everything drawn with it
+             * @return this builder
+             */
             Builder hideLegend(boolean v) { hideLegend = v; return this; }
+
+            /**
+             * Chooses whether the grid lines are omitted.
+             *
+             * @param v true to omit the grid lines
+             * @return this builder
+             */
             Builder hideGrid(boolean v) { hideGrid = v; return this; }
+
+            /**
+             * Chooses whether the title derived from the stat name is omitted.
+             *
+             * @param v true to omit the title derived from the stat name
+             * @return this builder
+             */
             Builder hideTitle(boolean v) { hideTitle = v; return this; }
+
+            /**
+             * Chooses whether the event count is plotted instead of the stat.
+             *
+             * @param v true to plot the event count instead of the stat itself
+             * @return this builder
+             */
             Builder showEvents(boolean v) { showEvents = v; return this; }
+
+            /**
+             * Chooses whether rrd4j's signature line is kept.
+             *
+             * @param v true to keep rrd4j's signature line
+             * @return this builder
+             */
             Builder showCredit(boolean v) { showCredit = v; return this; }
+
+            /**
+             * Chooses whether each router restart is ruled off.
+             *
+             * @param v true to rule off each router restart inside the window
+             * @return this builder
+             */
             Builder showRestarts(boolean v) { showRestarts = v; return this; }
+
+            /**
+             * Sets the title, replacing the one derived from the stat name.
+             *
+             * @param v title to draw, or null to derive one from the stat name
+             * @return this builder
+             */
             Builder titleOverride(String v) { titleOverride = v; return this; }
+
+            /**
+             * Sets the rate this pass plots.
+             *
+             * @param v the tracked rate, for its period, stat name and description
+             * @return this builder
+             */
             Builder rate(Rate v) { rate = v; return this; }
 
             /**
+             * Plot a list of extra series alongside the primary.
+             *
              * @param v extra series to plot on the same graph, or null/empty for none
              * @return this builder
              * @since 0.9.71+
@@ -1708,6 +1995,8 @@ class GraphRenderer {
             Builder extras(List<GraphListener> v) { extras = v; return this; }
 
             /**
+             * Draw the primary as a line rather than as a filled area.
+             *
              * @param v true to draw the primary as a line instead of a filled area
              * @return this builder
              * @since 0.9.71+
@@ -1715,6 +2004,8 @@ class GraphRenderer {
             Builder allLines(boolean v) { allLines = v; return this; }
 
             /**
+             * Draw every series as a filled path under a thin line.
+             *
              * @param v render every series as a filled path under a thin line
              * @return this builder
              * @since 0.9.71+
@@ -1722,6 +2013,8 @@ class GraphRenderer {
             Builder fillSeries(boolean v) { fillSeries = v; return this; }
 
             /**
+             * Plot one extra series alongside the primary, wrapped into the extras list.
+             *
              * @param v single extra series to plot on the same graph, or null
              * @return this builder
              */
@@ -1729,7 +2022,21 @@ class GraphRenderer {
                 extras = (v == null) ? null : java.util.Collections.singletonList(v);
                 return this;
             }
+
+            /**
+             * Label the axis and the dates in UTC.
+             *
+             * @param v true to label the axis and the dates in UTC
+             * @return this builder
+             */
             Builder useUtc(boolean v) { useUtc = v; return this; }
+
+            /**
+             * Interpolate between samples instead of stepping.
+             *
+             * @param v true to interpolate between samples instead of stepping
+             * @return this builder
+             */
             Builder smooth(boolean v) { smooth = v; return this; }
 
             /**
@@ -1739,10 +2046,36 @@ class GraphRenderer {
              * @return this builder
              */
             Builder meta(boolean v) { meta = v; return this; }
+
+            /**
+             * Keep the historical zero-floored y-axis.
+             *
+             * @param v true to keep the historical zero-floored y-axis
+             * @return this builder
+             */
             Builder forceZero(boolean v) { forceZero = v; return this; }
+
+            /**
+             * Select the fonts and the translated title for one language.
+             *
+             * @param v active UI language code
+             * @return this builder
+             */
             Builder lang(String v) { lang = v; return this; }
+
+            /**
+             * Name the listener whose RRD this pass plots.
+             *
+             * @param v the listener holding the RRD to plot
+             * @return this builder
+             */
             Builder listener(GraphListener v) { listener = v; return this; }
 
+            /**
+             * Freeze what has been set so far.
+             *
+             * @return the immutable configuration this builder has accumulated
+             */
             GraphRenderConfig build() {
                 return new GraphRenderConfig(this);
             }

@@ -3785,7 +3785,7 @@ public class TestJob extends JobImpl {
      *  ebb line leaves most of the in-flight cap free for first tests.
      *
      *  @param lastTraffic ms timestamp of the tunnel's last real traffic,
-     *         or <= 0 when it has carried none
+     *         or &lt;= 0 when it has carried none
      *  @param now current time in ms
      *  @param status the tunnel's current test status
      *  @param inFlight tests currently dispatched to the network (all pools)
@@ -3815,7 +3815,7 @@ public class TestJob extends JobImpl {
      *  tunnel is still alive, re-check contention, and run as soon as it
      *  has ebbed.
      *
-     *  @param remainingDeferMs ms left in the traffic window; <= 0 when none
+     *  @param remainingDeferMs ms left in the traffic window; &lt;= 0 when none
      *  @param normalDelayMs the delay to use when nothing is being waited out
      *  @return the delay in ms, never negative
      *  @since 0.9.71+

@@ -177,13 +177,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Resolved allowed hosts (excluding loopback, which is always allowed). */
     private volatile Set<InetAddress> _browserApiHostSet = new HashSet<>();
 
+    /** I2CP host to connect to the router on */
     public static final String PROP_I2CP_HOST = "i2psnark.i2cpHost";
+    /** I2CP port to connect to the router on */
     public static final String PROP_I2CP_PORT = "i2psnark.i2cpPort";
+    /** Extra session options, "name=value" space-separated */
     public static final String PROP_I2CP_OPTS = "i2psnark.i2cpOptions";
+    /** Uploader limit summed across all torrents */
     public static final String PROP_UPLOADERS_TOTAL = "i2psnark.uploaders.total";
+    /** Upload bandwidth cap across all torrents, in KBps */
     public static final String PROP_UPBW_MAX = "i2psnark.upbw.max";
 
     /**
+     * Download bandwidth cap across all torrents, in KBps.
+     *
      * @since 0.9.62
      */
     public static final String PROP_DOWNBW_MAX = "i2psnark.downbw.max";
@@ -197,6 +204,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Cap on a single piece request from a peer. @since 0.9.71+ */
     public static final String PROP_MAX_PARTSIZE = "i2psnark.pipeline.maxPartsize";
 
+    /** Directory the downloaded torrent data is stored in */
     public static final String PROP_DIR = "i2psnark.dir";
 
     /**
@@ -219,6 +227,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_TORRENT_DIR = "i2psnark.torrentDir";
 
     private static final String PROP_META_PREFIX = "i2psnark.zmeta.";
+    /** Per-torrent key marking whether the torrent runs at startup; absent means run it */
     static final String PROP_META_RUNNING = "running";
     private static final String PROP_META_STAMP = "stamp";
     private static final String PROP_META_BASE = "base";
@@ -254,17 +263,22 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String DEPRECATED_IN_ORDER = "inOrder";
 
     private static final String CONFIG_FILE_SUFFIX = ".config";
+    /** Config file name within the config directory; the webapp's name only selects the directory */
     public static final String CONFIG_FILE = "i2psnark" + CONFIG_FILE_SUFFIX;
     private static final String COMMENT_FILE_SUFFIX = ".comments.txt.gz";
     private static final String METADATA_FILE = "i2psnark.metadata";
     private static final String META_PREFIX = "zmeta.";
+    /** Whether files in the data directory are world-readable */
     public static final String PROP_FILES_PUBLIC = "i2psnark.filesPublic";
 
     /**
+     * Preallocate the storage of new torrents.
+     *
      * @since 0.9.66+
      */
     public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
 
+    /** {@code true}: preallocate new torrents' storage */
     public static final String DEFAULT_PREALLOCATE_FILES = "true";
 
     /**
@@ -274,16 +288,18 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_SHOULD_PAD_FILES = "i2psnark.shouldPadFiles";
 
+    /** {@code false}: leave new torrents unpadded */
     public static final String DEFAULT_SHOULD_PAD_FILES = "false";
 
     /**
-     * Disconnect peers that cancel most of what they request. Off by default; conservative
+     * Disconnect peers that cancel most of what they request. On by default; conservative
      * thresholds and a minimum-volume guard protect legitimate peers under congestion.
      *
      * @since 0.9.71+
      */
     public static final String PROP_BAN_DISCARD_RATIO = "i2psnark.banDiscardRatio";
 
+    /** {@code true}: auto-ban peers with an excessive discard ratio */
     public static final String DEFAULT_BAN_DISCARD_RATIO = "true";
 
     /**
@@ -293,49 +309,73 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public static final String PROP_BAN_DISCARD_PERIOD = "i2psnark.banDiscardPeriod";
 
+    /** Discard-ratio bans last an hour */
     public static final int DEFAULT_BAN_DISCARD_PERIOD = 60;
+    /** Ancient "i2snark" typo in old configs, migrated to {@link #PROP_AUTO_START} */
     public static final String PROP_OLD_AUTO_START = "i2snark.autoStart"; // oops
+    /** Auto-start saved torrents on startup */
     public static final String PROP_AUTO_START =
             "i2psnark.autoStart"; // convert in migration to new config file
     private final boolean DEFAULT_AUTO_START;
     /** @deprecated since 2.13.0 replaced by PROP_STARTUP_DELAY_MIN/MAX, kept for migration */
     public static final String PROP_STARTUP_DELAY = "i2psnark.startupDelay";
+    /** Shortest delay before an auto-started torrent, in minutes */
     public static final String PROP_STARTUP_DELAY_MIN = "i2psnark.startupDelayMin";
+    /** Longest delay before an auto-started torrent, in minutes */
     public static final String PROP_STARTUP_DELAY_MAX = "i2psnark.startupDelayMax";
+    /** Seconds between automatic page refreshes */
     public static final String PROP_REFRESH_DELAY = "i2psnark.refreshSeconds";
+    /** Torrents listed per page */
     public static final String PROP_PAGE_SIZE = "i2psnark.pageSize";
+    /** Router console property holding the theme shared by all webapps */
     public static final String RC_PROP_THEME = "routerconsole.theme";
+    /** Router console property applying one theme to all webapps */
     public static final String RC_PROP_UNIVERSAL_THEMING = "routerconsole.universal.theme";
+    /** Theme I2PSnark uses when universal theming is off */
     public static final String PROP_THEME = "i2psnark.theme";
+    /** Theme used until the user picks one */
     public static final String DEFAULT_THEME = "ubergine";
 
     /**
+     * Start the page panels collapsed.
+     *
      * @since 0.9.32
      */
     public static final String PROP_COLLAPSE_PANELS = "i2psnark.collapsePanels";
 
     /**
+     * Show the torrents-page status filter.
+     *
      * @since 0.9.34
      */
     public static final String PROP_SHOW_STATUSFILTER = "i2psnark.showStatusFilter";
 
+    /** {@code false}: hide the status filter */
     public static final String DEFAULT_SHOW_STATUSFILTER = "false";
 
     /**
+     * Load the image lightbox viewer.
+     *
      * @since 0.9.34
      */
     public static final String PROP_ENABLE_LIGHTBOX = "i2psnark.enableLightbox";
 
+    /** {@code true}: load the lightbox viewer */
     public static final String DEFAULT_ENABLE_LIGHTBOX = "true";
 
     /**
+     * Keep the add-torrent and create-torrent forms on every page, not just page one.
+     *
      * @since 0.9.38
      */
     public static final String PROP_ENABLE_ADDCREATE = "i2psnark.enableAddCreate";
 
+    /** {@code false}: show the add/create forms only on page one */
     public static final String DEFAULT_ENABLE_ADDCREATE = "false";
     private static final String PROP_USE_OPENTRACKERS = "i2psnark.useOpentrackers";
+    /** Announce URLs of the open trackers, used as backups */
     public static final String PROP_OPENTRACKERS = "i2psnark.opentrackers";
+    /** Announce URLs offered per torrent for private trackers */
     public static final String PROP_PRIVATETRACKERS = "i2psnark.privatetrackers";
     private static final String PROP_USE_DHT = "i2psnark.enableDHT";
     private static final String PROP_SMART_SORT = "i2psnark.smartSort";
@@ -358,6 +398,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_COMMENTS_NAME = "i2psnark.commentsName";
 
     /**
+     * Ceiling on the number of files one torrent may contain.
+     *
      * @since 0.9.58
      */
     public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
@@ -391,15 +433,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String PROP_BROWSER_API_HOSTS = "i2psnark.browserApiHosts";
 
     /**
+     * Configured cap on the number of log messages.
+     *
      * @since 0.9.61+
      */
     public static final String PROP_MAX_MESSAGES = "i2psnark.maxLogMessages";
 
     /**
+     * Randomize the hop count of inbound torrent tunnels.
+     *
      * @since 0.9.64+
      */
     public static final String PROP_VARY_INBOUND_HOPS = "i2psnark.varyInboundHops";
 
+    /** Randomize the hop count of outbound torrent tunnels */
     public static final String PROP_VARY_OUTBOUND_HOPS = "i2psnark.varyOutboundHops";
 
     /**
@@ -472,17 +519,25 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Absolute maximum for the destination cap */
     public static final int MAX_MULTI_DEST = 1000;
 
+    /** Lowest upload bandwidth limit the configuration accepts, in KBps */
     public static final int MIN_UP_BW = 5;
+    /** Lowest download bandwidth limit the configuration accepts, in KBps */
     public static final int MIN_DOWN_BW = 2 * MIN_UP_BW;
+    /** Initial upload bandwidth cap across all torrents, in KBps */
     public static final int DEFAULT_MAX_UP_BW = 1024;
     private static final int DEFAULT_MAX_DOWN_BW = 1024;
+    /** Initial shortest delay before an auto-started torrent, in minutes */
     public static final int DEFAULT_STARTUP_DELAY_MIN = 3;
+    /** Initial longest delay before an auto-started torrent, in minutes */
     public static final int DEFAULT_STARTUP_DELAY_MAX = 10;
+    /** Initial seconds between automatic page refreshes */
     public static final int DEFAULT_REFRESH_DELAY_SECS = 5;
     private static final int DEFAULT_PAGE_SIZE = 50;
+    /** Tunnel quantity the default I2CP options ask for, in each direction */
     public static final int DEFAULT_TUNNEL_QUANTITY = 16;
     /** Delay between per-destination torrent starts, allowing each destination's tunnels to build */
     private static final long MULTI_DEST_STAGGER_MS = 8 * 1000;
+    /** Initial ceiling on the number of files one torrent may contain */
     public static final int DEFAULT_MAX_FILES_PER_TORRENT = 2000;
 
     /**
@@ -523,6 +578,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         } catch (InterruptedException ie) { /* ignored */ }
     }
 
+    /** Appended to the old flat config file name to form the config directory name */
     public static final String CONFIG_DIR_SUFFIX = ".d";
     private static final String SUBDIR_PREFIX = "s";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -633,7 +689,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /** Filename for serialized torrent filters config. */
     public static final String PROP_TORRENT_FILTERS_CONFIG = "filters.conf";
 
-    /** For embedded. */
+    /**
+     * For embedded.
+     *
+     * @param ctx the I2P context to run in
+     */
     public SnarkManager(I2PAppContext ctx) {
         this(ctx, "/i2psnark", "i2psnark");
     }
@@ -641,6 +701,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * For webapp.
      *
+     * @param ctx the I2P context to run in
      * @param ctxPath generally "/i2psnark"
      * @param ctxName generally "i2psnark"
      * @since 0.9.6
@@ -940,7 +1001,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 .replace("&amp;nbsp;", "&nbsp;");
     }
 
-    /** Use if it does not include a link. Escapes '&lt;' and '&gt;' before queueing */
+    /**
+     * Use if it does not include a link. Escapes '&lt;' and '&gt;' before queueing
+     *
+     * @param message text to queue for the messages page
+     */
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
@@ -956,6 +1021,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Use if it includes a link. Does not escape '&lt;' and '&gt;' before queueing
      *
+     * @param message HTML to queue for the messages page, unescaped
      * @since 0.9.14.1
      */
     public void addMessageNoEscape(String message) {
@@ -1041,6 +1107,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     };
 
+    /**
+     * The current time as bold UTC "dd/MM HH:mm:ss" HTML, prefixed to each queued message.
+     *
+     * @return the timestamp
+     */
     public String getTime() {
         long now = System.currentTimeMillis();
         String date = DATE_FORMAT.get().format(new Date(now));
@@ -1057,6 +1128,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Discard every queued UI message.
+     *
      * @since 0.9
      */
     public void clearMessages() {
@@ -1066,6 +1139,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Clear through this id
      *
+     * @param id discard messages up to and including this one
      * @since 0.9.33
      */
     public void clearMessages(int id) {
@@ -2276,7 +2350,54 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return rv;
     }
 
-    /** All params may be null or need trimming. */
+    /**
+     * All params may be null or need trimming.
+     *
+     * @param dataDir absolute path for the data directory, or null to leave it alone;
+     *        changing it stops and removes every non-magnet torrent
+     * @param filesPublic true to make new data directory files world-readable
+     * @param autoStart true to auto-start saved torrents
+     * @param refreshDelay seconds between page refreshes, negative to disable,
+     *        or null to leave it alone
+     * @param startDelayMin shortest delay before an auto-started torrent in minutes,
+     *        or null to leave it alone
+     * @param startDelayMax longest delay before an auto-started torrent in minutes,
+     *        swapped with the minimum if lower, or null to leave it alone
+     * @param pageSize torrents listed per page, 5 or more, zero or less for all,
+     *        or null to leave it alone
+     * @param i2cpHost I2CP host to connect to, or null to keep the current one
+     * @param i2cpPort I2CP port to connect to, or null to keep the current one
+     * @param i2cpOpts space-separated "name=value" session options, not null
+     * @param upLimit uploader limit summed across all torrents, or null to leave it alone
+     * @param upBW upload bandwidth cap in KBps, or null to leave it alone
+     * @param downBW download bandwidth cap in KBps, or null to leave it alone
+     * @param useOpenTrackers true to announce to the open trackers as backups
+     * @param useDHT true to participate in the DHT
+     * @param theme theme name to use when universal theming is off, or null to leave it alone
+     * @param lang standalone language as "lang_COUNTRY", ignored in router context,
+     *        or null to leave it alone
+     * @param enableRatings true to collect and show peer ratings
+     * @param enableComments true to fetch and show peer comments
+     * @param commentName author name for our own comments, or null to clear it
+     * @param collapsePanels true to start the page panels collapsed
+     * @param showStatusFilter true to show the torrents-page filter bar
+     * @param enableLightbox true to load the image lightbox viewer
+     * @param enableAddCreate true to keep the add/create forms on every page
+     * @param enableVaryInboundHops true to randomize the inbound tunnel hop count
+     * @param enableVaryOutboundHops true to randomize the outbound tunnel hop count
+     * @param multiDest true to give each torrent a destination of its own
+     * @param multiDestMax destination cap in multi-dest mode, zero for one per torrent,
+     *        or null to leave it alone
+     * @param randomizeStartup true to stagger batched torrent starts
+     * @param apiTarget API target base path, honored only alongside a non-empty apiKey
+     * @param apiKey API key, honored only alongside a non-empty apiTarget
+     * @param maxFiles ceiling on the files one torrent may contain, at least 1,
+     *        or null to leave it alone
+     * @param preallocateFiles true to preallocate storage for new torrents
+     * @param tempDir staging directory for incomplete files, or null to disable staging
+     * @param torrentDir directory for .torrent files, or null to reset to the data directory
+     * @param preserveFileNames true to keep the torrent's own file names
+     */
     public void updateConfig(
             String dataDir,
             boolean filesPublic,
@@ -3004,6 +3125,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Whether the nonce-free browser API for adding torrents is enabled.
+     *
+     * @return whether the browser api is enabled
      * @since 0.9.71+
      */
     public boolean browserApiEnabled() {
@@ -3123,6 +3246,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * IPv4 loopback (127/8), IPv6 loopback, and "localhost".
+     *
+     * @param host remote address string from the request
+     * @return whether the host is a loopback address
      * @since 0.9.71+
      */
     public static boolean isLoopbackHost(String host) {
@@ -3206,6 +3332,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return rv;
     }
 
+    /**
+     * Write the config to the config file, queueing a message on failure.
+     */
     public void saveConfig() {
         try {
             synchronized (_configLock) {
@@ -3217,7 +3346,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         }
     }
 
-    /** Canonical .torrent filenames that we are dealing with. An unsynchronized copy. */
+    /**
+     * Canonical .torrent filenames that we are dealing with. An unsynchronized copy.
+     *
+     * @return the filenames, a copy that may change under the caller
+     */
     public Set<String> listTorrentFiles() {
         return new HashSet<>(_snarks.keySet());
     }
@@ -3225,6 +3358,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Grab the torrent given the (canonical) filename of the .torrent file
      *
+     * @param filename canonical .torrent filename
      * @return Snark or null
      */
     public Snark getTorrent(String filename) {
@@ -3259,6 +3393,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Grab the torrent given the info hash
      *
+     * @param infohash the torrent's info hash
      * @return Snark or null
      * @since 0.8.4
      */
@@ -3663,6 +3798,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @param trackerURL may be null
      * @param updateStatus should we save this magnet to metadata, to persist it across restarts,
      *     in case we don't get the metadata before shutdown?
+     * @param autoStart true to start fetching right away
      * @param dataDir must exist, or null to default to snark data directory
      * @param listener to intercept callbacks, should pass through to this
      * @return the new Snark or null on failure
@@ -3758,6 +3894,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         public final String name;
         /** Combined size of data files in bytes (excludes padding) */
         public final long size;
+        /**
+         * Assemble the name and size resolved by a metadata lookup.
+         *
+         * @param name torrent display name
+         * @param size combined size of the data files in bytes, zero if unknown
+         */
         public TorrentInfo(String name, long size) {
             this.name = name;
             this.size = size;
@@ -4171,6 +4313,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /**
      * Hex overload for {@link #lookupTorrentInfo(byte[], long)}.
+     *
+     * @param hex 40-character hex infohash
+     * @param timeoutMs max wait as for {@code lookupTorrentInfo}
+     * @return {@code TorrentInfo} with name and size, or null if not found/timeout
      * @since 0.9.71+
      */
     public TorrentInfo lookupTorrentInfo(String hex, long timeoutMs) {
@@ -4345,7 +4491,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *     which is also the name of the torrent Must be a filesystem-safe name. If null, will
      *     generate a name from the metainfo.
      * @param baseFile may be null, if so look in rootDataDir
+     * @param dontAutoStart true to add the torrent without starting it
      * @throws RuntimeException via Snark.fatal()
+     * @throws IOException declared for API compatibility; a write failure is reported
+     *     as a queued message and a false return
      * @return success
      * @since 0.8.4
      */
@@ -4432,6 +4581,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *     which is also the name of the torrent Must be a filesystem-safe name.
      * @param dataDir must exist, or null to default to snark data directory
      * @throws RuntimeException via Snark.fatal()
+     * @throws IOException declared for API compatibility; a copy failure is reported
+     *     as a queued message and a false return
      * @return success
      * @since 0.8.4
      */
@@ -4525,6 +4676,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Saved priorities for a torrent from the metadata file.
      *
+     * @param snark the torrent to load the per-file priorities into
      * @since 0.8.1
      */
     public void loadSavedFilePriorities(Snark snark) {
@@ -4584,6 +4736,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Setting for a torrent from the metadata file.
      *
+     * @param snark the torrent to read the times of
      * @return non-null, rv[0] is added time or 0; rv[1] is completed time or 0
      * @since 0.9.23
      */
@@ -4601,6 +4754,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Setting for comments enabled from the metadata file. Caller must first check global
      * I2PSnarkUtil.commentsEnabled() Default true.
      *
+     * @param snark the torrent to read the setting of
      * @return the saved comments enabled
      * @since 0.9.31
      */
@@ -4619,6 +4773,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Setting for comments enabled in the metadata file.
      *
+     * @param snark the torrent to record the setting for
+     * @param yes the setting to store
      * @since 0.9.31
      */
     public void setSavedCommentsEnabled(Snark snark, boolean yes) {
@@ -4629,6 +4785,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Save the completion status of a torrent and other data in the metadata file.
      * Does nothing for magnets.
      *
+     * @param snark the torrent to record
      * @since 0.9.15
      */
     public void saveTorrentStatus(Snark snark) {
@@ -4900,6 +5057,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Just remember we have it. Stores the magnet info in the metadata file
      * so we can remember the directory, tracker, etc.
      *
+     * @param ih the magnet's info hash, which keys the stored marker
      * @param dir may be null
      * @param trackerURL may be null
      * @param dn may be null
@@ -4936,6 +5094,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Remove the magnet marker from the config.
      *
+     * @param ih the magnet's info hash, whose marker to remove
      * @since 0.8.4
      */
     public void removeMagnetStatus(byte[] ih) {
@@ -5017,6 +5176,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Stop the torrent, leaving it on the list of torrents unless told to remove it. If
      * shouldRemove is true, removes the torrent's metadata entries also.
+     *
+     * @param filename canonical .torrent filename of the torrent to stop
+     * @param shouldRemove true to drop the torrent from the list and delete its metadata
+     * @return the stopped torrent, or null if no torrent has that filename
      */
     public Snark stopTorrent(String filename, boolean shouldRemove) {
         File sfile = new File(filename);
@@ -5056,6 +5219,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * Stop the torrent, leaving it on the list of torrents unless told to remove it. If
      * shouldRemove is true, removes the torrent's metadata entries also.
      *
+     * @param torrent the torrent to stop, may be null
+     * @param shouldRemove true to drop the torrent from the list and delete its metadata
      * @since 0.8.4
      */
     public void stopTorrent(Snark torrent, boolean shouldRemove) {
@@ -5078,6 +5243,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Stop the torrent only, leaving it on the list of torrents.
      *
+     * @param torrent the torrent to stop, may be null
      * @since 0.9.67+
      */
     public void stopTorrent(Snark torrent) {
@@ -5095,6 +5261,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Stop the torrent and delete the torrent file itself, but leaving the data behind. Removes
      * saved metadata entries also. Holds the snarks lock to prevent interference from the DirMonitor.
+     *
+     * @param filename canonical .torrent filename of the torrent to remove
      */
     public void removeTorrent(String filename) {
         Snark torrent;
@@ -5834,7 +6002,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return _torrentCreateFilterMap.size();
     }
 
-    /** Unsorted, do not modify */
+    /**
+     * Unsorted, do not modify
+     *
+     * @return the configured trackers, a live view of the tracker map
+     */
     public Collection<Tracker> getTrackers() {
         return _trackerMap.values();
     }
@@ -5977,6 +6149,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Replace the tracker map with the built-in defaults, clearing the config key.
+     *
      * @since 0.9
      */
     public void setDefaultTrackerMap() {
@@ -5984,6 +6158,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Replace the torrent create filter map with the built-in defaults and persist it.
+     *
      * @since 0.9.62+
      */
     public void setDefaultTorrentCreateFilterMap() {
@@ -6027,6 +6203,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Write the tracker map to the config and save it.
+     *
      * @since 0.9
      */
     public void saveTrackerMap() {
@@ -6051,6 +6229,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
+     * Serialize the torrent create filter map to its config file.
+     *
      * @since 0.9.62+
      */
     public void saveTorrentCreateFilterMap() {
@@ -6069,6 +6249,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * If not connected, thread it, otherwise inline
      *
+     * @param infoHash info hash of the torrent to start
      * @throws RuntimeException via Snark.fatal()
      * @since 0.9.1
      */
@@ -6085,6 +6266,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * If not connected, thread it, otherwise inline
      *
+     * @param snark the stopped torrent to start
      * @throws RuntimeException via Snark.fatal()
      * @since 0.9.23
      */
@@ -6655,6 +6837,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      * Threaded. Torrent must be stopped.
      *
+     * @param snark the stopped torrent to recheck
      * @since 0.9.23
      */
     public void recheckTorrent(Snark snark) {

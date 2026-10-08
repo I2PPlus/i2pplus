@@ -142,7 +142,7 @@ class RouterInfoRefresher {
      *
      *  <p>A held peer cannot be refreshed directly - that is precisely why it is held, since
      *  it has no address to send to - so the only way to re-qualify it is an iterative lookup
-     *  via other routers. This only records the request; {@link #drainAddressRefreshes}
+     *  via other routers. This only records the request; {@link #takeAddressRefreshBatch(long)}
      *  issues it, because the scan that fills this queue runs under the reorganize write lock
      *  and must not do network work there.
      *

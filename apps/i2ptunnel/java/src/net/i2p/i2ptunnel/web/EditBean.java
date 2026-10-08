@@ -56,6 +56,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The target host for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the target host for the tunnel
      *  @since 0.8.3
      */
@@ -65,6 +66,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The target port for the tunnel, or empty string if none.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the target port, or "" if none
      *  @since 0.8.3
      */
@@ -75,6 +77,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The private key file for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the private key file
      *  @since 0.8.3
      */
@@ -84,6 +87,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The alternate private key file for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return path or ""
      *  @since 0.9.30
      */
@@ -93,6 +97,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The signing private key for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return key or null
      *  @since 0.9.26
      */
@@ -283,6 +288,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether the tunnel should reduce on idle.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if the tunnel should reduce on idle
      *  @since 0.8.3
      */
@@ -292,6 +298,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The reduce count for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the reduce count for the tunnel
      *  @since 0.8.3
      */
@@ -301,6 +308,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The reduce time in minutes for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the reduce time in minutes for the tunnel
      *  @since 0.8.3
      */
@@ -310,6 +318,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The certificate for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the certificate for the tunnel
      *  @since 0.8.3
      */
@@ -319,6 +328,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The encryption effort for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the encryption effort for the tunnel
      *  @since 0.8.3
      */
@@ -328,6 +338,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The signer for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the signer for the tunnel
      *  @since 0.8.3
      */
@@ -337,6 +348,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether encryption is enabled for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if encryption is enabled for the tunnel
      *  @since 0.8.3
      */
@@ -369,6 +381,7 @@ public class EditBean extends IndexBean {
     /**
      *  List of b64 name : b64key
      *  Pubkeys for DH, privkeys for PSK
+     *  @param tunnel index of the tunnel in the configured list
      *  @param isDH true for DH, false for PSK
      *  @return non-null
      *  @since 0.9.41
@@ -464,6 +477,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The encrypted outbound random key.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the encrypted outbound random key
      *  @since 0.8.3
      */
@@ -474,6 +488,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The encrypted lease set signing private key.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the encrypted lease set signing private key
      *  @since 0.8.3
      */
@@ -484,6 +499,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The encrypted lease set private key.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the encrypted lease set private key
      *  @since 0.8.3
      */
@@ -494,6 +510,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether DCC is enabled for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if DCC is enabled for the tunnel
      *  @since 0.8.9
      */
@@ -503,6 +520,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The encryption key for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the encryption key for the tunnel
      *  @since 0.8.3
      */
@@ -512,6 +530,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The access mode for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the access mode for the tunnel
      *  @since 0.8.3
      */
@@ -521,6 +540,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The access list for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the access list for the tunnel
      *  @since 0.8.3
      */
@@ -541,6 +561,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The jump list for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the jump list for the tunnel
      *  @since 0.8.3
      */
@@ -550,6 +571,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether the tunnel should close on idle.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if the tunnel should close on idle
      *  @since 0.8.3
      */
@@ -559,6 +581,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The close time in minutes for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the close time in minutes for the tunnel
      *  @since 0.8.3
      */
@@ -568,6 +591,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether a new destination should be created.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if a new destination should be created
      *  @since 0.8.3
      */
@@ -577,6 +601,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether the client key should be persistent.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if the client key should be persistent
      *  @since 0.8.3
      */
@@ -586,6 +611,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether the tunnel open should be delayed.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if the tunnel open should be delayed
      *  @since 0.8.3
      */
@@ -639,6 +665,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether multihoming is enabled.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if multihoming is enabled
      *  @since 0.9.18
      */
@@ -648,6 +675,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The user agents string.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the user agents string
      *  @since 0.9.25
      */
@@ -657,6 +685,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether proxy authentication is enabled.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if proxy authentication is enabled
      *  @since 0.8.2
      */
@@ -665,6 +694,7 @@ public class EditBean extends IndexBean {
     }
     /**
      *  Whether outproxy authentication is enabled.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if outproxy authentication is enabled
      *  @since 0.8.3
      */
@@ -676,6 +706,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The outproxy username.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the outproxy username
      *  @since 0.8.3
      */
@@ -685,6 +716,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The outproxy password.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the outproxy password
      *  @since 0.8.3
      */
@@ -694,6 +726,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The SSL proxies string.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the SSL proxies string
      *  @since 0.9.11
      */
@@ -703,6 +736,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether the outproxy plugin should be used.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if the outproxy plugin should be used
      *  @since 0.9.11
      */
@@ -712,6 +746,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The outproxy type.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the outproxy type
      *  @since 0.9.57
      */
@@ -721,6 +756,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The per-minute limit for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the per-minute limit for the tunnel
      *  @since 0.8.3
      */
@@ -730,6 +766,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The per-hour limit for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the per-hour limit for the tunnel
      *  @since 0.8.3
      */
@@ -739,6 +776,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The per-day limit for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the per-day limit for the tunnel
      *  @since 0.8.3
      */
@@ -748,6 +786,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The per-minute total for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the per-minute total for the tunnel
      *  @since 0.8.3
      */
@@ -757,6 +796,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The per-hour total for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the per-hour total for the tunnel
      *  @since 0.8.3
      */
@@ -766,6 +806,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The per-day total for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the per-day total for the tunnel
      *  @since 0.8.3
      */
@@ -775,6 +816,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The maximum number of streams for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the maximum number of streams for the tunnel
      *  @since 0.8.3
      */
@@ -784,6 +826,7 @@ public class EditBean extends IndexBean {
 
     /**
      * POST limits
+     * @param tunnel index of the tunnel in the configured list
      * @return the post max
      * @since 0.9.9
      */
@@ -793,8 +836,9 @@ public class EditBean extends IndexBean {
 
     /**
      *  The POST total max for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the POST total max for the tunnel
-     *  @since 0.9.9
+     * @since 0.9.9
      */
     public int getPostTotalMax(int tunnel) {
         return _helper.getPostTotalMax(tunnel);
@@ -802,6 +846,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The POST check time for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the POST check time for the tunnel
      *  @since 0.9.9
      */
@@ -811,6 +856,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The POST ban time for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the POST ban time for the tunnel
      *  @since 0.9.9
      */
@@ -820,6 +866,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The POST total ban time for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the POST total ban time for the tunnel
      *  @since 0.9.9
      */
@@ -829,6 +876,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  Whether unique local addresses should be used.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return true if unique local addresses should be used
      *  @since 0.9.13
      */
@@ -866,6 +914,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The I2CP host for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the I2CP host for the tunnel
      *  @since 0.8.3
      */
@@ -878,6 +927,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The I2CP port for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the I2CP port for the tunnel
      *  @since 0.8.3
      */
@@ -890,6 +940,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The custom options string for the tunnel.
+     *  @param tunnel index of the tunnel in the configured list
      *  @return the custom options string for the tunnel
      *  @since 0.8.3
      */
@@ -906,6 +957,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The quantity options for the tunnel, as HTML.
+     *  @param tunnel index of the tunnel in the configured list
      *  @param mode 0=both, 1=in, 2=out
      *  @return the quantity options
      *  @since 0.9.7
@@ -953,6 +1005,7 @@ public class EditBean extends IndexBean {
 
     /**
      *  The translated string wrapped in parentheses, or empty in advanced mode.
+     *  @param s the string to translate
      *  @return translated s or ""
      *  @since 0.9.47
      */

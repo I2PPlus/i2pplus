@@ -133,6 +133,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getRootNode.
+     *
+     * @return the node holding the root description, or null
      */
     public Node getRootNode() {
         if (rootNode != null) return rootNode;
@@ -142,6 +144,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDeviceNode.
+     *
+     * @return this device's own <code>device</code> element
      */
     public Node getDeviceNode() {
         return deviceNode;
@@ -149,6 +153,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setRootNode.
+     *
+     * @param node the node holding the root description, or null to derive it from the device node
      */
     public void setRootNode(Node node) {
         rootNode = node;
@@ -156,6 +162,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setDeviceNode.
+     *
+     * @param node this device's own <code>device</code> element
      */
     public void setDeviceNode(Node node) {
         deviceNode = node;
@@ -175,6 +183,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * Device.
+     *
+     * @param root the node holding the root description, or null
+     * @param device this device's own <code>device</code> element
      */
     public Device(Node root, Node device) {
         rootNode = root;
@@ -192,6 +203,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * Device.
+     *
+     * @param device this device's own <code>device</code> element
      */
     public Device(Node device) {
         this(null, device);
@@ -199,6 +212,10 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * Device.
+     *
+     * @param descriptionFile the file holding the description XML
+     * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
+     *     device element
      */
     public Device(File descriptionFile) throws InvalidDescriptionException {
         this(null, null);
@@ -206,6 +223,11 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Device.
+     *
+     * @param input the stream to read the description XML from
+     * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
+     *     device element
      * @since 1.8.0
      */
     public Device(InputStream input) throws InvalidDescriptionException {
@@ -215,6 +237,10 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * Device.
+     *
+     * @param descriptionFileName the name of the file holding the description XML
+     * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
+     *     device element
      */
     public Device(String descriptionFileName) throws InvalidDescriptionException {
         this(new File(descriptionFileName));
@@ -246,6 +272,11 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getAbsoluteURL.
+     *
+     * @param urlString the URL to resolve, which may be relative
+     * @param baseURLStr the URLBase to resolve against, or null
+     * @param locationURLStr the description location to resolve against, or null
+     * @return the resolved URL, or urlString itself if it cannot be resolved
      */
     public String getAbsoluteURL(String urlString, String baseURLStr, String locationURLStr) {
         // Debug.warning("GAURL \"" + urlString + "\" \"" + baseURLStr + "\" \"" + locationURLStr +
@@ -325,6 +356,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getAbsoluteURL.
+     *
+     * @param urlString the URL to resolve, which may be relative
+     * @return the URL resolved against the root device's URLBase and location
      */
     public String getAbsoluteURL(String urlString) {
         String baseURLStr = null;
@@ -345,6 +379,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setNMPRMode.
+     *
+     * @param flag true to describe the device as NMPR compliant, false to drop the NMPR elements
      */
     public void setNMPRMode(boolean flag) {
         Node devNode = getDeviceNode();
@@ -359,6 +395,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isNMPRMode.
+     *
+     * @return true if the device is marked NMPR compliant
      */
     public boolean isNMPRMode() {
         Node devNode = getDeviceNode();
@@ -374,6 +412,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setWirelessMode.
+     *
+     * @param flag true when the device is announced over a wireless link
      */
     public void setWirelessMode(boolean flag) {
         wirelessMode = flag;
@@ -381,6 +421,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isWirelessMode.
+     *
+     * @return true when the device is announced over a wireless link
      */
     public boolean isWirelessMode() {
         return wirelessMode;
@@ -388,6 +430,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getSSDPAnnounceCount.
+     *
+     * @return how many times this device should be announced
      */
     public int getSSDPAnnounceCount() {
         if (isNMPRMode() == true && isWirelessMode() == true)
@@ -407,6 +451,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getUUID.
+     *
+     * @return the UUID generated for this device
      */
     public String getUUID() {
         return this.devUUID;
@@ -428,6 +474,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getBootId.
+     *
+     * @return the boot ID announced by this device, or 0 until it is started
      */
     public int getBootId() {
         return this.bootId;
@@ -478,6 +526,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getConfigId.
+     *
+     * @return the configuration ID of this device, or 0 until it is computed
      */
     public int getConfigId() {
         Node devNode = getDeviceNode();
@@ -491,6 +541,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getRootDevice.
+     *
+     * @return the root of this device's description tree, or null if it has no root
      */
     public Device getRootDevice() {
         Node rootNode = getRootNode();
@@ -507,6 +559,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Thanks for Stefano Lenzi (07/24/04)
 
     /**
+     * Get the device that contains this one.
+     *
      * @return A Device that contain this object.<br>
      *     Return <code>null</code> if this is a root device.
      */
@@ -592,6 +646,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDescriptionFile.
+     *
+     * @return the file the description was loaded from, or null if it came from a stream or string
      */
     public File getDescriptionFile() {
         return getDeviceData().getDescriptionFile();
@@ -613,6 +669,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDescriptionFilePath.
+     *
+     * @return the directory holding the description file, or an empty string if there is none
      */
     public String getDescriptionFilePath() {
         File descriptionFile = getDescriptionFile();
@@ -621,6 +679,12 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Load the device description from a stream.
+     *
+     * @param input the stream to read the description XML from
+     * @return true if the description was loaded
+     * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
+     *     device element
      * @since 1.8.0
      */
     public boolean loadDescription(InputStream input) throws InvalidDescriptionException {
@@ -645,6 +709,11 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * loadDescription.
+     *
+     * @param descString the description XML
+     * @return true if the description was loaded
+     * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
+     *     device element
      */
     public boolean loadDescription(String descString) throws InvalidDescriptionException {
         try {
@@ -668,6 +737,11 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * loadDescription.
+     *
+     * @param file the file holding the description XML
+     * @return true if the description was loaded
+     * @throws InvalidDescriptionException if the description cannot be parsed or has no root or
+     *     device element
      */
     public boolean loadDescription(File file) throws InvalidDescriptionException {
         try {
@@ -706,6 +780,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isDeviceNode.
+     *
+     * @param node the node to test
+     * @return true if the node is a <code>device</code> element
      */
     public static boolean isDeviceNode(Node node) {
         return Device.ELEM_NAME.equals(node.getName());
@@ -717,6 +794,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isRootDevice.
+     *
+     * @return true if this device is the root of its description tree
      */
     public boolean isRootDevice() {
         return getRootNode().getNode("device").getNodeValue(UDN).equals(getUDN());
@@ -728,6 +807,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setSSDPPacket.
+     *
+     * @param packet the SSDP packet that announced this device
      */
     public void setSSDPPacket(SSDPPacket packet) {
         getDeviceData().setSSDPPacket(packet);
@@ -735,6 +816,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getSSDPPacket.
+     *
+     * @return the SSDP packet that announced this device, or null
      */
     public SSDPPacket getSSDPPacket() {
         return getSSDPPacket(false);
@@ -743,6 +826,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     /**
      * I2P for multiple location support
      *
+     * @param preferIPv6 whether to prefer the IPv6 packet when both were advertised
+     * @return the SSDP packet that announced this device, or null
      * @since 0.9.50
      */
     public SSDPPacket getSSDPPacket(boolean preferIPv6) {
@@ -756,6 +841,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setLocation.
+     *
+     * @param value the URL the description is served from
      */
     public void setLocation(String value) {
         getDeviceData().setLocation(value);
@@ -763,6 +850,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getLocation.
+     *
+     * @return the URL the description is served from
      */
     public String getLocation() {
         return getLocation(false);
@@ -771,6 +860,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     /**
      * I2P for multiple location support
      *
+     * @param preferIPv6 whether to prefer the IPv6 location when both were advertised
+     * @return the URL the description is served from
      * @since 0.9.50
      */
     public String getLocation(boolean preferIPv6) {
@@ -785,6 +876,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setLeaseTime.
+     *
+     * @param value the advertisement lifetime in seconds
      */
     public void setLeaseTime(int value) {
         getDeviceData().setLeaseTime(value);
@@ -797,6 +890,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getLeaseTime.
+     *
+     * @return the advertisement lifetime in seconds
      */
     public int getLeaseTime() {
         SSDPPacket packet = getSSDPPacket();
@@ -810,6 +905,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getTimeStamp.
+     *
+     * @return when this device was last announced, in milliseconds since the epoch, or 0
      */
     public long getTimeStamp() {
         SSDPPacket packet = getSSDPPacket();
@@ -819,6 +916,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getElapsedTime.
+     *
+     * @return the seconds since this device was last announced
      */
     public long getElapsedTime() {
         return (System.currentTimeMillis() - getTimeStamp()) / 1000;
@@ -826,6 +925,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isExpired.
+     *
+     * @return true if this device has not been announced within its lease time
      */
     public boolean isExpired() {
         long elipsedTime = getElapsedTime();
@@ -862,6 +963,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getURLBase.
+     *
+     * @return the root device's URLBase, or an empty string if this device is not the root
      */
     public String getURLBase() {
         if (isRootDevice() == true) return getRootNode().getNodeValue(URLBASE_NAME);
@@ -876,6 +979,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setDeviceType.
+     *
+     * @param value the device type URN
      */
     public void setDeviceType(String value) {
         getDeviceNode().setNode(DEVICE_TYPE, value);
@@ -883,6 +988,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDeviceType.
+     *
+     * @return the device type URN
      */
     public String getDeviceType() {
         return getDeviceNode().getNodeValue(DEVICE_TYPE);
@@ -890,6 +997,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isDeviceType.
+     *
+     * @param value the device type URN to compare against
+     * @return true if this device has that type
      */
     public boolean isDeviceType(String value) {
         if (value == null) return false;
@@ -904,6 +1014,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setFriendlyName.
+     *
+     * @param value the name to advertise for this device
      */
     public void setFriendlyName(String value) {
         getDeviceNode().setNode(FRIENDLY_NAME, value);
@@ -911,6 +1023,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getFriendlyName.
+     *
+     * @return the name advertised for this device
      */
     public String getFriendlyName() {
         return getDeviceNode().getNodeValue(FRIENDLY_NAME);
@@ -924,6 +1038,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setManufacture.
+     *
+     * @param value the name of the company that makes this device
      */
     public void setManufacture(String value) {
         getDeviceNode().setNode(MANUFACTURE, value);
@@ -931,6 +1047,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getManufacture.
+     *
+     * @return the name of the company that makes this device
      */
     public String getManufacture() {
         return getDeviceNode().getNodeValue(MANUFACTURE);
@@ -944,6 +1062,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setManufactureURL.
+     *
+     * @param value the URL of the manufacturer's home page
      */
     public void setManufactureURL(String value) {
         getDeviceNode().setNode(MANUFACTURE_URL, value);
@@ -951,6 +1071,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getManufactureURL.
+     *
+     * @return the URL of the manufacturer's home page
      */
     public String getManufactureURL() {
         return getDeviceNode().getNodeValue(MANUFACTURE_URL);
@@ -964,6 +1086,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setModelDescription.
+     *
+     * @param value the free-form description of this model
      */
     public void setModelDescription(String value) {
         getDeviceNode().setNode(MODEL_DESCRIPTION, value);
@@ -971,6 +1095,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getModelDescription.
+     *
+     * @return the free-form description of this model
      */
     public String getModelDescription() {
         return getDeviceNode().getNodeValue(MODEL_DESCRIPTION);
@@ -984,6 +1110,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setModelName.
+     *
+     * @param value the model name
      */
     public void setModelName(String value) {
         getDeviceNode().setNode(MODEL_NAME, value);
@@ -991,6 +1119,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getModelName.
+     *
+     * @return the model name
      */
     public String getModelName() {
         return getDeviceNode().getNodeValue(MODEL_NAME);
@@ -1004,6 +1134,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setModelNumber.
+     *
+     * @param value the model number
      */
     public void setModelNumber(String value) {
         getDeviceNode().setNode(MODEL_NUMBER, value);
@@ -1011,6 +1143,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getModelNumber.
+     *
+     * @return the model number
      */
     public String getModelNumber() {
         return getDeviceNode().getNodeValue(MODEL_NUMBER);
@@ -1024,6 +1158,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setModelURL.
+     *
+     * @param value the URL of the documentation for this model
      */
     public void setModelURL(String value) {
         getDeviceNode().setNode(MODEL_URL, value);
@@ -1031,6 +1167,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getModelURL.
+     *
+     * @return the URL of the documentation for this model
      */
     public String getModelURL() {
         return getDeviceNode().getNodeValue(MODEL_URL);
@@ -1044,6 +1182,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setSerialNumber.
+     *
+     * @param value the serial number of this unit
      */
     public void setSerialNumber(String value) {
         getDeviceNode().setNode(SERIAL_NUMBER, value);
@@ -1051,6 +1191,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getSerialNumber.
+     *
+     * @return the serial number of this unit
      */
     public String getSerialNumber() {
         return getDeviceNode().getNodeValue(SERIAL_NUMBER);
@@ -1064,6 +1206,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setUDN.
+     *
+     * @param value the unique device name, this device's UUID prefixed with <code>uuid:</code>
      */
     public void setUDN(String value) {
         getDeviceNode().setNode(UDN, value);
@@ -1071,6 +1215,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getUDN.
+     *
+     * @return the unique device name
      */
     public String getUDN() {
         return getDeviceNode().getNodeValue(UDN);
@@ -1078,6 +1224,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * hasUDN.
+     *
+     * @return true if a non-empty UDN is set
      */
     public boolean hasUDN() {
         String udn = getUDN();
@@ -1093,6 +1241,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setUPC.
+     *
+     * @param value the Universal Product Code
      */
     public void setUPC(String value) {
         getDeviceNode().setNode(UPC, value);
@@ -1100,6 +1250,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getUPC.
+     *
+     * @return the Universal Product Code
      */
     public String getUPC() {
         return getDeviceNode().getNodeValue(UPC);
@@ -1114,6 +1266,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setPresentationURL.
+     *
+     * @param value the URI path serving this device's control page
      */
     public void setPresentationURL(String value) {
         getDeviceNode().setNode(presentationURL, value);
@@ -1121,6 +1275,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getPresentationURL.
+     *
+     * @return the URI path serving this device's control page
      */
     public String getPresentationURL() {
         return getDeviceNode().getNodeValue(presentationURL);
@@ -1128,6 +1284,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * removePresentationURL.
+     *
+     * @return true if there was a presentation URL to remove
      */
     public boolean removePresentationURL() {
         return getDeviceNode().removeNode(presentationURL);
@@ -1144,6 +1302,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setPresentationListener.
+     *
+     * @param listener the handler for control page requests, or null to stop serving one
      */
     public void setPresentationListener(PresentationListener listener) {
         this.presentationListener = listener;
@@ -1157,6 +1317,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * hasPresentationListener.
+     *
+     * @return true if a control page handler is set
      */
     public boolean hasPresentationListener() {
         return (this.presentationListener != null) ? true : false;
@@ -1164,6 +1326,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getPresentationListener.
+     *
+     * @return the handler for control page requests, or null
      */
     public PresentationListener getPresentationListener() {
         return this.presentationListener;
@@ -1175,6 +1339,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDeviceList.
+     *
+     * @return the devices embedded in this one
      */
     public DeviceList getDeviceList() {
         DeviceList devList = new DeviceList();
@@ -1192,6 +1358,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isDevice.
+     *
+     * @param name the UDN, friendly name or device type to test against
+     * @return true if that name identifies this device
      */
     public boolean isDevice(String name) {
         if (name == null) return false;
@@ -1203,6 +1372,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDevice.
+     *
+     * @param name the UDN, friendly name or device type to search for
+     * @return the matching embedded device, or null
      */
     public Device getDevice(String name) {
         DeviceList devList = getDeviceList();
@@ -1218,6 +1390,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getDeviceByDescriptionURI.
+     *
+     * @param uri the description URI to search for
+     * @return the embedded device served at that URI, or null
      */
     public Device getDeviceByDescriptionURI(String uri) {
         DeviceList devList = getDeviceList();
@@ -1237,6 +1412,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getServiceList.
+     *
+     * @return the services of this device
      */
     public ServiceList getServiceList() {
         ServiceList serviceList = new ServiceList();
@@ -1254,6 +1431,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getService.
+     *
+     * @param name the service type or service ID to search for
+     * @return the matching service of this or an embedded device, or null
      */
     public Service getService(String name) {
         ServiceList serviceList = getServiceList();
@@ -1276,6 +1456,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getServiceBySCPDURL.
+     *
+     * @param searchUrl the service control URL to search for
+     * @return the matching service of this or an embedded device, or null
      */
     public Service getServiceBySCPDURL(String searchUrl) {
         ServiceList serviceList = getServiceList();
@@ -1298,6 +1481,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getServiceByControlURL.
+     *
+     * @param searchUrl the control URL to search for
+     * @return the matching service of this or an embedded device, or null
      */
     public Service getServiceByControlURL(String searchUrl) {
         ServiceList serviceList = getServiceList();
@@ -1320,6 +1506,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getServiceByEventSubURL.
+     *
+     * @param searchUrl the event subscription URL to search for
+     * @return the matching service of this or an embedded device, or null
      */
     public Service getServiceByEventSubURL(String searchUrl) {
         ServiceList serviceList = getServiceList();
@@ -1342,6 +1531,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getSubscriberService.
+     *
+     * @param uuid the subscription ID to search for
+     * @return the subscribed service with that ID, or null
      */
     public Service getSubscriberService(String uuid) {
         ServiceList serviceList = getServiceList();
@@ -1369,6 +1561,11 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getStateVariable.
+     *
+     * @param serviceType the service type to restrict the search to, or null to search every
+     *     service
+     * @param name the state variable name to search for
+     * @return the matching state variable, or null
      */
     public StateVariable getStateVariable(String serviceType, String name) {
         if (serviceType == null && name == null) return null;
@@ -1398,6 +1595,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getStateVariable.
+     *
+     * @param name the state variable name to search for
+     * @return the matching state variable, or null
      */
     public StateVariable getStateVariable(String name) {
         return getStateVariable(null, name);
@@ -1409,6 +1609,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getAction.
+     *
+     * @param name the action name to search for
+     * @return the matching action, or null
      */
     public Action getAction(String name) {
         ServiceList serviceList = getServiceList();
@@ -1444,6 +1647,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isIconBytesURI.
+     *
+     * @param uri the icon URL to look up
+     * @return true if the bytes for that icon are cached
      */
     public boolean isIconBytesURI(String uri) {
         byte[] iconBytes = iconBytesMap.get(uri);
@@ -1453,6 +1659,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getIconByURI.
+     *
+     * @param uri the icon URL to search for
+     * @return the matching icon, or null
      */
     public Icon getIconByURI(String uri) {
         IconList iconList = getIconList();
@@ -1469,6 +1678,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * addIcon.
+     *
+     * @param icon the icon to add
+     * @return true if the icon was added
      */
     public boolean addIcon(Icon icon) {
         Node deviceNode = getDeviceNode();
@@ -1495,6 +1707,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getIconList.
+     *
+     * @return the icons of this device
      */
     public IconList getIconList() {
         IconList iconList = new IconList();
@@ -1519,6 +1733,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getIcon.
+     *
+     * @param n the position in the icon list
+     * @return the icon at that position, or null if there is none
      */
     public Icon getIcon(int n) {
         IconList iconList = getIconList();
@@ -1528,6 +1745,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getSmallestIcon.
+     *
+     * @return the narrowest icon, or null if this device has none
      */
     public Icon getSmallestIcon() {
         Icon smallestIcon = null;
@@ -1551,6 +1770,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getLocationURL.
+     *
+     * @param host the address this device is reached on
+     * @return the URL its description is served from on that address
      */
     public String getLocationURL(String host) {
         return HostInterface.getHostURL(host, getHTTPPort(), getDescriptionURI());
@@ -1583,6 +1805,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * announce.
+     *
+     * @param bindAddr the address to send the SSDP advertisement from
      */
     public void announce(String bindAddr) {
         String devLocation = getLocationURL(bindAddr);
@@ -1670,6 +1894,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * byebye.
+     *
+     * @param bindAddr the address to send the SSDP byebye from
      */
     public void byebye(String bindAddr) {
         SSDPNotifySocket ssdpSock;
@@ -1753,6 +1979,11 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * postSearchResponse.
+     *
+     * @param ssdpPacket the search request being answered
+     * @param st the search target being answered
+     * @param usn the unique service name naming this device
+     * @return true if the response was sent
      */
     public boolean postSearchResponse(SSDPPacket ssdpPacket, String st, String usn) {
         String localAddr = ssdpPacket.getLocalAddress();
@@ -1784,6 +2015,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * deviceSearchResponse.
+     *
+     * @param ssdpPacket the search request to answer
      */
     public void deviceSearchResponse(SSDPPacket ssdpPacket) {
         String ssdpST = ssdpPacket.getST();
@@ -1841,6 +2074,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setHTTPPort.
+     *
+     * @param port the port the HTTP server binds to
      */
     public void setHTTPPort(int port) {
         getDeviceData().setHTTPPort(port);
@@ -1848,6 +2083,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getHTTPPort.
+     *
+     * @return the port the HTTP server binds to
      */
     public int getHTTPPort() {
         return getDeviceData().getHTTPPort();
@@ -1855,6 +2092,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setHTTPBindAddress.
+     *
+     * @param inets the addresses to bind the HTTP server to, or null for the default
      */
     public void setHTTPBindAddress(InetAddress[] inets) {
         this.getDeviceData().setHTTPBindAddress(inets);
@@ -1862,12 +2101,16 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getHTTPBindAddress.
+     *
+     * @return the addresses the HTTP server is bound to
      */
     public InetAddress[] getHTTPBindAddress() {
         return this.getDeviceData().getHTTPBindAddress();
     }
 
     /**
+     * Get the IPv4 address SSDP multicasts to.
+     *
      * @return SSDPIPv4MulticastAddress
      * @since 1.8
      */
@@ -1876,7 +2119,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
-     * @param ip
+     * Set the IPv4 address SSDP multicasts to.
+     *
+     * @param ip the IPv4 multicast address
      * @since 1.8
      */
     public void getSSDPIPv4MulticastAddress(String ip) {
@@ -1884,6 +2129,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Get the IPv6 address SSDP multicasts to.
+     *
      * @return SSDPIPv6MulticastAddress
      * @since 1.8
      */
@@ -1892,7 +2139,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
-     * @param ip
+     * Set the IPv6 address SSDP multicasts to.
+     *
+     * @param ip the IPv6 multicast address
      * @since 1.8
      */
     public void getSSDPIPv6MulticastAddress(String ip) {
@@ -2203,6 +2452,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Set the port the SSDP service binds to.
+     *
      * @param port The port to use for binding the SSDP service
      */
     public void setSSDPPort(int port) {
@@ -2210,6 +2461,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Get the port the SSDP service binds to.
+     *
      * @return The port to use for binding the SSDP service
      */
     public int getSSDPPort() {
@@ -2217,6 +2470,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Set the addresses the SSDP service binds to.
+     *
      * @param inets The IP that will be used for binding the SSDP service. Use <code>null</code> to
      *     get the default beahvior
      */
@@ -2225,6 +2480,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Get the addresses the SSDP service binds to.
+     *
      * @return inets The IP that will be used for binding the SSDP service. null means the default
      *     setted by the class UPnP
      */
@@ -2233,6 +2490,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Set the IPv4 address SSDP multicasts to.
+     *
      * @param ip The IPv4 address used for Multicast comunication
      */
     public void setMulticastIPv4Address(String ip) {
@@ -2240,6 +2499,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Get the IPv4 address SSDP multicasts to.
+     *
      * @return The IPv4 address used for Multicast comunication
      */
     public String getMulticastIPv4Address() {
@@ -2247,6 +2508,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Set the IPv6 address SSDP multicasts to.
+     *
      * @param ip The IPv address used for Multicast comunication
      */
     public void setMulticastIPv6Address(String ip) {
@@ -2254,6 +2517,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     }
 
     /**
+     * Get the IPv6 address SSDP multicasts to.
+     *
      * @return The IPv address used for Multicast comunication
      */
     public String getMulticastIPv6Address() {
@@ -2274,6 +2539,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * start.
+     *
+     * @return true if the device was started
      */
     public boolean start() {
         stop(true);
@@ -2351,6 +2618,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * stop.
+     *
+     * @return true if the device was stopped
      */
     public boolean stop() {
         return stop(true);
@@ -2358,6 +2627,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * isRunning.
+     *
+     * @return true if the device is running
      */
     public boolean isRunning() {
         return (getAdvertiser() != null) ? true : false;
@@ -2369,6 +2640,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getInterfaceAddress.
+     *
+     * @return the address this device was discovered on, or an empty string
      */
     public String getInterfaceAddress() {
         SSDPPacket ssdpPacket = getSSDPPacket();
@@ -2382,6 +2655,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setActionListener.
+     *
+     * @param listener the handler for incoming action requests
      */
     public void setActionListener(ActionListener listener) {
         ServiceList serviceList = getServiceList();
@@ -2394,6 +2669,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setQueryListener.
+     *
+     * @param listener the handler for incoming variable queries
      */
     public void setQueryListener(QueryListener listener) {
         ServiceList serviceList = getServiceList();
@@ -2411,6 +2688,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Thanks for Mikael Hakman (04/25/05)
     /**
      * setActionListener.
+     *
+     * @param listener the handler for incoming action requests
+     * @param includeSubDevices true to set the handler on embedded devices too
      */
     public void setActionListener(ActionListener listener, boolean includeSubDevices) {
         setActionListener(listener);
@@ -2427,6 +2707,9 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
     // Thanks for Mikael Hakman (04/25/05)
     /**
      * setQueryListener.
+     *
+     * @param listener the handler for incoming variable queries
+     * @param includeSubDevices true to set the handler on embedded devices too
      */
     public void setQueryListener(QueryListener listener, boolean includeSubDevices) {
         setQueryListener(listener);
@@ -2448,6 +2731,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * setUserData.
+     *
+     * @param data user-defined data
      */
     public void setUserData(Object data) {
         userData = data;
@@ -2455,6 +2740,8 @@ public class Device implements org.cybergarage.http.HTTPRequestListener, SearchL
 
     /**
      * getUserData.
+     *
+     * @return user-defined data
      */
     public Object getUserData() {
         return userData;

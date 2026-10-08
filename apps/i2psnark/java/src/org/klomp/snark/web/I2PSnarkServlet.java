@@ -157,6 +157,9 @@ public class I2PSnarkServlet extends BasicServlet {
     private int searchResults;
     /** Csp nonce */
     String cspNonce = Integer.toHexString(_context.random().nextInt());
+    /**
+     * Constructor called by the servlet container; all setup is deferred to init().
+     */
     public I2PSnarkServlet() {super();}
 
     /**
@@ -281,15 +284,56 @@ public class I2PSnarkServlet extends BasicServlet {
         return originHost.equals(requestHost) && originPort == requestPort;
     }
 
-    /** Package-visible collaborators for {@link I2PSnarkConfigure}. */
+    /**
+     * The torrent manager behind this servlet.
+     *
+     * @return the SnarkManager holding the torrents this servlet renders
+     */
     SnarkManager manager() {return _manager;}
+
+    /**
+     * The context path this servlet is mounted under.
+     *
+     * @return the context path, always starting with '/'
+     */
     String contextPath() {return _contextPath;}
+
+    /**
+     * The name identifying this instance in config and titles.
+     *
+     * @return the context name, defaulting to "i2psnark"
+     */
     String contextName() {return _contextName;}
+
+    /**
+     * Prefix for links to resources bundled in the war.
+     *
+     * @return the context path plus WARBASE
+     */
     String resourcePath() {return _resourcePath;}
+
+    /**
+     * War-relative prefix under which static resources are served.
+     *
+     * @return the resource prefix, "/.res/"
+     */
     String warBase() {return WARBASE;}
+
+    /**
+     * The I2P context this servlet runs in.
+     *
+     * @return the app context passed to init()
+     */
     I2PAppContext context() {return _context;}
 
+    /** Settings form writer, which reads its settings back through this servlet's accessors. */
     private final I2PSnarkConfigure configForms = new I2PSnarkConfigure(this);
+
+    /**
+     * The settings form writer.
+     *
+     * @return the writer backing the /configure pages
+     */
     I2PSnarkConfigure configForms() {return configForms;}
 
     private void writeConfigForm(PrintWriter out, HttpServletRequest req) throws IOException {configForms().writeConfigForm(out, req);}
@@ -580,7 +624,12 @@ public class I2PSnarkServlet extends BasicServlet {
         out.flush();
     }
 
-    /** The two XHR fragment endpoints polled by the console JS. */
+    /**
+     * The two XHR fragment endpoints polled by the console JS.
+     *
+     * @param path servlet path after the context, may be null
+     * @return true if the path is one of the polled fragments
+     */
     static boolean isAjaxPath(String path) {
         return "/.ajax/xhr1.html".equals(path) || "/.ajax/xhrscreenlog.html".equals(path);
     }
@@ -589,6 +638,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Whether path is the torrent list landing page.
      *
      * @param path servlet path after the context, may be null
+     * @return true for "", "/", or "index.jsp"
      */
     static boolean isIndexPath(String path) {
         return path != null && (path.isEmpty() || "/".equals(path) || "index.jsp".equals(path));
@@ -600,6 +650,9 @@ public class I2PSnarkServlet extends BasicServlet {
      * target, and the configuration UI.
      *
      * @param path servlet path after the context, may be null
+     * @param isIndex whether path is the torrent list landing page
+     * @param isConfigure whether the request selected the configuration UI
+     * @return true if handleUnmanagedPath should answer the request
      */
     static boolean isUnmanagedPath(String path, boolean isIndex, boolean isConfigure) {
         if (isIndex || "/index.html".equals(path) || "/_post".equals(path) || isConfigure) {return false;}
@@ -610,7 +663,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * Serves the XHR fragment endpoints; unknown paths are ignored so the
      * caller's fall-through routing stays in charge.
      *
+     * @param path servlet path after the context, may be null
+     * @param isConfigure whether the request selected the configuration UI
+     * @param peerString the peer parameter to carry into message rendering, may be null
+     * @param req the HTTP request
+     * @param resp the HTTP response
      * @return true if the request was handled here
+     * @throws IOException if writing the response fails
      * @since 0.9.71+
      */
     private boolean handleAjaxRequest(String path, boolean isConfigure, String peerString,
@@ -1369,14 +1428,30 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class SortHeaderContext {
+        /** The request the header links are built for. */
         final HttpServletRequest req;
         /** Link path prefix: contextPath with trailing '/'. */
         final String pathPrefix;
+        /** Current sort key, may be null when unsorted */
         final String currentSort;
+        /** Active status filter key, may be null when no filter is applied */
         final String filterParam;
+        /** Query string of the applied filters, preserved across sort links */
         final String filterQuery;
+        /** More than one torrent is listed, so the columns are sortable */
         final boolean showSort;
 
+/**
+         * Builds the context from the header's caller inputs, deriving
+         * pathPrefix from contextPath.
+         *
+         * @param req the request the header links are built for
+         * @param contextPath the servlet context path, without a trailing slash
+         * @param currentSort the active sort key, may be null
+         * @param filterParam the active status filter key, may be null
+         * @param filterQuery the applied filters as a query string
+         * @param showSort more than one torrent is listed
+         */
         SortHeaderContext(HttpServletRequest req, String contextPath, String currentSort,
                           String filterParam, String filterQuery, boolean showSort) {
             this.req = req;
@@ -1395,10 +1470,20 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class TorrentActivityScan {
+        /** Some torrent on the page has a connected peer */
         final boolean hasPeers;
+        /** Some torrent on the page has a non-zero download rate */
         final boolean isDownloading;
+        /** Some torrent on the page has a non-zero upload rate */
         final boolean isUploading;
 
+        /**
+         * Records the flags the scan found.
+         *
+         * @param hasPeers some torrent on the page has a connected peer
+         * @param isDownloading some torrent on the page has a non-zero download rate
+         * @param isUploading some torrent on the page has a non-zero upload rate
+         */
         TorrentActivityScan(boolean hasPeers, boolean isDownloading, boolean isUploading) {
             this.hasPeers = hasPeers;
             this.isDownloading = isDownloading;
@@ -1769,16 +1854,41 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class FooterContext {
+        /** Rate and transfer counters indexed by the STAT_* constants */
         final long[] stats;
+        /** Summed ETA of the listed torrents in seconds, 0 if not computable */
         final long totalETA;
+        /** Number of torrents on the page */
         final int total;
+        /** The router is connected to the I2P network */
         final boolean isConnected;
+        /** No torrents are loaded */
         final boolean noSnarks;
+        /** At least one listed torrent has a connected peer */
         final boolean hasPeers;
+        /** At least one listed torrent has a non-zero upload rate */
         final boolean isUploading;
+        /** The DHT for the debug row, null when DHT is disabled */
         final DHT dht;
+        /** Running without a parent I2P router */
         final boolean standalone;
+        /** The peer parameter controlling peer display, may be null */
         final String peerParam;
+        /**
+         * Collects the values the footer renders, so callers do not pass
+         * twelve arguments.
+         *
+         * @param stats rate and transfer counters indexed by the STAT_* constants
+         * @param totalETA summed ETA of the listed torrents in seconds
+         * @param total number of torrents on the page
+         * @param isConnected the router is connected to the I2P network
+         * @param noSnarks no torrents are loaded
+         * @param hasPeers at least one listed torrent has a connected peer
+         * @param isUploading at least one listed torrent has a non-zero upload rate
+         * @param dht the DHT for the debug row, null when disabled
+         * @param standalone running without a parent I2P router
+         * @param peerParam the peer parameter controlling peer display, may be null
+         */
         FooterContext(long[] stats, long totalETA, int total, boolean isConnected,
                       boolean noSnarks, boolean hasPeers, boolean isUploading,
                       DHT dht, boolean standalone, String peerParam) {
@@ -2166,6 +2276,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Hidden inputs for the nonce and parameters p, st, and sort.
      *
      * @param out writes to it
+     * @param req the HTTP request, read for the p, st, sort and search parameters
      * @param action if non-null, add it as the action
      * @since 0.9.16
      */
@@ -2180,6 +2291,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * Emitted in a fixed order; absent request values are omitted.
      *
      * @param buf appends to it
+     * @param req the HTTP request, read for the p, st, sort and search parameters
      * @param action if non-null, add it as the action
      * @since 0.9.16
      */
@@ -2808,6 +2920,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validates if a string is a valid 40-hex character info hash.
+     * @param s candidate v1 info hash: exactly 40 hex characters
      * @return whether valid hex info hash
      * @since 0.9.71+
      */
@@ -2817,6 +2930,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validates if a string is a valid 32-base32 character info hash.
+     * @param s candidate v1 info hash: exactly 32 base32 characters
      * @return whether valid base32 info hash
      * @since 0.9.71+
      */
@@ -2826,6 +2940,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Validates if string is version 2 hex multihash (68 characters starting with "1220").
+     * @param s candidate v2 info hash: 68 hex characters starting with "1220"
      * @return whether valid v2 info hash
      * @since 0.9.71+
      */
@@ -3113,6 +3228,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * The version of the I2PSnark Bridge extension bundled in this war, read
      * once from the XPI's manifest.json; null if it cannot be determined.
+     *
+     * @return the bundled extension version, "" if the XPI carries none
      */
     String getBridgeVersion() {
         String v = _bridgeVersion;
@@ -3172,14 +3289,27 @@ public class I2PSnarkServlet extends BasicServlet {
      * Package-visible for testing.
      */
     static class BaseFileValidationResult {
+        /** The resolved absolute base file; null when validation failed */
         final File baseFile;
-        final String errorMessage; // null if valid
+        /** Human-readable failure reason; null if valid */
+        final String errorMessage;
 
+        /**
+         * Records the resolved base file, or why it was rejected.
+         *
+         * @param baseFile the resolved absolute base file, null when validation failed
+         * @param errorMessage human-readable failure reason, null if valid
+         */
         BaseFileValidationResult(File baseFile, String errorMessage) {
             this.baseFile = baseFile;
             this.errorMessage = errorMessage;
         }
 
+        /**
+         * Tells whether the base file passed validation.
+         *
+         * @return true if no error message was recorded
+         */
         boolean isValid() {return errorMessage == null;}
     }
 
@@ -3235,9 +3365,17 @@ public class I2PSnarkServlet extends BasicServlet {
      * Package-visible for testing.
      */
     static class AnnounceParams {
-        final String primary; // may be null
-        final List<String> backupURLs; // never null
+        /** The requested announce URL, null for "none" or an absent parameter */
+        final String primary;
+        /** Backup tracker URLs from the backup_* parameters, never null */
+        final List<String> backupURLs;
 
+        /**
+         * Captures the announce URL chosen on the create form plus its backup trackers.
+         *
+         * @param primary the requested announce URL, null for "none" or an absent parameter
+         * @param backupURLs the backup_* tracker URLs, never null
+         */
         AnnounceParams(String primary, List<String> backupURLs) {
             this.primary = primary;
             this.backupURLs = backupURLs;
@@ -3277,16 +3415,31 @@ public class I2PSnarkServlet extends BasicServlet {
      * Package-visible for testing.
      */
     static class CreateAnnounceListResult {
-        final List<List<String>> announceList; // null if no backups
+        /** Tiers of announce URLs, null if the announce list could not be built */
+        final List<List<String>> announceList;
+        /** The primary tracker is private rather than open */
         final boolean isPrivate;
-        final String errorMessage; // null if valid
+        /** Human-readable failure reason; null if valid */
+        final String errorMessage;
 
+        /**
+         * Records the tiered announce list, or why it could not be built.
+         *
+         * @param announceList tiers of announce URLs, null if the list could not be built
+         * @param isPrivate the primary tracker is private rather than open
+         * @param errorMessage human-readable failure reason, null if valid
+         */
         CreateAnnounceListResult(List<List<String>> announceList, boolean isPrivate, String errorMessage) {
             this.announceList = announceList;
             this.isPrivate = isPrivate;
             this.errorMessage = errorMessage;
         }
 
+        /**
+         * Tells whether the announce list could be built.
+         *
+         * @return true if no error message was recorded
+         */
         boolean isValid() {return errorMessage == null;}
     }
 
@@ -4095,10 +4248,33 @@ public class I2PSnarkServlet extends BasicServlet {
      * classifier can be unit-tested without a servlet.
      */
     enum StatusKind {
-        CHECKING, ALLOCATING, TRACKER_ERROR, STARTING,
-        SEEDING_ACTIVE, SEEDING_CONNECTED_IDLE, STALLED_CONNECTED_IDLE,
-        SEEDING_IDLE, COMPLETE_STOPPED, DOWNLOADING,
-        STALLED_INCOMPLETE_CONNECTED, NOPEERS_CONNECTED, NOPEERS_UNKNOWN,
+        /** Checking or rechecking existing data */
+        CHECKING,
+        /** Allocating disk space for the torrent */
+        ALLOCATING,
+        /** No tracker response for over an hour while otherwise idle */
+        TRACKER_ERROR,
+        /** Start requested, tunnels not yet built */
+        STARTING,
+        /** Complete, running, uploading to connected peers */
+        SEEDING_ACTIVE,
+        /** Complete, running, connected but not uploading */
+        SEEDING_CONNECTED_IDLE,
+        /** Incomplete, connected, no transfer in either direction */
+        STALLED_CONNECTED_IDLE,
+        /** Complete and running, but with no known peers */
+        SEEDING_IDLE,
+        /** Complete and stopped */
+        COMPLETE_STOPPED,
+        /** Incomplete, connected, downloading */
+        DOWNLOADING,
+        /** Incomplete and connected, but neither downloading nor uploading */
+        STALLED_INCOMPLETE_CONNECTED,
+        /** Running with peers known but none connected */
+        NOPEERS_CONNECTED,
+        /** Running with no peers known at all */
+        NOPEERS_UNKNOWN,
+        /** Fallback: stopped and incomplete */
         STOPPED_DEFAULT
     }
 
@@ -4304,10 +4480,20 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class PeerRowContext {
+        /** The torrent the peer belongs to */
         final Snark snark;
+        /** The torrent metadata, null for magnet links */
         final MetaInfo meta;
+        /** Omit thin spaces, for narrow layouts */
         final boolean noThinsp;
 
+        /**
+         * Captures the torrent and metadata needed to render one peer row.
+         *
+         * @param snark the torrent the peer belongs to
+         * @param meta the torrent metadata, null for magnet links
+         * @param noThinsp omit thin spaces, for narrow layouts
+         */
         PeerRowContext(Snark snark, MetaInfo meta, boolean noThinsp) {
             this.snark = snark;
             this.meta = meta;
@@ -4322,10 +4508,20 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class PeerStatus {
-        final String status; // "active" or "inactive"
+        /** "active" or "inactive" */
+        final String status;
+        /** Sending data to this peer */
         final boolean isTx;
+        /** Receiving data from this peer */
         final boolean isRx;
 
+        /**
+         * Records a peer's activity classification and the direction of its transfers.
+         *
+         * @param status "active" or "inactive"
+         * @param isTx sending data to this peer
+         * @param isRx receiving data from this peer
+         */
         PeerStatus(String status, boolean isTx, boolean isRx) {
             this.status = status;
             this.isTx = isTx;
@@ -4934,29 +5130,66 @@ public class I2PSnarkServlet extends BasicServlet {
         }
     }
 
-    /** Translate a string. */
+    /**
+     * Translate a string.
+     *
+     * @param s the message key
+     * @return the translation in the current language, or the key itself if untranslated
+     */
     String _t(String s) {return _manager.util().getString(s);}
 
-    /** Translate a string with one argument. */
+    /**
+     * Translate a string with one argument.
+     *
+     * @param s the message key
+     * @param o substituted for the {0} placeholder
+     * @return the translation in the current language
+     */
     String _t(String s, Object o) {return _manager.util().getString(s, o);}
 
-    /** Translate a string with two arguments. */
+    /**
+     * Translate a string with two arguments.
+     *
+     * @param s the message key
+     * @param o substituted for the {0} placeholder
+     * @param o2 substituted for the {1} placeholder
+     * @return the translation in the current language
+     */
     String _t(String s, Object o, Object o2) {return _manager.util().getString(s, o, o2);}
 
-    /** Translate a pluralized string. @since 0.7.14 */
+    /**
+     * Translate a pluralized string. @since 0.7.14
+     *
+     * @param s the singular message key
+     * @param p the plural message key
+     * @param n the count selecting between them
+     * @return the translation for the count's plural form
+     */
     String ngettext(String s, String p, int n) {return _manager.util().getString(n, s, p);}
 
-    /** Format the file size. */
+    /**
+     * Format the file size.
+     *
+     * @param bytes the size in bytes
+     * @return the size with a binary unit suffix and a 'B'
+     */
     private static String formatSize(long bytes) {return DataHelper.formatSize2(bytes) + 'B';}
 
     /**
      * This is for a full URL. For a path only, use encodePath().
+     *
+     * @param s the URL to wrap in an anchor
+     * @return an anchor tag, truncated to 100 characters of display text
      * @since 0.7.14
      */
     static String urlify(String s) {return urlify(s, 100);}
 
     /**
      * This is for a full URL. For a path only, use encodePath().
+     *
+     * @param s the URL to wrap in an anchor
+     * @param max the display text is cut to this many characters and elided
+     * @return an anchor tag opening in a new window
      * @since 0.9
      */
     static String urlify(String s, int max) {
@@ -5110,6 +5343,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return buffered mode: the full page; streamed mode: the tail remaining
      *         after the last drained chunk (possibly empty); null only when
      *         postParams != null (P-R-G)
+     * @throws IOException if the response writer or resource lookups fail
      * @since 0.7.14
      */
     String getListHTML(File xxxr, String base, boolean parent, Map<String, String[]> postParams, String sortParam, PrintWriter out) throws IOException {
@@ -6213,6 +6447,8 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Basic checks only, not as comprehensive as what TrackerClient does.
      * Just to hide non-i2p trackers from the details page.
+     * @param url the tracker URL to classify
+     * @param udpEnabled whether i2p udp trackers count as acceptable
      * @return whether i2 p tracker
      * @since 0.9.46
      */
@@ -6401,13 +6637,29 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class CommentsContext {
+        /** The torrent whose comments are being rendered */
         final Snark snark;
+        /** Ratings are enabled globally */
         final boolean er;
+        /** Comments are enabled globally */
         final boolean ec;
+        /** Comments are enabled for this torrent */
         final boolean esc;
+        /** Name to attribute new comments to, may be empty */
         final String authorName;
+        /** Comments are on for this torrent and an author name is set */
         final boolean canRate;
 
+        /**
+         * Captures the comment and rating settings in force for one torrent.
+         *
+         * @param snark the torrent whose comments are being rendered
+         * @param er ratings are enabled globally
+         * @param ec comments are enabled globally
+         * @param esc comments are enabled for this torrent
+         * @param authorName name to attribute new comments to, may be empty
+         * @param canRate comments are on for this torrent and an author name is set
+         */
         CommentsContext(Snark snark, boolean er, boolean ec, boolean esc,
                         String authorName, boolean canRate) {
             this.snark = snark;
@@ -6427,9 +6679,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class CommentsHeaderResult {
+        /** The user's own rating, 0 when unrated or ratings are disabled */
         final int myRating;
+        /** Number of ratings cast by the community, 0 when ratings are disabled */
         final int ratingCount;
+        /** Community average rating, 0d when there are no ratings */
         final double averageRating;
+        /** Iterator over the existing comments, null when none are saved */
         final Iterator<Comment> iter;
 
         /**
@@ -6441,6 +6697,14 @@ public class I2PSnarkServlet extends BasicServlet {
             this(myRating, 0, 0d, null);
         }
 
+        /**
+         * Records the rating snapshot read from a torrent's comment set.
+         *
+         * @param myRating the user's own rating, 0 when unrated or ratings are disabled
+         * @param ratingCount number of ratings cast by the community
+         * @param averageRating community average rating, 0d when there are none
+         * @param iter iterator over the existing comments, null when none are saved
+         */
         CommentsHeaderResult(int myRating, int ratingCount, double averageRating,
                              Iterator<Comment> iter) {
             this.myRating = myRating;
@@ -6803,6 +7067,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param title the tooltip title (optional; if empty, no title attribute is added)
      * @param fromTheme if true, uses the current theme's image path (_imgPath); otherwise uses the WARBASE/icons/ path
      * @param isSvg if true, uses .svg extension; otherwise uses .png
+     * @param addDimensions if true, hardcodes width=16 height=16 instead of relying on CSS
      * @since 0.9.68+
      */
     void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg, boolean addDimensions) {
@@ -6816,6 +7081,13 @@ public class I2PSnarkServlet extends BasicServlet {
 
     /**
      * Overloaded method that defaults addDimensions to false.
+     *
+     * @param buf the StringBuilder to append to (must not be null)
+     * @param name the icon name without file extension (e.g., "magnet", "folder")
+     * @param alt the alt text (should already be HTML-escaped if needed)
+     * @param title the tooltip title (optional; if empty, no title attribute is added)
+     * @param fromTheme if true, uses the current theme's image path (_imgPath); otherwise uses the WARBASE/icons/ path
+     * @param isSvg if true, uses .svg extension; otherwise uses .png
      * @since 0.9.68+
      */
     void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg) {
@@ -7083,11 +7355,23 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class FileRowContext {
+        /** Decoded base URL of the directory being listed */
         final String decodedBase;
+        /** The torrent's storage, null for magnet links */
         final Storage storage;
+        /** Priority controls are shown for this directory */
         final boolean showPriority;
+        /** Listing is at the torrent root, so no parent link is rendered */
         final boolean isTopLevel;
 
+        /**
+         * Captures the torrent state needed to render one file row.
+         *
+         * @param decodedBase decoded base URL of the directory being listed
+         * @param storage the torrent's storage, null for magnet links
+         * @param showPriority priority controls are shown for this directory
+         * @param isTopLevel listing is at the torrent root, so no parent link is rendered
+         */
         FileRowContext(String decodedBase, Storage storage, boolean showPriority, boolean isTopLevel) {
             this.decodedBase = decodedBase;
             this.storage = storage;
@@ -7103,22 +7387,43 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.71+
      */
     static class FileRowCounters {
+        /** Complete video files seen, for the video preview script */
         int videoCount = 0;
+        /** Thumbnailed images seen, for the image dimension script */
         int imgCount = 0;
+        /** Text files seen, for the text viewer script */
         int txtCount = 0;
+        /** Any row offered a priority control, so the save button is rendered */
         boolean showSaveButton = false;
+
+        /** Starts every counter at zero and the save button hidden. */
+        FileRowCounters() {}
     }
 
     /**
      * Parsed edit form parameters. Package-visible for testing.
      */
     static class EditParams {
+        /** Hash codes of tracker URLs to add */
         final List<Integer> toAdd;
+        /** Hash codes of tracker URLs to remove */
         final List<Integer> toDel;
+        /** Hash code of the announce URL to promote to primary, null if unchanged */
         final Integer primary;
+        /** Replacement torrent comment, empty if unchanged */
         final String newComment;
+        /** Replacement createdBy value, empty if unchanged */
         final String newCreatedBy;
 
+        /**
+         * Captures the tracker and metadata changes submitted on the edit form.
+         *
+         * @param toAdd hash codes of tracker URLs to add
+         * @param toDel hash codes of tracker URLs to remove
+         * @param primary hash code of the announce URL to promote, null if unchanged
+         * @param newComment replacement torrent comment, empty if unchanged
+         * @param newCreatedBy replacement createdBy value, empty if unchanged
+         */
         EditParams(List<Integer> toAdd, List<Integer> toDel, Integer primary, String newComment, String newCreatedBy) {
             this.toAdd = toAdd;
             this.toDel = toDel;
@@ -7132,9 +7437,17 @@ public class I2PSnarkServlet extends BasicServlet {
      * Result of building the new announce list. Package-visible for testing.
      */
     static class AnnounceListResult {
+        /** The rebuilt announce tiers, null when no i2p trackers remain */
         final List<List<String>> newAnnList;
+        /** The announce URL marked primary, null if there is none */
         String thePrimary;
 
+        /**
+         * Records the rebuilt announce tiers and the surviving primary.
+         *
+         * @param newAnnList the rebuilt announce tiers, null when no i2p trackers remain
+         * @param thePrimary the announce URL marked primary, null if there is none
+         */
         AnnounceListResult(List<List<String>> newAnnList, String thePrimary) {
             this.newAnnList = newAnnList;
             this.thePrimary = thePrimary;

@@ -81,7 +81,14 @@ public class RRSIG extends Data {
     private final byte[] signature;
 
     /**
-     * parse.
+     * Parse the RDATA of an RRSIG record.
+     *
+     * @param dis the stream positioned at the start of the RDATA.
+     * @param data the full message data, needed to decompress the signer name.
+     * @param length the RDLENGTH of this record in bytes.
+     * @return the parsed RRSIG payload.
+     * @throws IOException if the RDATA is too short for the fixed RRSIG fields
+     *                     or for the signature trailing the signer name.
      */
     @SuppressWarnings("JavaUtilDate")
     public static RRSIG parse(DataInputStream dis, byte[] data, int length) throws IOException {
@@ -119,49 +126,105 @@ public class RRSIG extends Data {
     }
 
     /**
-     * RRSIG.
+     * Create an RRSIG payload.
+     *
+     * @param typeCovered the RR type of the RRset this signature covers.
+     * @param algorithm the DNSSEC signing algorithm number of RFC 4034.
+     * @param labels the number of labels of the owner name of the covered RRset,
+     *               the wildcard label of a wildcard RRset not counted.
+     * @param originalTtl the TTL in seconds of the covered RRset in the signed zone.
+     * @param signatureExpiration the time from which on the signature expires.
+     * @param signatureInception the time from which on the signature is valid.
+     * @param keyTag the key tag of the DNSKEY which must validate this signature.
+     * @param signerName the owner name of the DNSKEY RRset holding the signing key.
+     * @param signature the signature over the RRSIG RDATA without the signature
+     *                  field and over the covered RRset.
      */
     public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
         this(typeCovered, null, (byte) algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, signerName, signature);
     }
 
     /**
-     * RRSIG.
+     * Create an RRSIG payload.
+     *
+     * @param typeCovered the RR type of the RRset this signature covers.
+     * @param algorithm the DNSSEC signing algorithm number of RFC 4034.
+     * @param labels the number of labels of the owner name of the covered RRset,
+     *               the wildcard label of a wildcard RRset not counted.
+     * @param originalTtl the TTL in seconds of the covered RRset in the signed zone.
+     * @param signatureExpiration the time from which on the signature expires.
+     * @param signatureInception the time from which on the signature is valid.
+     * @param keyTag the key tag of the DNSKEY which must validate this signature.
+     * @param signerName the owner name of the DNSKEY RRset holding the signing
+     *                  key, in presentation format.
+     * @param signature the signature over the RRSIG RDATA without the signature
+     *                  field and over the covered RRset.
      */
     public RRSIG(TYPE typeCovered, int algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, String signerName, byte[] signature) {
         this(typeCovered, null, (byte) algorithm, labels, originalTtl, signatureExpiration, signatureInception, keyTag, DnsName.from(signerName), signature);
     }
 
     /**
-     * RRSIG.
+     * Create an RRSIG payload.
+     *
+     * @param typeCovered the RR type of the RRset this signature covers.
+     * @param algorithm the DNSSEC signing algorithm.
+     * @param labels the number of labels of the owner name of the covered RRset,
+     *               the wildcard label of a wildcard RRset not counted.
+     * @param originalTtl the TTL in seconds of the covered RRset in the signed zone.
+     * @param signatureExpiration the time from which on the signature expires.
+     * @param signatureInception the time from which on the signature is valid.
+     * @param keyTag the key tag of the DNSKEY which must validate this signature.
+     * @param signerName the owner name of the DNSKEY RRset holding the signing key.
+     * @param signature the signature over the RRSIG RDATA without the signature
+     *                  field and over the covered RRset.
      */
     public RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, DnsName signerName, byte[] signature) {
         this(typeCovered, algorithm.number, labels, originalTtl, signatureExpiration, signatureInception, keyTag, signerName, signature);
     }
 
     /**
-     * RRSIG.
+     * Create an RRSIG payload.
+     *
+     * @param typeCovered the RR type of the RRset this signature covers.
+     * @param algorithm the DNSSEC signing algorithm.
+     * @param labels the number of labels of the owner name of the covered RRset,
+     *               the wildcard label of a wildcard RRset not counted.
+     * @param originalTtl the TTL in seconds of the covered RRset in the signed zone.
+     * @param signatureExpiration the time from which on the signature expires.
+     * @param signatureInception the time from which on the signature is valid.
+     * @param keyTag the key tag of the DNSKEY which must validate this signature.
+     * @param signerName the owner name of the DNSKEY RRset holding the signing
+     *                  key, in presentation format.
+     * @param signature the signature over the RRSIG RDATA without the signature
+     *                  field and over the covered RRset.
      */
     public RRSIG(TYPE typeCovered, SignatureAlgorithm algorithm, byte labels, long originalTtl, Date signatureExpiration, Date signatureInception, int keyTag, String signerName, byte[] signature) {
         this(typeCovered, algorithm.number, labels, originalTtl, signatureExpiration, signatureInception, keyTag, DnsName.from(signerName), signature);
     }
 
     /**
-     * getSignature.
+     * Retrieve a copy of the signature.
+     *
+     * @return a copy of the signature bytes.
      */
     public byte[] getSignature() {
         return signature.clone();
     }
 
     /**
-     * getSignatureAsDataInputStream.
+     * Expose the signature as a stream.
+     *
+     * @return a stream to read the signature bytes from.
      */
     public DataInputStream getSignatureAsDataInputStream() {
         return new DataInputStream(new ByteArrayInputStream(signature));
     }
 
     /**
-     * getSignatureLength.
+     * Retrieve the size of the signature in the wire format.
+     *
+     * @return the length of the signature in bytes.
      */
     public int getSignatureLength() {
         return signature.length;
@@ -170,7 +233,10 @@ public class RRSIG extends Data {
     private transient String base64SignatureCache;
 
     /**
-     * getSignatureBase64.
+     * Retrieve the signature in the base64 encoding of the RFC 4034 presentation
+     * format.
+     *
+     * @return the base64 encoded signature.
      */
     public String getSignatureBase64() {
         if (base64SignatureCache == null) {
@@ -180,7 +246,9 @@ public class RRSIG extends Data {
     }
 
     /**
-     * getType.
+     * Retrieve the type of this record.
+     *
+     * @return TYPE.RRSIG.
      */
     @Override
     public TYPE getType() {
@@ -188,7 +256,10 @@ public class RRSIG extends Data {
     }
 
     /**
-     * serialize.
+     * Write the RDATA of this record.
+     *
+     * @param dos the stream to write to.
+     * @throws IOException if an I/O error occurs.
      */
     @Override
     public void serialize(DataOutputStream dos) throws IOException {
@@ -197,7 +268,11 @@ public class RRSIG extends Data {
     }
 
     /**
-     * writePartialSignature.
+     * Write the RRSIG RDATA without the trailing signature, which is the part a
+     * validator has to feed into the signature calculation.
+     *
+     * @param dos the stream to write to.
+     * @throws IOException if an I/O error occurs.
      */
     @SuppressWarnings("JavaUtilDate")
     public void writePartialSignature(DataOutputStream dos) throws IOException {
@@ -212,7 +287,10 @@ public class RRSIG extends Data {
     }
 
     /**
-     * toString.
+     * Format this record in the presentation format of RFC 4034.
+     *
+     * @return a single line holding the covered type, algorithm, label count,
+     *         TTL, both validity times, key tag, signer name and signature.
      */
     @Override
     public String toString() {

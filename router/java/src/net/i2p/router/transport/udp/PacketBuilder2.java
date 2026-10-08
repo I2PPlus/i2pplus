@@ -174,6 +174,9 @@ class PacketBuilder2 {
 
         /**
          * Fragment.
+         *
+         * @param state the outbound message state
+         * @param num fragment number within the message, {@code 0} for the first
          */
         public Fragment(OutboundMessageState state, int num) {
             this.state = state;
@@ -192,6 +195,7 @@ class PacketBuilder2 {
     /**
      *  No state, all methods are thread-safe.
      *
+     *  @param ctx router context for logging, randomness, and router identity
      *  @param transport may be null for unit testing only
      */
     public PacketBuilder2(RouterContext ctx, UDPTransport transport) {
@@ -208,7 +212,9 @@ class PacketBuilder2 {
      *
      *  This doesn't leave anything for acks or anything else.
      *
+     *  @param peer supplies the MTU and address family for the overhead
      *  @param numFragments &gt;= 1
+     *  @param curDataSize bytes of body already committed by those fragments
      *  @return max additional fragment size
      */
     public static int getMaxAdditionalFragmentSize(PeerState peer, int numFragments, int curDataSize) {
@@ -358,6 +364,10 @@ class PacketBuilder2 {
      * this method writes exactly one fragment.
      * For no fragments use buildAck().
      *
+     * @param state the outbound message state
+     * @param fragment fragment number within the message, {@code 0} for the first
+     * @param peer the destination session
+     * @return ready to send packet, non-null
      * @throws IOException if peer is dead
      */
     public UDPPacket buildPacket(OutboundMessageState state, int fragment, PeerState2 peer) throws IOException {
@@ -368,6 +378,9 @@ class PacketBuilder2 {
     /**
      *  Build a packet from multiple fragments.
      *
+     *  @param fragments one or more fragments of a message, in fragment order
+     *  @param peer the destination session
+     *  @return ready to send packet, non-null
      *  @throws IOException if peer is dead
      */
     public UDPPacket buildPacket(List<Fragment> fragments, PeerState2 peer) throws IOException {
@@ -377,7 +390,11 @@ class PacketBuilder2 {
     /**
      *  Build a packet from multiple fragments and optional other blocks.
      *
+     *  @param fragments one or more fragments of a message, in fragment order;
+     *                  empty for an ack-only packet
      *  @param otherBlocks may be null or empty
+     *  @param peer the destination session
+     *  @return ready to send packet, non-null
      *  @throws IOException if peer is dead
      */
     public UDPPacket buildPacket(List<Fragment> fragments, List<Block> otherBlocks, SSU2Sender peer) throws IOException {
@@ -539,6 +556,8 @@ class PacketBuilder2 {
      * A DATA packet with padding only.
      * We use this for keepalive purposes.
      *
+     * @param peer the destination session
+     * @return ready to send packet, or null if padding did not fit
      * @throws IOException if peer is dead
      */
     public UDPPacket buildPing(PeerState2 peer) throws IOException {
@@ -571,6 +590,8 @@ class PacketBuilder2 {
      *  An ack packet is just a data packet with no data.
      *  See buildPacket() for format.
      *
+     *  @param peer the destination session
+     *  @return ready to send packet, non-null
      *  @throws IOException if peer is dead
      */
     public UDPPacket buildACK(PeerState2 peer) throws IOException {
@@ -581,6 +602,9 @@ class PacketBuilder2 {
      *  Build a data packet with a termination block.
      *  This will also include acks, a new token block, and padding.
      *
+     *  @param reason termination reason code (0-255), also recorded on the peer
+     *  @param peer the session being destroyed
+     *  @return ready to send packet, non-null
      *  @throws IOException if peer is dead
      */
     public UDPPacket buildSessionDestroyPacket(int reason, SSU2Sender peer) throws IOException {
@@ -606,6 +630,7 @@ class PacketBuilder2 {
      * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
      *
+     * @param state the outbound establish state carrying conn IDs, version, and keys
      * @return ready to send packet, non-null
      */
     public UDPPacket buildTokenRequestPacket(OutboundEstablishState2 state) {
@@ -627,6 +652,7 @@ class PacketBuilder2 {
      * Build a new SessionRequest packet for the given peer, encrypting it
      * as necessary.
      *
+     * @param state the outbound establish state carrying conn IDs, token, and keys
      * @return ready to send packet, non-null
      */
     public UDPPacket buildSessionRequestPacket(OutboundEstablishState2 state) {
@@ -648,6 +674,7 @@ class PacketBuilder2 {
      * Build a new SessionCreated packet for the given peer, encrypting it
      * as necessary.
      *
+     * @param state the inbound establish state carrying conn IDs and keys
      * @return ready to send packet, non-null
      */
     public UDPPacket buildSessionCreatedPacket(InboundEstablishState2 state) {
@@ -674,8 +701,9 @@ class PacketBuilder2 {
      * Build a new Retry packet for the given peer, encrypting it
      * as necessary.
      *
-     * @param terminationCode 0 normally, nonzero to send termination block
-     * @return ready to send packet, non-null
+     *  @param state the inbound establish state carrying conn IDs and keys
+     *  @param terminationCode 0 normally, nonzero to send termination block
+     *  @return ready to send packet, non-null
      */
     public UDPPacket buildRetryPacket(InboundEstablishState2 state, int terminationCode) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -701,9 +729,14 @@ class PacketBuilder2 {
      * Build a new Retry packet with a termination code, for a rejection
      * direct from the EstablishmentManager. No InboundEstablishState2 required.
      *
-     * @param terminationCode must be greater than zero
-     * @return ready to send packet, non-null
-     * @since 0.9.57
+     *  @param to remote address family, supplying the IP and port for the address block
+     *  @param toAddr socket address to send the packet to
+     *  @param destID destination connection ID, or 0 when unknown
+     *  @param srcID our connection ID for the reply
+     *  @param version SSU2 protocol version of the peer
+     *  @param terminationCode must be greater than zero
+     *  @return ready to send packet, non-null
+     *  @since 0.9.57
      */
     public UDPPacket buildRetryPacket(RemoteHostId to, SocketAddress toAddr, long destID, long srcID, int version, int terminationCode) {
         long n = _context.random().signedNextInt() & 0xFFFFFFFFL;
@@ -728,7 +761,9 @@ class PacketBuilder2 {
      * the establish state via confirmedPacketsSent(), and the state will
      * transmit them via the new PeerState2.
      *
-     * @return ready to send packets, non-null
+     *  @param state the outbound establish state carrying conn IDs, keys, and MTU
+     *  @param ourInfo the RouterInfo to send, gzipped here if it shrinks
+     *  @return ready to send packets, non-null
      */
     public UDPPacket[] buildSessionConfirmedPackets(OutboundEstablishState2 state, RouterInfo ourInfo) {
         boolean gzip = false;
@@ -901,6 +936,8 @@ class PacketBuilder2 {
      * Build a packet as Alice, to Bob to begin a  peer test.
      * In-session, message 1.
      *
+     * @param signedData flag + signed data
+     * @param bob the destination session
      * @return ready to send packet, non-null
      * @throws IOException if peer is dead
      */
@@ -915,6 +952,12 @@ class PacketBuilder2 {
      * Build a packet as Alice to Charlie.
      * Out-of-session, message 6.
      *
+     * @param toIP Charlie's address
+     * @param toPort Charlie's port
+     * @param introKey static introduction key used to encrypt the packet
+     * @param sendID our connection ID
+     * @param rcvID Charlie's connection ID
+     * @param signedData flag + signed data
      * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestFromAlice(InetAddress toIP, int toPort, SessionKey introKey,
@@ -938,6 +981,9 @@ class PacketBuilder2 {
      * In-session, message 4.
      *
      * @param charlieHash fake hash (all zeros) if rejected by bob
+     * @param code peer test response code from Charlie, or Bob's rejection code
+     * @param signedData flag + signed data
+     * @param alice the destination session
      * @return ready to send packet, non-null
      * @throws IOException if peer is dead
      */
@@ -950,11 +996,14 @@ class PacketBuilder2 {
      * or a rejection by Bob.
      * In-session, message 4.
      *
-     * @param charlieHash fake hash (all zeros) if rejected by bob
-     * @param riBlock to include, may be null
-     * @return ready to send packet, non-null
-     * @throws IOException if peer is dead
-     * @since 0.9.57
+     *  @param charlieHash fake hash (all zeros) if rejected by bob
+     *  @param code peer test response code from Charlie, or Bob's rejection code
+     *  @param signedData flag + signed data
+     *  @param riBlock to include, may be null
+     *  @param alice the destination session
+     *  @return ready to send packet, non-null
+     *  @throws IOException if peer is dead
+     *  @since 0.9.57
      */
     public UDPPacket buildPeerTestToAlice(int code, Hash charlieHash, byte[] signedData, Block riBlock, PeerState2 alice) throws IOException {
         Block block = new SSU2Payload.PeerTestBlock(4, code, charlieHash, signedData);
@@ -976,6 +1025,13 @@ class PacketBuilder2 {
      * Build a packet as Charlie to Alice.
      * Out-of-session, messages 5 and 7.
      *
+     * @param aliceIP Alice's address
+     * @param alicePort Alice's port
+     * @param introKey static introduction key used to encrypt the packet
+     * @param firstSend {@code true} for message 5, {@code false} for the message 7 retry
+     * @param sendID our connection ID
+     * @param rcvID Alice's connection ID
+     * @param signedData flag + signed data
      * @return ready to send packet, non-null
      */
     public UDPPacket buildPeerTestToAlice(InetAddress aliceIP, int alicePort, SessionKey introKey,
@@ -999,9 +1055,12 @@ class PacketBuilder2 {
      * Build a packet as Bob to Charlie to help test Alice.
      * In-session, message 2.
      *
-     * @param riBlock to include, may be null
-     * @return ready to send packet, non-null
-     * @throws IOException if peer is dead
+     *  @param aliceHash hash of Alice's transient key, or all zeros if Alice is unknown
+     *  @param signedData flag + signed data
+     *  @param riBlock to include, may be null
+     *  @param charlie the destination session
+     *  @return ready to send packet, non-null
+     *  @throws IOException if peer is dead
      */
     public UDPPacket buildPeerTestToCharlie(Hash aliceHash, byte[] signedData, Block riBlock, PeerState2 charlie) throws IOException {
         Block block = new SSU2Payload.PeerTestBlock(2, 0, aliceHash, signedData);
@@ -1023,6 +1082,9 @@ class PacketBuilder2 {
      * Build a packet as Charlie to Bob verifying that we will help test Alice.
      * In-session, message 3.
      *
+     * @param code peer test response code relayed from Charlie to Bob
+     * @param signedData flag + signed data
+     * @param bob the destination session
      * @return ready to send packet, non-null
      * @throws IOException if peer is dead
      */
@@ -1038,6 +1100,7 @@ class PacketBuilder2 {
      *  In-session.
      *
      *  @param signedData flag + signed data
+     *  @param bob the destination session
      *  @return non-null
      *  @throws IOException if peer is dead
      */
@@ -1055,6 +1118,7 @@ class PacketBuilder2 {
      *
      *  @param signedData flag + alice hash + signed data
      *  @param riBlock to include, may be null
+     *  @param charlie the destination session
      *  @return non-null
      *  @throws IOException if peer is dead
      */
@@ -1093,6 +1157,13 @@ class PacketBuilder2 {
     /**
      *  Out-of-session, containing a RelayResponse block.
      *
+     *  @param to the peer's IP address
+     *  @param port the peer's port
+     *  @param introKey static introduction key used to encrypt the packet
+     *  @param sendID our connection ID
+     *  @param rcvID the peer's connection ID
+     *  @param signedData flag + response code + signed data + optional token
+     *  @return ready to send packet, non-null
      */
     public UDPPacket buildHolePunch(InetAddress to, int port, SessionKey introKey,
                                     long sendID, long rcvID, byte[] signedData) {
@@ -1499,7 +1570,8 @@ class PacketBuilder2 {
 
     /**
      * Calculates the maximum payload size that can be sent to this peer in a single data packet.
-     * @return the max data size
+     * @param peer the destination session, may be null
+     * @return the max data size in bytes
      * @since 0.9.68+
      */
     public static int getMaxDataSize(PeerState peer) {

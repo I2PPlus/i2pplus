@@ -51,9 +51,13 @@ public class Util {
     /** Constant <code>MIN_DOUBLE=-Double.MAX_VALUE</code> */
     public static final double MIN_DOUBLE = -Double.MAX_VALUE;
 
+    /** DecimalFormat pattern giving the RRDTool-like "+1.234567E+02" rendering */
     static final String PATTERN = "0.0000000000E00";
+
+    /** Name of the directory created under the user home for demo graphs */
     static final String RRD4J_DIR = "rrd4j-demo";
 
+    /** Per-thread {@link NumberFormat} applying {@link #PATTERN} and a leading '+' for positives */
     static final ThreadLocal<NumberFormat> df =
             ThreadLocal.withInitial(
                     () -> {
@@ -449,7 +453,15 @@ public class Util {
             return null;
         }
     }
-    /** Same file path */
+    /**
+     * Tells whether two paths denote the same existing file, resolving symbolic links
+     *
+     * @param pathname1 first file path, absolute or relative
+     * @param pathname2 second file path, absolute or relative
+     * @return <code>true</code> if both paths exist and resolve to one file, <code>false</code> if
+     *     their existence differs or neither path exists
+     * @throws java.io.IOException Thrown if a path cannot be resolved to its canonical form
+     */
     static boolean sameFilePath(String pathname1, String pathname2) throws IOException {
         Path path1 = Paths.get(pathname1);
         Path path2 = Paths.get(pathname2);
@@ -464,6 +476,16 @@ public class Util {
         }
     }
 
+    /**
+     * Looks up in <code>rrd2</code> the datasource sharing the name of datasource
+     * <code>dsIndex</code> of <code>rrd1</code>
+     *
+     * @param rrd1 database to read the datasource name from
+     * @param dsIndex zero-based datasource index within <code>rrd1</code>
+     * @param rrd2 database to search by name
+     * @return matching datasource index in <code>rrd2</code>, or -1 if no datasource has that name
+     * @throws java.io.IOException Thrown if either database cannot be read
+     */
     static int getMatchingDatasourceIndex(RrdDb rrd1, int dsIndex, RrdDb rrd2) throws IOException {
         String dsName = rrd1.getDatasource(dsIndex).getName();
         try {
@@ -473,6 +495,16 @@ public class Util {
         }
     }
 
+    /**
+     * Looks up in <code>rrd2</code> the archive whose consolidation function and row count match
+     * archive <code>arcIndex</code> of <code>rrd1</code>
+     *
+     * @param rrd1 database to read the archive properties from
+     * @param arcIndex zero-based archive index within <code>rrd1</code>
+     * @param rrd2 database to search by consolidation function and step count
+     * @return matching archive index in <code>rrd2</code>, or -1 if no archive matches
+     * @throws java.io.IOException Thrown if either database cannot be read
+     */
     static int getMatchingArchiveIndex(RrdDb rrd1, int arcIndex, RrdDb rrd2) throws IOException {
         Archive archive = rrd1.getArchive(arcIndex);
         ConsolFun consolFun = archive.getConsolFun();
@@ -484,10 +516,18 @@ public class Util {
         }
     }
 
+    /**
+     * Creates a new empty temporary file with the <code>rrd4j_</code> prefix and
+     * <code>.tmp</code> suffix
+     *
+     * @return canonical path to the newly created file
+     * @throws java.io.IOException Thrown if the file cannot be created or its path not resolved
+     */
     static String getTmpFilename() throws IOException {
         return File.createTempFile("rrd4j_", ".tmp").getCanonicalPath();
     }
 
+    /** The single date pattern {@link #getCalendar(String)} accepts and names on failure */
     static final String ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; // ISO
 
     /**
@@ -566,14 +606,21 @@ public class Util {
         private Xml() {}
 
         /**
-         * getChildNodes.
+         * Returns every element child of the given node
+         *
+         * @param parentNode node whose children are collected
+         * @return element children in document order, empty if there are none
          */
         public static Node[] getChildNodes(Node parentNode) {
             return getChildNodes(parentNode, null);
         }
 
         /**
-         * getChildNodes.
+         * Returns the element children of the given node whose name matches
+         *
+         * @param parentNode node whose children are collected
+         * @param childName element name to match, or <code>null</code> to accept every element
+         * @return matching element children in document order, empty if there are none
          */
         public static Node[] getChildNodes(Node parentNode, String childName) {
             ArrayList<Node> nodes = new ArrayList<>();
@@ -589,7 +636,12 @@ public class Util {
         }
 
         /**
-         * getFirstChildNode.
+         * Returns the first element child carrying the requested name
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return the first matching element child
+         * @throws java.lang.IllegalArgumentException If no child carries that name
          */
         public static Node getFirstChildNode(Node parentNode, String childName) {
             Node[] childs = getChildNodes(parentNode, childName);
@@ -598,7 +650,13 @@ public class Util {
             }
             throw new IllegalArgumentException("XML Error, no such child: " + childName);
         }
-        /** Has child node */
+        /**
+         * Checks whether the given node has an element child of the requested name
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return <code>true</code> if at least one child carries that name
+         */
         public static boolean hasChildNode(Node parentNode, String childName) {
             Node[] childs = getChildNodes(parentNode, childName);
             return childs.length > 0;
@@ -606,14 +664,25 @@ public class Util {
 
         // -- Wrapper around getChildValue with trim
         /**
-         * getChildValue.
+         * Returns the trimmed text of the first child element carrying the requested name
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return text of the first matching child element, trimmed
+         * @throws java.lang.IllegalStateException If no child carries that name
          */
         public static String getChildValue(Node parentNode, String childName) {
             return getChildValue(parentNode, childName, true);
         }
 
         /**
-         * getChildValue.
+         * Returns the text of the first child element carrying the requested name
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @param trim whether to strip leading and trailing whitespace from the text
+         * @return text of the first matching child element, trimmed if requested
+         * @throws java.lang.IllegalStateException If no child carries that name
          */
         public static String getChildValue(Node parentNode, String childName, boolean trim) {
             NodeList children = parentNode.getChildNodes();
@@ -628,14 +697,22 @@ public class Util {
 
         // -- Wrapper around getValue with trim
         /**
-         * getValue.
+         * Returns the trimmed text of the node's first child
+         *
+         * @param node element whose child supplies the text
+         * @return text of the first child, trimmed, or <code>null</code> if the node has no child
          */
         public static String getValue(Node node) {
             return getValue(node, true);
         }
 
         /**
-         * getValue.
+         * Returns the text of the node's first child
+         *
+         * @param node element whose child supplies the text
+         * @param trimValue whether to strip leading and trailing whitespace from the text
+         * @return text of the first child, trimmed if requested, or <code>null</code> if the node
+         *     has no child at all (an empty element such as <code>&lt;x/&gt;</code>)
          */
         public static String getValue(Node node, boolean trimValue) {
             String value = null;
@@ -650,7 +727,13 @@ public class Util {
         }
 
         /**
-         * getChildValueAsInt.
+         * Reads a child element's text as an <code>int</code>
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return the text parsed as an int, typically a row or step count
+         * @throws java.lang.IllegalStateException If no child carries that name
+         * @throws java.lang.NumberFormatException If the text is not a valid int
          */
         public static int getChildValueAsInt(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
@@ -658,7 +741,11 @@ public class Util {
         }
 
         /**
-         * getValueAsInt.
+         * Reads a node's text as an <code>int</code>
+         *
+         * @param node element whose child supplies the text
+         * @return the text parsed as an int, typically a row or step count
+         * @throws java.lang.NumberFormatException If the text is not a valid int
          */
         public static int getValueAsInt(Node node) {
             String valueStr = getValue(node);
@@ -666,7 +753,13 @@ public class Util {
         }
 
         /**
-         * getChildValueAsLong.
+         * Reads a child element's text as a <code>long</code>
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return the text parsed as a long, typically a timestamp in seconds or a heartbeat span
+         * @throws java.lang.IllegalStateException If no child carries that name
+         * @throws java.lang.NumberFormatException If the text is not a valid long
          */
         public static long getChildValueAsLong(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
@@ -674,7 +767,11 @@ public class Util {
         }
 
         /**
-         * getValueAsLong.
+         * Reads a node's text as a <code>long</code>
+         *
+         * @param node element whose child supplies the text
+         * @return the text parsed as a long, typically a timestamp in seconds or a heartbeat span
+         * @throws java.lang.NumberFormatException If the text is not a valid long
          */
         public static long getValueAsLong(Node node) {
             String valueStr = getValue(node);
@@ -682,7 +779,12 @@ public class Util {
         }
 
         /**
-         * getChildValueAsDouble.
+         * Reads a child element's text as a <code>double</code>, yielding NaN when unparsable
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return the text parsed as a double, or NaN if it is not a valid double
+         * @throws java.lang.IllegalStateException If no child carries that name
          */
         public static double getChildValueAsDouble(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
@@ -690,7 +792,10 @@ public class Util {
         }
 
         /**
-         * getValueAsDouble.
+         * Reads a node's text as a <code>double</code>, yielding NaN when unparsable
+         *
+         * @param node element whose child supplies the text
+         * @return the text parsed as a double, or NaN if it is not a valid double
          */
         public static double getValueAsDouble(Node node) {
             String valueStr = getValue(node);
@@ -698,7 +803,13 @@ public class Util {
         }
 
         /**
-         * getChildValueAsBoolean.
+         * Reads a child element's text as a boolean
+         *
+         * @param parentNode node whose children are searched
+         * @param childName element name to match
+         * @return <code>true</code> for true/on/yes/y/1 (any case), <code>false</code> for anything
+         *     else including a missing text
+         * @throws java.lang.IllegalStateException If no child carries that name
          */
         public static boolean getChildValueAsBoolean(Node parentNode, String childName) {
             String valueStr = getChildValue(parentNode, childName);
@@ -706,7 +817,11 @@ public class Util {
         }
 
         /**
-         * getValueAsBoolean.
+         * Reads a node's text as a boolean
+         *
+         * @param node element whose child supplies the text
+         * @return <code>true</code> for true/on/yes/y/1 (any case), <code>false</code> for anything
+         *     else including a missing text
          */
         public static boolean getValueAsBoolean(Node node) {
             String valueStr = getValue(node);
@@ -714,7 +829,12 @@ public class Util {
         }
 
         /**
-         * getRootElement.
+         * Parses an RRD XML document and returns its root element
+         *
+         * @param inputSource source of the XML text, for example a file or a string reader
+         * @return the document element of the parsed document
+         * @throws java.io.IOException Thrown if the source cannot be read
+         * @throws java.lang.RuntimeException Thrown if the source is not well-formed XML
          */
         public static Element getRootElement(InputSource inputSource) throws IOException {
             try {
@@ -728,14 +848,24 @@ public class Util {
         }
 
         /**
-         * getRootElement.
+         * Parses RRD XML held in a string and returns its root element
+         *
+         * @param xmlString the XML text
+         * @return the document element of the parsed document
+         * @throws java.io.IOException Thrown if the string cannot be read
+         * @throws java.lang.RuntimeException Thrown if the string is not well-formed XML
          */
         public static Element getRootElement(String xmlString) throws IOException {
             return getRootElement(new InputSource(new StringReader(xmlString)));
         }
 
         /**
-         * getRootElement.
+         * Parses an RRD XML file, read as UTF-8, and returns its root element
+         *
+         * @param xmlFile file holding the XML text
+         * @return the document element of the parsed document
+         * @throws java.io.IOException Thrown if the file cannot be opened or read
+         * @throws java.lang.RuntimeException Thrown if the file is not well-formed XML
          */
         public static Element getRootElement(File xmlFile) throws IOException {
             try (Reader reader =
@@ -836,7 +966,7 @@ public class Util {
      *
      * @param file File object representing file on the disk
      * @return Last modification time in seconds (without milliseconds)
-     * @throws IOException
+     * @throws IOException Thrown if the file cannot be read or the path cannot be resolved
      */
     public static long getLastModifiedTime(String file) throws IOException {
         return Files.getLastModifiedTime(Paths.get(file)).to(TimeUnit.SECONDS);

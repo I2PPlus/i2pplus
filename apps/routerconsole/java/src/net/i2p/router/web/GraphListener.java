@@ -34,7 +34,11 @@ import java.util.concurrent.ConcurrentMap;
  *  @since 0.6.1.13
  */
 public class GraphListener implements RateSummaryListener {
-    /** @since 0.9.33 */
+    /**
+     *  Whether RRDs are kept on disk between restarts rather than held in memory.
+     *
+     *  @since 0.9.33
+     */
     public static final String PROP_PERSISTENT = "routerconsole.graphPersistent";
     /** note that .jrb files are NOT compatible with .rrd files */
     static final String RRD_DIR = "rrd";
@@ -132,7 +136,11 @@ public class GraphListener implements RateSummaryListener {
      */
     private volatile long _unrecoverableCoalesceDelta;
 
-    /** When the most recent RRD write succeeded, or 0 if none has. */
+    /**
+     *  When the most recent RRD write succeeded, or 0 if none has.
+     *
+     *  @return wall-clock ms of the last successful write, or 0 if none
+     */
     long getLastUpdateSuccess() { return _lastUpdateSuccess; }
 
     /**
@@ -143,7 +151,11 @@ public class GraphListener implements RateSummaryListener {
      */
     long getAttachedMs() { return _attachedMs; }
 
-    /** Number of successful RRD writes since startup. */
+    /**
+     *  Number of successful RRD writes since startup.
+     *
+     *  @return the live-write count, backfilled steps included
+     */
     long getUpdateCount() { return _updateCount; }
 
     /**
@@ -247,7 +259,11 @@ public class GraphListener implements RateSummaryListener {
     static final int GRAPH_END_OFFSET_SECONDS = 75;
     /** Minimum number of rows to keep in the archive. */
     private static final int MIN_ROWS = PERIODS;
-    /** @since 0.9.33 */
+    /**
+     *  Most rows a persistent RRD archive keeps, three months at one-minute resolution.
+     *
+     *  @since 0.9.33
+     */
     public static final int MAX_ROWS = 91 * MIN_ROWS;
     /** Three months in milliseconds (used to compute max rows for persistent RRDs). */
     private static final long THREE_MONTHS = 91L * 24 * 60 * 60 * 1000;
@@ -568,9 +584,12 @@ public class GraphListener implements RateSummaryListener {
     }
 
     /**
-     * JRobin can only deal with 20 character data source names, so we need to create a unique,
-     * munged version from the user/developer-visible name.
+     *  JRobin can only deal with 20 character data source names, so we need to create a unique,
+     *  munged version from the user/developer-visible name.
      *
+     *  @param ctx the context whose SHA munges the name
+     *  @param wanted the stat name, or the stat name and period, to munge
+     *  @return a 20-character datasource id, distinct for each name
      */
     static String createName(I2PAppContext ctx, String wanted) {
         return ctx.sha().calculateHash(DataHelper.getUTF8(wanted)).toBase64().substring(0,20);
@@ -888,7 +907,17 @@ public class GraphListener implements RateSummaryListener {
     /**
      *  Single graph.
      *
+     *  @param out the output stream to write the graph to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
      *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
                            boolean hideTitle, boolean showEvents, int periodCount,
@@ -900,9 +929,20 @@ public class GraphListener implements RateSummaryListener {
     /**
      *  Single or two-data-source graph.
      *
+     *  @param out the output stream to write the graph to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
      *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
      *  @param titleOverride If non-null, overrides the title
      *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      *  @since 0.9.6
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -924,7 +964,21 @@ public class GraphListener implements RateSummaryListener {
      *  client cannot read the numbers out of it. This is the separate request that carries
      *  them, for a cursor readout.
      *
+     *  @param out the output stream to write the graph or the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
+     *  @param lsnr2 2nd data source to plot on same graph, or null. Not recommended for events.
+     *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
      *  @param meta true to write the metadata instead of the image
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      *  @since 0.9.71+
      */
     public void renderGraphMeta(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -944,8 +998,20 @@ public class GraphListener implements RateSummaryListener {
      *  <p>Every series shares one axis, so the caller must supply stats that measure the
      *  same thing; see {@link GraphGroups} for the sanctioned groupings.
      *
+     *  @param out the output stream to write the graph to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
      *  @param extras extra series in legend order, or null for none
      *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      *  @since 0.9.71+
      */
     public void renderGraph(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -962,7 +1028,21 @@ public class GraphListener implements RateSummaryListener {
     /**
      *  As {@link #renderGraph}, but emitting the plot geometry and series as JSON.
      *
+     *  @param out the output stream to write the graph or the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
+     *  @param extras extra series in legend order, or null for none
+     *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
      *  @param meta true to write the metadata instead of the image
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      *  @since 0.9.71+
      */
     public void renderGraphMeta(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -983,7 +1063,20 @@ public class GraphListener implements RateSummaryListener {
      *  boolean, int, int, boolean, List, String, boolean)} except that the primary is a line
      *  rather than a filled area, so no member of the group is hidden behind another.
      *
+     *  @param out the output stream to write the graph to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
      *  @param extras extra series in legend order, or null for none
+     *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      *  @since 0.9.71+
      */
     public void renderGraphLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -1000,7 +1093,21 @@ public class GraphListener implements RateSummaryListener {
     /**
      *  As {@link #renderGraphLines}, but emitting the plot geometry and series as JSON.
      *
+     *  @param out the output stream to write the graph or the metadata to
+     *  @param width image width in pixels
+     *  @param height image height in pixels
+     *  @param hideLegend if true, omit the legend
+     *  @param hideGrid if true, omit the grid lines
+     *  @param hideTitle if true, omit the title
+     *  @param showEvents if true, plot the event count rather than the stat
+     *  @param periodCount number of time periods to display, or -1 for default
+     *  @param end number of periods before now
+     *  @param showCredit if true, keep the signature line
+     *  @param extras extra series in legend order, or null for none
+     *  @param titleOverride If non-null, overrides the title
+     *  @param showRestarts if true, draw the vertical restart lines and "Router restarted" label
      *  @param meta true to write the metadata instead of the image
+     *  @throws IOException if this listener has no open RRD, or the graph cannot be produced
      *  @since 0.9.71+
      */
     public void renderGraphMetaLines(OutputStream out, int width, int height, boolean hideLegend, boolean hideGrid,
@@ -1052,7 +1159,12 @@ public class GraphListener implements RateSummaryListener {
      */
     long now() {return _context.clock().now();}
 
-    /** @since 0.9.46 */
+    /**
+     *  The backend factory matching this listener's persistence setting.
+     *
+     *  @return the NIO file factory when persistent, otherwise the in-memory one
+     *  @since 0.9.46
+     */
     RrdBackendFactory getBackendFactory() {return getBackendFactory(_isPersistent);}
 
     /** @since 0.9.46 */

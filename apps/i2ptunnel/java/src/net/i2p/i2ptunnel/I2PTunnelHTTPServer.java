@@ -2722,7 +2722,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          *
          * @param bytes bytes transferred
          * @param secs elapsed seconds
-         * @return formatted rate, e.g. {@code 60.6K/s}; "0.0B/s" if secs <= 0
+         * @return formatted rate, e.g. {@code 60.6K/s}; "0.0B/s" if secs &lt;= 0
          * @since 0.9.71+
          */
     static String formatTransferRate(long bytes, double secs) {

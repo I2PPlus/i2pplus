@@ -1009,6 +1009,8 @@ public class UDPTransport extends TransportImpl {
     /**
      * Introduction key that people should use to contact us,
      * or null if SSU1 disabled.
+     *
+     * @return the SSU1 introduction key, or null if SSU1 is disabled
      */
     SessionKey getIntroKey() { return _introKey; }
 
@@ -1046,8 +1048,9 @@ public class UDPTransport extends TransportImpl {
      * Valid SSU version of Bob's SSU address
      * for our outbound connections as Alice.
      *
-     * @return the valid version 1 or 2, or 0 if unusable
-     * @since 0.9.54
+     *  @param addr the remote RouterAddress, whose transport style selects the version
+     *  @return the valid version 1 or 2, or 0 if unusable
+     *  @since 0.9.54
      */
     int getSSUVersion(RouterAddress addr) {
         String style = addr.getTransportStyle();
@@ -1113,6 +1116,9 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  Published or requested port
+     *
+     *  @param ipv6 {@code true} for the IPv6 socket
+     *  @return the published port, else the requested port
      */
     int getExternalPort(boolean ipv6) {
         RouterAddress addr = getCurrentAddress(ipv6);
@@ -1140,6 +1146,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  For PeerTestManager
+     *  @return {@code true} if we have a published IPv6 address
      *  @since 0.9.30
      */
     boolean hasIPv6Address() {
@@ -1150,6 +1157,7 @@ public class UDPTransport extends TransportImpl {
      *  Is this IP too close to ours to trust it for
      *  things like relaying?
      *  @param ip IPv4 or IPv6
+     *  @return {@code true} if it shares our subnet prefix (2 bytes IPv4, 4 bytes IPv6)
      *  @since IPv6
      */
     boolean isTooClose(byte[] ip) {
@@ -1282,7 +1290,12 @@ public class UDPTransport extends TransportImpl {
      */
     private static final int ALLOW_IP_CHANGE_INTERVAL = 2*60*1000;
 
-    /** Inbound connection received */
+    /**
+     * Inbound connection received, which locks our IP against changing for
+     * {@link #ALLOW_IP_CHANGE_INTERVAL}.
+     *
+     * @param isIPv6 {@code true} for the IPv6 socket
+     */
     void inboundConnectionReceived(boolean isIPv6) {
         if (isIPv6) {
             _lastInboundIPv6 = _context.clock().now();
@@ -1874,6 +1887,9 @@ public class UDPTransport extends TransportImpl {
     /**
      *  The peer state for the peer with the given ident, or null
      *  if no state exists.
+     *
+     *  @param remotePeer the router identity hash
+     *  @return the peer state, or null if none exists
      */
     PeerState getPeerState(Hash remotePeer) {
         return _peersByIdent.get(remotePeer);
@@ -1899,6 +1915,8 @@ public class UDPTransport extends TransportImpl {
     /**
      * Peer state by SSU2 connection ID.
      *
+     * @param rcvConnID the receive connection ID of the session
+     * @return the peer state, or null if none exists
      * @since 0.9.55
      */
     PeerState2 getPeerState(long rcvConnID) {
@@ -1909,8 +1927,10 @@ public class UDPTransport extends TransportImpl {
      * Was the state for this SSU2 receive connection ID recently closed?
      * Lock-free single ConcurrentHashMap read; hits the per-packet receive path
      * on a connection-ID miss (attacker-triggerable), so the shared add/drop
-     * lock must not be taken here.
-     * @since 0.9.56
+     *  lock must not be taken here.
+     *  @param rcvConnID the receive connection ID of the closed session
+     *  @return the destroyed state, or null if the ID is not in the recent list
+     *  @since 0.9.56
      */
     PeerStateDestroyed getRecentlyClosed(long rcvConnID) {
         return _recentlyClosedConnIDs.get(Long.valueOf(rcvConnID));
@@ -1918,6 +1938,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Start listening for packets on a destroyed connection
+     * @param peer the destroyed session to keep reachable
      * @since 0.9.57
      */
     void addRecentlyClosed(PeerStateDestroyed peer) {
@@ -1934,6 +1955,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      * Stop listening for packets on a destroyed connection
+     * @param peer the destroyed session to stop tracking
      * @since 0.9.57
      */
     void removeRecentlyClosed(PeerStateDestroyed peer) {
@@ -1960,6 +1982,8 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  Remove and add to peersByRemoteHost map
+     *  @param peer the peer whose port changed
+     *  @param newPort the peer's new port
      *  @since 0.9.3
      */
     void changePeerPort(PeerState peer, int newPort) {
@@ -1980,6 +2004,8 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  Remove and add to peersByRemoteHost map
+     *  @param peer the peer whose address changed
+     *  @param newAddress the peer's new IP and port
      *  @since 0.9.56
      */
     void changePeerAddress(PeerState2 peer, RemoteHostId newAddress) {
@@ -2194,13 +2220,20 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-    /** Is in drop list */
+    /**
+     * Is in drop list
+     *
+     * @param peer the peer to look for
+     * @return {@code true} if a delayed drop is still pending for the peer
+     */
     boolean isInDropList(RemoteHostId peer) { return _dropList.contains(peer); }
 
     /**
      *  This does not send a session destroy, caller must do that if desired.
      *
+     *  @param peer the router identity hash of the peer to drop
      *  @param shouldBanlist doesn't really, only sets unreachable
+     *  @param why cause, for the debug log only, may be null
      */
     void dropPeer(Hash peer, boolean shouldBanlist, String why) {
         PeerState state = getPeerState(peer);
@@ -2211,7 +2244,9 @@ public class UDPTransport extends TransportImpl {
     /**
      *  This does not send a session destroy, caller must do that if desired.
      *
+     *  @param peer the session to drop, recursing if another session shares its ident or host
      *  @param shouldBanlist doesn't really, only sets unreachable
+     *  @param why cause, for the debug log only, may be null
      */
     void dropPeer(PeerState peer, boolean shouldBanlist, String why) {
         if (_log.shouldDebug()) {
@@ -2313,6 +2348,8 @@ public class UDPTransport extends TransportImpl {
      *  This sends it directly out, bypassing OutboundMessageFragments.
      *  The only queueing is for the bandwidth limiter.
      *  BLOCKING if OB queue is full.
+     *
+     *  @param packet already built, addressed, and encrypted
      */
     void send(UDPPacket packet) {
         if (_pusher != null) {
@@ -2328,6 +2365,7 @@ public class UDPTransport extends TransportImpl {
      *  Send a session destroy message, bypassing OMF and PacketPusher.
      *  BLOCKING if OB queue is full.
      *
+     *  @param peer the session to tear down, SSU1 peers are ignored
      *  @param reasonCode SSU2 only, ignored for SSU1
      *  @since 0.8.9
      */
@@ -2628,6 +2666,7 @@ public class UDPTransport extends TransportImpl {
 
     /**
      *  First available address of the target that we can use.
+     *  @param target the remote RouterInfo whose addresses are scanned in order
      *  @return address or null
      *  @since 0.9.6
      */
@@ -2747,6 +2786,7 @@ public class UDPTransport extends TransportImpl {
     /**
      *  Send only if established, otherwise fail immediately.
      *  Never queue with the establisher.
+     *  @param msg the message to send, which must have an established peer
      *  @since 0.9.2
      */
     void sendIfEstablished(OutNetMessage msg) {
@@ -2757,6 +2797,7 @@ public class UDPTransport extends TransportImpl {
      *  "injected" message from the EstablishmentManager.
      *  If you have multiple messages, use the list variant, so the messages may be bundled efficiently.
      *
+     *  @param msg the message to send, which must have an established peer
      *  @param peer the message MUST be going to this peer
      */
     void send(I2NPMessage msg, PeerState peer) {
@@ -2776,7 +2817,7 @@ public class UDPTransport extends TransportImpl {
      *  so the messages may be bundled efficiently. Called at end of outbound establishment.
      *
      *  @param msg may be null if nothing to inject
-     *  @param msgs non-null, may be empty
+     *  @param msgs pending messages to bundle with {@code msg}, non-null, may be empty
      *  @param peer all messages MUST be going to this peer
      *  @since 0.9.24
      */
@@ -2805,6 +2846,7 @@ public class UDPTransport extends TransportImpl {
      *  "injected" messages from the EstablishmentManager.
      *  Called at end of inbound establishment.
      *
+     *  @param msgs the messages to bundle, non-null, may be empty
      *  @param peer all messages MUST be going to this peer
      *  @since 0.9.24
      */
@@ -3427,6 +3469,8 @@ public class UDPTransport extends TransportImpl {
      *  This is like introducersRequired, but if we aren't sure, this returns true.
      *  Used only by EstablishmentManager.
      *
+     *  @param ipv6 {@code true} to test the IPv6 side of our reachability
+     *  @return {@code true} if introducers may be required
      *  @since 0.9.24
      */
     boolean introducersMaybeRequired(boolean ipv6) {
@@ -3477,6 +3521,8 @@ public class UDPTransport extends TransportImpl {
     /**
      *  For EstablishmentManager.
      *
+     *  @param ipv6 {@code true} to test the IPv6 side of our reachability
+     *  @return {@code true} if we are eligible to offer relay introductions
      *  @since 0.9.3
      */
     boolean canIntroduce(boolean ipv6) {
@@ -3502,7 +3548,11 @@ public class UDPTransport extends TransportImpl {
         return _context.getBooleanPropertyDefaultTrue(PROP_ALLOW_DIRECT);
     }
 
-    /** Packet handler status */
+    /**
+     * Packet handler status
+     *
+     * @return the handler's status string, or empty if not yet started
+     */
     String getPacketHandlerStatus() {
         PacketHandler handler = _handler;
         if (handler != null)
@@ -3511,7 +3561,11 @@ public class UDPTransport extends TransportImpl {
             return "";
     }
 
-    /** The packet handler */
+    /**
+     * The packet handler
+     *
+     * @return the handler, or null if not yet started
+     */
     PacketHandler getPacketHandler() {
         return _handler;
     }
@@ -3522,6 +3576,13 @@ public class UDPTransport extends TransportImpl {
      */
     public void failed(OutboundMessageState msg) { failed(msg, true); }
 
+    /**
+     * Handle a failed outbound message, blaming the peer only after
+     * MAX_CONSECUTIVE_FAILED failures with no recent activity.
+     *
+     * @param msg the outbound message
+     * @param allowPeerFailure {@code false} to count the failure without blaming the peer
+     */
     void failed(OutboundMessageState msg, boolean allowPeerFailure) {
         if (msg == null) return;
         OutNetMessage m = msg.getMessage();
@@ -3767,6 +3828,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  The introduction manager
+     *
+     *  @return the manager, or null if not started
      *  @since 0.9.54
      */
     IntroductionManager getIntroManager() {
@@ -3774,6 +3838,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  The peer test manager
+     *
+     *  @return the manager, or null if not started
      *  @since 0.9.54
      */
     PeerTestManager getPeerTestManager() {
@@ -3781,6 +3848,9 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
+     *  The inbound fragment reassembler
+     *
+     *  @return the reassembler, or null if not started
      *  @since 0.9.54
      */
     InboundMessageFragments getInboundFragments() {
@@ -4162,6 +4232,7 @@ if (_alive)
     /**
      *  Update the reachability status of this router, optionally for an IPv6 change.
      *
+     *  @param status the merged IPv4/IPv6 reachability status
      *  @param isIPv6 Is the change an IPv6 change?
      *  @since 0.9.27
      */
@@ -4429,6 +4500,7 @@ if (_alive)
 
     /**
      *  Is IPv4 Symmetric NATted?
+     *  @return {@code true} if the IPv4 status is one of the SYMNAT states
      *  @since 0.9.57
      */
     boolean isSymNatted() {
@@ -4437,6 +4509,7 @@ if (_alive)
 
     /**
      *  Can we be a Charlie right now?
+     *  @param ipv6 {@code true} to test the IPv6 side of our reachability
      *  @return true if we can participate
      *  @since 0.9.57
      */

@@ -372,9 +372,9 @@ public class ProfileManagerImpl implements ProfileManager {
      *
      * Thresholds:
      * - UNKNOWN: 0 successful lookups (probing target)
-     * - OK: 1-4 successful lookups with >=50% success rate
-     * - GOOD: >=5 successful lookups with >=80% success rate
-     * - BAD: >=5 total lookups with <50% success rate
+     * - OK: 1-4 successful lookups with &gt;=50% success rate
+     * - GOOD: &gt;=5 successful lookups with &gt;=80% success rate
+     * - BAD: &gt;=5 total lookups with &lt;50% success rate
      *
      * @param data the peer profile, must have expanded DB profile
      * @since 0.9.71+

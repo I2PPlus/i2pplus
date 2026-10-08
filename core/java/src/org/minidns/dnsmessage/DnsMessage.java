@@ -335,7 +335,9 @@ public class DnsMessage {
     public final long receiveTimestamp;
 
     /**
-     * DnsMessage.
+     * Construct a DNS message from the state of the given builder.
+     *
+     * @param builder the builder holding the header flags and the sections.
      */
     protected DnsMessage(Builder builder) {
         this.id = builder.id;
@@ -502,7 +504,11 @@ public class DnsMessage {
     }
 
     /**
-     * asDatagram.
+     * Wrap the serialized message in a UDP datagram.
+     *
+     * @param address the address of the peer the message is addressed to.
+     * @param port the UDP port of that peer, normally 53.
+     * @return a datagram carrying the serialized message.
      */
     public DatagramPacket asDatagram(InetAddress address, int port) {
         byte[] bytes = serialize();
@@ -510,14 +516,23 @@ public class DnsMessage {
     }
 
     /**
-     * writeTo.
+     * Write the serialized message to the given stream, prefixed with its length
+     * as required by the DNS over TCP framing of RFC 1035 § 4.2.2.
+     *
+     * @param outputStream the stream to write to.
+     * @throws IOException On write errors.
      */
     public void writeTo(OutputStream outputStream) throws IOException {
         writeTo(outputStream, true);
     }
 
     /**
-     * writeTo.
+     * Write the serialized message to the given stream.
+     *
+     * @param outputStream the stream to write to.
+     * @param writeLength true to prefix the message with its 16 bit length,
+     *                    false to write the bare message.
+     * @throws IOException On write errors.
      */
     public void writeTo(OutputStream outputStream, boolean writeLength) throws IOException {
         byte[] bytes = serialize();
@@ -529,7 +544,9 @@ public class DnsMessage {
     }
 
     /**
-     * getInByteBuffer.
+     * Wrap the serialized message in a byte buffer.
+     *
+     * @return a buffer over a private copy of the serialized message.
      */
     public ByteBuffer getInByteBuffer() {
         byte[] bytes = serialize().clone();
@@ -601,7 +618,12 @@ public class DnsMessage {
         return byteCache;
     }
 
-    /** Compute the DNS header bitmap */
+    /**
+     * Compute the DNS header bitmap
+     *
+     * @return the 16 bit header field with the QR, opcode, AA, TC, RD, RA, AD
+     *         and CD bits and the response code packed into it.
+     */
     int calculateHeaderBitmap() {
         int header = 0;
         if (qr) {
@@ -635,7 +657,9 @@ public class DnsMessage {
     }
 
     /**
-     * getQuestion.
+     * Retrieve the first question of the question section.
+     *
+     * @return the first question.
      */
     public Question getQuestion() {
         return questions.get(0);
@@ -678,7 +702,10 @@ public class DnsMessage {
     }
 
     /**
-     * getEdns.
+     * Retrieve the EDNS information of this message.
+     *
+     * @return the EDNS information built from the OPT pseudo record, or null if
+     *         this message has none.
      */
     public Edns getEdns() {
         if (edns != null) return edns;
@@ -690,7 +717,10 @@ public class DnsMessage {
     }
 
     /**
-     * getOptPseudoRecord.
+     * Retrieve the OPT pseudo record of this message.
+     *
+     * @return the OPT record of the additional section, or null if this message
+     *         has none.
      */
     @SuppressWarnings("unchecked")
     public Record<OPT> getOptPseudoRecord() {
@@ -798,7 +828,12 @@ public class DnsMessage {
     }
 
     /**
-     * getAnswersFor.
+     * Collect the payloads of the answer records matching the given question.
+     *
+     * @param <D> the payload type the collected payloads are cast to.
+     * @param q the question whose name, type and class the records must match.
+     * @return the distinct payloads of the matching answer records, or null if
+     *         this message has a response code other than NO_ERROR.
      */
     public <D extends Data> Set<D> getAnswersFor(Question q) {
         if (responseCode != RESPONSE_CODE.NO_ERROR) return null;
@@ -844,7 +879,9 @@ public class DnsMessage {
     }
 
     /**
-     * asBuilder.
+     * Create a builder holding a copy of the content of this message.
+     *
+     * @return a builder initialized from this message.
      */
     public Builder asBuilder() {
         return new Builder(this);
@@ -856,7 +893,10 @@ public class DnsMessage {
     private DnsMessage normalizedVersionCache;
 
     /**
-     * asNormalizedVersion.
+     * Retrieve the copy of this message with the message id set to 0.
+     *
+     * @return a message with the content of this one but with the id zeroed, so
+     *         that messages differing only in the id compare as equal.
      */
     public DnsMessage asNormalizedVersion() {
         if (normalizedVersionCache == null) {
@@ -866,7 +906,11 @@ public class DnsMessage {
     }
 
     /**
-     * getResponseBuilder.
+     * Create a builder for a response to this query.
+     *
+     * @param responseCode the status of the response to put into the header.
+     * @return a builder with the QR flag set and with the id and the first
+     *         question of this message; only usable while this message is a query.
      */
     public Builder getResponseBuilder(RESPONSE_CODE responseCode) {
         if (qr) {
@@ -941,42 +985,69 @@ public class DnsMessage {
     }
 
     /**
-     * filterAnswerSectionBy.
+     * Collect the answer records holding the given payload type.
+     *
+     * @param <D> the payload type the collected records are typed as.
+     * @param type the payload type to match.
+     * @return the matching records of the answer section, in message order.
      */
     public <D extends Data> List<Record<D>> filterAnswerSectionBy(Class<D> type) {
         return filterSectionByType(SectionName.answer, type);
     }
 
     /**
-     * filterAuthoritySectionBy.
+     * Collect the authority section records holding the given payload type.
+     *
+     * @param <D> the payload type the collected records are typed as.
+     * @param type the payload type to match.
+     * @return the matching records of the authority section, in message order.
      */
     public <D extends Data> List<Record<D>> filterAuthoritySectionBy(Class<D> type) {
         return filterSectionByType(SectionName.authority, type);
     }
 
     /**
-     * filterAdditionalSectionBy.
+     * Collect the additional section records holding the given payload type.
+     *
+     * @param <D> the payload type the collected records are typed as.
+     * @param type the payload type to match.
+     * @return the matching records of the additional section, in message order.
      */
     public <D extends Data> List<Record<D>> filterAdditionalSectionBy(Class<D> type) {
         return filterSectionByType(SectionName.additional, type);
     }
 
     /**
-     * getFirstOfTypeFromAnswerSection.
+     * Retrieve the first answer record holding the given payload type.
+     *
+     * @param <D> the payload type the returned record is typed as.
+     * @param type the payload type to match.
+     * @return the first matching record of the answer section, or null if there
+     *         is none.
      */
     public <D extends Data> Record<D> getFirstOfTypeFromAnswerSection(Class<D> type) {
         return getFirstOfType(SectionName.answer, type);
     }
 
     /**
-     * getFirstOfTypeFromAuthoritySection.
+     * Retrieve the first authority section record holding the given payload type.
+     *
+     * @param <D> the payload type the returned record is typed as.
+     * @param type the payload type to match.
+     * @return the first matching record of the authority section, or null if
+     *         there is none.
      */
     public <D extends Data> Record<D> getFirstOfTypeFromAuthoritySection(Class<D> type) {
         return getFirstOfType(SectionName.authority, type);
     }
 
     /**
-     * getFirstOfTypeFromAdditionalSection.
+     * Retrieve the first additional section record holding the given payload type.
+     *
+     * @param <D> the payload type the returned record is typed as.
+     * @param type the payload type to match.
+     * @return the first matching record of the additional section, or null if
+     *         there is none.
      */
     public <D extends Data> Record<D> getFirstOfTypeFromAdditionalSection(Class<D> type) {
         return getFirstOfType(SectionName.additional, type);
@@ -1000,7 +1071,9 @@ public class DnsMessage {
     }
 
     /**
-     * builder.
+     * Create an empty builder for a new DNS message.
+     *
+     * @return a builder with the default header flags and empty sections.
      */
     public static Builder builder() {
         return new DnsMessage.Builder();
@@ -1096,7 +1169,10 @@ public class DnsMessage {
         }
 
         /**
-         * setOpcode.
+         * Set the opcode of the DNS message header.
+         *
+         * @param opcode the operation this message requests.
+         * @return a reference to this builder.
          */
         public Builder setOpcode(OPCODE opcode) {
             this.opcode = opcode;
@@ -1104,7 +1180,10 @@ public class DnsMessage {
         }
 
         /**
-         * setResponseCode.
+         * Set the response code of the DNS message header.
+         *
+         * @param responseCode the status of the DNS exchange to report.
+         * @return a reference to this builder.
          */
         public Builder setResponseCode(RESPONSE_CODE responseCode) {
             this.responseCode = responseCode;
@@ -1202,7 +1281,10 @@ public class DnsMessage {
         }
 
         /**
-         * copyFlagsFrom.
+         * Copy the header flags of the given message.
+         *
+         * @param dnsMessage the message to copy the QR, TC, RD, RA, AD and CD
+         *                   flags from; its AD bit also becomes the AA flag.
          */
         public void copyFlagsFrom(DnsMessage dnsMessage) {
             this.query = dnsMessage.qr;
@@ -1215,7 +1297,11 @@ public class DnsMessage {
         }
 
         /**
-         * setReceiveTimestamp.
+         * Set the time at which the message was received.
+         *
+         * @param receiveTimestamp the receive time in milliseconds since the
+         *                        epoch, or -1 if the message was not received.
+         * @return a reference to this builder.
          */
         public Builder setReceiveTimestamp(long receiveTimestamp) {
             this.receiveTimestamp = receiveTimestamp;
@@ -1223,7 +1309,10 @@ public class DnsMessage {
         }
 
         /**
-         * addQuestion.
+         * Append a question to the question section.
+         *
+         * @param question the question to append.
+         * @return a reference to this builder.
          */
         public Builder addQuestion(Question question) {
             if (questions == null) {
@@ -1257,7 +1346,10 @@ public class DnsMessage {
         }
 
         /**
-         * addAnswer.
+         * Append a record to the answer section.
+         *
+         * @param answer the record to append to the answer section.
+         * @return a reference to this builder.
          */
         public Builder addAnswer(Record<? extends Data> answer) {
             if (answerSection == null) {
@@ -1268,7 +1360,10 @@ public class DnsMessage {
         }
 
         /**
-         * addAnswers.
+         * Append records to the answer section.
+         *
+         * @param records the records to append to the answer section.
+         * @return a reference to this builder.
          */
         public Builder addAnswers(Collection<Record<? extends Data>> records) {
             if (answerSection == null) {
@@ -1279,7 +1374,10 @@ public class DnsMessage {
         }
 
         /**
-         * setAnswers.
+         * Replace the answer section by a copy of the given records.
+         *
+         * @param records the records the new answer section consists of.
+         * @return a reference to this builder.
          */
         public Builder setAnswers(Collection<Record<? extends Data>> records) {
             answerSection = new ArrayList<>(records.size());
@@ -1288,7 +1386,10 @@ public class DnsMessage {
         }
 
         /**
-         * getAnswers.
+         * Retrieve the answer section records.
+         *
+         * @return the records of the answer section, or an empty list if none
+         *         have been set.
          */
         public List<Record<? extends Data>> getAnswers() {
             if (answerSection == null) {
@@ -1298,7 +1399,10 @@ public class DnsMessage {
         }
 
         /**
-         * addNameserverRecords.
+         * Append a record to the authority section.
+         *
+         * @param record the record to append to the authority section.
+         * @return a reference to this builder.
          */
         public Builder addNameserverRecords(Record<? extends Data> record) {
             if (authoritySection == null) {
@@ -1309,7 +1413,10 @@ public class DnsMessage {
         }
 
         /**
-         * setNameserverRecords.
+         * Replace the authority section by a copy of the given records.
+         *
+         * @param records the records the new authority section consists of.
+         * @return a reference to this builder.
          */
         public Builder setNameserverRecords(Collection<Record<? extends Data>> records) {
             authoritySection = new ArrayList<>(records.size());
@@ -1318,7 +1425,10 @@ public class DnsMessage {
         }
 
         /**
-         * setAdditionalResourceRecords.
+         * Replace the additional section by a copy of the given records.
+         *
+         * @param records the records the new additional section consists of.
+         * @return a reference to this builder.
          */
         public Builder setAdditionalResourceRecords(Collection<Record<? extends Data>> records) {
             additionalSection = new ArrayList<>(records.size());
@@ -1327,7 +1437,10 @@ public class DnsMessage {
         }
 
         /**
-         * addAdditionalResourceRecord.
+         * Append a record to the additional section.
+         *
+         * @param record the record to append to the additional section.
+         * @return a reference to this builder.
          */
         public Builder addAdditionalResourceRecord(Record<? extends Data> record) {
             if (additionalSection == null) {
@@ -1338,7 +1451,10 @@ public class DnsMessage {
         }
 
         /**
-         * addAdditionalResourceRecords.
+         * Append records to the additional section.
+         *
+         * @param records the records to append to the additional section.
+         * @return a reference to this builder.
          */
         public Builder addAdditionalResourceRecords(List<Record<? extends Data>> records) {
             if (additionalSection == null) {
@@ -1349,7 +1465,10 @@ public class DnsMessage {
         }
 
         /**
-         * getAdditionalResourceRecords.
+         * Retrieve the additional section records.
+         *
+         * @return the records of the additional section, or an empty list if
+         *         none have been set.
          */
         public List<Record<? extends Data>> getAdditionalResourceRecords() {
             if (additionalSection == null) {
@@ -1378,7 +1497,10 @@ public class DnsMessage {
         }
 
         /**
-         * build.
+         * Build the DNS message from the state of this builder.
+         *
+         * @return a message holding the header flags and the sections of this
+         *         builder.
          */
         public DnsMessage build() {
             return new DnsMessage(this);
