@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Properties;
 
 import net.i2p.data.DataHelper;
@@ -56,6 +58,9 @@ public class HostCheckStatus {
     /** The probe results, written by the addressbook host checker. */
     static final String STATUS_FILE = "hosts_check.txt";
 
+    /** Hostnames the operator has blacklisted, maintained by susidns/addressbook. */
+    static final String BLACKLIST_FILE = "blacklist.txt";
+
     /** Where the ping interval is configured. */
     static final String CONFIG_FILE = "config.txt";
 
@@ -78,7 +83,7 @@ public class HostCheckStatus {
 
     private static File _cachedDir;
     private static Map<String, Boolean> _probed = Collections.emptyMap();
-    private static boolean _haveFile;
+    private static Set<String> _blacklisted = Collections.emptySet();
     private static long _loadedAt;
     private static long _ttl = DEFAULT_INTERVAL_MS;
 
@@ -93,19 +98,50 @@ public class HostCheckStatus {
      *          judges nothing rather than judging everything
      */
     public static synchronized Map<String, Boolean> probed(File routerDir) {
-        if (routerDir == null) { return Collections.emptyMap(); }
+        refresh(routerDir);
+        return _probed;
+    }
+
+    /**
+     *  Hostnames the operator has blacklisted, cached on the same cycle as the probe results.
+     *
+     *  <p>This is the susidns/addressbook blacklist, one lowercased hostname per line. It is
+     *  not the router's {@code Banlist}, which is a separate peer-hash mechanism with
+     *  expiry: the two answer different questions, and a hostname can be blacklisted here
+     *  without the router ever refusing that peer.
+     *
+     *  @param routerDir the router's working directory
+     *  @return the blacklisted hostnames, empty if the file could not be read
+     */
+    public static synchronized Set<String> blacklisted(File routerDir) {
+        refresh(routerDir);
+        return _blacklisted;
+    }
+
+    /**
+     *  Reload both files if the cache has expired.
+     *
+     *  <p>They are refreshed together on purpose: the checker rewrites both, so they have the
+     *  same cadence, and one timestamp for the pair means a page render can never mix a fresh
+     *  blacklist with stale probe results. Freshness is keyed on the timestamp rather than on
+     *  whether the files were found, so a missing file does not make every request re-read.
+     *
+     *  @param routerDir the router's working directory
+     */
+    private static void refresh(File routerDir) {
+        if (routerDir == null) { return; }
         long now = System.currentTimeMillis();
-        if (_haveFile && _cachedDir != null && _cachedDir.equals(routerDir)
+        if (_loadedAt != 0 && _cachedDir != null && _cachedDir.equals(routerDir)
                 && now - _loadedAt < _ttl) {
-            return _probed;
+            return;
         }
         _cachedDir = routerDir;
         _ttl = readInterval(routerDir);
         Map<String, Boolean> read = readProbed(routerDir);
         _probed = read != null ? read : Collections.<String, Boolean>emptyMap();
-        _haveFile = read != null;
+        Set<String> blocked = readBlacklist(routerDir);
+        _blacklisted = blocked != null ? blocked : Collections.<String>emptySet();
         _loadedAt = now;
-        return _probed;
     }
 
     /**
@@ -126,6 +162,41 @@ public class HostCheckStatus {
         if (probed == null) { return false; }
         Boolean up = probed.get(host);
         return up != null && !up.booleanValue();
+    }
+
+    /**
+     *  Whether a hostname is blacklisted.
+     *
+     *  <p>A blacklisted host is never offered as a link, whatever the probe results say. That
+     *  is a stronger rule than "down": the operator has said they do not want it reached, so a
+     *  successful probe does not earn it a place back.
+     *
+     *  @param host lowercase host, as returned by {@link #hostFromUrl(String)}
+     *  @param blacklist result of {@link #blacklisted(File)}
+     *  @return true if the host is blacklisted
+     */
+    public static boolean isBlacklisted(String host, Set<String> blacklist) {
+        return host != null && blacklist != null && blacklist.contains(host);
+    }
+
+    /**
+     *  Record one entry of the blacklist, which is a bare hostname per line.
+     *
+     *  <p>Comments and blank lines are skipped and the name is lowercased, so the file stays
+     *  usable if it is ever hand-edited. A line carrying anything other than a hostname is
+     *  ignored rather than stored, since a malformed entry must not silently blank a link.
+     *
+     *  @param line one line from the blacklist
+     *  @param out receives the hostname
+     */
+    public static void parseBlacklistLine(String line, Set<String> out) {
+        if (line == null || out == null) { return; }
+        String trimmed = line.trim();
+        if (trimmed.isEmpty() || trimmed.charAt(0) == '#') { return; }
+        if (trimmed.indexOf('=') >= 0 || trimmed.indexOf('/') >= 0 || trimmed.indexOf(' ') >= 0) {
+            return;
+        }
+        out.add(trimmed.toLowerCase(Locale.US));
     }
 
     /**
@@ -242,6 +313,26 @@ public class HostCheckStatus {
     }
 
     /**
+     *  Read the susidns/addressbook blacklist.
+     *
+     *  @param routerDir the router's working directory
+     *  @return the blacklisted hostnames, or null if the file could not be read
+     */
+    private static Set<String> readBlacklist(File routerDir) {
+        File file = new File(new File(routerDir, STATUS_DIR), BLACKLIST_FILE);
+        if (!file.canRead()) { return null; }
+        Set<String> out = new HashSet<>();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), StandardCharsets.UTF_8), MAX_LINE)) {
+            String line;
+            while ((line = in.readLine()) != null) { parseBlacklistLine(line, out); }
+        } catch (IOException ioe) {
+            return null;
+        }
+        return out;
+    }
+
+    /**
      *  Read the configured ping interval.
      *
      *  @param routerDir the router's working directory
@@ -263,7 +354,7 @@ public class HostCheckStatus {
     static synchronized void clearCache() {
         _cachedDir = null;
         _probed = Collections.emptyMap();
-        _haveFile = false;
+        _blacklisted = Collections.emptySet();
         _loadedAt = 0;
         _ttl = DEFAULT_INTERVAL_MS;
     }

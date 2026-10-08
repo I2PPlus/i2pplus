@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -20,6 +22,13 @@ import org.junit.Test;
  *  @since 0.9.71+
  */
 public class HostCheckStatusTest {
+
+
+    private static java.util.Set<String> blacklist(String... lines) {
+        Set<String> out = new HashSet<>();
+        for (String line : lines) { HostCheckStatus.parseBlacklistLine(line, out); }
+        return out;
+    }
 
     private static Map<String, Boolean> probes(String... lines) {
         Map<String, Boolean> out = new HashMap<>();
@@ -275,5 +284,64 @@ public class HostCheckStatusTest {
         assertTrue(HostCheckStatus.isDown("down.i2p", true, probed));
         assertFalse(HostCheckStatus.isDown("untested.i2p", true, probed));
         assertTrue(HostCheckStatus.isDown("not-in-book.i2p", false, probed));
+    }
+
+    // ---- blacklist -----------------------------------------------------------
+
+    /** A blacklisted host is never offered, whatever the probe results say. */
+    @Test
+    public void blacklistedHostIsNotOffered() {
+        Set<String> bl = blacklist("ahmia.i2p", "cake.i2p");
+        assertTrue(HostCheckStatus.isBlacklisted("ahmia.i2p", bl));
+        assertFalse(HostCheckStatus.isBlacklisted("exil3.i2p", bl));
+    }
+
+    /**
+     *  Being blacklisted outranks being up: a successful probe must not earn a link back.
+     */
+    @Test
+    public void blacklistOutranksASuccessfulProbe() {
+        Set<String> bl = blacklist("ahmia.i2p");
+        Map<String, Boolean> probed = probes("1,ahmia.i2p,y,forum,34765,[6,4]");
+        // "not down" is what the probe says; the link is withheld anyway.
+        assertFalse(HostCheckStatus.isDown("ahmia.i2p", true, probed));
+        assertTrue(HostCheckStatus.isBlacklisted("ahmia.i2p", bl));
+    }
+
+    @Test
+    public void nullsAreNotBlacklisted() {
+        assertFalse(HostCheckStatus.isBlacklisted(null, blacklist("ahmia.i2p")));
+        assertFalse(HostCheckStatus.isBlacklisted("ahmia.i2p", null));
+    }
+
+    /** The real file has no comments or blanks, but it is hand-maintained, so tolerate them. */
+    @Test
+    public void blacklistToleratesCommentsBlanksAndCase() {
+        Set<String> bl = blacklist(
+            "# operator blacklist",
+            "",
+            "   ",
+            "  Ahmia.i2p  ",
+            "CAKE.i2p");
+        assertTrue(bl.contains("ahmia.i2p"));
+        assertTrue(bl.contains("cake.i2p"));
+        assertEquals(2, bl.size());
+    }
+
+    /**
+     *  A line carrying more than a hostname is ignored rather than stored, so a malformed
+     *  entry cannot blank a link that is not actually blacklisted.
+     */
+    @Test
+    public void blacklistRejectsNonHostnameLines() {
+        Set<String> bl = blacklist(
+            "ahmia.i2p=x", "http://ahmia.i2p/", "two words.i2p", "good.i2p");
+        assertEquals(1, bl.size());
+        assertTrue(bl.contains("good.i2p"));
+    }
+
+    @Test
+    public void emptyBlacklistBlocksNothing() {
+        assertFalse(HostCheckStatus.isBlacklisted("ahmia.i2p", blacklist()));
     }
 }

@@ -351,7 +351,9 @@ public class HomeHelper extends HelperBase {
      */
     private Collection<App> hideUnreachable(Collection<App> apps) {
         if (apps == null || apps.isEmpty()) { return apps; }
-        Map<String, Boolean> probed = HostCheckStatus.probed(_context.getRouterDir());
+        java.io.File routerDir = _context.getRouterDir();
+        Map<String, Boolean> probed = HostCheckStatus.probed(routerDir);
+        java.util.Set<String> blacklisted = HostCheckStatus.blacklisted(routerDir);
         List<App> keep = new ArrayList<>(apps.size());
         for (App app : apps) {
             String host = HostCheckStatus.hostFromUrl(app.url);
@@ -359,6 +361,10 @@ public class HomeHelper extends HelperBase {
                 keep.add(app);
                 continue;
             }
+            // A blacklisted host is never offered, whatever the probe results say. The
+            // operator has said they do not want it reached, so a successful probe does not
+            // earn it back a link.
+            if (HostCheckStatus.isBlacklisted(host, blacklisted)) { continue; }
             boolean inAddressbook = _context.namingService().lookup(host) != null;
             if (!HostCheckStatus.isDown(host, inAddressbook, probed)) { keep.add(app); }
         }
