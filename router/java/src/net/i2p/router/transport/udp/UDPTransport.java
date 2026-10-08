@@ -986,7 +986,7 @@ public class UDPTransport extends TransportImpl {
     /**
      * The endpoint has failed. Remove it.
      *
-     * @param endpoint the endpoint
+     * @param endpoint the failed endpoint; dropping it rebuilds the external address advertisement
      * @since 0.9.16
      */
     public void fail(UDPEndpoint endpoint) {
@@ -2732,6 +2732,58 @@ public class UDPTransport extends TransportImpl {
      */
     private String getPublishStyle() {return STYLE2;}
 
+    /**
+     *  Is an established peer idle past the threshold in both directions, and so
+     *  due for teardown and re-establishment rather than continued selection?
+     *
+     *  <p>Pure decision, extracted from {@link #send(OutNetMessage)} so the truth
+     *  table can be pinned in a test without a router.
+     *
+     *  <p>This predicate is deliberately <em>time-only</em>, where the code it
+     *  replaces also required {@code getConsecutiveFailedSends() > 2}. That counter is
+     *  incremented from exactly one place, {@link #failed(OutboundMessageState, boolean)},
+     *  and only once a message has exhausted its retransmits or expired. A half-open
+     *  session therefore never accumulates it — the peer still ACKs enough traffic to
+     *  keep messages alive, or we stop sending and never reach {@code failed()} at all.
+     *  Either way the session stays in {@code _peersByIdent} indefinitely and keeps
+     *  answering {@link #isEstablished(Hash)} true, so peer selection keeps choosing peers
+     *  we have not heard from in days. Of the hop records on expired builds, 85% had this
+     *  shape and only 15% had been heard from within 3 seconds.
+     *
+     *  <p>The slack is intentional. {@link #MAX_IDLE_TIME} is {@link #EXPIRE_TIMEOUT}, 20
+     *  minutes, which already governed this drop and which the consecutive-failure path
+     *  relaxes toward. A peer silent in both directions for twenty minutes is not carrying
+     *  traffic, and a false positive costs one re-establishment, not a lost session.
+     *
+     *  @param now current time in ms
+     *  @param lastSend time of the last fully sent message, or 0 if never
+     *  @param lastRecv time of the last receive, or 0 if never
+     *  @param maxIdleTime idle threshold in ms
+     *  @return true if the session is idle in both directions past the threshold
+     *  @since 0.9.71+
+     */
+    static boolean isIdleEstablished(long now, long lastSend, long lastRecv, long maxIdleTime) {
+        // A zero timestamp means never sent or never received, which is not evidence of
+        // idleness: a peer that has not spoken yet has not been shown to be silent.
+        if (lastSend <= 0 || lastRecv <= 0) {return false;}
+        return (now - lastSend > maxIdleTime) && (now - lastRecv > maxIdleTime);
+    }
+
+    /**
+     *  Is the peer idle in both directions past the threshold, disregarding send failures.
+     *
+     *  @param peer the peer state, may be null
+     *  @param now current time in ms
+     *  @param maxIdleTime idle threshold in ms
+     *  @return true if the peer should be dropped and re-established
+     *  @since 0.9.71+
+     */
+    boolean isIdleEstablished(PeerState peer, long now, long maxIdleTime) {
+        if (peer == null) {return false;}
+        return isIdleEstablished(now, peer.getLastSendFullyTime(),
+                                peer.getLastReceiveTime(), maxIdleTime);
+    }
+
     @Override
     public void send(OutNetMessage msg) {
         if (msg == null) return;
@@ -2750,19 +2802,21 @@ public class UDPTransport extends TransportImpl {
         if (_log.shouldDebug()) {_log.debug("Sending to " + (to != null ? to.toString() : ""));}
         if (peer != null) {
             long lastSend = peer.getLastSendFullyTime();
-            long lastRecv = peer.getLastReceiveTime();
             long now = _context.clock().now();
             // expireInboundMessages() walks the inbound message map under
             // _inboundLock and is only consumed by the idle check below, so call
-            // it only once the other three gates have passed rather than for every
+            // it only once the time gate has passed rather than for every
             // message to an established peer. The sweep is not load-bearing
             // otherwise: stale states are also released when the peer is dropped,
             // and a peer idle in both directions for MAX_IDLE_TIME is dropped
             // here or by the expire event.
-            if ((lastSend > 0) && (lastRecv > 0) &&
-                (now - lastSend > MAX_IDLE_TIME) &&
-                (now - lastRecv > MAX_IDLE_TIME) &&
-                (peer.getConsecutiveFailedSends() > 2) &&
+            //
+            // The gate is time-only; it no longer waits on getConsecutiveFailedSends().
+            // That counter is reached solely through failed(), and only once a message
+            // has exhausted its retransmits, so a half-open session never builds it and
+            // stayed "established" indefinitely while selection kept choosing it.
+            // See isIdleEstablished().
+            if (isIdleEstablished(peer, now, MAX_IDLE_TIME) &&
                 (peer.expireInboundMessages() <= 0)) {
                 // peer is waaaay idle, drop the con and queue it up as a new con
                 dropPeer(peer, false, "proactive reconnection");

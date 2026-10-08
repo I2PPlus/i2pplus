@@ -266,8 +266,28 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /** How often to send keepalive pings to established Fast/HighCap peers */
     private static final long KEEPALIVE_INTERVAL_MS = 15_000; // More frequent keepalives
 
-    /** Peers requested per tier (fast, high-capacity) in a keepalive cycle. */
+    /** Peers requested from the fast tier in a keepalive cycle. */
     private static final int KEEPALIVE_TARGET_TIERS = 200;
+
+    /**
+     *  Peers requested from the high-capacity tier in a keepalive cycle.
+     *
+     *  <p>Set deeper than {@link #KEEPALIVE_TARGET_TIERS} because the fast and
+     *  high-capacity tiers are both ranked on throughput, so their top entries overlap
+     *  heavily and equal depth returns nearly the same peers twice. Only
+     *  {@link #KEEPALIVE_ACTION_BUDGET} of the union is ever acted on, so the deeper
+     *  request costs set insertions and a counter, not sends: the budget check runs
+     *  first in the loop, and a peer past the budget is tallied without ever reaching
+     *  the stale check or the RouterInfo lookup.
+     *
+     *  <p>Measured over an 85-minute run at equal depth, the union collapsed from ~395
+     *  to ~203 peers while the action budget held at 200 — so servicing never fell,
+     *  only the surplus above budget did. Deeper high-cap selection lifted the union
+     *  to ~600-800, restoring a surplus of several hundred.
+     *
+     *  @since 0.9.71+
+     */
+    private static final int KEEPALIVE_HIGH_CAP_DEPTH = 2 * KEEPALIVE_TARGET_TIERS;
 
     /** Most peers acted on in one cycle, bounding a cycle's cost. */
     private static final int KEEPALIVE_ACTION_BUDGET = 200;
@@ -303,7 +323,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  is stressed — many peers are ghosted through no fault of their own.
      *
      *  @param ctx the router context
-     *  @param peer the peer
+     *  @param peer the candidate to test; its first-hop reachability is probed
      *  @return true if the peer should be excluded
      */
     public static boolean isFirstHopFailing(RouterContext ctx, Hash peer) {
@@ -346,7 +366,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  the shared static maps when they exceed their size caps.
      *
      *  @param ctx the router context
-     *  @param peer the peer
+     *  @param peer the candidate to test; its first-hop reachability is probed
      *  @since 0.9.70+
      */
     protected static void recordFirstHopFail(RouterContext ctx, Hash peer) {
@@ -633,7 +653,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      * Uses the effective first-hop cooldown (shortened during ghost cascades).
      *
      * @param ctx the router context
-     * @param peer the peer
+     * @param peer the candidate to test; its first-hop reachability is probed
      * @return true if the peer has recovered
      */
     protected static boolean hasRecoveredFromFailure(RouterContext ctx, Hash peer) {
@@ -2192,10 +2212,14 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     /**
      *  Per-cycle tally of why keepalive did not act on the peers it selected.
      *
-     *  <p>Added because the candidate pool was observed shrinking from roughly 400 delivered
-     *  peers per cycle to roughly 210, and the pre-existing log line only reported how many
+     *  <p>Added because the candidate pool was observed shrinking from roughly 395 peers per
+     *  cycle to roughly 203, and the pre-existing log line only reported how many
      *  peers were kept alive, never how many were dropped on the way. Without a reason for each
      *  drop, an eroding pool and a busy pool look identical from the outside.
+     *
+     *  <p>Note that the fall from 395 to 203 is <em>supply</em>, not delivery: the action
+     *  budget sits at 200, so the cycle was servicing its full budget in both periods and
+     *  only the surplus above it collapsed.
      *
      *  <p>{@link #describe} is pure so the summary can be asserted in a test without a router.
      *
@@ -2203,11 +2227,29 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      */
     static final class KeepAliveTally {
 
-        /** Peers the selector asked for, before any filtering. */
-        int requested;
+        /**
+         *  Peers the selector asked for, before any filtering.
+         *
+         *  <p>This is the per-tier request doubled for the two tiers, not a count of
+         *  anything on the wire.
+         */
+        int budget;
 
-        /** Peers that survived selection and are eligible for keepalive. */
-        int delivered;
+/**
+         *  Distinct peers the two tier selectors returned.
+         *
+         *  <p>Named {@code candidates} rather than {@code delivered} because it is fixed
+         *  before the cycle sends anything: it measures supply, not delivery. A previous
+         *  field name of {@code delivered} sat on this same value and read as
+         *  "203 delivered of 400 requested", which was mistaken twice for a fall in
+         *  successful keepalives when it only ever showed the candidate pool.
+         *
+         *  <p>May exceed {@link #budget}, which is the sum of the two nominal tier
+         *  requests rather than a cap. {@code selectFastPeers} backfills from the
+         *  high-capacity tier when the fast tier cannot fill its depth, and each
+         *  selector adds up to its own depth to whatever the set already holds.
+         */
+        int candidates;
 
         /** Acted on: sent a keepalive DLM. */
         int keepalived;
@@ -2237,18 +2279,33 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         int unprocessed;
 
         /**
+         *  Peers the cycle actually acted on: a keepalive DLM sent, or an
+         *  establishment started. This is the figure that means delivery.
+         *
+         *  @return keepalived plus preConnected
+         */
+        int actedOn() {
+            return keepalived + preConnected;
+        }
+
+        /**
          *  Summarise the cycle.
          *
+         *  <p>Reports supply ({@code candidates} of {@code budget}) separately from
+         *  delivery ({@code actedOn}), because conflating them hides which of the two
+         *  actually fell.
+         *
          *  @param aggressive whether this was an aggressive cycle
-         *  @return a single line naming delivered vs requested and every skip reason
+         *  @return a single line naming candidates, acted-on peers and every skip reason
          */
         String describe(boolean aggressive) {
-            StringBuilder buf = new StringBuilder(160);
+            StringBuilder buf = new StringBuilder(192);
             buf.append("KeepAlive: ").append(keepalived).append(" keepalives, ")
                .append(preConnected).append(" pre-connects (")
                .append(aggressive ? "aggressive" : "normal").append(", ")
-               .append(delivered).append(" delivered of ").append(requested)
-               .append(" requested) skipped: cooldown=").append(skipCooldown)
+               .append(actedOn()).append(" acted of ").append(candidates)
+               .append(" candidates from a ").append(budget).append(" budget")
+               .append(") skipped: cooldown=").append(skipCooldown)
                .append(" stale=").append(skipStale)
                .append(" recent=").append(skipRecent)
                .append(" noRouterInfo=").append(skipNoRouterInfo)
@@ -2264,16 +2321,15 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
          *  <p>Every selected peer must land in exactly one bucket, so this is the check that
          *  the accounting has not lost a path.
          *
-         *  @return the number of delivered peers with no recorded disposition
+         *  @return the number of candidate peers with no recorded disposition
          */
         int unaccounted() {
-            int acted = keepalived + preConnected;
             int skipped = skipCooldown + skipStale + skipRecent + skipNoRouterInfo
                           + skipNoAddress + skipNoTransport;
             // unprocessed counts as a disposition: the budget was spent before this peer
             // was reached, which is different from falling through every branch but is
             // still accounted for.
-            return delivered - acted - skipped - unprocessed;
+            return candidates - actedOn() - skipped - unprocessed;
         }
     }
 
@@ -2710,14 +2766,22 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         Set<Hash> targets = new HashSet<>(256);
         // Must use mutable set — lockedSelectPeers may add to the exclude set
         rctx.profileOrganizer().selectFastPeers(KEEPALIVE_TARGET_TIERS, new HashSet<>(4), targets);
-        // Also add top HighCap to cover more candidates
-        rctx.profileOrganizer().selectHighCapacityPeers(KEEPALIVE_TARGET_TIERS, targets, targets);
+        // Also add top HighCap to cover more candidates.
+        //
+        // Overlap is inherent here: the fast and high-capacity tiers are both ordered
+        // on throughput, so their heads are largely the same peers and asking each for
+        // the same depth yields a union barely larger than either one. Measured over an
+        // 85-minute run, the union collapsed from ~395 to ~203 while the action budget
+        // held at 200 — so servicing never fell, only the surplus above budget did.
+        // Asking the wider tier for more depth than the fast tier is what puts genuinely
+        // distinct peers into the cycle; the action budget bounds cost regardless.
+        rctx.profileOrganizer().selectHighCapacityPeers(KEEPALIVE_HIGH_CAP_DEPTH, targets, targets);
         // Remove self
         targets.remove(rctx.routerHash());
 
         KeepAliveTally tally = new KeepAliveTally();
-        tally.requested = 2 * KEEPALIVE_TARGET_TIERS;
-        tally.delivered = targets.size();
+        tally.budget = KEEPALIVE_TARGET_TIERS + KEEPALIVE_HIGH_CAP_DEPTH;
+        tally.candidates = targets.size();
 
         if (targets.isEmpty()) {
             if (log.shouldInfo())

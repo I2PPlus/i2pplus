@@ -1,6 +1,7 @@
 package net.i2p.router.tunnel.pool;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -8,29 +9,39 @@ import org.junit.Test;
 /**
  *  Accounting for a keepalive cycle.
  *
- *  <p>Added because the top-tier candidate pool was observed shrinking from roughly 400 peers
- *  delivered per cycle to roughly 210, while the pre-existing log line reported only what was
- *  kept alive and never what was dropped on the way. A tally that accounts for every delivered
+ *  <p>Added because the top-tier candidate pool was observed shrinking from roughly 395 peers
+ *  per cycle to roughly 203, while the pre-existing log line reported only what was
+ *  kept alive and never what was dropped on the way. A tally that accounts for every candidate
  *  peer is what turns "the pool is eroding" into "the pool is eroding because of X".
+ *
+ *  <p>The original field names called the candidate count "delivered", which is the error
+ *  this class now pins shut: the count is fixed before the cycle sends anything, so it
+ *  measures supply. Read as delivery it turned a shrinking surplus above the 200-peer
+ *  action budget into an apparent halving of successful keepalives.
  *
  *  @since 0.9.71+
  */
 public class KeepAliveTallyTest {
 
-    private static TunnelPeerSelector.KeepAliveTally full(int delivered) {
+    /**
+     *  Every peer the selector offered for keepalive must land in exactly one bucket. A peer
+     *  that falls through every branch unaccounted would let a real leak hide behind a
+     *  plausible-looking log line.
+     *
+     *  <p>The fields are named for what they measure: {@code candidates} is fixed before the
+     *  cycle sends anything, so it is supply, and {@code actedOn()} is delivery. The previous
+     *  single "delivered" field sat on the candidate count and read as a fall in successful
+     *  keepalives when only the pool above budget had shrunk.
+     */
+    private static TunnelPeerSelector.KeepAliveTally full(int candidates) {
         TunnelPeerSelector.KeepAliveTally t = new TunnelPeerSelector.KeepAliveTally();
-        t.requested = 400;
-        t.delivered = delivered;
+        t.budget = 400;
+        t.candidates = candidates;
         return t;
     }
 
-    /**
-     *  Every peer the selector delivered must land in exactly one bucket. A peer that falls
-     *  through every branch unaccounted would let a real leak hide behind a plausible-looking
-     *  log line.
-     */
     @Test
-    public void everyDeliveredPeerIsAccountedFor() {
+    public void everyCandidateIsAccountedFor() {
         TunnelPeerSelector.KeepAliveTally t = full(210);
         t.keepalived = 20;
         t.preConnected = 30;
@@ -41,8 +52,8 @@ public class KeepAliveTallyTest {
         t.skipNoAddress = 6;
         t.skipNoTransport = 2;
         t.unprocessed = 33;
-        assertEquals("acted + skipped + unprocessed must equal delivered",
-                     t.delivered, t.keepalived + t.preConnected + t.skipCooldown + t.skipStale
+        assertEquals("acted + skipped + unprocessed must equal candidates",
+                     t.candidates, t.keepalived + t.preConnected + t.skipCooldown + t.skipStale
                                   + t.skipRecent + t.skipNoRouterInfo + t.skipNoAddress
                                   + t.skipNoTransport + t.unprocessed);
         assertEquals(0, t.unaccounted());
@@ -59,18 +70,40 @@ public class KeepAliveTallyTest {
     @Test
     public void anIdleCycleAccountsForNothing() {
         TunnelPeerSelector.KeepAliveTally t = new TunnelPeerSelector.KeepAliveTally();
-        t.requested = 400;
-        t.delivered = 0;
+        t.budget = 400;
+        t.candidates = 0;
         assertEquals(0, t.unaccounted());
     }
 
-    /** The erosion case this was built to expose: the pool cannot fill what it asks for. */
+    /**
+     *  The erosion case this was built to expose: the pool cannot fill what it asks for.
+     *  The line must name supply and delivery separately, since conflating them is what
+     *  let the collapse of the surplus above budget be read as a fall in keepalives.
+     */
     @Test
-    public void summaryNamesDeliveredVersusRequested() {
+    public void summarySeparatesCandidatesFromActedOn() {
         TunnelPeerSelector.KeepAliveTally t = full(210);
+        t.keepalived = 20;
+        t.preConnected = 30;
         String line = t.describe(true);
-        assertTrue(line, line.contains("210 delivered of 400 requested"));
+        assertTrue(line, line.contains("50 acted of 210 candidates from a 400 budget"));
         assertTrue(line, line.contains("aggressive"));
+        // The old wording claimed candidates were delivered; that is the misreading this guards.
+        assertFalse(line, line.contains("delivered"));
+    }
+
+    /**
+     *  Delivery is the figure that answers "did we reach the peers", and it is counted
+     *  after the cycle runs, not before.
+     */
+    @Test
+    public void actedOnIsDeliveryNotSupply() {
+        TunnelPeerSelector.KeepAliveTally t = full(400);
+        assertEquals("nothing acted yet", 0, t.actedOn());
+        t.keepalived = 7;
+        assertEquals(7, t.actedOn());
+        t.preConnected = 13;
+        assertEquals(20, t.actedOn());
     }
 
     @Test
@@ -102,7 +135,7 @@ public class KeepAliveTallyTest {
     public void anEmptyCycleStillReports() {
         TunnelPeerSelector.KeepAliveTally t = full(0);
         String line = t.describe(false);
-        assertTrue(line, line.contains("0 delivered of 400 requested"));
+        assertTrue(line, line.contains("0 acted of 0 candidates from a 400 budget"));
         assertTrue(line, line.contains("noAddress=0"));
     }
 

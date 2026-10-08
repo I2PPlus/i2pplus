@@ -142,7 +142,7 @@ public class ProfileOrganizer {
      * successful or failed send, or any contact. Split out so the rule is testable without a
      * reorganise cycle or a live profile set.
      *
-     * @param profile the profile
+     * @param profile profile whose send and heard-from timestamps are compared against the cutoff
      * @param hideBefore cutoff time, i.e. now minus {@link #ACTIVE_WINDOW_MS}
      * @return true if the profile is recently active
      * @since 0.9.72
@@ -184,6 +184,7 @@ public class ProfileOrganizer {
     private final ConcurrentHashMap<Hash, Integer> _demoteStrikes = new ConcurrentHashMap<>(64);
     /** Last strike time per peer, so strikes expire after DEMOTE_STRIKE_DECAY_MS */
     private final ConcurrentHashMap<Hash, Long> _demoteStrikeTimes = new ConcurrentHashMap<>(64);
+    /** Unreachable first-hop failures needed inside the decay window before demoteIfUnreachable demotes */
     public static final int DEMOTE_STRIKE_THRESHOLD = 3;
     /** A strike older than this no longer counts, so a peer that recovered is not demoted by one later failure */
     public static final long DEMOTE_STRIKE_DECAY_MS = 10 * 60 * 1000L;
@@ -229,9 +230,19 @@ public class ProfileOrganizer {
      * _defaultMinFastPeers.
      */
     public static volatile int _defaultMinFastPeers = 1000;
-    /** @since 0.9.70+ */
+    /**
+     * Fast tier size the router refills toward.
+     *
+     * @return the current minimum number of fast-tier peers
+     * @since 0.9.70+
+     */
     public static int getDefaultMinFastPeers() { return _defaultMinFastPeers; }
-    /** @since 0.9.70+ */
+    /**
+     * Override the fast tier refill target, clamped to 50-2000 peers.
+     *
+     * @param val requested minimum fast tier size, in peers
+     * @since 0.9.70+
+     */
     public static void setDefaultMinFastPeers(int val) { _defaultMinFastPeers = Math.max(50, Math.min(2000, val)); }
 
     /**
@@ -278,9 +289,19 @@ public class ProfileOrganizer {
      * _defaultMaxFastPeers.
      */
     public static volatile int _defaultMaxFastPeers = 2000;
-    /** @since 0.9.70+ */
+    /**
+     * Ceiling on the fast tier.
+     *
+     * @return the current maximum number of fast-tier peers
+     * @since 0.9.70+
+     */
     public static int getDefaultMaxFastPeers() { return _defaultMaxFastPeers; }
-    /** @since 0.9.70+ */
+    /**
+     * Override the fast tier ceiling, clamped to 200-3000 peers.
+     *
+     * @param val requested maximum fast tier size, in peers
+     * @since 0.9.70+
+     */
     public static void setDefaultMaxFastPeers(int val) { _defaultMaxFastPeers = Math.max(200, Math.min(3000, val)); }
 
     /**
@@ -295,9 +316,19 @@ public class ProfileOrganizer {
      * _defaultMinHighCapPeers.
      */
     public static volatile int _defaultMinHighCapPeers = DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS;
-    /** @since 0.9.70+ */
+    /**
+     * High-capacity tier size the router refills toward.
+     *
+     * @return the current minimum number of high-capacity-tier peers
+     * @since 0.9.70+
+     */
     public static int getMinHighCapacityPeers() { return _defaultMinHighCapPeers; }
-    /** @since 0.9.70+ */
+    /**
+     * Override the high-capacity tier refill target, clamped to 50-3000 peers.
+     *
+     * @param val requested minimum high-capacity tier size, in peers
+     * @since 0.9.70+
+     */
     public static void setMinHighCapacityPeers(int val) { _defaultMinHighCapPeers = Math.max(50, Math.min(3000, val)); }
     /**
      * PROP_MAXIMUM_HIGH_CAPACITY_PEERS.
@@ -307,9 +338,19 @@ public class ProfileOrganizer {
      * _defaultMaxHighCapPeers.
      */
     public static volatile int _defaultMaxHighCapPeers = 3000;
-    /** @since 0.9.70+ */
+    /**
+     * Ceiling on the high-capacity tier.
+     *
+     * @return the current maximum number of high-capacity-tier peers
+     * @since 0.9.70+
+     */
     public static int getDefaultMaxHighCapPeers() { return _defaultMaxHighCapPeers; }
-    /** @since 0.9.70+ */
+    /**
+     * Override the high-capacity tier ceiling, clamped to 200-6000 peers.
+     *
+     * @param val requested maximum high-capacity tier size, in peers
+     * @since 0.9.70+
+     */
     public static void setDefaultMaxHighCapPeers(int val) { _defaultMaxHighCapPeers = Math.max(200, Math.min(6000, val)); }
 
     /** Minimum tunnel acceptance ratio (40%) to remain in high-capacity/fast tiers */
@@ -465,9 +506,20 @@ public class ProfileOrganizer {
     public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
     /** Runtime-adjustable default max profile count. */
     public static volatile int _defaultMaxProfiles = getDefaultMaxProfiles();
-    /** @since 0.9.70+ */
+    /**
+     * Profile count the reorganizer targets by default.
+     *
+     * @return the current default maximum number of stored profiles
+     * @since 0.9.70+
+     */
     public static int getDefaultMaxProfilesValue() { return _defaultMaxProfiles; }
-    /** @since 0.9.70+ */
+    /**
+     * Override the default profile count, clamped to
+     * {@link #MIN_MAX_PROFILES}-{@link #ABSOLUTE_MAX_PROFILES}.
+     *
+     * @param val requested maximum profile count
+     * @since 0.9.70+
+     */
     public static void setDefaultMaxProfiles(int val) { _defaultMaxProfiles = Math.max(MIN_MAX_PROFILES, Math.min(ABSOLUTE_MAX_PROFILES, val)); }
     /**
      * ABSOLUTE_MAX_PROFILES.
@@ -587,6 +639,8 @@ public class ProfileOrganizer {
 
     /**
      * Store the local router hash for self-exclusion from peer selection.
+     *
+     * @param us our own router hash
      */
     public void setUs(Hash us) {_us = us;}
 
@@ -1511,26 +1565,6 @@ public class ProfileOrganizer {
     }
 
     /**
-     * Reorganizes peer profiles into performance-based tiers (fast, high-capacity, etc.) and expires stale entries.
-     * <p>
-     * This method:
-     * <ul>
-     *   <li>Coalesces stats if requested and uptime conditions are met. Peak
-     *       throughput values are never decayed.</li>
-     *   <li>Filters out unreachable, inactive, or low-tier peers.</li>
-     *   <li>Recalculates dynamic thresholds for speed, capacity, and integration.</li>
-     *   <li>Rebuilds internal tier maps and the global profile ordering.</li>
-     *   <li>Expires profiles that haven't been active recently to bound memory usage.</li>
-     * </ul>
-     * <p>
-     * <strong>Memory Safety:</strong> To prevent unbounded memory growth (e.g., OOM after 8+ hours),
-     * this method ensures that expired profiles are removed from all data structures—even if the full
-     * reorganization is skipped due to lock contention. A best-effort expiration pass runs outside the
-     * write lock to mitigate leaks during high contention.
-     *
-     * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
-     */
-    /**
      *  Fraction of a tier population that must carry a usable first-hop RTT before
      *  latency is allowed to influence tier membership.
      *
@@ -1716,6 +1750,26 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Reorganizes peer profiles into performance-based tiers (fast, high-capacity, etc.) and expires stale entries.
+     * <p>
+     * This method:
+     * <ul>
+     *   <li>Coalesces stats if requested and uptime conditions are met. Peak
+     *       throughput values are never decayed.</li>
+     *   <li>Filters out unreachable, inactive, or low-tier peers.</li>
+     *   <li>Recalculates dynamic thresholds for speed, capacity, and integration.</li>
+     *   <li>Rebuilds internal tier maps and the global profile ordering.</li>
+     *   <li>Expires profiles that haven't been active recently to bound memory usage.</li>
+     * </ul>
+     * <p>
+     * <strong>Memory Safety:</strong> To prevent unbounded memory growth (e.g., OOM after 8+ hours),
+     * this method ensures that expired profiles are removed from all data structures—even if the full
+     * reorganization is skipped due to lock contention. A best-effort expiration pass runs outside the
+     * write lock to mitigate leaks during high contention.
+     *
+     * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
+     */
     void reorganize(boolean shouldCoalesce) {
         final long now = _context.clock().now();
         final long start = System.currentTimeMillis();
@@ -1917,7 +1971,8 @@ public class ProfileOrganizer {
      *  <p>
      *  Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile the profile
+     *  @param profile profile to test; its expiration window is picked from its
+     *         the newest activity timestamp
      *  @param now current time in ms
      *  @param expireActive active-tier window in ms
      *  @param expirePassive passive-tier window in ms
@@ -2072,7 +2127,7 @@ public class ProfileOrganizer {
      *  <p>
      *  Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile the profile
+     *  @param profile profile whose heard-from and last-successful-send timestamps are checked
      *  @param activeCutoff earliest allowed activity timestamp in ms
      *  @return whether the peer has recent activity
      *  @since 0.9.71+
@@ -2653,7 +2708,7 @@ public class ProfileOrganizer {
      *  <p>
      *  Pure decision — no context access, safe for unit tests.
      *
-     *  @param profile the profile
+     *  @param profile profile whose newest send, heard-from or heard-about timestamp sets the age
      *  @param now current time in ms
      *  @param absentThreshold stale threshold in ms
      *  @return whether the peer is stale-absent
@@ -2895,6 +2950,7 @@ public class ProfileOrganizer {
      *  Check if a peer should be excluded from profiling.
      *  Excludes low bandwidth tiers (K, L, M, Unknown) and G cap (no tunnels).
      *
+     *  @param peer the peer hash
      *  @return true if the peer should not be profiled
      *  @since 0.9.70+
      */
@@ -2908,6 +2964,7 @@ public class ProfileOrganizer {
     /**
      *  Check if a peer is in a low bandwidth tier (K, L, M, or Unknown).
      *
+     *  @param peer the peer hash
      *  @return true if the peer should be excluded from profiling
      *  @since 0.9.70+
      */
@@ -3503,6 +3560,7 @@ public class ProfileOrganizer {
      * Fetches the build success ratio once; per-peer callers should use
      * {@link #isSelectable(Hash, double)} with a value fetched once per scan.
      *
+     * @param peer hash of the peer to judge
      * @return whether selectable
      */
     public boolean isSelectable(Hash peer) {
@@ -3676,6 +3734,7 @@ public class ProfileOrganizer {
      *  threshold (they'd be excluded anyway).  Pure decision — no side effects.
      *
      *  @param peer the peer hash
+     *  @param prof the peer's profile, or null if it has none
      *  @return a penalty multiplier in (1.0, 2.0] — higher means more penalized
      *  @since 0.9.71+
      */
@@ -3889,8 +3948,28 @@ public class ProfileOrganizer {
      * @param maxHighCap maximum high-capacity peers, fetched once per scan
      * @since 0.9.71+
      */
-    private void lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess,
-                                             int minHighCap, int maxFast, int maxHighCap) {
+    /**
+     *  Evaluate a profile for promotion to the tiers, reporting whether the only
+     *  thing that stopped it was an unusable transport address.
+     *
+     *  <p>The return value exists for {@link #promoteToFillTiers()}, whose
+     *  underfill log line wants to distinguish a candidate held back by policy
+     *  from a candidate that was never examined. That line used to carry a local
+     *  counter which was declared and then never incremented, so it always
+     *  reported zero holds and read as "the gate never fires" for an entire
+     *  diagnostic run.
+     *
+     *  @param profile the profile to evaluate
+     *  @param buildSuccess the windowed build success ratio
+     *  @param minHighCap minimum high-capacity peers
+     *  @param maxFast maximum fast peers
+     *  @param maxHighCap maximum high-capacity peers
+     *  @return true only if promotion was held because the RouterInfo has no
+     *          usable transport address; false for every other outcome
+     *  @since 0.9.71+
+     */
+    private boolean lockedPromoteProfileToTiers(PeerProfile profile, double buildSuccess,
+                                               int minHighCap, int maxFast, int maxHighCap) {
         Hash peer = profile.getPeer();
         PeerProfile notFailingProfile = _notFailingPeers.get(peer);
 
@@ -3905,7 +3984,7 @@ public class ProfileOrganizer {
                 if (_log.shouldDebug()) {
                     _log.debug("Skipping ghost peer from promotion: " + peer.toBase32().substring(0, 6));
                 }
-                return;
+                return false;
             }
         }
 
@@ -3918,7 +3997,7 @@ public class ProfileOrganizer {
                            " excessiveFailures=" + hasExcessiveLifetimeFailures(peer) +
                            " sameObj=" + (profile == notFailingProfile));
             }
-            return;
+            return false;
         }
         // Passing the gate means loss probation is over (either never started
         // or readmission conditions were met) — clear the flag so the cleared
@@ -3941,7 +4020,7 @@ public class ProfileOrganizer {
             if (_log.shouldDebug())
                 _log.debug("Holding promotion for [" + peer.toBase32().substring(0, 6) +
                            "]: RouterInfo has no usable transport address");
-            return;
+            return true;
         }
 
         double effectiveCapThreshold = Math.max(_thresholdCapacityValue, CapacityCalculator.GROWTH_FACTOR);
@@ -4014,6 +4093,7 @@ public class ProfileOrganizer {
             profile.getIntegrationValue() >= _thresholdIntegrationValue) {
             _wellIntegratedPeers.put(peer, profile);
         }
+        return false;
     }
 
     /**
@@ -4236,6 +4316,10 @@ public class ProfileOrganizer {
         // need different fixes. From outside they are indistinguishable, so count both.
         int examined = 0;
         int alreadyTiered = 0;
+        // Incremented from the return of lockedPromoteProfileToTiers() below. This counter was
+        // previously declared and never incremented, so it always logged zero and the gate it
+        // was meant to expose looked inert for a full diagnostic run. The rate stat
+        // tunnel.promotionHeldNoAddress is the aggregate; this is the per-scan detail.
         int heldNoAddress = 0;
 
         for (PeerProfile profile : _strictCapacityOrder) {
@@ -4254,12 +4338,12 @@ public class ProfileOrganizer {
             // Use live profile from _notFailingPeers, which has current
             // capacityBonus, capacityValue, etc. — the TreeSet's copy may be stale
             PeerProfile liveProfile = _notFailingPeers.get(peer);
-            if (liveProfile != null)
-                lockedPromoteProfileToTiers(liveProfile, buildSuccess,
-                                            minHighCap, fastTarget, highCapTarget);
-            else
-                lockedPromoteProfileToTiers(profile, buildSuccess,
-                                            minHighCap, fastTarget, highCapTarget);
+            boolean held = (liveProfile != null)
+                ? lockedPromoteProfileToTiers(liveProfile, buildSuccess,
+                                             minHighCap, fastTarget, highCapTarget)
+                : lockedPromoteProfileToTiers(profile, buildSuccess,
+                                             minHighCap, fastTarget, highCapTarget);
+            if (held) { heldNoAddress++; }
 
             if (_log.shouldInfo()) {
                 boolean nowFast = _fastPeers.containsKey(peer);
@@ -4321,6 +4405,8 @@ public class ProfileOrganizer {
      * Immediately demote a peer from fast/high-cap tiers if its RouterInfo is stale
      * and it has no recent proof of life (fails isSelectable). Non-blocking — only acts
      * if the peer is currently in those tiers.
+     *
+     * @param peer hash of the peer to demote
      */
     public void demoteIfStale(Hash peer) {
         if (!isSelectable(peer)) {
@@ -4346,6 +4432,8 @@ public class ProfileOrganizer {
     /**
      * Immediately demote a peer from fast/high-cap tiers if its capacityBonus is -30
      * (UI shows ✖ for high latency). Non-blocking.
+     *
+     * @param peer hash of the peer to demote
      */
     public void demoteIfHighLatency(Hash peer) {
         if (!getWriteLock()) return;
@@ -4370,6 +4458,8 @@ public class ProfileOrganizer {
      * Immediately demote a peer from fast/high-cap tiers if it has a congestion cap (D/E).
      * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
      * Non-blocking - only acts if the peer is currently in those tiers.
+     *
+     * @param peer hash of the peer to demote
      */
     public void demoteIfCongested(Hash peer) {
         if (!getWriteLock()) return;
@@ -4396,7 +4486,7 @@ public class ProfileOrganizer {
      * test result arrives that contradicts the peer's tier membership.
      * Non-blocking — only acts if the peer is currently in those tiers.
      *
-     * @param peer the peer
+     * @param peer hash of the peer to demote
      * @since 0.9.71+
      */
     public void demoteIfNotLowLatency(Hash peer) {
@@ -4431,6 +4521,7 @@ public class ProfileOrganizer {
      * Immediately demote a peer from fast/high-cap tiers if it is banned.
      * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
      * Non-blocking - only acts if the peer is currently in those tiers.
+     * @param peer hash of the peer to demote
      * @since 0.9.71+
      */
     public void demoteIfBanned(Hash peer) {
@@ -4493,6 +4584,14 @@ public class ProfileOrganizer {
         profile.setLowLatency(low.booleanValue());
     }
 
+    /**
+     * Immediately demote a peer from fast/high-cap tiers on a single unreachable
+     * first hop, skipping the {@link #DEMOTE_STRIKE_THRESHOLD} strikes and the
+     * cooldown that {@link #demoteIfUnreachable} requires. Non-blocking — only
+     * acts if the peer is currently in those tiers.
+     *
+     * @param peer hash of the peer to demote
+     */
     public void demoteIfUnreachableNow(Hash peer) {
         if (!getWriteLock()) return;
         try {
@@ -4516,6 +4615,8 @@ public class ProfileOrganizer {
      * Immediately demote a peer from fast/high-cap tiers if it has G cap (no tunnels).
      * Sets capacityBonus = -30 so the UI reflects the demotion immediately.
      * Non-blocking - only acts if the peer is currently in those tiers.
+     *
+     * @param peer hash of the peer to demote
      */
     public void demoteIfNoTunnel(Hash peer) {
         if (!getWriteLock()) return;
@@ -4545,6 +4646,8 @@ public class ProfileOrganizer {
      * that recovered is not demoted by one later failure.
      * Does not touch the tunnel failure counter; the caller records the
      * failure blame (e.g. profileManager().tunnelFailed()).
+     *
+     * @param peer hash of the peer that failed as a first hop
      */
     public void demoteIfUnreachable(Hash peer) {
         if (!getWriteLock()) return;
@@ -4977,7 +5080,7 @@ public class ProfileOrganizer {
      * after a severe loss episode even if the transport goes quiet — the
      * decay, not a freshness window, provides the slow forgiveness.
      *
-     * @param profile the profile
+     * @param profile profile carrying the decayed loss score to test against the threshold
      * @param now current time in ms
      * @since 0.9.71+
      */
@@ -4994,7 +5097,7 @@ public class ProfileOrganizer {
      * peers whose decayed score is at or above the demotion threshold even if
      * the demotion flag was never set, e.g. a profile loaded from disk.
      *
-     * @param profile the profile
+     * @param profile profile whose loss demotion flag and loss score are checked
      * @param now current time in ms
      * @since 0.9.71+
      */
@@ -5019,7 +5122,7 @@ public class ProfileOrganizer {
      * immediately regardless of the minimum age, accelerating tier recovery
      * after brief congestion episodes.
      *
-     * @param profile the profile
+     * @param profile profile holding the demotion timestamp and the last reported loss ratio
      * @param now current time in ms
      * @return true if the peer may be re-admitted
      * @since 0.9.71+
@@ -5044,7 +5147,7 @@ public class ProfileOrganizer {
      * cleared state is persisted and re-admission is not re-evaluated on every
      * reorganize. Must be called with the write lock held.
      *
-     * @param profile the profile
+     * @param profile profile whose lossy flag is cleared, so re-admission is not re-checked every cycle
      * @since 0.9.71+
      */
     private void clearLossIfReadmitted(PeerProfile profile) {
@@ -5066,7 +5169,7 @@ public class ProfileOrganizer {
      * cycle. Non-blocking: if a reorganize currently holds the write lock, the
      * reorganize purge catches the peer instead.
      *
-     * @param peer the peer
+     * @param peer hash of the peer to demote and place into loss probation
      * @since 0.9.71+
      */
     public void demoteIfLossy(Hash peer) {
@@ -5130,6 +5233,7 @@ public class ProfileOrganizer {
      * are evicted the average drops and the bar tightens. Used by the Tuner to
      * adapt {@link #PROP_LOSSY_THRESHOLD} to the network.
      *
+     * @return the mean loss ratio as a fraction of 1.0, or 0.0 if no fresh data
      * @since 0.9.71+
      */
     public float getAverageLossRatio() {
@@ -5142,6 +5246,7 @@ public class ProfileOrganizer {
      * Average loss ratio across the fast tier with a fresh measurement, as a
      * fraction (0.0 - 1.0); 0.0 if none. See {@link #getAverageLossRatio()}.
      *
+     * @return the mean fast-tier loss ratio as a fraction of 1.0, or 0.0 if no fresh data
      * @since 0.9.71+
      */
     public float getFastAverageLossRatio() {
@@ -5154,6 +5259,7 @@ public class ProfileOrganizer {
      * Average loss ratio across the high-capacity tier with a fresh measurement,
      * as a fraction (0.0 - 1.0); 0.0 if none. See {@link #getAverageLossRatio()}.
      *
+     * @return the mean high-capacity-tier loss ratio as a fraction of 1.0, or 0.0 if no fresh data
      * @since 0.9.71+
      */
     public float getHighCapAverageLossRatio() {
@@ -5168,6 +5274,7 @@ public class ProfileOrganizer {
      * robust to the worst peers dragging the mean up, so the auto-tuned demotion
      * threshold tracks the typical tier member. See {@link #getAverageLossRatio()}.
      *
+     * @return the median tier loss ratio as a fraction of 1.0, or 0.0 if no fresh data
      * @since 0.9.71+
      */
     public float getMedianLossRatio() {
@@ -5426,6 +5533,8 @@ public class ProfileOrganizer {
 
     /**
      * Command-line entry point; reads profile dump files and prints thresholds.
+     *
+     * @param args paths to gzipped profile dump files
      */
     public static void main(String[] args) {
         if (args.length <= 0) {
@@ -5535,6 +5644,13 @@ public class ProfileOrganizer {
         return Double.isNaN(ratio) ? 1.0 : ratio;
     }
 
+    /**
+     * Tunnel build success ratio across the whole router, cached for
+     * {@code BUILD_SUCCESS_CACHE_MS} because a single lookup costs several rate
+     * reads. 1.0 (neutral) when the window is absent or empty.
+     *
+     * @return the build success ratio as a fraction of 1.0
+     */
     public double getTunnelBuildSuccess() {
         long now = _context.clock().now();
         if (now - _cachedBuildSuccessTime < BUILD_SUCCESS_CACHE_MS) {
@@ -5565,6 +5681,8 @@ public class ProfileOrganizer {
 
     /**
      * Persist the given profile to disk.
+     *
+     * @param profile profile to write
      */
     public void writeProfile(PeerProfile profile) {
         _persistenceHelper.writeProfile(profile);

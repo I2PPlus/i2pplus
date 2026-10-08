@@ -103,6 +103,13 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.createRequiredRateStat("router.gcPauseTime", _x("Time spent paused in GC (ms)"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", RateConstants.TUNNEL_RATES);
+        // Counters recorded at the point the condition fires. Without a definition
+        // they accumulate in memory but never reach /stats, so each one had to be
+        // recovered by grepping the log to tell an inactive gate from a silent one.
+        sm.createRequiredRateStat("tunnel.promotionHeldNoAddress", _x("Tier promotions held back for a peer with no usable address"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("tunnel.promotionRefreshIssued", _x("RouterInfo refreshes issued for peers held out of the tiers"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("peermanager.tiersUnderfilled", _x("Tier scans that left the fast or high-capacity tier short of target"), "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("streaming.duplicateCloseSent", _x("Duplicate CLOSE safety-net messages sent"), "Streaming", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         // Describe the stat itself; the JVM ceiling is secondary detail. Using the ceiling
         // as the whole description left the stat unexplained on /configstats, and left it
         // blank entirely when the ceiling was unknown.
