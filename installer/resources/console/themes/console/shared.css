@@ -185,7 +185,7 @@ html:not(.advmode) #tuning input[type=number]{min-width:0!important;text-align:c
 .graphTooltip.flip-x{translate:calc(-100% - 14px) -10px}
 .graphTooltipLevel{height:1px;background:var(--graphTooltipLevel,#fff5);pointer-events:none}
 .graphTooltipCrosshair{width:1px;background:var(--graphTooltipCrosshair,#fff8);pointer-events:none}
-.graphTooltipMark{width:7px;height:7px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--graphTooltipMark,#fc4);box-shadow:0 0 0 1px #0006;pointer-events:none}
+.graphTooltipMark{width:7px;height:7px;margin:-3px 0 0 -3px;border-radius:50%;background:var(--graphTooltipMark,#fc4);box-shadow:0 0 0 1px #0006;z-index:9999;pointer-events:none}
 #gform .nowrap.disabled{pointer-events:none}
 #gform .nowrap.disabled>*{opacity:.5}
 #health{padding-bottom:14px}
