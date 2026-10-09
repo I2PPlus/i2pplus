@@ -222,4 +222,32 @@ public interface TunnelInfo {
      * @since 0.9.69+
      */
     public void setExpiration(long when);
+
+    /**
+     * Whether this tunnel held a transport session to its local hop when it was
+     * built, recorded once when the tunnel entered the pool.
+     *
+     * <p>A tunnel cannot complete a build without a session to the peer it sends
+     * through, so a true here means the session has since gone away rather than
+     * never having existed. That distinction is what lets the pool tell a zombie
+     * tunnel from one whose session is still coming up: reading the current
+     * session state alone cannot separate the two, and a pool excluding a fifth of
+     * its live slots on its own reconnects would be worse than missing a zombie.
+     *
+     * <p>False when the fact was never recorded, in which case the pool declines to
+     * attribute a loss rather than risk excluding a live tunnel.
+     *
+     * @return true when a local-hop session was established at build time
+     * @since 0.9.71+
+     */
+    public boolean hadLocalHopSession();
+
+    /**
+     * Record whether this tunnel held a transport session to its local hop at build
+     * time. Called once, by the pool, as the tunnel is added.
+     *
+     * @param established the session state observed when the tunnel entered the pool
+     * @since 0.9.71+
+     */
+    public void setLocalHopSessionEstablished(boolean established);
 }

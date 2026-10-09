@@ -1702,39 +1702,52 @@ public class TunnelPool {
         if (!_log.shouldLog(Log.WARN) || now < _nextZombieLog) {return;}
         _nextZombieLog = now + ZOMBIE_LOG_INTERVAL_MS;
         _log.warn("Pool health excludes " + excluded + " of " + (kept + excluded)
-                  + " tunnels with no transport session to their local hop -> kept: " + kept);
+                  + " tunnels with no transport session to their local hop -> Kept: " + kept
+                  + " [" + toString() + "]");
     }
 
-    /**
+/**
       * Whether this tunnel's local path is unusable because we hold no transport
       * session to the peer we actually send through.
      *
-      * <p>A tunnel is a crypto path above the transport, and it resolves its hop
-      * per message. So when a transport session dies the {@code TunnelInfo} and its
-      * lease survive untouched: nothing marks the tunnel failed, and
-      * {@link #getHealthyTunnelCount()} -- which tests only expiration, test status,
-      * soft failures and next-hop backlog -- keeps counting it. The result is a
-      * zombie that occupies a pool slot and inflates every healthy/usable figure the
-      * pool and its throttles are driven by, while carrying nothing.
+     * <p>A tunnel is a crypto path above the transport, and it resolves its hop
+     * per message. So when a transport session dies the {@code TunnelInfo} and its
+     * lease survive untouched: nothing marks the tunnel failed, and
+     * {@link #getHealthyTunnelCount()} -- which tests only expiration, test status,
+     * soft failures and next-hop backlog -- keeps counting it. The result is a
+     * zombie that occupies a pool slot and inflates every healthy/usable figure the
+     * pool and its throttles are driven by, while carrying nothing.
      *
-      * <p>The peer index is direction-dependent, which is the trap here. Mirroring
-      * {@code BuildRequestor.getBuildRequestPeer}: for an inbound tunnel
-      * {@code getPeer(0)} is the peer we send to, but for outbound {@code getPeer(0)}
-      * is the gateway we want to <em>reach</em> and {@code getPeer(1)} is our next
-      * hop. Checking {@code getPeer(0)} unconditionally would query a session we
-      * never had for every outbound tunnel and mark them all dead.
+     * <p>The peer index is direction-dependent, which is the trap here. Mirroring
+     * {@code BuildRequestor.getBuildRequestPeer}: for an inbound tunnel
+     * {@code getPeer(0)} is the peer we send to, but for outbound {@code getPeer(0)}
+     * is the gateway we want to <em>reach</em> and {@code getPeer(1)} is our next
+     * hop. Checking {@code getPeer(0)} unconditionally would query a session we
+     * never had for every outbound tunnel and mark them all dead.
      *
-      * <p>Only the local hop can be checked. Hops beyond it are inside the network
-      * and are reached <em>through</em> the tunnel, so we hold no session to them;
-      * a failure there is indistinguishable from a far-end failure. That limit is
-      * why this is a complement to the tester rather than a replacement for it.
+     * <p>Only the local hop can be checked. Hops beyond it are inside the network
+     * and are reached <em>through</em> the tunnel, so we hold no session to them;
+     * a failure there is indistinguishable from a far-end failure. That limit is
+     * why this is a complement to the tester rather than a replacement for it.
      *
-      * @param t the pool tunnel; may be null or zero-length
-      * @return true when the local path cannot carry anything
-      * @since 0.9.71+
+     * <p>A tunnel is only excluded when its local session has been <em>lost</em>
+     * since it was built, never merely absent. {@link TunnelInfo#hadLocalHopSession()}
+     * snapshots the state at {@link #addTunnel}, when the session must have existed
+     * for the build to complete. Reading {@code isEstablished} on its own cannot
+     * tell a genuine zombie from a session that is still coming up, and with the
+     * observed exclusion rate near 20% of pool slots that distinction is the
+     * difference between measuring real loss and measuring our own reconnects.
+     *
+     * @param t the pool tunnel; may be null or zero-length
+     * @return true when the local path cannot carry anything
+     * @since 0.9.71+
      */
     private boolean isLocalHopUnreachable(TunnelInfo t) {
         if (t == null || t.getLength() <= 1) {return false;}
+        // Never excluded unless we are certain the session existed at build time
+        // and is gone now. An unknown snapshot means we cannot attribute the loss,
+        // and wrongly excluding a live tunnel is worse than missing a zombie.
+        if (!t.hadLocalHopSession()) {return false;}
         int idx = t.isInbound() ? 0 : 1;
         if (idx >= t.getLength()) {return false;}
         Hash nextHop = t.getPeer(idx);
@@ -2564,6 +2577,20 @@ public class TunnelPool {
         // their full lifetime.
         if (info.getLength() > 1 && _settings.isExploratory()) {
             expireZeroHopFallbacks();
+        }
+        // Snapshot the local-hop session before the tunnel can join the pool. A
+        // tunnel cannot complete a build without one, so this records the session we
+        // are relying on; isEstablished() going false later then means the session was
+        // lost rather than never there. Written here rather than at the two
+        // _tunnels.add() sites so the two cannot drift apart, and before the
+        // duplicate checks below so an early return cannot leave the map describing
+        // a tunnel that never entered the pool.
+        if (info.getLength() > 1) {
+            int hop = info.isInbound() ? 0 : 1;
+            Hash localHop = hop < info.getLength() ? info.getPeer(hop) : null;
+            if (localHop != null) {
+                info.setLocalHopSessionEstablished(_context.commSystem().isEstablished(localHop));
+            }
         }
         LeaseSet ls = null;
         _tunnelsLock.lock();

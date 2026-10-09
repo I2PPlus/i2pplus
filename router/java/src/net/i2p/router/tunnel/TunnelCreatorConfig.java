@@ -103,6 +103,15 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private volatile boolean _reused;
     private volatile int _priority;
     /**
+     * Whether a transport session to our local hop existed when this tunnel entered
+     * the pool. Recorded once at build time by the pool, then read-only.
+     *
+     * <p>See {@link net.i2p.router.TunnelInfo#hadLocalHopSession()} for why the pool
+     * needs the build-time fact rather than the current session state.
+     * @since 0.9.71+
+     */
+    private volatile boolean _localHopSessionEstablished;
+    /**
      * Bytes verified on this tunnel since the last per-peer profile update.
      * A {@link LongAdder} because it is bumped once per 1KB fragment and does
      * not need the monitor guarding {@link #_peakThroughputLastCoallesce}.
@@ -341,6 +350,21 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
      * The tunnel expiration, in ms since the epoch.
      */
     public void setExpiration(long when) {_expiration = when;}
+
+    /**
+     * Whether this tunnel held a transport session to its local hop when it was
+     * built. False when never recorded.
+     */
+    public boolean hadLocalHopSession() {return _localHopSessionEstablished;}
+
+    /**
+     * Record whether a transport session to the local hop existed at build time.
+     *
+     * @param established the session state observed when the tunnel entered the pool
+     */
+    public void setLocalHopSessionEstablished(boolean established) {
+        _localHopSessionEstablished = established;
+    }
 
     /** Component ordering in the new style request. */
     public List<Integer> getReplyOrder() {return _order;}
