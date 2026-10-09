@@ -60,7 +60,7 @@ import net.i2p.util.SystemVersion;
 
 /**
  * General-purpose adaptive tuner. Observes network and system stats,
- * adjusts tunable parameters to optimize router performance.
+ *  adjusts tunable parameters to optimize router performance.
  *
  * <p>Runs every 5 seconds via {@link SimpleTimer2}. Each tick samples
  * transport worker-stage CPU and updates the transport thread pool params;
@@ -381,8 +381,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *  ago does carry a stale entry forward — {@link #sampleStageCpu()} spots
          *  it as a backwards CPU counter and resets the stage.
          *
-         *  @param ids   live thread ids from the MXBean
-         *  @param count number of valid entries in {@code ids}
+         * @param ids   live thread ids from the MXBean
+         * @param count number of valid entries in {@code ids}
          */
         void beginCycle(long[] ids, int count) {
             Slots live = _live;
@@ -555,7 +555,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
     /** Priority for I/O handler threads — boosted under load, reduced when idle */
     private static volatile int handlerThreadPriority = Thread.NORM_PRIORITY;
 
-    /** Per-pool test budget for client tunnels — high enough to never throttle.
+    /**
+  * Per-pool test budget for client tunnels — high enough to never throttle.
      *  Global caps (maxQueuedTests, hardLimit) protect the job queue instead. */
     private static volatile int testClientBudget = 256;
 
@@ -870,7 +871,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         File getFile() { return _file; }
     }
 
-    /** The tuner with all tunable parameters.
+    /**
+  * The tuner with all tunable parameters.
      *
      * @param ctx the router context
      */
@@ -4838,7 +4840,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
     }
 
-    /** Matches ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE (1730), which is what the
+    /**
+  * Matches ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE (1730), which is what the
      *  streaming layer actually applies: i2ptunnel builds socket manager options
      *  without maxMessageSize, so connections fall back to this default.  Hardcoded
      *  here because the router module cannot reference the streaming app constant.
@@ -5066,13 +5069,16 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         return current;
     }
 
-    /** Heap % below which the streaming ceiling takes the full four-step jump.
+    /**
+  * Heap % below which the streaming ceiling takes the full four-step jump.
      *  @since 0.9.71+ */
     private static final double STRONG_CLEAN_MEM_PCT = 40.0;
-    /** Heap % below which a clean path may take a two-step climb; holds at or
+    /**
+  * Heap % below which a clean path may take a two-step climb; holds at or
      *  above this until memory frees. @since 0.9.71+ */
     private static final double CLIMB_HEADROOM_MEM_PCT = 50.0;
-    /** Heap % above which the streaming ceiling shrinks half a step.
+    /**
+  * Heap % above which the streaming ceiling shrinks half a step.
      *  @since 0.9.71+ */
     private static final double SHRINK_MEM_PCT = 60.0;
 
@@ -8848,7 +8854,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
         }
 
         /**
-         *  Compute the target value from memory headroom.
+         * Compute the target value from memory headroom.
          *
          *  <p>This parameter bounds a memory store, so memory is the only input it
          *  needs. It previously took {@code peer.fastPeerCount} and an hourly
@@ -8865,9 +8871,9 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *   grant, so a growing profile store is not penalised while memory is free
          *  and a shrinking one is not expanded while memory is tight.
          *
-         *  @param observed current value of the bound stat, {@code peer.activeProfileCount}
-         *  @return the target profile count
-         *  @since 0.9.71+
+         * @param observed current value of the bound stat, {@code peer.activeProfileCount}
+         * @return the target profile count
+         * @since 0.9.71+
          */
         protected int computeTarget(double observed) {
             int current = getRuntimeValue();
@@ -12466,7 +12472,7 @@ protected int computeTarget(double observed) {
                 int actual = mgr.getBuildHandlerThreadCount();
                 if (actual != stored) {
                     if (_log.shouldWarn())
-                        _log.warn("BuildHandler thread mismatch: stored=" + stored + " actual=" + actual + " — reconciling");
+                        _log.warn("BuildHandler thread mismatch: stored: " + stored + " actual: " + actual + " — reconciling");
                     TunnelPoolManager.setBuildHandlerThreads(actual);
                     stored = actual;
                 }
@@ -12871,7 +12877,8 @@ protected int computeTarget(double observed) {
             return clamp(0.5 - 0.5 * (avg - 4000) / 6000);
         }
 
-        /** Share of the fast or high-capacity tier that ghost exclusions may consume
+        /**
+  * Share of the fast or high-capacity tier that ghost exclusions may consume
          *  before the factor starts to bite, and the share at which it bottoms out. */
         static final double GHOST_TIER_FREE = 0.10;
         /** Share of the tier at which the ghost-exclusion factor bottoms out at 0.0. */
@@ -14155,7 +14162,15 @@ protected int computeTarget(double observed) {
             boolean healthy = !Double.isNaN(observed) && observed > 80;
             if (timeoutsHigh && !healthy)
                 return Math.min(_max, current + 30_000);
-            if (healthy)
+            // The two thresholds must straddle the operating point or the walk cannot
+            // settle: timeoutsHigh wanted ~25% and healthy wanted >80%, while this
+            // router ran 35% timeout and 56% success, so both conditions held
+            // permanently and current +30_000 was applied every pass until the cooldown
+            // pinned at its 510s ceiling. That parks first-hop peers for 8.5 minutes,
+            // and Hop1 -- the first *remote* hop -- is where builds most often go
+            // silent, so the loop removed exactly the capacity it meant to protect.
+            // Accepting success >= 50% as healthy lets the branches alternate.
+            if (healthy || (!Double.isNaN(observed) && observed >= 50))
                 return Math.max(_min, current - 30_000);
             return current;
         }
