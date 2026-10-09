@@ -404,7 +404,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          *
          * @param id thread id
          * @return index into {@link #CPU_STAGES}, or {@link #NO_STAGE} /
-         *         {@link #UNRESOLVED}
+         *               {@link #UNRESOLVED}
          */
         int stageOf(long id) {
             int idx = _live.index(id);
@@ -2766,7 +2766,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
          * @param target  the desired target value
          * @param step    the maximum change per cycle
          * @return current moved by at most step toward target; the value is
-         *         computed and returned, not applied
+         *                 computed and returned, not applied
          * @since 0.9.70+
          */
         protected static int clamp(int current, int target, int step) {
@@ -4899,7 +4899,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param rtxPerMille    {@code stream.rtxRatio} (resends per 1000 messages), or NaN
      * @param rtxBytesPerMille {@code stream.rtxRatioBytes} (resend bytes per 1000 bytes), or NaN
      * @return the retransmission rate clamped to [0.0, 1.0], or NaN when no
-     *         signal is available at all
+     *             signal is available at all
      * @since 0.9.71+
      */
     static double streamingLossRate(double dupEvents, double sendEvents,
@@ -4976,7 +4976,7 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param min lower bound for the window (inclusive)
      * @param max upper bound for the window (inclusive)
      * @return the BDP window target in {@code [min, max]}, or -1 if there is no usable signal;
-     *         never returns a value outside {@code [min, max]}
+     *             never returns a value outside {@code [min, max]}
      * @since 0.9.71+
      */
     static int computeStreamingBdpTarget(double bwSendBps, double rttMs, int messageSize, int min, int max) {
@@ -5025,8 +5025,8 @@ public class Tuner extends SimpleTimer2.TimedEvent {
      * @param min lower bound for the ceiling (inclusive)
      * @param max upper bound for the ceiling (inclusive)
      * @param step one tuning step; clean-path climbs use four steps under
-     *              strong heap headroom and two otherwise, hard-signal
-     *              shrinks use half a step
+     *             strong heap headroom and two otherwise, hard-signal
+     *             shrinks use half a step
      * @param defaultValue factory default ceiling; the recovery floor is max(min, defaultValue / 2)
      * @param failLifetime stat {@code transport.sendMessageFailureLifetime} in ms, or NaN if absent
      * @param lossRate streaming retransmission rate (0.0-1.0), or NaN if absent;
@@ -9229,7 +9229,12 @@ public class Tuner extends SimpleTimer2.TimedEvent {
                   // build durations put p90 at 12.2s and the slowest at 25.4s against a 17s
                   // inbound budget, so the ceiling was genuinely below the tail it was meant
                   // to accommodate. One layer's ceiling should not silently cap the other's.
-                  5000, 30000, 1000, "tunnel.buildTimeoutRate", _context);
+                  // Floor raised from 5000 to 10000. BuildExecutor adds an outbound surcharge
+                  // of 8s and an RTT floor of roughly 10s on top of this base, so a 5s base
+                  // cannot produce a budget below ~10s in any case. Leaving the floor at
+                  // 5000 let the walk stall there while still yielding 10s, spending half
+                  // the parameter's range on values that are never reachable.
+                  10000, 30000, 1000, "tunnel.buildTimeoutRate", _context);
         }
 
         protected void applyValue(int value) {
@@ -9263,6 +9268,23 @@ public class Tuner extends SimpleTimer2.TimedEvent {
 
             // No data: no change
             if (Double.isNaN(observed)) return current;
+            // Measured completion time is the primary evidence; timeout rate is a proxy that
+            // points the wrong way here. Slot-time is dominated by builds that never arrive:
+            // over 8h and 26586 builds, 13241 succeeded at 0.58s each (~7.7k slot-seconds)
+            // while 11926 timed out at their full 30-45s budget (~441k). Over 98% of build
+            // capacity was held by requests that never succeeded, and none expired early, so
+            // no timeout was ever converted by waiting longer.
+            //
+            // Checked before the ramps deliberately: the observed>30 and observed>15 branches
+            // below raise this value *because* builds are timing out, which is exactly the
+            // state in which waiting longer has been shown not to help. Left in front, they
+            // made the decrease unreachable and pinned the parameter at its ceiling.
+            double buildTime = getAdditionalStat(_context, "tunnel.buildRequestTime");
+            boolean budgetFarAboveMeasured =
+                !Double.isNaN(buildTime) && buildTime * 1000.0 < current * 0.25;
+            if (budgetFarAboveMeasured && observed > 10)
+                return Math.max(_min, current - _step);
+
 
             // Build storm: DON'T decrease timeout when builds are timing out.
             // If builds expire, the timeout is too short — the storm may be *caused* by
