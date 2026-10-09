@@ -96,7 +96,8 @@ public class TestJob extends JobImpl {
     private RatchetSessionTag _ratchetEncryptTag;
     private static final AtomicInteger __id = new AtomicInteger();
     private int _testId;
-    /** Test period for the current round, computed once at send time so the
+    /**
+     * Test period for the current round, computed once at send time so the
      *  reply is judged against the same window used to set the expiration. */
     private int _testPeriod;
 
@@ -533,7 +534,7 @@ public class TestJob extends JobImpl {
     private static final long MIN_RETEST_GAP_MS = 120_000;
 
     /**
-      * The max test delay in effect, tuned value if set else config.
+     * The max test delay in effect, tuned value if set else config.
      * @param ctx the router context
      * @return the max test delay in ms
      * @since 0.9.71+
@@ -614,7 +615,8 @@ public class TestJob extends JobImpl {
     // Adaptive testing frequency constants
     private static final int SUCCESS_HISTORY_SIZE = 3; // Track last 3 results
     private static final int MAX_LAG_FOR_SCHEDULE = 150;
-    /** Hard ceiling on consecutive test failures for server pool tunnels.
+    /**
+     * Hard ceiling on consecutive test failures for server pool tunnels.
      *  Without this, dead server pool tunnels keep their slot indefinitely
      *  because incrementTestFailures() holds them for the LS republish cycle.
      *  At 10+ failures the tunnel is clearly dead — mark it conclusively. */
@@ -839,19 +841,19 @@ public class TestJob extends JobImpl {
         final ConcurrentHashMap<String, AtomicInteger> poolInFlight =
                 new ConcurrentHashMap<String, AtomicInteger>();
 
-        /** Guards firstTestBuffer and bufferedKeys. */
+                        /** Guards firstTestBuffer and bufferedKeys. */
         final Object bufferLock = new Object();
 
-        /** First-test candidates awaiting batched dispatch, oldest first. */
+                        /** First-test candidates awaiting batched dispatch, oldest first. */
         final Deque<PendingTest> firstTestBuffer = new ArrayDeque<PendingTest>();
 
-        /** Tunnel keys currently in firstTestBuffer, for offer-time dedupe. */
+                        /** Tunnel keys currently in firstTestBuffer, for offer-time dedupe. */
         final Set<Long> bufferedKeys = new HashSet<Long>();
 
-        /** Set while a PumpJob is queued or running; cleared when the buffer drains. */
+                        /** Set while a PumpJob is queued or running; cleared when the buffer drains. */
         final AtomicBoolean pumpQueued = new AtomicBoolean();
 
-        /** Last time a batch-denial INFO line was logged (global rate limit). */
+                        /** Last time a batch-denial INFO line was logged (global rate limit). */
         final AtomicLong lastDenialLog = new AtomicLong();
 
         /**
@@ -904,6 +906,9 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static void registerBatchStats(StatManager stats, long[] periods) {
+        stats.createRequiredRateStat("tunnel.testFailedLocalHopUnreachable",
+                "Tunnel tests that failed while we held no transport session to the peer we send through (count)",
+                "Tunnels", periods);
         stats.createRequiredRateStat("tunnel.testBufferOffered",
                 "First-test candidates accepted into the batch buffer (count)",
                 "Tunnels", periods);
@@ -1301,7 +1306,7 @@ public class TestJob extends JobImpl {
         return "client-" + destination.toBase64() + "-" + direction;
     }
 
-    /** Flag to indicate if this job is valid and should be queued */
+            /** Flag to indicate if this job is valid and should be queued */
     private boolean _valid = true;
 
     /**
@@ -1330,7 +1335,7 @@ public class TestJob extends JobImpl {
      */
     private volatile OutNetMessage _pendingMessage;
 
-    /** Monotonic generation for round tokens; diagnostics only. */
+            /** Monotonic generation for round tokens; diagnostics only. */
     private final AtomicLong _roundGen = new AtomicLong();
 
     /**
@@ -1364,7 +1369,7 @@ public class TestJob extends JobImpl {
         return maxQueuedTests;
     }
 
-    /** This job's per-context runtime state. */
+            /** This job's per-context runtime state. */
     private BatchState state() {
         return batchState(getContext());
     }
@@ -1828,22 +1833,22 @@ public class TestJob extends JobImpl {
      */
     static final int MAX_STRANDED_OFFERS_PER_SWEEP = 32;
 
-    /** Pump requeue delay while the job queue is quiet. @since 0.9.71+ */
+            /** Pump requeue delay while the job queue is quiet. @since 0.9.71+ */
     static final long PUMP_DELAY_HEALTHY_MS = 250;
 
-    /** Pump requeue delay while the job queue is busy. @since 0.9.71+ */
+            /** Pump requeue delay while the job queue is busy. @since 0.9.71+ */
     static final long PUMP_DELAY_BUSY_MS = 1000;
 
-    /** Pump requeue delay when the job queue is badly lagging. @since 0.9.71+ */
+            /** Pump requeue delay when the job queue is badly lagging. @since 0.9.71+ */
     static final long PUMP_DELAY_LAGGED_MS = 3000;
 
-    /** Job-queue lag above which the pump uses the busy delay (ms). @since 0.9.71+ */
+            /** Job-queue lag above which the pump uses the busy delay (ms). @since 0.9.71+ */
     static final long PUMP_BUSY_LAG_MS = MAX_LAG_FOR_SCHEDULE;
 
-    /** Job-queue lag above which the pump uses the lagged delay (ms). @since 0.9.71+ */
+            /** Job-queue lag above which the pump uses the lagged delay (ms). @since 0.9.71+ */
     static final long PUMP_LAGGED_LAG_MS = 3000;
 
-    /** Minimum spacing between batch-denial INFO lines (ms). @since 0.9.71+ */
+            /** Minimum spacing between batch-denial INFO lines (ms). @since 0.9.71+ */
     static final long DENIAL_LOG_INTERVAL_MS = 3 * 60 * 1000L;
 
     /**
@@ -2251,13 +2256,13 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static final class InstanceClaims {
-        /** Pool identity captured when the claim was taken; null when there is no pool. */
+                        /** Pool identity captured when the claim was taken; null when there is no pool. */
         final String poolId;
-        /** True until the total counter has been released. */
+                        /** True until the total counter has been released. */
         final AtomicBoolean totalHeld = new AtomicBoolean(true);
-        /** True while the per-pool claim is outstanding. */
+                        /** True while the per-pool claim is outstanding. */
         final AtomicBoolean poolHeld;
-        /** True once the running-test registration succeeded. */
+                        /** True once the running-test registration succeeded. */
         final AtomicBoolean runningHeld = new AtomicBoolean(false);
 
         InstanceClaims(String poolId) {
@@ -2610,15 +2615,15 @@ public class TestJob extends JobImpl {
      * @since 0.9.71+
      */
     static final class RoundToken {
-        /** Monotonic generation, for logs and token identity. */
+                        /** Monotonic generation, for logs and token identity. */
         final long generation;
-        /** Pool the in-flight permits were taken from; null when the job has no pool. */
+                        /** Pool the in-flight permits were taken from; null when the job has no pool. */
         final String poolId;
-        /** When the round stops being eligible for a reply. */
+                        /** When the round stops being eligible for a reply. */
         final long expiration;
-        /** True once one path has claimed this round; later claims are no-ops. */
+                        /** True once one path has claimed this round; later claims are no-ops. */
         final AtomicBoolean completed = new AtomicBoolean(false);
-        /** True while this round holds the global and per-pool in-flight permits. */
+                        /** True while this round holds the global and per-pool in-flight permits. */
         final AtomicBoolean permitsHeld = new AtomicBoolean(false);
 
         /**
@@ -2669,13 +2674,13 @@ public class TestJob extends JobImpl {
      *  @since 0.9.71+
      */
     enum InFlightRefusal {
-        /** Permits were taken; the round may dispatch. */
+                        /** Permits were taken; the round may dispatch. */
         NONE,
-        /** The token already holds permits, so it is refused rather than double counted. */
+                        /** The token already holds permits, so it is refused rather than double counted. */
         ALREADY_HELD,
-        /** The global concurrent-test cap is reached. */
+                        /** The global concurrent-test cap is reached. */
         GLOBAL_CAP,
-        /** This pool's own in-flight budget is reached. */
+                        /** This pool's own in-flight budget is reached. */
         POOL_BUDGET
     }
 
@@ -3463,13 +3468,13 @@ public class TestJob extends JobImpl {
         }
     }
 
-    /**
-     *  Update the rolling average test duration and adapt the timeout multiplier.
-     *  Called after each test completion (success or failure).
-     *
-     *  @param durationMs the test duration in ms
-     *  @since 0.9.71+
-     */
+      /**
+       *  Update the rolling average test duration and adapt the timeout multiplier.
+       *  Called after each test completion (success or failure).
+       *
+       *  @param durationMs the test duration in ms
+       *  @since 0.9.71+
+       */
       private void updateTestDuration(long durationMs) {
           _pool.updateAdaptiveTestDuration(durationMs);
       }
@@ -3908,12 +3913,49 @@ public class TestJob extends JobImpl {
      *
      * @param timeToFail time in milliseconds the test ran before failing
      */
+    /**
+      * Record blame evidence when a tunnel test fails and our own next hop has no session.
+     *
+      * <p>A tunnel test is an onion: the message traverses every hop and any hop that
+      * cannot forward drops it silently, so the round trip reports only "somewhere
+      * between us and the far end". The single hop we can name is the peer we send
+      * through, and only when we hold no session to it is the fault local rather than
+      * beyond us. Anything else stays unattributed -- blaming a peer for a failure we
+      * cannot place on it is how a good peer ends up ghosted.
+     *
+      * <p>Uses {@link BuildRequestor#getBuildRequestPeer} rather than a fixed index:
+      * the peer we send through is {@code getPeer(0)} inbound but {@code getPeer(1)}
+      * outbound, where {@code getPeer(0)} is the gateway we are trying to reach.
+      * Checking the wrong index would blame a peer we never contacted.
+     *
+      * <p>Records the observation only. It does not fail the tunnel early -- the
+      * failure path owns that decision and its threshold -- and it does not penalise
+      * the peer, because one missed session is indistinguishable from a peer
+      * restarting, and a single such event must not remove a peer that is otherwise
+      * serving us.
+     *
+      * @since 0.9.71+
+     */
+    private void noteLocalHopAttribution() {
+        Hash localHop = BuildRequestor.getBuildRequestPeer(_cfg);
+        if (localHop == null) {return;}
+        if (getContext().commSystem().isEstablished(localHop)) {return;}
+        getContext().statManager().addRateData("tunnel.testFailedLocalHopUnreachable", 1);
+        if (_log.shouldDebug())
+            _log.debug("Tunnel test failed with no session to local hop [" +
+                       localHop.toBase64().substring(0,6) + "] -> " + _cfg);
+    }
+
     private void testFailed(long timeToFail) {
         if (_pool == null || !_pool.isAlive()) {
             cleanupTunnelTracking();
             decrementIfCounted();
             return;
         }
+        // Attribution belongs on the failure path, not on every round: a passing
+        // test says nothing about the local hop, and counting it there would report
+        // an unreachable hop for tunnels that are working.
+        noteLocalHopAttribution();
         updateTestDuration(timeToFail);
         probeFarEndpoint(_cfg);
 

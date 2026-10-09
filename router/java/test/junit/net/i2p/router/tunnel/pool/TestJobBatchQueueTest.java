@@ -905,6 +905,8 @@ public class TestJobBatchQueueTest {
 
         TestJob.registerBatchStats(stats, periods);
 
+        verify(stats).createRequiredRateStat(eq("tunnel.testFailedLocalHopUnreachable"),
+                anyString(), eq("Tunnels"), same(periods));
         verify(stats).createRequiredRateStat(eq("tunnel.testBufferOffered"),
                 anyString(), eq("Tunnels"), same(periods));
         verify(stats).createRequiredRateStat(eq("tunnel.testBufferDropped"),
