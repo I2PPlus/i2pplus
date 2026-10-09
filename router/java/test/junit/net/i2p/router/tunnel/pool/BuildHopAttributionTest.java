@@ -85,4 +85,63 @@ public class BuildHopAttributionTest {
         assertEquals("established, silent",
                      BuildHopAttribution.normalise(BuildExecutor.HOP_ESTABLISHED_SILENT));
     }
+
+    /**
+     * Every classification the generator can emit must yield a legal stat name.
+     *
+     * <p>addRateData drops unregistered names silently, so a classification the
+     * registration set forgot would record nothing with no error at all -- which
+     * is exactly what happened before the set existed.
+     */
+    @Test
+    public void everyRegisteredClassificationYieldsALegalStatName() {
+        for (String c : BuildHopAttribution.registeredClassifications()) {
+            String name = BuildHopAttribution.statName(1, c);
+            assertFalse("no spaces: " + name, name.contains(" "));
+            assertFalse("no commas: " + name, name.contains(","));
+            assertTrue("starts with tunnel.: " + name, name.startsWith("tunnel."));
+        }
+    }
+
+    /**
+     * A registered classification that {@code isPeerFailure} rejects would register
+     * a stat that can never fire.
+     */
+    @Test
+    public void everyRegisteredClassificationIsAPeerFailure() {
+        for (String c : BuildHopAttribution.registeredClassifications()) {
+            assertTrue("registered but never counted: " + c,
+                BuildHopAttribution.isPeerFailure(1, c));
+        }
+    }
+
+    /**
+     * Hop0 is this router, so it can never be a peer failure and must not be
+     * registered as one.
+     */
+    @Test
+    public void registeredHopIndexesExcludeOurself() {
+        for (int hop : BuildHopAttribution.registeredHopIndexes()) {
+            assertTrue("Hop0 is this router", hop > 0);
+        }
+    }
+
+    /**
+     * The registration set must cover every classification
+     * {@code classifyExpiredHop} can return for a remote hop, so no real state goes
+     * unrecorded.
+     */
+    @Test
+    public void registrationCoversEveryRemoteClassification() {
+        java.util.List<String> reg = java.util.Arrays.asList(
+            BuildHopAttribution.registeredClassifications());
+        String[] remote = {
+            BuildExecutor.HOP_ESTABLISHED_SILENT, BuildExecutor.HOP_REACHABLE,
+            BuildExecutor.HOP_UNREACHABLE, BuildExecutor.HOP_HANDSHAKE_UNFINISHED
+        };
+        for (String c : remote) {
+            assertTrue("classifyExpiredHop can return '" + c + "' but it is not registered",
+                reg.contains(c));
+        }
+    }
 }
