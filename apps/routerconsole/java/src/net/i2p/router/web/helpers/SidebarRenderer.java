@@ -588,11 +588,11 @@ class SidebarRenderer {
 
         tx = _t("Profiles");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/profiles?show=fast\" target=_top title=\"")
+        rbuf.append("<a href=/profiles target=_top title=\"")
             .append(_t("Show recent peer performance profiles"))
             .append("\">")
             .append(nbsp(tx))
-            .append("</a>\n<a class=sb_icon target=_top href=\"/profiles?show=fast\" title=\"")
+            .append("</a>\n<a class=sb_icon target=_top href=/profiles title=\"")
             .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/profile.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
