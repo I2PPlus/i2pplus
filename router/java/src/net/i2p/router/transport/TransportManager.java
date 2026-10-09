@@ -1147,26 +1147,37 @@ public class TransportManager implements TransportEventListener {
                                                      _context.clock().now() + SIGTYPE_BANLIST_DURATION);
                 } else {
                     _context.statManager().addRateData("transport.banlistOnUnreachable", msg.getLifetime(), msg.getLifetime());
-                      // Unreachable is not misbehaviour. It means we could not reach
-                      // them, which may be their end, a NAT, or our own connectivity --
-                      // none of which is grounds for a banlist entry the peer cannot
-                      // appeal and that survives them coming back. This used to banlist
-                      // outright, so a peer that had demonstrably returned was banned
-                      // anyway, because the persistent wasUnreachable flag feeding this
-                      // branch was never cleared by an inbound reconnect. Ghosting states
-                      // the same judgement with the right shape: removed from selection
-                      // for a bounded, decaying window, cleared by a successful build.
-                      TunnelManagerFacade tmf = _context.tunnelManager();
-                      GhostPeerManager ghostMgr = tmf != null ? tmf.getGhostPeerManager() : null;
-                      if (ghostMgr != null) {
-                          _banLogger.logBan(peer, _peerIP, "Unreachable on any transport -> ghosted", 0, targetRI);
-                          ghostMgr.recordTimeout(peer);
-                      } else {
-                          // No pool manager (very early startup): keep the previous
-                          // behaviour rather than silently dropping the signal.
-                          _banLogger.logBan(peer, _peerIP, "Unreachable on any transport", 0, targetRI);
-                          _context.banlist().banlistRouter(peer, "" + _x("Unreachable on any transport"));
-                      }
+                    // Unreachable is not misbehaviour. It means we could not reach them,
+                    // which may be their end, a NAT, or our own connectivity -- none of
+                    // which is grounds for a banlist entry the peer cannot appeal and that
+                    // survives them coming back. This used to banlist outright, so a peer
+                    // that had demonstrably returned was banned anyway, because the
+                    // persistent wasUnreachable flag feeding this branch was never cleared
+                    // by an inbound reconnect. Ghosting states the same judgement with the
+                    // right shape: out of selection for a bounded, decaying window, cleared
+                    // by a successful build.
+                    //
+                    // Ghosting is preferred over banlisting, but the ghost carries tunnel
+                    // BUILD semantics: its cooldown derives from the pool build success
+                    // rate and it only affects build selection. A routing-level
+                    // reachability failure is not a build outcome, so ghosting here is an
+                    // approximation, not an exact fit. That is still the better trade than
+                    // a ban, which is why this is not simply stat-only.
+                    TunnelManagerFacade tmf = _context.tunnelManager();
+                    GhostPeerManager ghostMgr = tmf != null ? tmf.getGhostPeerManager() : null;
+                    if (ghostMgr != null) {
+                        _banLogger.logBan(peer, _peerIP, "Unreachable on any transport -> ghosted", 0, targetRI);
+                        ghostMgr.recordTimeout(peer);
+                    } else {
+                        // No pool manager yet (very early startup). There is no evidence of
+                        // an offence, so the fallback records nothing further rather than
+                        // banlisting: dropping the signal is preferable to asserting
+                        // misbehaviour we never observed. The stat on the line above is
+                        // already recorded, so the case remains visible in the aggregate.
+                        if (_log.shouldWarn())
+                            _log.warn("Unreachable on any transport -> not banned (no ghost manager yet) [" +
+                                                          peer.toBase64().substring(0,6) + "]");
+                    }
                 }
             }
         } else if (rv == null) {
