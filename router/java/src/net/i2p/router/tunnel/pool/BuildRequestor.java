@@ -507,10 +507,13 @@ public abstract class BuildRequestor {
                         msg = enc;
                     }
                 }
+                // Recorded before dispatch so an expiry can be joined back to this send.
+                cfg.setLastRequestMsgId(msg.getUniqueId());
                 if (log.shouldInfo()) {
                     log.info("Sending outbound TunnelBuildRequest via exploratory tunnel to [" +
                              nextHop.toBase64().substring(0,6) + "] for " + cfg +
-                             "\n* Via: " + outTunnel + " Reply via: " + pairedTunnel);
+                             "\n* Via: " + outTunnel + " Reply via: " + pairedTunnel +
+                             " [MsgID " + msg.getUniqueId() + "]");
                 }
                 ctx.tunnelDispatcher().dispatchOutbound(msg, outTunnel.getSendTunnelId(0), nextHop);
                 return;
@@ -529,6 +532,7 @@ public abstract class BuildRequestor {
             effectiveTimeout = getRequestTimeout(ctx);
         }
 
+        cfg.setLastRequestMsgId(msg.getUniqueId());
         if (log.shouldInfo()) {
             log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0,6) + "] for " + cfg +
                      "\n* Reply via: " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");

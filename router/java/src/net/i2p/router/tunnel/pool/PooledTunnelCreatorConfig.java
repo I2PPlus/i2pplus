@@ -16,6 +16,26 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
     private volatile long _lastActivity;
     private volatile boolean _lastResort;
     private volatile boolean _bypassPacing;
+    /**
+     *  I2NP message ID of the most recent build request sent for this config.
+     *
+     *  <p>This is the join key between the send side ({@code BuildRequestor}
+     *  logs it as {@code [MsgID ...]}, on both the direct and exploratory send
+     *  paths) and the expiry side ({@code
+     *  BuildExecutor.logExpiredBuildWarn} logs it as {@code reqMsgId=...}), so
+     *  a build that expires unanswered can be attributed to a specific send.
+     *  Without it, "established, silent" is indistinguishable between a hop that
+     *  never answered and a reply that was lost, which is why no amount of
+     *  deadline tuning could be shown to help.
+     *
+     *  <p>0 means not yet sent, or not a {@code PooledTunnelCreatorConfig}.
+     *  Written on the build executor thread and read on the expiry path, hence
+     *  volatile; a stale read costs only a missing correlation ID, never
+     *  correctness.
+     *
+     *  @since 0.9.71+
+     */
+    private volatile long _lastRequestMsgId;
     private static final long ACTIVITY_TIMEOUT = 30*1000L;
 
     /**
@@ -185,5 +205,25 @@ public class PooledTunnelCreatorConfig extends TunnelCreatorConfig {
      *  @since 0.9.53
      */
     public TunnelId getPairedGW() {return _pairedGW;}
+
+    /**
+     *  Record the I2NP message ID of a build request just sent for this config.
+     *
+     *  <p>A config may be retried, so this holds the most recent attempt rather
+     *  than the first; the expiry report wants the send that actually went out.
+     *
+     *  @param msgId the {@code getUniqueId()} of the {@code TunnelBuildMessage}
+     *               handed to the transport or dispatcher
+     *  @since 0.9.71+
+     */
+    public void setLastRequestMsgId(long msgId) {if (msgId != 0) {_lastRequestMsgId = msgId;}}
+
+    /**
+     *  The I2NP message ID of the most recent build request sent for this config.
+     *
+     *  @return the message ID, or 0 if no request has been sent yet
+     *  @since 0.9.71+
+     */
+    public long getLastRequestMsgId() {return _lastRequestMsgId;}
 
 }

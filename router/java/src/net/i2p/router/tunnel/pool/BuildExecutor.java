@@ -1334,6 +1334,7 @@ public class BuildExecutor implements Runnable {
         buf.append(' ').append(destination != null ? destination : "exploratory");
         buf.append(", ").append(length).append(length == 1 ? " hop" : " hops");
         buf.append(", gateway=Hop").append(gatewayHop < 0 ? "?" : String.valueOf(gatewayHop));
+        appendRequestMsgId(buf, cfg);
         for (int hop = 0; hop < length; hop++) {
             Hash peer = cfg.getPeer(hop);
             boolean assigned = (peer != null);
@@ -1361,6 +1362,37 @@ public class BuildExecutor implements Runnable {
         _log.warn(buf.toString());
     }
 
+    /**
+     *  Append the build request's I2NP message ID, when known.
+     *
+     *  <p>This is the join key to the {@code [MsgID ...]} emitted by
+     *  {@code BuildRequestor} on send. With it, an expiring build can be traced
+     *  to a specific send and the "hop never answered" and "reply lost" cases
+     *  become separable; without it both look identical as {@code established,
+     *  silent}. Omitted entirely when unset rather than printed as 0, so a zero
+     *  is never mistaken for a real message ID.
+     *
+     *  @param buf the line being assembled
+     *  @param cfg the expired build's config
+     *  @since 0.9.71+
+     */
+    private static void appendRequestMsgId(StringBuilder buf, TunnelCreatorConfig cfg) {
+        if (!(cfg instanceof PooledTunnelCreatorConfig)) {return;}
+        long msgId = ((PooledTunnelCreatorConfig)cfg).getLastRequestMsgId();
+        // Labelled reqMsgId, not replyId: replyId is already this class's
+        // duplicate-detection key (set in buildTunnel(), read by
+        // wasRecentlyBuilding()), a different value from the I2NP message ID.
+        // Reusing that token for a second ID would make the two ambiguous in
+        // the same log stream.
+        if (msgId != 0) {buf.append(", reqMsgId=").append(msgId);}
+    }
+
+    /**
+     *  Emit the detailed per-hop expiry report at DEBUG level.
+     *
+     *  @param cfg the expired build's config
+     *  @since 0.9.71+
+     */
     private void logExpiredPeers(TunnelCreatorConfig cfg) {
         CommSystemFacade commSystem = _context.commSystem();
         long now = _context.clock().now();
@@ -1373,6 +1405,7 @@ public class BuildExecutor implements Runnable {
         buf.append(cfg.isInbound() ? "inbound" : "outbound");
         buf.append(" [").append(destination != null ? destination : "exploratory");
         buf.append("] ").append(length).append(length == 1 ? " hop" : " hops");
+        appendRequestMsgId(buf, cfg);
         for (int hop = 0; hop < length; hop++) {
             Hash peer = cfg.getPeer(hop);
             buf.append("\n* Hop ").append(hop);
