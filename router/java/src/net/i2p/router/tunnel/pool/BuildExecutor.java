@@ -850,12 +850,10 @@ public class BuildExecutor implements Runnable {
 
         // Start at base, then adjust from the success rate. The timeout rate drives the
         // concurrency throttle further down rather than the deadline - see
-        // adaptiveTimeoutDelta() for the measurement behind that.
-        _adaptiveTimeout = baseTimeout + adaptiveTimeoutDelta(successRate);
-
-        // Clamp: never below 10s regardless of rate; allow adaptive increase up to 30s
-        if (_adaptiveTimeout < 10*1000L) { _adaptiveTimeout = 10*1000L; }
-        if (_adaptiveTimeout > 30*1000L) { _adaptiveTimeout = 30*1000L; }
+        // adaptiveTimeoutDelta() for the measurement behind that. Unclamped on purpose;
+        // see combineAdaptiveTimeout() for why the base and the final budget are bounded
+        // elsewhere, and clamping here collapsed every branch onto the base.
+        _adaptiveTimeout = combineAdaptiveTimeout(baseTimeout, successRate);
 
         // Adaptive concurrency throttle: reduce max concurrent builds when
         // timeout rate is high to prevent overwhelming the IB reply path.
@@ -1067,6 +1065,33 @@ public class BuildExecutor implements Runnable {
             return MODERATE_RECOVERY_MS;
         }
         return LOW_SUCCESS_RECOVERY_MS;
+    }
+
+    /**
+     *  Combine the Tuner's base timeout with the success-rate adjustment.
+     *
+     *  <p>Pure, and deliberately unclamped. The base is already bounded by the
+     *  Tuner's own range, and the final budget is bounded by
+     *  {@link #computeAdaptiveTimeout} through {@code MAX_ADAPTIVE_TIMEOUT_MS}, so
+     *  clamping here to the same endpoints as the base only destroyed information:
+     *  with the base at 30s the GOOD (+0), MODERATE (+2s) and LOW (+5s) branches all
+     *  collapsed onto 30s, and with the base at 10s the FAST (-3s) branch collapsed up
+     *  to 10s. Logged samples sat pinned at the 30s ceiling 75% of the time, which is
+     *  what a degenerate ladder looks like from outside.
+     *
+     *  <p>Extracted from the adaptive-timeout update so that reachability of every
+     *  branch across the base range is unit-testable without a router. While the
+     *  arithmetic lived only inside the instance method, the sole way to test it was
+     *  to reimplement it in the test -- which passes whether or not the real code
+     *  clamps, so it proved nothing.
+     *
+     *  @param baseTimeout the Tuner's current build request timeout in ms
+     *  @param successRate fraction of recent builds that succeeded, 0..1
+     *  @return the base adjusted for success rate, in ms; not clamped
+     *  @since 0.9.71+
+     */
+    static long combineAdaptiveTimeout(long baseTimeout, double successRate) {
+        return baseTimeout + adaptiveTimeoutDelta(successRate);
     }
 
     /**
