@@ -81,7 +81,7 @@ import net.i2p.util.Translate;
  *
  */
 public abstract class TransportImpl implements Transport {
-    /** Timestamp labels for afterSend(), constants so neither costs an allocation. */
+            /** Timestamp labels for afterSend(), constants so neither costs an allocation. */
     private static final String AFTER_SEND_SUCCESSFUL = "afterSend(successful)";
     private static final String AFTER_SEND_FAILED = "afterSend(failed)";
 
@@ -102,7 +102,7 @@ public abstract class TransportImpl implements Transport {
      * _context.
      */
     protected final RouterContext _context;
-    /** Map from routerIdentHash to timestamp (Long) when the peer was last unreachable. */
+            /** Map from routerIdentHash to timestamp (Long) when the peer was last unreachable. */
     private final Map<Hash, Long>  _unreachableEntries;
     private final Map<Hash, Long> _wasUnreachableEntries;
     // one-entry cache for reachable check
@@ -112,24 +112,24 @@ public abstract class TransportImpl implements Transport {
     private volatile int _sendPoolDroppedLast;
     private long _lastSendPoolStatTime;
 
-    /** Global router ident -> IP map. */
+            /** Global router ident -> IP map. */
     private static final Map<Hash, byte[]> _IPMap;
 
     private final long UNREACHABLE_PERIOD;
     private final long WAS_UNREACHABLE_PERIOD;
     private volatile CleanupUnreachable _cleanupJob;
 
-    /** @since 0.9.50 */
+            /** @since 0.9.50 */
     public static final String CAP_IPV4 = "4";
-    /** @since 0.9.50 */
+            /** @since 0.9.50 */
     public static final String CAP_IPV6 = "6";
-    /** @since 0.9.50 */
+            /** @since 0.9.50 */
     public static final String CAP_IPV4_IPV6 = CAP_IPV4 + CAP_IPV6;
 
-    /** @since 0.9.44 */
+            /** @since 0.9.44 */
     protected static final String PROP_IPV6_FIREWALLED = "i2np.lastIPv6Firewalled";
 
-    /** @since 0.9.64+ */
+            /** @since 0.9.64+ */
     protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
 
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
@@ -143,7 +143,7 @@ public abstract class TransportImpl implements Transport {
         _IPMap = new LHMCache<>(size);
     }
 
-    /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
+            /** 50/100/150/250/450/550/700 for BW Tiers K/L/M/N/O/P/X */
     private static final int MAX_CONNECTION_FACTOR = 100;
     // see constructor
     private static volatile int SEND_POOL_CAPACITY = SystemVersion.isSlow() ? 64 : 128;
@@ -179,7 +179,7 @@ public abstract class TransportImpl implements Transport {
     /**
      * Initialize the new transport
      *
-      * @param context the context
+     * @param context the context
      */
     public TransportImpl(RouterContext context) {
         _context = context;
@@ -246,11 +246,11 @@ public abstract class TransportImpl implements Transport {
     /**
      * How many peers are we currently connected to, that we have
      * sent a message to or received a message from in the last five minutes.
-      * @return the value
+     * @return the value
      */
     public abstract int countActivePeers();
 
-    /** Per-transport connection limit */
+            /** Per-transport connection limit */
     public int getMaxConnections() {
         if (_context.commSystem().isDummy()) {return 0;} // testing
 
@@ -649,9 +649,9 @@ public abstract class TransportImpl implements Transport {
         }
     }
 
-    /** Do we increase the advertised cost when approaching conn limits? */
+            /** Do we increase the advertised cost when approaching conn limits? */
     protected static final boolean ADJUST_COST = true;
-    /** Adjustment factor for congestion cost */
+            /** Adjustment factor for congestion cost */
     protected static final int CONGESTION_COST_ADJUSTMENT = 1;
 
     /**
@@ -992,9 +992,9 @@ public abstract class TransportImpl implements Transport {
      */
     public int getRequestedPort() {return -1;}
 
-    /** Who to notify on message availability */
+            /** Who to notify on message availability */
     public void setListener(TransportEventListener listener) {_listener = listener;}
-    /** Make this stuff pretty */
+            /** Make this stuff pretty */
     public void renderStatusHTML(Writer out) throws IOException { /* no-op */ }
     /**
      * Render the transport status HTML to the given writer.
@@ -1077,7 +1077,7 @@ public abstract class TransportImpl implements Transport {
         return rv;
     }
 
-    /** Called when we can't reach a peer. */
+            /** Called when we can't reach a peer. */
     public void markUnreachable(Hash peer) {
         Status status = _context.commSystem().getStatus();
         if (status == Status.DISCONNECTED || status == Status.HOSED) {return;}
@@ -1087,7 +1087,7 @@ public abstract class TransportImpl implements Transport {
         markWasUnreachable(peer, true); // This is not cleared when they contact us
     }
 
-    /** Called when we establish a peer connection (outbound or inbound). */
+            /** Called when we establish a peer connection (outbound or inbound). */
     public void markReachable(Hash peer, boolean isInbound) {
         /**
          * The legacy treatment for the peer has been to unban them because if any transport
@@ -1105,7 +1105,14 @@ public abstract class TransportImpl implements Transport {
             _context.banlist().unbanlistRouter(peer);
         }
         _unreachableEntries.remove(peer);
-        if (!isInbound) {markWasUnreachable(peer, false);}
+        // Clear the persistent flag on contact regardless of direction. It used to be
+        // cleared only for outbound peers, so a peer that reconnected inbound stayed
+        // flagged "was unreachable" for the full WAS_UNREACHABLE_PERIOD. That flag is
+        // what TransportManager escalates on when deciding "Unreachable on any
+        // transport", so a peer that had demonstrably come back could still be
+        // punished for it. Reaching us is the evidence that matters, whichever way
+        // the connection was initiated.
+        markWasUnreachable(peer, false);
     }
 
     private class CleanupUnreachable extends SimpleTimer2.TimedEvent {
@@ -1136,7 +1143,7 @@ public abstract class TransportImpl implements Transport {
         }
     }
 
-    /** @since 0.9.70+ */
+            /** @since 0.9.70+ */
     public void stopCleanupJob() {
         if (_cleanupJob != null) {
             _cleanupJob.cancel();
