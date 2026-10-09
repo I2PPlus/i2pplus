@@ -9,12 +9,9 @@ package net.i2p.router.transport;
 
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.BanLogger;
-import net.i2p.router.Banlist;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.TransportImpl;
 
 import net.i2p.router.Tuner;
 import net.i2p.util.Log;
@@ -26,23 +23,9 @@ import net.i2p.util.Log;
  * pass it on to the transport for processing
  */
 class GetBidsJob {
-    private static volatile BanLogger _banLogger;
 
     /** Transport bids for a message and send it if a suitable bid is found */
     static void getBids(RouterContext context, TransportManager tmgr, OutNetMessage msg) {
-        // Ensure BanLogger is initialized
-        BanLogger bl = _banLogger;
-        if (bl == null) {
-            synchronized (GetBidsJob.class) {
-                bl = _banLogger;
-                if (bl == null) {
-                    bl = new BanLogger();
-                    bl.initialize(context);
-                    _banLogger = bl;
-                }
-            }
-        }
-
         if (msg.getFailedTransportCount() > 1) {
             context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
             fail(context, msg);
@@ -86,14 +69,26 @@ class GetBidsJob {
         if (bid == null) {
             int failedCount = msg.getFailedTransportCount();
             if (failedCount == 0) {
+                // No transport was even attempted, so nothing here is evidence of
+                // misbehaviour: it means we hold no usable route to the peer. Their
+                // addresses may be stale, may advertise only a transport we lack,
+                // or they may be behind NAT we cannot traverse. This branch used to
+                // banlist them for "No transports", which punished a peer for our
+                // own reachability gap and outlived their return. Repeats are not a
+                // stronger signal -- a peer behind restrictive NAT lands here on
+                // every attempt, forever -- so counting them would penalise exactly
+                // the participants least able to route back to us. Record the stat
+                // and stop. TransportManager's unreachable branch is the matching
+                // decision once a transport has actually been tried and failed.
                 context.statManager().addRateData("transport.bidFailNoTransports", msg.getLifetime());
-                // This used to be "no common transports" but it is almost always no transports at all
-                String ipPort = TransportImpl.getRouterIPPort(msg.getTarget());
-                String banReason = _x("No transports");
-                context.banlist().banlistRouter(to, "" + banReason);
-                // Log to sessionbans.txt with IP address (use default duration)
-                _banLogger.logBan(to, ipPort, banReason, Banlist.BANLIST_DURATION_MS);
+                if (log.shouldLog(Log.DEBUG))
+                    log.debug("No transport bid for [" + to.toBase64().substring(0,6)
+                              + "]; no route on file -> not banning");
             } else if (failedCount >= tmgr.getTransportCount()) {
+                // Every transport was tried and every one failed. This branch does
+                // carry an attempt, which is why it is the one that would justify
+                // escalating -- but a single dispatch failing is still weak evidence,
+                // so it records a stat and leaves the judgement to the peer profile.
                 context.statManager().addRateData("transport.bidFailAllTransports", msg.getLifetime());
             }
             fail(context, msg);
