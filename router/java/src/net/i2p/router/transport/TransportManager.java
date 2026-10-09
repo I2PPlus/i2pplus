@@ -8,8 +8,6 @@ package net.i2p.router.transport;
  *
  */
 
-import static net.i2p.router.transport.Transport.AddressSource.*;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.net.Inet6Address;
@@ -38,14 +36,16 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.BanLogger;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.BanLogger;
+import net.i2p.router.Tuner;
+import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
-import net.i2p.router.Tuner;
+import net.i2p.router.tunnel.pool.GhostPeerManager;
 import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
@@ -53,6 +53,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
+import static net.i2p.router.transport.Transport.AddressSource.*;
 
 /**
  * Central coordinator for all I2P transport protocols.
@@ -103,7 +104,7 @@ public class TransportManager implements TransportEventListener {
      * If we want more than one transport with the same style we will have to change this.
      */
     private final Map<String, Transport> _transports;
-    /** Locking: this. */
+            /** Locking: this. */
     private final Map<String, Transport> _pluggableTransports;
     private final RouterContext _context;
     private final UPnPManager _upnpManager;
@@ -120,7 +121,7 @@ public class TransportManager implements TransportEventListener {
      * @since 0.9.71+
      */
     private volatile EstablishedSnapshot _establishedCache;
-    /** How long a getEstablished() snapshot is reused, in ms. @since 0.9.71+ */
+            /** How long a getEstablished() snapshot is reused, in ms. @since 0.9.71+ */
     private static final long ESTABLISHED_CACHE_TTL = 1000;
 
     /**
@@ -143,44 +144,44 @@ public class TransportManager implements TransportEventListener {
         }
     }
 
-    /** Property enabling the UDP transport; defaults to true. */
+            /** Property enabling the UDP transport; defaults to true. */
     public static final String PROP_ENABLE_UDP = "i2np.udp.enable";
-    /** Property enabling the NTCP transport; defaults to true. */
+            /** Property enabling the NTCP transport; defaults to true. */
     public static final String PROP_ENABLE_NTCP = "i2np.ntcp.enable";
-    /** Property enabling UPnP port forwarding; defaults to true. */
+            /** Property enabling UPnP port forwarding; defaults to true. */
     public static final String PROP_ENABLE_UPNP = "i2np.upnp.enable";
-    /** Enable UPnP for IPv6 */
+            /** Enable UPnP for IPv6 */
     public static final String PROP_ENABLE_UPNP_IPV6 = "i2np.upnp.ipv6.enable";
-    /** Default UPnP IPv6 enable */
+            /** Default UPnP IPv6 enable */
     public static final boolean DEFAULT_ENABLE_UPNP_IPV6 = true;
     private static final String PROP_JAVA_PROXY1 = "socksProxyHost";
     private static final String PROP_JAVA_PROXY2 = "java.net.useSystemProxies";
     private static final String PROP_JAVA_PROXY3 = "http.proxyHost";
     private static final String PROP_JAVA_PROXY4 = "https.proxyHost";
 
-    /** Not forever, since they may update. */
+            /** Not forever, since they may update. */
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
     private final long _msgIDBloomXor;
     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
-     *  Interval for the outbound connection maintainer (60 seconds).
+     * Interval for the outbound connection maintainer (60 seconds).
      *  Periodically checks whether we have enough outbound connections
      *  to Fast peers and proactively establishes new ones.
      */
     private static final long MAINTAINER_INTERVAL = 60*1000L;
-    /** Maximum per-cycle establishments to avoid flooding the network */
+            /** Maximum per-cycle establishments to avoid flooding the network */
     private static final int MAINTAINER_MAX_PER_CYCLE = 10;
-    /** Minimum outbound Fast connections to maintain (below this, we establish more) */
+            /** Minimum outbound Fast connections to maintain (below this, we establish more) */
     private static final int MAINTAINER_MIN_OUTBOUND = 150;
 
     private OutboundMaintainerEvent _outboundMaintainer;
 
     /**
-     *  Manager for all enabled transports.
+     * Manager for all enabled transports.
      *
-     *  @param context router context
+     * @param context router context
      */
     public TransportManager(RouterContext context) {
         _context = context;
@@ -393,17 +394,17 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Whether the NTCP transport is enabled.
+     * Whether the NTCP transport is enabled.
      *
-     *  @param ctx context
-     *  @return true if NTCP enabled
+     * @param ctx context
+     * @return true if NTCP enabled
      */
     public static boolean isNTCPEnabled(RouterContext ctx) {
         return ctx.getBooleanPropertyDefaultTrue(PROP_ENABLE_NTCP);
     }
 
     /**
-     *  Notify transport of ALL routable interface addresses, including IPv6.
+     * Notify transport of ALL routable interface addresses, including IPv6.
      *  It's the transport's job to ignore what it can't handle.
      */
     private void initializeAddress(Transport t) {
@@ -411,18 +412,18 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Notify all transports of ALL routable interface addresses, including IPv6.
+     * Notify all transports of ALL routable interface addresses, including IPv6.
      *  It's the transport's job to ignore what it can't handle.
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     void initializeAddress() {
         initializeAddress(_transports.values());
     }
 
     /**
-     *  Notify transports of ALL routable interface addresses, including IPv6.
+     * Notify transports of ALL routable interface addresses, including IPv6.
      *  It's the transport's job to ignore what it can't handle.
-     *  @since 0.9.34
+     * @since 0.9.34
      */
     private void initializeAddress(Collection<Transport> ts) {
         if (ts.isEmpty())
@@ -523,11 +524,11 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Remove all ipv4 or ipv6 addresses.
+     * Remove all ipv4 or ipv6 addresses.
      *  See CSFI.notifyRemoveAddress().
      *  Tell all transports... but don't loop.
      *
-     *  @since 0.9.20
+     * @since 0.9.20
      */
     void externalAddressRemoved(Transport.AddressSource source, boolean ipv6) {
         for (Transport t : _transports.values()) {
@@ -547,7 +548,7 @@ public class TransportManager implements TransportEventListener {
             t.forwardPortStatus(ip, port, externalPort, success, reason);
     }
 
-    /** Start listening on all configured transports. */
+            /** Start listening on all configured transports. */
     synchronized void startListening() {
         if (_xdhThread != null && _xdhThread.getState() == Thread.State.NEW)
             _xdhThread.start();
@@ -589,7 +590,7 @@ public class TransportManager implements TransportEventListener {
         _context.router().rebuildRouterInfo();
     }
 
-    /** Restart all transports (stop, wait, start). */
+            /** Restart all transports (stop, wait, start). */
     synchronized void restart() {
         stopListening();
         try { Thread.sleep(5*1000L); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
@@ -597,7 +598,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Can be restarted.
+     * Can be restarted.
      */
     synchronized void stopListening() {
         if (_upnpManager != null) {
@@ -611,8 +612,8 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Cannot be restarted.
-     *  @since 0.9
+     * Cannot be restarted.
+     * @since 0.9
      */
     synchronized void shutdown() {
         stopListening();
@@ -623,25 +624,25 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  The registered transport for the given style.
+     * The registered transport for the given style.
      *
-     *  @param style transport style
-     *  @return the transport for the given style or null
+     * @param style transport style
+     * @return the transport for the given style or null
      */
     Transport getTransport(String style) {
         return _transports.get(style);
     }
 
     /**
-     *  Number of registered transports.
+     * Number of registered transports.
      *
-     *  @return number of registered transports
+     * @return number of registered transports
      */
     int getTransportCount() { return _transports.size(); }
 
     /**
-     *  @return SortedMap of style to Transport (a copy)
-     *  @since 0.9.31
+     * @return SortedMap of style to Transport (a copy)
+     * @since 0.9.31
      */
     SortedMap<String, Transport> getTransports() {
         TreeMap<String, Transport> rv = new TreeMap<>();
@@ -665,7 +666,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  How many peers are we currently connected to, that we have
+     * How many peers are we currently connected to, that we have
      *  sent a message to or received a message from in the last five minutes.
      */
     int countActivePeers() {
@@ -677,11 +678,11 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-      * Is at least one transport below its outbound connection limit + some margin
-      * Use for throttling in the router.
-      *
-      * @param pct percent of limit 0-100
-      */
+     * Is at least one transport below its outbound connection limit + some margin
+     * Use for throttling in the router.
+     *
+     * @param pct percent of limit 0-100
+     */
     boolean haveOutboundCapacity(int pct) {
         for (Transport t : _transports.values()) {
             if (t.haveCapacity(pct))
@@ -692,9 +693,9 @@ public class TransportManager implements TransportEventListener {
 
     private static final int HIGH_CAPACITY_PCT = 50;
     /**
-      * Are all transports well below their outbound connection limit
-      * Use for throttling in the router.
-      */
+     * Are all transports well below their outbound connection limit
+     * Use for throttling in the router.
+     */
     boolean haveHighOutboundCapacity() {
         if (_transports.isEmpty())
             return false;
@@ -706,11 +707,11 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-      * Is at least one transport below its inbound connection limit + some margin
-      * Use for throttling in the router.
-      *
-      * @param pct percent of limit 0-100
-      */
+     * Is at least one transport below its inbound connection limit + some margin
+     * Use for throttling in the router.
+     *
+     * @param pct percent of limit 0-100
+     */
     boolean haveInboundCapacity(int pct) {
         for (Transport t : _transports.values()) {
             if (t.hasCurrentAddress() && t.haveCapacity(pct))
@@ -736,8 +737,8 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Previously returned short, now enum as of 0.9.20
-     *  @return the best status of any transport
+     * Previously returned short, now enum as of 0.9.20
+     * @return the best status of any transport
      */
     Status getReachabilityStatus() {
         Status rv = Status.UNKNOWN;
@@ -894,7 +895,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  This forces a rebuild
+     * This forces a rebuild
      */
     List<RouterAddress> getAddresses() {
         List<RouterAddress> rv = new ArrayList<>(4);
@@ -908,22 +909,22 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Port configuration for transport protocols.
-     *  @since IPv6
+     * Port configuration for transport protocols.
+     * @since IPv6
      */
     @SuppressWarnings("PMD.AvoidFieldNameMatchingTypeName")
     static class Port {
-        /** Transport style */
+                        /** Transport style */
         public final String style;
-        /** Port number */
+                        /** Port number */
         public final int port;
-        /** True if IPv6 */
+                        /** True if IPv6 */
         public final boolean isIPv6;
-        /** IP address string */
+                        /** IP address string */
         public final String ip;
 
         /**
-         *  IPv4 only
+         * IPv4 only
          */
         public Port(String style, int port) {
             this.style = style;
@@ -933,8 +934,8 @@ public class TransportManager implements TransportEventListener {
         }
 
         /**
-         *  IPv6 only
-         *  @since 0.9.50
+         * IPv6 only
+         * @since 0.9.50
          */
         public Port(String style, String host, int port) {
             this.style = style;
@@ -944,9 +945,9 @@ public class TransportManager implements TransportEventListener {
         }
 
         /**
-         *  Hash code combining style, port, and IP.
+         * Hash code combining style, port, and IP.
          *
-         *  @return hash code
+         * @return hash code
          */
         @Override
         public int hashCode() {
@@ -954,10 +955,10 @@ public class TransportManager implements TransportEventListener {
         }
 
         /**
-         *  Whether this port equals the given object.
+         * Whether this port equals the given object.
          *
-         *  @param o object
-         *  @return true if equal
+         * @param o object
+         * @return true if equal
          */
         @Override
         public boolean equals(Object o) {
@@ -1146,8 +1147,26 @@ public class TransportManager implements TransportEventListener {
                                                      _context.clock().now() + SIGTYPE_BANLIST_DURATION);
                 } else {
                     _context.statManager().addRateData("transport.banlistOnUnreachable", msg.getLifetime(), msg.getLifetime());
-                    _banLogger.logBan(peer, _peerIP, "Unreachable on any transport", 0, targetRI);
-                    _context.banlist().banlistRouter(peer, "" + _x("Unreachable on any transport"));
+                      // Unreachable is not misbehaviour. It means we could not reach
+                      // them, which may be their end, a NAT, or our own connectivity --
+                      // none of which is grounds for a banlist entry the peer cannot
+                      // appeal and that survives them coming back. This used to banlist
+                      // outright, so a peer that had demonstrably returned was banned
+                      // anyway, because the persistent wasUnreachable flag feeding this
+                      // branch was never cleared by an inbound reconnect. Ghosting states
+                      // the same judgement with the right shape: removed from selection
+                      // for a bounded, decaying window, cleared by a successful build.
+                      TunnelManagerFacade tmf = _context.tunnelManager();
+                      GhostPeerManager ghostMgr = tmf != null ? tmf.getGhostPeerManager() : null;
+                      if (ghostMgr != null) {
+                          _banLogger.logBan(peer, _peerIP, "Unreachable on any transport -> ghosted", 0, targetRI);
+                          ghostMgr.recordTimeout(peer);
+                      } else {
+                          // No pool manager (very early startup): keep the previous
+                          // behaviour rather than silently dropping the signal.
+                          _banLogger.logBan(peer, _peerIP, "Unreachable on any transport", 0, targetRI);
+                          _context.banlist().banlistRouter(peer, "" + _x("Unreachable on any transport"));
+                      }
                 }
             }
         } else if (rv == null) {
@@ -1261,9 +1280,9 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Aggregated recent error messages from all transports.
+     * Aggregated recent error messages from all transports.
      *
-     *  @return aggregated recent error messages from all transports
+     * @return aggregated recent error messages from all transports
      */
     List<String> getMostRecentErrorMessages() {
         List<String> rv = new ArrayList<>(16);
@@ -1304,10 +1323,10 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Mark a string for extraction by xgettext and translation.
+     * Mark a string for extraction by xgettext and translation.
      *  Use this only in static initializers.
      *  It does not translate!
-     *  @return s
+     * @return s
      */
     private static final String _x(String s) {
         return s;
@@ -1316,21 +1335,21 @@ public class TransportManager implements TransportEventListener {
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
 
     /**
-     *  Translate
+     * Translate
      */
     private final String _t(String s) {
         return Translate.getString(s, _context, BUNDLE_NAME);
     }
 
     /**
-     *  Periodically ensures we have enough outbound connections to Fast peers.
+     * Periodically ensures we have enough outbound connections to Fast peers.
      *
-     *  The transport layer creates outbound connections on-demand when a message
+     * The transport layer creates outbound connections on-demand when a message
      *  needs to be sent. However, in low-traffic scenarios or when the I2P+ pre-send
      *  check blocks sends to unconnected peers, outbound connections can dry up,
      *  causing tunnel build failures ("first hop unreachable").
      *
-     *  This maintainer runs every 60 seconds, checks how many outbound connections
+     * This maintainer runs every 60 seconds, checks how many outbound connections
      *  we have to Fast/HiCap peers, and proactively establishes new ones if the count
      *  is below the threshold.
      */
@@ -1356,7 +1375,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Check outbound connection count and establish new ones if below threshold.
+     * Check outbound connection count and establish new ones if below threshold.
      */
     private void maintainOutboundConnections() {
         List<Hash> established = getEstablished();
@@ -1394,7 +1413,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Trigger transport connection establishment to a peer.
+     * Trigger transport connection establishment to a peer.
      *  Uses a DatabaseLookupMessage to warm the connection, which triggers
      *  a real handshake and keeps the session alive (peer replies with its
      *  RouterInfo). NTCP crashes on null messages, so we always provide
