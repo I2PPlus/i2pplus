@@ -15,6 +15,7 @@ import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.util.Clock;
+import net.i2p.stat.StatManager;
 import net.i2p.util.LogManager;
 
 /**
@@ -55,6 +56,10 @@ public class GhostPeerManagerTest {
         });
         LogManager lm = new LogManager(_ctx);
         when(_ctx.logManager()).thenReturn(lm);
+        // GhostPeerManager counts marks added and cleared. The real StatManager is
+        // never null in production, so this is a gap in the mock rather than
+        // something the manager should guard against.
+        when(_ctx.statManager()).thenReturn(mock(StatManager.class));
 
         _clock = mock(Clock.class);
         when(_clock.now()).thenReturn(NOW);
@@ -194,25 +199,25 @@ public class GhostPeerManagerTest {
     }
 
     @Test
-    public void testEscalationCappedAtFourX() {
+    public void testEscalationCappedAtTwoX() {
         _mgr.recordTimeout(hash(1)); // offense 0: 300s
         when(_clock.now()).thenReturn(NOW + 301_000L);
-        _mgr.recordTimeout(hash(1)); // offense 1: 600s
+        _mgr.recordTimeout(hash(1)); // offense 1: 600s (cap)
         when(_clock.now()).thenReturn(NOW + 301_000L + 601_000L);
-        _mgr.recordTimeout(hash(1)); // offense 2: 1200s (cap)
+        _mgr.recordTimeout(hash(1)); // offense 2: still 600s (capped)
         long markAt = NOW + 301_000L + 601_000L;
-        when(_clock.now()).thenReturn(markAt + 1_199_000L);
-        assertTrue("4x cooldown respected", _mgr.isGhost(hash(1)));
-        when(_clock.now()).thenReturn(markAt + 1_201_000L);
-        assertFalse("4x cooldown released", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(markAt + 599_000L);
+        assertTrue("2x cooldown respected", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(markAt + 601_000L);
+        assertFalse("2x cooldown released", _mgr.isGhost(hash(1)));
 
         // further offenses stay at the cap, never grow unbounded
-        when(_clock.now()).thenReturn(markAt + 1_201_000L);
+        when(_clock.now()).thenReturn(markAt + 601_000L);
         _mgr.recordTimeout(hash(1));
-        long cappedAt = markAt + 1_201_000L;
-        when(_clock.now()).thenReturn(cappedAt + 1_199_000L);
-        assertTrue("still capped at 4x", _mgr.isGhost(hash(1)));
-        when(_clock.now()).thenReturn(cappedAt + 1_201_000L);
+        long cappedAt = markAt + 601_000L;
+        when(_clock.now()).thenReturn(cappedAt + 599_000L);
+        assertTrue("still capped at 2x", _mgr.isGhost(hash(1)));
+        when(_clock.now()).thenReturn(cappedAt + 601_000L);
         assertFalse("capped cooldown released", _mgr.isGhost(hash(1)));
     }
 
@@ -424,8 +429,11 @@ public class GhostPeerManagerTest {
         assertEquals(300_000L, GhostPeerManager.escalationCooldownMs(300_000L, 0));
         assertEquals(300_000L, GhostPeerManager.escalationCooldownMs(300_000L, -1));
         assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 1));
-        assertEquals(1_200_000L, GhostPeerManager.escalationCooldownMs(300_000L, 2));
-        assertEquals(1_200_000L, GhostPeerManager.escalationCooldownMs(300_000L, 99));
+        // Capped at 2x base since MAX_ESCALATION_SHIFT fell from 2 to 1: every mark
+        // rests on one build timeout whose attribution we cannot verify, so the
+        // exclusion is held to 600s rather than 1200s.
+        assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 2));
+        assertEquals(600_000L, GhostPeerManager.escalationCooldownMs(300_000L, 99));
         assertEquals(0L, GhostPeerManager.escalationCooldownMs(0L, 5));
     }
 

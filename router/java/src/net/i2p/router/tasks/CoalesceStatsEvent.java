@@ -114,6 +114,10 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         // sustained non-zero means peers are being profiled faster than their RouterInfos
         // can be re-fetched.
         sm.createRequiredRateStat("peermanager.routerInfoRequested", _x("RouterInfos requested for stored profiles that had none"), "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("tunnel.ghostMarksAdded", _x("Build timeouts recorded against a peer as a ghost mark"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("tunnel.ghostMarksCleared", _x("Ghost marks cleared by a successful build reply"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("tunnel.ghostPeers", _x("Peers currently excluded as ghosts"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        sm.createRequiredRateStat("tunnel.ghostFastOrHighCapPeers", _x("Ghost peers in the fast or high-capacity tiers"), "Tunnels", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         sm.createRequiredRateStat("streaming.duplicateCloseSent", _x("Duplicate CLOSE safety-net messages sent"), "Streaming", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
         // Describe the stat itself; the JVM ceiling is secondary detail. Using the ceiling
         // as the whole description left the stat unexplained on /configstats, and left it
@@ -213,6 +217,14 @@ public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
         sm.addRateData("peer.activeProfileCount", po.getActiveProfileCount(), 60L*1000);
         sm.addRateData("peer.qualityPeerCount", po.getQualityCount(), 60L*1000);
         sm.addRateData("peer.storedProfileCount", po.getStoredProfileCount(), 60L*1000);
+        // Excluded peers, as a gauge rather than an event: a mark is a state lasting
+        // minutes, so a rate would report how often it was applied and not how many
+        // peers are currently unable to be selected.
+        net.i2p.router.tunnel.pool.GhostPeerManager gpm = _ctx.tunnelManager().getGhostPeerManager();
+        if (gpm != null) {
+            sm.addRateData("tunnel.ghostPeers", gpm.getGhostCount(), 60L*1000);
+            sm.addRateData("tunnel.ghostFastOrHighCapPeers", gpm.getFastOrHighCapGhostCount(), 60L*1000);
+        }
 
         int integrated = _ctx.peerManager().getPeersByCapability('f').size();
         sm.addRateData("router.integratedPeers", integrated, 60L*1000);

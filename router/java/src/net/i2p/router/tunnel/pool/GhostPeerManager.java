@@ -81,11 +81,21 @@ public class GhostPeerManager {
     static final long OFFENSE_DECAY_MS = 30 * 60 * 1000L;
 
     /**
-     * Maximum escalation shift: base × 2² = 4× base (1200s normal, 480s under
+     * Maximum escalation shift: base × 2 = 2× base (600s normal, 240s under
      * attack).
+     *
+     * <p>Lowered from 2 (4× base, so 20 minutes) to 1. Every mark rests on a single
+     * build timeout attributed to the contacted hop, and a timeout has at least three
+     * causes we cannot separate: the hop did not answer, the hop answered and the reply
+     * was lost on the reply path, or the request never reached it. Measured over 8h, 44.9%
+     * of builds timed out while the contacted hop was typically heard from within a
+     * minute, so most marks rest on unverified blame and the penalty should be
+     * conservative. 20 minutes out of a roughly 6000-peer pool is a large exclusion to
+     * impose on that evidence.
+     *
      * @since 0.9.71+
      */
-    static final int MAX_ESCALATION_SHIFT = 2;
+    static final int MAX_ESCALATION_SHIFT = 1;
 
     private static final long GHOST_WARN_INTERVAL_MS = 60 * 1000L;
 
@@ -234,6 +244,10 @@ public class GhostPeerManager {
             }
             boolean wasActive = cur != null && now < cur.until;
             _ghostMarks.put(peer, mark);
+            // Every timeout that reaches here, whether it newly excludes the peer or
+            // merely extends an existing mark, so the rate shows exclusion pressure
+            // rather than only newly-marked peers.
+            _context.statManager().addRateData("tunnel.ghostMarksAdded", 1);
             adjustActiveLocked(wasActive, now < mark.until, mark.until);
             capActiveLocked(now);
             // The active-set cap may have just deactivated this very mark, so
@@ -430,6 +444,9 @@ public class GhostPeerManager {
      */
     public void recordSuccess(Hash peer) {
         if (peer == null || peer.equals(_context.routerHash())) {return;}
+        // Counted before the map write so a mark that is not present reports nothing:
+        // a success from a peer that was never excluded is not a recovery.
+        _context.statManager().addRateData("tunnel.ghostMarksCleared", 1);
         // Same monitor as recordTimeout so a removal can never interleave
         // between its map write and its count delta.  Rare enough that the
         // exact rescan is cheaper than tracking a removal delta here.
