@@ -907,7 +907,7 @@ public class TestJob extends JobImpl {
      */
     static void registerBatchStats(StatManager stats, long[] periods) {
         stats.createRequiredRateStat("tunnel.testFailedLocalHopUnreachable",
-                "Tunnel tests that failed while we held no transport session to the peer we send through (count)",
+                "Tunnel tests failing with no local hop session (count)",
                 "Tunnels", periods);
         stats.createRequiredRateStat("tunnel.testBufferOffered",
                 "First-test candidates accepted into the batch buffer (count)",

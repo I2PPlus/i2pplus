@@ -3520,7 +3520,7 @@ public class ProfileOrganizer {
         return picked;
     }
 
-/**
+    /**
      * Scan up to {@link #maxCandidateSample} established peers for the active
      * tier, in {@link RandomIterator} order so the peers examined differ from
      * call to call.  Capped for the same reason as {@link #lockedSelectPeers}:
